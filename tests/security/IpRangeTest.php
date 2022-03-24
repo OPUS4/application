@@ -25,29 +25,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Class Publish_View_Helper_JavascriptMessages extends the generic view-helper with the default-message-set
- * for the publish-module
- */
-class Publish_View_Helper_JavascriptMessages extends Application_View_Helper_JavascriptMessages
+use Opus\Security\Realm;
+
+class IpRangeTest extends ControllerTestCase
 {
-    /**
-     * Default message-set for the publish-module
-     */
-    public function getDefaultMessageSet()
+
+    protected $configModifiable = true;
+
+    protected $additionalResources = ['database', 'view', 'navigation', 'mainMenu', 'translation'];
+
+    public function setUp()
     {
-        $this->addMessage('uploadedFileHasErrorMessage');
-        $this->addMessage('fileExtensionFalse');
-        $this->addMessage('fileUploadErrorSize');
-        $this->addMessage('filenameLengthError');
-        $this->addMessage('filenameFormatError');
-        $this->addMessage('chooseAnotherFile');
+        parent::setUp();
+        $this->enableSecurity();
+    }
+
+    public function tearDown()
+    {
+        $this->restoreSecuritySetting();
+        parent::tearDown();
+    }
+
+    public function testClientIpSetDuringRouting()
+    {
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.2';
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = '127.0.0.3';
+
+        $this->dispatch('/home');
+
+        $realm = Realm::getInstance();
+
+        $this->assertEquals('127.0.0.2', $realm->getIp());
     }
 }

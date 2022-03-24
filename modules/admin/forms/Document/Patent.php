@@ -26,8 +26,11 @@
  *
  */
 
+use Opus\Patent;
+use Opus\Model\NotFoundException;
+
 /**
- * Formular für Opus_Patent Objekte.
+ * Formular für Patent Objekte.
  *
  * Felder:
  * - Countries
@@ -42,7 +45,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
@@ -50,7 +52,7 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
 {
 
     /**
-     * Name fuer Formularelement fuer ID von Opus_Patent.
+     * Name fuer Formularelement fuer ID von Patent.
      */
     const ELEMENT_ID = 'Id';
 
@@ -83,7 +85,7 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
      * Präfix fuer Übersetzungsschlüssel (noch nicht verwendet).
      * @var string
      */
-    protected $_translationPrefix = ''; // TODO OPUSVIER-1875 Sollte sein: 'Opus_Patent_';
+    protected $_translationPrefix = ''; // TODO OPUSVIER-1875 Sollte sein: 'Patent_';
 
     /**
      * Erzeugt die Formularelemente.
@@ -105,8 +107,8 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * Setzt die Formularelement entsprechend der Instanz von Opus_Patent.
-     * @param Opus_Patent $patent
+     * Setzt die Formularelement entsprechend der Instanz von Patent.
+     * @param Patent $patent
      */
     public function populateFromModel($patent)
     {
@@ -123,8 +125,8 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * Aktualisiert Instanz von Opus_Patent mit Werten in Formular.
-     * @param Opus_Patent $patent
+     * Aktualisiert Instanz von Patent mit Werten in Formular.
+     * @param Patent $patent
      */
     public function updateModel($patent)
     {
@@ -141,12 +143,12 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * Liefert Opus_Patent Instanz fuer das Formular.
+     * Liefert Patent Instanz fuer das Formular.
      *
-     * Wenn das Formular eine existierende Opus_Patent Instanz repräsentiert (gesetztes ID Feld) wird diese Instanz
+     * Wenn das Formular eine existierende Patent Instanz repräsentiert (gesetztes ID Feld) wird diese Instanz
      * zurück geliefert und ansonsten eine neue Instanz erzeugt.
      *
-     * @return \Opus_Patent
+     * @return Patent
      */
     public function getModel()
     {
@@ -157,12 +159,12 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
         }
 
         try {
-            $patent = new Opus_Patent($patentId);
-        } catch (Opus_Model_NotFoundException $omnfe) {
+            $patent = new Patent($patentId);
+        } catch (NotFoundException $omnfe) {
             // kann eigentlich nur bei manipuliertem POST passieren
             $this->getLogger()->err($omnfe);
             // bei ungültiger ID wird Patentwie neu hinzugefügt behandelt
-            $patent = new Opus_Patent();
+            $patent = new Patent();
         }
 
         $this->updateModel($patent);

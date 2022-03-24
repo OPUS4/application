@@ -31,6 +31,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Identifier;
+
 class Application_Form_Element_IdentifierTest extends FormElementTestCase
 {
 
@@ -39,9 +42,9 @@ class Application_Form_Element_IdentifierTest extends FormElementTestCase
     public function setUp()
     {
         $this->_formElementClass = 'Application_Form_Element_Identifier';
-        $this->_expectedDecoratorCount = 6;
         $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper'];
+            'dataWrapper', 'ElementHint'];
+        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
         $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
@@ -52,7 +55,7 @@ class Application_Form_Element_IdentifierTest extends FormElementTestCase
 
         $translator = $element->getTranslator();
 
-        $identifier = new Opus_Identifier();
+        $identifier = new Identifier();
 
         $types = $identifier->getField('Type')->getDefault();
 

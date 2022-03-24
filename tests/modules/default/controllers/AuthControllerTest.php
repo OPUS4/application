@@ -106,7 +106,7 @@ class AuthControllerTest extends ControllerTestCase
         $this->dispatch('/auth/logout/rmodule/home/rcontroller/index/raction/index');
         $this->assertResponseLocationHeader($this->response, '/home');
         $this->assertResponseCode('302');
-        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
+        $this->assertNull(\Zend_Auth::getInstance()->getIdentity());
     }
 
     public function testLogoutActionAsAnonymous()
@@ -114,7 +114,7 @@ class AuthControllerTest extends ControllerTestCase
         $this->dispatch('/auth/logout/rmodule/home/rcontroller/index/raction/index');
         $this->assertResponseLocationHeader($this->response, '/home');
         $this->assertResponseCode('302');
-        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
+        $this->assertNull(\Zend_Auth::getInstance()->getIdentity());
     }
 
     public function testLogoutActionFromAdministrationModule()
@@ -124,7 +124,7 @@ class AuthControllerTest extends ControllerTestCase
         $this->assertNotContains('Argument 4 passed to Zend_Controller_Action_Helper_Redirector::direct() must be an array, null given', $this->response->outputBody());
         $this->assertResponseLocationHeader($this->response, '/home');
         $this->assertResponseCode('302');
-        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
+        $this->assertNull(\Zend_Auth::getInstance()->getIdentity());
     }
 
     public function testLogoutActionFromAnyModule()
@@ -133,6 +133,6 @@ class AuthControllerTest extends ControllerTestCase
         $this->dispatch('/auth/logout/rmodule/any/rcontroller/index/raction/index');
         $this->assertResponseLocationHeader($this->response, '/home');
         $this->assertResponseCode('302');
-        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
+        $this->assertNull(\Zend_Auth::getInstance()->getIdentity());
     }
 }

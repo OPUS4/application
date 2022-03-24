@@ -71,7 +71,7 @@ class Application_Form_Element_NumberTest extends FormElementTestCase
 
     public function testMessagesTranslated()
     {
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
         $this->assertTrue($translator->isTranslated('validation_error_number_tooSmall'));
         $this->assertTrue($translator->isTranslated('validation_error_number_notBetween'));

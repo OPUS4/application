@@ -31,6 +31,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\DnbInstitute;
+use Opus\Model\ModelException;
+use Opus\Model\NotFoundException;
+
 /**
  * Select Element für Thesis Grantor Institute.
  */
@@ -44,11 +48,11 @@ class Application_Form_Element_Grantor extends Application_Form_Element_Select
         $this->setRequired(true);
         $this->setDisableTranslator(true); // Grantor institutes are not translated
 
-        $validator = new Zend_Validate_Int();
+        $validator = new \Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 
-        $options = Opus_DnbInstitute::getGrantors();
+        $options = DnbInstitute::getGrantors();
 
         foreach ($options as $option) {
             $this->addMultiOption($option->getId(), $option->getDisplayName());
@@ -62,13 +66,13 @@ class Application_Form_Element_Grantor extends Application_Form_Element_Select
      *
      * @param mixed $value
      * @return void|Zend_Form_Element
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      */
     public function setValue($value)
     {
         try {
-            $institute = new Opus_DnbInstitute($value);
-        } catch (Opus_Model_NotFoundException $omne) {
+            $institute = new DnbInstitute($value);
+        } catch (NotFoundException $omne) {
             parent::setValue($value); // could be blocked, but keeping compatibility just in case
             return;
         }

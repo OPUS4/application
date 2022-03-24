@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestCase
 {
 
@@ -42,7 +44,7 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
     {
         parent::setUp();
 
-        $this->documents = Zend_Controller_Action_HelperBroker::getStaticHelper('Documents');
+        $this->documents = \Zend_Controller_Action_HelperBroker::getStaticHelper('Documents');
     }
 
     public function testGetDocumentForIdForValidId()
@@ -52,7 +54,7 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $document = $this->documents->getDocumentForId($docId);
 
         $this->assertNotNull($document);
-        $this->assertInstanceOf('Opus_Document', $document);
+        $this->assertInstanceOf(Document::class, $document);
     }
 
     public function testGetDocumentForIdForEmptyValue()
@@ -141,7 +143,7 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
 
         if (count($documents) > 0) {
             foreach ($documents as $docId) {
-                $document = new Opus_Document($docId);
+                $document = Document::get($docId);
                 $this->assertEquals($state, $document->getServerState());
             }
         }

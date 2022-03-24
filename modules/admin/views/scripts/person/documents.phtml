@@ -33,7 +33,7 @@
 ?>
 
 <?PHP foreach ($this->documents as $index => $docId) : ?>
-    <?PHP $document = new Opus_Document($docId) ?>
+    <?PHP $document = new \Opus\Document($docId) ?>
 
     <div class="document"><?= $this->documentTitle($document) ?> (<?= $document->getId() ?>)</div>
 

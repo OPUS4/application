@@ -182,7 +182,7 @@ class Setup_HelppageController extends Application_Controller_Action
 
         try {
             $translation = $manager->getTranslation($key);
-        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
         }
 
         if (is_null($translation)) {

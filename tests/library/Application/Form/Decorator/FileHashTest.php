@@ -32,6 +32,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\File;
+
 class Application_Form_Decorator_FileHashTest extends ControllerTestCase
 {
 
@@ -48,7 +51,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
     {
         $decorator = new Application_Form_Decorator_FileHash();
 
-        $decorator->setElement(new Zend_Form_Element_Text('text'));
+        $decorator->setElement(new \Zend_Form_Element_Text('text'));
 
         $this->assertEquals('content', $decorator->render('content'));
     }
@@ -57,7 +60,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
     {
         $element = new Application_Form_Element_FileHash('name');
 
-        $file = new Opus_File(116);
+        $file = new File(116);
         $hashes = $file->getHashValue();
         $hash = $hashes[0];
 
@@ -85,7 +88,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
         $this->useEnglish();
         $element = new Application_Form_Element_FileHash('name');
 
-        $file = new Opus_File(116);
+        $file = new File(116);
         $hashes = $file->getHashValue();
         $hash = $hashes[0];
 
@@ -114,7 +117,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
         $this->useEnglish();
         $element = new Application_Form_Element_FileHash('name');
 
-        $file = new Opus_File(123);
+        $file = new File(123);
         $hashes = $file->getHashValue();
 
         $hash = $hashes[0];
@@ -132,19 +135,19 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
             . '<div class="textarea hashsoll"><span class="hash-label">Expected:</span>1ba50dc8abc619cea3ba39f77c75c0fe</div>'
             . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Soll" />'
             . '<div class="textarea hashist"><span class="hash-label">Actual:</span>'
-            . Zend_Registry::get('Zend_Translate')->translate('frontdoor_checksum_not_verified')
+            . Application_Translate::getInstance()->translate('frontdoor_checksum_not_verified')
             . '</div>', $output);
     }
 
     public function testRenderWithFileTooBig()
     {
         $this->useEnglish();
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(['checksum' => ['maxVerificationSize' => '0']]));
+        $config = $this->getConfig();
+        $config->merge(new \Zend_Config(['checksum' => ['maxVerificationSize' => '0']]));
 
         $element = new Application_Form_Element_FileHash('name');
 
-        $file = new Opus_File(116);
+        $file = new File(116);
         $hashes = $file->getHashValue();
 
         $hash = $hashes[0];
@@ -162,7 +165,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
             . '<div class="textarea hashsoll"><span class="hash-label">Expected:</span>1ba50dc8abc619cea3ba39f77c75c0fe</div>'
             . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Soll" />'
             . '<div class="textarea hashist"><span class="hash-label">Actual:</span>'
-            . Zend_Registry::get('Zend_Translate')->translate('frontdoor_file_too_big')
+            . Application_Translate::getInstance()->translate('frontdoor_file_too_big')
             . '</div>', $output);
     }
 }

@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -38,7 +37,7 @@
  * This filter is used for document titles that are entered using a textarea,
  * since the titles can be rather long.
  */
-class Application_Form_Filter_ReplaceNewlines implements Zend_Filter_Interface
+class Application_Form_Filter_ReplaceNewlines implements \Zend_Filter_Interface
 {
 
     /**
@@ -48,7 +47,7 @@ class Application_Form_Filter_ReplaceNewlines implements Zend_Filter_Interface
      * line break.
      *
      * @param string $value Value that should be filtered
-     * @return Filtered string (newlines => whitespaces)
+     * @return string Filtered string (newlines => whitespaces)
      */
     public function filter($value)
     {

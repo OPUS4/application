@@ -29,11 +29,11 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Security\IRealm;
 
-class MockRealm implements Opus_Security_IRealm
+class MockRealm implements IRealm
 {
 
     private $fileAllowed;
@@ -68,9 +68,11 @@ class MockRealm implements Opus_Security_IRealm
     public function setUser($username)
     {
     }
+
     public function setIp($ipaddress)
     {
     }
+
     public function check($privilege, $documentServerState = null, $fileId = null)
     {
     }

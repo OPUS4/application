@@ -30,11 +30,10 @@
  * @author      Tobias Leidinger <tobias.leidinger@gmail.com>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 
-class Statistic_Form_Test extends Zend_Form
+class Statistic_Form_Test extends \Zend_Form
 {
 
     public $elementDecorators = [

@@ -44,7 +44,7 @@ class Application_Form_Element_SupportedLanguages extends Application_Form_Eleme
     {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
 
         $this->setMultiOptions($this->getLanguageOptions());
 
@@ -59,7 +59,7 @@ class Application_Form_Element_SupportedLanguages extends Application_Form_Eleme
             true,
             [
                 'messages' => [
-                    Zend_Validate_InArray::NOT_IN_ARRAY => 'validation_error_language_not_supported'
+                    \Zend_Validate_InArray::NOT_IN_ARRAY => 'validation_error_language_not_supported'
                 ],
                 'haystack' => array_keys($options)
             ]
@@ -92,13 +92,13 @@ class Application_Form_Element_SupportedLanguages extends Application_Form_Eleme
      * Returns available language options determined by translation resources.
      *
      * @return array
-     * @throws Zend_Exception
+     * @throws \Zend_Exception
      */
     public function getLanguageOptions()
     {
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
 
-        $currentLocale = new Zend_Locale($translator->getLocale());
+        $currentLocale = new \Zend_Locale($translator->getLocale());
 
         $translations = $translator->getList();
 

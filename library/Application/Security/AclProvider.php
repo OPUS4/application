@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,12 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Security
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Security\Realm;
 
 /**
  * Erzeugt das Zend_Acl object für die Prüfung von Nutzerprivilegien.
@@ -86,6 +86,8 @@ class Application_Security_AclProvider
         ]
     ];
 
+    private static $acl;
+
     public static function init()
     {
         $aclProvider = new Application_Security_AclProvider();
@@ -94,12 +96,22 @@ class Application_Security_AclProvider
 
         $aclProvider->getLogger()->debug('ACL: bootrapping');
 
-        Zend_Registry::set('Opus_Acl', $acl);
+        self::$acl = $acl;
 
-        Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
-        Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(
+        \Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
+        \Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(
             Application_Security_AclProvider::ACTIVE_ROLE
         );
+    }
+
+    public static function getAcl()
+    {
+        return self::$acl;
+    }
+
+    public static function clear()
+    {
+        self::$acl = null;
     }
 
     /**
@@ -109,41 +121,26 @@ class Application_Security_AclProvider
     {
         $logger = $this->getLogger();
 
-        $acl = new Zend_Acl();
+        $acl = new \Zend_Acl();
 
         $this->loadResources($acl);
 
-        $realm = Opus_Security_Realm::getInstance();
-
-        if (isset($_SERVER['REMOTE_ADDR']) and preg_match('/:/', $_SERVER['REMOTE_ADDR']) === 0) {
-            $realm->setIp($_SERVER['REMOTE_ADDR']);
-        }
-
-        $user = Zend_Auth::getInstance()->getIdentity();
-
-        if (! is_null($user)) {
-            try {
-                $realm->setUser($user);
-            } catch (Opus_Security_Exception $ose) {
-                // unknown user -> invalidate session (logout)
-                Zend_Auth::getInstance()->clearIdentity();
-                $user = null;
-            }
-        }
+        $realm = Realm::getInstance();
 
         $parents = $realm->getRoles();
 
         $this->loadRoles($acl, $parents);
 
         // create role for user on-the-fly with assigned roles as parents
-        if (Zend_Registry::get('LOG_LEVEL') >= Zend_LOG::DEBUG) {
-                $logger->debug(
-                    "ACL: Create role '" . $user . "' with parents " . "(" . implode(", ", $parents) . ")"
-                );
+        if ($logger->getLevel() >= \Zend_LOG::DEBUG) {
+            $user = \Zend_Auth::getInstance()->getIdentity();
+            $logger->debug(
+                "ACL: Create role '" . $user . "' with parents " . "(" . implode(", ", $parents) . ")"
+            );
         }
 
         // Add role for current user
-        $acl->addRole(new Zend_Acl_Role(self::ACTIVE_ROLE), $parents);
+        $acl->addRole(new \Zend_Acl_Role(self::ACTIVE_ROLE), $parents);
 
         return $acl;
     }
@@ -156,9 +153,9 @@ class Application_Security_AclProvider
         $modules = Application_Security_AclProvider::$resourceNames;
 
         foreach ($modules as $module => $resources) {
-            $acl->addResource(new Zend_Acl_Resource($module));
+            $acl->addResource(new \Zend_Acl_Resource($module));
             foreach ($resources as $resource) {
-                $acl->addResource(new Zend_Acl_Resource($resource), $module);
+                $acl->addResource(new \Zend_Acl_Resource($resource), $module);
             }
         }
 
@@ -169,10 +166,10 @@ class Application_Security_AclProvider
     {
         $resources = Application_Controller_Action_Helper_Workflow::getWorkflowResources();
 
-        $acl->addResource(new Zend_Acl_Resource('workflow'));
+        $acl->addResource(new \Zend_Acl_Resource('workflow'));
 
         foreach ($resources as $resource) {
-            $acl->addResource(new Zend_Acl_Resource($resource), 'workflow');
+            $acl->addResource(new \Zend_Acl_Resource($resource), 'workflow');
         }
     }
 
@@ -197,14 +194,14 @@ class Application_Security_AclProvider
     public function loadRoles($acl, $roles)
     {
         // Feste Rollen, die immer existieren
-        $acl->addRole(new Zend_Acl_Role('guest'));
-        $acl->addRole(new Zend_Acl_Role('administrator'));
+        $acl->addRole(new \Zend_Acl_Role('guest'));
+        $acl->addRole(new \Zend_Acl_Role('administrator'));
 
         $acl->allow('administrator');
 
         foreach ($roles as $role) {
             if (! $acl->hasRole($role)) {
-                $acl->addRole(new Zend_Acl_Role($role));
+                $acl->addRole(new \Zend_Acl_Role($role));
             }
 
             $roleConfig = new Application_Security_RoleConfig($role);

@@ -40,7 +40,7 @@
  *
  * A combobox has options like a select element, but it can also have a value that does not match any of the options.
  */
-class Application_Form_Element_Combobox extends Zend_Form_Element_Multi
+class Application_Form_Element_Combobox extends \Zend_Form_Element_Multi
 {
 
     public $multiple = false;
@@ -54,7 +54,7 @@ class Application_Form_Element_Combobox extends Zend_Form_Element_Multi
 
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators()

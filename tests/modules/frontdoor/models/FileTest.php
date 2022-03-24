@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Julian Heise <heise@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Date;
+use Opus\File;
+
 class Frontdoor_Model_FileTest extends ControllerTestCase
 {
 
-    protected $additionalResources = ['database', 'authz'];
+    protected $additionalResources = ['database'];
 
     const FILENAME = 'test.xhtml';
     const FILENAME_DELETED_DOC = 'foo.html';
@@ -55,37 +56,28 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $this->assertEquals(self::FILENAME, $opusFile->getPathName());
     }
 
-    /**
-     * @expectedException Frontdoor_Model_DocumentNotFoundException
-     * @expectedExceptionCode 404
-     */
     public function testGetFileObjectDocumentNotFoundException()
     {
-        $file = new Frontdoor_Model_File(99999999999, self::FILENAME);
-        $realm = new MockRealm(true, true);
-        $opusFile = $file->getFileObject($realm);
+        $this->setExpectedException(Frontdoor_Model_DocumentNotFoundException::class, null, 404);
+        new Frontdoor_Model_File(99999999999, self::FILENAME);
     }
 
-    /**
-     * @expectedException Frontdoor_Model_DocumentDeletedException
-     * @expectedExceptionCode 404
-     */
     public function testGetFileObjectDocumentDeletedExceptionIfDocForbidden()
     {
         $file = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
         $realm = new MockRealm(true, false);
-        $opusFile = $file->getFileObject($realm);
+
+        $this->setExpectedException(Frontdoor_Model_DocumentDeletedException::class, null, 404);
+        $file->getFileObject($realm);
     }
 
-    /**
-     * @expectedException Frontdoor_Model_FileAccessNotAllowedException
-     * @expectedExceptionCode 403
-     */
     public function testGetFileObjectFileAccessNotAllowedExceptionIfFileForbidden()
     {
         $file = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
         $realm = new MockRealm(false, true);
-        $opusFile = $file->getFileObject($realm);
+
+        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class, null, 403);
+        $file->getFileObject($realm);
     }
 
     public function testGetFileObjectNoDocumentDeletedExceptionIfAccessAllowed()
@@ -94,7 +86,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $realm = new MockRealm(true, true);
         $opusFile = $file->getFileObject($realm);
 
-        $this->assertTrue($opusFile instanceof Opus_File);
+        $this->assertTrue($opusFile instanceof File);
         $this->assertEquals(self::FILENAME_DELETED_DOC, $opusFile->getPathName());
     }
 
@@ -104,48 +96,44 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $file->setAclHelper(new MockAccessControl(true));
         $realm = new MockRealm(false, false); // sollte egal sein
         $opusFile = $file->getFileObject($realm);
-        $this->assertTrue($opusFile instanceof Opus_File);
+        $this->assertTrue($opusFile instanceof File);
     }
 
-    /**
-     * @expectedException Frontdoor_Model_FileAccessNotAllowedException
-     */
     public function testGetFileObjectAccessNotAllowedForUser()
     {
         $file = new Frontdoor_Model_File(92, self::FILENAME);
         $file->setAclHelper(new MockAccessControl(false));
         $realm = new MockRealm(false, false); // sollte egal sein
-        $opusFile = $file->getFileObject($realm);
+
+        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class);
+        $file->getFileObject($realm);
     }
 
-    /**
-     * @expectedException Frontdoor_Model_DocumentAccessNotAllowedException
-     */
     public function testGetFileObjectDocumentAccessNotAllowedException()
     {
         $file = new Frontdoor_Model_File(124, self::FILENAME_UNPUBLISHED_DOC);
         $realm = new MockRealm(true, false);
-        $opusFile = $file->getFileObject($realm);
+
+        $this->setExpectedException(Frontdoor_Model_DocumentAccessNotAllowedException::class);
+        $file->getFileObject($realm);
     }
 
-    /**
-     * @expectedException Frontdoor_Model_FileNotFoundException
-     */
     public function testGetFileObjectFileNotFoundException()
     {
         $file = new Frontdoor_Model_File(92, 'this_file_does_not_exist.file');
         $realm = new MockRealm(true, true);
-        $opusFile = $file->getFileObject($realm);
+
+        $this->setExpectedException(Frontdoor_Model_FileNotFoundException::class);
+        $file->getFileObject($realm);
     }
 
-    /**
-     * @expectedException Frontdoor_Model_FileAccessNotAllowedException
-     */
     public function testGetFileObjectFileAccessNotAllowedException()
     {
         $file = new Frontdoor_Model_File(92, self::FILENAME);
         $realm = new MockRealm(false, true);
-        $opusFile = $file->getFileObject($realm);
+
+        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class);
+        $file->getFileObject($realm);
     }
 
     public function testConstructorDocIdEmpty()
@@ -213,24 +201,22 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @expectedException Frontdoor_Model_DocumentAccessNotAllowedException
-     */
     public function testWrongTypeOfRealmNoDocAccess()
     {
         $file = new Frontdoor_Model_File(124, self::FILENAME_UNPUBLISHED_DOC);
         $realm = 'this is an invalid realm object';
-        $opusFile = $file->getFileObject($realm);
+
+        $this->setExpectedException(Frontdoor_Model_DocumentAccessNotAllowedException::class);
+        $file->getFileObject($realm);
     }
 
-    /**
-     * @expectedException Frontdoor_Model_FileAccessNotAllowedException
-     */
     public function testWrongTypeOfRealmNoFileAccess()
     {
         $file = new Frontdoor_Model_File(92, self::FILENAME);
         $realm = 'this is an invalid realm object';
-        $opusFile = $file->getFileObject($realm);
+
+        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class);
+        $file->getFileObject($realm);
     }
 
     public function testGetAclHelper()
@@ -263,8 +249,6 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
 
     /**
      * Dateien, die nicht sichtbar sind in Frontdoor dürfen nicht heruntergeladen werden.
-     *
-     * @expectedException Frontdoor_Model_FileAccessNotAllowedException
      */
     public function testFileAccessDeniedIfNotVisibleInFrontdoorForGuest()
     {
@@ -272,11 +256,12 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
 
         $realm = new MockRealm(true, true);
 
-        $opusFile = new Opus_File(128);
+        $opusFile = new File(128);
 
         $this->assertEquals(0, $opusFile->getVisibleInFrontdoor(), "Testdaten geändert.");
         $this->assertEquals("frontdoor_invisible.txt", $opusFile->getPathName(), "Testdaten geändert.");
 
+        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class);
         $model->getFileObject($realm);
     }
 
@@ -318,7 +303,6 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     /**
      * Dateien dürfen nicht heruntergeladen werden, wenn das Embargo-Datum nicht vergangen ist.
      * Regressiontest for OPUSVIER-3313.
-     * @expectedException Frontdoor_Model_FileAccessNotAllowedException
      */
     public function testAccessDeniedForEmbargoedDocument()
     {
@@ -327,7 +311,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->addFile($file);
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear('2100')->setMonth('00')->setDay('01');
         $doc->setEmbargoDate($date);
 
@@ -335,6 +319,8 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
 
         $model = new Frontdoor_Model_File($docId, "test.pdf");
         $realm = new MockRealm(true, true);
+
+        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class);
         $model->getFileObject($realm);
     }
 
@@ -350,7 +336,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->addFile($file);
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear('2100')->setMonth('00')->setDay('01');
         $doc->setEmbargoDate($date);
 
@@ -375,7 +361,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->addFile($file);
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear('2100')->setMonth('00')->setDay('01');
         $doc->setEmbargoDate($date);
 
@@ -395,7 +381,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $doc->setServerState('unpublished');
         $doc->addFile($file);
 
-        $date = new Opus_Date();
+        $date = new Date();
         $date->setYear('2100')->setMonth('00')->setDay('01');
         $doc->setEmbargoDate($date);
 

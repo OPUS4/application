@@ -33,9 +33,8 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Application_Controller_Action extends Application_Controller_ModuleAccess
@@ -44,14 +43,14 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess
     /**
      * Holds the Redirector Helper.
      *
-     * @var Zend_Controller_Action_Helper_Redirector
+     * @var \Zend_Controller_Action_Helper_Redirector
      */
     private $_redirector = null;
 
     /**
      * Holds the FlashMessenger Helper.
      *
-     * @var Zend_Controller_Action_Helper_Messenger
+     * @var \Zend_Controller_Action_Helper_FlashMessenger
      */
     private $_flashMessenger = null;
 
@@ -95,7 +94,7 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess
     public function moduleAccessDeniedAction()
     {
         // we are not allowed to access this module -- but why?
-        $identity = Zend_Auth::getInstance()->getIdentity();
+        $identity = \Zend_Auth::getInstance()->getIdentity();
 
         $errorcode = 'no_identity_error';
         if (! empty($identity)) {

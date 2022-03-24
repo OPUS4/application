@@ -35,7 +35,7 @@ class Application_View_Helper_ExportLinksEnabled extends Application_View_Helper
 
     public function exportLinksEnabled($context = null)
     {
-        $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use constant
+        $exporter = \Zend_Registry::get('Opus_Exporter'); // TODO use constant
 
         $formats = $exporter->getAllowedFormats();
 

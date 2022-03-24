@@ -162,24 +162,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="admin_validate_error_select_inarray">
-            <tuv xml:lang="en">
-                <seg>This selection is not valid.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Dieser Auswahlwert steht nicht zur Verfügung.</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="admin_validate_error_regex_pattern">
-            <tuv xml:lang="en">
-                <seg>This value is not valid.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Dieser Wert ist nicht gültig.</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="admin_role_name_regexNotMatch">
             <tuv xml:lang="en">
                 <seg>Role names must only contains letters and numbers and start with a letter.</seg>

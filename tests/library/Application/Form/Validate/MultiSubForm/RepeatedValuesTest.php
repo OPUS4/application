@@ -189,13 +189,13 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
     {
         $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues('Language', 'testmessage');
 
-        $form = new Zend_Form();
+        $form = new \Zend_Form();
 
-        $subform = new Zend_Form_SubForm();
+        $subform = new \Zend_Form_SubForm();
         $subform->addElement('text', 'Language');
         $form->addSubForm($subform, 'subform1');
 
-        $subform = new Zend_Form_SubForm();
+        $subform = new \Zend_Form_SubForm();
         $subform->addElement('text', 'Language');
         $form->addSubForm($subform, 'subform2');
 
@@ -227,13 +227,13 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
     {
         $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues('Value', 'testmessage', 'Language');
 
-        $form = new Zend_Form();
+        $form = new \Zend_Form();
 
-        $subform = new Zend_Form_SubForm();
+        $subform = new \Zend_Form_SubForm();
         $subform->addElement('text', 'Value');
         $form->addSubForm($subform, 'subform1');
 
-        $subform = new Zend_Form_SubForm();
+        $subform = new \Zend_Form_SubForm();
         $subform->addElement('text', 'Value');
         $form->addSubForm($subform, 'subform2');
 

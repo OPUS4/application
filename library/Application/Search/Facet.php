@@ -172,7 +172,7 @@ class Application_Search_Facet
 
     /**
      * TODO Should probably move into Opus\Search\Result\Facet(Item)
-     * TODO $facetValue = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($facetValue));
+     * TODO $facetValue = $this->translate('Document_ServerState_Value_' . ucfirst($facetValue));
      *
      */
     public function getLabel($value)
@@ -205,7 +205,7 @@ class Application_Search_Facet
 
     public function getTranslator()
     {
-        return Zend_Registry::get('Zend_Translate');
+        return Application_Translate::getInstance();
     }
 
     public function setTranslationPrefix($prefix)

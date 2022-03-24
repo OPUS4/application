@@ -29,8 +29,9 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\CollectionRole;
 
 class Solrsearch_Model_CollectionRoles
 {
@@ -39,13 +40,13 @@ class Solrsearch_Model_CollectionRoles
 
     /**
      * Returns visible collection roles.
-     * @return array of Opus_CollectionRole objects
+     * @return array of CollectionRole objects
      */
     public function getAllVisible()
     {
         if (is_null($this->_collectionRoles)) {
             $this->_collectionRoles = [];
-            foreach (Opus_CollectionRole::fetchAll() as $collectionRole) {
+            foreach (CollectionRole::fetchAll() as $collectionRole) {
                 if ($this->isVisible($collectionRole)
                     && ($this->hasVisibleChildren($collectionRole)
                     || $this->hasPublishedDocs($collectionRole))) {
@@ -61,7 +62,7 @@ class Solrsearch_Model_CollectionRoles
      * Return true if the given collection role has at least one
      * first-level collection that is visible.
      *
-     * @param Opus_CollectionRole $collectionRole
+     * @param CollectionRole $collectionRole
      * @return bool
      */
     private function hasVisibleChildren($collectionRole)
@@ -77,7 +78,7 @@ class Solrsearch_Model_CollectionRoles
      * Returns true if the given collection role has at least one associated document
      * in server_state published.
      *
-     * @param Opus_CollectionRole $collectionRole
+     * @param CollectionRole $collectionRole
      * @return bool
      */
     private function hasPublishedDocs($collectionRole)
@@ -92,7 +93,7 @@ class Solrsearch_Model_CollectionRoles
 
     /**
      * Returns true if collection role is visible in browsing.
-     * @param $collectionRole Opus_CollectionRole
+     * @param $collectionRole CollectionRole
      * @return bool
      */
     private function isVisible($collectionRole)

@@ -29,8 +29,10 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Account;
+use Opus\UserRole;
 
 /**
  * Abstract class for supporting editing of Opus roles in form.
@@ -68,7 +70,7 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
      */
     protected function addRoleElements()
     {
-        $roles = Opus_UserRole::getAll();
+        $roles = UserRole::getAll();
 
         foreach ($roles as $role) {
             $roleName = $role->getDisplayName();
@@ -90,11 +92,11 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
-     * @param $model Opus_Account
+     * @param $model Account
      */
     public function populateFromModel($model)
     {
-        if (! $model instanceof Opus_Account) {
+        if (! $model instanceof Account) {
             throw new Exception('Model must be of type Opus_Account');
         }
 
@@ -149,22 +151,22 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
      */
     public function updateModel($account)
     {
-        if (! $account instanceof Opus_Account) {
+        if (! $account instanceof Account) {
             throw new Exception('Model must be of type Opus_Account');
         }
 
-        $currentUser = Zend_Auth::getInstance()->getIdentity();
+        $currentUser = \Zend_Auth::getInstance()->getIdentity();
 
         $selected = $this->getSelectedRoles();
 
         $roles = [];
 
         foreach ($selected as $name) {
-            $role = Opus_UserRole::fetchByName($name);
+            $role = UserRole::fetchByName($name);
             $roles[] = $role;
         }
 
-        $adminRole = Opus_UserRole::fetchByName('administrator');
+        $adminRole = UserRole::fetchByName('administrator');
 
         if ($currentUser === $account->getLogin() && in_array($account->getId(), $adminRole->getAllAccountIds())) {
             $roles[] = $adminRole;

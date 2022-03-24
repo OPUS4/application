@@ -51,7 +51,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
 
     public function toString($keys = null, $context = null)
     {
-        $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use constant
+        $exporter = \Zend_Registry::get('Opus_Exporter'); // TODO use constant
 
         $formats = $exporter->getAllowedFormats();
 

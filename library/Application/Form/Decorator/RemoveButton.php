@@ -39,7 +39,7 @@
  *
  * TODO find better solution that is more generic
  */
-class Application_Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_RemoveButton extends \Zend_Form_Decorator_Abstract
 {
 
     private $_secondElement;
@@ -48,7 +48,7 @@ class Application_Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstra
     {
         $button = $this->getElement();
 
-        if ($button instanceof Zend_Form) {
+        if ($button instanceof \Zend_Form) {
             $button = $button->getElement(Admin_Form_Document_MultiSubForm::ELEMENT_REMOVE);
         }
 
@@ -58,7 +58,7 @@ class Application_Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstra
 
         $view = $button->getView();
 
-        if (! $view instanceof Zend_View_Interface) {
+        if (! $view instanceof \Zend_View_Interface) {
             return $content;
         }
 

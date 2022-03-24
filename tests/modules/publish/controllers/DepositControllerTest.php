@@ -27,9 +27,12 @@
  * @category    Tests
  * @package     Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\Log;
 
 /**
  * Class Publish_DepositControllerTest.
@@ -58,7 +61,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
      */
     public function testDepositActionWithValidPostAndBackButton()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $elemente = [
             1 => ['name' => 'PersonSubmitterFirstName_1', 'value' => 'Hans'],
             2 => ['name' => 'PersonSubmitterLastName_1', 'value' => 'Hansmann'],
@@ -90,7 +93,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
      */
     public function testDepositActionWithValidPostAndSendButton()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $elemente = [
             1 => ['name' => 'PersonSubmitterFirstName_1', 'value' => 'Hans', 'datatype' => 'Person', 'subfield' => '0'],
             2 => ['name' => 'PersonSubmitterLastName_1', 'value' => 'Hansmann', 'datatype' => 'Person', 'subfield' => '1'],
@@ -157,14 +160,14 @@ class Publish_DepositControllerTest extends ControllerTestCase
         $this->assertController('deposit');
         $this->assertAction('deposit');
 
-        $doc = new Opus_Document($session->documentId);
+        $doc = Document::get($session->documentId);
         $this->assertEquals('unpublished', $doc->getServerState());
         $this->assertEquals('publish', $doc->getEnrichmentValue('opus.source'));
     }
 
     public function testConfirmAction()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $session->depositConfirmDocumentId = '712';
         $this->dispatch('/publish/deposit/confirm');
         $this->assertController('deposit');
@@ -188,7 +191,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
      */
     public function testDepositActionWithAbortInPost()
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
         $elemente = [
             1 => ['name' => 'PersonSubmitterFirstName_1', 'value' => 'Hans'],
             2 => ['name' => 'PersonSubmitterLastName_1', 'value' => 'Hansmann'],
@@ -227,7 +230,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->setType('preprint');
 
-        $log = Zend_Registry::get('Zend_Log');
+        $log = Log::get();
         $deposit = new Publish_Model_Deposit($log);
         $deposit->storeDocument($doc->store());
     }

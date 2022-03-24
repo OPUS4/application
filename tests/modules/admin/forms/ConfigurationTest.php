@@ -49,7 +49,7 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
     {
         $form = new Admin_Form_Configuration();
 
-        $form->populateFromModel(new Zend_Config([
+        $form->populateFromModel(new \Zend_Config([
             'searchengine' => ['solr' => ['parameterDefaults' => ['rows' => '20']]]
         ])); // searchengine.solr.parameterDefaults.rows
 
@@ -65,7 +65,7 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
 
         $form->getElement('maxSearchResults')->setValue(15);
 
-        $config = new Zend_Config([], true);
+        $config = new \Zend_Config([], true);
 
         $form->updateModel($config);
 

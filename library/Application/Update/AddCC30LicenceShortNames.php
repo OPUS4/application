@@ -35,6 +35,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Licence;
+use Opus\Repository;
+
 /**
  * Added short names (labels) to licences that look like the old standard licences distributed with OPUS 4.
  */
@@ -57,9 +60,9 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
 
     public function run()
     {
-        $cache = new Opus_Model_Xml_Cache();
+        $cache = Repository::getInstance()->getDocumentXmlCache();
 
-        $licences = Opus_Licence::getAll();
+        $licences = Licence::getAll();
 
         foreach ($licences as $licence) {
             $nameLong = $licence->getNameLong();
@@ -80,14 +83,14 @@ class Application_Update_AddCC30LicenceShortNames extends Application_Update_Plu
 
             if (! is_null($name)) {
                 // 'name' must be unique - check if already used
-                $existingLicence = Opus_Licence::fetchByName($name);
+                $existingLicence = Licence::fetchByName($name);
 
                 if (is_null($existingLicence)) {
                     $licence->setName($name);
 
                     // prevent updates to ServerDateModified
                     // TODO cache should be transparent - updating ServerDateModified is important
-                    $licence->unregisterPlugin('Opus_Model_Plugin_InvalidateDocumentCache');
+                    $licence->unregisterPlugin('Opus\Model\Plugin\InvalidateDocumentCache');
 
                     $licence->store();
 

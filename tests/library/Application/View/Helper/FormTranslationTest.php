@@ -38,7 +38,7 @@ class Application_View_Helper_FormTranslationTest extends ControllerTestCase
     public function testRenderingMinimal()
     {
         $helper = new Application_View_Helper_FormTranslation();
-        $helper->setView(Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $output = $helper->formTranslation('DisplayName');
 
@@ -50,7 +50,7 @@ class Application_View_Helper_FormTranslationTest extends ControllerTestCase
         $this->useEnglish();
 
         $helper = new Application_View_Helper_FormTranslation();
-        $helper->setView(Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
 
         $options = [
             'en' => 'English',

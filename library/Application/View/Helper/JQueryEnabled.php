@@ -30,18 +30,19 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Config;
 
 /**
  * Checks if JQuery Library is available.
  */
-class Application_View_Helper_JQueryEnabled extends Zend_View_Helper_Abstract
+class Application_View_Helper_JQueryEnabled extends \Zend_View_Helper_Abstract
 {
 
     public function jQueryEnabled()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         if (! isset($config->javascript->jquery->path)) {
             return false;
         }

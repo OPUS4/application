@@ -41,5 +41,7 @@ require_once dirname(__FILE__) . '/../common/update.php';
  * TODO direct dependency on framework internals - possibly a problem in the future
  */
 
-$update = new Opus_Update_Plugin_DatabaseCharset();
+use Opus\Update\Plugin\DatabaseCharset;
+
+$update = new DatabaseCharset();
 $update->run();

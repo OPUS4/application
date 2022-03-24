@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO remove this file (compare function with set-file-permissions in bin folder)
+
 set -e
 
 FILEOWNER="$1"

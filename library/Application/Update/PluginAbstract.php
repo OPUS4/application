@@ -31,12 +31,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Update\Plugin\AbstractUpdatePlugin;
+
 /**
  * Base class for update plugins.
  *
  * TODO eliminate this class?
  */
-abstract class Application_Update_PluginAbstract extends Opus_Update_Plugin_Abstract
+abstract class Application_Update_PluginAbstract extends AbstractUpdatePlugin
 {
 
     /**

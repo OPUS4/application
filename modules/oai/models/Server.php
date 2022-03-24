@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Oai_Modul
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2017-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\Log;
+use Opus\Model\NotFoundException;
+use Opus\Model\Xml;
+use Opus\Model\Xml\Version1;
+use Opus\Repository;
 
 class Oai_Model_Server extends Application_Model_Abstract
 {
@@ -37,21 +42,21 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Holds xml representation of document information to be processed.
      *
-     * @var DomDocument  Defaults to null.
+     * @var \DomDocument  Defaults to null.
      */
     protected $_xml = null;
 
     /**
      * Holds the stylesheet for the transformation.
      *
-     * @var DomDocument  Defaults to null.
+     * @var \DomDocument  Defaults to null.
      */
     protected $_xslt = null;
 
     /**
      * Holds the xslt processor.
      *
-     * @var XSLTProcessor  Defaults to null.
+     * @var \XSLTProcessor  Defaults to null.
      */
     protected $_proc = null;
 
@@ -96,18 +101,18 @@ class Oai_Model_Server extends Application_Model_Abstract
     {
         $config = $this->getConfig();
 
-        $this->_xml = new DomDocument;
-        $this->_proc = new XSLTProcessor;
+        $this->_xml = new \DomDocument;
+        $this->_proc = new \XSLTProcessor;
         $this->_configuration = new Oai_Model_Configuration($config);
         $this->_xmlFactory = new Oai_Model_XmlFactory();
     }
 
-    public function handleRequest(array $oaiRequest, $requestUri)
+    public function handleRequest($parameters, $requestUri)
     {
         // TODO move error handling into Oai_Model_Server
         try {
             // handle request
-            return $this->handleRequestIntern($oaiRequest, $requestUri);
+            return $this->handleRequestIntern($parameters, $requestUri);
         } catch (Oai_Model_Exception $e) {
             $errorCode = Oai_Model_Error::mapCode($e->getCode());
             $this->getLogger()->err($errorCode);
@@ -123,14 +128,14 @@ class Oai_Model_Server extends Application_Model_Abstract
                 'An error occured while processing the resumption token.'
             );
             $this->getResponse()->setHttpResponseCode(500);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $this->getLogger()->err($e);
             $this->_proc->setParameter('', 'oai_error_code', 'unknown');
             $this->_proc->setParameter('', 'oai_error_message', 'An internal error occured.');
             $this->getResponse()->setHttpResponseCode(500);
         }
 
-        $this->_xml = new DOMDocument();
+        $this->_xml = new \DOMDocument();
 
         return $this->_proc->transformToXML($this->_xml);
     }
@@ -138,42 +143,18 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Handles an OAI request.
      *
-     * @param  array  $oaiRequest Contains full request information
+     * @param  Oai_Model_OaiRequest $oaiRequest Contains full request information
      * @throws Oai_Model_Exception Thrown if the request could not be handled.
-     * @return void
+     * @return string Generated XML
      */
-    protected function handleRequestIntern(array $oaiRequest, $requestUri)
+    protected function handleRequestIntern($oaiRequest, $requestUri)
     {
         $this->init();
 
         // Setup stylesheet
         $this->loadStyleSheet($this->getScriptPath() . '/oai-pmh.xslt');
 
-        $this->_proc->registerPHPFunctions('Opus_Language::getLanguageCode');
-        Application_Xslt::registerViewHelper(
-            $this->_proc,
-            [
-                'optionValue',
-                'fileUrl',
-                'frontdoorUrl',
-                'transferUrl',
-                'dcmiType',
-                'dcType',
-                'openAireType'
-            ]
-        );
-        $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
-        $this->_proc->setParameter('', 'doiResolverUrl', $this->getConfig()->doi->resolverUrl);
-
-        // Set response time
-        $this->_proc->setParameter(
-            '',
-            'dateTime',
-            str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso())
-        );
-
-        // set OAI base url
-        $this->_proc->setParameter('', 'oai_base_url', $this->getOaiBaseUrl());
+        $this->setupProcessor();
 
         $metadataPrefixPath = $this->getScriptPath() . DIRECTORY_SEPARATOR . 'prefixes';
         $resumptionPath = $this->_configuration->getResumptionTokenPath();
@@ -205,7 +186,7 @@ class Oai_Model_Server extends Application_Model_Abstract
         }
 
         foreach ($oaiRequest as $parameter => $value) {
-            Zend_Registry::get('Zend_Log')->debug("'oai_' . $parameter, $value");
+             Log::get()->debug("'oai_' . $parameter, $value");
             $this->_proc->setParameter('', 'oai_' . $parameter, $value);
         }
 
@@ -271,6 +252,41 @@ class Oai_Model_Server extends Application_Model_Abstract
     }
 
     /**
+     * @throws Zend_Date_Exception
+     * @throws Zend_Exception
+     *
+     * TODO factory (function) for processor
+     */
+    protected function setupProcessor()
+    {
+        $this->_proc->registerPHPFunctions('Opus\Language::getLanguageCode');
+        Application_Xslt::registerViewHelper(
+            $this->_proc,
+            [
+                'optionValue',
+                'fileUrl',
+                'frontdoorUrl',
+                'transferUrl',
+                'dcmiType',
+                'dcType',
+                'openAireType'
+            ]
+        );
+        $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
+        $this->_proc->setParameter('', 'doiResolverUrl', $this->getConfig()->doi->resolverUrl);
+
+        // Set response time
+        $this->_proc->setParameter(
+            '',
+            'dateTime',
+            str_replace('+00:00', 'Z', \Zend_Date::now()->setTimeZone('UTC')->getIso())
+        );
+
+        // set OAI base url
+        $this->_proc->setParameter('', 'oai_base_url', $this->getOaiBaseUrl());
+    }
+
+    /**
      * Implements response for OAI-PMH verb 'GetRecord'.
      *
      * @param  array &$oaiRequest Contains full request information
@@ -284,8 +300,8 @@ class Oai_Model_Server extends Application_Model_Abstract
 
         $document = null;
         try {
-            $document = new Opus_Document($docId);
-        } catch (Opus_Model_NotFoundException $ex) {
+            $document = Document::get($docId);
+        } catch (NotFoundException $ex) {
             throw new Oai_Model_Exception(
                 'The value of the identifier argument is unknown or illegal in this repository.',
                 Oai_Model_Error::IDDOESNOTEXIST
@@ -332,11 +348,11 @@ class Oai_Model_Server extends Application_Model_Abstract
         $sampleIdentifier = $this->_configuration->getSampleIdentifier();
 
         // Set backup date if database query does not return a date.
-        $earliestDate = new Zend_Date('1970-01-01', Zend_Date::ISO_8601);
+        $earliestDate = new \Zend_Date('1970-01-01', \Zend_Date::ISO_8601);
 
-        $earliestDateFromDb = Opus_Document::getEarliestPublicationDate();
+        $earliestDateFromDb = Document::getEarliestPublicationDate();
         if (! is_null($earliestDateFromDb)) {
-            $earliestDate = new Zend_Date($earliestDateFromDb, Zend_Date::ISO_8601);
+            $earliestDate = new \Zend_Date($earliestDateFromDb, \Zend_Date::ISO_8601);
         }
         $earliestDateIso = $earliestDate->get('yyyy-MM-dd');
 
@@ -491,7 +507,7 @@ class Oai_Model_Server extends Application_Model_Abstract
             $oaiRequest['metadataPrefix'] = $metadataPrefix;
             $oaiRequest['metadataPrefixMode'] = strtolower($metadataPrefix);
             $this->_proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
-
+            $this->_proc->setParameter('', 'oai_metadataPrefixMode', strtolower($metadataPrefix));
             $resumed = true;
         } else {
             // no resumptionToken is given
@@ -506,7 +522,7 @@ class Oai_Model_Server extends Application_Model_Abstract
         $workIds = array_splice($restIds, 0, $maxRecords);
 
         foreach ($workIds as $docId) {
-            $document = new Opus_Document($docId);
+            $document = Document::get($docId);
             $this->createXmlRecord($document);
         }
 
@@ -549,7 +565,7 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     private function setParamResumption($res, $cursor, $totalIds)
     {
-        $tomorrow = str_replace('+00:00', 'Z', Zend_Date::now()->addDay(1)->setTimeZone('UTC')->getIso());
+        $tomorrow = str_replace('+00:00', 'Z', \Zend_Date::now()->addDay(1)->setTimeZone('UTC')->getIso());
         $this->_proc->setParameter('', 'dateDelete', $tomorrow);
         $this->_proc->setParameter('', 'res', $res);
         $this->_proc->setParameter('', 'cursor', $cursor);
@@ -559,11 +575,11 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Create xml structure for one record
      *
-     * @param  Opus_Document $document
+     * @param  Document $document
      * @param  string        $metadataPrefix
      * @return void
      */
-    private function createXmlRecord(Opus_Document $document)
+    private function createXmlRecord(Document $document)
     {
         $docId = $document->getId();
         $domNode = $this->getDocumentXmlDomNode($document);
@@ -640,9 +656,9 @@ class Oai_Model_Server extends Application_Model_Abstract
     }
 
     /**
-     * Add the frontdoorurl attribute to Opus_Document XML output.
+     * Add the frontdoorurl attribute to Document XML output.
      *
-     * @param DOMNode $document Opus_Document XML serialisation
+     * @param DOMNode $document Document XML serialisation
      * @param string  $docid    Id of the document
      * @return void
      */
@@ -657,9 +673,9 @@ class Oai_Model_Server extends Application_Model_Abstract
     }
 
     /**
-     * Add download link url attribute to Opus_Document XML output.
+     * Add download link url attribute to Document XML output.
      *
-     * @param DOMNode $document Opus_Document XML serialisation
+     * @param DOMNode $document Document XML serialisation
      * @param string  $docid    Id of the document
      * @param string  $filename File path name
      * @return void
@@ -677,7 +693,7 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Add <ddb:transfer> element for ddb container file.
      *
-     * @param DOMNode $document Opus_Document XML serialisation
+     * @param DOMNode $document Document XML serialisation
      * @param string  $docid    Document ID
      * @return void
      */
@@ -693,10 +709,10 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Add rights element to output.
      *
-     * @param DOMNode $domNode
-     * @param Opus_Document $doc
+     * @param \DOMNode $domNode
+     * @param Document $doc
      */
-    private function _addAccessRights(DOMNode $domNode, Opus_Document $doc)
+    private function _addAccessRights(DOMNode $domNode, Document $doc)
     {
         $fileElement = $domNode->ownerDocument->createElement('Rights');
         $fileElement->setAttribute('Value', $this->_xmlFactory->getAccessRights($doc));
@@ -716,10 +732,10 @@ class Oai_Model_Server extends Application_Model_Abstract
         $docId = null;
         switch ($identifierParts[0]) {
             case 'urn':
-                $finder = new Opus_DocumentFinder();
-                $finder->setIdentifierTypeValue('urn', $oaiIdentifier);
-                $finder->setServerStateInList($this->_deliveringDocumentStates);
-                $docIds = $finder->ids();
+                $finder = Repository::getInstance()->getDocumentFinder();
+                $finder->setIdentifierValue('urn', $oaiIdentifier);
+                $finder->setServerState($this->_deliveringDocumentStates);
+                $docIds = $finder->getIds();
                 $docId = $docIds[0];
                 break;
             case 'oai':
@@ -747,7 +763,7 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      *
-     * @param Opus_Document $document
+     * @param Document $document
      * @return DOMNode
      * @throws Exception
      */
@@ -755,15 +771,15 @@ class Oai_Model_Server extends Application_Model_Abstract
     {
         if (! in_array($document->getServerState(), $this->_deliveringDocumentStates)) {
             $message = 'Trying to get a document in server state "' . $document->getServerState() . '"';
-            Zend_Registry::get('Zend_Log')->err($message);
-            throw new Exception($message);
+             Log::get()->err($message);
+            throw new \Exception($message);
         }
 
-        $xmlModel = new Opus_Model_Xml();
+        $xmlModel = new Xml();
         $xmlModel->setModel($document);
         $xmlModel->excludeEmptyFields();
-        $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
-        $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+        $xmlModel->setStrategy(new Version1);
+        $xmlModel->setXmlCache(Repository::getInstance()->getDocumentXmlCache());
         return $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
     }
 
@@ -786,7 +802,7 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     protected function loadStyleSheet($stylesheet)
     {
-        $this->_xslt = new DomDocument;
+        $this->_xslt = new \DomDocument;
         $this->_xslt->load($stylesheet);
         $this->_proc->importStyleSheet($this->_xslt);
         if (isset($_SERVER['HTTP_HOST'])) {

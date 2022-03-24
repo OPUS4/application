@@ -29,9 +29,12 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstract
+
+use Opus\Config;
+use Opus\Document;
+
+class Publish_View_Helper_BibliographieOverview extends \Zend_View_Helper_Abstract
 {
 
     public $view;
@@ -46,13 +49,13 @@ class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstrac
      */
     public function bibliographieOverview()
     {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = Config::get();
         if (! isset($config->form->first->bibliographie) ||
             (! filter_var($config->form->first->bibliographie, FILTER_VALIDATE_BOOLEAN))) {
             return;
         }
 
-        $this->session = new Zend_Session_Namespace('Publish');
+        $this->session = new \Zend_Session_Namespace('Publish');
 
         $fieldsetStart = "<fieldset><legend>" . $this->view->translate('header_bibliographie')
             . "</legend>\n\t\t\n\t\t";
@@ -62,7 +65,7 @@ class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstrac
             return "";
         }
 
-        $this->document = new Opus_Document($this->session->documentId);
+        $this->document = Document::get($this->session->documentId);
         $bib = $this->document->getBelongsToBibliography();
 
         if (empty($bib)) {

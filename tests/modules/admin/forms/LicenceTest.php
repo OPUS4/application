@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Licence;
+
 /**
  * Unit Tests fuer Formular fuer eine Lizenz.
  *
@@ -67,7 +69,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase
     {
         $form = new Admin_Form_Licence();
 
-        $licence = new Opus_Licence();
+        $licence = new Licence();
         $licence->setActive(true);
         $licence->setCommentInternal('Test Internal Comment');
         $licence->setDescMarkup('<h1>Test Markup</h1>');
@@ -101,7 +103,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase
     {
         $form = new Admin_Form_Licence();
 
-        $licence = new Opus_Licence(2);
+        $licence = new Licence(2);
 
         $form->populateFromModel($licence);
 
@@ -126,7 +128,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase
         $form->getElement('SortOrder')->setValue(5);
         $form->getElement('PodAllowed')->setChecked(true);
 
-        $licence = new Opus_Licence();
+        $licence = new Licence();
 
         $form->updateModel($licence);
 

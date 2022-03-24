@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Basic unit tests for class Review_IndexController.
  *
@@ -52,7 +54,7 @@ class Review_IndexControllerTest extends ControllerTestCase
         $document->setEnrichment([]);
         $this->documentId = $document->store();
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals(0, count($document->getPersonReferee()));
         $this->assertEquals(0, count($document->getEnrichment()));
     }
@@ -107,7 +109,7 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertContains('sureyes', $response->getBody());
         $this->assertContains('sureno', $response->getBody());
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('unpublished', $document->getServerState());
     }
 
@@ -129,7 +131,7 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertContains('sureyes', $response->getBody());
         $this->assertContains('sureno', $response->getBody());
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('unpublished', $document->getServerState());
     }
 
@@ -152,7 +154,7 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains('sureyes', $response->getBody());
         $this->assertNotContains('sureno', $response->getBody());
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('unpublished', $document->getServerState());
     }
 
@@ -175,7 +177,7 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains('sureyes', $response->getBody());
         $this->assertNotContains('sureno', $response->getBody());
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('published', $document->getServerState());
     }
 
@@ -197,7 +199,7 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertContains('sureyes', $response->getBody());
         $this->assertContains('sureno', $response->getBody());
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('unpublished', $document->getServerState());
     }
 
@@ -220,7 +222,7 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains('sureyes', $response->getBody());
         $this->assertNotContains('sureno', $response->getBody());
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('unpublished', $document->getServerState());
     }
 
@@ -243,7 +245,7 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains('sureyes', $response->getBody());
         $this->assertNotContains('sureno', $response->getBody());
 
-        $document = new Opus_Document($this->documentId);
+        $document = Document::get($this->documentId);
         $this->assertEquals('deleted', $document->getServerState());
     }
 }

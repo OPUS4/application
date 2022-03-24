@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Unit Test for class Application_Controller_Action_Helper_Workflow.
  */
@@ -129,7 +131,7 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
 
         $this->__workflowHelper->changeState($doc, 'published');
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
 
         $this->assertEquals('published', $doc->getServerState());
         $this->assertNotNull($doc->getServerDatePublished());
@@ -147,7 +149,7 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
 
         $this->__workflowHelper->changeState($doc, 'deleted');
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
 
         $this->assertEquals('deleted', $doc->getServerState());
     }
@@ -184,7 +186,7 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
 
         $this->__workflowHelper->changeState($doc, 'unpublished');
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
 
         $this->assertEquals('unpublished', $doc->getServerState());
     }
@@ -217,7 +219,7 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
     {
         $states = Application_Controller_Action_Helper_Workflow::getAllStates();
 
-        $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
 
         foreach ($states as $state) {
             $key = 'admin_workflow_' . $state;

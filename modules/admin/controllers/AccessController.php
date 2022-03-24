@@ -33,6 +33,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\UserRole;
+
 /**
  * Controller for managing permissions for roles including module access.
  *
@@ -47,7 +49,7 @@ class Admin_AccessController extends Application_Controller_Action
     public function listroleAction()
     {
         $id = $this->getRequest()->getParam('docid');
-        $roles = Opus_UserRole::getAll();
+        $roles = UserRole::getAll();
         $this->view->docId = $id;
         $this->view->roles = $roles;
         $this->view->checkedRoles = $this->getCheckedRoles($id, $roles);
@@ -88,11 +90,11 @@ class Admin_AccessController extends Application_Controller_Action
             throw new Exception('Role ID missing');
         }
 
-        $role = new Opus_UserRole($id);
+        $role = new UserRole($id);
         $roleModules = $role->listAccessModules();
 
         if ($role->getName() !== 'guest') {
-            $guest = Opus_UserRole::fetchByName('guest');
+            $guest = UserRole::fetchByName('guest');
             $guestModules = $guest->listAccessModules();
             // Role 'guest' has always access to 'default' module
             if (! in_array('default', $guestModules)) {
@@ -163,7 +165,7 @@ class Admin_AccessController extends Application_Controller_Action
     {
         $id = $request->getParam('roleid');
 
-        $role = new Opus_UserRole($id);
+        $role = new UserRole($id);
         $roleModules = $role->listAccessModules();
 
         foreach ($roleModules as $module) {
@@ -197,7 +199,7 @@ class Admin_AccessController extends Application_Controller_Action
     {
         $docId = $request->getParam('docid');
 
-        $roles = Opus_UserRole::getAll();
+        $roles = UserRole::getAll();
 
         foreach ($roles as $role) {
             $roleName = $role->getName();

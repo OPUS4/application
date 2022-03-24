@@ -25,41 +25,29 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @package     Search
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Search\Util\Searcher;
 
 /**
- * Dieses Script gibt die IDs aller veröffentlichten Dokumente aus, bei denen
- * Jane Doe der Name des Autors ODER der Name einer sonstigen beteiligten
- * Personen (advisor, contributor, editor, other, translator) ist
+ * Factory for searcher objects.
+ *
+ * TODO factory should be injected into objects that need it
  */
+class Application_Search_SearcherFactory
+{
 
-$firstName = "Jane";
-$lastName = "Doe";
-
-$docfinder = new Opus_DocumentFinder();
-// wichtig: müssen diesen Filter setzen, da im Index nur Dokument im Zustand published sind
-$docfinder->setServerState('published');
-$select = $docfinder->getSelect();
-$select
-  ->joinLeft(
-      ['pd' => 'link_persons_documents'],
-      'd.id = pd.document_id AND (pd.role = "author"'
-      . ' OR pd.role = "advisor" OR pd.role = "contributor" OR pd.role = "editor" OR pd.role = "other"'
-      . ' OR pd.role = "translator")',
-      []
-  )
-  ->joinLeft(['p' => 'persons'], 'pd.person_id = p.id', [])
-  ->where('p.first_name = ?', $firstName)
-  ->where('p.last_name = ?', $lastName)
-  ->group('d.id');
-
-foreach ($docfinder->ids() as $docId) {
-    echo "DocID $docId\n";
+    /**
+     * @return Searcher Configured Searcher object
+     */
+    public static function getSearcher()
+    {
+        $searcher = new Searcher();
+        $searcher->setAcl(Application_Security_AclProvider::getAcl());
+        return $searcher;
+    }
 }
-
-exit();

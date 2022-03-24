@@ -52,7 +52,7 @@ class Application_View_Helper_ExportLinksEnabledTest extends ControllerTestCase
     {
         $this->assertTrue($this->_helper->exportLinksEnabled());
 
-        Zend_Registry::get('Opus_Exporter')->removeAll();
+        \Zend_Registry::get('Opus_Exporter')->removeAll();
 
         $this->assertFalse($this->_helper->exportLinksEnabled());
     }

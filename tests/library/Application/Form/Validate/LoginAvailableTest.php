@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Account;
+
 /**
  *
  */
@@ -47,7 +49,7 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
         parent::setUp();
         $this->validator = new Application_Form_Validate_LoginAvailable();
 
-        $user = new Opus_Account();
+        $user = new Account();
         $user->setLogin('user');
         $user->setPassword('userpwd');
         $user->store();

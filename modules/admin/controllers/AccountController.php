@@ -33,6 +33,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Account;
+use Opus\UserRole;
+
 /**
  * Controller for administration of user accounts.
  *
@@ -77,7 +80,7 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
     {
         $login = $account->getLogin();
 
-        return ((Zend_Auth::getInstance()->getIdentity() !== strtolower($login)) && ($login !== 'admin'));
+        return ((\Zend_Auth::getInstance()->getIdentity() !== strtolower($login)) && ($login !== 'admin'));
     }
 
     public function getEditModelForm($model)
@@ -108,16 +111,16 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
 
         $this->view->allModules = $modules;
 
-        $account = new Opus_Account($id);
+        $account = new Account($id);
         $this->view->account = $account;
 
-        // Get all Opus_UserRoles for current Account *plus* 'guest'
+        // Get all UserRoles for current Account *plus* 'guest'
         $roles = [];
         foreach ($account->getRole() as $roleLinkModel) {
             $roles[] = $roleLinkModel->getModel();
         }
 
-        $guestRole = Opus_UserRole::fetchByName('guest');
+        $guestRole = UserRole::fetchByName('guest');
         if (! is_null($guestRole)) {
             $roles[] = $guestRole;
         }

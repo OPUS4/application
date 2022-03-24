@@ -28,8 +28,30 @@
  * @package     Import
  * @author      Sascha Szott
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2018
+ * @copyright   Copyright (c) 2016-2020
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ */
+
+use Opus\Collection;
+use Opus\DnbInstitute;
+use Opus\Document;
+use Opus\EnrichmentKey;
+use Opus\File;
+use Opus\Licence;
+use Opus\Person;
+use Opus\Series;
+use Opus\Subject;
+use Opus\Model\ModelException;
+use Opus\Model\NotFoundException;
+use Opus\Security\SecurityException;
+
+/**
+ * Class Application_Import_Importer
+ *
+ * TODO behavior of this importer changes depending swordContext - It means special handling code in various places.
+ *      With every new context, every new use case this code will get more complicated. It would be better if the
+ *      different context would be implemented in separate classes that extend a base class providing common
+ *      functionality.
  */
 class Application_Import_Importer
 {
@@ -45,6 +67,9 @@ class Application_Import_Importer
     private $swordContext = false;
     private $importDir = null;
 
+    /**
+     * @var null
+     */
     private $statusDoc = null;
 
     /**
@@ -64,7 +89,7 @@ class Application_Import_Importer
      *
      * Contains the document object if the import was successful.
      *
-     * @var Opus_Document
+     * @var Document
      */
     private $document;
 
@@ -111,7 +136,7 @@ class Application_Import_Importer
 
     private function initDocument()
     {
-        $doc = new Opus_Document();
+        $doc = Document::new();
         // since OPUS 4.5 attribute serverState is optional: if no attribute
         // value is given we set server state to unpublished
         $doc->setServerState('unpublished');
@@ -121,8 +146,8 @@ class Application_Import_Importer
     /**
      * @throws Application_Import_MetadataImportInvalidXmlException
      * @throws Application_Import_MetadataImportSkippedDocumentsException
-     * @throws Opus_Model_Exception
-     * @throws Opus_Security_Exception
+     * @throws ModelException
+     * @throws SecurityException
      */
     public function run()
     {
@@ -150,7 +175,7 @@ class Application_Import_Importer
             }
 
             /*
-             * @var Opus_Document
+             * @var Document
              */
             $doc = null;
             if ($opusDocumentElement->hasAttribute('docId')) {
@@ -166,9 +191,9 @@ class Application_Import_Importer
                     // with the given document are not deleted or updated
                     $docId = $opusDocumentElement->getAttribute('docId');
                     try {
-                        $doc = new Opus_Document($docId);
+                        $doc = Document::get($docId);
                         $opusDocumentElement->removeAttribute('docId');
-                    } catch (Opus_Model_NotFoundException $e) {
+                    } catch (NotFoundException $e) {
                         $this->log('Could not load document #' . $docId . ' from database: ' . $e->getMessage());
                         $this->appendDocIdToRejectList($oldId);
                         $numOfSkippedDocs++;
@@ -306,7 +331,7 @@ class Application_Import_Importer
 
     /**
      *
-     * @param Opus_Document $doc
+     * @param Document $doc
      */
     private function resetDocument($doc)
     {
@@ -333,6 +358,7 @@ class Application_Import_Importer
             'CompletedYear',
             'ThesisDateAccepted',
             'ThesisYearAccepted',
+            'EmbargoDate',
             'ContributingCorporation',
             'CreatingCorporation',
             'Edition',
@@ -361,7 +387,7 @@ class Application_Import_Importer
     /**
      *
      * @param DOMNamedNodeMap $attributes
-     * @param Opus_Document $doc
+     * @param Document $doc
      */
     private function processAttributes($attributes, $doc)
     {
@@ -381,8 +407,8 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNodeList $elements
-     * @param Opus_Document $doc
+     * @param \DOMNodeList $elements
+     * @param Document $doc
      *
      * @return boolean returns true if the import XML definition of the
      *                 currently processed document contains the first level
@@ -393,7 +419,7 @@ class Application_Import_Importer
         $filesElementPresent = false;
 
         foreach ($elements as $node) {
-            if ($node instanceof DOMElement) {
+            if ($node instanceof \DOMElement) {
                 switch ($node->tagName) {
                     case 'titlesMain':
                         $this->handleTitleMain($node, $doc);
@@ -451,13 +477,13 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param \DOMNode $node
+     * @param Document $doc
      */
     private function handleTitleMain($node, $doc)
     {
         foreach ($node->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement) {
+            if ($childNode instanceof \DOMElement) {
                 $t = $doc->addTitleMain();
                 $t->setValue(trim($childNode->textContent));
                 $t->setLanguage(trim($childNode->getAttribute('language')));
@@ -467,13 +493,13 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param \DOMNode $node
+     * @param Document $doc
      */
     private function handleTitles($node, $doc)
     {
         foreach ($node->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement) {
+            if ($childNode instanceof \DOMElement) {
                 $method = 'addTitle' . ucfirst($childNode->getAttribute('type'));
                 $t = $doc->$method();
                 $t->setValue(trim($childNode->textContent));
@@ -484,13 +510,13 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param \DOMNode $node
+     * @param Document $doc
      */
     private function handleAbstracts($node, $doc)
     {
         foreach ($node->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement) {
+            if ($childNode instanceof \DOMElement) {
                 $t = $doc->addTitleAbstract();
                 $t->setValue(trim($childNode->textContent));
                 $t->setLanguage(trim($childNode->getAttribute('language')));
@@ -500,14 +526,14 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param \DOMNode $node
+     * @param Document $doc
      */
     private function handlePersons($node, $doc)
     {
         foreach ($node->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement) {
-                $p = new Opus_Person();
+            if ($childNode instanceof \DOMElement) {
+                $p = new Person();
 
                 // mandatory fields
                 $p->setFirstName(trim($childNode->getAttribute('firstName')));
@@ -545,15 +571,15 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNodeList $identifiers
-     * @param Opus_Person $person
+     * @param \DOMNodeList $identifiers
+     * @param Person $person
      */
     private function handlePersonIdentifiers($identifiers, $person)
     {
         $identifiers = $identifiers->childNodes;
         $idTypesFound = []; // print log message if an identifier type is used more than once
         foreach ($identifiers as $identifier) {
-            if ($identifier instanceof DOMElement && $identifier->tagName == 'identifier') {
+            if ($identifier instanceof \DOMElement && $identifier->tagName == 'identifier') {
                 $idType = $identifier->getAttribute('type');
                 if ($idType == 'intern') {
                     $idType = 'misc';
@@ -572,14 +598,14 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param \DOMNode $node
+     * @param Document $doc
      */
     private function handleKeywords($node, $doc)
     {
         foreach ($node->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement) {
-                $s = new Opus_Subject();
+            if ($childNode instanceof \DOMElement) {
+                $s = new Subject();
                 $s->setLanguage(trim($childNode->getAttribute('language')));
                 $s->setType($childNode->getAttribute('type'));
                 $s->setValue(trim($childNode->textContent));
@@ -590,18 +616,18 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param \DOMNode $node
+     * @param Document $doc
      */
     private function handleDnbInstitutions($node, $doc)
     {
         foreach ($node->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement) {
+            if ($childNode instanceof \DOMElement) {
                 $instId = trim($childNode->getAttribute('id'));
                 $instRole = $childNode->getAttribute('role');
                 // check if dnbInstitute with given id and role exists
                 try {
-                    $inst = new Opus_DnbInstitute($instId);
+                    $inst = new DnbInstitute($instId);
 
                     // check if dnbInstitute supports given role
                     $method = 'getIs' . ucfirst($instRole);
@@ -611,7 +637,7 @@ class Application_Import_Importer
                     } else {
                         throw new Exception('given role ' . $instRole . ' is not allowed for dnbInstitution id ' . $instId);
                     }
-                } catch (Opus_Model_NotFoundException $e) {
+                } catch (NotFoundException $e) {
                     $msg = 'dnbInstitution id ' . $instId . ' does not exist: ' . $e->getMessage();
                     if ($this->swordContext) {
                         $this->log($msg);
@@ -625,13 +651,13 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param \DOMNode $node
+     * @param Document $doc
      */
     private function handleIdentifiers($node, $doc)
     {
         foreach ($node->childNodes as $childNode) {
-            if ($childNode instanceof DOMElement) {
+            if ($childNode instanceof \DOMElement) {
                 $i = $doc->addIdentifier();
                 $i->setValue(trim($childNode->textContent));
                 $i->setType($childNode->getAttribute('type'));
@@ -641,8 +667,8 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param \DOMNode $node
+     * @param Document $doc
      */
     private function handleNotes($node, $doc)
     {
@@ -657,8 +683,8 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param \DOMNode $node
+     * @param Document $doc
      */
     private function handleCollections($node, $doc)
     {
@@ -667,9 +693,9 @@ class Application_Import_Importer
                 $collectionId = trim($childNode->getAttribute('id'));
                 // check if collection with given id exists
                 try {
-                    $c = new Opus_Collection($collectionId);
+                    $c = new Collection($collectionId);
                     $doc->addCollection($c);
-                } catch (Opus_Model_NotFoundException $e) {
+                } catch (NotFoundException $e) {
                     $msg = 'collection id ' . $collectionId . ' does not exist: ' . $e->getMessage();
                     if ($this->swordContext) {
                         $this->log($msg);
@@ -684,7 +710,7 @@ class Application_Import_Importer
     /**
      *
      * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param Document $doc
      */
     private function handleSeries($node, $doc)
     {
@@ -693,10 +719,10 @@ class Application_Import_Importer
                 $seriesId = trim($childNode->getAttribute('id'));
                 // check if document set with given id exists
                 try {
-                    $s = new Opus_Series($seriesId);
+                    $s = new Series($seriesId);
                     $link = $doc->addSeries($s);
                     $link->setNumber(trim($childNode->getAttribute('number')));
-                } catch (Opus_Model_NotFoundException $e) {
+                } catch (NotFoundException $e) {
                     $msg = 'series id ' . $seriesId . ' does not exist: ' . $e->getMessage();
                     if ($this->swordContext) {
                         $this->log($msg);
@@ -712,7 +738,7 @@ class Application_Import_Importer
      * Processes the enrichments in the document xml.
      *
      * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param Document $doc
      */
     private function handleEnrichments($node, $doc)
     {
@@ -721,8 +747,8 @@ class Application_Import_Importer
                 $key = trim($childNode->getAttribute('key'));
                 // check if enrichment key exists
                 try {
-                    new Opus_EnrichmentKey($key);
-                } catch (Opus_Model_NotFoundException $e) {
+                    new EnrichmentKey($key);
+                } catch (NotFoundException $e) {
                     $msg = 'enrichment key ' . $key . ' does not exist: ' . $e->getMessage();
                     if ($this->swordContext) {
                         $this->log($msg);
@@ -738,9 +764,9 @@ class Application_Import_Importer
 
     /**
      * Adds an enrichment to the document.
-     * @param $doc Opus_Document
-     * @param $key Name of enrichment
-     * @param $value Value of enrichment
+     * @param $doc Document
+     * @param $key string Name of enrichment
+     * @param $value string Value of enrichment
      */
     private function addEnrichment($doc, $key, $value)
     {
@@ -757,7 +783,7 @@ class Application_Import_Importer
     /**
      *
      * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param Document $doc
      */
     private function handleLicences($node, $doc)
     {
@@ -765,9 +791,9 @@ class Application_Import_Importer
             if ($childNode instanceof DOMElement) {
                 $licenceId = trim($childNode->getAttribute('id'));
                 try {
-                    $l = new Opus_Licence($licenceId);
+                    $l = new Licence($licenceId);
                     $doc->addLicence($l);
-                } catch (Opus_Model_NotFoundException $e) {
+                } catch (NotFoundException $e) {
                     $msg = 'licence id ' . $licenceId . ' does not exist: ' . $e->getMessage();
                     if ($this->swordContext) {
                         $this->log($msg);
@@ -782,7 +808,7 @@ class Application_Import_Importer
     /**
      *
      * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param Document $doc
      */
     private function handleDates($node, $doc)
     {
@@ -816,7 +842,7 @@ class Application_Import_Importer
      * Handling of files was introduced with OPUS 4.6.
      *
      * @param DOMNode $node
-     * @param Opus_Document $doc
+     * @param Document $doc
      * @param string $baseDir
      */
     private function handleFiles($node, $doc, $baseDir)
@@ -837,10 +863,10 @@ class Application_Import_Importer
 
     /**
      *
-     * Add a single file to the given Opus_Document.
+     * Add a single file to the given Document.
      *
-     * @param Opus_Document $doc the given document
-     * @param type $name name of the file that should be imported (relative to baseDir)
+     * @param Document $doc the given document
+     * @param $name string Name of the file that should be imported (relative to baseDir)
      * @param string $baseDir (optional) path of the file that should be imported (relative to the import directory)
      * @param string $path (optional) path (and name) of the file that should be imported (relative to baseDir)
      * @param DOMNodeList $childNode (optional) additional metadata of the file (taken from import XML)
@@ -868,7 +894,7 @@ class Application_Import_Importer
             return;
         }
 
-        $file = new Opus_File();
+        $file = new File();
         if (! is_null($childNode)) {
             $this->handleFileAttributes($childNode, $file);
         }
@@ -899,7 +925,7 @@ class Application_Import_Importer
      * Prüft, ob die übergebene Datei überhaupt importiert werden darf.
      * Dazu gibt es in der Konfiguration die Schlüssel filetypes.mimetypes.*
      *
-     * @param type $fullPath
+     * @param $fullPath string
      *
      * TODO move check to file types helper?
      */
@@ -909,7 +935,7 @@ class Application_Import_Importer
         $finfo = new finfo(FILEINFO_MIME_TYPE);
         $mimeTypeFound = $finfo->file($fullPath);
 
-        $fileTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('fileTypes');
+        $fileTypes = \Zend_Controller_Action_HelperBroker::getStaticHelper('fileTypes');
 
         return $fileTypes->isValidMimeType($mimeTypeFound, $extension);
     }
@@ -941,8 +967,8 @@ class Application_Import_Importer
 
     /**
      *
-     * @param DOMElement $node
-     * @param Opus_File $file
+     * @param \DOMElement $node
+     * @param File $file
      */
     private function handleFileAttributes($node, $file)
     {
@@ -980,7 +1006,7 @@ class Application_Import_Importer
      * Add all files in the root level of the import package to the given
      * document.
      *
-     * @param Opus_Document $doc document
+     * @param Document $doc document
      */
     private function importFilesDirectly($doc)
     {
@@ -992,7 +1018,7 @@ class Application_Import_Importer
 
     /**
      * Returns the imported document.
-     * @return Opus_Document
+     * @return Document
      */
     public function getDocument()
     {

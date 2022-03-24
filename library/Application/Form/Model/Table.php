@@ -33,7 +33,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  *
  * TODO class is tied to Application_Controller_ActionCRUD - resolve
  */
@@ -109,7 +108,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
 
     /**
      * Liefert das Label für eine Spalte.
-     * @param $index Index der Spalte angefangen bei 0
+     * @param $index int Index der Spalte angefangen bei 0
      * @return string|null
      */
     public function getColumnLabel($index)
@@ -179,7 +178,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
      * Determines if a link for the show action should be rendered.
      * @return bool true - link should be rendered
      */
-    public function isRenderShowActionLink($model = null)
+    public function isRenderShowActionLink()
     {
         if (! is_null($this->_controller)) {
             if (! method_exists($this->_controller, 'getShowActionEnabled')) {

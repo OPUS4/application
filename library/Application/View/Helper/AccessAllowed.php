@@ -29,13 +29,12 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Returns true is current user has access to a resource.
  */
-class Application_View_Helper_AccessAllowed extends Zend_View_Helper_Abstract
+class Application_View_Helper_AccessAllowed extends \Zend_View_Helper_Abstract
 {
 
     /**
@@ -45,7 +44,7 @@ class Application_View_Helper_AccessAllowed extends Zend_View_Helper_Abstract
 
     /**
      * Returns true if access to resource is allowed or resource does not exist.
-     * @param type $resource
+     * @param $resource string
      * @return boolean
      */
     public function accessAllowed($resource)
@@ -55,12 +54,12 @@ class Application_View_Helper_AccessAllowed extends Zend_View_Helper_Abstract
 
     /**
      * Returns the Zend_Acl object or null.
-     * @return Zend_Acl
+     * @return \Zend_Acl
      */
     protected function getAccessControl()
     {
         if (is_null($this->_accessControl)) {
-            $this->_accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+            $this->_accessControl = \Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
         }
         return $this->_accessControl;
     }

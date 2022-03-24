@@ -444,7 +444,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
         $resultList = null;
 
         try {
-            $searcher = new Opus\Search\Util\Searcher();
+            $searcher = Application_Search_SearcherFactory::getSearcher();
 
             if (! is_null($openFacets)) {
                 $searcher->setFacetArray($openFacets);

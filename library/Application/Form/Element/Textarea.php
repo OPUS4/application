@@ -29,13 +29,12 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Angepasste Klasse für Textarea Formularelemente.
  */
-class Application_Form_Element_Textarea extends Zend_Form_Element_Textarea implements Application_Form_IElement
+class Application_Form_Element_Textarea extends \Zend_Form_Element_Textarea implements Application_Form_IElement
 {
 
     /**
@@ -56,7 +55,7 @@ class Application_Form_Element_Textarea extends Zend_Form_Element_Textarea imple
             $this->setAttrib('cols', 70);
         }
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators()

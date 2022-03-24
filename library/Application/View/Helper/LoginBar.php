@@ -31,8 +31,10 @@
  * @author      Jens Schwidder (schwidder@zib.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Config;
+use Opus\Security\Realm;
 
 /**
  * The LoginBar View Helper returns a link to an actual logout controller and action
@@ -42,7 +44,7 @@
  * @category    Application
  * @package     View
  */
-class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract
+class Application_View_Helper_LoginBar extends \Zend_View_Helper_Abstract
 {
 
     /**
@@ -115,8 +117,8 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract
      */
     public function __toString()
     {
-        $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
-        $identity = Zend_Auth::getInstance()->getIdentity();
+        $returnParams = \Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
+        $identity = \Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
             $url = $this->view->url(array_merge($this->_loginUrl, $returnParams->getReturnParameters()));
             return '<a rel="nofollow" href="' . $url . '">' . $this->view->translate('default_auth_index') . '</a>';
@@ -126,11 +128,11 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract
         $addAccountLink = false;
 
         // Prüfe, ob Nutzer Zugriff auf Account Modul hat
-        $realm = Opus_Security_Realm::getInstance();
+        $realm = Realm::getInstance();
 
         if ($realm->checkModule('account') == true) {
             // Prüfe, ob Nutzer ihren Account editieren dürfen
-            $config = Zend_Registry::get('Zend_Config');
+            $config = Config::get();
             if (isset($config) and isset($config->account->editOwnAccount)) {
                 $addAccountLink = filter_var($config->account->editOwnAccount, FILTER_VALIDATE_BOOLEAN);
             }

@@ -63,7 +63,7 @@ class Setup_Form_FaqItem extends Application_Form_Translations
         $this->getElement(self::ELEMENT_ID)->setValue($name);
         $this->getElement(self::ELEMENT_NAME)->setValue($name);
 
-        $manager = Zend_Registry::get('Zend_Translate');
+        $manager = Application_Translate::getInstance();
 
         $translations = $manager->getTranslations("help_title_$name");
         $this->getElement(self::ELEMENT_QUESTION)->setValue($translations);
@@ -79,7 +79,7 @@ class Setup_Form_FaqItem extends Application_Form_Translations
 
     public function updateEntry()
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
         $manager = new Application_Translate_TranslationManager();
 
         $faqId = $this->getElementValue(self::ELEMENT_ID);

@@ -33,6 +33,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Series;
+
 /**
  * Class Solrsearch_BrowseControllerTest.
  *
@@ -95,7 +97,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $d->setServerState('unpublished');
         $d->store();
 
-        $s = new Opus_Series(7);
+        $s = new Series(7);
         $s->setVisible('1');
         $s->store();
 
@@ -118,7 +120,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $d->setServerState('published');
         $d->store();
 
-        $s = new Opus_Series(7);
+        $s = new Series(7);
         $s->setVisible('1');
         $s->store();
 
@@ -130,7 +132,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->restoreSeriesVisibility($visibilities);
 
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());
-        foreach (Opus_Series::getAll() as $series) {
+        foreach (Series::getAll() as $series) {
             if ($series->getId() != 7) {
                 $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/' . $series->getId(), $this->getResponse()->getBody());
             }
@@ -141,7 +143,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     private function setAllSeriesToUnvisible()
     {
         $visibilities = [];
-        foreach (Opus_Series::getAll() as $seriesItem) {
+        foreach (Series::getAll() as $seriesItem) {
             $visibilities[$seriesItem->getId()] = $seriesItem->getVisible();
             $seriesItem->setVisible(0);
             $seriesItem->store();
@@ -151,7 +153,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
 
     private function restoreSeriesVisibility($visibilities)
     {
-        foreach (Opus_Series::getAll() as $seriesItem) {
+        foreach (Series::getAll() as $seriesItem) {
             $seriesItem->setVisible($visibilities[$seriesItem->getId()]);
             $seriesItem->store();
         }
@@ -175,7 +177,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $sortOrders = $this->getSortOrders();
 
         // reverse ordering of series
-        foreach (Opus_Series::getAll() as $seriesItem) {
+        foreach (Series::getAll() as $seriesItem) {
             $seriesItem->setSortOrder(10 - intval($sortOrders[$seriesItem->getId()]));
             $seriesItem->store();
         }
@@ -197,11 +199,11 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     {
         $sortOrders = $this->getSortOrders();
 
-        $s = new Opus_Series(2);
+        $s = new Series(2);
         $s->setSortOrder(6);
         $s->store();
 
-        $s = new Opus_Series(6);
+        $s = new Series(6);
         $s->setSortOrder(0);
         $s->store();
 
@@ -221,7 +223,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     private function getSortOrders()
     {
         $sortOrders = [];
-        foreach (Opus_Series::getAll() as $seriesItem) {
+        foreach (Series::getAll() as $seriesItem) {
             $sortOrders[$seriesItem->getId()] = $seriesItem->getSortOrder();
         }
         return $sortOrders;
@@ -229,7 +231,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
 
     private function setSortOrders($sortOrders)
     {
-        foreach (Opus_Series::getAll() as $seriesItem) {
+        foreach (Series::getAll() as $seriesItem) {
             $seriesItem->setSortOrder($sortOrders[$seriesItem->getId()]);
             $seriesItem->store();
         }

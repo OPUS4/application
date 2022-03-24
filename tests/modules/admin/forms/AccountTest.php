@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Account;
+
 class Admin_Form_AccountTest extends ControllerTestCase
 {
 
@@ -41,7 +43,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $user = new Opus_Account();
+        $user = new Account();
         $user->setLogin('user');
         $user->setPassword('userpwd');
         $user->store();
@@ -66,7 +68,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
 
     public function testCreateFormForUser()
     {
-        $user = new Opus_Account(null, null, 'user');
+        $user = new Account(null, null, 'user');
         $form = new Admin_Form_Account($user->getId());
         $this->assertNotNUll($form);
         $this->assertEquals('user', $form->getElement('username')->getValue());
@@ -79,7 +81,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
     public function testCreateFormForCurrentUser()
     {
         $this->loginUser('admin', 'adminadmin');
-        $user = new Opus_Account(null, null, 'admin');
+        $user = new Account(null, null, 'admin');
         $form = new Admin_Form_Account($user->getId());
         $this->assertNotNull($form);
         $element = $form->getSubForm(Admin_Form_Account::SUBFORM_ROLES)->getElement('administrator');
@@ -91,7 +93,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
      */
     public function testDoNotLowerCaseUsername()
     {
-        $user = new Opus_Account(null, null, 'user');
+        $user = new Account(null, null, 'user');
 
         $form = new Admin_Form_Account($user->getId());
 
@@ -106,7 +108,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
 
     public function testChangedLoginNameValidationExistingLoginNameAccount()
     {
-        $user = new Opus_Account(null, null, 'user');
+        $user = new Account(null, null, 'user');
 
         $form = new Admin_Form_Account($user->getId());
 
@@ -124,7 +126,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
 
     public function testChangedLoginNameValidationNewLoginName()
     {
-        $user = new Opus_Account(null, null, 'user');
+        $user = new Account(null, null, 'user');
 
         $form = new Admin_Form_Account($user->getId());
 
@@ -142,7 +144,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
 
     public function testEditValidationSameAccount()
     {
-        $user = new Opus_Account(null, null, 'user');
+        $user = new Account(null, null, 'user');
 
         $form = new Admin_Form_Account($user->getId());
 
@@ -216,5 +218,19 @@ class Admin_Form_AccountTest extends ControllerTestCase
         $this->assertContains('administrator', $selected);
         $this->assertContains('jobaccess', $selected);
         $this->assertContains('guest', $selected);
+    }
+
+    public function testValidationNewAccountMissingPassword()
+    {
+        $form = new Admin_Form_Account();
+
+        $postData = [
+            'username' => 'newaccount'
+        ];
+
+        $this->assertFalse($form->isValid($postData));
+
+        $this->assertContains('isEmpty', $form->getErrors('password'));
+        $this->assertContains('isEmpty', $form->getErrors('confirmPassword'));
     }
 }

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Date;
+
 class Application_View_Helper_EmbargoHasPassedTest extends ControllerTestCase
 {
 
@@ -45,7 +47,7 @@ class Application_View_Helper_EmbargoHasPassedTest extends ControllerTestCase
 
         $this->assertTrue($helper->embargoHasPassed($document));
 
-        $document->setEmbargoDate(new Opus_Date(new DateTime('tomorrow')));
+        $document->setEmbargoDate(new Date(new DateTime('tomorrow')));
 
         $this->assertFalse($helper->embargoHasPassed($document));
     }
@@ -59,7 +61,7 @@ class Application_View_Helper_EmbargoHasPassedTest extends ControllerTestCase
 
         $this->assertTrue($helper->embargoHasPassed($docId));
 
-        $document->setEmbargoDate(new Opus_Date(new DateTime('tomorrow')));
+        $document->setEmbargoDate(new Date(new DateTime('tomorrow')));
         $document->store();
 
         $this->assertFalse($helper->embargoHasPassed($docId));

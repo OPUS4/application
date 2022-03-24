@@ -241,7 +241,7 @@ class Setup_LanguageController extends Application_Controller_Action
                     if ($form->isValid($post)) {
                         $form->updateTranslation();
                         $form = null;
-                        Zend_Registry::get('Zend_Translate')->clearCache(); // TODO encapsulate
+                        Application_Translate::getInstance()->clearCache(); // TODO encapsulate
                     } else {
                         // TODO go back to form
                     }
@@ -454,7 +454,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
         if ($request->isPost()) {
             // TODO validate form
-            $upload = new Zend_File_Transfer_Adapter_Http();
+            $upload = new \Zend_File_Transfer_Adapter_Http();
             $files = $upload->getFileInfo();
 
             foreach ($files as $file => $fileInfo) {
@@ -516,7 +516,7 @@ class Setup_LanguageController extends Application_Controller_Action
             switch ($result) {
                 case Admin_Form_Configuration::RESULT_SAVE:
                     if ($form->isValid($data)) {
-                        $config = new Zend_Config([], true);
+                        $config = new \Zend_Config([], true);
                         $form->updateModel($config);
                         Application_Configuration::save($config);
                     } else {

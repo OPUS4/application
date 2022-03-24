@@ -46,7 +46,7 @@ class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->helper = Zend_Controller_Action_HelperBroker::getStaticHelper('Files');
+        $this->helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('Files');
 
         $this->assertNotNull($this->helper, 'Files Action Helper not available.');
 

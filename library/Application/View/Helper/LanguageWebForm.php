@@ -31,10 +31,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Language;
+
 /**
  * View helper for tranform long language form in short language form (Part2 in Part1).
  */
-class Application_View_Helper_LanguageWebForm extends Zend_View_Helper_Abstract
+class Application_View_Helper_LanguageWebForm extends \Zend_View_Helper_Abstract
 {
     /**
      * Array with transformed language-attributes. So they don't have been computed twice.
@@ -55,7 +57,7 @@ class Application_View_Helper_LanguageWebForm extends Zend_View_Helper_Abstract
     public function languageWebForm($value)
     {
         if (! array_key_exists($value, $this->_langCache)) {
-            $lang = Opus_Language::getPropertiesByPart2T($value);
+            $lang = Language::getPropertiesByPart2T($value);
             $this->_langCache[$value] = $lang['part1'];
         }
         return $this->_langCache[$value];

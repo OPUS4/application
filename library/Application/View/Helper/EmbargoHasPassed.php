@@ -31,7 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_EmbargoHasPassed extends Zend_View_Helper_Abstract
+use Opus\Document;
+
+class Application_View_Helper_EmbargoHasPassed extends \Zend_View_Helper_Abstract
 {
 
     /**
@@ -43,8 +45,8 @@ class Application_View_Helper_EmbargoHasPassed extends Zend_View_Helper_Abstract
      */
     public static function embargoHasPassed($doc)
     {
-        if (! $doc instanceof Opus_Document) {
-            $doc = new Opus_Document($doc);
+        if (! $doc instanceof Document) {
+            $doc = Document::get($doc);
         }
 
         return $doc->hasEmbargoPassed();

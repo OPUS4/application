@@ -31,6 +31,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Date;
+use Opus\Document;
+use Opus\Identifier;
+use Opus\Model\ModelException;
+use Opus\Person;
+use Opus\Title;
+
 class Export_DataCiteExportTest extends ControllerTestCase
 {
 
@@ -41,7 +48,6 @@ class Export_DataCiteExportTest extends ControllerTestCase
     public function testExportOfValidDataCiteXML()
     {
         // DOI Präfix setzen
-        $oldConfig = Zend_Registry::get('Zend_Config');
         $this->adaptDoiConfiguration();
 
         // freigegebenes Testdokument mit allen Pflichtfeldern anlegen
@@ -50,9 +56,6 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $docId = $this->addRequiredFields($doc);
 
         $this->dispatch('/export/index/datacite/docId/' . $docId);
-
-        // Änderungen an Konfiguration zurücksetzen
-        Zend_Registry::set('Zend_Config', $oldConfig);
 
         $this->assertResponseCode(200);
         $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
@@ -90,7 +93,6 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlStatusPageForUnpublishedDoc()
     {
-        $oldConfig = Zend_Registry::get('Zend_Config');
         $this->adaptDoiConfiguration();
 
         // nicht freigegebenes Testdokument mit allen Pflichtfeldern erzeugen
@@ -100,9 +102,6 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->useGerman();
         $this->dispatch('/export/index/datacite/docId/' . $docId);
-
-        // Änderungen an Konfiguration zurücksetzen
-        Zend_Registry::set('Zend_Config', $oldConfig);
 
         $this->assertResponseCode(200);
 
@@ -114,7 +113,6 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlStatusPageForUnpublishedDocWithMissingField()
     {
-        $oldConfig = Zend_Registry::get('Zend_Config');
         $this->adaptDoiConfiguration();
 
         // nicht freigegebenes Testdokument mit Pflichtfeldern erzeugen
@@ -129,9 +127,6 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->useGerman();
         $this->dispatch('/export/index/datacite/docId/' . $docId);
 
-        // Änderungen an Konfiguration zurücksetzen
-        Zend_Registry::set('Zend_Config', $oldConfig);
-
         $this->assertResponseCode(200);
 
         $this->assertContains("DataCite XML von Dokument $docId ist nicht gültig", $this->getResponse()->getBody());
@@ -142,20 +137,16 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlForUnpublishedDocWithServerDatePublished()
     {
-        $oldConfig = Zend_Registry::get('Zend_Config');
         $this->adaptDoiConfiguration();
 
         // nicht freigegebenes Testdokument mit Pflichtfeldern erzeugen und ServerDatePublished
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
-        $doc->setServerDatePublished(new Opus_Date('2019-12-24'));
+        $doc->setServerDatePublished(new Date('2019-12-24'));
         $docId = $this->addRequiredFields($doc);
 
         $this->useGerman();
         $this->dispatch('/export/index/datacite/docId/' . $docId);
-
-        // Änderungen an Konfiguration zurücksetzen
-        Zend_Registry::set('Zend_Config', $oldConfig);
 
         $this->assertResponseCode(200);
         $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
@@ -164,7 +155,6 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     public function testExportOfDataCiteXmlStatusPageForPublishedDocWithoutServerDatePublished()
     {
-        $oldConfig = Zend_Registry::get('Zend_Config');
         $this->adaptDoiConfiguration();
 
         // freigegebenes Testdokument mit Pflichtfeldern erzeugen
@@ -172,15 +162,12 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $doc->setServerState('published');
         $docId = $this->addRequiredFields($doc);
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
         $doc->setServerDatePublished(''); // dies setzt das Publication Year auf 0001 (ohne Monat und Tag)
         $doc->store();
 
         $this->useGerman();
         $this->dispatch('/export/index/datacite/docId/' . $docId);
-
-        // Änderungen an Konfiguration zurücksetzen
-        Zend_Registry::set('Zend_Config', $oldConfig);
 
         $this->assertResponseCode(200);
 
@@ -195,24 +182,21 @@ class Export_DataCiteExportTest extends ControllerTestCase
      * Nicht freigeschaltete Dokumente können nur dann exportiert werden,
      * wenn der Benutzer das Recht 'resource_documents' besitzt.
      *
-     * @throws Opus_Model_Exception
+     * @throws ModelException
      * @throws Zend_Exception
      */
     public function testExportOfDataCiteXmlWithUnpublishedDocNotAllowed()
     {
         $removeAccess = $this->addModuleAccess('export', 'guest');
         $this->enableSecurity();
-        $config = Zend_Registry::get('Zend_Config');
 
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' => [
+                'export' => [
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
                 ]
-            )
-        );
+            ]
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -226,7 +210,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        Zend_Registry::set('Zend_Config', $config);
+
         if ($removeAccess) {
             $this->removeModuleAccess('export', 'guest');
         }
@@ -240,17 +224,14 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->useEnglish();
 
         $this->enableSecurity();
-        $config = Zend_Registry::get('Zend_Config');
 
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' => [
+                'export' => [
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
                 ]
-            )
-        );
+            ]
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -264,7 +245,6 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        Zend_Registry::set('Zend_Config', $config);
 
         $this->assertResponseCode(200);
         $this->assertContains("DataCite XML of document ${docId} is not valid", $this->getResponse()->getBody());
@@ -276,17 +256,14 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $removeAccess = $this->addModuleAccess('export', 'docsadmin');
         $this->enableSecurity();
-        $config = Zend_Registry::get('Zend_Config');
 
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' => [
+                'export' => [
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
                 ]
-            )
-        );
+            ]
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -300,7 +277,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        Zend_Registry::set('Zend_Config', $config);
+
         if ($removeAccess) {
             $this->removeModuleAccess('export', 'docsadmin');
         }
@@ -315,17 +292,14 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $removeAccess = $this->addModuleAccess('export', 'collectionsadmin');
         $this->enableSecurity();
-        $config = Zend_Registry::get('Zend_Config');
 
-        Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config(
-                ['plugins' =>
-                    ['export' =>
-                        ['datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                    ]
+        $this->adjustConfiguration([
+            'plugins' => [
+                'export' => [
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
                 ]
-            )
-        );
+            ]
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -339,7 +313,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         // revert configuration changes
         $this->restoreSecuritySetting();
-        Zend_Registry::set('Zend_Config', $config);
+
         if ($removeAccess) {
             $this->removeModuleAccess('export', 'collectionsadmin');
         }
@@ -349,7 +323,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
     }
 
     /**
-     * @param Opus_Document $doc
+     * @param Document $doc
      * @return int ID des gespeicherten Dokuments
      */
     private function addRequiredFields($doc)
@@ -359,19 +333,19 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $doc->setLanguage('deu');
         $docId = $doc->store();
 
-        $doc = new Opus_Document($docId);
+        $doc = Document::get($docId);
 
-        $doi = new Opus_Identifier();
+        $doi = new Identifier();
         $doi->setType('doi');
         $doi->setValue('10.2345/opustest-' . $docId);
         $doc->setIdentifier([$doi]);
 
-        $author = new Opus_Person();
+        $author = new Person();
         $author->setFirstName('John');
         $author->setLastName('Doe');
         $doc->setPersonAuthor([$author]);
 
-        $title = new Opus_Title();
+        $title = new Title();
         $title->setValue('Meaningless title');
         $title->setLanguage('deu');
         $doc->setTitleMain([$title]);
@@ -382,14 +356,12 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
     private function adaptDoiConfiguration()
     {
-        Zend_Registry::set('Zend_Config', Zend_Registry::get('Zend_Config')->merge(
-            new Zend_Config([
-                'doi' => [
-                    'autoCreate' => false,
-                    'prefix' => '10.2345',
-                    'localPrefix' => 'opustest'
-                ]
-            ])
-        ));
+        $this->adjustConfiguration([
+            'doi' => [
+                'autoCreate' => false,
+                'prefix' => '10.2345',
+                'localPrefix' => 'opustest'
+            ]
+        ]);
     }
 }

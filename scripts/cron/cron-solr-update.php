@@ -30,7 +30,6 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 define('APPLICATION_ENV', 'development');
@@ -38,8 +37,12 @@ define('APPLICATION_ENV', 'development');
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$jobrunner = new Opus_Job_Runner();
-$jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
+use Opus\Job\Runner;
+use Opus\Search\Task\IndexOpusDocument;
+use Opus\Log;
+
+$jobrunner = new Runner();
+$jobrunner->setLogger(Log::get());
 
 // no waiting between jobs
 $jobrunner->setDelay(0);
@@ -47,7 +50,7 @@ $jobrunner->setDelay(0);
 // set a limit of 100 index jobs per run
 $jobrunner->setLimit(100);
 
-$indexWorker = new Opus\Search\Task\IndexOpusDocument();
+$indexWorker = new IndexOpusDocument();
 $jobrunner->registerWorker($indexWorker);
 
 // run processing

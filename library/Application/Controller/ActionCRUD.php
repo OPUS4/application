@@ -124,7 +124,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
     /**
      * Klasse für OPUS Model.
-     * @var \Opus_Model_Abstract
+     * @var \Opus\Model\AbstractModel
      */
     private $_modelClass = null;
 
@@ -317,7 +317,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
                         try {
                             $model->store();
-                        } catch (Opus_Model_Exception $ome) {
+                        } catch (\Opus\Model\ModelException $ome) {
                             // Speichern fehlgeschlagen
                             return ['message' => self::SAVE_FAILURE];
                         }
@@ -378,7 +378,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
                 // Model löschen
                 try {
                     $this->deleteModel($model);
-                } catch (Opus_Model_Exception $ome) {
+                } catch (\Opus\Model\ModelException $ome) {
                     $this->getLogger()->err(__METHOD__ . ' ' . $ome->getMessage());
                     return ['message' => self::DELETE_FAILURE];
                 }
@@ -414,7 +414,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
             $this->_helper->Redirector->redirectTo($action, $message, null, null, $params);
         } else {
             // Ergebnis ist Formular
-            if (! is_null($result) && $result instanceof Zend_Form) {
+            if (! is_null($result) && $result instanceof \Zend_Form) {
                 $this->renderForm($result);
             }
         }
@@ -425,7 +425,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      *
      * Die Funktion kann überschrieben werden, falls spezielle Schritte beim Löschen notwendig sind.
      *
-     * @param $model \Opus_Model_Abstract
+     * @param $model \Opus\Model\AbstractModel
      */
     protected function deleteModel($model)
     {
@@ -463,7 +463,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      *
      * Das Bestätigunsformular ohne Model wird für die Validierung verwendet.
      *
-     * @param Opus_Model_AbstractDb $model
+     * @param \Opus\Model\AbstractDb $model
      * @return Application_Form_Confirmation
      */
     public function getConfirmationForm($model = null)
@@ -512,7 +512,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
             if (strlen(trim($modelId)) !== 0) {
                 try {
                     return new $modelClass($modelId);
-                } catch (Opus_Model_NotFoundException $omnfe) {
+                } catch (\Opus\Model\NotFoundException $omnfe) {
                     $this->getLogger()->err(__METHOD__ . ':' . $omnfe->getMessage());
                 }
             }
@@ -585,7 +585,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
     /**
      * Liefert die Model-Klasse die verwaltet wird.
-     * @return null|Opus_Model_Abstract
+     * @return null|\Opus\Model\AbstractModel
      */
     public function getModelClass()
     {
@@ -627,7 +627,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
     /**
      * Liefert die Nachricht für den Schlüssel.
-     * @param $key Nachrichtenschlüssel
+     * @param $key string Nachrichtenschlüssel
      * @return null|string
      */
     public function getMessage($key)

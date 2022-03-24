@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,26 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Repository;
 
 /**
  * Basic publication statistics (based on server_published_date)
+ *
+ * TODO make command in opus4 tool
  */
 
-$df = new Opus_DocumentFinder();
-$years = $df->setServerState('published')->groupedServerYearPublished();
+$repository = Repository::getInstance();
+
+$finder = $repository->getDocumentFinder();
+$years = $finder->setServerState('published')->getYearsPublished();
 sort($years);
 
 $cumSum = 0;
 foreach ($years as $year) {
-    $df = new Opus_DocumentFinder();
-    $count = $df->setServerState('published')->setServerDatePublishedRange($year, $year + 1)->count();
+    $finder = $repository->getDocumentFinder();
+    $count = $finder->setServerState('published')->setServerDatePublishedRange($year, $year + 1)->getCount();
 
     $cumSum += $count;
     echo "year $year: $cumSum ($count)\n";

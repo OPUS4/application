@@ -42,7 +42,7 @@
  * TODO validation
  * TODO should translation functions be added at model level (in framework)?
  */
-class Application_Form_Element_Translation extends Zend_Form_Element_Multi
+class Application_Form_Element_Translation extends \Zend_Form_Element_Multi
 {
 
     public $helper = 'formTranslation';
@@ -54,7 +54,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
     public function init()
     {
         parent::init();
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
         $this->setRegisterInArrayValidator(false);
         $this->loadDefaultOptions();
     }
@@ -99,7 +99,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 
         try {
             $translation = $manager->getTranslation($key);
-        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
             $translation = null;
         }
 
@@ -120,7 +120,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
             try {
                 $translation = $manager->getTranslation($key);
                 $old = $translation['translations'];
-            } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
             }
         }
 

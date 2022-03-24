@@ -33,6 +33,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Enrichment;
+use Opus\EnrichmentKey;
+use Opus\Model\NotFoundException;
+
 /**
  * Class Admin_EnrichmentkeyController
  *
@@ -91,7 +95,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
      * Checks if an enrichment key can be modified. All enrichment keys except protected ones
      * can be modified even if they are referenced in enrichments of documents.
      *
-     * @param $model Opus_EnrichmentKey
+     * @param $model EnrichmentKey
      * @return bool true if model can be edited and deleted, false if model is protected
      */
     public function isModifiable($model)
@@ -116,8 +120,8 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
             $name = $this->getRequest()->getParam(self::PARAM_MODEL_ID);
             if (! is_null($name) && trim($name) !== '') {
                 // prüfe, ob bereits ein nicht registrierter Enrichment Key mit den Namen existiert, der in Benutzung ist
-                if (is_null(Opus_EnrichmentKey::fetchByName($name)) &&
-                    in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
+                if (is_null(EnrichmentKey::fetchByName($name)) &&
+                    in_array($name, EnrichmentKey::getAllReferenced())) {
                     $form->setNameElementValue($name);
                 }
             }
@@ -150,8 +154,8 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 
             $oldName = $this->getRequest()->getParam(self::PARAM_MODEL_ID);
             if (! is_null($oldName) &&
-                is_null(Opus_EnrichmentKey::fetchByName($oldName)) &&
-                in_array($oldName, Opus_EnrichmentKey::getAllReferenced())) {
+                is_null(EnrichmentKey::fetchByName($oldName)) &&
+                in_array($oldName, EnrichmentKey::getAllReferenced())) {
                 $newName = $post[Admin_Form_EnrichmentKey::ELEMENT_NAME];
                 if (! is_null($newName) && $oldName !== $newName) {
                     // Neuregistrierung mit gleichzeitiger Umbenennung des Enrichment Keys
@@ -164,7 +168,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 
         if ($renamingOfUnregisteredKey && is_array($result) && in_array(self::SAVE_SUCCESS, $result)) {
             // Enrichment Key wurde erfolgreich registriert: Umbenennung des EK in den Dokumenten durchführen
-            $enrichmentKey = Opus_EnrichmentKey::fetchByName($newName);
+            $enrichmentKey = EnrichmentKey::fetchByName($newName);
             if (! is_null($enrichmentKey)) {
                 // es hat eine Umbenennung mit gleichzeitiger Registrierung stattgefunden: nach der erfolgreichen
                 // Registrierung des Enrichment Key muss der Name des EK in allen Dokumenten geändert werden
@@ -185,7 +189,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
             $enrichmentKey = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
 
             // dem Enrichment Key muss mindestens ein Dokument zugeordnet sein, sonst ist die Operation nicht ausführbar
-            if (! is_null($enrichmentKey) && in_array($enrichmentKey->getName(), Opus_EnrichmentKey::getAllReferenced())) {
+            if (! is_null($enrichmentKey) && in_array($enrichmentKey->getName(), EnrichmentKey::getAllReferenced())) {
                 if (is_null($enrichmentKey->getId())) {
                     // Sonderbehandlung für nicht registrierte Enrichment Keys, die in Dokuemten verwendet werden
                     $result = $this->initConfirmationForm($enrichmentKey, true);
@@ -204,7 +208,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     }
 
     /**
-     * @param Opus_EnrichmentKey $model
+     * @param EnrichmentKey $model
      * @param bool $unregistered
      * @return Application_Form_Confirmation
      */
@@ -223,7 +227,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     }
 
     /**
-     * @param Opus_EnrichmentKey $model
+     * @param EnrichmentKey $model
      */
     public function deleteModel($model)
     {
@@ -242,7 +246,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     public function getAllModels()
     {
         // determine names of all enrichment keys
-        $allKeyNames = Opus_Enrichment::getAllUsedEnrichmentKeyNames();
+        $allKeyNames = Enrichment::getAllUsedEnrichmentKeyNames();
 
         $registeredEnrichmentKeys = parent::getAllModels();
         $mapNamesToEnrichmentKeys = [];
@@ -261,7 +265,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
             if (key_exists($keyName, $mapNamesToEnrichmentKeys)) {
                 $result[] = $mapNamesToEnrichmentKeys[$keyName];
             } else {
-                $newEnrichmentKey = new Opus_EnrichmentKey();
+                $newEnrichmentKey = new EnrichmentKey();
                 $newEnrichmentKey->setName($keyName);
                 $result[] = $newEnrichmentKey;
             }
@@ -270,13 +274,13 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     }
 
     /**
-     * Liefert eine Instanz von Opus_Enrichment mit übergebenen $modelId, sofern diese existiert (andernfalls null).
+     * Liefert eine Instanz von Enrichment mit übergebenen $modelId, sofern diese existiert (andernfalls null).
      * Hier wird der Sonderfall behandelt, dass die Id (d.h. der EnrichmentKey Name) nicht registriert ist.
      * Wird der nicht registrierte EnrichmentKey Name in Dokumenten verwendet, so wird ebenfalls eine Instanz von
-     * Opus_Enrichment zurückgegeben, die allerdings nicht in der Datenbank persistiert ist.
+     * Enrichment zurückgegeben, die allerdings nicht in der Datenbank persistiert ist.
      *
      * @param $modelId
-     * @return Opus_EnrichmentKey|null
+     * @return EnrichmentKey|null
      */
     public function getModel($modelId)
     {
@@ -286,10 +290,10 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
             if (strlen(trim($modelId)) !== 0) {
                 try {
                     return new $modelClass($modelId);
-                } catch (Opus_Model_NotFoundException $omnfe) {
-                    if (in_array($modelId, Opus_EnrichmentKey::getAllReferenced())) {
+                } catch (NotFoundException $omnfe) {
+                    if (in_array($modelId, EnrichmentKey::getAllReferenced())) {
                         // Sonderbehandlung: nicht registrierter, aber in Benutzung befindlicher Enrichment Key
-                        $enrichmentKey = new Opus_EnrichmentKey();
+                        $enrichmentKey = new EnrichmentKey();
                         $enrichmentKey->setName($modelId);
                         return $enrichmentKey;
                     }

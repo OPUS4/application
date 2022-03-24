@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  **/
 
+use Opus\Document;
+
 /**
  * Unit Tests fuer Unterformular fuer eine mit einem Dokument verknuepfte Person.
  */
@@ -97,7 +99,7 @@ class Admin_Form_Document_PersonTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Person();
 
-        $document = new Opus_Document(146);
+        $document = Document::get(146);
 
         $authors = $document->getPersonAuthor();
 

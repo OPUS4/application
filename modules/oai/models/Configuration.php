@@ -30,7 +30,6 @@
  * @author      Ralf Claußnitzer <ralf.claussnitzer@slub-dresden.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -102,7 +101,7 @@ class Oai_Model_Configuration
      *
      * @throws Exception Thrown if no oai section is set.
      */
-    public function __construct(Zend_Config $config)
+    public function __construct(\Zend_Config $config)
     {
         if (false === isset($config->oai)) {
             throw new Exception('No configuration for module oai.');

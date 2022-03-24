@@ -28,22 +28,28 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+use Opus\Repository;
 
 /**
  * Removes all documents
  *
+ * TODO convert to command (with confirmation check)
+ *
  */
 
-$finder = new Opus_DocumentFinder();
-foreach ($finder->ids() as $id) {
-    $doc = new Opus_Document($id);
-    $doc->deletePermanent();
+$repository = Repository::getInstance();
+
+$finder = $repository->getDocumentFinder();
+
+foreach ($finder->getIds() as $id) {
+    $doc = Document::get($id);
+    $doc->delete();
     echo "document " . $id . " was deleted.\n";
 }
 
-$finder = new Opus_DocumentFinder();
-echo "done -- num of docs: " . $finder->count() . "\n";
+$finder = $repository->getDocumentFinder();
+echo "done -- num of docs: " . $finder->getCount() . "\n";
 exit();

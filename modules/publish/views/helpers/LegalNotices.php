@@ -30,9 +30,8 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract
+class Publish_View_Helper_LegalNotices extends \Zend_View_Helper_Abstract
 {
 
     public $view;
@@ -44,7 +43,7 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract
      */
     public function legalNotices($form)
     {
-        $session = new Zend_Session_Namespace('Publish');
+        $session = new \Zend_Session_Namespace('Publish');
 
         if (! is_null($form->getElement('LegalNotices'))) {
             $fieldset = new Publish_View_Helper_Element();

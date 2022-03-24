@@ -27,10 +27,14 @@
  * @category    Application
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2011-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2011-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Config;
+use Opus\Document;
+use Opus\Model\NotFoundException;
+use Opus\Repository;
 
 /**
  * Script for exporting all documents.
@@ -44,7 +48,7 @@
 
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
-$config = Zend_Registry::get('Zend_Config');
+$config = Config::get();
 
 // process options
 $options = getopt('o:');
@@ -83,15 +87,15 @@ $opusDocuments = new DOMDocument('1.0', 'utf-8');
 $opusDocuments->formatOutput = true;
 $export = $opusDocuments->createElement('export');
 
-$docFinder = new Opus_DocumentFinder();
+$docFinder = Repository::getInstance()->getDocumentFinder();
 
 // get all documents
-foreach ($docFinder->ids() as $id) {
+foreach ($docFinder->getIds() as $id) {
     $doc = null;
 
     try {
-        $doc = new Opus_Document($id);
-    } catch (Opus_Model_NotFoundException $e) {
+        $doc = Document::get($id);
+    } catch (NotFoundException $e) {
         echo "Document with id $id does not exist." . PHP_EOL;
         continue;
     }

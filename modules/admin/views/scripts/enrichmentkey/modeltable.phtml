@@ -27,88 +27,33 @@
  * @category    Application
  * @package     Application_View_Scripts_EnrichmentKey
  * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 ?>
 
-<h2>
-    <?= $this->translate($this->element->getColumnLabel(0)) ?>
+<h2><?= $this->translate('admin_title_enrichmentkey') ?>
+<span class="enrichmentkey_new">
+    <a class="add" href="<?= $this->url(['action' => 'new']) ?>"><?= $this->translate('admin_button_add') ?></a>
+</span>
 </h2>
-<div class="enrichmentkey_new">
-    <a class="add" href="<?= $this->url(['action' => 'new']) ?>">
-        <?= $this->translate('admin_button_add') ?>
-    </a>
-</div>
-<table id="enrichmentkeyTable">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Typ</th>
-        <th colspan="4"></th>
-    </tr>
-    </thead>
-    <?PHP foreach ($this->element->getModels() as $model) : ?>
-        <tr class="<?= $this->element->getRowCssClass($model)?>"
-            title="<?= htmlspecialchars($this->translate($this->element->getRowTooltip($model))) ?>">
-            <td>
-                <?php if (is_null($model->getId())) : ?>
-                    <?= htmlspecialchars($model->getDisplayName()) ?>
-                <?php else : ?>
-                    <span class="strong">
-                        <?= htmlspecialchars($model->getDisplayName()) ?>
-                    </span>
-                    <?PHP if ($this->element->isProtected($model)) : ?>
-                        <i class="fa fa-lock"
-                           title="<?= htmlspecialchars($this->translate('admin_enrichmentkey_protected_tooltip')); ?>"
-                           aria-hidden="true"></i>
-                    <?PHP endif ?>
-                <?php endif; ?>
-            </td>
-            <td>
-                <?= htmlspecialchars($model->getType()) ?>
-                <?PHP $optionsPrintable = $model->getOptionsPrintable();
-                if (! is_null($optionsPrintable)) : ?>
-                    <i title="<?= htmlspecialchars($optionsPrintable) ?>" class="fa fa-info-circle" aria-hidden="true"></i>
-                <?PHP endif ?>
-            </td>
-            <td class="edit">
-                <?PHP if (is_null($model->getId())) : ?>
-                    <a href="<?= $this->url(['action' => 'new', 'id' => $model->getName()]) ?>"
-                    ><?= $this->translate('admin_button_create'); ?></a>
-                <?PHP elseif ($this->element->isModifiable($model)) : ?>
-                    <a href="<?= $this->url(['action' => 'edit', 'id' => $model->getId()]) ?>"
-                    ><?= $this->translate('admin_button_edit'); ?></a>
-                <?PHP endif ?>
-            </td>
-            <td class="remove">
-                <?PHP if (is_null($model->getId())) : ?>
-                    <a href="<?= $this->url(['action' => 'removeFromDocs', 'id' => $model->getName()]) ?>"
-                    ><?= $this->translate('admin_button_remove_from_documents'); ?></a>
-                <?PHP elseif ($this->element->isModifiable($model) && $this->element->isUsed($model)) : ?>
-                    <a href="<?= $this->url(['action' => 'removeFromDocs', 'id' => $model->getId()]) ?>"
-                    ><?= $this->translate('admin_button_remove_from_documents'); ?></a>
-                <?PHP endif ?>
-            </td>
-            <td>
-                <?PHP if ($this->element->isModifiable($model)) : ?>
-                    <a href="<?= $this->url([
-                        'module' => 'setup',
-                        'controller' => 'language',
-                        'action' => 'index',
-                        'search' => $model->getName(),
-                        'scope' => 'key'
-                    ]) ?>"
-                    ><?= $this->translate('admin_button_translations'); ?></a>
-                <?PHP endif ?>
-            </td>
-            </td>
-            <td class="remove">
-                <?PHP if (! is_null($model->getId()) && $this->element->isModifiable($model)) : ?>
-                    <a href="<?= $this->url(['action' => 'delete', 'id' => $model->getId()]) ?>"
-                    ><?= $this->translate('admin_button_remove'); ?></a>
-                <?PHP endif ?>
-            </td>
-        </tr>
-    <?PHP endforeach; ?>
-</table>
+
+<?php if (count($this->element->getManaged()) > 0) : ?>
+<fieldset>
+    <legend><?= $this->translate('admin_enrichmentkey_managed') ?></legend>
+<?= $this->partial('enrichmentkey/enrichment.phtml', [
+        'managed' => true,
+        'enrichments' => $this->element->getManaged(),
+        'element' => $this->element]); ?>
+</fieldset>
+<?php endif ?>
+
+<?php if (count($this->element->getUnmanaged()) > 0) : ?>
+<fieldset>
+    <legend><?= $this->translate('admin_enrichmentkey_unmanaged') ?></legend>
+<?= $this->partial('enrichmentkey/enrichment.phtml', [
+        'managed' => false,
+        'enrichments' => $this->element->getUnmanaged(),
+        'element' => $this->element]); ?>
+</fieldset>
+<?php endif ?>

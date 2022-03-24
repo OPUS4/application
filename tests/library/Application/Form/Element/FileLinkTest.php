@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +30,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\File;
+
 class Application_Form_Element_FileLinkTest extends FormElementTestCase
 {
 
@@ -55,7 +57,7 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
 
     public function testSetValueWithFile()
     {
-        $file = new Opus_File(130);
+        $file = new File(130);
 
         $element = $this->getElement();
 
@@ -72,13 +74,13 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
 
         $file = $element->getValue();
 
-        $this->assertInstanceOf('Opus_File', $file);
+        $this->assertInstanceOf('Opus\File', $file);
         $this->assertEquals(130, $file->getId());
     }
 
     public function testSetValueWithMissingFile()
     {
-        $file = new Opus_File(123);
+        $file = new File(123);
 
         $element = $this->getElement();
 

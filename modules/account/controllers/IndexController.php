@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Account
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Account;
 
 /**
  * Controller for editing account of logged in user.
@@ -64,11 +63,11 @@ class Account_IndexController extends Application_Controller_Action
      */
     public function indexAction()
     {
-        $login = Zend_Auth::getInstance()->getIdentity();
+        $login = \Zend_Auth::getInstance()->getIdentity();
 
         if (! empty($login)) {
             $accountForm = new Account_Form_Account();
-            $account = new Opus_Account(null, null, $login);
+            $account = new Account(null, null, $login);
             $accountForm->populateFromModel($account);
 
             $actionUrl = $this->view->url(['action' => 'save']);
@@ -90,14 +89,14 @@ class Account_IndexController extends Application_Controller_Action
      */
     public function saveAction()
     {
-        $login = Zend_Auth::getInstance()->getIdentity();
+        $login = \Zend_Auth::getInstance()->getIdentity();
 
         $config = $this->getConfig();
         $logger = $this->getLogger();
 
         if (! empty($login) && $this->getRequest()->isPost()) {
             $accountForm = new Account_Form_Account();
-            $account = new Opus_Account(null, null, $login);
+            $account = new Account(null, null, $login);
             $accountForm->populateFromModel($account);
 
             $postData = $this->getRequest()->getPost();
@@ -122,7 +121,7 @@ class Account_IndexController extends Application_Controller_Action
             $postData['oldLogin'] = $login;
 
             if ($accountForm->isValid($postData)) {
-                $account = new Opus_Account(null, null, $login);
+                $account = new Account(null, null, $login);
 
                 $newLogin = $postData['username'];
                 $password = $postData['password'];

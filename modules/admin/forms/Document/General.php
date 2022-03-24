@@ -30,11 +30,12 @@
  * @author      Michael Lang <lang@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+use Opus\Document;
+
 /**
- * Formular fuer allgemeine Felder von Opus_Document.
+ * Formular fuer allgemeine Felder von Document.
  *
  * TODO validierung
  */
@@ -99,7 +100,7 @@ class Admin_Form_Document_General extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Befuellt das Formular anhand der Metadaten eines Dokuments.
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function populateFromModel($document)
     {
@@ -122,7 +123,7 @@ class Admin_Form_Document_General extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Aktualisiert ein Dokument mit den Werten im Formular.
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($document)
     {

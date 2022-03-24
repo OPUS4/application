@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,11 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Document;
+use Opus\DocumentFinderInterface;
+use Opus\DocumentFinder\DefaultDocumentFinder;
+use Opus\Model\NotFoundException;
+use Opus\Security\Realm;
+
 class ControllerTestCaseTest extends ControllerTestCase
 {
 
@@ -51,12 +57,12 @@ class ControllerTestCaseTest extends ControllerTestCase
     {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
-        $realm = Opus_Security_Realm::getInstance();
+        $realm = Realm::getInstance();
 
         $this->assertContains(
             'administrator',
             $realm->getRoles(),
-            Zend_Debug::dump($realm->getRoles(), null, false)
+            \Zend_Debug::dump($realm->getRoles(), null, false)
         );
     }
 
@@ -68,13 +74,13 @@ class ControllerTestCaseTest extends ControllerTestCase
     public function testTearDownDidLogout()
     {
         $this->enableSecurity();
-        $realm = Opus_Security_Realm::getInstance();
+        $realm = Realm::getInstance();
         $this->assertNotContains('administrator', $realm->getRoles());
     }
 
     public function testSetHostname()
     {
-        $view = Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $this->assertEquals('http://', $view->serverUrl());
 
@@ -85,7 +91,7 @@ class ControllerTestCaseTest extends ControllerTestCase
 
     public function testSetBaseUrlNotSet()
     {
-        $view = Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $this->assertEquals('', $view->baseUrl());
 
@@ -96,7 +102,7 @@ class ControllerTestCaseTest extends ControllerTestCase
 
     public function testSetBaseUrlSet()
     {
-        $view = Zend_Registry::get('Opus_View');
+        $view = $this->getView();
 
         $this->setBaseUrl('opus4');
 
@@ -105,32 +111,32 @@ class ControllerTestCaseTest extends ControllerTestCase
 
     /**
      * Test removing document using identifier.
-     *
-     * @expectedException Opus_Model_NotFoundException
      */
     public function testRemoveDocumentById()
     {
-        $doc = new Opus_Document();
+        $doc = Document::new();
         $docId = $doc->store();
 
         $this->removeDocument($docId);
 
-        new Opus_Document($docId);
+        $this->setExpectedException(NotFoundException::class);
+
+        Document::get($docId);
     }
 
     /**
      * Test removing document using object.
-     *
-     * @expectedException Opus_Model_NotFoundException
      */
     public function testRemoveDocument()
     {
-        $doc = new Opus_Document();
+        $doc = Document::new();
         $docId = $doc->store();
 
         $this->removeDocument($doc);
 
-        new Opus_Document($docId);
+        $this->setExpectedException(NotFoundException::class);
+
+        Document::get($docId);
     }
 
     /**
@@ -138,7 +144,7 @@ class ControllerTestCaseTest extends ControllerTestCase
      */
     public function testRemoveDocumentNotStored()
     {
-        $doc = new Opus_Document();
+        $doc = Document::new();
 
         $this->removeDocument($doc);
     }
@@ -163,17 +169,17 @@ class ControllerTestCaseTest extends ControllerTestCase
 
     public function testDisableEnableTranslation()
     {
-        $defaultTranslator = Zend_Registry::get('Zend_Translate');
+        $defaultTranslator = Application_Translate::getInstance();
         $this->assertTrue($defaultTranslator->isTranslated('LastName'));
 
         $this->disableTranslation();
 
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
         $this->assertFalse($translator->isTranslated('LastName'));
 
         $this->enableTranslation();
 
-        $translator = Zend_Registry::get('Zend_Translate');
+        $translator = Application_Translate::getInstance();
         $this->assertTrue($translator->isTranslated('LastName'));
 
         $this->assertSame($defaultTranslator, $translator);
@@ -193,9 +199,9 @@ class ControllerTestCaseTest extends ControllerTestCase
      */
     public function testGetWorkspacePathNotDefined()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'workspacePath' => null
-        ]));
+        ]);
 
         $this->getWorkspacePath();
     }
@@ -428,5 +434,12 @@ class ControllerTestCaseTest extends ControllerTestCase
         $this->assertContains('help.ini', $files);
         $this->assertContains('imprint.de.txt', $files);
         $this->assertContains('metadata.en.txt', $files);
+    }
+
+    public function testGetDocumentFinder()
+    {
+        $finder = $this->getDocumentFinder();
+
+        $this->assertInstanceOf(DefaultDocumentFinder::class, $finder);
     }
 }

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Unterformular mit Haupttitel, ID, und Authoren eines Dokuments.
  *
@@ -42,7 +44,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Dokument das angezeigt wird.
-     * @var Opus_Document
+     * @var Document
      */
     private $_document;
 
@@ -66,11 +68,11 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Initialisiert Formular mit Dokument.
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function populateFromModel($document)
     {
-        if ($document instanceof Opus_Document) {
+        if ($document instanceof Document) {
             $this->_document = $document;
         } else {
             $objclass = ($document !== null) ? get_class($document) : 'null';
@@ -81,11 +83,11 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
     /**
      * Initialisiert Formular nach POST.
      * @param array $post
-     * @param Opus_Document $document
+     * @param Document $document
      */
     public function constructFromPost($post, $document = null)
     {
-        if ($document instanceof Opus_Document) {
+        if ($document instanceof Document) {
             $this->_document = $document;
         } else {
             $objclass = ($document !== null) ? get_class($document) : 'null';
@@ -97,7 +99,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
      * Liefert Dokument zurück.
      *
      * Wird vom ViewScript verwendet, um das Dokument zu holen.
-     * @return Opus_Document
+     * @return Document
      */
     public function getDocument()
     {

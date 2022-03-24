@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,10 +27,12 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2011-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2011-2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Log;
+
 class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkflow
 {
 
@@ -46,7 +47,7 @@ class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkfl
         $userId = trim($loggedUserModel->getUserId());
 
         if (empty($userId)) {
-            $logger = Zend_Registry::get('Zend_Log');
+            $logger = Log::get();
             $logger->debug("No user logged in.  Skipping enrichment.");
             return;
         }

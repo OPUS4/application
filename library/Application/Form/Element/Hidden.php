@@ -34,12 +34,12 @@
  * @copyright   Copyright (c) 2013-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_Hidden extends Zend_Form_Element_Hidden
+class Application_Form_Element_Hidden extends \Zend_Form_Element_Hidden
 {
 
     public function init()
     {
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators()

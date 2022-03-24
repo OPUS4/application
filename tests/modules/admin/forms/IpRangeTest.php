@@ -30,6 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Iprange;
+use Opus\UserRole;
+
 /**
  * Basic unit tests for IP range form.
  */
@@ -44,7 +47,7 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $model = new Opus_Iprange();
+        $model = new Iprange();
         $model->setName('localhost');
         $model->setStartingip('127.0.0.1');
         $model->setEndingip('127.0.0.2');
@@ -54,7 +57,7 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
     public function tearDown()
     {
         if (! is_null($this->_modelId)) {
-            $range = new Opus_Iprange($this->_modelId);
+            $range = new Iprange($this->_modelId);
             $range->delete();
         }
 
@@ -81,13 +84,13 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
     {
         $form = new Admin_Form_IpRange();
 
-        $range = new Opus_Iprange();
+        $range = new Iprange();
         $range->setName('localhost');
         $range->setStartingip('127.0.0.1');
         $range->setEndingip('127.0.0.100');
         $range->setRole([
-            Opus_UserRole::fetchByName('docsadmin'),
-            Opus_UserRole::fetchByName('jobaccess')
+            UserRole::fetchByName('docsadmin'),
+            UserRole::fetchByName('jobaccess')
         ]);
 
         $form->populateFromModel($range);
@@ -108,7 +111,7 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
     {
         $form = new Admin_Form_IpRange();
 
-        $model = new Opus_Iprange($this->_modelId);
+        $model = new Iprange($this->_modelId);
 
         $form->populateFromModel($model);
 
@@ -124,7 +127,7 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form->getElement('Startingip')->setValue('127.0.0.1');
         $form->getElement('Endingip')->setValue('127.0.0.3');
 
-        $model = new Opus_Iprange();
+        $model = new Iprange();
 
         $form->updateModel($model);
 

@@ -51,9 +51,9 @@ class Application_View_Helper_FaqEditLinkTest extends ControllerTestCase
 
     public function testRenderOnlyIfSetupAccess()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,help']]]
-        ]));
+        ]);
 
         $helper = $this->getHelper();
 
@@ -76,9 +76,9 @@ class Application_View_Helper_FaqEditLinkTest extends ControllerTestCase
 
     public function testRenderOnlyIfKeyEditable()
     {
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default']]]
-        ]));
+        ]);
 
         $helper = $this->getHelper();
 
@@ -86,9 +86,9 @@ class Application_View_Helper_FaqEditLinkTest extends ControllerTestCase
 
         $this->assertEquals('', $html);
 
-        Zend_Registry::get('Zend_Config')->merge(new Zend_Config([
+        $this->adjustConfiguration([
             'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,help']]]
-        ]));
+        ]);
 
         // TODO enable editing of help module
 
@@ -104,7 +104,7 @@ class Application_View_Helper_FaqEditLinkTest extends ControllerTestCase
     protected function getHelper()
     {
         $helper = new Application_View_Helper_FaqEditLink();
-        $helper->setView(Zend_Registry::get('Opus_View'));
+        $helper->setView($this->getView());
         return $helper;
     }
 }

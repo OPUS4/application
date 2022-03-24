@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +30,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Series;
+
 class Admin_Form_SeriesTest extends ControllerTestCase
 {
 
@@ -56,7 +58,7 @@ class Admin_Form_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Series();
 
-        $series = new Opus_Series();
+        $series = new Series();
         $series->setTitle('TestTitle');
         $series->setInfobox('TestInfo');
         $series->setVisible(1);
@@ -74,7 +76,7 @@ class Admin_Form_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Series();
 
-        $series = new Opus_Series(2);
+        $series = new Series(2);
 
         $form->populateFromModel($series);
 
@@ -90,7 +92,7 @@ class Admin_Form_SeriesTest extends ControllerTestCase
         $form->getElement('Visible')->setValue(1);
         $form->getElement('SortOrder')->setValue(22);
 
-        $series = new Opus_Series();
+        $series = new Series();
 
         $form->updateModel($series);
 

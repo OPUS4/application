@@ -29,8 +29,10 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Repository;
+use Opus\Security\Realm;
 
 /**
  * Main entry point for the review module.
@@ -61,7 +63,7 @@ class Review_IndexController extends Application_Controller_Action
         parent::init();
 
         // Highlight menu entries.
-        if (true === Opus_Security_Realm::getInstance()->checkModule('admin')) {
+        if (true === Realm::getInstance()->checkModule('admin')) {
             $this->getHelper('MainMenu')->setActive('admin');
         } else {
             $this->getHelper('MainMenu')->setActive('review');
@@ -112,31 +114,32 @@ class Review_IndexController extends Application_Controller_Action
 
         switch ($sortOrder) {
             case 'author':
-                $finder->orderByAuthorLastname($sortReverse != 1);
+                $finder->setOrder($finder::ORDER_AUTHOR, $sortReverse != 1);
                 break;
             case 'publicationDate':
-                $finder->orderByServerDatePublished($sortReverse != 1);
+                $finder->setOrder($finder::ORDER_SERVER_DATE_PUBLISHED, $sortReverse != 1);
                 break;
             case 'docType':
-                $finder->orderByType($sortReverse != 1);
+                $finder->setOrder($finder::ORDER_DOCUMENT_TYPE, $sortReverse != 1);
                 break;
             case 'title':
-                $finder->orderByTitleMain($sortReverse != 1);
+                $finder->setOrder($finder::ORDER_TITLE, $sortReverse != 1);
                 break;
             default:
-                $finder->orderById($sortReverse != 1);
+                $finder->setOrder($finder::ORDER_ID, $sortReverse != 1);
         }
 
         $this->view->breadcrumbsDisabled = true;
 
-        $result = $finder->ids();
+        $result = $finder->getIds();
+
         if (empty($result)) {
             $this->view->message = 'review_no_docs_found';
             return $this->render('message');
         }
 
         $currentPage = $this->_getParam('page', 1);
-        $paginator = Zend_Paginator::factory($result);
+        $paginator = \Zend_Paginator::factory($result);
         $paginator->setCurrentPageNumber($currentPage);
         $paginator->setItemCountPerPage(10);
 
@@ -242,11 +245,11 @@ class Review_IndexController extends Application_Controller_Action
     /**
      * Prepare document finder.
      *
-     * @return Opus_DocumentFinder
+     * @return DocumentFinderInterface
      */
     protected function _prepareDocumentFinder()
     {
-        $finder = new Opus_DocumentFinder();
+        $finder = Repository::getInstance()->getDocumentFinder();
         $finder->setServerState(self::$_reviewServerState);
 
         $logger = $this->getLogger();
@@ -254,13 +257,13 @@ class Review_IndexController extends Application_Controller_Action
         $onlyReviewerByUserId = false;
 
         // Add constraint for reviewer, if current user is *not* admin.
-        if (Opus_Security_Realm::getInstance()->checkModule('admin')) {
+        if (Realm::getInstance()->checkModule('admin')) {
             $message = "Review: Showing all unpublished documents to admin";
             $logger->debug($message . " (user_id: $userId)");
-        } elseif (Opus_Security_Realm::getInstance()->checkModule('review')) {
+        } elseif (Realm::getInstance()->checkModule('review')) {
             if ($onlyReviewerByUserId) {
                 $message = "Review: Showing only documents belonging to reviewer";
-                $finder->setEnrichmentKeyValue('reviewer.user_id', $userId);
+                $finder->setEnrichmentValue('reviewer.user_id', $userId);
             } else {
                 $message = "Review: Showing all unpublished documents to reviewer";
             }
@@ -293,10 +296,11 @@ class Review_IndexController extends Application_Controller_Action
         $this->getLogger()->debug("ids before filtering: " . implode(", ", $ids));
 
         $finder = $this->_prepareDocumentFinder();
-        $ids = $finder->setIdSubset($ids)->ids();
+        $foundIds = $finder->setDocumentIds($ids)->getIds();
 
-        $this->getLogger()->debug("ids after filtering: " . implode(", ", $ids));
-        return $ids;
+        $this->getLogger()->debug("ids after filtering: " . implode(", ", $foundIds));
+
+        return $foundIds;
     }
 
     /**

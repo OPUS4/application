@@ -29,7 +29,6 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
@@ -38,7 +37,7 @@
  * @category    Application
  * @package     Form_Validate
  */
-class Application_Form_Validate_AtLeastOneNotEmpty extends Zend_Validate_Abstract
+class Application_Form_Validate_AtLeastOneNotEmpty extends \Zend_Validate_Abstract
 {
 
     const ALL_EMPTY = 'allElementsEmpty';
@@ -73,7 +72,7 @@ class Application_Form_Validate_AtLeastOneNotEmpty extends Zend_Validate_Abstrac
     public function isValid($value, $context = null)
     {
         if (is_array($this->_elements)) {
-            $notEmpty = new Zend_Validate_NotEmpty();
+            $notEmpty = new \Zend_Validate_NotEmpty();
             foreach ($this->_elements as $name) {
                 if (isset($context[$name]) && $notEmpty->isValid($context[$name])) {
                     return true;
@@ -86,7 +85,7 @@ class Application_Form_Validate_AtLeastOneNotEmpty extends Zend_Validate_Abstrac
 
     /**
      * Adds a form element to group for validation.
-     * @param $element Zend_Form_Element
+     * @param $element \Zend_Form_Element
      */
     public function addElement($element)
     {

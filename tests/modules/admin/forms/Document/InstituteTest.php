@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+use Opus\Model\Dependent\Link\DocumentDnbInstitute;
+
 /**
  * Unit Tests fuer Unterformular fuer Verknuepfung mit einem Institut im Metadaten-Formular.
  */
@@ -61,7 +64,7 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
         $publishers = $doc->getThesisPublisher();
         $publisher = $publishers[0];
 
@@ -77,7 +80,7 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
 
         $form->getElement('Institute')->setValue(3);
 
-        $model = new Opus_Model_Dependent_Link_DocumentDnbInstitute();
+        $model = new DocumentDnbInstitute();
 
         $form->updateModel($model);
 
@@ -88,7 +91,7 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
-        $doc = new Opus_Document(146);
+        $doc = Document::get(146);
         $publishers = $doc->getThesisPublisher();
         $publisher = $publishers[0];
         $publisherId = $publisher->getModel()->getId();

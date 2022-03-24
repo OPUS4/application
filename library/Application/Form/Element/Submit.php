@@ -33,9 +33,8 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
-class Application_Form_Element_Submit extends Zend_Form_Element_Submit
+class Application_Form_Element_Submit extends \Zend_Form_Element_Submit
 {
 
     /**
@@ -47,12 +46,12 @@ class Application_Form_Element_Submit extends Zend_Form_Element_Submit
     {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
     }
 
     /**
      * Lädt die Dekoratoren für Button Element.
-     * @return $this|Zend_Form_Element_Submit
+     * @return $this|\Zend_Form_Element_Submit
      */
     public function loadDefaultDecorators()
     {

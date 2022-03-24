@@ -30,7 +30,9 @@ SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
 BASEDIR="`dirname "$SCRIPT_PATH"`"
 
+mkdir -p "$BASEDIR/workspace/filecache"
 mkdir -p "$BASEDIR/workspace/files"
+mkdir -p "$BASEDIR/workspace/import"
 mkdir -p "$BASEDIR/workspace/incoming"
 mkdir -p "$BASEDIR/workspace/log"
 mkdir -p "$BASEDIR/workspace/cache"

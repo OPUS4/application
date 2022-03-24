@@ -34,6 +34,14 @@
  *
  * Controller for handling file downloads in the frontdoor.
  */
+
+use Opus\Config;
+use Opus\Document;
+use Opus\File;
+use Opus\Pdf\Cover\CoverGeneratorFactory;
+use Opus\Pdf\Cover\CoverGeneratorInterface;
+use Opus\Security\Realm;
+
 class Frontdoor_DeliverController extends Application_Controller_Action
 {
 
@@ -45,7 +53,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $docId = $this->_getParam('docId', null);
         $path = $this->_getParam('file', null);
 
-        $realm = Opus_Security_Realm::getInstance();
+        $realm = Realm::getInstance();
 
         $fileModel = null;
 
@@ -70,9 +78,16 @@ class Frontdoor_DeliverController extends Application_Controller_Action
             return;
         }
 
-        $fullFilename = $fileObject->getPath();
-        $baseFilename = basename($fullFilename);
+        $originalFilePath = $fileObject->getPath();
+        $baseFilename = basename($originalFilePath);
         $baseFilename = self::quoteFileName($baseFilename);
+
+        try {
+            $filePath = $this->prepareFile($fileObject);
+        } catch (Exception $e) {
+            $this->handleDeliveryError($e);
+            return;
+        }
 
         $this->disableViewRendering();
 
@@ -88,7 +103,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
 
         $this->_helper->SendFile->setLogger($this->getLogger());
         try {
-            $this->_helper->SendFile($fullFilename);
+            $this->_helper->SendFile($filePath);
         } catch (Exception $e) {
             $this->logError($e);
             $response = $this->getResponse();
@@ -129,5 +144,84 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $this->getResponse()->setHttpResponseCode($exception->getCode());
         $this->view->translateKey = $exception->getTranslateKey();
         $this->render('error');
+    }
+
+    /**
+     * Prepares the given file for download and returns the path to the resulting file.
+     *
+     * Depending on certain criteria (such as the document collection), the file download
+     * may include a PDF cover that was generated based on a template and using the document's
+     * metadata.
+     *
+     * @param File $file
+     * @return string the file's path
+     */
+    private function prepareFile($file)
+    {
+        $filePath = $file->getPath();
+
+        // only handle PDF files
+        if ($file->getMimeType() !== 'application/pdf') {
+            return $filePath;
+        }
+
+        $coverGenerator = $this->getCoverGenerator();
+
+        if ($coverGenerator === null) {
+            return $filePath;
+        }
+
+        // get the file's parent document
+        $doc = null;
+        $docId = $file->getParentId();
+        if ($docId !== null) {
+            $doc = new Document($docId);
+        }
+
+        if ($doc === null) {
+            return $filePath;
+        }
+
+        // if a PDF cover should be served for this file, create a file copy that includes an
+        // appropriate cover page and return its path (instead of the original file's path)
+        $filePath = $coverGenerator->processFile($doc, $file);
+
+        return $filePath;
+    }
+
+    /**
+     * Returns the cover generator instance to be used for creation of PDF covers. Returns
+     * null if generation of PDF covers has been disabled in the application configuration.
+     *
+     * @return CoverGeneratorInterface|null
+     */
+    private function getCoverGenerator()
+    {
+        $config = Config::get();
+
+        // check if a PDF cover should be generated
+        $generatePdfCover = (isset($config->pdf->covers->generate)
+            && filter_var($config->pdf->covers->generate, FILTER_VALIDATE_BOOLEAN));
+
+        if (! $generatePdfCover) {
+            return null;
+        }
+
+        $generator = CoverGeneratorFactory::create();
+
+        if ($generator === null) {
+            return null;
+        }
+
+        // configure cover generator with appropriate directory paths
+        $appConfig = Application_Configuration::getInstance();
+
+        $filecacheDir = $appConfig->getFilecachePath();
+        $generator->setFilecacheDir($filecacheDir);
+
+        $tempDir = $appConfig->getTempPath();
+        $generator->setTempDir($tempDir);
+
+        return $generator;
     }
 }

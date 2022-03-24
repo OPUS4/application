@@ -28,8 +28,9 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
+use Opus\Person;
 
 /**
  *
@@ -41,9 +42,11 @@
  * Dieses Problem tritt auf bei der Migration aus OPUS3, wo es noch kein
  * separates Feld für das Ablegen des akademischen Titels einer Person gab.
  *
+ * TODO fixing tool - where should it go?
+ *
  */
 
-foreach (Opus_Person::getAll() as $person) {
+foreach (Person::getAll() as $person) {
     $firstname = $person->getFirstName();
     $numOfOpeningParenthesis = substr_count($firstname, '(');
     $numOfClosingParenthesis = substr_count($firstname, ')');

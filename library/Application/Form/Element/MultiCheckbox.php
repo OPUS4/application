@@ -30,7 +30,7 @@
  * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox
+class Application_Form_Element_MultiCheckbox extends \Zend_Form_Element_MultiCheckbox
 {
 
     public function init()
@@ -40,7 +40,7 @@ class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiChec
         $this->addPrefixPath(
             'Application_Form_Decorator',
             'Application/Form/Decorator',
-            Zend_Form::DECORATOR
+            \Zend_Form::DECORATOR
         );
     }
 

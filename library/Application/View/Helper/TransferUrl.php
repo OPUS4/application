@@ -35,7 +35,7 @@
  * Generiert die Transfer-URL für den OAI-Container (Archivdatei), in der alle
  * verfügbaren Dateien des Dokuments zusammengefasst werden.
  */
-class Application_View_Helper_TransferUrl extends Zend_View_Helper_Abstract
+class Application_View_Helper_TransferUrl extends \Zend_View_Helper_Abstract
 {
 
     public function transferUrl($docId)

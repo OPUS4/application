@@ -36,7 +36,7 @@
  *
  * TODO HIDDEN inputs mit Hash entfernen? Werden momentan nicht benötigt.
  */
-class Application_Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_FileHash extends \Zend_Form_Decorator_Abstract
 {
 
     public function render($content)
@@ -49,7 +49,7 @@ class Application_Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract
 
         $view = $element->getView();
 
-        if (! $view instanceof Zend_View_Interface) {
+        if (! $view instanceof \Zend_View_Interface) {
             return $content;
         }
 

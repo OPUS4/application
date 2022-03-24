@@ -34,7 +34,7 @@
 /**
  * Helper for printing the title of a OPUS document in search results.
  *
- * TODO use $result->getAsset('title') ??? Avoid using Opus_Document (?)
+ * TODO use $result->getAsset('title') ??? Avoid using Document (?)
  */
 class Application_View_Helper_ResultTitle extends Application_View_Helper_Document_HelperAbstract
 {
@@ -79,7 +79,7 @@ class Application_View_Helper_ResultTitle extends Application_View_Helper_Docume
         // TODO hack - can this be avoided?
         $searchType = $this->view->searchType;
         if (is_null($searchType)) {
-            $searchType = Zend_Controller_Front::getInstance()->getRequest()->getParam('searchtype');
+            $searchType = \Zend_Controller_Front::getInstance()->getRequest()->getParam('searchtype');
         }
 
         return $this->view->url([

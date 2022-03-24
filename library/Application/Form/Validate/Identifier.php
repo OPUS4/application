@@ -35,27 +35,27 @@
  *
  * This validator is used in the document metadate form.
  */
-class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
+class Application_Form_Validate_Identifier extends \Zend_Validate_Abstract
 {
 
     /**
      * Form element for the type of identifier.
-     * @var Zend_Form_Element
+     * @var \Zend_Form_Element
      */
     private $_element;
 
     /**
      * Application_Form_Validate_Identifier constructor.
-     * @param Zend_Form_Element $element
+     * @param \Zend_Form_Element $element
      */
     public function __construct($element)
     {
         if ($element === null) {
-            throw new InvalidArgumentException('Argument must not be NULL');
-        } elseif ($element instanceof Zend_Form_Element) {
+            throw new \InvalidArgumentException('Argument must not be NULL');
+        } elseif ($element instanceof \Zend_Form_Element) {
             $this->_element = $element;
         } else {
-            throw new InvalidArgumentException('Object must be Zend_Form_Element');
+            throw new \InvalidArgumentException('Object must be Zend_Form_Element');
         }
     }
 

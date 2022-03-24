@@ -50,7 +50,8 @@ Alias /OPUS_URL_BASE "/BASEDIR/public"
     php_flag short_open_tag on
 
     # Setting cookie options
-    php_value session.cookie_path    /OPUS_URL_BASE
+    php_value session.cookie_path     /OPUS_URL_BASE
+    php_value session.cookie_httponly on
 
     # On Debian/Ubuntu, prevent PHP from deleting the cookies
     #Enable for UBUNTU/DEBIAN:# php_value session.gc_probability 0

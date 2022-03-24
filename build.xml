@@ -72,7 +72,9 @@
     <target name="prepare-workspace">
         <mkdir dir="${basedir}/workspace/cache" />
         <mkdir dir="${basedir}/workspace/export" />
+        <mkdir dir="${basedir}/workspace/filecache" />
         <mkdir dir="${basedir}/workspace/files" />
+        <mkdir dir="${basedir}/workspace/import" />
         <mkdir dir="${basedir}/workspace/incoming" />
         <mkdir dir="${basedir}/workspace/log" />
         <mkdir dir="${basedir}/workspace/tmp" />
@@ -82,7 +84,9 @@
     <target name="prepare-test-workspace">
         <mkdir dir="${basedir}/tests/workspace/cache" />
         <mkdir dir="${basedir}/tests/workspace/export" />
+        <mkdir dir="${basedir}/tests/workspace/filecache" />
         <mkdir dir="${basedir}/tests/workspace/files" />
+        <mkdir dir="${basedir}/tests/workspace/import" />
         <mkdir dir="${basedir}/tests/workspace/incoming" />
         <mkdir dir="${basedir}/tests/workspace/log" />
         <mkdir dir="${basedir}/tests/workspace/tmp" />
@@ -134,7 +138,7 @@
             </filterset>
         </copy>
 
-        <!-- Prepare main configuration. Needed for scripts like SolrIndexBuilder. -->
+        <!-- Prepare main configuration. Needed for scripts like `bin/opus4`. -->
         <copy file="${basedir}/application/configs/config.ini.template"
               toFile="${basedir}/application/configs/config.ini" filtering="true" overwrite="true">
             <filterset>
@@ -261,8 +265,8 @@
     </target>
 
     <target name="rebuild-index">
-        <exec executable="php" dir="${basedir}/scripts" failonerror="on">
-            <arg line="SolrIndexBuilder.php" />
+        <exec executable="php" dir="${basedir}/bin" failonerror="on">
+            <arg line="opus4 index:index -v" />
         </exec>
     </target>
 

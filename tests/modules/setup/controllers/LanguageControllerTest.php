@@ -44,7 +44,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function tearDown()
     {
-        $database = new Opus_Translate_Dao();
+        $database = $this->getTranslationManager();
         $database->removeAll();
         parent::tearDown();
     }
@@ -55,8 +55,8 @@ class Setup_LanguageControllerTest extends ControllerTestCase
     public function testMissingConfigMessageIsDisplayedRed()
     {
         $this->markTestSkipped('Needs to be updated for no modules allowed.');
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(['setup' => ['translation' => ['modules' => ['allowed' => null]]]]));
+
+        $this->adjustConfiguration(['setup' => ['translation' => ['modules' => ['allowed' => null]]]]);
 
         $this->getRequest()->setPost(['Anzeigen' => 'Anzeigen', 'search' => 'test', 'sort' => 'unit']);
         $this->dispatch('/setup/language/show');
@@ -94,7 +94,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $this->dispatch("/setup/language/edit/key/$key");
 
-        $database = new Opus_Translate_Dao();
+        $database = $this->getTranslationManager();
 
         $storedTranslations = $database->getTranslation($key);
 
@@ -202,7 +202,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testIndexActionScopeKey()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getTranslationManager();
 
         $key1 = 'testentry';
         $key2 = 'customkey2';
@@ -226,7 +226,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testIndexActionScopeTranslation()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getTranslationManager();
 
         $key1 = 'testentry';
         $key2 = 'customkey2';
@@ -363,7 +363,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         try {
             $manager->getTranslation('customkey');
-        } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
             $keyFound = false;
         }
 
@@ -372,7 +372,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testResetTranslationShowForm()
     {
-        $database = new Opus_Translate_Dao();
+        $database = $this->getTranslationManager();
 
         $database->setTranslation('default_add', [
             'en' => 'AddEdited',
@@ -394,7 +394,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testResetTranslationConfirmNo()
     {
-        $database = new Opus_Translate_Dao();
+        $database = $this->getTranslationManager();
 
         $database->setTranslation('default_add', [
             'en' => 'AddTest',
@@ -423,7 +423,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testResetTranslationConfirmYes()
     {
-        $database = new Opus_Translate_Dao();
+        $database = $this->getTranslationManager();
 
         $database->setTranslation('default_add', [
             'en' => 'AddTest',
@@ -473,7 +473,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testDeleteTranslationConfirmYes()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getTranslationManager();
 
         $key = 'customtestkey';
 
@@ -499,7 +499,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testDeleteTranslationConfirmNo()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getTranslationManager();
 
         $key = 'customtestkey';
 
@@ -540,7 +540,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testDeleteAllConfirmYes()
     {
-        $database = new Opus_Translate_Dao();
+        $database = $this->getTranslationManager();
 
         $database->setTranslation('default_add', [
             'en' => 'CreateTest',
@@ -572,7 +572,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testDeleteAllConfirmYesMatchingEntriesOnly()
     {
-        $database = new Opus_Translate_Dao();
+        $database = $this->getTranslationManager();
 
         $database->setTranslation('default_add', [
             'en' => 'CreateTest',
@@ -603,7 +603,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testDeleteAllConfirmNo()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getTranslationManager();
 
         $key = 'customtestkey';
 
@@ -691,7 +691,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testChangeNameOfAddedKey()
     {
-        $database = new Opus_Translate_Dao();
+        $database = $this->getTranslationManager();
 
         $oldKey = 'customkey';
         $newKey = 'renamedkey';
@@ -727,7 +727,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testChangeModuleOfAddedKey()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getTranslationManager();
 
         $key = 'customtestkey';
 
@@ -790,7 +790,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testExportFiltered()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getTranslationManager();
 
         $dao->setTranslation('customtestkey', [
             'en' => 'English',
@@ -822,7 +822,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testExportAll()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getTranslationManager();
 
         $dao->setTranslation('testkey1', [
             'en' => 'Test key 1',
@@ -849,7 +849,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     public function testExportAllWithUnmodified()
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = $this->getTranslationManager();
 
         $dao->setTranslation('testkey1', [
             'en' => 'Test key 1',
@@ -885,11 +885,11 @@ class Setup_LanguageControllerTest extends ControllerTestCase
     }
 
     /**
-     * @return Opus_Database_Dao
+     * @return \Opus\Translate\Dao
      * TODO really use translation manager (be independent of database)
      */
     protected function getTranslationManager()
     {
-        return new Opus_Translate_Dao();
+        return new \Opus\Translate\Dao();
     }
 }

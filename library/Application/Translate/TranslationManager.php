@@ -349,7 +349,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         // get translations from TMX files
         $translations = $this->getTranslations($sortKey, $sortOrder);
 
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         $modules = $this->getModules();
 
@@ -400,7 +400,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     /**
      * @param $key
      * TODO IMPORTANT optimize (do some caching or something)
-     * @throws \Opus\Translate\UnknownTranslationKey
+     * @throws \Opus\Translate\UnknownTranslationKeyException
      */
     public function getTranslation($key)
     {
@@ -411,7 +411,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
         if (isset($translations[$key])) {
             $translation = $translations[$key];
         } else {
-            throw new \Opus\Translate\UnknownTranslationKey("Unknown key '$key'.");
+            throw new \Opus\Translate\UnknownTranslationKeyException("Unknown key '$key'.");
         }
 
         return $translation;
@@ -424,7 +424,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      * Filtering by state happens outside this function because this depends on the presence of the
      * key in the TMX files and the database or just the database.
      *
-     * TODO should filting by module happen here
+     * TODO should filtering by module happen here
      *
      * @param $key string Name of translation key
      * @param $values array Translated texts for supported languages
@@ -570,7 +570,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      */
     public function keyExists($key)
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         return ! is_null($database->getTranslation($key));
     }
@@ -588,7 +588,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      */
     public function reset($key)
     {
-        $database = new Opus_Translate_Dao();
+        $database = new \Opus\Translate\Dao();
 
         $translations = $this->getTranslations();
 
@@ -620,8 +620,8 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
     public function clearCache()
     {
-        if (Zend_Registry::isRegistered('Zend_Translate')) {
-            $translate = Zend_Registry::get('Zend_Translate');
+        $translate = Application_Translate::getInstance();
+        if ($translate !== null) {
             $translate->clearCache();
         }
     }
@@ -681,7 +681,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
 
             try {
                 $old = $this->getTranslation($key);
-            } catch (\Opus\Translate\UnknownTranslationKey $ex) {
+            } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
                 // do nothing
                 // TODO work without exception here (keyExists)?
             }
@@ -693,7 +693,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                     // TODO write to log
                 }
 
-                if (isset($old['transaltionsTmx'])) {
+                if (isset($old['translationsTmx'])) {
                     $oldValues = $old['translationsTmx'];
                 } else {
                     $oldValues = $old['translations'];
@@ -711,11 +711,11 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     }
 
     /**
-     * @return Opus_Translate_Dao $database
+     * @return \Opus\Translate\Dao $database
      */
     public function getDatabase()
     {
-        return new Opus_Translate_Dao();
+        return new \Opus\Translate\Dao();
     }
 
     public function setState($state)
@@ -738,7 +738,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      */
     public function updateTranslation($key, $translations, $module = null, $oldKey = null)
     {
-        $dao = new Opus_Translate_Dao();
+        $dao = new \Opus\Translate\Dao();
 
         if ($key !== $oldKey && ! is_null($oldKey)) {
             $translation = $this->getTranslation($oldKey);
@@ -746,7 +746,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                 $dao->remove($oldKey);
                 $this->clearCache();
             } else {
-                throw new \Opus\Translate\Exception("Name of key '$oldKey' cannot be changed.");
+                throw new \Opus\Translate\TranslateException("Name of key '$oldKey' cannot be changed.");
             }
         } else {
             $translation = $this->getTranslation($key);
@@ -756,7 +756,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                     $dao->remove($key);
                     $this->clearCache();
                 } else {
-                    throw new \Opus\Translate\Exception("Module of key '$key' cannot be changed.");
+                    throw new \Opus\Translate\TranslateException("Module of key '$key' cannot be changed.");
                 }
             }
         }
@@ -800,7 +800,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     {
         try {
             $old = $this->getTranslation($key);
-        } catch (\Opus\Translate\UnknownTranslationKey $excep) {
+        } catch (\Opus\Translate\UnknownTranslationKeyException $excep) {
             $old = null;
         }
 

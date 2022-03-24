@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,24 +29,26 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Document;
+use Opus\Repository;
+
 $date = new DateTime();
 $dateString = $date->sub(new DateInterval('P2D'))->format('Y-m-d');
-$f = new Opus_DocumentFinder();
-$f->setServerState('temporary')
+$finder = Repository::getInstance()->getDocumentFinder();
+$finder->setServerState('temporary')
   ->setServerDateModifiedBefore($dateString);
 
-foreach ($f->ids() as $id) {
-    $d = new Opus_Document($id);
-    if ($d->getServerState() == 'temporary') {
+foreach ($finder->getIds() as $id) {
+    $doc = Document::get($id);
+    if ($doc->getServerState() == 'temporary') {
         echo "deleting document: $id\n";
-        $d->deletePermanent();
+        $doc->delete();
     } else {
-        echo "NOT deleting document: $id because it has server state ".$d->getServerState();
+        echo "NOT deleting document: $id because it has server state ".$doc->getServerState();
     }
 }

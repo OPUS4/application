@@ -113,7 +113,10 @@ function cleanupFolders() {
     fi
 
     if [ -d ${workspace_log_dir} ] ; then
-        rm -rf $workspace_log_dir
+        rm -f $workspace_log_dir/opus.log
+        rm -f $workspace_log_dir/opus-console.log
+        rm -f $workspace_log_dir/index.log
+        # do not remove error.log (Apache2 is using it)
     fi
 
     if [ -d ${series_logos_dir} ] ; then
@@ -131,14 +134,16 @@ mkdir -p $workspace_files_dir
 mkdir -p $workspace_log_dir
 mkdir -p $workspace_dir/cache
 mkdir -p $workspace_dir/export
+mkdir -p $workspace_dir/import
 mkdir -p $workspace_dir/incoming
 mkdir -p $workspace_dir/tmp
 mkdir -p $workspace_dir/tmp/resumption
 mkdir -p $series_logos_dir
 
-rm -rf $workspace_test_dir/*
+rm -rf "${workspace_test_dir:?}"/*
 mkdir -p $workspace_test_dir/cache
 mkdir -p $workspace_test_dir/export
+mkdir -p $workspace_test_dir/import
 mkdir -p $workspace_test_dir/incoming
 mkdir -p $workspace_test_dir/tmp
 mkdir -p $workspace_test_dir/tmp/resumption

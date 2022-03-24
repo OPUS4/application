@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2011-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\CollectionRole;
+use Opus\Repository;
 
 class Oai_Model_Sets extends Application_Model_Abstract
 {
@@ -69,10 +70,10 @@ class Oai_Model_Sets extends Application_Model_Abstract
 
         $dcTypeHelper = new Application_View_Helper_DcType();
 
-        $finder = new Opus_DocumentFinder();
+        $finder = Repository::getInstance()->getDocumentFinder();
         $finder->setServerState('published');
 
-        foreach ($finder->groupedTypesPlusCount() as $doctype => $row) {
+        foreach ($finder->getDocumentTypes() as $doctype) {
             if (0 == preg_match("/^$setSpecPattern$/", $doctype)) {
                 $msg = "Invalid SetSpec (doctype='".$doctype."')."
                     . " Allowed characters are [$setSpecPattern].";
@@ -101,7 +102,7 @@ class Oai_Model_Sets extends Application_Model_Abstract
 
         $setSpecPattern = self::SET_SPEC_PATTERN;
 
-        $oaiRolesSets = Opus_CollectionRole::fetchAllOaiEnabledRoles();
+        $oaiRolesSets = CollectionRole::fetchAllOaiEnabledRoles();
 
         foreach ($oaiRolesSets as $result) {
             if ($result['oai_name'] == 'doc-type') {
@@ -129,7 +130,7 @@ class Oai_Model_Sets extends Application_Model_Abstract
     /**
      * Returns sets for collections of a collection role.
      * @param $setSpec OAI name for collection role
-     * @param $roleId Database ID of role
+     * @param $roleId int Database ID of role
      * @return array
      */
     public function getSetsForCollectionRole($setSpec, $roleId)
@@ -140,7 +141,7 @@ class Oai_Model_Sets extends Application_Model_Abstract
 
         $setSpecPattern = self::SET_SPEC_PATTERN;
 
-        $role = new Opus_CollectionRole($roleId);
+        $role = new CollectionRole($roleId);
         foreach ($role->getOaiSetNames() as $subset) {
             $subSetSpec  = "$setSpec:" . $subset['oai_subset'];
             // $subSetCount = $subset['count'];

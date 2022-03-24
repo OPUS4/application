@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Document;
+
 /**
  * Unterformular für die Personen in einer bestimmten Role für ein Dokument.
  */
@@ -269,7 +271,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm
 
     /**
      * Überschreibt updateModel damit vorher die SortOrder berücksichtigt werden kann.
-     * @param \Opus_Document $document
+     * @param Document $document
      */
     public function updateModel($document)
     {
