@@ -1,16 +1,16 @@
 # OPUS 4 Release Notes
 ---
 
-## Release 4.7.1
+## Release 4.7.1 2022-03-24
 
-# Anforderungen
+### Anforderungen
 
 OPUS 4.7.1 erfordert weiterhin PHP 7.1 bzw. eine Version vor PHP 7.2. Durch 
 die Verwendung von Zend Framework 1 ist OPUS 4 nicht kompatibel mit neueren
 PHP Versionen. Diese werden erst nach dem vollständigen Umstieg auf Laminas
 mit OPUS 4 v5.0 unterstützt werden. 
 
-# Installation
+### Installation
 
 Die Installation von Apache Solr wurde aus den Installationsskripten entfernt.
 Für den produktiven Betrieb sollte Solr entsprechend den Empfehlungen der
@@ -24,7 +24,7 @@ nach dem Umstieg auf Laminas geplant.
 Die Integration in die Installationsskripte war vor allem für Test-Installationen
 gedacht. Tests sind nun mit dem Einsatz von Vagrant leichter geworden.
 
-# Testen mit Vagrant
+### Testen mit Vagrant
 
 Mit Vagrant (<https://www.vagrantup.com/>) und dem `Vagrantfile` in OPUS 4 
 Application lässt sich eine Virtuelle Maschine hochfahren in der ein vollständiges 
@@ -36,7 +36,7 @@ Damit kann man OPUS 4, auch Entwicklungsversionen, unter Linux, Mac OS-X
 oder auch Windows laufen lassen, z.B. um neue Funktionen zu testen oder
 an Anpassungen zu arbeiten.
 
-# User Interface "Experimente"
+### User Interface "Experimente"
 
 Das Formular für den Import von BibTeX-Dateien verwendet ein neues Eingabefeld
 für die Auswahl von Sammlungen. Es funktioniert wie ein Suchfeld für Sammlungen,
@@ -51,7 +51,7 @@ gegeben werden.
 
 <https://github.com/OPUS4/application/issues/500>
 
-# Konfiguration
+### Konfiguration
 
 Der Parameter `url` kann verwendet werden, um die absolute URL für eine OPUS 4
 Instanz manuell zu setzen. Diese URL wird dann verwendet, um absolute Links,
@@ -61,13 +61,13 @@ url = 'https://opus4mig.kobv.de/opus4-demo'
 
 __URLs mit Port werden momentan nicht unterstützt.__
 
-# Betrieb mit Proxy
+### Betrieb mit Proxy
 
 Es wurden eine Reihe von Problemen beim Betrieb von OPUS 4 mit einem Proxy-Server
 behoben, hauptsächlich das korrekte Rendern von URLs in Exports. Der Betrieb mit
 einem Proxy sollte nun ohne Einschränkungen möglich sein.
 
-# Neues Kommandozeilen-Skript `bin/opus4`
+### Neues Kommandozeilen-Skript `bin/opus4`
 
 Es gibt das neue Skript `bin/opus4`, dass in Zukunft die Rolle des zentralen OPUS 4
 Werkzeugs auf der Kommandozeile übernehmen wird. Mit dem Kommando `list` lassen sich
@@ -79,7 +79,7 @@ einzelnen Kommandos abrufen.
 
 Es sind noch nicht alle alten Skripte in Kommandos umgewandelt worden.
 
-# Wartung des Solr-Index
+### Wartung des Solr-Index
 
 Das Skript `script/SolrIndexBuilder.php` wurde durch `bin/opus4` ersetzt. Dadurch
 soll der Aufruf vereinfacht werden. Das neue Skript soll außerdem in Zukunft auch
@@ -95,14 +95,14 @@ aus dem Index zu entfernen. Es kann über eine Option bestimmt werden wie viele
 Dokumente gleichzeitig zum Solr-Server geschickt werden sollen. Das kann helfen,
 wenn es Probleme bei der Indexierung gibt.
 
-# Export
+### Export
 
 Die beiden Variablen `host` und `server` in den Export-XSLT Skripten wurden durch
 die Variable `opusUrl` ersetzt. Eigene Skripte, die diese Variablen einsetzen,
 müssen angepasst werden. Die neue Variable `opusUrl` enthält die absolute URL für
 die OPUS 4 Instanz.
 
-# BibTeX-Import
+### BibTeX-Import
 
 OPUS 4 erlaubt nun den Import von Dokumentmetadaten aus BibTeX-Dateien. Der Import
 ist bisher auf Administratoren beschränkt. Der Import einer BibTeX-Datei kann auf
@@ -120,7 +120,7 @@ In der Dokumentenverwaltung gibt es dazu einen entsprechenden Button _BibTeX-Imp
 Das Webformular in der Administration für den Import von BibTeX-Dateien bietet 
 sämtliche Optionen an, die auch auf der Kommandozeile verwendet werden können.
 
-## Anforderungen für BibTeX-Import
+#### Anforderungen für BibTeX-Import
 
 Für die Ausführung des BibTeX-Imports, insbesondere die Umwandlung von LaTeX-codierten
 Sonderzeichen (z. B. Umlaute) in ihren Unicode-Entsprechungen, wird das Programm 
@@ -142,13 +142,13 @@ den BibTeX-Import ausführlich beschrieben werden:
 
 <http://www.opus-repository.org/userdoc/import/bibtex.html>
 
-# SWORD Import
+### SWORD Import
 
 Nach dem Import über die SWORD-Schnittstelle werden die übertragenen Pakete gelöscht.
 Das erfolgt nicht mehr automatische, wenn beim Import Probleme aufgetreten sind, damit 
 diese leichter analysiert und behoben werden können.
 
-# Deckblätter für PDF-Downloads
+### Deckblätter für PDF-Downloads
 
 Die Entwicklung von automatisch generierten Deckblättern in OPUS 4 hat begonnen. Sie 
 findet im neuen Paket __opus4-pdf__ statt und ist noch nicht abgeschlossen. In 4.7.1
@@ -157,16 +157,16 @@ aktivieren zu können.
 
 <http://github.com/OPUS4/opus4-pdf>
 
-# Umstieg auf Laminas
+### Umstieg auf Laminas
 
 In 4.7.1 sind bereits einige Vorarbeiten für den Umstieg zu Laminas, dem Nachfolger
 des Zend Frameworks, eingeflossen, insbesondere im Framework. Die kommenden Releases
 werden sich zum größten Teil mit dem Umstieg befassen, da nur so eine solide Platform 
 für die Entwicklung und das Hosting in den kommenden Jahren geschaffen werden kann.
 
-# OPUS 4 Framework Package
+### OPUS 4 Framework Package
 
-## API
+#### API
 
 Die `deletePermanent` Funktion von `Opus\Document`, um Dokumente vollständig zu
 löschen, wurde entfernt. Die `delete` Funktion löscht Dokumente jetzt vollständig,
@@ -179,7 +179,7 @@ verwendet werden.
 
 Dies muss unter Umständen bei eigenen Skripten berücksichtigt werden.
 
-## PHP Namespaces
+#### PHP Namespaces
 
 Der Code des OPUS Frameworks wurde in Vorbereitung auf die Migration zu Laminas
 auf PHP Namespaces umgestellt und die Verwendung der Klassen in der Application
@@ -256,8 +256,6 @@ insbesondere auch mit Namen, die  Bindestriche enthalten.
 
 Die Deklaration des Namespaces "xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 erfolgt nun beim OAI-Export in jedem Metadata Wurzel Element (GH-412).
-
----
 
 ---
 

@@ -1,8 +1,10 @@
 # OPUS 4 Change Log
 
-## Release 4.7.1 - 2022-03-22
+## Release 4.7.1 - 2022-03-24
 
 ### Aufgaben
+
+* #520 SOLR-Installation von Install-Skript entfernen
 
 * [OPUSVIER-421] - Feinschliff des SolrIndexBuilder-Skripts
 * [OPUSVIER-1443] - Cookies: Setzen der Option http_only gegen XSS-Cookie-Klau
@@ -82,6 +84,10 @@
 * [OPUSVIER-4570] - BibTeX-Import - Import von DOI mit Maskierung
 
 ### Bugs
+
+* #375 DB-Exception beim Versuch einen neuen Account ohne Passwort zu speichern bug
+* #482 bin/install.sh doesn't finish with Composer 2 as robloach/component-installer package is abandoned
+* #483 Setting up the database with MySQL 8.0 using install.sh script doesn't work
 
 * [OPUSVIER-4038] - Betrieb von OPUS hinter einem Proxy
 * [OPUSVIER-4043] - Schattierung bei mehreren Autoren im Publishformular verschiebt sich
