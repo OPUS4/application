@@ -119,9 +119,9 @@ echo
 
 if [[ $SUDO_ENABLED -eq 0 ]] ;
 then
-    "$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
+    "$SCRIPT_PATH/install-composer.sh" install
 else
-    sudo -u "$SUDO_USER" "$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
+    sudo -u "$SUDO_USER" "$SCRIPT_PATH/install-composer.sh" install
 fi
 
 #
