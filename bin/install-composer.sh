@@ -19,7 +19,6 @@ set -e
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
-
 BASEDIR="`dirname "$SCRIPT_PATH"`"
 
 # Don't run Composer as root - Composer itself warns against that
@@ -28,8 +27,19 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
-if [ -e composer ] ;
+# get BASEDIR from first argument if present
+if [ $# -ge 1 ] ;
 then
+    INSTALL_PACKAGES=1
+fi
+
+if [ -e bin/composer ] ;
+then
+  if [[ "$INSTALL_PACKAGES" == 1 ]] ;
+  then
+    cd $BASEDIR
+    php bin/composer install
+  fi
   exit 1
 fi
 
@@ -47,4 +57,11 @@ fi
 php composer-setup.php --quiet --install-dir="$BASEDIR/bin" --filename=composer
 RESULT=$?
 rm composer-setup.php
+
+if [[ "$INSTALL_PACKAGES" == 1 ]] ;
+then
+  cd $BASEDIR
+  php bin/composer install
+fi
+
 exit $RESULT
