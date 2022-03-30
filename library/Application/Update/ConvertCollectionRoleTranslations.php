@@ -32,7 +32,7 @@
  */
 
 use Opus\CollectionRole;
-use Opus\Util\ConsoleColors;
+use Opus\Console\ConsoleColors;
 
 /**
  * Handles update of "speaking" collection role names.
