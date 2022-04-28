@@ -40,8 +40,11 @@
  * später nicht mehr angepasst werden muss.
  *
  */
+
+use Opus\Import\CsvImporter;
+
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 require_once 'Log.php';
 
-$importer = new Application_Import_CsvImporter();
+$importer = new CsvImporter();
 $importer->run($argv);

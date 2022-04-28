@@ -36,6 +36,7 @@ use Opus\Collection;
 use Opus\CollectionRole;
 use Opus\Config;
 use Opus\Document;
+use Opus\Import\AdditionalEnrichments;
 
 class DepositTestHelper extends PHPUnit_Framework_Assert
 {
@@ -191,22 +192,22 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
 
         foreach ($enrichments as $enrichment) {
             switch ($enrichment->getKeyName()) {
-                case Application_Import_AdditionalEnrichments::OPUS_IMPORT_CHECKSUM:
+                case AdditionalEnrichments::OPUS_IMPORT_CHECKSUM:
                     $this->assertEquals($checksum, $enrichment->getValue());
                     break;
-                case Application_Import_AdditionalEnrichments::OPUS_IMPORT_DATE:
+                case AdditionalEnrichments::OPUS_IMPORT_DATE:
                     $dateStr = $enrichment->getValue();
                     $this->assertTrue(trim($dateStr) !== '');
                     $date = new DateTime($dateStr, new DateTimeZone('GMT'));
                     $this->assertTrue($date <= new DateTime());
                     break;
-                case Application_Import_AdditionalEnrichments::OPUS_IMPORT_FILE:
+                case AdditionalEnrichments::OPUS_IMPORT_FILE:
                     $this->assertEquals($fileName, $enrichment->getValue());
                     break;
-                case Application_Import_AdditionalEnrichments::OPUS_IMPORT_USER:
+                case AdditionalEnrichments::OPUS_IMPORT_USER:
                     $this->assertEquals('sworduser', $enrichment->getValue());
                     break;
-                case Application_Import_AdditionalEnrichments::OPUS_SOURCE:
+                case AdditionalEnrichments::OPUS_SOURCE:
                     $this->assertEquals('sword', $enrichment->getValue());
                     break;
                 default:
