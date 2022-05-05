@@ -1,9 +1,5 @@
 <?php
 
-use Opus\Import\PackageReader;
-use Opus\Import\TarPackageReader;
-use Opus\Import\ZipPackageReader;
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -38,6 +34,11 @@ use Opus\Import\ZipPackageReader;
  * TODO separate differentiation of ZIP and TAR into separate classes - it should be possible to ADD another class to
  *      support a new type of package - it should not be necessary to MODIFY existing classes for that
  */
+
+use Opus\Import\AbstractPackageReader;
+use Opus\Import\TarPackageReader;
+use Opus\Import\ZipPackageReader;
+
 class Sword_Model_PackageHandler
 {
     private $additionalEnrichments;
@@ -132,7 +133,7 @@ class Sword_Model_PackageHandler
      * Liefert in Abhängigkeit vom zu verarbeitenden Pakettyp ein passendes Objekt zum Einlesen des Pakets zurück.
      * Liefert null zurück, wenn der Pakettyp nicht verarbeitet werden kann.
      *
-     * @return PackageReader
+     * @return AbstractPackageReader
      *
      * TODO make types configurable and remove explicit TAR/ZIP declarations in this class (use factory class?)
      */
