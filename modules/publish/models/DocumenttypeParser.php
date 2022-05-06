@@ -33,7 +33,7 @@
  */
 
 use Opus\EnrichmentKey;
-use Opus\Log;
+use Opus\Common\Log;
 
 class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
 {

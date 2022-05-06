@@ -34,7 +34,7 @@
 
 use Opus\Date;
 use Opus\Document;
-use Opus\Log;
+use Opus\Common\Log;
 use Opus\Person;
 use Opus\UserRole;
 

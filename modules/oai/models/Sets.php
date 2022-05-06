@@ -30,7 +30,7 @@
  */
 
 use Opus\CollectionRole;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 class Oai_Model_Sets extends Application_Model_Abstract
 {
@@ -129,8 +129,8 @@ class Oai_Model_Sets extends Application_Model_Abstract
 
     /**
      * Returns sets for collections of a collection role.
-     * @param $setSpec OAI name for collection role
-     * @param $roleId int Database ID of role
+     * @param string $setSpec OAI name for collection role
+     * @param int    $roleId int Database ID of role
      * @return array
      */
     public function getSetsForCollectionRole($setSpec, $roleId)

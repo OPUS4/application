@@ -33,7 +33,7 @@
  */
 
 use Opus\EnrichmentKey;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 /**
  * Unit Tests for Admin_Form_Enrichmentkey.

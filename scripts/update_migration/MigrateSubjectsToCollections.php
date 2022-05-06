@@ -38,7 +38,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 use Opus\Collection;
 use Opus\CollectionRole;
 use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Repository;
 use Opus\EnrichmentKey;
 use Opus\Model\NotFoundException;
 

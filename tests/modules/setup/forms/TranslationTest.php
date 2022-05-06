@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,6 +31,8 @@
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Translate\UnknownTranslationKeyException;
 
 /**
  */
@@ -260,13 +263,11 @@ class Setup_Form_TranslationTest extends ControllerTestCase
         ], $form->getSubForm($form::SUBFORM_TRANSLATION)->getTranslations());
     }
 
-    /**
-     * @expectedException \Opus\Translate\UnknownTranslationKeyException
-     * @expectedExceptionMessage unknownKey789
-     */
     public function testPopulateFromKeyUnknownKey()
     {
         $form = $this->getForm();
+
+        $this->setExpectedException(UnknownTranslationKeyException::class, 'unknownKey789');
 
         $form->populateFromKey('unknownKey789');
     }
@@ -388,7 +389,7 @@ class Setup_Form_TranslationTest extends ControllerTestCase
         $failed = true;
         try {
             $translation = $manager->getTranslation($oldKey);
-        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
+        } catch (UnknownTranslationKeyException $ex) {
             $failed = false;
         }
         if ($failed) {

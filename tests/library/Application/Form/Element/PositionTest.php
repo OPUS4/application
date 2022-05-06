@@ -30,6 +30,9 @@
  * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\CollectionRole;
+
 class Application_Form_Element_PositionTest extends FormElementTestCase
 {
 
@@ -54,7 +57,7 @@ class Application_Form_Element_PositionTest extends FormElementTestCase
 
         $options = $element->getMultiOptions();
 
-        $collectionRoles = \Opus\CollectionRole::fetchAll();
+        $collectionRoles = CollectionRole::fetchAll();
 
         // One additional option for last position
         $this->assertEquals(count($collectionRoles) + 1, count($options));

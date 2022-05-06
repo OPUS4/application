@@ -33,7 +33,7 @@
 
 use Opus\Collection;
 use Opus\CollectionRole;
-use Opus\Config;
+use Opus\Common\Config;
 
 /**
  * Export plugin for exporting collections based on role name and collection number.

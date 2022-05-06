@@ -35,7 +35,7 @@
  * Controller for handling file downloads in the frontdoor.
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 use Opus\Document;
 use Opus\File;
 use Opus\Pdf\Cover\CoverGeneratorFactory;

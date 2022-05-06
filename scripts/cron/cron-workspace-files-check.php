@@ -34,7 +34,7 @@
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Config;
+use Opus\Common\Config;
 use Opus\Document;
 use Opus\Model\NotFoundException;
 

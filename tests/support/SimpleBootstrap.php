@@ -33,9 +33,9 @@
  * TODO take care of duplicated code (from regular bootstrap) - maybe SimpleBootstrap is not needed anymore?
  */
 
-use Opus\Config;
-use Opus\Log;
-use Opus\Log\LogService;
+use Opus\Common\Config;
+use Opus\Common\Log;
+use Opus\Common\Log\LogService;
 
 class SimpleBootstrap extends \Zend_Application_Bootstrap_Bootstrap
 {

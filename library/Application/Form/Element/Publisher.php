@@ -32,7 +32,7 @@
  */
 
 use Opus\DnbInstitute;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 use Opus\Model\NotFoundException;
 
 /**

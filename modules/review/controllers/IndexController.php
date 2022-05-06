@@ -31,7 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Repository;
+use Opus\Common\Repository;
+use Opus\Common\DocumentFinderInterface;
 use Opus\Security\Realm;
 
 /**

@@ -32,7 +32,7 @@
  */
 
 use Opus\Account;
-use Opus\Log;
+use Opus\Common\Log;
 use Opus\Person;
 
 class Publish_Model_LoggedUser

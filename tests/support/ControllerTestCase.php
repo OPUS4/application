@@ -29,14 +29,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
+use Opus\Common\LoggingTrait;
+use Opus\Common\DocumentFinderInterface;
 use Opus\Db\TableGateway;
 use Opus\Document;
 use Opus\Doi\DoiManager;
 use Opus\File;
-use Opus\Repository;
+use Opus\Common\Repository;
 use Opus\UserRole;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 use Opus\Model\NotFoundException;
 use Opus\Security\AuthAdapter;
 use Opus\Security\Realm;
@@ -57,7 +59,7 @@ class ControllerTestCase extends TestCase
 
     const CONFIG_VALUE_TRUE = '1'; // Zend_Config übersetzt true in den Wert '1'
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     private $securityEnabled;
 

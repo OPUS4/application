@@ -33,7 +33,7 @@
  * TODO use getRecipients
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 use Opus\Document;
 
 class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm

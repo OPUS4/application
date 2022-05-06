@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Repository;
+use Opus\Common\Repository;
 
 class Rewrite_IndexController extends Application_Controller_Action
 {

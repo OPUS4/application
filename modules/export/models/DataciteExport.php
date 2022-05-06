@@ -33,7 +33,7 @@
  */
 
 use Opus\Document;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 use Opus\Doi\DataCiteXmlGenerator;
 use Opus\Doi\DataCiteXmlGenerationException;
 
@@ -116,7 +116,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
      *
      * @param Document $document das aktuell verarbeitete Dokument
      * @param array $requiredFieldsStatus der Status (Existenz bzw. Nichtexistenz) der einzelnen Pflichtfelder
-     * @param $errors die bei der DataCite-XML Generierung gefundenen Fehler
+     * @param array $errors die bei der DataCite-XML Generierung gefundenen Fehler
      */
     private function prepareView($document, $requiredFieldsStatus, $errors)
     {

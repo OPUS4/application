@@ -33,7 +33,7 @@
  * TODO define and use interface
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 
 abstract class Application_Translate_Help
 {

@@ -34,7 +34,7 @@
 use Opus\Document;
 use Opus\Enrichment;
 use Opus\EnrichmentKey;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 /**
  * Unit Tests für Admin_Form_Document_MultiEnrichmentSubForm Formular das

@@ -30,7 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Log;
+use Opus\Common\Log;
 use Opus\Series;
 use Opus\Model\NotFoundException;
 

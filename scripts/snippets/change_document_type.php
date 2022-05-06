@@ -41,7 +41,7 @@ if (basename(__FILE__) !== basename($argv[0])) {
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 $options = getopt('', ['dryrun', 'from:', 'to:']);
 

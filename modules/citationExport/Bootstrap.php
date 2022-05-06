@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Log;
+use Opus\Common\Log;
 
 class CitationExport_Bootstrap extends \Zend_Application_Module_Bootstrap
 {

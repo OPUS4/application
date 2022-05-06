@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 use Opus\Document;
 
 class Publish_View_Helper_FileOverview extends \Zend_View_Helper_Abstract

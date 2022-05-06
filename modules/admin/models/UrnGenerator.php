@@ -31,9 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 use Opus\Identifier\Urn;
-use Opus\Log;
+use Opus\Common\Log;
 
 class Admin_Model_UrnGenerator
 {

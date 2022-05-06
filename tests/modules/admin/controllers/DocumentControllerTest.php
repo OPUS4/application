@@ -34,7 +34,7 @@
 
 use Opus\CollectionRole;
 use Opus\Date;
-use Opus\Log;
+use Opus\Common\Log;
 use Opus\Note;
 use Opus\Person;
 use Opus\Title;

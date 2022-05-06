@@ -34,7 +34,7 @@
 
 use Opus\Document;
 use Opus\Enrichment;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 use Opus\Security\Realm;
 
 class Publish_DepositController extends Application_Controller_Action

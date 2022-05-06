@@ -45,7 +45,7 @@ use Opus\Series;
 use Opus\Subject;
 use Opus\Reference;
 use Opus\Title;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 use Opus\Model\NotFoundException;
 use Opus\Model\Dependent\Link\DocumentPerson;
 

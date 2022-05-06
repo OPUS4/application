@@ -32,7 +32,7 @@
 
 use Opus\CollectionRole;
 use Opus\Db\Documents;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 class Admin_Model_Statistics
 {

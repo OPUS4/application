@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,6 +26,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+use Opus\Common\Model\ModelException;
 
 /**
  * CRUD Controller for Opus Application.
@@ -317,7 +320,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
                         try {
                             $model->store();
-                        } catch (\Opus\Model\ModelException $ome) {
+                        } catch (ModelException $ome) {
                             // Speichern fehlgeschlagen
                             return ['message' => self::SAVE_FAILURE];
                         }
@@ -378,7 +381,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
                 // Model löschen
                 try {
                     $this->deleteModel($model);
-                } catch (\Opus\Model\ModelException $ome) {
+                } catch (ModelException $ome) {
                     $this->getLogger()->err(__METHOD__ . ' ' . $ome->getMessage());
                     return ['message' => self::DELETE_FAILURE];
                 }

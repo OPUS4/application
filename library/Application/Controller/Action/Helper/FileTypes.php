@@ -38,7 +38,7 @@
  * TODO different configuration structure might be more efficient
  */
 
-use Opus\Config\FileTypes;
+use Opus\Common\Config\FileTypes;
 
 class Application_Controller_Action_Helper_FileTypes extends Application_Controller_Action_Helper_Abstract
 {

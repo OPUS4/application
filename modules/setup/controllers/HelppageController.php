@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +32,8 @@
  * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Translate\UnknownTranslationKeyException;
 
 /**
  *
@@ -182,7 +185,7 @@ class Setup_HelppageController extends Application_Controller_Action
 
         try {
             $translation = $manager->getTranslation($key);
-        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
+        } catch (UnknownTranslationKeyException $ex) {
         }
 
         if (is_null($translation)) {

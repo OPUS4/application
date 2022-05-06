@@ -39,7 +39,7 @@
  */
 
 use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 $updateRequired = 0;
 $docfinder = Repository::getInstance()->getDocumentFinder();

@@ -35,7 +35,7 @@ define('APPLICATION_ENV', 'production');
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Job\Runner;
-use Opus\Log;
+use Opus\Common\Log;
 use Opus\Search\Task\ConsistencyCheck;
 
 $jobrunner = new Runner;

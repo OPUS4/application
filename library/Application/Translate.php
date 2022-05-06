@@ -31,7 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
+use Opus\Common\LoggingTrait;
 
 /**
  * Erweiterung von Zend_Translate, um Übersetzungsressourcen für Module zu laden.
@@ -47,7 +48,7 @@ use Opus\Config;
 class Application_Translate extends \Zend_Translate
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     /**
      * Schlüssel für Zend_Translate in Zend_Registry.

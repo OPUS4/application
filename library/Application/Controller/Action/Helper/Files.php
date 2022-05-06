@@ -31,8 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
-use Opus\Log;
+use Opus\Common\Config;
+use Opus\Common\Log;
 
 /**
  * Helper for basic file and folder operations.

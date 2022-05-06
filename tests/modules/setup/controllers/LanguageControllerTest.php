@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,6 +32,9 @@
  * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Translate\UnknownTranslationKeyException;
+use Opus\Translate\Dao;
 
 /**
  * @covers Setup_LanguageController
@@ -363,7 +367,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         try {
             $manager->getTranslation('customkey');
-        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
+        } catch (UnknownTranslationKeyException $ex) {
             $keyFound = false;
         }
 
@@ -885,11 +889,11 @@ class Setup_LanguageControllerTest extends ControllerTestCase
     }
 
     /**
-     * @return \Opus\Translate\Dao
+     * @return Dao
      * TODO really use translation manager (be independent of database)
      */
     protected function getTranslationManager()
     {
-        return new \Opus\Translate\Dao();
+        return new Dao();
     }
 }

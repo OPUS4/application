@@ -33,6 +33,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\LoggingTrait;
+
 /**
  * Module-access-checking controller for Opus Applications.
  *
@@ -42,7 +44,7 @@
 class Application_Controller_ModuleAccess extends \Zend_Controller_Action
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     const ACCESS_DENIED_ACTION = 'module-access-denied';
 

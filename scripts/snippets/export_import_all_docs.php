@@ -35,7 +35,7 @@ use Opus\Document;
 use Opus\Model\NotFoundException;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Tries to export and import all documents.
