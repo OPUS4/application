@@ -33,6 +33,7 @@
 
 use Opus\Document;
 use Opus\EnrichmentKey;
+use Opus\Import\AdditionalEnrichments;
 
 /**
  * @covers Sword_DepositController
@@ -125,13 +126,13 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         $this->getRequest()->setRawBody('some content');
 
         // remove enrichment key opus.import.user
-        $enrichmentKey = new EnrichmentKey(Application_Import_AdditionalEnrichments::OPUS_IMPORT_USER);
+        $enrichmentKey = new EnrichmentKey(AdditionalEnrichments::OPUS_IMPORT_USER);
         $enrichmentKey->delete();
 
         $this->dispatch('/sword/deposit');
 
         $enrichmentKey = new EnrichmentKey();
-        $enrichmentKey->setName(Application_Import_AdditionalEnrichments::OPUS_IMPORT_USER);
+        $enrichmentKey->setName(AdditionalEnrichments::OPUS_IMPORT_USER);
         $enrichmentKey->store();
 
         $this->checkErrorDocument(400, 'http://www.opus-repository.org/sword/error/MissingImportEnrichmentKey');

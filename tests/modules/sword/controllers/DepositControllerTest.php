@@ -33,6 +33,7 @@
  */
 
 use Opus\Document;
+use Opus\Import\AdditionalEnrichments;
 
 /**
  * @covers Sword_DepositController
@@ -374,7 +375,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         foreach ($enrichments as $enrichment) {
             $keyName = $enrichment->getKeyName();
-            if ($keyName != Application_Import_AdditionalEnrichments::OPUS_SOURCE && strpos($keyName, 'opus.import.') !== 0) {
+            if ($keyName != AdditionalEnrichments::OPUS_SOURCE && strpos($keyName, 'opus.import.') !== 0) {
                 // überprüfe hier nur die Enrichments, die nicht automatisch beim Import eines Dokuments angelegt werden
                 $value = $enrichment->getValue();
                 $this->assertTrue($keyName == 'SourceSwb' && $value == 'enrichment1' || $keyName == 'SourceTitle' && $value == 'enrichment2');

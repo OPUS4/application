@@ -36,6 +36,9 @@
  * TODO change AdditionalEnrichments into something like ImportInfo and make it easy to access properties like "user"
  */
 
+use Opus\Import\AdditionalEnrichments;
+use Opus\Import\ImportStatusDocument;
+use Opus\Import\Xml\MetadataImportInvalidXmlException;
 use Opus\Log;
 
 class Sword_DepositController extends \Zend_Rest_Controller
@@ -129,7 +132,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
                 $errorDoc->setInternalFrameworkError();
             }
-        } catch (Application_Import_MetadataImportInvalidXmlException $ex) {
+        } catch (MetadataImportInvalidXmlException $ex) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setInvalidXml();
         } catch (Exception $ex) {
@@ -154,7 +157,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
 
     /**
      *
-     * @param Application_Import_ImportStatusDocument $statusDoc
+     * @param ImportStatusDocument $statusDoc
      */
     private function createAtomEntryDocument($statusDoc)
     {
@@ -180,7 +183,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
 
     private function getAdditionalEnrichments($userName, $request)
     {
-        $additionalEnrichments = new Application_Import_AdditionalEnrichments();
+        $additionalEnrichments = new AdditionalEnrichments();
 
         $additionalEnrichments->addUser($userName);
 
@@ -237,7 +240,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
 
     /**
      * Generates a name for storing the package as a file.\
-     * @param Application_Import_AdditionalEnrichments $importInfo
+     * @param AdditionalEnrichments $importInfo
      */
     protected function generatePackageFileName($importInfo)
     {
