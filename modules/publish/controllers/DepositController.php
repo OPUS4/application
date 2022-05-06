@@ -109,8 +109,14 @@ class Publish_DepositController extends Application_Controller_Action
         }
 
         try {
+            $selectedType = null;
+
+            if (isset($this->session->selectedType)) {
+                $selectedType = $this->session->selectedType;
+            }
+
             $depositData = new Publish_Model_Deposit();
-            $depositData->storeDocument($this->session->documentId, $this->log, $this->depositData);
+            $depositData->storeDocument($this->session->documentId, $this->log, $this->depositData, $selectedType);
         } catch (Publish_Model_Exception $e) {
             throw new Application_Exception('publish_error_unexpected');
         }
