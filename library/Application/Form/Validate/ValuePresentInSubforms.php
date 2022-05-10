@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Log;
+use Opus\Common\Log;
 
 /**
  * Prüft ob ein Wertfür ein Feld in Unterformularen mindestens einmal vorkommt.

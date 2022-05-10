@@ -37,7 +37,7 @@
 use Opus\Document;
 use Opus\Job;
 use Opus\Job\Worker\MailNotification;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 class Application_Util_Notification extends Application_Model_Abstract
 {

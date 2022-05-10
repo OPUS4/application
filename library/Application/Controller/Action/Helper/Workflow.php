@@ -32,7 +32,7 @@
  */
 
 use Opus\Document;
-use Opus\Log;
+use Opus\Common\Log;
 
 /**
  * Controller helper for providing workflow support.

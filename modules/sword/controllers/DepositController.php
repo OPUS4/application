@@ -39,7 +39,7 @@
 use Opus\Import\AdditionalEnrichments;
 use Opus\Import\ImportStatusDocument;
 use Opus\Import\Xml\MetadataImportInvalidXmlException;
-use Opus\Log;
+use Opus\Common\Log;
 
 class Sword_DepositController extends \Zend_Rest_Controller
 {

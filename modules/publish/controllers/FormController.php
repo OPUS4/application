@@ -31,9 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 use Opus\Document;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 class Publish_FormController extends Application_Controller_Action
 {

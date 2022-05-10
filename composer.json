@@ -28,7 +28,7 @@
     "opus4-repo/search": "dev-master",
     "opus4-repo/opus4-bibtex": "dev-master",
     "opus4-repo/opus4-import": "dev-main",
-    "opus4-repo/opus4-pdf": "*",
+    "opus4-repo/opus4-pdf": "dev-main",
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
     "oomphinc/composer-installers-extender": "^2.0",

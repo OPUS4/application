@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Console\ConsoleColors;
+use Opus\Common\Console\ConsoleColors;
 
 /**
  * Add import folder to workspace.

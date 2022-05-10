@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 use Opus\Import\Sword\ImportCollection;
 
 class Sword_Model_ServiceDocument

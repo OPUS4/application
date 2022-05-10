@@ -32,7 +32,7 @@
  */
 
 use Opus\Document;
-use Opus\Log;
+use Opus\Common\Log;
 
 /**
  * Class Publish_DepositControllerTest.

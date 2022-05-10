@@ -31,7 +31,7 @@
  */
 
 use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Dieses Script sucht Dokumente ohne sichtbare Dateien, fuer die bereits

@@ -31,7 +31,7 @@
  */
 
 use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Erstellt die Demoinstanz, in der nur die Testdokumente mit den IDs 91 bis 110

@@ -36,7 +36,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Date;
 use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /*
  * This cron job must be used if embargo dates are used in repository.

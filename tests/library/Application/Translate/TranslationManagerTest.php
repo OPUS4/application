@@ -32,6 +32,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Translate\UnknownTranslationKeyException;
+use Opus\Common\Translate\TranslateException;
+use Opus\Translate\Dao;
+
 /**
  * Test class for Setup_Model_Language_TranslationManager.
  */
@@ -895,7 +899,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         try {
             $translation = $manager->getTranslation($oldKey);
-        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
+        } catch (UnknownTranslationKeyException $ex) {
             $failed = false;
         }
 
@@ -904,24 +908,20 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @expectedException \Opus\Translate\TranslateException
-     * @expectedExceptionMessage default_add
-     */
     public function testUpdateTranslationForEditedKey()
     {
         $manager = $this->object;
 
+        $this->setExpectedException(TranslateException::class, 'default_add');
+
         $manager->updateTranslation('default_add_new', [], 'default', 'default_add');
     }
 
-    /**
-     * @expectedException \Opus\Translate\TranslateException
-     * @expectedExceptionMessage Module of key 'default_add' cannot be changed.
-     */
     public function testUpdateTranslationCannotModifyModuleForEditedKey()
     {
         $manager = $this->object;
+
+        $this->setExpectedException(TranslateException::class, 'Module of key \'default_add\' cannot be changed.');
 
         $manager->updateTranslation('default_add', null, 'publish');
     }
@@ -971,7 +971,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         try {
             $translation = $manager->getTranslation($oldKey);
-        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
+        } catch (UnknownTranslationKeyException $ex) {
             $failed = false;
         }
 
@@ -1271,6 +1271,6 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
     protected function getStorageInterface()
     {
-        return new \Opus\Translate\Dao();
+        return new Dao();
     }
 }

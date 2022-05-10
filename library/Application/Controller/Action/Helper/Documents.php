@@ -31,7 +31,7 @@
 
 use Opus\Document;
 use Opus\Model\NotFoundException;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Helper for getting a list of document IDs used by admin and review module.

@@ -44,7 +44,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 use Opus\DnbInstitute;
 use Opus\Document;
 use Opus\Model\NotFoundException;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 //if ($argc < 3) {
 //    echo "Usage: {$argv[0]} <document type> <thesis publisher ID> (dryrun)\n";

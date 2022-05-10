@@ -37,7 +37,7 @@ use Opus\Enrichment;
 use Opus\EnrichmentKey;
 use Opus\Enrichment\SelectType;
 use Opus\Enrichment\TextType;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 /**
  * Unterformular für einzelne Enrichments im Metadaten-Formular.

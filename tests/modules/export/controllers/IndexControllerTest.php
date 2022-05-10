@@ -36,7 +36,7 @@
 use Opus\Document;
 use Opus\File;
 use Opus\Title;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 use Opus\Search\Service;
 
 /**

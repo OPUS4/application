@@ -33,6 +33,7 @@
 
 use Opus\File;
 use Opus\UserRole;
+use Opus\Common\Util\File as FileUtil;
 
 /**
  * Class Oai_ContainerControllerTest.
@@ -137,7 +138,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
         // cleanup
         $file->delete();
-        \Opus\Util\File::deleteDirectory($path);
+        FileUtil::deleteDirectory($path);
 
         $this->assertResponseCode(500);
         $this->assertContains(
@@ -174,7 +175,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
         // cleanup
         $file->delete();
-        \Opus\Util\File::deleteDirectory($path);
+        FileUtil::deleteDirectory($path);
 
         $this->assertResponseCode(200);
     }

@@ -30,11 +30,11 @@
  */
 
 use Opus\Document;
-use Opus\Log;
+use Opus\Common\Log;
 use Opus\Model\NotFoundException;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 class Oai_Model_Server extends Application_Model_Abstract
 {

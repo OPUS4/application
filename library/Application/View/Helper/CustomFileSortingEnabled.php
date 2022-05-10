@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 
 class Application_View_Helper_CustomFileSortingEnabled extends \Zend_View_Helper_Abstract
 {

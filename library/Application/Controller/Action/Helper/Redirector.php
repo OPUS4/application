@@ -31,10 +31,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\LoggingTrait;
+
 class Application_Controller_Action_Helper_Redirector extends \Zend_Controller_Action_Helper_Redirector
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     private $_flashMessenger;
 

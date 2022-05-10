@@ -33,7 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Mail\SendMail;
+use Opus\Common\Mail\SendMail;
 
 /**
  * Controller for document recommendation starting from Frontdoor

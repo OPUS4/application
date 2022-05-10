@@ -32,8 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
-use Opus\Log;
+use Opus\Common\Config;
+use Opus\Common\Log;
 
 class Sword_Model_ErrorDocument
 {

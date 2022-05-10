@@ -36,7 +36,7 @@
  */
 
 use Opus\Licence;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Added short names (labels) to licences that look like the old standard licences distributed with OPUS 4.

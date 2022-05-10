@@ -33,7 +33,7 @@ use Opus\Date;
 use Opus\Document;
 use Opus\Identifier;
 use Opus\Db\TableGateway;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 {

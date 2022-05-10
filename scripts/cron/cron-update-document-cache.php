@@ -44,7 +44,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 use Opus\Document;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 $repository = Repository::getInstance();
 

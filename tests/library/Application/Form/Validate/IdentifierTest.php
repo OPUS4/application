@@ -61,10 +61,10 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
         $this->adjustConfiguration([
             'identifier' => ['validation' => [
                 'isbn' => [
-                    'class' => 'Opus\Validate\Isbn'
+                    'class' => 'Opus\Common\Validate\Isbn'
                 ],
                 'issn' => [
-                    'class' => 'Opus\Validate\Issn'
+                    'class' => 'Opus\Common\Validate\Issn'
                 ]
             ]]
         ]);

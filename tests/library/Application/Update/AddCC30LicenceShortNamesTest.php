@@ -33,7 +33,7 @@
 
 use Opus\Document;
 use Opus\Licence;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 {

@@ -35,8 +35,8 @@
 
 use Opus\Collection;
 use Opus\Series;
-use Opus\Model\ModelException;
-use Opus\Repository;
+use Opus\Common\Model\ModelException;
+use Opus\Common\Repository;
 
 class Publish_Model_ExtendedValidation
 {

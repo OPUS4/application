@@ -33,7 +33,7 @@
  */
 
 use Opus\EnrichmentKey;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
 {

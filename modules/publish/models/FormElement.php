@@ -32,7 +32,7 @@
  */
 
 use Opus\CollectionRole;
-use Opus\Log;
+use Opus\Common\Log;
 
 class Publish_Model_FormElement
 {

@@ -34,8 +34,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Mail\MailException;
-use Opus\Mail\SendMail;
+use Opus\Common\Mail\MailException;
+use Opus\Common\Mail\SendMail;
 
 /**
  * This controller is called on every error or exception.

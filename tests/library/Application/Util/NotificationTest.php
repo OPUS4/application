@@ -33,7 +33,7 @@
  */
 
 use Opus\Job;
-use Opus\Log;
+use Opus\Common\Log;
 use Opus\Person;
 use Opus\Title;
 use Opus\Job\Worker\MailNotification;

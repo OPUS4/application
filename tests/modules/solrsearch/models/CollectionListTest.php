@@ -32,7 +32,7 @@
  */
 
 use Opus\CollectionRole;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 class Solrsearch_Model_CollectionListTest extends ControllerTestCase
 {
