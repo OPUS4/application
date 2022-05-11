@@ -68,12 +68,13 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $this->assertFalse($form->isRenderAsTableEnabled());
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Validator ist keine Instanz von Application_Form_Validate_IMultiSubForm.
-     */
     public function testConstructFormWithBadValidator()
     {
+        $this->setExpectedException(
+            Application_Exception::class,
+            'Validator ist keine Instanz von Application_Form_Validate_IMultiSubForm.'
+        );
+
         $form = new Admin_Form_Document_MultiSubForm(
             'Admin_Form_Document_Title',
             'TitleParent',

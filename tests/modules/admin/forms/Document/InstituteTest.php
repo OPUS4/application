@@ -51,12 +51,9 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
         $this->assertNotNull($form->getElement('Institute'));
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Unknown role 'unknown_role'.
-     */
     public function testCreateFormBadRole()
     {
+        $this->setExpectedException(Application_Exception::class, 'Unknown role \'unknown_role\'.');
         $form = new Admin_Form_Document_Institute('unknown_role');
     }
 

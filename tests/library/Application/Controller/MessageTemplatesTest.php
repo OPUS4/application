@@ -59,21 +59,15 @@ class Application_Controller_MessageTemplatesTest extends TestCase
         $this->assertEquals($this->exampleTemplates, $this->messageTemplates->getMessages());
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Parameter 'messages' is required
-     */
     public function testConstructWithoutParam()
     {
+        $this->setExpectedException(Application_Exception::class, 'Parameter \'messages\' is required');
         $messages = new Application_Controller_MessageTemplates(null);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Parameter 'messages' is required and must be an array.
-     */
     public function testConstructWithBadParam()
     {
+        $this->setExpectedException(Application_Exception::class, 'Parameter \'messages\' is required and must be an array.');
         $messages = new Application_Controller_MessageTemplates('notanarray');
     }
 
@@ -103,12 +97,9 @@ class Application_Controller_MessageTemplatesTest extends TestCase
         $this->assertEquals(['failure' => 'save_failure_msg'], $this->messageTemplates->getMessage('save_failure'));
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Message key 'unknownkey' is not defined.
-     */
     public function testGetMessageUnknownKey()
     {
+        $this->setExpectedException(Application_Exception::class, 'Message key \'unknownkey\' is not defined.');
         $this->messageTemplates->getMessage('unknownkey');
     }
 
@@ -134,21 +125,15 @@ class Application_Controller_MessageTemplatesTest extends TestCase
         $this->assertEquals($message, $this->messageTemplates->getMessage('newkey'));
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Message key 'save_success' must not be null.
-     */
     public function testSetMessageNull()
     {
+        $this->setExpectedException(Application_Exception::class, 'Message key \'save_success\' must not be null.');
         $this->messageTemplates->setMessage('save_success', null);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Message key 'unknownkey' must not be null.
-     */
     public function testSetMessageNullUnknownKey()
     {
+        $this->setExpectedException(Application_Exception::class, 'Message key \'unknownkey\' must not be null.');
         $this->messageTemplates->setMessage('unknownkey', null);
     }
 

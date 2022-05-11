@@ -70,10 +70,6 @@ TEXT;
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage could not read source file
-     */
     public function testCopyAndFilterMissingSource()
     {
         $source = APPLICATION_PATH . '/tests/resources/doesnotexist.txt';
@@ -81,6 +77,7 @@ TEXT;
 
         $properties = ['@user@', 'admin'];
 
+        $this->setExpectedException(Exception::class, 'could not read source file');
         Application_Util_File::copyAndFilter($source, $dest->getTempFile(), $properties);
     }
 }
