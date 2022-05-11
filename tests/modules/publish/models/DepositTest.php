@@ -55,9 +55,6 @@ class Publish_Model_DepositTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @expectedException Publish_Model_FormDocumentNotFoundException
-     */
     public function testInvalidDocumentState()
     {
         $document = $this->createTestDocument();
@@ -66,6 +63,8 @@ class Publish_Model_DepositTest extends ControllerTestCase
 
         $log = Log::get();
         $deposit = new Publish_Model_Deposit($log);
+
+        $this->setExpectedException(Publish_Model_FormDocumentNotFoundException::class);
         $deposit->storeDocument($documentId);
     }
 

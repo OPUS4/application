@@ -46,11 +46,11 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase
     }
 
     /**
-     * @expectedException Publish_Model_FormSessionTimeoutException
      * exception because of missing session documentType
      */
     public function testConstructorWithoutDocTypeInSession()
     {
+        $this->setExpectedException(Publish_Model_FormSessionTimeoutException::class);
         $form = new Publish_Form_PublishingSecond($this->_logger);
     }
 

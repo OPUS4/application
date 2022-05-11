@@ -81,21 +81,15 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
         $this->assertEquals('headline', $form->getDecorator('Fieldset')->getOption('class'));
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage construct without parameter
-     */
     public function testConstructFormNull()
     {
+        $this->setExpectedException(Application_Exception::class, 'construct without parameter');
         new Application_Form_Confirmation(null);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage construct without parameter
-     */
     public function testConstructFormEmpty()
     {
+        $this->setExpectedException(Application_Exception::class, 'construct without parameter');
         new Application_Form_Confirmation('   ');
     }
 

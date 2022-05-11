@@ -200,29 +200,23 @@ class Admin_Form_FileTest extends ControllerTestCase
         $this->assertContains('reviewer', $roles);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Bad file ID = 'bla'.
-     */
     public function testGetModelBadId()
     {
         $form = new Admin_Form_File();
 
         $form->getElement('Id')->setValue('bla');
 
+        $this->setExpectedException(Application_Exception::class, 'Bad file ID = \'bla\'.');
         $form->getModel();
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Unknown file ID = '8888'.
-     */
     public function testGetModelUnknownID()
     {
         $form = new Admin_Form_File();
 
         $form->getElement('Id')->setValue('8888');
 
+        $this->setExpectedException(Application_Exception::class, 'Unknown file ID = \'8888\'.');
         $form->getModel();
     }
 
@@ -261,10 +255,6 @@ class Admin_Form_FileTest extends ControllerTestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage File with ID = 5555 not found.
-     */
     public function testValidationUnknownFileLink()
     {
         $form = new Admin_Form_File();
@@ -274,6 +264,7 @@ class Admin_Form_FileTest extends ControllerTestCase
             'Language' => 'eng'
         ];
 
+        $this->setExpectedException(Application_Exception::class, 'File with ID = 5555 not found.');
         $result = $form->isValid($post);
     }
 

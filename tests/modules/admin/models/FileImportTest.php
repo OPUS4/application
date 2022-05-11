@@ -120,21 +120,15 @@ class Admin_Model_FileImportTest extends ControllerTestCase
         unlink($this->importFolder . '/testfile');
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage no files for import
-     */
     public function testAddFilesToDocumentNoFiles()
     {
+        $this->setExpectedException(Application_Exception::class, 'no files for import');
         $this->model->addFilesToDocument(200, null);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage no document found for id 500
-     */
     public function testAddFilesToDocumentUnknownDocument()
     {
+        $this->setExpectedException(Application_Exception::class, 'no document found for id 500');
         $this->model->addFilesToDocument(500, ['testfile']);
     }
 

@@ -192,16 +192,13 @@ class ControllerTestCaseTest extends ControllerTestCase
         $this->assertTrue(is_writeable($workspacePath));
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage config key 'workspacePath' not defined in config file
-     */
     public function testGetWorkspacePathNotDefined()
     {
         $this->adjustConfiguration([
             'workspacePath' => null
         ]);
 
+        $this->setExpectedException(Exception::class, 'config key \'workspacePath\' not defined in config file');
         $this->getWorkspacePath();
     }
 

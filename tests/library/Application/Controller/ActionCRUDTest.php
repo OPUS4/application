@@ -103,12 +103,9 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $this->assertEquals('Admin_Form_Licence', $controller->getFormClass());
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage not instance of Application_Form_IModel
-     */
     public function testSetFormClassBadClass()
     {
+        $this->setExpectedException(Application_Exception::class, 'not instance of Application_Form_IModel');
         $this->controller->setFormClass('Opus\Document');
     }
 

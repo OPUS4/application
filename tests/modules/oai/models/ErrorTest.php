@@ -41,12 +41,9 @@ class Oai_Model_ErrorTest extends ControllerTestCase
         $this->assertEquals('badVerb', $code);
     }
 
-    /**
-     * @expectedException Oai_Model_Exception
-     * @expectedExceptionMessage Unknown oai error code 1
-     */
     public function testMapCodeUnknown()
     {
+        $this->setExpectedException(Oai_Model_Exception::class, 'Unknown oai error code 1');
         Oai_Model_Error::mapCode(1);
     }
 }

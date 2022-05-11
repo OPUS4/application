@@ -408,10 +408,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @expectedException Oai_Model_Exception
-     * @expectedExceptionMessage access to requested document files is embargoed
-     */
     public function testGetAccessibleFilesForEmbargoedDocument()
     {
         $this->enableSecurity();
@@ -434,6 +430,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $this->assertFalse($doc->hasEmbargoPassed()); // not yet passed
 
         $container = new Oai_Model_Container($doc->getId());
+
+        $this->setExpectedException(Oai_Model_Exception::class, 'access to requested document files is embargoed');
         $container->getAccessibleFiles();
     }
 }

@@ -217,9 +217,6 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
     /**
      * Test getting path for document types with path not set.
-     *
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Path to document types not configured
      */
     public function testGetDocumentTypesWithPathNotSet()
     {
@@ -227,6 +224,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
         unset($config->publish->path->documenttypes);
 
+        $this->setExpectedException(Application_Exception::class, 'Path to document types not configured');
         $this->docTypeHelper->getDocTypesPath();
     }
 
