@@ -41,7 +41,6 @@
     "phpunit/phpunit-selenium": "~1.4",
     "phpunit/php-invoker": "1.1.*",
     "phploc/phploc": "*",
-    "phpdocumentor/phpdocumentor": "2.*",
     "phpmd/phpmd" : "2.*",
     "sebastian/phpcpd": "*",
     "mayflower/php-codebrowser": "~1.1",
