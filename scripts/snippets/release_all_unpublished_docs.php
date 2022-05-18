@@ -33,7 +33,7 @@
 use Opus\Date;
 use Opus\Document;
 use Opus\Model\NotFoundException;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Releases all documents in server state unpublished.

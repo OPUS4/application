@@ -173,10 +173,6 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $this->assertEquals('bibtex.xslt', $this->_helper->getTemplateForDocument($document, 'bibtex'));
     }
 
-    /**
-     * @expectedException CitationExport_Model_Exception
-     * @expectedExceptionMessage invalid_format
-     */
     public function testGetTemplateForDocumentInvalidFormat()
     {
         $document = Document::get($this->_documentId);
@@ -184,26 +180,22 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $document->setType('masterthesis');
         $document->store();
 
+        $this->setExpectedException(CitationExport_Model_Exception::class, 'invalid_format');
         $this->assertEquals('bibtex_masterthesis.xslt', $this->_helper->getTemplateForDocument($document, 'plain'));
     }
 
-    /**
-     * @expectedException CitationExport_Model_Exception
-     * @expectedExceptionMessage invalid_docid
-     */
     public function testGetDocumentMissingDocId()
     {
+        $this->setExpectedException(CitationExport_Model_Exception::class, 'invalid_docid');
         $this->_helper->getDocument($this->getRequest());
     }
 
-    /**
-     * @expectedException CitationExport_Model_Exception
-     * @expectedExceptionMessage invalid_docid
-     */
     public function testGetDocumentInvalidDocId()
     {
         $request = $this->getRequest();
         $request->setParam('docId', '9999');
+
+        $this->setExpectedException(CitationExport_Model_Exception::class, 'invalid_docid');
         $this->_helper->getDocument($request);
     }
 
@@ -218,8 +210,6 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
     /**
      * Check if non-admin user has access to unpublished documents.
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage not allowed
      */
     public function testGetDocumentUnpublished()
     {
@@ -232,7 +222,10 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $request = $this->getRequest();
         $request->setParam('docId', $this->_documentId);
+
+        $this->setExpectedException(Application_Exception::class, 'not allowed');
         $document = $this->_helper->getDocument($request);
+
         $this->assertNotNull($document);
         $this->assertEquals($this->_documentId, $document->getId());
     }

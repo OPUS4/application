@@ -33,7 +33,7 @@
  */
 
 use Opus\CollectionRole;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 class Oai_Model_DocumentList
 {

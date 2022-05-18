@@ -111,34 +111,27 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $this->assertNull($model->getId());
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Model class has not been set.
-     */
     public function testGetModelNoModelClass()
     {
+        $this->setExpectedException(Application_Exception::class, 'Model class has not been set.');
         $this->form->getModel();
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Model-ID must be numeric.
-     */
     public function testGetModelBadModelId()
     {
         $this->form->setModelClass('Opus\Licence');
         $this->form->getElement('Id')->setValue('notAnId');
+
+        $this->setExpectedException(Application_Exception::class, 'Model-ID must be numeric.');
         $this->form->getModel();
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Model with ID '1000' not found.
-     */
     public function testGetModelUnknownModelId()
     {
         $this->form->setModelClass('Opus\Licence');
         $this->form->getElement('Id')->setValue(1000);
+
+        $this->setExpectedException(Application_Exception::class, 'Model with ID \'1000\' not found.');
         $this->form->getModel();
     }
 
@@ -195,15 +188,12 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $this->assertNull($method->invoke($this->form, 'enrichment'));
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Model-ID must be numeric.
-     */
     public function testValidateModelIdNotValidNonNumeric()
     {
         $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
         $method->setAccessible(true);
 
+        $this->setExpectedException(Application_Exception::class, 'Model-ID must be numeric.');
         $method->invoke($this->form, 'enrichment');
     }
 

@@ -25,6 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
+use Opus\Translate\Dao;
+
 /**
  * Unit tests for translation form element.
  *
@@ -75,7 +77,7 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
 
         $key = 'testkey';
 
-        $dao = new \Opus\Translate\Dao();
+        $dao = new Dao();
 
         $dao->remove($key);
 
@@ -100,7 +102,7 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
         $element = new Application_Form_Element_Translation('DisplayName');
 
         $translate = Application_Translate::getInstance();
-        $dao = new \Opus\Translate\Dao();
+        $dao = new Dao();
 
         $dao->remove($key);
 
@@ -167,7 +169,7 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
     {
         $element = new Application_Form_Element_Translation('Content');
 
-        $dao = new \Opus\Translate\Dao();
+        $dao = new Dao();
         $dao->removeAll();
 
         $key = 'help_content_contact';
@@ -211,7 +213,7 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
 
     public function testUpdateTranslationForDuplicateKey()
     {
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
 
         $key = 'duplicateTestKey';

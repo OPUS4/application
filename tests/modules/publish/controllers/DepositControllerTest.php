@@ -32,7 +32,7 @@
  */
 
 use Opus\Document;
-use Opus\Log;
+use Opus\Common\Log;
 
 /**
  * Class Publish_DepositControllerTest.
@@ -221,9 +221,6 @@ class Publish_DepositControllerTest extends ControllerTestCase
         $this->assertAction('deposit');
     }
 
-    /**
-     * @expectedException Publish_Model_FormDocumentNotFoundException
-     */
     public function testStoreExistingDocument()
     {
         $doc = $this->createTestDocument();
@@ -232,6 +229,8 @@ class Publish_DepositControllerTest extends ControllerTestCase
 
         $log = Log::get();
         $deposit = new Publish_Model_Deposit($log);
+
+        $this->setExpectedException(Publish_Model_FormDocumentNotFoundException::class);
         $deposit->storeDocument($doc->store());
     }
 }

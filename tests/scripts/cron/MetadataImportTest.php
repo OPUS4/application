@@ -36,7 +36,7 @@ require_once('CronTestCase.php');
 
 use Opus\Document;
 use Opus\Job;
-use Opus\Job\Worker\MetadataImport;
+use Opus\Import\Worker\MetadataImportWorker;
 
 class MetadataImportTest extends CronTestCase
 {
@@ -69,12 +69,12 @@ class MetadataImportTest extends CronTestCase
     public function testJobFailedWithoutXml()
     {
         $xml = null;
-        $this->createJob(MetadataImport::LABEL, ['xml' => $xml]);
+        $this->createJob(MetadataImportWorker::LABEL, ['xml' => $xml]);
         $this->executeScript('cron-import-metadata.php');
 
-        $allJobs = Job::getByLabels([MetadataImport::LABEL], null, Job::STATE_UNDEFINED);
+        $allJobs = Job::getByLabels([MetadataImportWorker::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
-        $failedJobs = Job::getByLabels([MetadataImport::LABEL], null, Job::STATE_FAILED);
+        $failedJobs = Job::getByLabels([MetadataImportWorker::LABEL], null, Job::STATE_FAILED);
         $this->assertEquals(1, count($failedJobs), 'Expected one failed job in queue');
 
         // TODO Opus\\\\Job... is necessary to match Opus\\Job... in the actual error message - Fix!
@@ -87,14 +87,14 @@ class MetadataImportTest extends CronTestCase
         $xml = new DOMDocument();
         $this->assertTrue($xml->load($this->xmlDir . $filename), 'Could not load xml as DomDocument');
 
-        $this->createJob(MetadataImport::LABEL, ['xml' => $xml->saveXML()]);
+        $this->createJob(MetadataImportWorker::LABEL, ['xml' => $xml->saveXML()]);
         $this->executeScript('cron-import-metadata.php');
 
-        $allJobs = Job::getByLabels([MetadataImport::LABEL], null, Job::STATE_UNDEFINED);
+        $allJobs = Job::getByLabels([MetadataImportWorker::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
-        $failedJobs = Job::getByLabels([MetadataImport::LABEL], null, Job::STATE_FAILED);
+        $failedJobs = Job::getByLabels([MetadataImportWorker::LABEL], null, Job::STATE_FAILED);
         $this->assertEquals(1, count($failedJobs), 'Expected one failed job in queue');
-        $this->assertJobException(array_pop($failedJobs), 'Opus\\\\Util\\\\MetadataImportSkippedDocumentsException');
+        $this->assertJobException(array_pop($failedJobs), 'Opus\\\\Import\\\\Xml\\\\MetadataImportSkippedDocumentsException');
     }
 
     public function testJobFailedWithInvalidXmlException()
@@ -103,14 +103,14 @@ class MetadataImportTest extends CronTestCase
         $xml = new DOMDocument();
         $this->assertTrue($xml->load($this->xmlDir . $filename), 'Could not load xml as DomDocument');
 
-        $this->createJob(MetadataImport::LABEL, ['xml' => $xml->saveXML()]);
+        $this->createJob(MetadataImportWorker::LABEL, ['xml' => $xml->saveXML()]);
         $this->executeScript('cron-import-metadata.php');
 
-        $allJobs = Job::getByLabels([MetadataImport::LABEL], null, Job::STATE_UNDEFINED);
+        $allJobs = Job::getByLabels([MetadataImportWorker::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
-        $failedJobs = Job::getByLabels([MetadataImport::LABEL], null, Job::STATE_FAILED);
+        $failedJobs = Job::getByLabels([MetadataImportWorker::LABEL], null, Job::STATE_FAILED);
         $this->assertEquals(1, count($failedJobs), 'Expected one failed job in queue');
-        $this->assertJobException(array_pop($failedJobs), 'Opus\\\\Util\\\\MetadataImportInvalidXmlException');
+        $this->assertJobException(array_pop($failedJobs), 'Opus\\\\Import\\\\Xml\\\\MetadataImportInvalidXmlException');
     }
 
 
@@ -120,12 +120,12 @@ class MetadataImportTest extends CronTestCase
         $xml = new DOMDocument();
         $this->assertTrue($xml->load($this->xmlDir . $filename), 'Could not load xml as DomDocument');
 
-        $this->createJob(MetadataImport::LABEL, ['xml' => $xml->saveXML()]);
+        $this->createJob(MetadataImportWorker::LABEL, ['xml' => $xml->saveXML()]);
         $this->executeScript('cron-import-metadata.php');
 
-        $allJobs = Job::getByLabels([MetadataImport::LABEL], null, Job::STATE_UNDEFINED);
+        $allJobs = Job::getByLabels([MetadataImportWorker::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
-        $failedJobs = Job::getByLabels([MetadataImport::LABEL], null, Job::STATE_FAILED);
+        $failedJobs = Job::getByLabels([MetadataImportWorker::LABEL], null, Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue');
 
         $this->documentImported = true;

@@ -74,16 +74,13 @@ class Application_Form_Model_TableTest extends ControllerTestCase
         $this->assertEquals($models, $form->getModels());
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Parameter must be array.
-     */
     public function testSetModelNotArray()
     {
         $form = new Application_Form_Model_Table();
 
         $models = Licence::getAll();
 
+        $this->setExpectedException(Application_Exception::class, 'Parameter must be array.');
         $form->setModels('notanarray');
     }
 

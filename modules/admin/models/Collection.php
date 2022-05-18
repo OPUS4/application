@@ -33,7 +33,7 @@
 
 use Opus\Document;
 use Opus\Collection;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 use Opus\Model\NotFoundException;
 
 class Admin_Model_Collection

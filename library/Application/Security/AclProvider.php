@@ -30,6 +30,7 @@
  */
 
 use Opus\Security\Realm;
+use Opus\Common\LoggingTrait;
 
 /**
  * Erzeugt das Zend_Acl object für die Prüfung von Nutzerprivilegien.
@@ -41,7 +42,7 @@ use Opus\Security\Realm;
 class Application_Security_AclProvider
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     /**
      * Name der Role, die für ACL Prüfungen verwendet wird.

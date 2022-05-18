@@ -72,8 +72,8 @@ class Publish_IndexController extends Application_Controller_Action
 
         //initialize session variables
         // TODO hide initialization routine
-        $session->documentType = "";
-        $session->documentId = "";
+        $session->documentType = '';
+        $session->documentId = '';
         $session->additionalFields = [];
 
         $config = $this->getConfig();

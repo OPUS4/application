@@ -33,7 +33,7 @@
  */
 
 use Opus\Date;
-use Opus\Log;
+use Opus\Common\Log;
 use Opus\Security\Realm;
 
 /**

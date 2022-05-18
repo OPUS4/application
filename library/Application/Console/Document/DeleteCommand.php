@@ -34,8 +34,8 @@
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Opus\Console\AbstractBaseDocumentCommand;
-use Opus\Console\Helper\ProgressMatrix;
+use Opus\Common\Console\AbstractBaseDocumentCommand;
+use Opus\Common\Console\Helper\ProgressMatrix;
 use Opus\Document;
 use Opus\Search\Console\Helper\DocumentHelper;
 

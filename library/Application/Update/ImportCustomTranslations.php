@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Util\ConsoleColors;
+use Opus\Common\Console\ConsoleColors;
 
 class Application_Update_ImportCustomTranslations extends Application_Update_PluginAbstract
 {

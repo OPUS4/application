@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 class Export_Marc21ExportTest extends ControllerTestCase
 {

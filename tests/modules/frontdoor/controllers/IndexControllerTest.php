@@ -35,10 +35,10 @@
 
 use Opus\Collection;
 use Opus\CollectionRole;
-use Opus\Config;
+use Opus\Common\Config;
 use Opus\Date;
 use Opus\Document;
-use Opus\Log;
+use Opus\Common\Log;
 use Opus\Note;
 use Opus\Title;
 

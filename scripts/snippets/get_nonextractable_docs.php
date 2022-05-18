@@ -32,7 +32,7 @@
 
 use Opus\Document;
 use Opus\Model\NotFoundException;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Finds all non-extractable full texts.

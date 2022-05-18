@@ -33,7 +33,7 @@
 
 use Opus\Job;
 use Opus\Job\Runner;
-use Opus\Log;
+use Opus\Common\Log;
 
 /**
  * Class Admin_IndexmaintenanceControllerTest

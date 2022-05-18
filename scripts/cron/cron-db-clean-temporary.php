@@ -35,7 +35,7 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 $date = new DateTime();
 $dateString = $date->sub(new DateInterval('P2D'))->format('Y-m-d');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,13 +32,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\LoggingTrait;
+
 /**
  * Abstract base class for view helpers.
  */
 class Application_View_Helper_Abstract extends \Zend_View_Helper_Abstract
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     /**
      * Return configuration of application.

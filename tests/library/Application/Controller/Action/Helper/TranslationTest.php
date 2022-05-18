@@ -35,7 +35,7 @@ use Opus\Language;
 use Opus\Note;
 use Opus\Person;
 use Opus\Model\Dependent\Link\DocumentPerson;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 /**
  * Test for class Application_Controller_Action_Helper_Translation and translations in general.

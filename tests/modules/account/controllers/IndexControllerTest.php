@@ -32,7 +32,7 @@
  */
 
 use Opus\Account;
-use Opus\Config;
+use Opus\Common\Config;
 
 /**
  * Basic unit tests for account module.

@@ -33,7 +33,7 @@
  */
 
 use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Repository;
 use Opus\Doi\DoiManager;
 
 class Admin_Model_DoiReport

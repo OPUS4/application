@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Basic publication statistics (based on server_published_date)

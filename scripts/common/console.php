@@ -37,7 +37,7 @@
 // TODO integrate as command in opus4 tool
 // TODO add exit command
 
-use Opus\Config;
+use Opus\Common\Config;
 
 $config = Config::get();
 if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {

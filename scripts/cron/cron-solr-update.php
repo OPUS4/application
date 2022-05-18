@@ -39,7 +39,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Job\Runner;
 use Opus\Search\Task\IndexOpusDocument;
-use Opus\Log;
+use Opus\Common\Log;
 
 $jobrunner = new Runner();
 $jobrunner->setLogger(Log::get());

@@ -25,7 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-use Opus\Config;
+use Opus\Common\Config;
+use Opus\Common\LoggingTrait;
 
 /**
  * Abstrakte Basisklasse für OPUS Formulare.
@@ -39,7 +40,7 @@ use Opus\Config;
 abstract class Application_Form_Abstract extends \Zend_Form_SubForm
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     /**
      * Konfiguration Objekt für Applikation.

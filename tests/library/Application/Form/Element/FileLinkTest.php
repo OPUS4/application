@@ -92,25 +92,19 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
         $this->assertEquals('admin_filemanager_file_does_not_exist', $messages[0]);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage File with ID = 5555 not found.
-     */
     public function testSetValueWithUnknownFileId()
     {
         $element = $this->getElement();
 
+        $this->setExpectedException(Application_Exception::class, 'File with ID = 5555 not found.');
         $element->setValue(5555);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Value must not be null.
-     */
     public function testSetValueNull()
     {
         $element = $this->getElement();
 
+        $this->setExpectedException(Application_Exception::class, 'Value must not be null.');
         $element->setValue(null);
     }
 
@@ -122,14 +116,11 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
         $this->assertTrue($element->isValid(116)); // File 116 exists (document 91)
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage File with ID = 5555 not found.
-     */
     public function testIsValidUnknownId()
     {
         $element = $this->getElement();
 
+        $this->setExpectedException(Application_Exception::class, 'File with ID = 5555 not found.');
         $this->assertFalse($element->isValid(5555)); // File 5555 does not exist
     }
 }

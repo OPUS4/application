@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,21 +24,20 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\LoggingTrait;
 
 /**
  * Basisklasse fuer OPUS 4 Controller Action Helper.
- *
- * @category    Application
- * @package     Application_Controller_Action_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 abstract class Application_Controller_Action_Helper_Abstract extends \Zend_Controller_Action_Helper_Abstract
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     private $_view = null;
 
@@ -52,9 +52,9 @@ abstract class Application_Controller_Action_Helper_Abstract extends \Zend_Contr
      */
     public function getView()
     {
-        if (is_null($this->_view)) {
+        if ($this->_view === null) {
             $controller = $this->getActionController();
-            if (! is_null($controller)) {
+            if ($controller !== null) {
                 $this->_view = $controller->view;
             }
         }
@@ -78,7 +78,7 @@ abstract class Application_Controller_Action_Helper_Abstract extends \Zend_Contr
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
+        if ($this->_config === null) {
             $this->_config = Application_Configuration::getInstance()->getConfig();
         }
 

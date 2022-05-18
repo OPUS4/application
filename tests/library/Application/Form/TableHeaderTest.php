@@ -62,21 +62,15 @@ class Application_Form_TableHeaderTest extends TestCase
         $this->assertNotNull($this->form->getDecorator('ViewScript'));
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Parameter 'columns' must be array.
-     */
     public function testConstructFormNull()
     {
+        $this->setExpectedException(Application_Exception::class, 'Parameter \'columns\' must be array.');
         new Application_Form_TableHeader(null);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Parameter 'columns' must be array.
-     */
     public function testConstructFormNotArray()
     {
+        $this->setExpectedException(Application_Exception::class, 'Parameter \'columns\' must be array.');
         new Application_Form_TableHeader('notAnArray');
     }
 

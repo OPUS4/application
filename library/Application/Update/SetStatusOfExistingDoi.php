@@ -32,7 +32,7 @@
  */
 
 use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Set registration status of all existing DOIs to "registered".

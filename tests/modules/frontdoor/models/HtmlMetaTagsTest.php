@@ -36,7 +36,7 @@ use Opus\DnbInstitute;
 use Opus\Document;
 use Opus\Identifier;
 use Opus\Licence;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 use Opus\Person;
 use Opus\Subject;
 use Opus\Title;

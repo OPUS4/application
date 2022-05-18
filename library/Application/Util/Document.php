@@ -32,7 +32,7 @@
 use Opus\Document;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
-use Opus\Repository;
+use Opus\Common\Repository;
 use Opus\Security\Realm;
 
 class Application_Util_Document

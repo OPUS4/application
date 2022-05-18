@@ -34,7 +34,7 @@
 use Opus\Date;
 use Opus\Document;
 use Opus\Identifier;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 use Opus\Person;
 use Opus\Title;
 

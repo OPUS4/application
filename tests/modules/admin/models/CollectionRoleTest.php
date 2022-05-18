@@ -91,30 +91,21 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
         $this->assertEquals(1, $collectionRole->getVisibleOai());
     }
 
-    /**
-     * @expectedException Admin_Model_Exception
-     * @expectedExceptionMessage missing parameter roleid
-     */
     public function testConstructModelWithEmptyParameter()
     {
+        $this->setExpectedException(Admin_Model_Exception::class, 'missing parameter roleid');
         $model = new Admin_Model_CollectionRole('');
     }
 
-    /**
-     * @expectedException Admin_Model_Exception
-     * @expectedExceptionMessage roleid parameter value unknown
-     */
     public function testConstructModelWithUnknownId()
     {
+        $this->setExpectedException(Admin_Model_Exception::class, 'roleid parameter value unknown');
         $model = new Admin_Model_CollectionRole(2222);
     }
 
-    /**
-     * @expectedException Admin_Model_Exception
-     * @expectedExceptionMessage roleid parameter value unknown
-     */
     public function testContructModelWithBadParameter()
     {
+        $this->setExpectedException(Admin_Model_Exception::class, 'roleid parameter value unknown');
         $model = new Admin_Model_CollectionRole('noId');
     }
 

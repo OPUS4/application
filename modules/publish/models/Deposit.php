@@ -45,7 +45,7 @@ use Opus\Series;
 use Opus\Subject;
 use Opus\Reference;
 use Opus\Title;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 use Opus\Model\NotFoundException;
 use Opus\Model\Dependent\Link\DocumentPerson;
 
@@ -65,7 +65,7 @@ class Publish_Model_Deposit
         $this->_log = $log;
     }
 
-    public function storeDocument($docId, $log = null, $documentData = null)
+    public function storeDocument($docId, $log = null, $documentData = null, $documentType = null)
     {
         if (! is_null($log)) {
             $this->_log = $log;
@@ -75,6 +75,10 @@ class Publish_Model_Deposit
 
         try {
             $this->_document = Document::get($this->_docId);
+
+            if ($documentType !== null) {
+                $this->_document->setType($documentType);
+            }
         } catch (NotFoundException $e) {
             $this->_log->err('Could not find document ' . $this->_docId . ' in database');
             throw new Publish_Model_FormDocumentNotFoundException();

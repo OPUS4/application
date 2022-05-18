@@ -26,7 +26,7 @@
  */
 
 use Opus\File;
-use Opus\Model\ModelException;
+use Opus\Common\Model\ModelException;
 
 /**
  * Controller fuer die Verwaltung der Dateien eines Dokuments.

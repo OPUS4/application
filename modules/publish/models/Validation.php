@@ -34,7 +34,7 @@
 
 use Opus\Collection;
 use Opus\CollectionRole;
-use Opus\Config;
+use Opus\Common\Config;
 use Opus\DnbInstitute;
 use Opus\Licence;
 use Opus\Series;

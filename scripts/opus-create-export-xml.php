@@ -31,10 +31,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 use Opus\Document;
 use Opus\Model\NotFoundException;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Script for exporting all documents.
