@@ -26,6 +26,7 @@ apt-get -yq install php7.1-mysql
 apt-get -yq install openjdk-11-jdk
 
 # Install required tools
+apt-get -yq install texlive-xetex
 apt-get -yq install libxml2-utils
 apt-get -yq install ant
 SCRIPT
@@ -35,6 +36,19 @@ $pandoc = <<SCRIPT
 cd /home/vagrant
 wget https://github.com/jgm/pandoc/releases/download/2.17.1.1/pandoc-2.17.1.1-1-amd64.deb
 dpkg -i pandoc-2.17.1.1-1-amd64.deb
+SCRIPT
+
+$fonts = <<SCRIPT
+# Install "Open Sans" font family (available under the Apache License v.2.0 at
+# https://fonts.google.com/specimen/Open+Sans) to be used for PDF cover generation
+# by cover templates (e.g., in application/configs/covers or tests/resources/covers)
+mkdir -p /usr/share/fonts/opentype
+cd /home/vagrant
+wget https://fonts.google.com/download?family=Open%20Sans -O Open_Sans.zip
+unzip -o Open_Sans.zip -d Open_Sans
+cp -r /home/vagrant/Open_Sans/static/OpenSans/ /usr/share/fonts/opentype/
+apt-get -yq install fontconfig
+fc-cache -f -v
 SCRIPT
 
 $composer = <<SCRIPT
@@ -134,6 +148,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "Install required software...", type: "shell", inline: $software
   config.vm.provision "Install pandoc...", type: "shell", inline: $pandoc
+  config.vm.provision "Install fonts...", type: "shell", inline: $fonts
   config.vm.provision "Install Composer dependencies...", type: "shell", privileged: false, inline: $composer
   config.vm.provision "Install Apache Solr...", type: "shell", privileged: false, inline: $solr
   config.vm.provision "Create database...", type: "shell", inline: $database

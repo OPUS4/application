@@ -72,6 +72,7 @@ ensureDirectory(APPLICATION_PATH . '/tests/workspace/tmp');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/tmp/resumption');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/incoming');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/log');
+ensureDirectory(APPLICATION_PATH . '/tests/workspace/filecache');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/files');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/cache');
 ensureDirectory(APPLICATION_PATH . '/tests/workspace/export');
