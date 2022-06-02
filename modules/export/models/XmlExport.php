@@ -354,7 +354,16 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         $proc = $this->_proc;
         $xml = $this->_xml;
 
-        $proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', \Zend_Date::now()->setTimeZone('UTC')->getIso()));
+        $proc->setParameter(
+            '',
+            'timestamp',
+            str_replace(
+                '+00:00',
+                'Z',
+                (new DateTime())->setTimezone(new DateTimeZone('UTC'))->format(DateTime::ATOM)
+            )
+        );
+
         $proc->setParameter('', 'docCount', count($resultIds));
         $proc->setParameter('', 'queryhits', $numOfHits);
 

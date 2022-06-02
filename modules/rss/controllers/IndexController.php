@@ -141,12 +141,12 @@ class Rss_IndexController extends Application_Controller_Xml
         if ($resultList->getNumberOfHits() > 0) {
             $latestDoc = $resultList->getResults();
             $document = Document::get($latestDoc[0]->getId());
-            $date = new \Zend_Date($document->getServerDatePublished());
+            $date = new DateTime($document->getServerDatePublished());
         } else {
-            $date = \Zend_Date::now();
+            $date = new DateTime();
         }
-        $this->_proc->setParameter('', 'lastBuildDate', $date->get(\Zend_Date::RFC_2822));
-        $this->_proc->setParameter('', 'pubDate', $date->get(\Zend_Date::RFC_2822));
+        $this->_proc->setParameter('', 'lastBuildDate', $date->format(DateTime::RFC2822));
+        $this->_proc->setParameter('', 'pubDate', $date->format(DateTime::RFC2822));
     }
 
     private function setItems($resultList)

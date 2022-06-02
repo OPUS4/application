@@ -50,7 +50,7 @@ class Oai_Model_Request
      *
      * @var string
      */
-    private $_dateFormat = 'yyyy-MM-dd';
+    private $_dateFormat = 'Y-m-d';
 
     /**
      * TODO
@@ -148,14 +148,8 @@ class Oai_Model_Request
     private function checkDate(&$date)
     {
         // simple proofing
-        $result = \Zend_Date::isDate($date, $this->_dateFormat);
-
-        if (true === $result) {
-             $zd = new \Zend_Date($date, $this->_dateFormat);
-             $result = $date === $zd->get($this->_dateFormat);
-        }
-
-        return $result;
+        $tempDate = DateTime::createFromFormat($this->_dateFormat, $date);
+        return false !== $tempDate && $tempDate->format($this->_dateFormat) === $date;
     }
 
     /**
@@ -260,9 +254,11 @@ class Oai_Model_Request
 
         $result = true;
 
-        $untilDate = new \Zend_Date($until, $this->_dateFormat);
-        $isEqual = $untilDate->equals($from, $this->_dateFormat);
-        $isLater = $untilDate->isLater($from, $this->_dateFormat);
+        $untilDate = DateTime::createFromFormat($this->_dateFormat, $until);
+        $fromDate  = DateTime::createFromFormat($this->_dateFormat, $from);
+
+        $isEqual = $untilDate->getTimestamp() === $fromDate->getTimestamp();
+        $isLater = $untilDate->getTimestamp() > $fromDate->getTimestamp();
 
         if ((false === $isEqual) and (false === $isLater)) {
             $this->setErrorCode(Oai_Model_Error::BADARGUMENT);

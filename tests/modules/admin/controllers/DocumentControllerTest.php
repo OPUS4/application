@@ -97,7 +97,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $person = new Person();
         $person->setFirstName("Johnny");
         $person->setLastName("Test");
-        $dateOfBirth = new Date(new \Zend_Date('1.1.2010', 'dd/MM/yyyy'));
+        $dateOfBirth = new Date(DateTime::createFromFormat('d.m.Y', '1.1.2010'));
         $person->setDateOfBirth($dateOfBirth);
 
         $doc->addPersonAuthor($person);

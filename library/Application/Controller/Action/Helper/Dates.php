@@ -84,7 +84,7 @@ class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action
         if (! is_null($datestr) && $this->isValid($datestr)) {
             $dateFormat = $this->_validator->getDateFormat();
 
-            $date = new \Zend_Date($datestr, $dateFormat);
+            $date = DateTime::createFromFormat($dateFormat, $datestr);
 
             $dateModel = new Date($date);
             return $dateModel;
@@ -104,8 +104,7 @@ class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action
         // Protect against invalid dates
         if (! is_null($date) && $date->isValid()) {
             $dateFormat = $this->_validator->getDateFormat();
-            $zendDate = $date->getZendDate();
-            return $zendDate->get($dateFormat);
+            return $date->getDateTime()->format($dateFormat);
         } else {
             return null;
         }

@@ -49,11 +49,11 @@ class Application_Form_Validate_Date extends \Zend_Validate_Date
      */
     private static $_dateFormats = [
         'de' => [
-            'format' => 'dd.MM.yyyy',
+            'format' => 'd.m.Y',
             'regex' => '#^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,4}$#'
         ],
         'en' => [
-            'format' => 'yyyy/MM/dd',
+            'format' => 'Y/m/d',
             'regex' => '#^[0-9]{1,4}/[0-9]{1,2}/[0-9]{1,2}$#'
         ]
     ];

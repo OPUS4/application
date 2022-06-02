@@ -101,8 +101,8 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $doc1->store();
 
         $docId1 = $doc1->getId();
-        $date = new \Zend_Date($doc1->getServerDatePublished());
-        $dateValue1 = $date->get(\Zend_Date::RFC_2822);
+        $date = new DateTime($doc1->getServerDatePublished());
+        $dateValue1 = $date->format(DateTime::RFC2822);
 
         $indexer = Opus\Search\Service::selectIndexingService(null, 'solr');
 
@@ -123,8 +123,8 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $doc2->store();
 
         $docId2 = $doc2->getId();
-        $date = new \Zend_Date($doc2->getServerDatePublished());
-        $dateValue2 = $date->get(\Zend_Date::RFC_2822);
+        $date = new DateTime($doc2->getServerDatePublished());
+        $dateValue2 = $date->format(DateTime::RFC2822);
 
         $this->dispatch('/rss/index/index/searchtype/all');
 

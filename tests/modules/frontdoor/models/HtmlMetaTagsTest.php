@@ -65,7 +65,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
             'http://localhost/opus'
         );
 
-        $this->currDate = new Date(new \Zend_Date());
+        $this->currDate = new Date(new DateTime());
     }
 
     public function testCreateTagsForMinimalDocument()
