@@ -171,7 +171,7 @@ class Frontdoor_Model_HtmlMetaTags
 
         $datePublished = $document->getPublishedDate();
         if (! is_null($datePublished)) {
-            $dateStr = $datePublished->getDateTime()->get('Y-m-d');
+            $dateStr = $datePublished->getDateTime()->format('Y-m-d');
         } else {
             $dateStr = $document->getPublishedYear();
         }
