@@ -351,12 +351,17 @@ class Oai_Model_Server extends Application_Model_Abstract
         $sampleIdentifier = $this->_configuration->getSampleIdentifier();
 
         // Set backup date if database query does not return a date.
-        $earliestDate = DateTime::createFromFormat('1970-01-01', DateTime::ATOM);
+        $earliestDate = DateTime::createFromFormat("Y-m-d", '1970-01-01');
 
         $earliestDateFromDb = Document::getEarliestPublicationDate();
         if (! is_null($earliestDateFromDb)) {
-            $earliestDate = DateTime::createFromFormat($earliestDateFromDb, DateTime::ATOM);
+            // TODO: Do we expect the full ISO format or Y-m-d? ZEND_DATE::ISO_8601 was probably less strict here.
+            $earliestDate = DateTime::createFromFormat(DateTime::ATOM, $earliestDateFromDb);
+            if ($earliestDate === false) {
+                $earliestDate = DateTime::createFromFormat("Y-m-d", $earliestDateFromDb);
+            }
         }
+
         $earliestDateIso = $earliestDate->format('Y-m-d');
 
         // set parameters for oai-pmh.xslt
