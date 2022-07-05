@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Rss
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -175,6 +173,9 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains("Warning: XSLTProcessor::transformToXml(): runtime error", $this->getResponse()->getBody());
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+
+        $this->assertXpath('//channel/pubDate');
+        $this->assertXpath('//channel/lastBuildDate');
     }
 
     /**
@@ -188,5 +189,10 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/rss/index/index');
         $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/147');
         $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/150');
+    }
+
+    public function testPubDateFormatting()
+    {
+        $this->markTestIncomplete('TODO check if dates are rendered correctly');
     }
 }

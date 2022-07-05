@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Rss
- * @author      Sascha Szott <szott@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO context spezifische Titel für RSS feed (latest, collections, ...)
@@ -37,6 +33,7 @@
  */
 
 use Opus\Document;
+use Opus\Search\SearchException;
 
 class Rss_IndexController extends Application_Controller_Xml
 {
@@ -90,7 +87,7 @@ class Rss_IndexController extends Application_Controller_Xml
         try {
             $searcher = Application_Search_SearcherFactory::getSearcher();
             $resultList = $searcher->search($search->createSearchQuery($params));
-        } catch (Opus\Search\Exception $exception) {
+        } catch (SearchException $exception) {
             $this->handleSolrError($exception);
         }
 
@@ -102,7 +99,7 @@ class Rss_IndexController extends Application_Controller_Xml
         $this->setFrontdoorBaseUrl();
     }
 
-    private function handleSolrError(Opus\Search\Exception $exception)
+    private function handleSolrError(SearchException $exception)
     {
         $this->_helper->layout()->enableLayout();
         $this->getLogger()->err(__METHOD__ . ' : ' . $exception);
@@ -136,19 +133,30 @@ class Rss_IndexController extends Application_Controller_Xml
         $this->_proc->setParameter('', 'link', $feedLink);
     }
 
+    /**
+     * @param array $resultList
+     * @throws Exception
+     */
     private function setDates($resultList)
     {
         if ($resultList->getNumberOfHits() > 0) {
             $latestDoc = $resultList->getResults();
             $document = Document::get($latestDoc[0]->getId());
-            $date = new DateTime($document->getServerDatePublished());
+            $date = $document->getServerDatePublished()->getDateTime();
         } else {
-            $date = new DateTime();
+            $date = new DateTime(); // now
         }
-        $this->_proc->setParameter('', 'lastBuildDate', $date->format(DateTime::RFC2822));
-        $this->_proc->setParameter('', 'pubDate', $date->format(DateTime::RFC2822));
+
+        $dateOutput = $date->format(DateTime::RFC2822);
+        $this->_proc->setParameter('', 'lastBuildDate', $dateOutput);
+        $this->_proc->setParameter('', 'pubDate', $dateOutput);
     }
 
+    /**
+     * @param array $resultList
+     * @throws Application_Exception
+     * @throws DOMException
+     */
     private function setItems($resultList)
     {
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
