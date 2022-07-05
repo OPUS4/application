@@ -60,7 +60,7 @@
                     <xsl:value-of select="$link"/>
                 </xsl:element>
                 <xsl:element name="pubDate">
-                    <xsl:value-of select="$lastBuildDate"/>
+                    <xsl:value-of select="$pubDate"/>
                 </xsl:element>
                 <xsl:element name="lastBuildDate">
                     <xsl:value-of select="$lastBuildDate"/>
