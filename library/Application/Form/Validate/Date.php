@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -49,11 +47,11 @@ class Application_Form_Validate_Date extends \Zend_Validate_Date
      */
     private static $_dateFormats = [
         'de' => [
-            'format' => 'd.m.Y',
+            'format' => 'dd.MM.yyyy',
             'regex' => '#^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,4}$#'
         ],
         'en' => [
-            'format' => 'Y/m/d',
+            'format' => 'yyyy/MM/dd',
             'regex' => '#^[0-9]{1,4}/[0-9]{1,2}/[0-9]{1,2}$#'
         ]
     ];
