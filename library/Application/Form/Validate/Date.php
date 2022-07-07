@@ -50,12 +50,10 @@ class Application_Form_Validate_Date extends \Zend_Validate_Date
     private static $_dateFormats = [
         'de' => [
             'format' => 'd.m.Y',
-            'zendFormat' => 'dd.MM.yyyy', // TODO: Only needed until the parent Zend_Validate_Date class has been removed.
             'regex' => '#^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,4}$#'
         ],
         'en' => [
             'format' => 'Y/m/d',
-            'zendFormat' => 'yyyy/MM/dd', // TODO: Only needed until the parent Zend_Validate_Date class has been removed.
             'regex' => '#^[0-9]{1,4}/[0-9]{1,2}/[0-9]{1,2}$#'
         ]
     ];
@@ -81,40 +79,6 @@ class Application_Form_Validate_Date extends \Zend_Validate_Date
     }
 
     /**
-     * TODO: Only needed until the parent Zend_Validate_Date class has been removed.
-     *
-     * @return string
-     */
-    public function getFormat()
-    {
-        $format = parent::getFormat();
-
-        foreach (self::$_dateFormats as $localeFormat) {
-            if ($format === $localeFormat['zendFormat']) {
-                return $localeFormat['format'];
-            }
-        }
-
-        return $format;
-    }
-
-    /**
-     * TODO: Only needed until the parent Zend_Validate_Date class has been removed.
-     * Sets the format option
-     *
-     * @param  string $format
-     * @return Zend_Validate_Date provides a fluent interface
-     */
-    public function setFormat($format = null)
-    {
-        foreach (self::$_dateFormats as $localeFormat) {
-            if ($format === $localeFormat['format']) {
-                parent::setFormat($localeFormat['zendFormat']);
-            }
-        }
-    }
-
-    /**
      * Modified function validates input pattern.
      * @param string $value
      * @return boolean - True only if date input is valid for Opus requirements
@@ -131,14 +95,7 @@ class Application_Form_Validate_Date extends \Zend_Validate_Date
         }
 
         // Perform check in parent class
-
-        $dateTime = DateTime::createFromFormat($this->getDateFormat(), $value);
-        $errors = DateTime::getLastErrors();
-        if (!empty($errors['warning_count'])) {
-            return false;
-        }
-
-        return $dateTime !== false;
+        return parent::isValid($value);
     }
 
     /**

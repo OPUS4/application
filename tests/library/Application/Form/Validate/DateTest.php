@@ -41,11 +41,11 @@ class Application_Form_Validate_DateTest extends ControllerTestCase
 
     protected $additionalResources = 'translation';
 
-    const DE_FORMAT = 'd.m.Y';
+    const DE_FORMAT = 'dd.MM.yyyy';
 
     const DE_PATTERN = '#^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,4}$#';
 
-    const EN_FORMAT = 'Y/m/d';
+    const EN_FORMAT = 'yyyy/MM/dd';
 
     const EN_PATTERN = '#^[0-9]{1,4}/[0-9]{1,2}/[0-9]{1,2}$#';
 
