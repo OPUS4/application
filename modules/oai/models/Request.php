@@ -149,17 +149,14 @@ class Oai_Model_Request
     /**
      * Checks the availability of a metadataPrefix.
      *
-     * @param mixed $oaiMetadataPrefix
-     * @param string $from
-     * @param string $until
+     * @param string $oaiMetadataPrefix
      * @return boolean
      *
      * TODO handling case insensitivity of metadataPrefix is spread through the code (here and other places)
      * TODO function handles access control in addition to checking if format is supported (mixed responsibilities)
      */
-    private function _validateMetadataPrefix($oaiMetadataPrefix, $from, $until)
+    private function validateMetadataPrefix($oaiMetadataPrefix)
     {
-
         // we assuming that a metadata prefix file ends with xslt
         $possibleFiles = glob($this->_pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
 
@@ -169,7 +166,7 @@ class Oai_Model_Request
             $availableMetadataPrefixes[] = strtolower(basename($prefixFile, '.xslt'));
         }
 
-        // only adminstrators can request copy_xml format
+        // only administrators can request copy_xml format
         if (! Realm::getInstance()->checkModule('admin')) {
             $availableMetadataPrefixes = array_diff($availableMetadataPrefixes, ['copy_xml']);
         }
@@ -427,7 +424,7 @@ class Oai_Model_Request
         // check if request values are valid
 
         foreach ($oaiRequest as $parameter => $value) {
-            $callname = '_validate' . ucfirst($parameter);
+            $callname = 'validate' . ucfirst($parameter);
             if (true === method_exists($this, $callname)) {
                 $result = $this->$callname($value);
 
