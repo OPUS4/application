@@ -37,7 +37,7 @@ use Opus\Common\Log;
 use Opus\Security\Realm;
 
 /**
- * TODO
+ * TODO documentation is not existent - especially the fact that 'validate' functions are called dynamically
  *
  * @category Application
  * @package Module_Oai
@@ -185,6 +185,40 @@ class Oai_Model_Request
     }
 
     /**
+     * Checks if given 'from' date is valid.
+     *
+     * @param string $from
+     * @return boolean
+     */
+    private function validateFrom($from)
+    {
+        if (! $this->checkDate($from)) {
+            $this->setErrorMessage("From date '$from' is not a correct date format (" . self::DATE_FORMAT . ').');
+            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if given 'until' date is valid.
+     *
+     * @param string $until
+     * @return boolean
+     */
+    private function validateUntil($until)
+    {
+        if (! $this->checkDate($until)) {
+            $this->setErrorMessage("Until date '$until' is not a correct date format (" . self::DATE_FORMAT . ').');
+            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Checks if from date is before until date.
      *
      * @param string $from
@@ -193,15 +227,7 @@ class Oai_Model_Request
      */
     public function validateFromUntilRange($from, $until)
     {
-        if (! $this->checkDate($from)) {
-            $this->setErrorMessage("From date '$from' is not a correct date format (" . self::DATE_FORMAT . ').');
-            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
-            return false;
-        }
-
-        if (! $this->checkDate($until)) {
-            $this->setErrorMessage("Until date '$until' is not a correct date format (" . self::DATE_FORMAT . ').');
-            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
+        if (! $this->validateFrom($from) || ! $this->validateUntil($until)) {
             return false;
         }
 
@@ -224,6 +250,8 @@ class Oai_Model_Request
 
     /**
      * Validates resumption token.
+     *
+     * IMPORTANT function may be called dynamically in 'validate' function
      *
      * @param  string $oaiResumptionToken The resumption token to validate.
      * @return boolean
@@ -340,7 +368,7 @@ class Oai_Model_Request
     /**
      * Validate a given oai request.
      *
-     * @param array $request
+     * @param array $oaiRequest
      * @return boolean
      */
     public function validate($oaiRequest)

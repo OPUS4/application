@@ -31,6 +31,17 @@
 
 class Oai_Model_RequestTest extends ControllerTestCase
 {
+
+    private $request;
+
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->request = new Oai_Model_Request();
+        $this->request->setPathToMetadataPrefixFiles(APPLICATION_PATH . '/modules/oai/views/scripts/index/prefixes');
+    }
+
     /**
      * @return array[][]
      */
@@ -89,5 +100,51 @@ class Oai_Model_RequestTest extends ControllerTestCase
         $request = new Oai_Model_Request();
 
         $this->assertEquals($result, $request->checkDate($datestr));
+    }
+
+    public function testValidate()
+    {
+        $request = $this->request;
+
+        $this->assertFalse($request->validate([]));
+
+        $this->assertTrue($request->validate([
+            'metadataPrefix' => 'xMetaDissPlus',
+            'verb' => 'ListRecords',
+        ]));
+    }
+
+    public function testValidateFrom()
+    {
+        $request = $this->request;
+
+        $this->assertTrue($request->validate([
+            'metadataPrefix' => 'xMetaDissPlus',
+            'verb' => 'ListRecords',
+            'from' => '2020-09-21'
+        ]));
+
+        $this->assertFalse($request->validate([
+            'metadataPrefix' => 'xMetaDissPlus',
+            'verb' => 'ListRecords',
+            'from' => '2020/09/21'
+        ]));
+    }
+
+    public function testValidateUntil()
+    {
+        $request = $this->request;
+
+        $this->assertTrue($request->validate([
+            'metadataPrefix' => 'xMetaDissPlus',
+            'verb' => 'ListRecords',
+            'until' => '2020-09-21'
+        ]));
+
+        $this->assertFalse($request->validate([
+            'metadataPrefix' => 'xMetaDissPlus',
+            'verb' => 'ListRecords',
+            'until' => '2020/09/21'
+        ]));
     }
 }
