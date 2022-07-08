@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Validiert Datumseingaben.
+ *
+ * TODO default language should come from configuration
  */
 class Application_Form_Validate_Date extends \Zend_Validate_Date
 {
@@ -50,10 +50,12 @@ class Application_Form_Validate_Date extends \Zend_Validate_Date
     private static $_dateFormats = [
         'de' => [
             'format' => 'dd.MM.yyyy',
+            'dateTimeFormat' => 'd.m.Y',
             'regex' => '#^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,4}$#'
         ],
         'en' => [
             'format' => 'yyyy/MM/dd',
+            'dateTimeFormat' => 'Y/m/d',
             'regex' => '#^[0-9]{1,4}/[0-9]{1,2}/[0-9]{1,2}$#'
         ]
     ];
@@ -152,6 +154,31 @@ class Application_Form_Validate_Date extends \Zend_Validate_Date
         }
 
         return $this->__getDateFormatForLocale($language);
+    }
+
+    /**
+     * Returns Datetime format string for selected language in session.
+     *
+     * TODO two formats are currently needed because validator is still ZF1, while the rest of the code is already
+     *      using Datetime instead of Zend_Date - cleanup for LAMINAS
+     *
+     * @param string $locale
+     * @return string
+     */
+    public function getDateTimeFormat($locale = null)
+    {
+        if (empty($locale)) {
+            $session = new \Zend_Session_Namespace();
+            $language = $session->language;
+        } else {
+            $language = $locale;
+        }
+
+        if (array_key_exists($language, self::$_dateFormats)) {
+            return self::$_dateFormats[$language]['dateTimeFormat'];
+        } else {
+            return self::$_dateFormats['en']['dateTimeFormat'];
+        }
     }
 
     /**

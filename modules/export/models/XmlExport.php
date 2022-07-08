@@ -136,7 +136,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
     /**
      * Sets mime type for response.
-     * @param $mimeType Mime type for response
+     * @param string $mimeType Mime type for response
      */
     public function setContentType($mimeType)
     {
@@ -354,7 +354,16 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         $proc = $this->_proc;
         $xml = $this->_xml;
 
-        $proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', \Zend_Date::now()->setTimeZone('UTC')->getIso()));
+        $proc->setParameter(
+            '',
+            'timestamp',
+            str_replace(
+                '+00:00',
+                'Z',
+                (new DateTime())->setTimezone(new DateTimeZone('UTC'))->format(DateTime::RFC3339)
+            )
+        );
+
         $proc->setParameter('', 'docCount', count($resultIds));
         $proc->setParameter('', 'queryhits', $numOfHits);
 
@@ -439,7 +448,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
     /**
      * Returns a list of documents from the database.
-     * @param $resultIds ids of documents for export
+     * @param int[] $resultIds ids of documents for export
      * @return array [docId] DocumentXml
      */
     private function getDocumentsFromDatabase($documentIds)
@@ -457,7 +466,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
     /**
      * Returns a list of documents from cache.
-     * @param $resultIds ids of documents for export
+     * @param int[] $resultIds ids of documents for export
      * @return array Map of docId to  Document XML
      */
     private function getDocumentsFromCache($documentIds)

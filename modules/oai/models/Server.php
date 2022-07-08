@@ -252,7 +252,6 @@ class Oai_Model_Server extends Application_Model_Abstract
     }
 
     /**
-     * @throws Zend_Date_Exception
      * @throws Zend_Exception
      *
      * TODO factory (function) for processor
@@ -279,7 +278,11 @@ class Oai_Model_Server extends Application_Model_Abstract
         $this->_proc->setParameter(
             '',
             'dateTime',
-            str_replace('+00:00', 'Z', \Zend_Date::now()->setTimeZone('UTC')->getIso())
+            str_replace(
+                '+00:00',
+                'Z',
+                (new DateTime())->setTimezone(new DateTimeZone('UTC'))->format(DateTime::RFC3339)
+            )
         );
 
         // set OAI base url
@@ -348,13 +351,18 @@ class Oai_Model_Server extends Application_Model_Abstract
         $sampleIdentifier = $this->_configuration->getSampleIdentifier();
 
         // Set backup date if database query does not return a date.
-        $earliestDate = new \Zend_Date('1970-01-01', \Zend_Date::ISO_8601);
+        $earliestDate = DateTime::createFromFormat("Y-m-d", '1970-01-01');
 
         $earliestDateFromDb = Document::getEarliestPublicationDate();
         if (! is_null($earliestDateFromDb)) {
-            $earliestDate = new \Zend_Date($earliestDateFromDb, \Zend_Date::ISO_8601);
+            // TODO: Do we expect the full ISO format or Y-m-d? ZEND_DATE::ISO_8601 was probably less strict here.
+            $earliestDate = DateTime::createFromFormat(DateTime::ATOM, $earliestDateFromDb);
+            if ($earliestDate === false) {
+                $earliestDate = DateTime::createFromFormat("Y-m-d", $earliestDateFromDb);
+            }
         }
-        $earliestDateIso = $earliestDate->get('yyyy-MM-dd');
+
+        $earliestDateIso = $earliestDate->format('Y-m-d');
 
         // set parameters for oai-pmh.xslt
         $this->_proc->setParameter('', 'emailAddress', $email);
@@ -565,7 +573,12 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     private function setParamResumption($res, $cursor, $totalIds)
     {
-        $tomorrow = str_replace('+00:00', 'Z', \Zend_Date::now()->addDay(1)->setTimeZone('UTC')->getIso());
+        $tomorrow = str_replace(
+            '+00:00',
+            'Z',
+            (new DateTime())->modify('+1 day')->setTimezone(new DateTimeZone('UTC'))->format(DateTime::RFC3339)
+        );
+
         $this->_proc->setParameter('', 'dateDelete', $tomorrow);
         $this->_proc->setParameter('', 'res', $res);
         $this->_proc->setParameter('', 'cursor', $cursor);
