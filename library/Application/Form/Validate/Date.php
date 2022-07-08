@@ -31,6 +31,8 @@
 
 /**
  * Validiert Datumseingaben.
+ *
+ * TODO default language should come from configuration
  */
 class Application_Form_Validate_Date extends \Zend_Validate_Date
 {
@@ -48,10 +50,12 @@ class Application_Form_Validate_Date extends \Zend_Validate_Date
     private static $_dateFormats = [
         'de' => [
             'format' => 'dd.MM.yyyy',
+            'dateTimeFormat' => 'd.m.Y',
             'regex' => '#^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,4}$#'
         ],
         'en' => [
             'format' => 'yyyy/MM/dd',
+            'dateTimeFormat' => 'Y/m/d',
             'regex' => '#^[0-9]{1,4}/[0-9]{1,2}/[0-9]{1,2}$#'
         ]
     ];
@@ -150,6 +154,31 @@ class Application_Form_Validate_Date extends \Zend_Validate_Date
         }
 
         return $this->__getDateFormatForLocale($language);
+    }
+
+    /**
+     * Returns Datetime format string for selected language in session.
+     *
+     * TODO two formats are currently needed because validator is still ZF1, while the rest of the code is already
+     *      using Datetime instead of Zend_Date - cleanup for LAMINAS
+     *
+     * @param string $locale
+     * @return string
+     */
+    public function getDateTimeFormat($locale = null)
+    {
+        if (empty($locale)) {
+            $session = new \Zend_Session_Namespace();
+            $language = $session->language;
+        } else {
+            $language = $locale;
+        }
+
+        if (array_key_exists($language, self::$_dateFormats)) {
+            return self::$_dateFormats[$language]['dateTimeFormat'];
+        } else {
+            return self::$_dateFormats['en']['dateTimeFormat'];
+        }
     }
 
     /**

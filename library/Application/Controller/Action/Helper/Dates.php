@@ -96,7 +96,7 @@ class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action
      */
     public function getDateFormat()
     {
-        return $this->getValidator()->getDateFormat();
+        return $this->getValidator()->getDateTimeFormat();
     }
 
     /**
