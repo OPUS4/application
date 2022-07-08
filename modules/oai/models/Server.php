@@ -281,7 +281,7 @@ class Oai_Model_Server extends Application_Model_Abstract
             str_replace(
                 '+00:00',
                 'Z',
-                (new DateTime())->setTimezone(new DateTimeZone('UTC'))->format(DateTime::ATOM)
+                (new DateTime())->setTimezone(new DateTimeZone('UTC'))->format(DateTime::RFC3339)
             )
         );
 
@@ -576,7 +576,7 @@ class Oai_Model_Server extends Application_Model_Abstract
         $tomorrow = str_replace(
             '+00:00',
             'Z',
-            (new DateTime())->modify('+1 day')->setTimezone(new DateTimeZone('UTC'))->format(DateTime::ATOM)
+            (new DateTime())->modify('+1 day')->setTimezone(new DateTimeZone('UTC'))->format(DateTime::RFC3339)
         );
 
         $this->_proc->setParameter('', 'dateDelete', $tomorrow);
