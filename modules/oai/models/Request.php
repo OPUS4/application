@@ -183,7 +183,7 @@ class Oai_Model_Request
 
         return $result;
     }
-    
+
     /**
      * Checks if from date is before until date.
      *
@@ -343,7 +343,7 @@ class Oai_Model_Request
      * @param array $request
      * @return boolean
      */
-    public function validate(array $oaiRequest)
+    public function validate($oaiRequest)
     {
         $logger = Log::get();
 
