@@ -44,13 +44,7 @@ use Opus\Security\Realm;
  */
 class Oai_Model_Request
 {
-
-    /**
-     * TODO
-     *
-     * @var string
-     */
-    private $_dateFormat = 'Y-m-d';
+    const DATE_FORMAT = 'Y-m-d';
 
     /**
      * TODO
@@ -142,46 +136,28 @@ class Oai_Model_Request
     /**
      * Checks for a valide date
      *
-     * @param &$date Date string to proof
+     * @param $date Date string to proof
      * @return boolean
      */
-    private function checkDate(&$date)
+    public function checkDate($datestr)
     {
         // simple proofing
-        $tempDate = DateTime::createFromFormat($this->_dateFormat, $date);
-        return false !== $tempDate && $tempDate->format($this->_dateFormat) === $date;
-    }
-
-    /**
-     * Checks if given from date is in preferred date format.
-     *
-     * @param mixed &$date
-     * @return boolean
-     */
-    private function _validateFrom(&$date)
-    {
-        $result = $this->checkDate($date);
-
-        if (false === $result) {
-            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
-            $this->setErrorMessage(
-                'From date "' . $date . '" is not a correct date format ("' . strtoupper($this->_dateFormat) . '").'
-            );
-        }
-
-        return $result;
+        $date = DateTime::createFromFormat(self::DATE_FORMAT, $datestr);
+        return $date !== false && $date->format(self::DATE_FORMAT) === $datestr;
     }
 
     /**
      * Checks the availability of a metadataPrefix.
      *
      * @param mixed $oaiMetadataPrefix
+     * @param string $from
+     * @param string $until
      * @return boolean
      *
      * TODO handling case insensitivity of metadataPrefix is spread through the code (here and other places)
      * TODO function handles access control in addition to checking if format is supported (mixed responsibilities)
      */
-    private function _validateMetadataPrefix($oaiMetadataPrefix)
+    private function _validateMetadataPrefix($oaiMetadataPrefix, $from, $until)
     {
 
         // we assuming that a metadata prefix file ends with xslt
@@ -204,58 +180,38 @@ class Oai_Model_Request
             // MetadataPrefix not available.
             $this->setErrorCode(Oai_Model_Error::CANNOTDISSEMINATEFORMAT);
             $this->setErrorMessage(
-                'The metadata format \'' . $oaiMetadataPrefix
-                . '\' given by metadataPrefix is not supported by the item or this repository.'
+                "The metadataPrefix '$oaiMetadataPrefix' is not supported by the item or this repository."
             );
         }
 
         return $result;
     }
-
-    /**
-     * Checks if until date is in preferred date format.
-     *
-     * @param mixed $date
-     * @return boolean
-     */
-    private function _validateUntil(&$date)
-    {
-        $result = $this->checkDate($date);
-
-        if (false === $result) {
-            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
-            $this->setErrorMessage(
-                'Until date "' . $date . '" is not a correct date format ("' . strtoupper($this->_dateFormat) . '").'
-            );
-        }
-
-        return $result;
-    }
-
+    
     /**
      * Checks if from date is before until date.
      *
-     * @param mixed $from
-     * @param mixed $until
+     * @param string $from
+     * @param string $until
      * @return boolean
      */
-    private function _validateFromUntilRange($from, $until)
+    public function validateFromUntilRange($from, $until)
     {
-
-        $result = $this->_validateFrom($from);
-        if (false === $result) {
+        if (! $this->checkDate($from)) {
+            $this->setErrorMessage("From date '$from' is not a correct date format (" . self::DATE_FORMAT . ').');
+            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
             return false;
         }
 
-        $result = $this->_validateUntil($until);
-        if (false === $result) {
-            return $result;
+        if (! $this->checkDate($until)) {
+            $this->setErrorMessage("Until date '$until' is not a correct date format (" . self::DATE_FORMAT . ').');
+            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
+            return false;
         }
 
         $result = true;
 
-        $untilDate = DateTime::createFromFormat($this->_dateFormat, $until);
-        $fromDate  = DateTime::createFromFormat($this->_dateFormat, $from);
+        $untilDate = DateTime::createFromFormat(self::DATE_FORMAT, $until);
+        $fromDate  = DateTime::createFromFormat(self::DATE_FORMAT, $from);
 
         $isEqual = $untilDate->getTimestamp() === $fromDate->getTimestamp();
         $isLater = $untilDate->getTimestamp() > $fromDate->getTimestamp();
@@ -272,12 +228,11 @@ class Oai_Model_Request
     /**
      * Validates resumption token.
      *
-     * @param  string  $oaiResumptionToken The resumption token to validate.
+     * @param  string $oaiResumptionToken The resumption token to validate.
      * @return boolean
      */
-    private function _validateResumptionToken($oaiResumptionToken)
+    private function validateResumptionToken($oaiResumptionToken)
     {
-
         $tokenWorker = new Oai_Model_Resumptiontokens;
 
         try {
@@ -489,7 +444,7 @@ class Oai_Model_Request
         // Proof combination of from and until
         if ((true === array_key_exists('from', $oaiRequest)) and
             (true === array_key_exists('until', $oaiRequest))) {
-                return $this->_validateFromUntilRange($oaiRequest['from'], $oaiRequest['until']);
+                return $this->validateFromUntilRange($oaiRequest['from'], $oaiRequest['until']);
         }
 
         return true;
