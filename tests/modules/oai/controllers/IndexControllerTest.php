@@ -1216,7 +1216,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->enableSecurity();
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::80');
         $this->assertContains(
-            '<error code="cannotDisseminateFormat">The metadata format \'copy_xml\' given by metadataPrefix is not supported by the item or this repository.</error>',
+            '<error code="cannotDisseminateFormat">The metadataPrefix \'copy_xml\' is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb GetRecords'
         );
@@ -1230,7 +1230,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->enableSecurity();
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=copy_xml&from=2100-01-01');
         $this->assertContains(
-            '<error code="cannotDisseminateFormat">The metadata format \'copy_xml\' given by metadataPrefix is not supported by the item or this repository.</error>',
+            '<error code="cannotDisseminateFormat">The metadataPrefix \'copy_xml\' is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb ListRecords'
         );
@@ -1244,7 +1244,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->enableSecurity();
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=copy_xml');
         $this->assertContains(
-            '<error code="cannotDisseminateFormat">The metadata format \'copy_xml\' given by metadataPrefix is not supported by the item or this repository.</error>',
+            '<error code="cannotDisseminateFormat">The metadataPrefix \'copy_xml\' is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'do not prevent usage of metadataPrefix copy_xml and verb ListIdentifiers'
         );
