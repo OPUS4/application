@@ -1,4 +1,17 @@
 # OPUS 4 Release Notes
+
+## Patch Release 4.7.1.1 - 2022-07-12
+
+Die Sprachen im Konfigurationsparameter `supportedLanguages` werden nun 
+automatisch getrimmt, um Leerzeichen zu entfernen. Die Leerzeichen hätten 
+Probleme beim Update verursachen können, wenn Namen für CollectionRoles 
+mit Sonderzeichen bereinigt werden müssen. Die Bereinigung wurde bereits 
+mit OPUS 4.7 ins Update integriert. 
+
+Für 4.7.1 Instanzen ist diese Änderung nicht relevant und kann einfach 
+mit `git pull` übernommen werden. Ältere Instanzen müssten dem normalen
+Update-Prozess folgen.
+
 ---
 
 ## Release 4.7.1 2022-03-24
