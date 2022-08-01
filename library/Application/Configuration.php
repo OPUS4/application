@@ -126,7 +126,7 @@ class Application_Configuration extends Config
         if (is_null($this->supportedLanguages)) {
             $config = $this->getConfig();
             if (isset($config->supportedLanguages)) {
-                $this->supportedLanguages = explode(',', $config->supportedLanguages);
+                $this->supportedLanguages = array_map('trim', explode(',', $config->supportedLanguages));
                 /* TODO only used for debugging - remove?
                 $this->getLogger()->debug(
                     Zend_Debug::dump(

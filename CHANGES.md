@@ -1,5 +1,9 @@
 # OPUS 4 Change Log
 
+## Release 4.7.1.1 - 2022-07-12
+
+* OPUS4/application#598 - Werte für Konfigurationsparameter "supportedLanguages" trimmen
+
 ## Release 4.7.1 - 2022-03-24
 
 ### Aufgaben

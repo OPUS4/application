@@ -124,6 +124,15 @@ class Application_ConfigurationTest extends ControllerTestCase
         $this->assertTrue($this->config->isLanguageSelectionEnabled());
     }
 
+    public function testGetSupportedLanguagesValuesAreTrimmed()
+    {
+        $this->adjustConfiguration([
+            'supportedLanguages' => 'en, de'
+        ]);
+
+        $this->assertEquals(['en', 'de'], $this->config->getSupportedLanguages());
+    }
+
     public function testIsLanguageSelectionEnabledFalse()
     {
         Config::get()->supportedLanguages = 'de';
