@@ -25,9 +25,14 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Model\ModelException;
+use Opus\Common\Model\ModelInterface;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * CRUD Controller for Opus Application.
@@ -49,12 +54,6 @@ use Opus\Common\Model\ModelException;
  * - Redirect mit Exception beim Delete
  * - Redirect mit Exception beim Speichern)
  * - Formular anzeigen
- *
- * @category    Application
- * @package     Application_Controller
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2018, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Controller_ActionCRUD extends Application_Controller_Action
 {
@@ -505,7 +504,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     /**
      * Liefert Instanz des Models.
      * @param type $modelId
-     * @return \modelClass
+     * @return ModelInterface
      */
     public function getModel($modelId)
     {
@@ -515,7 +514,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
             if (strlen(trim($modelId)) !== 0) {
                 try {
                     return new $modelClass($modelId);
-                } catch (\Opus\Model\NotFoundException $omnfe) {
+                } catch (NotFoundException $omnfe) {
                     $this->getLogger()->err(__METHOD__ . ':' . $omnfe->getMessage());
                 }
             }

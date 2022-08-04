@@ -31,7 +31,7 @@
 
 use Opus\Document;
 use Opus\DocumentFinder\DefaultDocumentFinder;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
 use Opus\Security\Realm;
 
 class ControllerTestCaseTest extends ControllerTestCase

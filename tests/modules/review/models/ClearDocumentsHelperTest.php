@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Date;
+use Opus\Common\Model\NotFoundException;
 use Opus\Document;
 use Opus\Person;
-use Opus\Date;
 
 class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 {
@@ -121,7 +121,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     {
         $helper = new Review_Model_ClearDocumentsHelper();
 
-        $this->setExpectedException('Opus\Model\NotFoundException');
+        $this->setExpectedException(NotFoundException::class);
         $helper->clear([$this->documentId + 100000], 23);
     }
 
@@ -129,7 +129,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     {
         $helper = new Review_Model_ClearDocumentsHelper();
 
-        $this->setExpectedException('Opus\Model\NotFoundException');
+        $this->setExpectedException(NotFoundException::class);
         $helper->reject([$this->documentId + 100000], 23);
     }
 

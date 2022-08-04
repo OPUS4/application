@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -38,7 +39,7 @@
 
 use Opus\Collection;
 use Opus\CollectionRole;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * Controller for administration of collections.

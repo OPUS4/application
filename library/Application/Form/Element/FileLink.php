@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,21 +24,18 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright Copyright (c) 2008, OPUS 4 development team
+ * @license   http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Model\NotFoundException;
 use Opus\File;
-use Opus\Model\NotFoundException;
 
 /**
  * Formularelement für die Anzeige eines Download Links für ein File Objekt.
  *
  * Das Formularelement kann nur mit gültigen IDs für File verwendet werden.
- *
- * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Form_Element_FileLink extends Application_Form_Element_Text
 {

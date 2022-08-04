@@ -25,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Cronjob
- * @package     Tests
- * @author      Gunar Maiwald (maiwald@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 require_once('CronTestCase.php');
 
+use Opus\Common\Repository;
 use Opus\Document;
 use Opus\Job;
 use Opus\Import\Worker\MetadataImportWorker;
@@ -58,7 +56,8 @@ class MetadataImportTest extends CronTestCase
     public function tearDown()
     {
         if ($this->documentImported) {
-            $ids = Document::getAllIds();
+            $finder = Repository::getInstance()->getDocumentFinder();
+            $ids = $finder->getIds();
             $last_id = array_pop($ids);
             $doc = Document::get($last_id);
             $doc->delete();

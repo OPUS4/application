@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
+use Opus\Common\Date;
 use Opus\DnbInstitute;
 use Opus\Document;
 use Opus\Identifier;

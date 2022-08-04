@@ -25,17 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2014-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Model\NotFoundException;
 use Opus\Document;
-use Opus\Model\NotFoundException;
 use Opus\Statistic\LocalCounter;
 
 class Frontdoor_IndexController extends Application_Controller_Action
