@@ -25,12 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Repository;
 use Opus\Title;
-use Opus\Db\DocumentXmlCache;
 
 /**
  * Class Export_Model_XmlExportTest
@@ -72,7 +72,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->setTitleMain($title);
-        $doc->store();
+        $docId = $doc->store();
 
         $this->_request->setMethod('POST')->setPost([
             'searchtype' => 'all'
@@ -80,11 +80,17 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $this->plugin->prepareXml();
 
-        $xpath = new DOMXPath($this->plugin->getXml());
-        $result = $xpath->query('//Opus_Document');
+        $xml = $this->plugin->getXml();
+        $xpath = new DOMXPath($xml);
 
-        // in OPUSVIER-3336 wurde die Sortierreihenfolge geändert, dh es wird nicht mehr aufsteigend nach id sortiert
-        $this->assertEquals('Deutscher Titel', $result->item(0)->childNodes->item(3)->attributes->item(2)->nodeValue);
+        $result = $xpath->query("//Opus_Document[@Id=\"$docId\"]");
+
+        $this->assertEquals(1, $result->length);
+
+        $this->assertEquals(
+            'Deutscher Titel',
+            $xpath->query("//Opus_Document[@Id=\"$docId\"]/TitleMain/@Value")->item(0)->nodeValue
+        );
     }
 
     public function testXmlPreparationForFrontdoor()
@@ -158,9 +164,9 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $thirdDocId = $thirdDoc->store();
 
         // Dokument aus dem Cache löschen
-        $documentCacheTable = new DocumentXmlCache();
-        $documentCacheTable->delete('document_id = ' . $secondDocId);
-        $documentCacheTable->delete('document_id = ' . $firstDocId);
+        $documentCache = Repository::getInstance()->getDocumentXmlCache();
+        $documentCache->remove($secondDocId);
+        $documentCache->remove($firstDocId);
 
         $this->getRequest()->setMethod('POST')->setPost([
             'searchtype' => 'all',
@@ -353,5 +359,15 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $plugin->setAttachmentFilename('fulltext.pdf');
 
         $this->assertEquals('fulltext.pdf', $plugin->getAttachmentFilename());
+    }
+
+    public function testGetDocumentsFromCache()
+    {
+        $plugin = $this->plugin;
+
+        $xml = $plugin->getDocumentsFromCache([146, 89, 90]);
+
+        $this->assertCount(3, $xml);
+        $this->assertEquals([146, 89, 90], array_keys($xml)); // order is preserved
     }
 }
