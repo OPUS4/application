@@ -34,7 +34,8 @@ use Opus\Common\Date;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
 use Opus\DnbInstitute;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Enrichment;
 use Opus\Identifier;
 use Opus\Licence;
@@ -444,7 +445,7 @@ class Publish_Model_Deposit
 
     /**
      * method to prepare a subject object for storing
-     * @param Document $this->document
+     * @param DocumentInterface $this->document
      * @param array $formValues
      * @param string $dataKey current Element of formValues
      * @param array $externalFields

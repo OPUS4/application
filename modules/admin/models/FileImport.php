@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\File;
 
 /**

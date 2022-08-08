@@ -32,7 +32,8 @@
 use Opus\Common\Log;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Repository;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
 
@@ -588,11 +589,11 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Create xml structure for one record
      *
-     * @param  Document $document
+     * @param  DocumentInterface $document
      * @param  string        $metadataPrefix
      * @return void
      */
-    private function createXmlRecord(Document $document)
+    private function createXmlRecord($document)
     {
         $docId = $document->getId();
         $domNode = $this->getDocumentXmlDomNode($document);
@@ -723,9 +724,9 @@ class Oai_Model_Server extends Application_Model_Abstract
      * Add rights element to output.
      *
      * @param \DOMNode $domNode
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
-    private function _addAccessRights(DOMNode $domNode, Document $doc)
+    private function _addAccessRights($domNode, $doc)
     {
         $fileElement = $domNode->ownerDocument->createElement('Rights');
         $fileElement->setAttribute('Value', $this->_xmlFactory->getAccessRights($doc));
@@ -776,7 +777,7 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @return DOMNode
      * @throws Exception
      */

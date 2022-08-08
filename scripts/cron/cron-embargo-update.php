@@ -33,7 +33,7 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Common\Date;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Common\Repository;
 
 /*

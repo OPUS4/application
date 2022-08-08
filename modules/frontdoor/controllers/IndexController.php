@@ -30,7 +30,8 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Statistic\LocalCounter;
 
 class Frontdoor_IndexController extends Application_Controller_Action
@@ -174,7 +175,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
     /**
      *
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function isMailPossible($doc)
     {
@@ -184,7 +185,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
     /**
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @return string
      */
     private function getFrontdoorTitle($document)

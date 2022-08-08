@@ -35,7 +35,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Common\Config;
 use Opus\Common\Model\NotFoundException;
-use Opus\Document;
+use Opus\Common\Document;
 
 // Get files directory...
 $startTime = microtime(true);

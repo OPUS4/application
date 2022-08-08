@@ -30,12 +30,13 @@
  */
 
 use Opus\Common\Config;
-use Opus\Common\LoggingTrait;
+use Opus\Common\Document;
 use Opus\Common\DocumentFinderInterface;
+use Opus\Common\DocumentInterface;
+use Opus\Common\LoggingTrait;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
 use Opus\Db\TableGateway;
-use Opus\Document;
 use Opus\Doi\DoiManager;
 use Opus\File;
 use Opus\Common\Repository;
@@ -682,7 +683,7 @@ class ControllerTestCase extends TestCase
     /**
      * Removes a test document from the database.
      *
-     * @param $value Document|int
+     * @param $value DocumentInterface|int
      * @throws ModelException
      */
     public function removeDocument($value)
@@ -692,7 +693,7 @@ class ControllerTestCase extends TestCase
         }
 
         $doc = $value;
-        if (! ($value instanceof Document)) {
+        if (! ($value instanceof DocumentInterface)) {
             try {
                 $doc = Document::get($value);
             } catch (NotFoundException $e) {
@@ -760,7 +761,7 @@ class ControllerTestCase extends TestCase
     /**
      * Erzeugt ein Testdokument, das nach der Testausführung automatisch aufgeräumt wird.
      *
-     * @return Document
+     * @return DocumentInterface
      * @throws ModelException
      */
     protected function createTestDocument()

@@ -31,7 +31,8 @@
 
 use Opus\Common\Date;
 use Opus\DnbInstitute;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Identifier;
 use Opus\Licence;
 use Opus\Common\Model\ModelException;
@@ -103,7 +104,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleJournalPaper($doc)
     {
@@ -134,7 +135,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleConferencePaper($doc)
     {
@@ -165,7 +166,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleThesis($doc)
     {
@@ -194,7 +195,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleWorkingPaper($doc)
     {
@@ -230,7 +231,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleWorkingPaperWithContributingCorporation($doc)
     {
@@ -265,7 +266,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleWorkingPaperWithPublisher($doc)
     {
@@ -292,7 +293,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleBook($doc)
     {
@@ -320,7 +321,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleBookPart($doc)
     {
@@ -557,7 +558,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      * @param array $tags
      */
     private function assertThesisPublisher($doc, $tags)
@@ -587,7 +588,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @return Document
+     * @return DocumentInterface
      */
     private function createJournalPaper()
     {
@@ -626,7 +627,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param string $docType
-     * @return Document
+     * @return DocumentInterface
      * @throws ModelException
      */
     private function createTestDoc($docType)
@@ -661,7 +662,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      * @param int $num
      */
     private function addAuthors($doc, $num)
@@ -680,7 +681,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addTitles($doc)
     {
@@ -721,7 +722,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addAbstracts($doc)
     {
@@ -743,7 +744,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addIdentifiers($doc)
     {
@@ -773,7 +774,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addSubjects($doc)
     {
@@ -795,7 +796,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addLicence($doc)
     {
@@ -804,7 +805,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addFile($doc)
     {
@@ -833,7 +834,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addThesisPublisher($doc)
     {

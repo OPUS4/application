@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Import\AdditionalEnrichments;
 
 /**
@@ -228,7 +228,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      * @throws Exception
      */
     private function checkAllFieldsImport($doc)
@@ -455,7 +455,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
      * @param int $numOfEnrichments
      * @param int $numOfCollections
      * @param string $serverState
-     * @return Document
+     * @return DocumentInterface
      */
     private function depositSuccessful(
         $fileName,

@@ -30,7 +30,8 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\File;
 use Opus\Security\IRealm;
 
@@ -43,7 +44,7 @@ class Frontdoor_Model_File
     const ILLEGAL_FILENAME_MESSAGE_KEY = 'illegal_argument_filename';
 
     /**
-     * @var Document
+     * @var DocumentInterface
      */
     private $_doc;
 
@@ -59,8 +60,8 @@ class Frontdoor_Model_File
 
     /**
      * Frontdoor_Model_File constructor.
-     * @param $docId int OPUS document id number
-     * @param $filename string Name of file
+     * @param int    $docId OPUS document id number
+     * @param string $filename Name of file
      */
     public function __construct($docId, $filename)
     {

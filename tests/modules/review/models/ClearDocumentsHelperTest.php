@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -31,7 +31,7 @@
 
 use Opus\Common\Date;
 use Opus\Common\Model\NotFoundException;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Person;
 
 class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase

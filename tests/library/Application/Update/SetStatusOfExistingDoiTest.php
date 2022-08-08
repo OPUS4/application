@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Date;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Identifier;
 use Opus\Db\TableGateway;
 use Opus\Common\Model\ModelException;

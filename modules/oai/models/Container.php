@@ -30,7 +30,8 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\File;
 use Opus\Security\Realm;
 
@@ -49,7 +50,7 @@ class Oai_Model_Container extends Application_Model_Abstract
     private $_docId;
 
     /**
-     * @var Document
+     * @var DocumentInterface
      */
     private $_doc;
 
@@ -82,7 +83,7 @@ class Oai_Model_Container extends Application_Model_Abstract
     /**
      *
      * @param string $docId
-     * @return Document returns valid Document if docId is valid, otherwise throws an Oai_Model_Exception
+     * @return DocumentInterface Returns valid Document if docId is valid, otherwise throws an Oai_Model_Exception
      * @throws Oai_Model_Exception throws Oai_Model_Exception if the given docId is invalid
      *
      * TODO centralize this function (is used in several controllers)

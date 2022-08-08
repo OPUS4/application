@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 /**
  * Class Publish_FormControllerTest.
  *
@@ -419,7 +415,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     }
 
     /**
-     * @return Document
+     * @return DocumentInterface
      */
     private function createTemporaryDoc()
     {

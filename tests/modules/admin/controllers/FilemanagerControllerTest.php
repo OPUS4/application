@@ -32,7 +32,7 @@
  */
 
 use Opus\Common\Date;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\UserRole;
 
 /**

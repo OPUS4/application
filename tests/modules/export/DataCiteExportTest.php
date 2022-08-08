@@ -30,7 +30,8 @@
  */
 
 use Opus\Common\Date;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Identifier;
 use Opus\Common\Model\ModelException;
 use Opus\Person;
@@ -321,7 +322,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      * @return int ID des gespeicherten Dokuments
      */
     private function addRequiredFields($doc)

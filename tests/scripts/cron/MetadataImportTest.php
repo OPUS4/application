@@ -32,7 +32,7 @@
 require_once('CronTestCase.php');
 
 use Opus\Common\Repository;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Job;
 use Opus\Import\Worker\MetadataImportWorker;
 

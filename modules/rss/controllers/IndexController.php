@@ -32,7 +32,7 @@
  * TODO move feed code into Rss_Model_Feed
  */
 
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Search\SearchException;
 
 class Rss_IndexController extends Application_Controller_Xml

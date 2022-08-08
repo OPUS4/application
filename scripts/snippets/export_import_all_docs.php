@@ -31,7 +31,7 @@
 
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
 use Opus\Common\Repository;

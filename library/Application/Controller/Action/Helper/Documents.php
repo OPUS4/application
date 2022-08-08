@@ -29,7 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Repository;
 
@@ -55,7 +56,7 @@ class Application_Controller_Action_Helper_Documents extends \Zend_Controller_Ac
     /**
      * Returns Document for provided ID or throws exception.
      * @param string $docId Document identifier
-     * @return Document
+     * @return DocumentInterface
      */
     public function getDocumentForId($docId)
     {

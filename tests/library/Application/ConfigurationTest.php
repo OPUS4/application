@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Config;
-use Opus\Document;
+use Opus\Common\Document;
 
 class Application_ConfigurationTest extends ControllerTestCase
 {

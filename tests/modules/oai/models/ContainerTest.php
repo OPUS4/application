@@ -31,7 +31,7 @@
 
 use Opus\Account;
 use Opus\Common\Date;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\File;
 use Opus\UserRole;
 

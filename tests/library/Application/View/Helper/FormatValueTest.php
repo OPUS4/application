@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Date;
-use Opus\Document;
+use Opus\Common\Document;
 
 /**
  * Unit tests for FormatValue view helper.

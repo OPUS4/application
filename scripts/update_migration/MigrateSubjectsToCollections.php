@@ -28,7 +28,7 @@
  *
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- **/
+ */
 
 // Bootstrapping.
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
@@ -36,7 +36,7 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 use Opus\Collection;
 use Opus\CollectionRole;
 use Opus\Common\Model\NotFoundException;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Common\Repository;
 use Opus\EnrichmentKey;
 

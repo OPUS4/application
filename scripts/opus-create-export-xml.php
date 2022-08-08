@@ -32,7 +32,7 @@
 use Opus\Common\Config;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Repository;
-use Opus\Document;
+use Opus\Common\Document;
 
 /**
  * Script for exporting all documents.

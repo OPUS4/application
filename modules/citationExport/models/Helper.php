@@ -30,7 +30,8 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 
 class CitationExport_Model_Helper extends Application_Model_Abstract
 {
@@ -70,7 +71,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
      * @param string $docId
      * @throws CitationExport_Module_Exception in case of an invalid parameter value
      *
-     * @return Document
+     * @return DocumentInterface
      */
     public function getDocument($request)
     {
@@ -115,7 +116,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
 
     /**
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @throws CitationExport_Module_Exception in case of an invalid parameter value
      *
      * @return string
@@ -173,7 +174,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
     /**
      * transform XML output to desired output format
      *
-     * @param Document $document Document that should be transformed
+     * @param DocumentInterface $document Document that should be transformed
      * @param string $template XSLT stylesheet that should be applied
      *
      * @return string document in the given output format as plain text

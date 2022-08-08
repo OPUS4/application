@@ -37,7 +37,7 @@
 
 use Opus\Collection;
 use Opus\Common\Date;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Person;
 
 for ($i = 1; $i < 10000; $i++) {

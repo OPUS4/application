@@ -29,7 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Common\Model\NotFoundException;
 
 class Frontdoor_Model_Authors
@@ -37,12 +38,12 @@ class Frontdoor_Model_Authors
 
     /**
      *
-     * @var Document
+     * @var DocumentInterface
      */
     private $_document;
 
     /**
-     * @param $arg int|Document either an instance of Document or an int that is interpreted
+     * @param $arg int|DocumentInterface either an instance of Document or an int that is interpreted
      * as a document ID
      * @throws Frontdoor_Model_Exception throws Frontdoor_Model_Exception if
      * no document with id $docId exists
@@ -50,7 +51,7 @@ class Frontdoor_Model_Authors
      */
     public function __construct($arg)
     {
-        if ($arg instanceof Document) {
+        if ($arg instanceof DocumentInterface) {
             $this->_document = $arg;
         } else {
             try {
@@ -113,7 +114,7 @@ class Frontdoor_Model_Authors
     /**
      * Returns the underlying document that was given at object creation time.
      *
-     * @return Document
+     * @return DocumentInterface
      */
     public function getDocument()
     {

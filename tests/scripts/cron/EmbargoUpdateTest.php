@@ -32,7 +32,7 @@
 require_once('CronTestCase.php');
 
 use Opus\Common\Date;
-use Opus\Document;
+use Opus\Common\Document;
 
 /**
  *

@@ -34,7 +34,7 @@ require_once('OpusDocumentMock.php');
 
 use Opus\Common\Date;
 use Opus\Common\Model\NotFoundException;
-use Opus\Document;
+use Opus\Common\Document;
 
 /**
  *

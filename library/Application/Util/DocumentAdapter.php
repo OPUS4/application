@@ -31,7 +31,8 @@
 
 use Opus\Account;
 use Opus\Common\Date;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Wrapper around Document to prepare presentation.
@@ -52,7 +53,7 @@ class Application_Util_DocumentAdapter
 
     /**
      * Wrapped document.
-     * @var Document
+     * @var DocumentInterface
      */
     public $document = null;
 
@@ -81,7 +82,7 @@ class Application_Util_DocumentAdapter
             $this->_view = $view;
         }
 
-        if ($value instanceof Document) {
+        if ($value instanceof DocumentInterface) {
             $this->document = $value;
             $this->docId = $this->document->getId();
         } else {
@@ -92,7 +93,7 @@ class Application_Util_DocumentAdapter
 
     /**
      * Returns the Document object for this adapter.
-     * @return Document
+     * @return DocumentInterface
      */
     public function getDocument()
     {

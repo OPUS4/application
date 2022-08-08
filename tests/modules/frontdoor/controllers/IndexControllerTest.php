@@ -33,7 +33,8 @@ use Opus\Collection;
 use Opus\CollectionRole;
 use Opus\Common\Config;
 use Opus\Common\Date;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Common\Log;
 use Opus\Note;
 use Opus\Title;
@@ -51,7 +52,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     /**
      * Document to count on :)
      *
-     * @var Document
+     * @var DocumentInterface
      */
     protected $_document = null;
     protected $_document_col = null;

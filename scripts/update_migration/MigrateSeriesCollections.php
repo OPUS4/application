@@ -25,18 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- **/
+ */
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Collection;
 use Opus\CollectionRole;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Common\Repository;
 use Opus\Series;
 

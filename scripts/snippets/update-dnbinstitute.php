@@ -41,7 +41,7 @@ if (basename(__FILE__) !== basename($argv[0])) {
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\DnbInstitute;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Repository;
 
