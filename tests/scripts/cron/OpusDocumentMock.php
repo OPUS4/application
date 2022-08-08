@@ -29,7 +29,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Document;
+use Opus\Common\Date;
+use Opus\Common\Model\ModelException;
+use Opus\Document;
+use Opus\Model\DbConstrainViolationException;
+use Opus\Model\DbException;
 
 /**
  * Mock used by DbCleanTemporary
@@ -37,6 +41,21 @@ use Opus\Common\Document;
 class OpusDocumentMock extends Document
 {
 
+    /**
+     * This function is needed to set ServerDateModified bypassing the regular store-function of Document, since it
+     * would update ServerDateModified to the current time.
+     *
+     * TODO hopefully the "temporary" state for documents will disappear, when the Publish module is rewritten. This
+     *      will make the cleanup script and these tests unnecessary.
+     * TODO Also setting ServerDatePublished automatically is "business logic". It should be handle it a plugin or
+     *      a piece of code that can be disabled without the need to subclass Document.
+     *
+     * @param Date $date
+     * @throws Zend_Db_Exception
+     * @throws ModelException
+     * @throws DbConstrainViolationException
+     * @throws DbException
+     */
     public function changeServerDateModified($date)
     {
         $this->setServerDateModified($date);
