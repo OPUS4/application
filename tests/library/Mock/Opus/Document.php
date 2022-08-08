@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -29,14 +29,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Document;
+use Opus\Document;
 
 /**
  * Mock Document for unit testing.
+ *
+ * TODO LAMINAS Is there a way to eliminate this Framework (Document) dependency?
  */
 class Mock_Opus_Document extends Document
 {
-
     public function store()
     {
         // don't do anything
