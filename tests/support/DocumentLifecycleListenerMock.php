@@ -25,59 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Date;
-use Opus\Common\Document;
-use Opus\Common\Model\NotFoundException;
+use Opus\Common\Model\DocumentLifecycleListener;
 
-class DbCleanTemporaryTest extends CronTestCase
+/**
+ * TODO This class is used by unit tests in two places and meets two different testing requirements. This different
+ *      responsibilities should be separated.
+ */
+class DocumentLifecycleListenerMock extends DocumentLifecycleListener
 {
 
-    protected $additionalResources = 'database';
-
-    private $doc;
-
-    public function setUp()
+    /**
+     * Circumvents setting of ServerDateModified and ServerDatePublished for testing.
+     * @param $document
+     */
+    public function preStore($document)
     {
-        parent::setUp();
-        $this->doc = Document::new();
-        $this->doc->setLifecycleListener(new DocumentLifecycleListenerMock());
-        $this->doc->setServerState('temporary');
-        $this->doc->store();
-    }
+        $dateModified = $document->getServerDateModified();
+        parent::preStore($document);
 
-    public function testCleanUpDocumentOlderThan2Days()
-    {
-        $this->changeDocumentDateModified(3);
-        $this->executeScript('cron-db-clean-temporary.php');
-        try {
-            $doc = Document::get($this->doc->getId());
-            $doc->delete();
-            $this->fail("expected Opus\Common\Model\NotFoundException");
-        } catch (NotFoundException $e) {
+        if ($dateModified !== null) {
+            $document->setServerDateModified($dateModified);
         }
-    }
 
-    public function testKeepDocumentNewerThan3Days()
-    {
-        $this->changeDocumentDateModified(2);
-        $this->executeScript('cron-db-clean-temporary.php');
-        try {
-            $doc = Document::get($this->doc->getId());
-            $doc->delete();
-        } catch (NotFoundException $e) {
-            $this->fail("expected existing document.");
-        }
-    }
-
-    private function changeDocumentDateModified($numDaysBeforeNow)
-    {
-        $date = new DateTime();
-        $date->sub(new DateInterval("P{$numDaysBeforeNow}D"));
-        $this->doc->setServerDateModified(new Date($date));
-        $this->doc->store();
+        $document->setServerDatePublished(null);
     }
 }
