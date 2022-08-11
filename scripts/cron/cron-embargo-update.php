@@ -66,4 +66,6 @@ $foundIds = $finder->getIds();
 $now = new Date();
 $now->setNow();
 
-Document::setServerDateModifiedByIds($now, $foundIds);
+$documents = Repository::getInstance()->getModelRepository(Document::class);
+
+$documents->setServerDateModifiedForDocuments($now, $foundIds);

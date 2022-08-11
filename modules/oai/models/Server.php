@@ -354,7 +354,9 @@ class Oai_Model_Server extends Application_Model_Abstract
         // Set backup date if database query does not return a date.
         $earliestDate = DateTime::createFromFormat("Y-m-d", '1970-01-01');
 
-        $earliestDateFromDb = Document::getEarliestPublicationDate();
+        $earliestDateFromDb = Repository::getInstance()->getModelRepository(Document::class)
+            ->getEarliestPublicationDate();
+
         if (! is_null($earliestDateFromDb)) {
             // TODO: Do we expect the full ISO format or Y-m-d? ZEND_DATE::ISO_8601 was probably less strict here.
             $earliestDate = DateTime::createFromFormat(DateTime::ATOM, $earliestDateFromDb);

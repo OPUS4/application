@@ -33,6 +33,7 @@ require_once('CronTestCase.php');
 
 use Opus\Common\Date;
 use Opus\Common\Document;
+use Opus\Common\Repository;
 
 /**
  *
@@ -62,7 +63,9 @@ class EmbargoUpdateTest extends CronTestCase
         $doc->setEmbargoDate($today);
         $notExpiredId = $doc->store();
 
-        Document::setServerDateModifiedByIds($twoDaysAgo, [$expiredId, $noEmbargoId, $notExpiredId]);
+        $documents = Repository::getInstance()->getModelRepository(Document::class);
+
+        $documents->setServerDateModifiedForDocuments($twoDaysAgo, [$expiredId, $noEmbargoId, $notExpiredId]);
 
         $this->executeScript('cron-embargo-update.php');
 

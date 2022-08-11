@@ -31,6 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
+
 /**
  * Class Publish_FormControllerTest.
  *
@@ -557,7 +558,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'SeriesNumber_1' => '',
             'Series_1' => '',
 
-            // Add Button wurde gedrückt
+            // Add Button wurde gedrueckt
             'addMoreTitleMain' => 'Einen+weiteren+Titel+hinzufügen',
         ];
 
@@ -612,7 +613,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'SeriesNumber_1' => '',
             'Series_1' => '',
 
-            // Delete Button wurde gedrückt
+            // Delete Button wurde gedrueckt
             'deleteMoreTitleMain' => 'Den+letzten+Titel+löschen',
         ];
 
@@ -667,7 +668,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'SeriesNumber_1' => '',
             'Series_1' => '',
 
-            // Browse Down Button wurde gedrückt
+            // Browse Down Button wurde gedrueckt
             'browseDownInstitute' => 'runter',
         ];
 
@@ -724,7 +725,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'SeriesNumber_1' => '',
             'Series_1' => '',
 
-            // Browse Up Button wurde gedrückt
+            // Browse Up Button wurde gedrueckt
             'browseUpInstitute' => 'hoch',
         ];
 
@@ -785,7 +786,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'Licence' => '',
             'SeriesNumber_1' => '',
             'Series_1' => ''
-            // kein Button wurde gedrückt
+            // kein Button wurde gedrueckt
         ];
 
         $this->request
