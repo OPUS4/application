@@ -57,7 +57,6 @@ class Application_Security_HttpAuthResolver implements \Zend_Auth_Adapter_Http_R
                 return $user->getPassword();
             }
         } catch (SecurityException $ex) {
-
         }
 
         return false;

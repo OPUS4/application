@@ -51,7 +51,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
             try {
                 $account = Account::fetchAccountByLogin($login);
                 $account->delete();
-            }catch (SecurityException $ex) {
+            } catch (SecurityException $ex) {
             }
         }
     }
