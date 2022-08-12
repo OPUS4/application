@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
+use Opus\Common\Account;
 use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\File;
@@ -61,7 +61,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
             $testRole->delete();
         }
         if (! is_null($this->userId)) {
-            $userAccount = new Account($this->userId);
+            $userAccount = Account::get($this->userId);
             $userAccount->delete();
         }
         parent::tearDown();
@@ -359,7 +359,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $testRole->appendAccessDocument($publishedDocId);
         $this->roleId = $testRole->store();
 
-        $userAccount = new Account();
+        $userAccount = Account::new();
         $userAccount->setLogin('test_account')->setPassword('role_tester_user2');
         $userAccount->setRole($testRole);
         $this->userId = $userAccount->store();

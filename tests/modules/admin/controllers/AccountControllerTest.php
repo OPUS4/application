@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
+use Opus\Common\Account;
+use Opus\Security\SecurityException;
 
 /**
  * Basic unit tests for the Admin_AccountController class.
@@ -48,9 +48,10 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $accounts = ['wally', 'wally2'];
 
         foreach ($accounts as $login) {
-            $account = Account::fetchAccountByLogin($login);
-            if ($account instanceof Account) {
+            try {
+                $account = Account::fetchAccountByLogin($login);
                 $account->delete();
+            }catch (SecurityException $ex) {
             }
         }
     }
@@ -158,7 +159,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertController('account');
         $this->assertAction('new');
         $this->assertRedirect();
-        $this->assertNotNull(new Account(null, null, 'wally'));
+        $this->assertNotNull(Account::fetchAccountByLogin('wally'));
     }
 
     public function testCreateActionCancel()
@@ -203,7 +204,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
      */
     public function testUpdateAction()
     {
-        $account = new Account(null, null, 'wally');
+        $account = Account::fetchAccountByLogin('wally');
         $id = $account->getId();
         $this->request
                 ->setMethod('POST')
@@ -224,7 +225,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertController('account');
         $this->assertAction('edit');
         $this->assertRedirect();
-        $this->assertNotNull(new Account(null, null, 'wally2'));
+        $this->assertNotNull(Account::fetchAccountByLogin('wally2'));
     }
 
     public function testUpdateActionCancel()
@@ -246,7 +247,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
      */
     public function testUpdateActionMissingInput()
     {
-        $account = new Account(null, null, 'wally2');
+        $account = Account::fetchAccountByLogin('wally2');
         $id = $account->getId();
         $this->request
                 ->setMethod('POST')
@@ -271,7 +272,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
      */
     public function testUpdateActionChangePassword()
     {
-        $account = new Account(null, null, 'wally2');
+        $account = Account::fetchAccountByLogin('wally2');
         $id = $account->getId();
         $this->request
                 ->setMethod('POST')
@@ -294,7 +295,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertController('account');
         $this->assertAction('edit');
         $this->assertRedirect();
-        $this->assertNotNull(new Account(null, null, 'wally2'));
+        $this->assertNotNull(Account::fetchAccountByLogin('wally2'));
     }
 
     /**
@@ -304,7 +305,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
      */
     public function testDeleteAction()
     {
-        $account = new Account(null, null, 'wally2');
+        $account = Account::fetchAccountByLogin('wally2');
         $id = $account->getId();
         $this->request
             ->setMethod('POST')
@@ -319,12 +320,12 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertRedirect('/admin/account/index');
 
         $this->setExpectedException('Opus\Security\SecurityException');
-        $this->assertNull(new Account(null, null, 'wally2'));
+        $this->assertNull(Account::fetchAccountByLogin('wally2'));
     }
 
     public function testDeleteActionDeleteSelf()
     {
-        $user = new Account();
+        $user = Account::new();
         $user->setLogin('john');
         $user->setPassword('testpwd');
         $user->store();
@@ -336,25 +337,25 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertAction('delete');
         $this->assertRedirect('/admin/account/index');
 
-        $user = new Account(null, null, 'john');
+        $user = Account::fetchAccountByLogin('john');
         $this->assertNotNull($user);
         $user->delete();
     }
 
     public function testDeleteActionDeleteAdmin()
     {
-        $user = new Account(null, null, 'admin');
+        $user = Account::fetchAccountByLogin('admin');
         $this->dispatch('/admin/account/delete/id/' . $user->getId());
         $this->assertController('account');
         $this->assertAction('delete');
         $this->assertRedirect('/admin/account/index');
-        $user = new Account(null, null, 'admin');
+        $user = Account::fetchAccountByLogin('admin');
         $this->assertNotNull($user);
     }
 
     public function testHideDeleteLinkForAdmin()
     {
-        $user = new Account(null, null, 'admin');
+        $user = Account::fetchAccountByLogin('admin');
         $this->dispatch('/admin/account');
         $this->assertResponseCode(200);
 
@@ -371,7 +372,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $this->logoutUser();
 
-        $user = new Account(null, null, 'security4');
+        $user = Account::fetchAccountByLogin('security4');
 
         $this->assertQueryCount(
             "a[@href='" . $this->getRequest()->getBaseUrl()

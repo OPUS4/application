@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
+use Opus\Common\Account;
 
 /**
  * Controller for editing account of logged in user.
@@ -67,7 +67,7 @@ class Account_IndexController extends Application_Controller_Action
 
         if (! empty($login)) {
             $accountForm = new Account_Form_Account();
-            $account = new Account(null, null, $login);
+            $account = Account::fetchAccountByLogin($login);
             $accountForm->populateFromModel($account);
 
             $actionUrl = $this->view->url(['action' => 'save']);
@@ -96,7 +96,7 @@ class Account_IndexController extends Application_Controller_Action
 
         if (! empty($login) && $this->getRequest()->isPost()) {
             $accountForm = new Account_Form_Account();
-            $account = new Account(null, null, $login);
+            $account = Account::fetchAccountByLogin($login);
             $accountForm->populateFromModel($account);
 
             $postData = $this->getRequest()->getPost();
@@ -121,7 +121,7 @@ class Account_IndexController extends Application_Controller_Action
             $postData['oldLogin'] = $login;
 
             if ($accountForm->isValid($postData)) {
-                $account = new Account(null, null, $login);
+                $account = Account::fetchAccountByLogin($login);
 
                 $newLogin = $postData['username'];
                 $password = $postData['password'];

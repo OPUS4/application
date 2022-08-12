@@ -498,7 +498,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     public function getNewModel()
     {
         $modelClass = $this->getModelClass();
-        return new $modelClass();
+        return $modelClass::new();
     }
 
     /**
@@ -513,7 +513,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
             if (strlen(trim($modelId)) !== 0) {
                 try {
-                    return new $modelClass($modelId);
+                    return $modelClass::get($modelId);
                 } catch (NotFoundException $omnfe) {
                     $this->getLogger()->err(__METHOD__ . ':' . $omnfe->getMessage());
                 }
@@ -587,7 +587,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
     /**
      * Liefert die Model-Klasse die verwaltet wird.
-     * @return null|\Opus\Model\AbstractModel
+     * @return null|string
      */
     public function getModelClass()
     {

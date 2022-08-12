@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
+use Opus\Common\Account;
 use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
@@ -342,7 +342,7 @@ class Application_Util_DocumentAdapter
                 continue;
             }
             $userId = $e->getValue();
-            $account = new Account($userId);
+            $account = Account::get($userId);
             $return[$account->getId()] = strtolower($account->getLogin());
         }
         return $return;
@@ -356,7 +356,7 @@ class Application_Util_DocumentAdapter
                 continue;
             }
             $userId = $e->getValue();
-            $account = new Account($userId);
+            $account = Account::get($userId);
             $return[$account->getId()] = strtolower($account->getLogin());
         }
         return $return;

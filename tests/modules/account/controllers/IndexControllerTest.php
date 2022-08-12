@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Account
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
+use Opus\Common\Account;
 use Opus\Common\Config;
+use Opus\Security\SecurityException;
 
 /**
  * Basic unit tests for account module.
@@ -51,7 +50,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         parent::setUp();
 
         $this->deleteUser('john');
-        $this->user = new Account();
+        $this->user = Account::new();
         $this->user->setLogin('john');
         $this->user->setPassword('testpwd');
         $this->user->store();
@@ -65,9 +64,10 @@ class Account_IndexControllerTest extends ControllerTestCase
 
     private function deleteUser($username)
     {
-        $account = Account::fetchAccountByLogin($username);
-        if ($account instanceof Account) {
+        try {
+            $account = Account::fetchAccountByLogin($username);
             $account->delete();
+        } catch (SecurityException $ex) {
         }
     }
 
@@ -128,7 +128,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->assertAction('save');
 
         // Check if change failed...
-        $account = new Account(null, null, 'john');
+        $account = Account::fetchAccountByLogin('john');
         $this->assertTrue($account->isPasswordCorrect('testpwd'));
         $this->assertFalse($account->isPasswordCorrect('newpassword'));
 
@@ -154,7 +154,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->assertAction('save');
 
         // Check if change failed...
-        $account = new Account(null, null, 'john');
+        $account = Account::fetchAccountByLogin('john');
         $this->assertTrue($account->isPasswordCorrect('testpwd'));
         $this->assertFalse($account->isPasswordCorrect('newpassword'));
 
@@ -184,7 +184,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->assertRedirect();
 
         // Check if change succeeded...
-        $account = new Account(null, null, 'john');
+        $account = Account::fetchAccountByLogin('john');
         $this->assertTrue($account->isPasswordCorrect('newpassword'));
 
         $this->assertNotContains('<ul class="errors">', $this->getResponse()->getBody());
@@ -213,7 +213,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->assertRedirect();
 
         // Check if change succeeded...
-        $account = new Account(null, null, 'john');
+        $account = Account::fetchAccountByLogin('john');
         $this->assertTrue($account->isPasswordCorrect('new@pwd$%'));
 
         $this->assertNotContains('<ul class="errors">', $this->getResponse()->getBody());
@@ -247,11 +247,11 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->assertNotNull($account);
         $this->assertTrue($account->isPasswordCorrect('testpwd'));
 
-        $account = Account::fetchAccountByLogin('john');
-        $this->assertNull($account);
-
         // Delete user 'john2' if we're done...
         $this->deleteUser('john2');
+
+        $this->setExpectedException(SecurityException::class, 'Account with login name \'john\' not found');
+        Account::fetchAccountByLogin('john');
     }
 
     public function testAccessAccountModule()

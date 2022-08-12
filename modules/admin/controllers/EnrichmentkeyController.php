@@ -285,7 +285,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 
             if (strlen(trim($modelId)) !== 0) {
                 try {
-                    return new $modelClass($modelId);
+                    return $modelClass::get($modelId);
                 } catch (NotFoundException $omnfe) {
                     if (in_array($modelId, EnrichmentKey::getAllReferenced())) {
                         // Sonderbehandlung: nicht registrierter, aber in Benutzung befindlicher Enrichment Key

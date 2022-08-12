@@ -71,13 +71,13 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * Name der Modelklasse fuer Formular.
      * @var string
      */
-    private $_modelClass;
+    private $modelClass;
 
     /**
      * Most model IDs are numeric. If not set to false;
      * @var bool
      */
-    private $_verifyModelIdIsNumeric = true;
+    private $verifyModelIdIsNumeric = true;
 
     /**
      * Initialisiert die Formularelement und Dekoratoren.
@@ -168,7 +168,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
         $model = null;
 
         try {
-            $model = new $modelClass($modelId);
+            $model = $modelClass::get($modelId);
         } catch (NotFoundException $omnfe) {
             $this->getLogger()->err($omnfe->getMessage());
             throw new Application_Exception(__METHOD__ . " Model with ID '$modelId' not found.");
@@ -212,7 +212,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      */
     public function getModelClass()
     {
-        return $this->_modelClass;
+        return $this->modelClass;
     }
 
     /**
@@ -221,7 +221,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      */
     public function setModelClass($modelClass)
     {
-        $this->_modelClass = $modelClass;
+        $this->modelClass = $modelClass;
     }
 
     /**
@@ -245,7 +245,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      */
     public function setVerifyModelIdIsNumeric($enabled)
     {
-        $this->_verifyModelIdIsNumeric = $enabled;
+        $this->verifyModelIdIsNumeric = $enabled;
     }
 
     /**
@@ -254,6 +254,6 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      */
     public function getVerifyModelIdIsNumeric()
     {
-        return $this->_verifyModelIdIsNumeric;
+        return $this->verifyModelIdIsNumeric;
     }
 }
