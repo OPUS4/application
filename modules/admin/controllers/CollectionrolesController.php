@@ -260,7 +260,6 @@ class Admin_CollectionrolesController extends Application_Controller_Action
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->delete();
-            $collectionRoleModel->getObject()->getDisplayName();
             $message = $this->view->translate(
                 'admin_collectionroles_delete',
                 [$collectionRoleModel->getObject()->getName()]
