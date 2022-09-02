@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -31,7 +31,7 @@
 
 use Opus\Common\Account;
 use Opus\DnbInstitute;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 /**
  * Class Admin_DnbinstituteControllerTest
@@ -57,7 +57,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
     public function tearDown()
     {
         if (isset($this->roleId) && isset($this->userId)) {
-            $testRole = new UserRole($this->roleId);
+            $testRole = UserRole::get($this->roleId);
             $testRole->delete();
             $userAccount = Account::get($this->userId);
             $userAccount->delete();
@@ -295,7 +295,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
      */
     public function testUserAccessToInstituteWithInstituteRights()
     {
-        $testRole = new UserRole();
+        $testRole = UserRole::new();
         $testRole->setName('TestRole');
         $testRole->appendAccessModule('admin');
         $testRole->appendAccessModule('resource_institutions');
@@ -323,7 +323,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
      */
     public function testUserAccessToInstituteWithoutInstituteRights()
     {
-        $testRole = new UserRole();
+        $testRole = UserRole::new();
         $testRole->setName('TestRole');
         $testRole->appendAccessModule('admin');
         $testRole->appendAccessModule('resource_languages');
@@ -352,7 +352,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
      */
     public function testUserAccessToInstituteWithInstituteRightsRegression3245()
     {
-        $testRole = new UserRole();
+        $testRole = UserRole::new();
         $testRole->setName('TestRole');
         $testRole->appendAccessModule('admin');
         $testRole->appendAccessModule('resource_institutions');

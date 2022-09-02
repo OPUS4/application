@@ -33,7 +33,7 @@
  */
 
 use Opus\Iprange;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 /**
  * Basic unit tests for IP range controller in admin module.

@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Account;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 class Admin_Form_UserRolesTest extends ControllerTestCase
 {

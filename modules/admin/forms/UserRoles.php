@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\AccountInterface;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 /**
  * Abstract class for supporting editing of Opus roles in form.

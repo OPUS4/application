@@ -33,7 +33,7 @@ use Opus\Common\Account;
 use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\File;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 class Oai_Model_ContainerTest extends ControllerTestCase
 {
@@ -57,7 +57,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     public function tearDown()
     {
         if (! is_null($this->roleId)) {
-            $testRole = new UserRole($this->roleId);
+            $testRole = UserRole::get($this->roleId);
             $testRole->delete();
         }
         if (! is_null($this->userId)) {
@@ -353,7 +353,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $doc->setServerState('unpublished');
         $unpublishedDocId = $doc->store();
 
-        $testRole = new UserRole();
+        $testRole = UserRole::new();
         $testRole->setName('test_access');
         $testRole->appendAccessDocument($unpublishedDocId);
         $testRole->appendAccessDocument($publishedDocId);

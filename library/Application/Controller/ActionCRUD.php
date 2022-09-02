@@ -126,7 +126,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
     /**
      * Klasse für OPUS Model.
-     * @var \Opus\Model\AbstractModel
+     * @var ModelInterface
      */
     private $_modelClass = null;
 

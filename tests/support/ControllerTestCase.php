@@ -40,7 +40,7 @@ use Opus\Db\TableGateway;
 use Opus\Doi\DoiManager;
 use Opus\File;
 use Opus\Common\Repository;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 use Opus\Security\AuthAdapter;
 use Opus\Security\Realm;
 use Opus\Security\SecurityException;

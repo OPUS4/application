@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Account;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 class SeriesAdminTest extends ControllerTestCase
 {
@@ -47,7 +47,7 @@ class SeriesAdminTest extends ControllerTestCase
         parent::setUp();
         $this->enableSecurity();
 
-        $userRole = new UserRole();
+        $userRole = UserRole::new();
         $userRole->setName($this->roleName);
         $userRole->appendAccessModule('admin');
         $userRole->appendAccessModule('resource_series');

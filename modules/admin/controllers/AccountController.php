@@ -32,7 +32,7 @@
 
 use Opus\Common\Account;
 use Opus\Common\AccountInterface;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 /**
  * Controller for administration of user accounts.

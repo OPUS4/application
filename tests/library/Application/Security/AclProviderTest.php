@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Account;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 class Application_Security_AclProviderTest extends ControllerTestCase
 {
@@ -44,7 +44,7 @@ class Application_Security_AclProviderTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $testRole = new UserRole();
+        $testRole = UserRole::new();
         $testRole->setName('_test');
 
         $testRole->appendAccessModule('documents');
@@ -62,7 +62,7 @@ class Application_Security_AclProviderTest extends ControllerTestCase
 
     public function tearDown()
     {
-        $testRole = new UserRole($this->roleId);
+        $testRole = UserRole::get($this->roleId);
         $testRole->delete();
         $userAccount = Account::get($this->userId);
         $userAccount->delete();
@@ -89,7 +89,7 @@ class Application_Security_AclProviderTest extends ControllerTestCase
         $userAccount = Account::new();
         $userAccount->setLogin('_test')
             ->setPassword('role_tester');
-        $userAccount->setRole(new UserRole($this->roleId));
+        $userAccount->setRole(UserRole::get($this->roleId));
         $userId = $userAccount->store();
         \Zend_Auth::getInstance()->getStorage()->write('_test');
 

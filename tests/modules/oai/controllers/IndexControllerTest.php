@@ -40,7 +40,7 @@ use Opus\Licence;
 use Opus\Person;
 use Opus\Series;
 use Opus\TitleAbstract;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 /**
  * TODO split specific protocol tests into separate classes

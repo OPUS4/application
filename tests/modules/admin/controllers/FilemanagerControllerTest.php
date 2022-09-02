@@ -33,7 +33,7 @@
 
 use Opus\Common\Date;
 use Opus\Common\Document;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 /**
  * @covers Admin_FilemanagerController
