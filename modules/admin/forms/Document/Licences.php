@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\DocumentInterface;
-use Opus\Licence;
+use Opus\Common\Licence;
 
 /**
  * Formular fuer das Editieren der Lizenzen eines Dokuments.
@@ -112,7 +112,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
             if ($element instanceof \Zend_Form_Element_Checkbox) {
                 $licenceId = $element->getCheckedValue();
                 if ($element->getValue() !== '0') {
-                    $docLicences[] = new Licence($licenceId);
+                    $docLicences[] = Licence::get($licenceId);
                 }
             }
         }

@@ -32,7 +32,7 @@
 use Opus\Common\Date;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
-use Opus\Person;
+use Opus\Common\Person;
 
 class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 {
@@ -56,7 +56,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $this->assertEquals(0, count($document->getPersonReferee()));
         $this->assertEquals(0, count($document->getEnrichment()));
 
-        $person = new Person();
+        $person = Person::new();
         $person->setFirstName('John');
         $person->setLastName('Doe');
         $this->person = $person;

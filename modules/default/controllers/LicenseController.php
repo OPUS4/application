@@ -27,11 +27,10 @@
  *
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Licence;
+use Opus\Common\Licence;
 
 class LicenseController extends Application_Controller_Action
 {
@@ -53,7 +52,7 @@ class LicenseController extends Application_Controller_Action
         // Load document
         $licId = $this->getRequest()->getParam('licId');
         try {
-            $license = new Licence($licId);
+            $license = Licence::get($licId);
 
             $this->view->license = $license;
         } catch (NotFoundException $e) {

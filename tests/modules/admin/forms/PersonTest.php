@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Person;
+use Opus\Common\Person;
 
 /**
  * Unit Test fuer Formularklasse zum Editieren einer Person.
@@ -62,7 +62,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
 
         $form = new Admin_Form_Person();
 
-        $person = new Person();
+        $person = Person::new();
 
         $person->setFirstName('John');
         $person->setLastName('Doe');
@@ -114,7 +114,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form->getElement('IdentifierMisc')->setValue('5678');
 
 
-        $person = new Person();
+        $person = Person::new();
 
         $form->updateModel($person);
 
@@ -146,7 +146,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('not instance of Opus\Person', $messages[0]);
+        $this->assertContains('not instance of PersonInterface', $messages[0]);
     }
 
     public function testGetModel()

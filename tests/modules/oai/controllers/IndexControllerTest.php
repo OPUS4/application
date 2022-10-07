@@ -30,14 +30,14 @@
  */
 
 use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\DnbInstitute;
+use Opus\Common\CollectionRole;
+use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 use Opus\Enrichment;
 use Opus\File;
 use Opus\Identifier;
-use Opus\Licence;
-use Opus\Person;
+use Opus\Common\Licence;
+use Opus\Common\Person;
 use Opus\Series;
 use Opus\TitleAbstract;
 use Opus\Common\UserRole;
@@ -1547,28 +1547,28 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $document->setServerState('published');
 
-        $author = new Person();
+        $author = Person::new();
         $author->setLastName('Foo');
         $author->setDateOfBirth('1900-01-01');
         $author->setPlaceOfBirth('Berlin');
 //      $authorId = $author->store();
         $document->addPersonAuthor($author);
 
-        $advisor = new Person();
+        $advisor = Person::new();
         $advisor->setLastName('Bar');
         $advisor->setDateOfBirth('1900-01-01');
         $advisor->setPlaceOfBirth('Berlin');
 //      $advisorId = $advisor->store();
         $document->addPersonAdvisor($advisor);
 
-        $referee = new Person();
+        $referee = Person::new();
         $referee->setLastName('Baz');
         $referee->setDateOfBirth('1900-01-01');
         $referee->setPlaceOfBirth('Berlin');
 //      $refereeId = $referee->store();
         $document->addPersonReferee($referee);
 
-        $editor = new Person();
+        $editor = Person::new();
         $editor->setLastName('TestEditor');
         $document->addPersonEditor($editor);
 
@@ -2471,9 +2471,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $abstractEng->setValue('TitleAbstractInOtherLanguage');
         $doc->setTitleAbstract([$abstractEng, $abstractDeu]);
 
-        $doc->setThesisPublisher([new DnbInstitute(2), new DnbInstitute(4)]);
+        $doc->setThesisPublisher([DnbInstitute::get(2), DnbInstitute::get(4)]);
 
-        $editor = new Person();
+        $editor = Person::new();
         $editor->setFirstName('John');
         $editor->setLastName('Doe');
         $doc->addPersonEditor($editor);
@@ -2596,10 +2596,10 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $f1->setVisibleInOai(false);
         $doc->addFile($f1);
 
-        $licencePresent = new Licence(1);
+        $licencePresent = Licence::get(1);
         $doc->addLicence($licencePresent);
 
-        $licenceMissing = new Licence(2);
+        $licenceMissing = Licence::get(2);
         $doc->addLicence($licenceMissing);
 
         $docId = $doc->store();
@@ -2635,10 +2635,10 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $f2->setVisibleInOai(true);
         $doc->addFile($f2);
 
-        $licencePresent = new Licence(1);
+        $licencePresent = Licence::get(1);
         $doc->addLicence($licencePresent);
 
-        $licenceMissing = new Licence(2);
+        $licenceMissing = Licence::get(2);
         $doc->addLicence($licenceMissing);
 
         $docId = $doc->store();

@@ -34,11 +34,11 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Collection;
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
 use Opus\Common\Repository;
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 
 // Parse arguments.
 global $argc, $argv;
@@ -222,12 +222,12 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName)
 function createEnrichmentKey($name)
 {
     try {
-        $eKey = new EnrichmentKey();
+        $eKey = EnrichmentKey::new();
         $eKey->setName($name)->store();
     } catch (Exception $e) {
     }
 
-    return new EnrichmentKey($name);
+    return EnrichmentKey::get($name);
 }
 
 echo "\nConsult the log file $argv[1] for full details\n";

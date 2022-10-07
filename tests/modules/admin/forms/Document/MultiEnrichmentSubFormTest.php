@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Enrichment;
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 use Opus\Common\Model\ModelException;
 
 /**
@@ -306,7 +306,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      */
     private function createEnrichmentKey($type = null, $options = null)
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName(self::$firstEnrichmentKeyName);
 
         if (! is_null($type)) {

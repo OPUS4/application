@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 use Opus\Common\Date;
 use Opus\Common\Log;
 
@@ -75,7 +75,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
         $document->setServerState('temporary');
         $docId = $document->store();
 
-        $this->enrichmentKey = new EnrichmentKey();
+        $this->enrichmentKey = EnrichmentKey::new();
         $this->enrichmentKey->setName('Foo2Title');
         $this->enrichmentKey->store();
 

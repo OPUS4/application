@@ -31,12 +31,11 @@
 
 use Opus\Common\Account;
 use Opus\Common\Log;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Security\SecurityException;
 
 class Publish_Model_LoggedUser
 {
-
     private $_log     = null;
     private $_login   = null;
     private $_account = null;
@@ -87,7 +86,7 @@ class Publish_Model_LoggedUser
             return;
         }
 
-        $person = new Person();
+        $person = Person::new();
         $person->setFirstName(trim($this->_account->getFirstName()));
         $person->setLastName(trim($this->_account->getLastName()));
         $person->setEmail(trim($this->_account->getEmail()));

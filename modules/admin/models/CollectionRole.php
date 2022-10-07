@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Common\Model\NotFoundException;
 
 /**
@@ -50,7 +50,7 @@ class Admin_Model_CollectionRole
             return;
         }
         try {
-            $this->_collectionRole = new CollectionRole((int) $id);
+            $this->_collectionRole = CollectionRole::get((int) $id);
         } catch (NotFoundException $e) {
             throw new Admin_Model_Exception('roleid parameter value unknown');
         }
@@ -61,7 +61,7 @@ class Admin_Model_CollectionRole
      */
     private function initNewCollectionRole()
     {
-        $this->_collectionRole = new CollectionRole();
+        $this->_collectionRole = CollectionRole::new();
         foreach (['Visible', 'VisibleBrowsingStart', 'VisibleFrontdoor', 'VisibleOai'] as $field) {
             $this->_collectionRole->getField($field)->setValue(1);
         }

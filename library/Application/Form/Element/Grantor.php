@@ -31,7 +31,7 @@
 
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 
 /**
  * Select Element für Thesis Grantor Institute.
@@ -69,7 +69,7 @@ class Application_Form_Element_Grantor extends Application_Form_Element_Select
     public function setValue($value)
     {
         try {
-            $institute = new DnbInstitute($value);
+            $institute = DnbInstitute::get($value);
         } catch (NotFoundException $omne) {
             parent::setValue($value); // could be blocked, but keeping compatibility just in case
             return;

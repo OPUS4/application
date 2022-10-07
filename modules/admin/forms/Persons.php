@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Date;
-use Opus\Person;
+use Opus\Common\Person;
 
 /**
  * Form for editing a person across multiple objects.
@@ -124,12 +124,14 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $this->addElement('combobox', self::ELEMENT_ACADEMIC_TITLE, ['label' => 'AcademicTitle']);
 
+        $fieldLastName = Person::describeField(Person::FIELD_LAST_NAME);
+
         $this->addElement(
             'text',
             self::ELEMENT_LAST_NAME,
             [
                 'label' => 'LastName', 'required' => true, 'size' => 50,
-                'maxlength' => Person::getFieldMaxLength('LastName')
+                'maxlength' => $fieldLastName->getMaxSize()
             ]
         );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, ['label' => 'FirstName', 'size' => 50]);
@@ -295,7 +297,9 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         $person = $this->getPerson();
 
         if (! is_null($person)) {
-            $columnName = Person::convertFieldnameToColumn($element->getName());
+            $persons = Person::getModelRepository();
+
+            $columnName = $persons->convertFieldnameToColumn($element->getName());
             if (array_key_exists($columnName, $person)) {
                 $displayValue = $person[$columnName];
             }

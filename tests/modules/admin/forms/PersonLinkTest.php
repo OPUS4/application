@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Model\Dependent\Link\DocumentPerson;
 
 /**
@@ -61,7 +61,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
 
         $model = new DocumentPerson();
 
-        $person = new Person(310); // von Testdokument 250 (Personensortierung)
+        $person = Person::get(310); // von Testdokument 250 (Personensortierung)
 
         $model->setModel($person);
         $model->setSortOrder(5);

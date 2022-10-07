@@ -29,10 +29,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Common\Date;
 use Opus\Identifier;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Security\Realm;
 use Opus\Subject;
 use Opus\Title;
@@ -740,7 +740,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
 
-        $person = new Person();
+        $person = Person::new();
         $person->setLastName($lastName);
         $personLink = $doc->addPerson($person);
         $personLink->setRole($role);

@@ -30,7 +30,7 @@
  */
 
 use Opus\Collection;
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Common\Model\NotFoundException;
 
 class Solrsearch_Model_CollectionList
@@ -62,7 +62,7 @@ class Solrsearch_Model_CollectionList
 
         $collectionRole = null;
         try {
-            $collectionRole = new CollectionRole($collection->getRoleId());
+            $collectionRole = CollectionRole::get($collection->getRoleId());
         } catch (NotFoundException $e) {
             throw new Solrsearch_Model_Exception(
                 "Collection role with id '" . $collection->getRoleId() . "' does not exist."

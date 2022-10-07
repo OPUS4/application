@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Person;
+use Opus\Common\Person;
 
 class Admin_Form_InfoBoxTest extends ControllerTestCase
 {
@@ -109,7 +109,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
 
         $logger->clear();
 
-        $form->constructFromPost([], new Person());
+        $form->constructFromPost([], Person::new());
 
         $messages = $logger->getMessages();
 

@@ -33,11 +33,11 @@
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
 use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\DnbInstitute;
+use Opus\Common\CollectionRole;
+use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
-use Opus\Licence;
-use Opus\Person;
+use Opus\Common\Licence;
+use Opus\Common\Person;
 
 $counter = 1;
 function randString($counter)
@@ -87,7 +87,7 @@ $doc->setContributingCorporation(randString($counter++));
 //
 // Persons
 //
-$submitter = new Person();
+$submitter = Person::new();
 $submitter->getField('Email')->setValidator(null);
 $submitter->setFirstName(randString($counter++))
     ->setLastName(randString($counter++))
@@ -97,7 +97,7 @@ $submitter->setFirstName(randString($counter++))
     ->setPlaceOfBirth(randString($counter++));
 $doc->addPersonSubmitter($submitter);
 
-$author = new Person();
+$author = Person::new();
 $author->getField('Email')->setValidator(null);
 $author->setFirstName(randString($counter++))
     ->setLastName(randString($counter++))
@@ -107,28 +107,28 @@ $author->setFirstName(randString($counter++))
     ->setPlaceOfBirth(randString($counter++));
 $doc->addPersonAuthor($author);
 
-$referee = new Person();
+$referee = Person::new();
 $referee->setFirstName('Gyro'.randString($counter++));
 $referee->setLastName('Gearloose'.randString($counter++));
 $referee->setAcademicTitle('Prof. Dr.'.randString($counter++));
 $doc->addPersonReferee($referee);
 
-$editor = new Person();
+$editor = Person::new();
 $editor->setFirstName('Bob'.randString($counter++));
 $editor->setLastName('Foster'.randString($counter++));
 $doc->addPersonEditor($editor);
 
-$advisor = new Person();
+$advisor = Person::new();
 $advisor->setFirstName('Fred'.randString($counter++));
 $advisor->setLastName('Clever'.randString($counter++));
 $doc->addPersonAdvisor($advisor);
 
-$translator = new Person();
+$translator = Person::new();
 $translator->setFirstName('Erika'.randString($counter++));
 $translator->setLastName('Fuchs'.randString($counter++));
 $doc->addPersonTranslator($translator);
 
-$contributor = new Person();
+$contributor = Person::new();
 $contributor->setFirstName('Jeff'.randString($counter++));
 $contributor->setLastName('Smart'.randString($counter++));
 $contributor->store();
@@ -156,7 +156,7 @@ foreach (['addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', '
 //
 // Collections
 //
-$institutesRole = new CollectionRole();
+$institutesRole = CollectionRole::new();
 $institutesRole->setName('institutes'.randString($counter++).rand())
                    ->setOaiName('institutes'.randString($counter++).rand())
                    ->setPosition(1)
@@ -211,7 +211,7 @@ $doc->addIdentifierOpac()->setValue(randString($counter++));
 //
 // DnbInstitutes
 //
-$dnbInstitute = new DnbInstitute();
+$dnbInstitute = DnbInstitute::new();
 $dnbInstitute->setName(randString($counter++).rand())
           ->setAddress(randString($counter++))
           ->setCity(randString($counter++))
@@ -267,7 +267,7 @@ $doc->addNote()
 //
 // Licenses
 //
-$lic = new Licence();
+$lic = Licence::new();
 $lic->setActive(1);
 $lic->setLanguage('deu'.randString($counter++));
 $lic->setLinkLicence(randString($counter++));

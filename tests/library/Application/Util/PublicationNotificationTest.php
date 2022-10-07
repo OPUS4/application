@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Config;
 use Opus\Common\Log;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Title;
 
 class Application_Util_PublicationNotificationTest extends ControllerTestCase
@@ -157,7 +155,7 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
     {
         $this->config->notification->document->published->email = "published@localhost";
         $doc = $this->createTestDocument();
-        $submitter = new Person();
+        $submitter = Person::new();
         $submitter->setFirstName('John');
         $submitter->setLastName('Submitter');
         $submitter->setEmail('john.submitter@localhost.de');
@@ -190,7 +188,7 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
     {
         $this->config->notification->document->published->email = "published@localhost";
         $doc = $this->createTestDocument();
-        $submitter = new Person();
+        $submitter = Person::new();
         $submitter->setFirstName('John');
         $submitter->setLastName('Submitter');
         $doc->addPersonSubmitter($submitter);
@@ -217,7 +215,7 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
         $title->setLanguage("eng");
         $doc->addTitleMain($title);
 
-        $submitter = new Person();
+        $submitter = Person::new();
         $submitter->setFirstName("John");
         $submitter->setLastName("Submitter");
         $submitter->setEmail("sub@localhost.de");
@@ -286,18 +284,18 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
         $title->setLanguage("eng");
         $doc->addTitleMain($title);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("John");
         $author->setLastName("Doe");
         $doc->addPersonAuthor($author);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("John With Address");
         $author->setLastName("Doe");
         $author->setEmail("doe@localhost.de");
         $doc->addPersonAuthor($author);
 
-        $submitter = new Person();
+        $submitter = Person::new();
         $submitter->setFirstName("John");
         $submitter->setLastName("Submitter");
         $submitter->setEmail("sub@localhost.de");

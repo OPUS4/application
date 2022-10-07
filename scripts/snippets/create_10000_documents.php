@@ -38,7 +38,7 @@
 use Opus\Collection;
 use Opus\Common\Date;
 use Opus\Common\Document;
-use Opus\Person;
+use Opus\Common\Person;
 
 for ($i = 1; $i < 10000; $i++) {
     $d = Document::new();
@@ -55,7 +55,7 @@ for ($i = 1; $i < 10000; $i++) {
     $date->setYear(1990 + ($i % 23));
     $d->setPublishedDate($date);
 
-    $p = new Person();
+    $p = Person::new();
     $p->setFirstName("foo-" . ($i % 7));
     $p->setLastName("bar-" . ($i % 5));
     $p = $d->addPersonAuthor($p);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 
 class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract
 {
@@ -52,13 +50,16 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract
         $this->setRemoveEmptyCheckbox(false);
         $this->setLabelPrefix('Opus_DnbInstitute_');
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus\DnbInstitute');
+        $this->setModelClass(DnbInstitute::class);
+
+        $fieldName = DnbInstitute::describeField(DnbInstitute::FIELD_NAME);
+        $fieldDepartment = DnbInstitute::describeField(DnbInstitute::FIELD_DEPARTMENT);
 
         $this->addElement('text', self::ELEMENT_NAME, [
-            'required' => true, 'size' => 70, 'maxlength' => DnbInstitute::getFieldMaxLength('Name')
+            'required' => true, 'size' => 70, 'maxlength' => $fieldName->getMaxSize()
         ]);
         $this->addElement('text', self::ELEMENT_DEPARTMENT, [
-            'size' => 70, 'maxlength' => DnbInstitute::getFieldMaxLength('Department')
+            'size' => 70, 'maxlength' => $fieldDepartment->getMaxSize()
         ]);
         $this->addElement('textarea', self::ELEMENT_ADDRESS);
         $this->addElement('text', self::ELEMENT_CITY, ['required' => true, 'size' => 50]);

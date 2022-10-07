@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Identifier;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Title;
 
 class Export_Model_DataciteExportTest extends ControllerTestCase
@@ -83,7 +83,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $doi->setValue('10.2345/opustest-' . $docId);
         $doc->setIdentifier([$doi]);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName('John');
         $author->setLastName('Doe');
         $doc->setPersonAuthor([$author]);

@@ -32,7 +32,7 @@
 require_once('CronTestCase.php');
 
 use Opus\Common\Repository;
-use Opus\Licence;
+use Opus\Common\Licence;
 
 /**
  *
@@ -55,7 +55,7 @@ class UpdateDocumentCacheTest extends CronTestCase
         $licences = $domDoc->getElementsByTagName('Licence');
         $this->assertTrue($licences->length == 0, 'Expected no Licence element in dom.');
 
-        $licence = new Licence();
+        $licence = Licence::new();
         $licence->setNameLong('TestLicence');
         $licence->setLinkLicence('http://example.org/licence');
         $licenceId = $licence->store();
@@ -63,7 +63,7 @@ class UpdateDocumentCacheTest extends CronTestCase
         $document->setLicence($licence);
         $document->store();
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $licence->setNameLong('TestLicenceAltered');
         $licence->store();
 

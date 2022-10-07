@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 use Opus\Model\Dependent\Link\DocumentDnbInstitute;
 use Opus\Model\Dependent\Link\AbstractLinkModel;
 
@@ -95,7 +95,7 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
     {
         $instituteId = $this->getElement(self::ELEMENT_INSTITUTE)->getValue();
         try {
-            $institute = new DnbInstitute($instituteId);
+            $institute = DnbInstitute::get($instituteId);
 
             $link->setModel($institute);
         } catch (NotFoundException $omnfe) {

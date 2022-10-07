@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Licence;
+use Opus\Common\Licence;
 
 /**
  * Description of Document_LicencesTest
@@ -127,7 +127,7 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase
         $form = new Admin_Form_Document_Licences();
 
         $document = Document::get(146);
-        $licence = new Licence(2);
+        $licence = Licence::get(2);
 
         $this->assertFalse($form->hasLicence($document, $licence));
     }

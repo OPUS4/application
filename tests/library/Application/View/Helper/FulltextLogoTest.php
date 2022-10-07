@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Common\Document;
 
 class Application_View_Helper_FulltextLogoTest extends ControllerTestCase

@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Common\Document;
 
 /**
@@ -48,7 +48,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->emptyCollectionRole = new CollectionRole();
+        $this->emptyCollectionRole = CollectionRole::new();
         $this->emptyCollectionRole->setName("test1role");
         $this->emptyCollectionRole->setOaiName("test1role");
         $this->emptyCollectionRole->setDisplayBrowsing("Name");
@@ -56,7 +56,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $this->emptyCollectionRole->setPosition(100);
         $this->emptyCollectionRole->store();
 
-        $this->nonEmptyCollectionRole = new CollectionRole();
+        $this->nonEmptyCollectionRole = CollectionRole::new();
         $this->nonEmptyCollectionRole->setName("test2role");
         $this->nonEmptyCollectionRole->setOaiName("test2role");
         $this->nonEmptyCollectionRole->setDisplayBrowsing("Name");
@@ -238,9 +238,9 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
     {
         // check for expected test data
 
-        $collectionRole1 = new CollectionRole(1);
+        $collectionRole1 = CollectionRole::get(1);
         $this->assertEquals(1, $collectionRole1->getPosition(), 'Test setup changed');
-        $collectionRole2 = new CollectionRole(2);
+        $collectionRole2 = CollectionRole::get(2);
         $this->assertEquals(2, $collectionRole2->getPosition(), 'Test setup changed');
 
         $docfinder = $this->getDocumentFinder();
@@ -358,7 +358,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
         $roles = CollectionRole::fetchAll();
 
-        $role = new CollectionRole();
+        $role = CollectionRole::new();
         $role->setName('EditTestName');
         $role->setOaiName('EditTestOaiName');
         $role->setDisplayBrowsing('Name');
@@ -398,7 +398,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         // TODO if assertion fails newly created role is not removed (cleanup)
         $this->assertEquals(count($roles) + 1, count(CollectionRole::fetchAll())); // keine neue Collection
 
-        $role = new CollectionRole($roleId);
+        $role = CollectionRole::get($roleId);
 
         $role->delete();
 
@@ -438,7 +438,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
         $roles = CollectionRole::fetchAll();
 
-        $role = new CollectionRole();
+        $role = CollectionRole::new();
         $role->setName('EditTestName');
         $role->setOaiName('EditTestOaiName');
         $role->setDisplayBrowsing('Name');
@@ -478,7 +478,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         // TODO if assertion fails newly created role is not removed (cleanup)
         $this->assertEquals(count($roles) + 1, count(CollectionRole::fetchAll())); // keine neue Collection
 
-        $role = new CollectionRole($roleId);
+        $role = CollectionRole::get($roleId);
 
         $role->delete();
 
@@ -507,7 +507,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $oldName = 'TestCollectionRole';
         $newName = 'NewNameForCollectionRole';
 
-        $role = new CollectionRole();
+        $role = CollectionRole::new();
         $role->setName($oldName);
         $role->setOaiName('oaiTestRole');
         $roleId = $role->store();

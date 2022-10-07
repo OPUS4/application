@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 use Opus\Common\Log;
 
 class Publish_Model_DocumenttypeParser extends Application_Model_Abstract

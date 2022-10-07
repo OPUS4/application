@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
-use Opus\Person;
+use Opus\Common\CollectionRole;
+use Opus\Common\Person;
 
 /**
  * Basic unit test for the documents controller in the admin module.
@@ -71,7 +70,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
      */
     public function testCollectionRoleNameGetsTranslatedForUserCollection()
     {
-        $cr = new CollectionRole();
+        $cr = CollectionRole::new();
         $cr->setName('foo');
         $cr->setOaiName('foo');
         $cr->store();
@@ -85,7 +84,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testShowAllDocsForDDCCollection()
     {
-        $role = new CollectionRole(2);
+        $role = CollectionRole::get(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -102,7 +101,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testShowAllDocsForBklCollection()
     {
-        $role = new CollectionRole(7);
+        $role = CollectionRole::get(7);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -206,7 +205,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testShowAuthorFilter()
     {
-        $person = new Person();
+        $person = Person::new();
         $person->setLastName('Test');
         $person->setFirstName('Justa');
         $person->setIdentifierOrcid('0000-0000-0000-0001');

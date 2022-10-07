@@ -33,14 +33,14 @@ use Opus\Collection;
 use Opus\Common\Date;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Enrichment;
 use Opus\Identifier;
-use Opus\Licence;
+use Opus\Common\Licence;
 use Opus\Note;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Series;
 use Opus\Subject;
 use Opus\Reference;
@@ -299,7 +299,7 @@ class Publish_Model_Deposit
 
             $addFunction = 'add' . $type;
         try {
-            $person = $this->_document->$addFunction(new Person());
+            $person = $this->_document->$addFunction(Person::new());
         } catch (ModelException $e) {
             $this->_log->err(
                 "could not add person of type $type to document " . $this->_docId . " : " . $e->getMessage()
@@ -562,7 +562,7 @@ class Publish_Model_Deposit
     private function storeLicenceObject($dataValue)
     {
         try {
-            $licence = new Licence($dataValue);
+            $licence = Licence::get($dataValue);
         } catch (ModelException $e) {
             $this->_log->err('Could not find licence #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();
@@ -586,7 +586,7 @@ class Publish_Model_Deposit
     private function storeThesisObject($dataValue, $grantor = false)
     {
         try {
-            $thesis = new DnbInstitute($dataValue);
+            $thesis = DnbInstitute::get($dataValue);
         } catch (ModelException $e) {
             $this->_log->err('Could not find DnbInstitute #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();

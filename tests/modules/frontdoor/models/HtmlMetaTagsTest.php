@@ -30,13 +30,13 @@
  */
 
 use Opus\Common\Date;
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Identifier;
-use Opus\Licence;
+use Opus\Common\Licence;
 use Opus\Common\Model\ModelException;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Subject;
 use Opus\Title;
 use Opus\TitleAbstract;
@@ -669,7 +669,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         $authors = [];
         for ($i = 0; $i < $num; $i++) {
-            $author = new Person();
+            $author = Person::new();
             $author->setLastName('lastName-' . $i);
             if ($i % 2 == 0) {
                 // nur jeder zweite Autor bekommt einen Vornamen
@@ -800,7 +800,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
      */
     private function addLicence($doc)
     {
-        $licence = new Licence(3);
+        $licence = Licence::get(3);
         $doc->setLicence($licence);
     }
 
@@ -838,7 +838,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
      */
     private function addThesisPublisher($doc)
     {
-        $institute = new DnbInstitute(3);
+        $institute = DnbInstitute::get(3);
         $doc->setThesisPublisher($institute);
     }
 

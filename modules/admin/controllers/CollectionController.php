@@ -26,19 +26,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Tobias Tappe <tobias.tappe@uni-bielefeld.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Collection;
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Common\Model\NotFoundException;
 
 /**
@@ -194,7 +187,7 @@ class Admin_CollectionController extends Application_Controller_Action
         $roleId = $this->getRequest()->getParam('role');
         $id = null;
         if (! is_null($roleId)) {
-            $collectionRole = new CollectionRole($roleId);
+            $collectionRole = CollectionRole::get($roleId);
             $rootCollection = $collectionRole->getRootCollection();
             if (is_null($rootCollection)) {
                 // collection role without root collection: create a new root collection

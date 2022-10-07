@@ -31,7 +31,7 @@
 
 use Opus\Common\Model\NotFoundException;
 use Opus\Model\Dependent\Link\DocumentPerson;
-use Opus\Person;
+use Opus\Common\Person;
 
 /**
  * Unterformular fuer eine einem Dokument zugewiesene Person im Metadaten-Formular.
@@ -107,7 +107,7 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink
             $personLink = new DocumentPerson([$personId, $documentId, $role]);
         } catch (NotFoundException $opnfe) {
             $personLink = new DocumentPerson();
-            $person = new Person($personId);
+            $person = Person::get($personId);
             $personLink->setModel($person);
         }
 

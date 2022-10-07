@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Enrichment;
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 use Opus\Enrichment\RegexType;
 use Opus\Enrichment\SelectType;
 use Opus\Enrichment\TextType;
@@ -1144,7 +1144,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
 
     private function createTestEnrichmentKey($name, $type = null, $options = null)
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName($name);
 
         if (! is_null($type)) {

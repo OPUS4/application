@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Title;
 
 class Frontdoor_Model_AuthorsTest extends ControllerTestCase
@@ -58,7 +58,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $title->setLanguage('deu');
         $document->setTitleMain($title);
 
-        $author1 = new Person();
+        $author1 = Person::new();
         $author1->setFirstName('John');
         $author1->setLastName('Doe');
         $author1->setEmail('doe@example.org');
@@ -67,7 +67,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $link_person1 = $document->addPersonAuthor($author1);
         $link_person1->setAllowEmailContact('1');
 
-        $author2 = new Person();
+        $author2 = Person::new();
         $author2->setFirstName('Jane');
         $author2->setLastName('Doe');
         $this->author2Id = $author2->store();
@@ -75,7 +75,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $link_person2 = $document->addPersonAuthor($author2);
         $link_person2->setAllowEmailContact('0');
 
-        $author3 = new Person();
+        $author3 = Person::new();
         $author3->setFirstName('Jimmy');
         $author3->setLastName('Doe');
         $this->author3Id = $author3->store();
@@ -83,7 +83,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $link_person3 = $document->addPersonAuthor($author3);
         $link_person3->setAllowEmailContact('1');
 
-        $author4 = new Person();
+        $author4 = Person::new();
         $author4->setFirstName('Foo');
         $author4->setLastName('Bar');
         $author4->setEmail('foo@bar.de');

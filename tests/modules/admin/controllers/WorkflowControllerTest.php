@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Person;
+use Opus\Common\Person;
 
 /**
  * Class Admin_WorkflowControllerTest.
@@ -53,7 +53,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("John");
         $author->setLastName("Doe");
         if ($author != '') {
@@ -61,7 +61,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         }
         $doc->addPersonAuthor($author);
 
-        $submitter = new Person();
+        $submitter = Person::new();
         $submitter->setFirstName("John");
         $submitter->setLastName("Submitter");
         if ($submitterMail != '') {
@@ -383,18 +383,18 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
             'author@localhost.de'
         );
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("AFN");
         $author->setLastName("ALN");
         $author->setEmail("A@localhost.de");
         $doc->addPersonAuthor($author);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("BFN");
         $author->setLastName("BLN");
         $doc->addPersonAuthor($author);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("CFN");
         $author->setLastName("CLN");
         $author->setEmail("C@localhost.de");

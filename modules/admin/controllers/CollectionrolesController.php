@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 
 /**
  * Controller for administration of collection roles.
@@ -223,10 +220,10 @@ class Admin_CollectionrolesController extends Application_Controller_Action
     /**
      * Erzeugt Formular für ein CollectionRole Objekt.
      *
-     * @param CollectionRole $collectionRole
+     * @param CollectionRoleInterface $collectionRole
      * @return mixed
      */
-    private function getRoleForm(CollectionRole $collectionRole)
+    private function getRoleForm($collectionRole)
     {
         $form = new Admin_Form_CollectionRole();
         $form->populateFromModel($collectionRole);

@@ -29,11 +29,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Common\Date;
 use Opus\Common\Log;
 use Opus\Note;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Title;
 
 /**
@@ -91,7 +91,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $person = new Person();
+        $person = Person::new();
         $person->setFirstName("Johnny");
         $person->setLastName("Test");
         $dateOfBirth = new Date('2010-01-01');
@@ -193,7 +193,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testDisplayCollectionNumberAndNameOnOverviewPageForDDCCollection()
     {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
-        $role = new CollectionRole(2);
+        $role = CollectionRole::get(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -211,7 +211,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testDisplayCollectionNumberAndNameOnAssignmentPageForDDCCollection()
     {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
-        $role = new CollectionRole(2);
+        $role = CollectionRole::get(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();

@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
 
@@ -69,7 +69,7 @@ class Application_Form_Element_Publisher extends Application_Form_Element_Select
     public function setValue($value)
     {
         try {
-            $institute = new DnbInstitute($value);
+            $institute = DnbInstitute::get($value);
         } catch (NotFoundException $omne) {
             parent::setValue($value); // could be blocked, but keeping compatibility just in case
             return;

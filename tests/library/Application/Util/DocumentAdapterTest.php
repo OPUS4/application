@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Title;
 
 /**
@@ -226,11 +226,11 @@ class Application_Util_DocumentAdapterTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $person = new Person();
+        $person = Person::new();
         $person->setLastName("Doe");
         $doc->addPersonAuthor($person);
 
-        $person = new Person();
+        $person = Person::new();
         $person->setLastName("Smith");
         $person->setFirstName("Jane");
         $doc->addPersonAuthor($person);

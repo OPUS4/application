@@ -31,7 +31,7 @@
 
 use Opus\Common\Model\NotFoundException;
 use Opus\Enrichment;
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 
 /**
  * Class Admin_EnrichmentkeyController
@@ -261,7 +261,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
             if (key_exists($keyName, $mapNamesToEnrichmentKeys)) {
                 $result[] = $mapNamesToEnrichmentKeys[$keyName];
             } else {
-                $newEnrichmentKey = new EnrichmentKey();
+                $newEnrichmentKey = EnrichmentKey::new();
                 $newEnrichmentKey->setName($keyName);
                 $result[] = $newEnrichmentKey;
             }
@@ -289,7 +289,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
                 } catch (NotFoundException $omnfe) {
                     if (in_array($modelId, EnrichmentKey::getAllReferenced())) {
                         // Sonderbehandlung: nicht registrierter, aber in Benutzung befindlicher Enrichment Key
-                        $enrichmentKey = new EnrichmentKey();
+                        $enrichmentKey = EnrichmentKey::new();
                         $enrichmentKey->setName($modelId);
                         return $enrichmentKey;
                     }

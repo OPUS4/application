@@ -34,7 +34,7 @@ use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Identifier;
 use Opus\Common\Model\ModelException;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Title;
 
 class Export_DataCiteExportTest extends ControllerTestCase
@@ -339,7 +339,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $doi->setValue('10.2345/opustest-' . $docId);
         $doc->setIdentifier([$doi]);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName('John');
         $author->setLastName('Doe');
         $doc->setPersonAuthor([$author]);

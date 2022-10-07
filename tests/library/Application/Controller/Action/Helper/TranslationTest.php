@@ -32,7 +32,7 @@
 use Opus\Identifier;
 use Opus\Language;
 use Opus\Note;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Model\Dependent\Link\DocumentPerson;
 use Opus\Common\Model\ModelException;
 
@@ -219,7 +219,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     public function testTranslationOfDocumentPersonFields()
     {
         $model = new DocumentPerson();
-        $target = new Person();
+        $target = Person::new();
         $model->setModel($target);
 
         $fieldNames = $model->describe();

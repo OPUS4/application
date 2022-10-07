@@ -30,7 +30,7 @@
  */
 
 use Opus\Collection;
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Common\Config;
 use Opus\Common\Date;
 use Opus\Common\Document;
@@ -626,7 +626,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651NameNumber()
     {
-        $role = new CollectionRole(7);
+        $role = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Name,Number');
         $role->store();
@@ -649,7 +649,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651NumberName()
     {
-        $role = new CollectionRole(7);
+        $role = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Number,Name');
         $role->store();
@@ -672,7 +672,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651Name()
     {
-        $role = new CollectionRole(7);
+        $role = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Name');
         $role->store();
@@ -696,7 +696,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651Number()
     {
-        $role = new CollectionRole(7);
+        $role = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Number');
         $role->store();

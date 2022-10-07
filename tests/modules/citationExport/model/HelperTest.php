@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 
 class CitationExport_Model_HelperTest extends ControllerTestCase
@@ -81,7 +81,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $document = Document::get($this->_documentId);
 
         $document->setType('masterthesis');
-        $institute = new DnbInstitute(4);
+        $institute = DnbInstitute::get(4);
         $document->addThesisPublisher($institute);
 
         $document->store();
@@ -102,7 +102,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $document->setType('masterthesis');
 
-        $institute = new DnbInstitute();
+        $institute = DnbInstitute::new();
         $institute->setName('Test Uni');
         $institute->setDepartment('Test Dep');
         $institute->setIsPublisher(true);
@@ -130,7 +130,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $document = Document::get($this->_documentId);
 
         $document->setType('doctoralthesis');
-        $institute = new DnbInstitute(4);
+        $institute = DnbInstitute::get(4);
         $document->addThesisPublisher($institute);
 
         $document->store();

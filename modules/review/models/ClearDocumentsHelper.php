@@ -32,7 +32,7 @@
 use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\Common\Log;
-use Opus\Person;
+use Opus\Common\Person;
 use Opus\Common\UserRole;
 
 /**

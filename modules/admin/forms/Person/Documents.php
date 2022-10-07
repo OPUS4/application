@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Person;
+use Opus\Common\Person;
 
 /**
  * TODO Move documents element code into this subform? (use smaller single document element)
@@ -69,7 +69,8 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
         $documents->setValue($documentIds);
 
         if (! is_null($person)) {
-            $documents->setAttrib('person', Person::convertToFieldNames($person));
+            $persons = Person::getModelRepository();
+            $documents->setAttrib('person', $persons->convertToFieldNames($person));
         }
     }
 

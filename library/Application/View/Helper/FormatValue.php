@@ -33,7 +33,7 @@ use Opus\Common\Date;
 use Opus\Common\LoggingTrait;
 use Opus\Common\Model\FieldInterface;
 use Opus\Common\Model\ModelInterface;
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 
 /**
  * View Helper for formatting field values.

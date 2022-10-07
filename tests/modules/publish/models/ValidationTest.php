@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish Unit Test
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\Licence;
+use Opus\Common\CollectionRole;
+use Opus\Common\Licence;
 use Opus\Series;
 
 class Publish_Model_ValidationTest extends ControllerTestCase
@@ -361,7 +359,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
      */
     public function testCollectionFieldVisiblePublish()
     {
-        $collectionRole = new CollectionRole();
+        $collectionRole = CollectionRole::new();
         $collectionRole->setName("test");
         $collectionRole->setOaiName("test");
         $collectionRole->setDisplayBrowsing("Name");
@@ -413,7 +411,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
      */
     public function testRootCollectionFieldVisiblePublish()
     {
-        $collectionRole = new CollectionRole();
+        $collectionRole = CollectionRole::new();
         $collectionRole->setName("test");
         $collectionRole->setOaiName("test");
         $collectionRole->setDisplayBrowsing("Name");

@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Date;
-use Opus\Licence;
+use Opus\Common\Licence;
 
 /**
  * Unit Tests für Bestaetigungsformular.
@@ -119,7 +119,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     public function testGetModelDisplayName()
     {
         $form = new Application_Form_Confirmation('Opus_Licence');
-        $form->setModel(new Licence(4));
+        $form->setModel(Licence::get(4));
         $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
     }
 
@@ -132,7 +132,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     public function testSetGetModelDisplayName()
     {
         $form = new Application_Form_Confirmation('Opus_Licence');
-        $form->setModel(new Licence(4));
+        $form->setModel(Licence::get(4));
         $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
 
         $form->setModelDisplayName('custom display name');
@@ -232,7 +232,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testSetModel()
     {
-        $this->form->setModel(new Licence(2));
+        $this->form->setModel(Licence::get(2));
         $this->assertEquals(2, $this->form->getModelId());
     }
 
@@ -258,7 +258,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $this->form->setModel(new Licence(4));
+        $this->form->setModel(Licence::get(4));
 
         $this->form->setQuestion('Klasse: %1$s, Name: %2$s');
 
@@ -272,7 +272,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $this->form->setModel(new Licence(1));
+        $this->form->setModel(Licence::get(1));
 
         $this->form->setQuestion('SignatureValue'); // belieber Schlüssel, es geht nur um die Übersetzung
 
@@ -281,7 +281,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testRenderQuestionEscaped()
     {
-        $licence = new Licence();
+        $licence = Licence::new();
 
         $licence->setNameLong('<h1>Name mit Tags</h1>');
 

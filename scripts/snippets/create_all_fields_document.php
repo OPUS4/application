@@ -35,12 +35,12 @@
 // TODO move script (is used for testing purposes) - also is probably out of date (since data model changes)
 
 use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\DnbInstitute;
+use Opus\Common\CollectionRole;
+use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
-use Opus\EnrichmentKey;
-use Opus\Licence;
-use Opus\Person;
+use Opus\Common\EnrichmentKey;
+use Opus\Common\Licence;
+use Opus\Common\Person;
 
 $doc = Document::new();
 $doc->setType('all');
@@ -50,12 +50,12 @@ $doc->setServerDatePublished('1900-01-01');
 
 // damn API. $doc->addPersonSubmiter() doesn't work for link models!
 // -> we should change this in 4.x
-$submitter = new Person();
+$submitter = Person::new();
 $submitter->setFirstName('Donald')->setLastName('Duck')->setEmail('donald@example.org')->setDateOfBirth('1920-03-13')
     ->setPlaceOfBirth('Entenhausen');
 $doc->addPersonSubmitter($submitter);
 
-$author = new Person();
+$author = Person::new();
 $author->setFirstName('Daniel')->setLastName('Düsentrieb')->setAcademicTitle('Dr.-Ing.');
 $doc->addPersonAuthor($author);
 
@@ -95,7 +95,7 @@ $doc->setIssue('18');
 $instituteName = 'Institut für empirische Forschung';
 $institutesRole = CollectionRole::fetchByName('institutes');
 if (is_null($institutesRole) === true) {
-    $institutesRole = new CollectionRole();
+    $institutesRole = CollectionRole::new();
     $institutesRole->setName('institutes')
                    ->setOaiName('institutes')
                    ->setPosition(1)
@@ -162,7 +162,7 @@ $pubmed->setValue('9382368');
 
 $doc->setThesisDateAccepted('2003-02-01');
 
-$dnbInstitute = new DnbInstitute();
+$dnbInstitute = DnbInstitute::new();
 $dnbInstitute->setName('Forschungsinstitut für Code Coverage');
 foreach (DnbInstitute::getGrantors() as $grantor) {
     if ($dnbInstitute->getName() === $grantor->getName()) {
@@ -176,32 +176,32 @@ if (is_null($dnbInstitute->getId()) === true) {
 $doc->setThesisGrantor($dnbInstitute);
 $doc->setThesisPublisher($dnbInstitute);
 
-$referee = new Person();
+$referee = Person::new();
 $referee->setFirstName('Gyro');
 $referee->setLastName('Gearloose');
 $referee->setAcademicTitle('Prof. Dr.');
 $referee->store();
 $doc->addPersonReferee($referee);
 
-$editor = new Person();
+$editor = Person::new();
 $editor->setFirstName('Bob');
 $editor->setLastName('Foster');
 $editor->store();
 $doc->addPersonEditor($editor);
 
-$advisor = new Person();
+$advisor = Person::new();
 $advisor->setFirstName('Fred');
 $advisor->setLastName('Clever');
 $advisor->store();
 $doc->addPersonAdvisor($advisor);
 
-$translator = new Person();
+$translator = Person::new();
 $translator->setFirstName('Erika');
 $translator->setLastName('Fuchs');
 $translator->store();
 $doc->addPersonTranslator($translator);
 
-$contributor = new Person();
+$contributor = Person::new();
 $contributor->setFirstName('Jeff');
 $contributor->setLastName('Smart');
 $contributor->store();
@@ -230,7 +230,7 @@ $licences = Licence::getAll();
 if (count($licences) >= 1) {
     $lic = $licences[0];
 } else {
-    $lic = new Licence();
+    $lic = Licence::new();
     $lic->setActive(1);
     $lic->setLanguage('deu');
     $lic->setLinkLicence('http://www.test.de');
@@ -251,7 +251,7 @@ $missingEnrichmentKeyNames = array_diff(
 );
 if (! empty($missingEnrichmentKeyNames)) {
     foreach ($missingEnrichmentKeyNames as $missingEnrichmentKeyName) {
-        $newEnrichmentKey = new EnrichmentKey();
+        $newEnrichmentKey = EnrichmentKey::new();
         $newEnrichmentKey->setName($missingEnrichmentKeyName);
         $newEnrichmentKey->store();
     }

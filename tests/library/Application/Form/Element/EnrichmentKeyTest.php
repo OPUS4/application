@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 use Opus\Common\Model\ModelException;
 
 class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
@@ -62,7 +59,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         parent::setUp();
 
         // create a new enrichment key with an untranslated name
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName(self::$testEnrichmentKeyName);
         $enrichmentKey->store();
     }
@@ -72,7 +69,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         parent::tearDown();
 
         // remove previously created enrichment key
-        $enrichmentKey = new EnrichmentKey(self::$testEnrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get(self::$testEnrichmentKeyName);
         if (! is_null($enrichmentKey)) {
             $enrichmentKey->delete();
         }
@@ -150,7 +147,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         $element = $this->getElement();
         $options = $element->getMultiOptions();
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('thisnamedoesnotexist');
         $enrichmentKey->store();
 

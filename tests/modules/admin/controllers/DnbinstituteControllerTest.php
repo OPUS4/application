@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Account;
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 use Opus\Common\UserRole;
 
 /**
@@ -77,7 +77,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
     public function createNewModel()
     {
-        $model = new DnbInstitute();
+        $model = DnbInstitute::new();
 
         $model->setName('TestName');
         $model->setCity('TestCity');
@@ -93,7 +93,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
     public function getModel($identifier)
     {
-        return new DnbInstitute($identifier);
+        return DnbInstitute::get($identifier);
     }
 
     private function verifyShow()
@@ -271,7 +271,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
     {
         $this->useEnglish();
 
-        $institute = new DnbInstitute();
+        $institute = DnbInstitute::new();
 
         $institute->updateFromArray([
             'Name' => 'Delete Test Institute',

@@ -40,7 +40,7 @@ if (basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Repository;
@@ -66,7 +66,7 @@ $thesisGrantorId = @$options['grantorid'] ? : null;
 $dryrun = isset($options['dryrun']);
 
 try {
-    $dnbInstitute = new DnbInstitute($thesisPublisherId);
+    $dnbInstitute = DnbInstitute::get($thesisPublisherId);
 } catch (NotFoundException $omnfe) {
     _log("Opus_DnbInstitute with ID <$thesisPublisherId> does not exist.\nExiting...");
     exit;
