@@ -37,7 +37,7 @@ use Opus\Identifier;
 use Opus\Common\Licence;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Person;
-use Opus\Subject;
+use Opus\Common\Subject;
 use Opus\Title;
 use Opus\TitleAbstract;
 
@@ -780,13 +780,13 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         $subjects = [];
 
-        $subject = new Subject();
+        $subject = Subject::new();
         $subject->setType('type1');
         $subject->setValue('value1');
         $subject->setLanguage('deu');
         $subjects[] = $subject;
 
-        $subject = new Subject();
+        $subject = Subject::new();
         $subject->setType('type2');
         $subject->setValue('value2');
         $subject->setLanguage('deu');

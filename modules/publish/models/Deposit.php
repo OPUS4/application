@@ -42,7 +42,7 @@ use Opus\Common\Licence;
 use Opus\Note;
 use Opus\Common\Person;
 use Opus\Series;
-use Opus\Subject;
+use Opus\Common\Subject;
 use Opus\Reference;
 use Opus\Title;
 use Opus\Model\Dependent\Link\DocumentPerson;
@@ -458,7 +458,7 @@ class Publish_Model_Deposit
         $counter = $this->getCounter($dataKey);
         $this->_log->debug("counter: " . $counter);
 
-        $subject = new Subject();
+        $subject = Subject::new();
 
         if ($type === 'Swd') {
             $subject->setLanguage('deu');

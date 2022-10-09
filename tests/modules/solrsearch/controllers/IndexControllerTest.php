@@ -34,7 +34,7 @@ use Opus\Common\Date;
 use Opus\Identifier;
 use Opus\Common\Person;
 use Opus\Security\Realm;
-use Opus\Subject;
+use Opus\Common\Subject;
 use Opus\Title;
 
 /**
@@ -849,7 +849,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $doc->addTitleMain($title);
 
         for ($index = 0; $index < $numOfSubjects; $index++) {
-            $subject = new Subject();
+            $subject = Subject::new();
             if ($index < 10) {
                 $subject->setValue('subject' . '0' . $index);
             } else {

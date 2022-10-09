@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Subject;
+use Opus\Common\Subject;
 
 /**
  * Unterformular fuer das Editieren eines Stichwortes.
@@ -160,10 +160,10 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
         }
 
         try {
-            $subject = new Subject($subjectId);
+            $subject = Subject::get($subjectId);
         } catch (NotFoundException $omnfe) {
             $this->getLogger()->err(__METHOD__ . " Unknown subject ID = '$subjectId'.");
-            $subject = new Subject();
+            $subject = Subject::new();
         }
 
         $this->updateModel($subject);

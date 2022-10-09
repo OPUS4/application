@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Subject;
+use Opus\Common\Subject;
 
 /**
  * Unit Tests fuer Unterformular fuer ein Subject im Metadaten-Formular.
@@ -100,7 +100,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
         $form->getElement('Value')->setValue('Test Schlagwort');
         $form->getElement('ExternalKey')->setValue('Test Schluessel');
 
-        $subject = new Subject();
+        $subject = Subject::new();
 
         $form->updateModel($subject);
 
