@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\DocumentInterface;
-use Opus\Enrichment;
+use Opus\Common\Enrichment;
 use Opus\Identifier;
 use Opus\Doi\DoiException;
 use Opus\Doi\DoiManager;
@@ -336,7 +336,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
                     // wenn nur noch ein Eingabefeld für Identifier des Typs übrig bleibt: Generieren-Button anzeigen
                     if (count($this->getSubForms()) == 1) {
-                        $firstIdForm = reset($this->getSubForms());
+                        $firstIdForm = reset($this->getSubForms()); // TODO ERROR ?
                         $this->addGenerateButton($firstIdForm, false);
                         // TODO ohne den nachfolgenden Aufruf wird der Button nicht neben, sondern über dem Input-Field ausgegeben
                         $this->prepareSubFormDecorators($firstIdForm);
@@ -468,7 +468,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Behandlung des Enrichments opus.doi.autoCreate bzw. opus.urn.autoCreate in Abhängigkeit vom Status der Checkbox
      *
-     * @param $document
+     * @param DocumentInterface $document
      */
     private function handleEnrichment($document)
     {
@@ -492,7 +492,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             }
 
             if (! $enrichmentExists) {
-                $enrichment = new Enrichment();
+                $enrichment = Enrichment::new();
                 $enrichment->setKeyName($enrichmentKeyName);
                 $enrichment->setValue($enrichmentValue);
                 $newEnrichments[] = $enrichment;

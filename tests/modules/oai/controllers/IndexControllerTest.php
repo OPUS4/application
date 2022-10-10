@@ -33,7 +33,7 @@ use Opus\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
-use Opus\Enrichment;
+use Opus\Common\Enrichment;
 use Opus\File;
 use Opus\Identifier;
 use Opus\Common\Licence;
@@ -2056,12 +2056,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $relation = new Enrichment();
+        $relation = Enrichment::new();
         $relation->setKeyName('Relation');
         $relation->setValue('test-1234');
         $doc->addEnrichment($relation);
 
-        $relation = new Enrichment();
+        $relation = Enrichment::new();
         $relation->setKeyName('Relation');
         $relation->setValue('info:eu-repo/grantAgreement/EC/FP7/1234withPrefix');
         $doc->addEnrichment($relation);

@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
-use Opus\Enrichment;
+use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentKey;
 use Opus\Enrichment\AbstractType;
 
@@ -664,7 +664,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         // assign test document to enrichment key
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName($enrichmentKeyName);
         $enrichment->setValue('foo');
         $doc->addEnrichment($enrichment);
@@ -922,7 +922,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('unregistered');
         $enrichment->setValue('value');
 
@@ -958,7 +958,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('used');
         $enrichment->setValue('value');
 
@@ -1004,7 +1004,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('testRemoveFromDocsActionWithUnregisteredId');
         $enrichment->setValue('value');
 
@@ -1038,7 +1038,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('used');
         $enrichment->setValue('value');
 
@@ -1058,7 +1058,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('unregistered');
         $enrichment->setValue('value');
 
@@ -1088,7 +1088,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('used');
         $enrichment->setValue('value');
 
@@ -1119,7 +1119,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('unregistered');
         $enrichment->setValue('value');
 
@@ -1161,7 +1161,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('used');
         $enrichment->setValue('value');
 
@@ -1184,7 +1184,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         // prepare test document with unregistered enrichment key
         $doc = $this->createTestDocument();
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('unregistered');
         $enrichment->setValue('value');
         $doc->addEnrichment($enrichment);
@@ -1222,7 +1222,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         // prepare test document with unregistered enrichment key
         $doc = $this->createTestDocument();
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('unregistered');
         $enrichment->setValue('value');
         $doc->addEnrichment($enrichment);

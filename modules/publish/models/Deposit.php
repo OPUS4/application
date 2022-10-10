@@ -36,7 +36,7 @@ use Opus\Common\Model\NotFoundException;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
-use Opus\Enrichment;
+use Opus\Common\Enrichment;
 use Opus\Identifier;
 use Opus\Common\Licence;
 use Opus\Note;
@@ -709,7 +709,7 @@ class Publish_Model_Deposit
         $this->_log->debug("try to store " . $dataKey . " with id: " . $dataValue);
         $keyName = str_replace('Enrichment', '', $dataKey);
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setValue($dataValue);
         $enrichment->setKeyName($keyName);
 

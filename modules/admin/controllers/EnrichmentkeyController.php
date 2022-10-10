@@ -30,8 +30,9 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Enrichment;
+use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
 
 /**
  * Class Admin_EnrichmentkeyController
@@ -276,7 +277,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
      * Enrichment zurückgegeben, die allerdings nicht in der Datenbank persistiert ist.
      *
      * @param $modelId
-     * @return EnrichmentKey|null
+     * @return EnrichmentKeyInterface|null
      */
     public function getModel($modelId)
     {

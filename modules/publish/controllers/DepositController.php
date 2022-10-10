@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
-use Opus\Enrichment;
+use Opus\Common\Enrichment;
 use Opus\Common\Model\ModelException;
 use Opus\Security\Realm;
 
@@ -197,7 +197,7 @@ class Publish_DepositController extends Application_Controller_Action
      */
     private function addSourceEnrichment($document)
     {
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('opus.source');
         $enrichment->setValue('publish');
         $document->addEnrichment($enrichment);

@@ -30,8 +30,10 @@
  */
 
 use Opus\Common\Document;
-use Opus\Enrichment;
+use Opus\Common\Enrichment;
+use Opus\Common\EnrichmentInterface;
 use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
 use Opus\Common\Model\ModelException;
 
 /**
@@ -283,12 +285,12 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      * @param string $keyName Name des Enrichment-Keys
      * @param string $value Wert des Enrichments
      *
-     * @return Enrichment neu erzeugtes Enrichment-Objekt
+     * @return EnrichmentInterface neu erzeugtes Enrichment-Objekt
      * @throws ModelException
      */
     private function createEnrichment($keyName, $value)
     {
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName($keyName);
         $enrichment->setValue($value);
         return $enrichment;
@@ -301,7 +303,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      * @param null $type optionaler Typ des Enrichment-Keys
      * @param null $options optionale Konfigurationsoptionen des Typs
      *
-     * @return EnrichmentKey neu erzeugter Enrichment-Key
+     * @return EnrichmentKeyInterface neu erzeugter Enrichment-Key
      * @throws ModelException
      */
     private function createEnrichmentKey($type = null, $options = null)
