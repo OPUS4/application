@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Language;
+use Opus\Common\Language;
 
 /**
  * Basic unit tests for Admin_LanguageController class.
@@ -58,7 +56,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $language = new Language();
+        $language = Language::new();
 
         $language->setActive(true);
         $language->setRefName('German');
@@ -73,7 +71,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
         $this->dispatch('/admin/language/show/id/' . $modelId);
 
-        $model = new Language($modelId);
+        $model = Language::get($modelId);
         $model->delete();
 
         $this->assertResponseCode(200);
@@ -194,7 +192,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $model = new Language();
+        $model = Language::new();
 
         $model->setRefName('Test');
         $model->setPart2T('tst');
@@ -218,7 +216,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo('/admin/language/show/id/' . $modelId);
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $model = new Language($modelId);
+        $model = Language::get($modelId);
 
         $this->assertEquals(1, $model->getActive());
         $this->assertEquals('RefNameModified', $model->getRefName());
@@ -234,7 +232,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $model = new Language();
+        $model = Language::new();
 
         $model->setRefName('Test');
         $model->setPart2T('tst');
@@ -251,7 +249,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
         $this->dispatch('/admin/language/edit');
         $this->assertRedirectTo('/admin/language');
 
-        $model = new Language($modelId);
+        $model = Language::get($modelId);
 
         $this->assertEquals('Test', $model->getRefName());
     }
@@ -270,7 +268,7 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
     public function createNewModel()
     {
-        $model = new Language();
+        $model = Language::new();
 
         $model->setRefName('TestLang');
         $model->setPart2T('lan');
@@ -280,6 +278,6 @@ class Admin_LanguageControllerTest extends CrudControllerTestCase
 
     public function getModel($identifier)
     {
-        return new Language($identifier);
+        return Language::get($identifier);
     }
 }

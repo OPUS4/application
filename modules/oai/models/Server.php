@@ -259,7 +259,7 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     protected function setupProcessor()
     {
-        $this->_proc->registerPHPFunctions('Opus\Language::getLanguageCode');
+        $this->_proc->registerPHPFunctions('Opus\Common\Language::getLanguageCode');
         Application_Xslt::registerViewHelper(
             $this->_proc,
             [

@@ -30,7 +30,7 @@
  */
 
 use Opus\Identifier;
-use Opus\Language;
+use Opus\Common\Language;
 use Opus\Note;
 use Opus\Common\Person;
 use Opus\Model\Dependent\Link\DocumentPerson;

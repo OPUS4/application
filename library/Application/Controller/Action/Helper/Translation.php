@@ -94,7 +94,7 @@ class Application_Controller_Action_Helper_Translation extends \Zend_Controller_
             return $this->normalizeModelName($modelName) . '_' . $fieldName;
         } else {
             switch ($modelName) {
-                case 'Opus\Language':
+                case 'Opus\Common\Language':
                     return $this->normalizeModelName($modelName) . '_' . $fieldName;
                 default:
                     return $fieldName;
