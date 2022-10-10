@@ -32,7 +32,7 @@
 use Opus\Common\CollectionRole;
 use Opus\Common\Date;
 use Opus\Common\Log;
-use Opus\Note;
+use Opus\Common\Note;
 use Opus\Common\Person;
 use Opus\Title;
 
@@ -175,7 +175,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 
-        $note = new Note();
+        $note = Note::new();
         $note->setMessage("foo\nbar\n\nbaz");
         $note->setVisibility("public");
         $doc->addNote($note);

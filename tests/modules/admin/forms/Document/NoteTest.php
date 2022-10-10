@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Note;
+use Opus\Common\Note;
 
 /**
  * Description of Document_NoteTest
@@ -55,7 +55,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Note();
 
-        $note = new Note();
+        $note = Note::new();
         $note->setMessage('Message1');
         $note->setVisibility('public');
 
@@ -78,7 +78,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
         $form->getElement('Message')->setValue('Test Message');
         $form->getElement('Visibility')->setChecked(true);
 
-        $note = new Note();
+        $note = Note::new();
 
         $form->updateModel($note);
 
@@ -145,7 +145,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Note();
 
-        $note = new Note();
+        $note = Note::new();
         $note->setMessage('Message1');
         $note->setVisibility('public');
 

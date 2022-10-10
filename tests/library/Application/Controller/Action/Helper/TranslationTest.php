@@ -31,7 +31,7 @@
 
 use Opus\Identifier;
 use Opus\Common\Language;
-use Opus\Note;
+use Opus\Common\Note;
 use Opus\Common\Person;
 use Opus\Model\Dependent\Link\DocumentPerson;
 use Opus\Common\Model\ModelException;
@@ -169,7 +169,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
     public function testTranslationOfNoteVisibilityValues()
     {
-        $model = new Note();
+        $model = Note::new();
         $values = $model->getField('Visibility')->getDefault();
 
         foreach ($values as $value) {

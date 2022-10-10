@@ -39,7 +39,7 @@ use Opus\Common\DocumentInterface;
 use Opus\Common\Enrichment;
 use Opus\Identifier;
 use Opus\Common\Licence;
-use Opus\Note;
+use Opus\Common\Note;
 use Opus\Common\Person;
 use Opus\Series;
 use Opus\Common\Subject;
@@ -489,7 +489,7 @@ class Publish_Model_Deposit
      */
     private function storeNoteObject($dataValue)
     {
-        $note = new Note();
+        $note = Note::new();
         $note->setMessage($dataValue);
         $note->setVisibility("private");
         try {
