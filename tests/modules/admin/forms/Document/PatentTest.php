@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Patent;
+use Opus\Common\Patent;
 
 /**
  * Unit Tests fuer Admin_Form_Document_Patent.
@@ -90,7 +90,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $form->getElement('Application')->setValue('Patent Title');
         $form->getElement('DateGranted')->setValue('2008/03/20');
 
-        $patent = new Patent();
+        $patent = Patent::new();
 
         $form->updateModel($patent);
 
@@ -245,7 +245,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $form->getElement('Countries')->setValue('Germany');
         $form->getElement('Application')->setValue('description');
 
-        $patent = new Patent();
+        $patent = Patent::new();
 
         $form->updateModel($patent);
 
