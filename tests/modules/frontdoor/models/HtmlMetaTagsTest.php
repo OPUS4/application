@@ -33,7 +33,7 @@ use Opus\Common\Date;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 use Opus\Common\Licence;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Person;
@@ -750,22 +750,22 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         $identifers = [];
 
-        $identifer = new Identifier();
+        $identifer = Identifier::new();
         $identifer->setType('doi');
         $identifer->setValue('doi' . $doc->getId());
         $identifers[] = $identifer;
 
-        $identifer = new Identifier();
+        $identifer = Identifier::new();
         $identifer->setType('urn');
         $identifer->setValue('urn' . $doc->getId());
         $identifers[] = $identifer;
 
-        $identifer = new Identifier();
+        $identifer = Identifier::new();
         $identifer->setType('issn');
         $identifer->setValue('issn');
         $identifers[] = $identifer;
 
-        $identifer = new Identifier();
+        $identifer = Identifier::new();
         $identifer->setType('isbn');
         $identifer->setValue('isbn');
         $identifers[] = $identifer;

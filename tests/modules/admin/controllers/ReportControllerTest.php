@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 
 /**
  * Unit tests for Admin_ReportController
@@ -253,7 +253,7 @@ class Admin_ReportControllerTest extends ControllerTestCase
         $docId = $doc->store();
         $this->docIds[] = $docId;
 
-        $doi = new Identifier();
+        $doi = Identifier::new();
         $doi->setType('doi');
         if ($local) {
             $doi->setValue('10.5072/opustest-' . $docId);

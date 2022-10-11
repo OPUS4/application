@@ -31,7 +31,7 @@
 
 use Opus\Common\DocumentInterface;
 use Opus\Common\Enrichment;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 use Opus\Doi\DoiException;
 use Opus\Doi\DoiManager;
 
@@ -452,7 +452,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             }
 
             while ($identifierValuesIndex < $identifierValuesCount) {
-                $identifier = new Identifier();
+                $identifier = Identifier::new();
                 $identifier->setType($this->_typeShort);
                 $identifier->setValue($identifierValues[$identifierValuesIndex]);
                 $identifiers[] = $identifier;

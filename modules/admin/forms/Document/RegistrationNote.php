@@ -30,7 +30,8 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Identifier;
+use Opus\Common\Identifier;
+use Opus\Common\IdentifierInterface;
 
 /**
  * Anzeigefeld für den Registrierungsstatus von lokalen DOIs
@@ -63,14 +64,14 @@ class Admin_Form_Document_RegistrationNote extends Admin_Form_AbstractDocumentSu
         if (is_string($model) && is_numeric($model)) {
             // Identifier-ID übergeben
             try {
-                $model = new Identifier($model);
+                $model = Identifier::get($model);
             } catch (NotFoundException $e) {
                 // ignore silently
                 return;
             }
         }
 
-        if (! ($model instanceof Identifier)) {
+        if (! ($model instanceof IdentifierInterface)) {
             return;
         }
         if (! $model->isLocalDoi()) {

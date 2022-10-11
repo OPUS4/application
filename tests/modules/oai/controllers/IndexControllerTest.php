@@ -35,7 +35,7 @@ use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 use Opus\Common\Enrichment;
 use Opus\File;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 use Opus\Common\Licence;
 use Opus\Common\Person;
 use Opus\Series;
@@ -2422,10 +2422,10 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc->setPageNumber('10');
         $doc->setCreatingCorporation('Foo Creating Corp.');
 
-        $identifierUrn = new Identifier();
+        $identifierUrn = Identifier::new();
         $identifierUrn->setType('urn');
         $identifierUrn->setValue('urn:nbn:de:foo:opus-4711');
-        $identifierIssn = new Identifier();
+        $identifierIssn = Identifier::new();
         $identifierIssn->setType('issn');
         $identifierIssn->setValue('0953-4563');
         $doc->setIdentifier([$identifierUrn, $identifierIssn]);
@@ -3359,7 +3359,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     private function addIdentifier($doc, $value, $type)
     {
-        $identifier = new Identifier();
+        $identifier = Identifier::new();
         $identifier->setType($type);
         $identifier->setValue($value);
 

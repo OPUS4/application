@@ -31,7 +31,7 @@
 
 use Opus\Common\CollectionRole;
 use Opus\Common\Date;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 use Opus\Common\Person;
 use Opus\Security\Realm;
 use Opus\Common\Subject;
@@ -685,7 +685,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
 
-        $id = new Identifier();
+        $id = Identifier::new();
         $field = $id->getField('Type');
         $identifierTypes = array_keys($field->getDefault());
 

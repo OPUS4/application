@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 
 /**
  * Unit Test fuer Identifier Formular Klasse.
@@ -81,7 +81,7 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase
         $form->getElement('Type')->setValue('url');
         $form->getElement('Value')->setValue('test-urn-1');
 
-        $identifier = new Identifier();
+        $identifier = Identifier::new();
 
         $form->updateModel($identifier);
 

@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 
 class Admin_Model_DoiStatusTest extends ControllerTestCase
 {
@@ -85,7 +85,7 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
         $doc->setServerState($serverState);
         $this->docId = $doc->store();
 
-        $doi = new Identifier();
+        $doi = Identifier::new();
         $doi->setType('doi');
         $doi->setValue('10.5027/opustest-' . $this->docId);
         $doi->setStatus('registered');

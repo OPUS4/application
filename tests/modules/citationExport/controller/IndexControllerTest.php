@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 use Opus\Series;
 
 /**
@@ -749,7 +749,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setType('article');
 
-        $doi = new Identifier();
+        $doi = Identifier::new();
         $doi->setValue('123_345_678');
         $doc->addIdentifierDoi($doi);
 

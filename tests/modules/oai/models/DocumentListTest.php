@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 
 class Oai_Model_DocumentListTest extends ControllerTestCase
 {
@@ -44,7 +44,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
     {
         $docWithUrn = $this->createTestDocument();
         $docWithUrn->setServerState('published');
-        $identifier = new Identifier();
+        $identifier = Identifier::new();
         $identifier->setValue('urn_value1');
         $identifier->setType('urn');
         $docWithUrn->addIdentifier($identifier);

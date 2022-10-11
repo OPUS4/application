@@ -37,7 +37,7 @@ use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Enrichment;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 use Opus\Common\Licence;
 use Opus\Common\Note;
 use Opus\Common\Person;
@@ -610,7 +610,7 @@ class Publish_Model_Deposit
 
     private function storeIdentifierObject($dataKey, $dataValue)
     {
-        $identifier = new Identifier();
+        $identifier = Identifier::new();
         $identifier->setValue($dataValue);
         try {
             if (strstr($dataKey, 'Old')) {

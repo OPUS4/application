@@ -30,14 +30,10 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 
 /**
  * Formular fuer einen Identifier eines Dokuments.
- *
- * @category    Application
- * @package     Module_Admin
- * @subpackage  Form_Document
  */
 class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
 {
@@ -108,14 +104,14 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
 
         if (strlen(trim($modelId)) > 0) {
             try {
-                $identifier = new Identifier($modelId);
+                $identifier = Identifier::get($modelId);
             } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown identifier ID = '$modelId'.");
             }
         }
 
         if (is_null($identifier)) {
-            $identifier = new Identifier();
+            $identifier = Identifier::new();
         }
 
         $this->updateModel($identifier);

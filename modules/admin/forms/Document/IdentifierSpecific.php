@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 
 class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSubForm
 {
@@ -110,14 +110,14 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
 
         if (strlen(trim($modelId)) > 0) {
             try {
-                $identifier = new Identifier($modelId);
+                $identifier = Identifier::get($modelId);
             } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown identifier ID = '$modelId'.");
             }
         }
 
         if (is_null($identifier)) {
-            $identifier = new Identifier();
+            $identifier = Identifier::new();
             $identifier->setType($this->type);
         }
 

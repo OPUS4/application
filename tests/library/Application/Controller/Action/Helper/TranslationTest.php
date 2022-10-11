@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Identifier;
+use Opus\Common\Identifier;
 use Opus\Common\Language;
 use Opus\Common\Note;
 use Opus\Common\Person;
@@ -199,7 +199,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
     public function testTranslationOfOpusIdentifierFields()
     {
-        $model = new Identifier();
+        $model = Identifier::new();
 
         $fieldNames = $model->describe();
 
@@ -208,7 +208,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
                 // do not provide translations for DOI specific fields
                 continue;
             }
-            $key = $this->helper->getKeyForField('Opus\Identifier', $name);
+            $key = $this->helper->getKeyForField(Identifier::class, $name);
             $this->assertTrue(
                 $this->translate->isTranslated($key),
                 "Translation key '$key' is missing."

@@ -31,7 +31,7 @@
 
 use Opus\Common\Date;
 use Opus\Common\Document;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 use Opus\Db\TableGateway;
 use Opus\Common\Model\ModelException;
 
@@ -51,7 +51,7 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $doi = new Identifier();
+        $doi = Identifier::new();
         $doi->setType('doi');
         $doi->setValue('testdoi');
 

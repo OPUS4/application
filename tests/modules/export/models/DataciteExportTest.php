@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 use Opus\Common\Person;
 use Opus\Title;
 
@@ -78,7 +78,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $doc->setLanguage('deu');
         $docId = $doc->store();
 
-        $doi = new Identifier();
+        $doi = Identifier::new();
         $doi->setType('doi');
         $doi->setValue('10.2345/opustest-' . $docId);
         $doc->setIdentifier([$doi]);

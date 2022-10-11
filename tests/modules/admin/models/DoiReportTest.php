@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Identifier;
+use Opus\Common\Identifier;
 
 /**
  * TODO test-performance
@@ -133,7 +133,7 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
         $docId = $doc->store();
         $this->docIds[] = $docId;
 
-        $doi = new Identifier();
+        $doi = Identifier::new();
         $doi->setType('doi');
         if ($local) {
             $doi->setValue('10.5072/opustest-' . $docId);
