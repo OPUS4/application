@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Iprange;
+use Opus\Common\Iprange;
 use Opus\Common\UserRole;
 
 /**
@@ -54,17 +51,17 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
 
     public function getModels()
     {
-        return Iprange::getAll();
+        return Iprange::getModelRepository()->getAll();
     }
 
     public function createNewModel()
     {
         $this->createsModels = true;
 
-        $ipRange = new Iprange();
+        $ipRange = Iprange::new();
         $ipRange->setName('localhost');
-        $ipRange->setStartingip('127.0.0.1');
-        $ipRange->setEndingip('127.0.0.2');
+        $ipRange->setStartingIp('127.0.0.1');
+        $ipRange->setEndingIp('127.0.0.2');
         $ipRange->setRole([
             UserRole::fetchByName('reviewer'),
             UserRole::fetchByName('docsadmin')
@@ -75,7 +72,7 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
 
     public function getModel($identifier)
     {
-        return new Iprange($identifier);
+        return Iprange::get($identifier);
     }
 
     public function testShowAction()
@@ -153,7 +150,11 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
 
         $this->assertRedirectTo('/admin/iprange', 'Should redirect to index action.');
 
-        $this->assertEquals($modelCount, count(Iprange::getAll()), 'There should be no new ip range.');
+        $this->assertEquals(
+            $modelCount,
+            count(Iprange::getModelRepository()->getAll()),
+            'There should be no new ip range.'
+        );
     }
 
     public function testEditActionShowForm()
@@ -191,11 +192,11 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo("/admin/iprange/show/id/$iprangeId");
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $iprange = new Iprange($iprangeId);
+        $iprange = Iprange::get($iprangeId);
 
         $this->assertEquals('ModifiedName', $iprange->getName());
-        $this->assertEquals('127.0.0.99', $iprange->getStartingip());
-        $this->assertEquals('127.0.0.100', $iprange->getEndingip());
+        $this->assertEquals('127.0.0.99', $iprange->getStartingIp());
+        $this->assertEquals('127.0.0.100', $iprange->getEndingIp());
 
         $roles = $iprange->getRole();
 
@@ -219,7 +220,7 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $this->dispatch("/admin/iprange/edit");
         $this->assertRedirectTo('/admin/iprange');
 
-        $iprange = new Iprange($iprangeId);
+        $iprange = Iprange::get($iprangeId);
 
         $this->assertEquals('localhost', $iprange->getName());
     }
