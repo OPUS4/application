@@ -24,14 +24,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 
 class Publish_Model_DisplayGroup
 {
@@ -236,7 +233,7 @@ class Publish_Model_DisplayGroup
         //show browseDown button only for the last select field
         $level = (int) count($this->collectionIds);
         try {
-            $collection = new Collection($this->collectionIds[$level - 1]);
+            $collection = Collection::get($this->collectionIds[$level - 1]);
         } catch (Exception $e) {
             // TODO improve exception handling
             return null;
@@ -339,7 +336,7 @@ class Publish_Model_DisplayGroup
     private function collectionEntries($id, $step, $fieldset)
     {
         try {
-            $collection = new Collection($id);
+            $collection = Collection::get($id);
         } catch (Exception $e) {
             // TODO: improve exception handling!
             return null;

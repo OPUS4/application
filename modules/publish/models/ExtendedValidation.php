@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Doreen Thiede <thiede@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Series;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Repository;
@@ -639,7 +635,7 @@ class Publish_Model_ExtendedValidation
             if (isset($collId)) {
                 $coll = null;
                 try {
-                    $coll = new Collection($collId);
+                    $coll = Collection::get($collId);
                 } catch (ModelException $e) {
                     $this->log->err("could not instantiate Opus_Collection with id $collId", $e);
                     $collectionLeafSelection = false;

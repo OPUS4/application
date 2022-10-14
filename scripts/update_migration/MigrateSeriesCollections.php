@@ -31,7 +31,7 @@
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\Document;
 use Opus\Common\Repository;

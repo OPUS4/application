@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\CollectionInterface;
 use Opus\Common\Document;
 
 class Admin_Form_Document_CollectionsTest extends ControllerTestCase
@@ -116,6 +117,6 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
         $ddc = $grouped['ddc'];
 
         $this->assertCount(4, $ddc);
-        $this->assertInstanceOf('Opus\Collection', $ddc[0]);
+        $this->assertInstanceOf(CollectionInterface::class, $ddc[0]);
     }
 }

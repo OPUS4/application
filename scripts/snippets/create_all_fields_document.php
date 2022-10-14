@@ -34,7 +34,7 @@
 
 // TODO move script (is used for testing purposes) - also is probably out of date (since data model changes)
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Document;

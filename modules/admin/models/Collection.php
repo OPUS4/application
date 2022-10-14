@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
 
@@ -49,7 +49,7 @@ class Admin_Model_Collection
             return;
         }
         try {
-            $this->_collection = new Collection($id);
+            $this->_collection = Collection::get($id);
         } catch (NotFoundException $e) {
             throw new Admin_Model_Exception('id parameter value unknown');
         }
@@ -57,7 +57,7 @@ class Admin_Model_Collection
 
     private function initNewCollection()
     {
-        $this->_collection = new Collection();
+        $this->_collection = Collection::new();
         $this->_collection->setVisible('1');
         $this->_collection->setVisiblePublish('1');
     }

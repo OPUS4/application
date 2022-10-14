@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\EnrichmentKey;
 
@@ -99,7 +99,7 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
         if (is_null($collection)) {
             $this->log("Creating collection 'import' ... ");
 
-            $collection = new Collection();
+            $collection = Collection::new();
             $collection->setName('Import');
             $collection->setNumber('import');
             $collection->setOaiSubset('import');

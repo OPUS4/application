@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\Config;
 use Opus\Common\DnbInstitute;
@@ -336,7 +336,7 @@ class Publish_Model_Validation
                     && $this->hasVisiblePublishChildren($collectionRole)) {
             $children = [];
             $collectionId = $collectionRole->getRootCollection()->getId();
-            $collection = new Collection($collectionId);
+            $collection = Collection::get($collectionId);
 
             $colls = $collection->getVisiblePublishChildren();
 

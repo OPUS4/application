@@ -30,7 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 
 class Application_Data_CollectionProvider
 {

@@ -30,7 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\Person;
 use Opus\Series;
 
@@ -122,7 +122,7 @@ class Admin_DocumentsController extends Application_Controller_Action
 
         if (! empty($collectionId)) {
             // TODO add as filter facet
-            $collection = new Collection($collectionId);
+            $collection = Collection::get($collectionId);
             $result = $collection->getDocumentIds();
             $this->view->collection = $collection;
             if ($collection->isRoot()) {

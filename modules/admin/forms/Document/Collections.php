@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\DocumentInterface;
 
 /**
@@ -242,7 +242,7 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
      */
     protected function _addCollection($colId)
     {
-        $collection = new Collection($colId);
+        $collection = Collection::get($colId);
 
         $collectionRole = $collection->getRole();
 

@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Collection;
+use Opus\Common\Collection;
 
 /**
  * script that imports collections from a text file
@@ -59,7 +59,7 @@ if (! is_readable($inputFile)) {
 
 $rootCollection = null;
 try {
-    $rootCollection = new Collection($parentCollectionId);
+    $rootCollection = Collection::get($parentCollectionId);
 } catch (NotFoundException $e) {
     echo "Error: collection with id $parentCollectionId does not exist\n";
     exit();
@@ -83,7 +83,7 @@ if (! is_null($rootCollection)) {
             continue;
         }
 
-        $collection = new Collection();
+        $collection = Collection::new();
         $collection->setName(trim($parts[0]));
         $collection->setNumber(trim($parts[1]));
         $collection->setVisible($visible);

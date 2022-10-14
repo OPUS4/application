@@ -35,7 +35,7 @@
  * TODO move as command to opus4dev tool
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\Common\Person;
@@ -60,7 +60,7 @@ for ($i = 1; $i < 10000; $i++) {
     $p->setLastName("bar-" . ($i % 5));
     $p = $d->addPersonAuthor($p);
 
-    $c = new Collection(15990 + ($i % 103));
+    $c = Collection::get(15990 + ($i % 103));
     $d->addCollection($c);
 
     $s = $d->addSubject()->setType('ddc');

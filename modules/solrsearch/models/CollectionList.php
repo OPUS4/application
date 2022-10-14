@@ -29,7 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
+use Opus\Common\CollectionInterface;
 use Opus\Common\CollectionRole;
 use Opus\Common\Model\NotFoundException;
 
@@ -48,7 +49,7 @@ class Solrsearch_Model_CollectionList
 
         $collection = null;
         try {
-            $collection = new Collection((int) $collectionId);
+            $collection = Collection::get((int) $collectionId);
         } catch (NotFoundException $e) {
             throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.", 404);
         }
@@ -127,7 +128,7 @@ class Solrsearch_Model_CollectionList
 
         if ($this->_collectionRole->getHideEmptyCollections()) {
             // Collection ausblenden, wenn ihr selbst und den Kind-Collections keine Dokumente zugeordnet
-            $children = array_filter($children, function (Collection $collection) {
+            $children = array_filter($children, function (CollectionInterface $collection) {
                 return $collection->getNumSubtreeEntries() > 0;
             });
         }

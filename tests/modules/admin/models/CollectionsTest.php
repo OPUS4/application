@@ -29,7 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\CollectionInterface;
 use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 
 class Admin_Model_CollectionsTest extends ControllerTestCase
 {
@@ -98,9 +100,9 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
             }
             $this->assertArrayHasKey('isRoot', $collection);
             $this->assertArrayHasKey('role', $collection);
-            $this->assertInstanceOf('Opus\CollectionRole', $collection['role']);
+            $this->assertInstanceOf(CollectionRoleInterface::class, $collection['role']);
             $this->assertArrayHasKey('collection', $collection);
-            $this->assertInstanceOf('Opus\Collection', $collection['collection']);
+            $this->assertInstanceOf(CollectionInterface::class, $collection['collection']);
             $this->assertArrayHasKey('assigned', $collection);
             $this->assertFalse($collection['assigned']);
         }
@@ -132,9 +134,9 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
             }
             $this->assertArrayHasKey('isRoot', $collection);
             $this->assertArrayHasKey('role', $collection);
-            $this->assertInstanceOf('Opus\CollectionRole', $collection['role']);
+            $this->assertInstanceOf(CollectionRoleInterface::class, $collection['role']);
             $this->assertArrayHasKey('collection', $collection);
-            $this->assertInstanceOf('Opus\Collection', $collection['collection']);
+            $this->assertInstanceOf(CollectionInterface::class, $collection['collection']);
             $this->assertArrayHasKey('assigned', $collection);
             $this->assertFalse($collection['assigned']);
         }
@@ -159,9 +161,9 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
             }
             $this->assertArrayHasKey('isRoot', $collection);
             $this->assertArrayHasKey('role', $collection);
-            $this->assertInstanceOf('Opus\CollectionRole', $collection['role']);
+            $this->assertInstanceOf(CollectionRoleInterface::class, $collection['role']);
             $this->assertArrayHasKey('collection', $collection);
-            $this->assertInstanceOf('Opus\Collection', $collection['collection']);
+            $this->assertInstanceOf(CollectionInterface::class, $collection['collection']);
             $this->assertArrayHasKey('assigned', $collection);
             $this->assertFalse($collection['assigned']);
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 
 /**
  * Unterformular fuer eine zugewiesene Collection.
@@ -140,7 +138,7 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm
     {
         $colId = $this->getElement(self::ELEMENT_ID)->getValue();
 
-        return new Collection($colId);
+        return Collection::get($colId);
     }
 
     /**
@@ -157,7 +155,7 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm
     public function populateFromPost($post)
     {
         $colId = $post[self::ELEMENT_ID];
-        $collection = new Collection($colId);
+        $collection = Collection::get($colId);
         $this->populateFromModel($collection);
     }
 

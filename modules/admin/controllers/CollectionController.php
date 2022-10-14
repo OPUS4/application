@@ -30,7 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\Model\NotFoundException;
 
@@ -296,14 +296,14 @@ class Admin_CollectionController extends Application_Controller_Action
 
             switch ($type) {
                 case 'child':
-                    $refCollection = new Collection($id);
+                    $refCollection = Collection::get($id);
                     $refCollection->addFirstChild($collection);
                     $refCollection->store();
                     $message = $this->view->translate('admin_collections_add', [$collectionModel->getName()]);
                     break;
 
                 case 'sibling':
-                    $refCollection = new Collection($id);
+                    $refCollection = Collection::get($id);
                     $refCollection->addNextSibling($collection);
                     $refCollection->store();
                     $message = $this->view->translate('admin_collections_add', [$collectionModel->getName()]);
@@ -384,7 +384,7 @@ class Admin_CollectionController extends Application_Controller_Action
         }
 
         try {
-            $collection = new Collection($collectionId);
+            $collection = Collection::get($collectionId);
 
             if (is_null($sortBy)) {
                 return $this->_helper->Redirector->redirectToAndExit(
@@ -512,7 +512,7 @@ class Admin_CollectionController extends Application_Controller_Action
 
     private function prepareAssignSubPage($documentId, $collectionId)
     {
-        $collection = new Collection($collectionId);
+        $collection = Collection::get($collectionId);
         $children = $collection->getChildren();
         if (count($children) === 0) {
             // zurück zur Ausgangsansicht

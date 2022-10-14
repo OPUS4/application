@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\Config;
 use Opus\Common\Document;
@@ -113,7 +113,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
             $rootCollection = $collectionRole->getRootCollection();
 
             // create temporary collection
-            $collection = new Collection();
+            $collection = Collection::new();
             $timestamp = time();
             $this->collectionNumber = 'sword-test-number-' . $timestamp;
             $collection->setNumber($this->collectionNumber);
@@ -134,7 +134,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
     public function removeImportCollection()
     {
         if (! is_null($this->collectionId)) {
-            $collection = new Collection($this->collectionId);
+            $collection = Collection::get($this->collectionId);
             $collection->delete();
             $this->collectionId = null;
         }

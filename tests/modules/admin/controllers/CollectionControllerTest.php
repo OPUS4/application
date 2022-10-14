@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 
 /**
@@ -71,13 +71,13 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->rootCollection = $this->nonEmptyCollectionRole->addRootCollection();
         $this->rootCollection->store();
 
-        $this->collection = new Collection();
+        $this->collection = Collection::new();
         $this->collection->setName("first collection");
         $this->collection->setNumber("123");
         $this->rootCollection->addFirstChild($this->collection);
         $this->collection->store();
 
-        $this->anotherCollection = new Collection();
+        $this->anotherCollection = Collection::new();
         $this->anotherCollection->setName("last collection");
         $this->anotherCollection->setNumber("987");
         $this->rootCollection->addLastChild($this->anotherCollection);

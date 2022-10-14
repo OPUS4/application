@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Db\TableGateway;
 
@@ -75,7 +75,7 @@ $collectionRole->setVisibleFrontdoor(true);
 $collectionRole->setVisibleOai(true);
 $collectionRoleId = $collectionRole->store();
 
-$rootCollection = new Collection();
+$rootCollection = Collection::new();
 $rootCollection->setPositionKey('Root');
 $rootCollection->setVisible(true);
 $rootCollection->setRoleId($collectionRoleId);
@@ -99,7 +99,7 @@ if (! is_null($rootCollection)) {
             continue;
         }
 
-        $collection = new Collection();
+        $collection = Collection::new();
         $collection->setNumber(trim($parts[0]));
         $collection->setOaiSubset(trim($parts[0]));
         $collection->setName(trim($parts[1]));

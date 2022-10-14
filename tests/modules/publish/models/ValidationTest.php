@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\Licence;
 use Opus\Series;
@@ -371,7 +371,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection = $collectionRole->addRootCollection();
         $rootCollection->store();
 
-        $invisibleCollection = new Collection();
+        $invisibleCollection = Collection::new();
         $invisibleCollection->setName("invisible collection");
         $invisibleCollection->setNumber("123");
         $invisibleCollection->setVisible(true);
@@ -379,7 +379,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->addFirstChild($invisibleCollection);
         $invisibleCollection->store();
 
-        $visibleCollection = new Collection();
+        $visibleCollection = Collection::new();
         $visibleCollection->setName("visible collection");
         $visibleCollection->setNumber("987");
         $visibleCollection->setVisiblePublish(true);
@@ -387,7 +387,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->addLastChild($visibleCollection);
         $visibleId = $visibleCollection->store();
 
-        $mixedVisibilityCollection = new Collection();
+        $mixedVisibilityCollection = Collection::new();
         $mixedVisibilityCollection->setName("mixed visibility");
         $mixedVisibilityCollection->setNumber("456");
         $mixedVisibilityCollection->setVisiblePublish(true);
@@ -426,7 +426,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->setVisiblePublish(false);
         $rootCollection->store();
 
-        $visibleCollection = new Collection();
+        $visibleCollection = Collection::new();
         $visibleCollection->setName("visible collection");
         $visibleCollection->setNumber("123");
         $visibleCollection->setVisible(true);
@@ -434,7 +434,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->addFirstChild($visibleCollection);
         $visibleCollection->store();
 
-        $invisibleCollection = new Collection();
+        $invisibleCollection = Collection::new();
         $invisibleCollection->setName("collection to invisible root collection");
         $invisibleCollection->setNumber("123");
         $invisibleCollection->setVisible(true);
@@ -442,7 +442,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->addFirstChild($invisibleCollection);
         $invisibleCollection->store();
 
-        $childCollection = new Collection();
+        $childCollection = Collection::new();
         $childCollection->setName("collection child");
         $childCollection->setNumber("123");
         $childCollection->setVisible(true);

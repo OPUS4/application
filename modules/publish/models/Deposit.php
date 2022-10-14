@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\Date;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
@@ -509,7 +509,7 @@ class Publish_Model_Deposit
     private function storeCollectionObject($dataValue)
     {
         try {
-            $collection = new Collection($dataValue);
+            $collection = Collection::get($dataValue);
         } catch (NotFoundException $e) {
             $this->_log->err('Could not find collection #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();

@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\Config;
 use Opus\Common\Date;
@@ -93,13 +93,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         // create collection test document
         $this->_document_col = $this->createTestDocument();
-        $this->_document_col->addCollection(new Collection(40)); // invisible collection
-        $this->_document_col->addCollection(new Collection(16214)); // visible collection with invisible collection role
-        $this->_document_col->addCollection(new Collection(1031)); // visible collection with visible collection role
+        $this->_document_col->addCollection(Collection::get(40)); // invisible collection
+        $this->_document_col->addCollection(Collection::get(16214)); // visible collection with invisible collection role
+        $this->_document_col->addCollection(Collection::get(1031)); // visible collection with visible collection role
 
         // collection role ID = 10 (sichbar)
-        $this->_document_col->addCollection(new Collection(16136)); // versteckte Collection (Role = 10)
-        $this->_document_col->addCollection(new Collection(15991)); // sichbare Collection (Role = 10);
+        $this->_document_col->addCollection(Collection::get(16136)); // versteckte Collection (Role = 10)
+        $this->_document_col->addCollection(Collection::get(15991)); // sichbare Collection (Role = 10);
         $this->_document_col->setServerState('published');
         $this->_document_col->store();
     }

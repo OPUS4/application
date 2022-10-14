@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
@@ -1322,7 +1322,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testDdbFileNumberForMultipleDocumentsForXMetaDissPlus()
     {
-        $collection = new Collection(112);
+        $collection = Collection::get(112);
 
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
@@ -1361,7 +1361,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testTransferUrlIsIOnlyGivenForDocsWithFulltext()
     {
-        $collection = new Collection(112);
+        $collection = Collection::get(112);
 
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
@@ -1421,7 +1421,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testForDDCSubjectTypeForXMetaDissPlus()
     {
-        $collection = new Collection(112);
+        $collection = Collection::get(112);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -2430,9 +2430,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $identifierIssn->setValue('0953-4563');
         $doc->setIdentifier([$identifierUrn, $identifierIssn]);
 
-        $ddc33x = new Collection(45); // sichtbar
-        $ddc334 = new Collection(402); // unsichtbar
-        $ddc34x = new Collection(46); // sichtbar
+        $ddc33x = Collection::get(45); // sichtbar
+        $ddc334 = Collection::get(402); // unsichtbar
+        $ddc34x = Collection::get(46); // sichtbar
         $doc->setCollection([$ddc33x, $ddc334, $ddc34x]);
 
         $titleMainDeu = TitleAbstract::new();
