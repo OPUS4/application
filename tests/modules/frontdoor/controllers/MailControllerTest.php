@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Person;
-use Opus\Title;
+use Opus\Common\Title;
 
 /**
  * Class Frontdoor_MailControllerTest.
@@ -54,7 +54,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
         $document->setServerState('published');
         $document->setType('baz');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('foobartitle');
         $title->setLanguage('deu');
         $document->setTitleMain($title);
@@ -66,7 +66,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
         $document->setServerState('published');
         $document->setType('baz');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('foobartitle');
         $title->setLanguage('deu');
         $document->setTitleMain($title);

@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Title;
+use Opus\Common\Title;
 
 /**
  * Unit Test fuer Unterformular fuer einen Titel.
@@ -76,7 +76,7 @@ class Admin_Form_Document_TitleTest extends ControllerTestCase
         $form->getElement('Language')->setValue('rus');
         $form->getElement('Value')->setValue('Test Title');
 
-        $title = new Title();
+        $title = Title::new();
 
         $form->updateModel($title);
 

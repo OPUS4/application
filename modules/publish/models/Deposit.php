@@ -44,7 +44,7 @@ use Opus\Common\Person;
 use Opus\Series;
 use Opus\Common\Subject;
 use Opus\Reference;
-use Opus\Title;
+use Opus\Common\Title;
 use Opus\Model\Dependent\Link\DocumentPerson;
 
 /**
@@ -388,7 +388,7 @@ class Publish_Model_Deposit
         $type = 'Title' . $this->getTitleType($dataKey);
         $this->_log->debug("Title type:" . $type);
         $addFunction = 'add' . $type;
-        $title = new Title();
+        $title = Title::new();
 
         $counter = $this->getCounter($dataKey);
         $this->_log->debug("counter: " . $counter);

@@ -32,7 +32,7 @@
 use Opus\Job;
 use Opus\Common\Log;
 use Opus\Common\Person;
-use Opus\Title;
+use Opus\Common\Title;
 use Opus\Job\Worker\MailNotification;
 
 class Application_Util_NotificationTest extends ControllerTestCase
@@ -73,7 +73,7 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue("Test Document");
         $title->setLanguage("eng");
         $doc->addTitleMain($title);
@@ -201,7 +201,7 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue("Test Document");
         $title->setLanguage("eng");
         $doc->addTitleMain($title);
@@ -250,7 +250,7 @@ class Application_Util_NotificationTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue("Test Document");
         $title->setLanguage("eng");
         $doc->addTitleMain($title);

@@ -32,7 +32,7 @@
 use Opus\Common\Config;
 use Opus\Common\Log;
 use Opus\Common\Person;
-use Opus\Title;
+use Opus\Common\Title;
 
 class Application_Util_PublicationNotificationTest extends ControllerTestCase
 {
@@ -210,7 +210,7 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue("Test Document");
         $title->setLanguage("eng");
         $doc->addTitleMain($title);
@@ -279,7 +279,7 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue("Test Document");
         $title->setLanguage("eng");
         $doc->addTitleMain($title);

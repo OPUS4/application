@@ -37,7 +37,7 @@ use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Log;
 use Opus\Common\Note;
-use Opus\Title;
+use Opus\Common\Title;
 
 /**
  * Class Frontdoor_IndexControllerTest.
@@ -74,12 +74,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->_document = $this->createTestDocument();
         $this->_document->setType("doctoral_thesis");
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('Titel');
         $this->_document->addTitleMain($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('eng');
         $title->setValue('Title');
         $this->_document->addTitleMain($title);
@@ -584,7 +584,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 
-        $abstract = new Title();
+        $abstract = Title::new();
         $abstract->setLanguage("eng");
         $abstract->setValue("foo\nbar\n\nbaz");
         $doc->addTitleAbstract($abstract);
@@ -981,12 +981,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $functions = ['addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleAbstract'];
         foreach ($functions as $function) {
             $doc = $this->createTestDocument();
-            $title = new Title();
+            $title = Title::new();
             $title->setLanguage('deu');
             $title->setValue('deutscher Titel');
             $doc->$function($title);
 
-            $title = new Title();
+            $title = Title::new();
             $title->setLanguage('eng');
             $title->setValue('englischer Titel');
             $doc->$function($title);
@@ -1026,12 +1026,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $functions = ['addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleAbstract'];
         foreach ($functions as $function) {
             $doc = $this->createTestDocument();
-            $title = new Title();
+            $title = Title::new();
             $title->setLanguage('deu');
             $title->setValue('deutscher Titel');
             $doc->$function($title);
 
-            $title = new Title();
+            $title = Title::new();
             $title->setLanguage('eng');
             $title->setValue('englischer Titel');
             $doc->$function($title);

@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\Person;
-use Opus\Title;
+use Opus\Common\Title;
 
 class Frontdoor_Model_AuthorsTest extends ControllerTestCase
 {
@@ -53,7 +53,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $document->setType('testtype');
         $document->setLanguage('deu');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('testtitle');
         $title->setLanguage('deu');
         $document->setTitleMain($title);

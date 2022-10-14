@@ -34,7 +34,7 @@ use Opus\Common\Date;
 use Opus\Common\Log;
 use Opus\Common\Note;
 use Opus\Common\Person;
-use Opus\Title;
+use Opus\Common\Title;
 
 /**
  * Unit tests for Admin_DocumentController.
@@ -153,7 +153,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $abstract = new Title();
+        $abstract = Title::new();
         $abstract->setLanguage("eng");
         $abstract->setValue("foo\nbar\n\nbaz");
         $doc->addTitleAbstract($abstract);

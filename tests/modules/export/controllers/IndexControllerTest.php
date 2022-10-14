@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\File;
-use Opus\Title;
+use Opus\Common\Title;
 use Opus\Common\Model\ModelException;
 use Opus\Search\Service;
 
@@ -234,7 +234,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
         $doc1->setLanguage('eng');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('test document for OPUSVIER-1726');
         $title->setLanguage('eng');
         $doc1->setTitleMain($title);
@@ -245,7 +245,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
         $doc2->setLanguage('eng');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('another test document for OPUSVIER-1726');
         $title->setLanguage('eng');
         $doc2->setTitleMain($title);
@@ -297,7 +297,7 @@ class Export_IndexControllerTest extends ControllerTestCase
             $doc = $this->createTestDocument();
             $doc->setServerState('published');
             $doc->setLanguage('eng');
-            $title = new Title();
+            $title = Title::new();
             $title->setValue('OPUSVIER-2488');
             $title->setLanguage('eng');
             $doc->setTitleMain($title);

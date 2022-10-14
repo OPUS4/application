@@ -39,7 +39,7 @@ use Opus\Common\Identifier;
 use Opus\Common\Licence;
 use Opus\Common\Person;
 use Opus\Series;
-use Opus\TitleAbstract;
+use Opus\Common\TitleAbstract;
 use Opus\Common\UserRole;
 
 /**
@@ -2435,37 +2435,37 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $ddc34x = new Collection(46); // sichtbar
         $doc->setCollection([$ddc33x, $ddc334, $ddc34x]);
 
-        $titleMainDeu = new TitleAbstract();
+        $titleMainDeu = TitleAbstract::new();
         $titleMainDeu->setLanguage('deu');
         $titleMainDeu->setType('main');
         $titleMainDeu->setValue('TitleMainInDocumentLanguage');
-        $titleMainEng = new TitleAbstract();
+        $titleMainEng = TitleAbstract::new();
         $titleMainEng->setLanguage('eng');
         $titleMainEng->setType('main');
         $titleMainEng->setValue('TitleMainInOtherLanguage');
         $doc->setTitleMain([$titleMainDeu, $titleMainEng]);
 
-        $titleSubDeu = new TitleAbstract();
+        $titleSubDeu = TitleAbstract::new();
         $titleSubDeu->setLanguage('deu');
         $titleSubDeu->setType('sub');
         $titleSubDeu->setValue('TitleSubInDocumentLanguage');
-        $titleSubEng = new TitleAbstract();
+        $titleSubEng = TitleAbstract::new();
         $titleSubEng->setLanguage('eng');
         $titleSubEng->setType('sub');
         $titleSubEng->setValue('TitleSubInOtherLanguage');
         $doc->setTitleSub([$titleSubDeu, $titleSubEng]);
 
-        $titleParent = new TitleAbstract();
+        $titleParent = TitleAbstract::new();
         $titleParent->setLanguage('deu');
         $titleParent->setType('parent');
         $titleParent->setValue('TitleParentInDocumentLanguage');
         $doc->setTitleParent([$titleParent]);
 
-        $abstractDeu = new TitleAbstract();
+        $abstractDeu = TitleAbstract::new();
         $abstractDeu->setLanguage('deu');
         $abstractDeu->setType('abstract');
         $abstractDeu->setValue('TitleAbstractInDocumentLanguage');
-        $abstractEng = new TitleAbstract();
+        $abstractEng = TitleAbstract::new();
         $abstractEng->setLanguage('eng');
         $abstractEng->setType('abstract');
         $abstractEng->setValue('TitleAbstractInOtherLanguage');
@@ -3342,7 +3342,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     private function addTitleParent($doc, $language, $value)
     {
-        $titleParent = new TitleAbstract();
+        $titleParent = TitleAbstract::new();
         $titleParent->setType('parent');
         $titleParent->setLanguage($language);
         $titleParent->setValue($value);

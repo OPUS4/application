@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\TitleAbstract;
+use Opus\Common\TitleAbstract;
 use Opus\Common\Model\NotFoundException;
 
 /**
@@ -88,10 +88,10 @@ class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm
         }
 
         try {
-            $abstract = new TitleAbstract($abstractId);
+            $abstract = TitleAbstract::get($abstractId);
         } catch (NotFoundException $omnfe) {
             $this->getLogger()->err(__METHOD__ . " Unknown ID = '$abstractId' (" . $omnfe->getMessage() . ').');
-            $abstract = new TitleAbstract();
+            $abstract = TitleAbstract::new();
         }
 
         $this->updateModel($abstract);

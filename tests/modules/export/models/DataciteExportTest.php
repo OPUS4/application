@@ -32,7 +32,7 @@
 use Opus\Common\Document;
 use Opus\Common\Identifier;
 use Opus\Common\Person;
-use Opus\Title;
+use Opus\Common\Title;
 
 class Export_Model_DataciteExportTest extends ControllerTestCase
 {
@@ -88,7 +88,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $author->setLastName('Doe');
         $doc->setPersonAuthor([$author]);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Meaningless title');
         $title->setLanguage('deu');
         $doc->setTitleMain([$title]);

@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\Person;
-use Opus\Title;
+use Opus\Common\Title;
 
 /**
  * Unit test for class Review_Model_DocumentAdapter.
@@ -122,12 +122,12 @@ class Application_Util_DocumentAdapterTest extends ControllerTestCase
 
         $doc = $this->createTestDocument();
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->addTitleMain($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('eng');
         $title->setValue('Englischer Titel');
         $doc->addTitleMain($title);
@@ -159,12 +159,12 @@ class Application_Util_DocumentAdapterTest extends ControllerTestCase
 
         $doc = $this->createTestDocument();
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->addTitleMain($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('eng');
         $title->setValue('Englischer Titel');
         $doc->addTitleMain($title);
@@ -181,12 +181,12 @@ class Application_Util_DocumentAdapterTest extends ControllerTestCase
 
         $doc = $this->createTestDocument();
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->addTitleMain($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('eng');
         $title->setValue('Englischer Titel');
         $doc->addTitleMain($title);
@@ -205,12 +205,12 @@ class Application_Util_DocumentAdapterTest extends ControllerTestCase
 
         $doc = $this->createTestDocument();
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->addTitleMain($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('eng');
         $title->setValue('Englischer Titel');
         $doc->addTitleMain($title);

@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Title;
+use Opus\Common\Title;
 
 class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTestCase
 {
@@ -139,7 +139,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
         $document->setLanguage('deu');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('01234567890123456789012345678901234567890123456789'); // 50 Zeichen lang
 
@@ -156,7 +156,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $document = $this->createTestDocument();
         $document->setLanguage('deu');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('012345678901234567890123456789012345678ü123'); // 50 Zeichen lang
 

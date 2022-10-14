@@ -38,8 +38,8 @@ use Opus\Common\Licence;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Person;
 use Opus\Common\Subject;
-use Opus\Title;
-use Opus\TitleAbstract;
+use Opus\Common\Title;
+use Opus\Common\TitleAbstract;
 
 class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 {
@@ -686,13 +686,13 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     private function addTitles($doc)
     {
         $titles = [];
-        $title = new Title();
+        $title = Title::new();
         $title->setType('main');
         $title->setLanguage('deu');
         $title->setValue('titlemain-deu');
         $titles[] = $title;
 
-        $title = new Title();
+        $title = Title::new();
         $title->setType('main');
         $title->setLanguage('eng');
         $title->setValue('titlemain-eng');
@@ -702,7 +702,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
 
         $titles = [];
-        $title = new Title();
+        $title = Title::new();
         $title->setType('sub');
         $title->setLanguage('eng');
         $title->setValue('titlesub-eng');
@@ -712,7 +712,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
 
         $titles = [];
-        $title = new Title();
+        $title = Title::new();
         $title->setType('parent');
         $title->setLanguage('deu');
         $title->setValue('titleparent-eng');
@@ -728,13 +728,13 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     {
         $abstracts = [];
 
-        $abstr = new TitleAbstract();
+        $abstr = TitleAbstract::new();
         $abstr->setType('abstract');
         $abstr->setLanguage('deu');
         $abstr->setValue('abstract1-deu');
         $abstracts[] = $abstr;
 
-        $abstr = new TitleAbstract();
+        $abstr = TitleAbstract::new();
         $abstr->setType('abstract');
         $abstr->setLanguage('deu');
         $abstr->setValue('abstract2-deu');

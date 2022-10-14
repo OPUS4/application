@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\TitleAbstract;
+use Opus\Common\TitleAbstract;
 
 /**
  * Unit Tests fuer Unterformular fuer Zusammenfassungen.
@@ -76,7 +76,7 @@ class Admin_Form_Document_AbstractTest extends ControllerTestCase
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Value')->setValue('Test Zusammenfassung!');
 
-        $abstract = new TitleAbstract();
+        $abstract = TitleAbstract::new();
 
         $form->updateModel($abstract);
 

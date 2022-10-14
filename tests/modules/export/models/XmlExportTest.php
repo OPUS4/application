@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Repository;
-use Opus\Title;
+use Opus\Common\Title;
 
 /**
  * Class Export_Model_XmlExportTest
@@ -68,7 +68,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->setTitleMain($title);
@@ -97,7 +97,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->setTitleMain($title);

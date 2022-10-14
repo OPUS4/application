@@ -35,7 +35,7 @@ use Opus\Common\Identifier;
 use Opus\Common\Person;
 use Opus\Security\Realm;
 use Opus\Common\Subject;
-use Opus\Title;
+use Opus\Common\Title;
 
 /**
  * Class Solrsearch_IndexControllerTest.
@@ -680,7 +680,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setLanguage('eng');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('test document for OPUSVIER-2475');
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
@@ -735,7 +735,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setLanguage('eng');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('test document for OPUSVIER-2484');
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
@@ -843,7 +843,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setLanguage('eng');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('facetlimittestwithsubjects-opusvier2610');
         $title->setLanguage('eng');
         $doc->addTitleMain($title);
@@ -1045,7 +1045,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $olderDoc->setServerDatePublished($date);
         $olderDoc->setType('article');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('zzzOlderDoc'); // 'zzz' to show the document at the first page
         $title->setLanguage('eng');
         $olderDoc->addTitleMain($title);
@@ -1055,7 +1055,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $newerDoc->setServerState('published');
         $newerDoc->setLanguage('eng');
         $newerDoc->setType('article');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('zzzNewerDoc');
         $title->setLanguage('eng');
         $newerDoc->addTitleMain($title);

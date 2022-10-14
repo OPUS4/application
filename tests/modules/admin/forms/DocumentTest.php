@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Title;
+use Opus\Common\Title;
 
 /**
  * Unit Tests für Metadaten-Formular Klasse.
@@ -152,7 +152,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Title());
+        $document->addTitleMain(Title::new());
 
         $form->populateFromModel($document);
 
@@ -188,7 +188,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Title());
+        $document->addTitleMain(Title::new());
 
         $form->populateFromModel($document);
 
@@ -228,7 +228,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Title());
+        $document->addTitleMain(Title::new());
 
         $form->populateFromModel($document);
 
@@ -268,8 +268,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Title());
-        $document->addTitleMain(new Title());
+        $document->addTitleMain(Title::new());
+        $document->addTitleMain(Title::new());
 
         $form->populateFromModel($document);
 
