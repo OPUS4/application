@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\Identifier;
-use Opus\Series;
+use Opus\Common\Series;
 
 /**
  * Class CitationExport_IndexControllerTest.
@@ -338,7 +338,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRisSeriesVisible()
     {
-        $s = new Series(4);
+        $s = Series::get(4);
         $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
@@ -350,7 +350,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRisSeriesInvisible()
     {
-        $s = new Series(3);
+        $s = Series::get(3);
         $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
@@ -449,7 +449,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testIndexActionBibtexSeriesVisible()
     {
         $this->setDocumentType('preprint');
-        $s = new Series(4);
+        $s = Series::get(4);
         $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
@@ -463,7 +463,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testIndexActionBibtexSeriesInvisible()
     {
         $this->setDocumentType('preprint');
-        $s = new Series(3);
+        $s = Series::get(3);
         $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();

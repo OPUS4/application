@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Collection;
-use Opus\Series;
+use Opus\Common\Series;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Repository;
 
@@ -711,7 +711,7 @@ class Publish_Model_ExtendedValidation
                     $seriesId = $matches[1];
                     $currSeries = null;
                     try {
-                        $currSeries = new Series($seriesId);
+                        $currSeries = Series::get($seriesId);
                     } catch (ModelException $e) {
                         $this->log->err(__METHOD__ . " could not instantiate Opus\Series with id $seriesId", $e);
                         $validSeries = false;

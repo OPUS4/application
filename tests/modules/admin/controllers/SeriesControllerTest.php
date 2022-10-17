@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
+use Opus\Common\Series;
 
 /**
  * Class Admin_SeriesControllerTest.
@@ -58,7 +54,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
 
     public function createNewModel()
     {
-        $series = new Series();
+        $series = Series::new();
 
         $series->setTitle('Testseries');
         $series->setInfobox('Infotext');
@@ -70,7 +66,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
 
     public function getModel($identifier)
     {
-        return new Series($identifier);
+        return Series::get($identifier);
     }
 
     public function testShowAction()
@@ -194,7 +190,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo('/admin/series/show/id/' . $seriesId);
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $series = new Series($seriesId);
+        $series = Series::get($seriesId);
 
         $this->assertEquals('ModifiedTitle', $series->getTitle());
         $this->assertEquals('ModifiedInfo', $series->getInfobox());
@@ -220,7 +216,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         $this->dispatch('/admin/series/edit');
         $this->assertRedirectTo('/admin/series');
 
-        $series = new Series($seriesId);
+        $series = Series::get($seriesId);
 
         $this->assertEquals('Testseries', $series->getTitle());
     }

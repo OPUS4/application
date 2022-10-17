@@ -32,7 +32,7 @@
 use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\Licence;
-use Opus\Series;
+use Opus\Common\Series;
 
 class Publish_Model_ValidationTest extends ControllerTestCase
 {

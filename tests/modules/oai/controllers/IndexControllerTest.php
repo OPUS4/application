@@ -38,7 +38,7 @@ use Opus\File;
 use Opus\Common\Identifier;
 use Opus\Common\Licence;
 use Opus\Common\Person;
-use Opus\Series;
+use Opus\Common\Series;
 use Opus\Common\TitleAbstract;
 use Opus\Common\UserRole;
 
@@ -2142,7 +2142,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setType('periodicalpart');
-        $series = new Series(7);
+        $series = Series::get(7);
         $doc->addSeries($series)->setNumber('1337');
         $docId = $doc->store();
 
@@ -2478,9 +2478,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $editor->setLastName('Doe');
         $doc->addPersonEditor($editor);
 
-        $doc->addSeries(new Series(1))->setNumber(1);
-        $doc->addSeries(new Series(2))->setNumber(2);
-        $doc->addSeries(new Series(3))->setNumber(3);
+        $doc->addSeries(Series::get(1))->setNumber(1);
+        $doc->addSeries(Series::get(2))->setNumber(2);
+        $doc->addSeries(Series::get(3))->setNumber(3);
 
         $docId = $doc->store();
 

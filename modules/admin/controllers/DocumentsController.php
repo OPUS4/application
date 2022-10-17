@@ -32,13 +32,10 @@
 
 use Opus\Common\Collection;
 use Opus\Common\Person;
-use Opus\Series;
+use Opus\Common\Series;
 
 /**
  * Administrative work with document metadata.
- *
- * @category    Application
- * @package     Module_Admin
  *
  * TODO handle state as a facet
  * TODO redirect to remove invalid parameters from URL
@@ -136,7 +133,7 @@ class Admin_DocumentsController extends Application_Controller_Action
             }
         } elseif (! empty($seriesId)) {
             // TODO add as filter facet
-            $series = new Series($seriesId);
+            $series = Series::get($seriesId);
             $this->view->series = $series;
             $result = $series->getDocumentIdsSortedBySortKey();
         } else {

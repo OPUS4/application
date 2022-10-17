@@ -31,16 +31,12 @@
 
 use Opus\Common\Model\NotFoundException;
 use Opus\Model\Dependent\Link\DocumentSeries;
-use Opus\Series;
+use Opus\Common\Series;
 
 /**
  * Unterformular fuer das Editieren eines Serieneintrags.
  *
  * TODO gibt es gute Lösung die Doc-ID nicht noch einmal im Unterformular zu haben (als Teil der ID)
- *
- * @category    Application
- * @package     Module_Admin
- * @subpackage  Form_Document
  */
 class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
 {
@@ -104,7 +100,7 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
     public function updateModel($seriesLink)
     {
         $seriesId = $this->getElementValue(self::ELEMENT_SERIES_ID);
-        $series = new Series($seriesId);
+        $series = Series::get($seriesId);
         $seriesLink->setModel($series);
         $seriesLink->setNumber($this->getElementValue(self::ELEMENT_NUMBER));
         $seriesLink->setDocSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));

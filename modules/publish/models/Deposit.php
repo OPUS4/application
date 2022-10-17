@@ -41,7 +41,7 @@ use Opus\Common\Identifier;
 use Opus\Common\Licence;
 use Opus\Common\Note;
 use Opus\Common\Person;
-use Opus\Series;
+use Opus\Common\Series;
 use Opus\Common\Subject;
 use Opus\Reference;
 use Opus\Common\Title;
@@ -538,7 +538,7 @@ class Publish_Model_Deposit
         $this->_log->debug('Deposit: ' . $dataKey . ' and ' . $id . ' = ' . $seriesId);
 
         try {
-            $s = new Series($seriesId);
+            $s = Series::get($seriesId);
         } catch (ModelException $e) {
             $this->_log->err('Could not find series #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();

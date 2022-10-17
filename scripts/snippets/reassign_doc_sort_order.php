@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\Series;
+use Opus\Common\Series;
 
 /**
  *
@@ -43,7 +43,6 @@ use Opus\Series;
  * neu zugeordnet. Als Sortierkriterium wird dabei die existierende Bandnummer
  * betrachtet. Sind alle Bandnummern numerisch, so wird numerisch nach
  * Bandnummer sortiert; andernfalls lexikographisch nach Bandnummer.
- *
  */
 
 foreach (Series::getAll() as $series) {

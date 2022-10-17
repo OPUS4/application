@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\DocumentInterface;
-use Opus\Series;
+use Opus\Common\Series;
 
 /**
  * This view helper returns the escaped number of a document in a series.

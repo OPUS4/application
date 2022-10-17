@@ -31,7 +31,7 @@
 
 use Opus\Common\Log;
 use Opus\Common\Model\NotFoundException;
-use Opus\Series;
+use Opus\Common\Series;
 
 /**
  * Checks if a number already exists in a series.
@@ -80,7 +80,7 @@ class Application_Form_Validate_SeriesNumberAvailable extends \Zend_Validate_Abs
         }
 
         try {
-            $series = new Series($seriesId);
+            $series = Series::get($seriesId);
         } catch (NotFoundException $omnfe) {
              Log::get()->err(__METHOD__ . $omnfe->getMessage());
             return true;

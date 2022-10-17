@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
+use Opus\Common\Series;
 
 class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
 {
@@ -50,7 +48,7 @@ class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
     public function testSeriesNumberForLinkedDocument()
     {
         $document = $this->getDocument(146);
-        $series = new Series(1);
+        $series = Series::get(1);
 
         $this->assertEquals('5/5', $this->_helper->seriesNumber($document, $series));
     }
@@ -58,7 +56,7 @@ class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
     public function testSeriesNumberForNotLinkedDocument()
     {
         $document = $this->getDocument(146);
-        $series = new Series(2);
+        $series = Series::get(2);
 
         $this->assertEquals('', $this->_helper->seriesNumber($document, $series));
     }
@@ -66,7 +64,7 @@ class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
     public function testSeriesNumberEscaped()
     {
         $document = $this->createTestDocument();
-        $series = new Series(5);
+        $series = Series::get(5);
 
         $document->addSeries($series)->setNumber('<h>XIII</h>');
         $document->store();

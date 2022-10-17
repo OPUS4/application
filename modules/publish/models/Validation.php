@@ -34,7 +34,7 @@ use Opus\Common\CollectionRole;
 use Opus\Common\Config;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Licence;
-use Opus\Series;
+use Opus\Common\Series;
 
 class Publish_Model_Validation
 {

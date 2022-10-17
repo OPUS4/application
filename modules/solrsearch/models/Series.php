@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Series;
+use Opus\Common\Series;
 
 class Solrsearch_Model_Series
 {
@@ -45,7 +45,7 @@ class Solrsearch_Model_Series
 
         $s = null;
         try {
-            $s = new Series($seriesId);
+            $s = Series::get($seriesId);
         } catch (NotFoundException $e) {
             throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.", 404);
         }
