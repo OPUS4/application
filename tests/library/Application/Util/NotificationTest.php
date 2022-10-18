@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Job;
+use Opus\Common\Job;
 use Opus\Common\Log;
 use Opus\Common\Person;
 use Opus\Common\Title;

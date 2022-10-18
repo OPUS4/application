@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Job;
+use Opus\Common\Job;
 
 /**
  *
@@ -54,7 +54,7 @@ class CronTestCase extends ControllerTestCase
         if (! empty($this->jobIds)) {
             foreach ($this->jobIds as $jobId) {
                 try {
-                    $job = new Job($jobId);
+                    $job = Job::get($jobId);
                     $job->delete();
                 } catch (NotFoundException $e) {
                 }
@@ -77,7 +77,7 @@ class CronTestCase extends ControllerTestCase
 
     protected function createJob($label, $data = [])
     {
-        $job = new Job();
+        $job = Job::new();
         $job->setLabel($label);
         $job->setData($data);
         $this->jobIds[] = $job->store();

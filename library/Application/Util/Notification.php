@@ -32,7 +32,7 @@
  */
 
 use Opus\Common\DocumentInterface;
-use Opus\Job;
+use Opus\Common\Job;
 use Opus\Job\Worker\MailNotification;
 use Opus\Common\Model\ModelException;
 
@@ -301,7 +301,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         foreach ($recipients as $recipient) {
             // only send if email address has not been used before
             if (! in_array($recipient['address'], $addressesUsed)) {
-                $job = new Job();
+                $job = Job::new();
                 $job->setLabel(MailNotification::LABEL);
                 $job->setData([
                     'subject' => $subject,

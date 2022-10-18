@@ -33,7 +33,7 @@ require_once('CronTestCase.php');
 
 use Opus\Common\Repository;
 use Opus\Common\Document;
-use Opus\Job;
+use Opus\Common\Job;
 use Opus\Import\Worker\MetadataImportWorker;
 
 class MetadataImportTest extends CronTestCase
