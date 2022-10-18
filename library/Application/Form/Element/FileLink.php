@@ -30,7 +30,8 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\File;
+use Opus\Common\File;
+use Opus\Common\FileInterface;
 
 /**
  * Formularelement für die Anzeige eines Download Links für ein File Objekt.
@@ -62,9 +63,9 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
             throw new Application_Exception(__METHOD__ . " Value must not be null.");
         }
 
-        if (! $file instanceof File) {
+        if (! $file instanceof FileInterface) {
             try {
-                $file = new File($file);
+                $file = File::get($file);
             } catch (NotFoundException $omnfe) {
                 throw new Application_Exception("File with ID = $file not found.");
             }
@@ -89,7 +90,7 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
         $this->setValue($value);
         $file = $this->getValue();
 
-        if ($file instanceof File) {
+        if ($file instanceof FileInterface) {
             return true;
         } else {
             return false;

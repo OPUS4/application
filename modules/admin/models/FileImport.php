@@ -31,7 +31,7 @@
 
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
-use Opus\File;
+use Opus\Common\File;
 
 /**
  * Model for importing files from a specific folder.
@@ -161,7 +161,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract
         $file = null;
 
         try {
-            $file = new File($fileId);
+            $file = File::get($fileId);
         } catch (NotFoundException $omnfe) {
             return false;
         }

@@ -34,7 +34,7 @@ use Opus\Common\CollectionRole;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 use Opus\Common\Enrichment;
-use Opus\File;
+use Opus\Common\File;
 use Opus\Common\Identifier;
 use Opus\Common\Licence;
 use Opus\Common\Person;
@@ -1103,7 +1103,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('foobar.pdf');
         $doc->addFile($file);
@@ -1181,12 +1181,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $d = $this->createTestDocument();
         $d->setServerState('published');
 
-        $f1 = new File();
+        $f1 = File::new();
         $f1->setPathName('foo.pdf');
         $f1->setVisibleInOai(false);
         $d->addFile($f1);
 
-        $f2 = new File();
+        $f2 = File::new();
         $f2->setPathName('bar.pdf');
         $f2->setVisibleInOai(false);
         $d->addFile($f2);
@@ -1270,7 +1270,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('foobar.pdf');
         $doc->addFile($file);
@@ -1295,11 +1295,11 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('foo.pdf');
         $doc->addFile($file);
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('bar.pdf');
         $doc->addFile($file);
@@ -1326,11 +1326,11 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('foo.pdf');
         $doc1->addFile($file);
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('bar.pdf');
         $doc1->addFile($file);
@@ -1339,7 +1339,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('baz.pdf');
         $doc2->addFile($file);
@@ -1365,11 +1365,11 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('foo.pdf');
         $doc1->addFile($file);
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('bar.pdf');
         $doc1->addFile($file);
@@ -1378,7 +1378,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('baz.pdf');
         $doc2->addFile($file);
@@ -1428,7 +1428,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc->addCollection($collection);
 
         // fixing test for OPUSVIER-3142
-        $visibleFile = new File();
+        $visibleFile = File::new();
         $visibleFile->setPathName('visible_file.txt');
         $visibleFile->setVisibleInOai(true);
         $doc->addFile($visibleFile);
@@ -2591,7 +2591,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->setPublisherPlace('publisherPlace');
 
-        $f1 = new File();
+        $f1 = File::new();
         $f1->setPathName('invisible-in-oai.pdf');
         $f1->setVisibleInOai(false);
         $doc->addFile($f1);
@@ -2625,12 +2625,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->setPublisherPlace('publisherPlace');
 
-        $f1 = new File();
+        $f1 = File::new();
         $f1->setPathName('visible-in-oai.pdf');
         $f1->setVisibleInOai(true);
         $doc->addFile($f1);
 
-        $f2 = new File();
+        $f2 = File::new();
         $f2->setPathName('visible-in-oai.txt');
         $f2->setVisibleInOai(true);
         $doc->addFile($f2);

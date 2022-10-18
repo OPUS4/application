@@ -32,7 +32,7 @@
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
-use Opus\File;
+use Opus\Common\File;
 use Opus\Security\Realm;
 
 /**

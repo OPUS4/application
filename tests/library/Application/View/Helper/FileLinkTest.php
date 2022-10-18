@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,18 +24,15 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
+use Opus\Common\File;
 
 /**
  * Unit Tests fuer View Helper zum Rendern von Datei-Links.
- *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_View_Helper_FileLinkTest extends ControllerTestCase
 {
@@ -50,7 +48,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
 
         $helper->setView(new \Zend_View());
 
-        $file = new File(126);
+        $file = File::get(126);
 
         $this->assertEquals('<a href="http:///files/146/test.pdf" class="filelink">foo-pdf</a>'
             . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(
@@ -66,7 +64,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
 
         $helper->setView(new \Zend_View());
 
-        $file = new File(130);
+        $file = File::get(130);
 
         $this->assertEquals(
             '<a href="http:///files/147/special-chars-%25-%22-%23-%26.pdf" class="filelink">Dateiname-mit-Sonderzeichen.pdf</a>'
@@ -81,7 +79,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
 
         $helper->setView($this->getView());
 
-        $file = new File(131);
+        $file = File::get(131);
 
         $this->assertEquals(
             '<a href="http:///files/147/%27many%27++-++spaces++and++quotes.pdf" class="filelink">'
@@ -96,7 +94,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
 
         $helper->setView($this->getView());
 
-        $file = new File(126);
+        $file = File::get(126);
         $file->setLabel(null);
 
         $this->assertEquals(
@@ -119,7 +117,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
 
         $helper->setView($view);
 
-        $file = new File(126);
+        $file = File::get(126);
 
         $this->assertEquals('<a href="http:///testbase/files/146/test.pdf" class="filelink">foo-pdf</a>'
             . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(

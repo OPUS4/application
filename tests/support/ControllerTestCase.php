@@ -38,7 +38,7 @@ use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
 use Opus\Db\TableGateway;
 use Opus\Doi\DoiManager;
-use Opus\File;
+use Opus\Common\File;
 use Opus\Common\Repository;
 use Opus\Common\UserRole;
 use Opus\Security\AuthAdapter;
@@ -824,7 +824,7 @@ class ControllerTestCase extends TestCase
         }
 
         $this->assertTrue(is_readable($filepath));
-        $file = new File();
+        $file = File::new();
         $file->setPathName(basename($filepath));
         $file->setTempFile($filepath);
         if (array_key_exists($filename, $this->testFiles)) {

@@ -33,7 +33,7 @@
 
 use Opus\Common\Config;
 use Opus\Common\Document;
-use Opus\File;
+use Opus\Common\File;
 use Opus\Pdf\Cover\CoverGeneratorFactory;
 use Opus\Pdf\Cover\CoverGeneratorInterface;
 use Opus\Security\Realm;

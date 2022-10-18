@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
+use Opus\Common\File;
 use Opus\Common\UserRole;
 use Opus\Common\Util\File as FileUtil;
 
@@ -125,7 +125,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(false);
         $file->setPathName('test.pdf');
         $file->setTempFile($filepath);
@@ -162,7 +162,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('test.pdf');
         $file->setTempFile($filepath);

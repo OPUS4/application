@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\File;
+use Opus\Common\FileInterface;
 use Opus\Common\Title;
 use Opus\Common\Model\ModelException;
 use Opus\Search\Service;
@@ -809,7 +809,7 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         $doc = Document::get(92);
         $file = $doc->getFile(1);
-        $this->assertTrue($file instanceof File, 'Test setup has changed.');
+        $this->assertTrue($file instanceof FileInterface, 'Test setup has changed.');
         $this->assertEquals('datei mit unüblichem Namen.xhtml', $file->getPathName(), 'Test setup has changed.');
 
         $collection = $doc->getCollection(0);

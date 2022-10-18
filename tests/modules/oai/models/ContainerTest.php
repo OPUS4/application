@@ -32,7 +32,7 @@
 use Opus\Common\Account;
 use Opus\Common\Date;
 use Opus\Common\Document;
-use Opus\File;
+use Opus\Common\File;
 use Opus\Common\UserRole;
 
 class Oai_Model_ContainerTest extends ControllerTestCase
@@ -154,7 +154,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setPathName('foo.pdf');
         $file->setVisibleInOai(false);
         $doc->addFile($file);
@@ -191,7 +191,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setPathName('test.pdf');
         $file->setVisibleInOai(true);
         $doc->addFile($file);

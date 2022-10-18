@@ -30,7 +30,8 @@
  */
 
 use Opus\Common\Date;
-use Opus\File;
+use Opus\Common\File;
+use Opus\Common\FileInterface;
 
 class Frontdoor_Model_FileTest extends ControllerTestCase
 {
@@ -86,7 +87,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $realm = new MockRealm(true, true);
         $opusFile = $file->getFileObject($realm);
 
-        $this->assertTrue($opusFile instanceof File);
+        $this->assertTrue($opusFile instanceof FileInterface);
         $this->assertEquals(self::FILENAME_DELETED_DOC, $opusFile->getPathName());
     }
 
@@ -96,7 +97,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $file->setAclHelper(new MockAccessControl(true));
         $realm = new MockRealm(false, false); // sollte egal sein
         $opusFile = $file->getFileObject($realm);
-        $this->assertTrue($opusFile instanceof File);
+        $this->assertTrue($opusFile instanceof FileInterface);
     }
 
     public function testGetFileObjectAccessNotAllowedForUser()
@@ -256,7 +257,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
 
         $realm = new MockRealm(true, true);
 
-        $opusFile = new File(128);
+        $opusFile = File::get(128);
 
         $this->assertEquals(0, $opusFile->getVisibleInFrontdoor(), "Testdaten geändert.");
         $this->assertEquals("frontdoor_invisible.txt", $opusFile->getPathName(), "Testdaten geändert.");

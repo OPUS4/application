@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\File;
+use Opus\Common\File;
 use Opus\Common\UserRole;
 use Opus\Model\AbstractDb;
 
@@ -163,7 +163,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
         if (isset($defaults[$this->getName()])) {
             $fileId = $defaults[$this->getName()][self::ELEMENT_ID];
-            $file = new File($fileId);
+            $file = File::get($fileId);
             $this->getSubForm(self::SUBFORM_HASHES)->populateFromModel($file);
             $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
         } else {
@@ -205,7 +205,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
         if (strlen(trim($fileId)) > 0 && is_numeric($fileId)) {
             try {
-                $file = new File($fileId);
+                $file = File::get($fileId);
             } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown file ID = '$fileId'.");
                 throw new Application_Exception("Unknown file ID = '$fileId'.");
