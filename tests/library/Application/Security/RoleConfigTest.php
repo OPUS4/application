@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @package     TODO
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 /**
  *
@@ -46,7 +44,7 @@ class Application_Security_RoleConfigTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->guestRole = new UserRole(2);
+        $this->guestRole = UserRole::get(2);
         $this->guestRole->appendAccessModule('documents');
     }
 

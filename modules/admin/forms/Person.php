@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Person;
+use Opus\Common\Person;
+use Opus\Common\PersonInterface;
 
 /**
  * Formular zum Editieren einer Person (Person).
@@ -129,13 +127,15 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
             ]
         );
 
+        $fieldLastName = Person::describeField(Person::FIELD_LAST_NAME);
+
         $this->addElement('hidden', self::ELEMENT_PERSON_ID, ['size' => '40']);
         $this->addElement('text', self::ELEMENT_ACADEMIC_TITLE, ['label' => 'AcademicTitle']);
         $this->addElement(
             'text',
             self::ELEMENT_LAST_NAME,
             ['label' => 'LastName', 'required' => true,
-            'size' => 50, 'maxlength' => Person::getFieldMaxLength('LastName')]
+            'size' => 50, 'maxlength' => $fieldLastName->getMaxSize()]
         );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, ['label' => 'FirstName', 'size' => 50]);
         $this->addElement('Email', self::ELEMENT_EMAIL, ['label' => 'Email']);
@@ -233,7 +233,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
      */
     public function updateModel($model)
     {
-        if ($model instanceof Person) {
+        if ($model instanceof PersonInterface) {
             $model->setAcademicTitle($this->getElementValue(self::ELEMENT_ACADEMIC_TITLE));
             $model->setLastName($this->getElementValue(self::ELEMENT_LAST_NAME));
             $model->setFirstName($this->getElementValue(self::ELEMENT_FIRST_NAME));
@@ -245,7 +245,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
             $datesHelper = $this->getDatesHelper();
             $model->setDateOfBirth($datesHelper->getOpusDate($this->getElementValue(self::ELEMENT_DATE_OF_BIRTH)));
         } else {
-            $this->getLogger()->err(__METHOD__ . ' called with object that is not instance of Opus\Person');
+            $this->getLogger()->err(__METHOD__ . ' called with object that is not instance of PersonInterface');
         }
     }
 
@@ -258,9 +258,9 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
         $personId = $this->getElementValue(self::ELEMENT_PERSON_ID);
 
         if (is_numeric($personId)) {
-            $person = new Person($personId);
+            $person = Person::get($personId);
         } else {
-            $person = new Person();
+            $person = Person::new();
         }
 
         $this->updateModel($person);

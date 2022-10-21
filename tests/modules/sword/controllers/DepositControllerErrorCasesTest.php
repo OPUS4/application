@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Sword
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016-2019
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\EnrichmentKey;
+use Opus\Common\Document;
+use Opus\Common\EnrichmentKey;
 use Opus\Import\AdditionalEnrichments;
 
 /**
@@ -126,12 +124,12 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         $this->getRequest()->setRawBody('some content');
 
         // remove enrichment key opus.import.user
-        $enrichmentKey = new EnrichmentKey(AdditionalEnrichments::OPUS_IMPORT_USER);
+        $enrichmentKey = EnrichmentKey::get(AdditionalEnrichments::OPUS_IMPORT_USER);
         $enrichmentKey->delete();
 
         $this->dispatch('/sword/deposit');
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName(AdditionalEnrichments::OPUS_IMPORT_USER);
         $enrichmentKey->store();
 

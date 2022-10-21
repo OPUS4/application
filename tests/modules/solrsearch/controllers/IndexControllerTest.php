@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,23 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
-use Opus\Date;
-use Opus\Identifier;
-use Opus\Person;
+use Opus\Common\CollectionRole;
+use Opus\Common\Date;
+use Opus\Common\Identifier;
+use Opus\Common\Person;
 use Opus\Security\Realm;
-use Opus\Subject;
-use Opus\Title;
+use Opus\Common\Subject;
+use Opus\Common\Title;
 
 /**
  * Class Solrsearch_IndexControllerTest.
@@ -685,12 +680,12 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setLanguage('eng');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('test document for OPUSVIER-2475');
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
 
-        $id = new Identifier();
+        $id = Identifier::new();
         $field = $id->getField('Type');
         $identifierTypes = array_keys($field->getDefault());
 
@@ -740,12 +735,12 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setLanguage('eng');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('test document for OPUSVIER-2484');
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
 
-        $person = new Person();
+        $person = Person::new();
         $person->setLastName($lastName);
         $personLink = $doc->addPerson($person);
         $personLink->setRole($role);
@@ -848,13 +843,13 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setLanguage('eng');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('facetlimittestwithsubjects-opusvier2610');
         $title->setLanguage('eng');
         $doc->addTitleMain($title);
 
         for ($index = 0; $index < $numOfSubjects; $index++) {
-            $subject = new Subject();
+            $subject = Subject::new();
             if ($index < 10) {
                 $subject->setValue('subject' . '0' . $index);
             } else {
@@ -1050,7 +1045,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $olderDoc->setServerDatePublished($date);
         $olderDoc->setType('article');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('zzzOlderDoc'); // 'zzz' to show the document at the first page
         $title->setLanguage('eng');
         $olderDoc->addTitleMain($title);
@@ -1060,7 +1055,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $newerDoc->setServerState('published');
         $newerDoc->setLanguage('eng');
         $newerDoc->setType('article');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('zzzNewerDoc');
         $title->setLanguage('eng');
         $newerDoc->addTitleMain($title);

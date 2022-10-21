@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Job;
+use Opus\Common\Job;
 
 /**
  * @covers Admin_JobController
@@ -54,7 +52,7 @@ class Admin_JobControllerTest extends ControllerTestCase
         $this->assertEquals(0, Job::getCount(Job::STATE_FAILED), 'test data changed.');
 
         for ($i = 0; $i < 10; $i++) {
-            $job = new Job();
+            $job = Job::new();
             $job->setLabel('testjob' . ($i < 5 ? 1 : 2));
             $job->setData([
                 'documentId' => $i,

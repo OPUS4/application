@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Admin_Form_Document
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Enrichment;
-use Opus\EnrichmentKey;
+use Opus\Common\Document;
+use Opus\Common\Enrichment;
+use Opus\Common\EnrichmentInterface;
+use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
 use Opus\Common\Model\ModelException;
 
 /**
@@ -285,12 +285,12 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      * @param string $keyName Name des Enrichment-Keys
      * @param string $value Wert des Enrichments
      *
-     * @return Enrichment neu erzeugtes Enrichment-Objekt
+     * @return EnrichmentInterface neu erzeugtes Enrichment-Objekt
      * @throws ModelException
      */
     private function createEnrichment($keyName, $value)
     {
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName($keyName);
         $enrichment->setValue($value);
         return $enrichment;
@@ -303,12 +303,12 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      * @param null $type optionaler Typ des Enrichment-Keys
      * @param null $options optionale Konfigurationsoptionen des Typs
      *
-     * @return EnrichmentKey neu erzeugter Enrichment-Key
+     * @return EnrichmentKeyInterface neu erzeugter Enrichment-Key
      * @throws ModelException
      */
     private function createEnrichmentKey($type = null, $options = null)
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName(self::$firstEnrichmentKeyName);
 
         if (! is_null($type)) {

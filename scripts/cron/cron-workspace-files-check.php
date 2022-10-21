@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,9 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2011-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -35,8 +34,8 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Common\Config;
-use Opus\Document;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Document;
 
 // Get files directory...
 $startTime = microtime(true);

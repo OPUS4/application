@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <opus-development@saschaszott.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Common\Model\ModelException;
 use Opus\Doi\DataCiteXmlGenerator;
 use Opus\Doi\DataCiteXmlGenerationException;
@@ -114,7 +112,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
     /**
      * Setzt die View-Objekte für die Generierung der HTML-Statusseite mit den Fehlermeldungen der XML-Generierung.
      *
-     * @param Document $document das aktuell verarbeitete Dokument
+     * @param DocumentInterface $document das aktuell verarbeitete Dokument
      * @param array $requiredFieldsStatus der Status (Existenz bzw. Nichtexistenz) der einzelnen Pflichtfelder
      * @param array $errors die bei der DataCite-XML Generierung gefundenen Fehler
      */

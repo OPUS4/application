@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
 use Opus\Common\Repository;
@@ -40,13 +40,13 @@ class Application_Util_Document
 
     /**
      *
-     * @var Document
+     * @var DocumentInterface
      */
     private $_document;
 
     /**
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @throws Application_Exception
      */
     public function __construct($document)

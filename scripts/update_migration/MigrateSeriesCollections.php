@@ -1,7 +1,8 @@
 #!/usr/bin/env php5
 <?php
 
-/** This file is part of OPUS. The software OPUS has been originally developed
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
  * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
@@ -25,20 +26,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- **/
+ */
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\Document;
+use Opus\Common\Collection;
+use Opus\Common\CollectionRole;
+use Opus\Common\Document;
 use Opus\Common\Repository;
-use Opus\Series;
+use Opus\Common\Series;
 
 class FindMissingSeriesNumbers
 {
@@ -85,7 +83,7 @@ class FindMissingSeriesNumbers
             if ($collection->isRoot()) {
                 continue;
             }
-            $series = new Series(Series::createRowWithCustomId($collection->getId()));
+            $series = Series::get(Series::createRowWithCustomId($collection->getId()));
             $series->setTitle($collection->getName());
             $series->setVisible($collection->getVisible());
             $series->setSortOrder($collection->getSortOrder());
@@ -185,7 +183,7 @@ class FindMissingSeriesNumbers
                             $numOfConflicts++;
                         } else {
                             // no conflict
-                            $series = new Series($collectionId);
+                            $series = Series::get($collectionId);
                             $doc->addSeries($series)->setNumber($serialId);
                             $doc->setIdentifierSerial([]);
 

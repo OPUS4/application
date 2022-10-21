@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @subpackage  Form_Document
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2013-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Enrichment;
-use Opus\EnrichmentKey;
+use Opus\Common\Enrichment;
+use Opus\Common\EnrichmentInterface;
+use Opus\Common\EnrichmentKey;
 use Opus\Enrichment\SelectType;
 use Opus\Enrichment\TextType;
 use Opus\Common\Model\ModelException;
@@ -285,7 +282,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     /**
      * Liefert angezeigtes oder neues (hinzuzufügendes) Enrichment Modell.
      *
-     * @return Enrichment
+     * @return EnrichmentInterface
      */
     public function getModel()
     {
@@ -296,12 +293,12 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         }
 
         try {
-            $enrichment = new Enrichment($enrichmentId);
+            $enrichment = Enrichment::get($enrichmentId);
         } catch (ModelException $omnfe) {
             $this->getLogger()->err(
                 __METHOD__ . " Unknown enrichment ID = '$enrichmentId' (" . $omnfe->getMessage() . ').'
             );
-            $enrichment = new Enrichment();
+            $enrichment = Enrichment::new();
         }
 
         $this->updateModel($enrichment);
@@ -349,7 +346,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         if (! is_null($enrichmentId)) {
             // Formularfeld zeigt den Wert eines in der Datenbank gespeicherten Enrichments
             try {
-                $enrichment = new Enrichment($enrichmentId);
+                $enrichment = Enrichment::get($enrichmentId);
             } catch (ModelException $e) {
                 // ignore exception silently
             }
@@ -377,8 +374,8 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * EnrichmentKey verwendet, so muss der Name des EnrichmentKey als zusätzlcher Auswahlwert
      * im Select-Element ELEMENT_KEY_NAME aufgenommen werden
      *
-     * @param $enrichmentKeyName
-     * @param $enrichmentId
+     * @param string $enrichmentKeyName
+     * @param int $enrichmentId
      */
     private function initEnrichmentKeyNameElement($enrichmentKeyName, $enrichmentId)
     {
@@ -388,7 +385,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 
         $enrichment = null;
         try {
-            $enrichment = new Enrichment($enrichmentId);
+            $enrichment = Enrichment::get($enrichmentId);
         } catch (ModelException $e) {
             // ignore silently
             return;
@@ -473,7 +470,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                 $enrichmentId = $enrichmentData[self::ELEMENT_ID];
                 $enrichment = null;
                 try {
-                    $enrichment = new Enrichment($enrichmentId);
+                    $enrichment = Enrichment::get($enrichmentId);
                 } catch (ModelException $e) {
                     // ignore exception silently and do not change validation result
                 }
@@ -543,7 +540,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 
                     $enrichmentId = $enrichmentData[self::ELEMENT_ID];
                     try {
-                        $enrichment = new Enrichment($enrichmentId);
+                        $enrichment = Enrichment::get($enrichmentId);
 
                         if (! array_key_exists(self::ELEMENT_VALUE, $enrichmentData)) {
                             return false; // negatives Validierungsergebnis bleibt bestehen

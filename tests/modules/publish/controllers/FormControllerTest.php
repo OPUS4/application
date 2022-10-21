@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Class Publish_FormControllerTest.
@@ -419,7 +416,7 @@ class Publish_FormControllerTest extends ControllerTestCase
     }
 
     /**
-     * @return Document
+     * @return DocumentInterface
      */
     private function createTemporaryDoc()
     {
@@ -561,7 +558,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'SeriesNumber_1' => '',
             'Series_1' => '',
 
-            // Add Button wurde gedrückt
+            // Add Button wurde gedrueckt
             'addMoreTitleMain' => 'Einen+weiteren+Titel+hinzufügen',
         ];
 
@@ -616,7 +613,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'SeriesNumber_1' => '',
             'Series_1' => '',
 
-            // Delete Button wurde gedrückt
+            // Delete Button wurde gedrueckt
             'deleteMoreTitleMain' => 'Den+letzten+Titel+löschen',
         ];
 
@@ -671,7 +668,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'SeriesNumber_1' => '',
             'Series_1' => '',
 
-            // Browse Down Button wurde gedrückt
+            // Browse Down Button wurde gedrueckt
             'browseDownInstitute' => 'runter',
         ];
 
@@ -728,7 +725,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'SeriesNumber_1' => '',
             'Series_1' => '',
 
-            // Browse Up Button wurde gedrückt
+            // Browse Up Button wurde gedrueckt
             'browseUpInstitute' => 'hoch',
         ];
 
@@ -789,7 +786,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'Licence' => '',
             'SeriesNumber_1' => '',
             'Series_1' => ''
-            // kein Button wurde gedrückt
+            // kein Button wurde gedrueckt
         ];
 
         $this->request

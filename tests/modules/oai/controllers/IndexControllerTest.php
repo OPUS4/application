@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,27 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Oai
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\DnbInstitute;
-use Opus\Document;
-use Opus\Enrichment;
-use Opus\File;
-use Opus\Identifier;
-use Opus\Licence;
-use Opus\Person;
-use Opus\Series;
-use Opus\TitleAbstract;
-use Opus\UserRole;
+use Opus\Common\Collection;
+use Opus\Common\CollectionRole;
+use Opus\Common\DnbInstitute;
+use Opus\Common\Document;
+use Opus\Common\Enrichment;
+use Opus\Common\File;
+use Opus\Common\Identifier;
+use Opus\Common\Licence;
+use Opus\Common\Person;
+use Opus\Common\Series;
+use Opus\Common\TitleAbstract;
+use Opus\Common\UserRole;
 
 /**
  * TODO split specific protocol tests into separate classes
@@ -1107,7 +1103,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('foobar.pdf');
         $doc->addFile($file);
@@ -1185,12 +1181,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $d = $this->createTestDocument();
         $d->setServerState('published');
 
-        $f1 = new File();
+        $f1 = File::new();
         $f1->setPathName('foo.pdf');
         $f1->setVisibleInOai(false);
         $d->addFile($f1);
 
-        $f2 = new File();
+        $f2 = File::new();
         $f2->setPathName('bar.pdf');
         $f2->setVisibleInOai(false);
         $d->addFile($f2);
@@ -1274,7 +1270,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('foobar.pdf');
         $doc->addFile($file);
@@ -1299,11 +1295,11 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('foo.pdf');
         $doc->addFile($file);
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('bar.pdf');
         $doc->addFile($file);
@@ -1326,15 +1322,15 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testDdbFileNumberForMultipleDocumentsForXMetaDissPlus()
     {
-        $collection = new Collection(112);
+        $collection = Collection::get(112);
 
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('foo.pdf');
         $doc1->addFile($file);
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('bar.pdf');
         $doc1->addFile($file);
@@ -1343,7 +1339,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('baz.pdf');
         $doc2->addFile($file);
@@ -1365,15 +1361,15 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testTransferUrlIsIOnlyGivenForDocsWithFulltext()
     {
-        $collection = new Collection(112);
+        $collection = Collection::get(112);
 
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('foo.pdf');
         $doc1->addFile($file);
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('bar.pdf');
         $doc1->addFile($file);
@@ -1382,7 +1378,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('baz.pdf');
         $doc2->addFile($file);
@@ -1425,14 +1421,14 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testForDDCSubjectTypeForXMetaDissPlus()
     {
-        $collection = new Collection(112);
+        $collection = Collection::get(112);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addCollection($collection);
 
         // fixing test for OPUSVIER-3142
-        $visibleFile = new File();
+        $visibleFile = File::new();
         $visibleFile->setPathName('visible_file.txt');
         $visibleFile->setVisibleInOai(true);
         $doc->addFile($visibleFile);
@@ -1551,28 +1547,28 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $document->setServerState('published');
 
-        $author = new Person();
+        $author = Person::new();
         $author->setLastName('Foo');
         $author->setDateOfBirth('1900-01-01');
         $author->setPlaceOfBirth('Berlin');
 //      $authorId = $author->store();
         $document->addPersonAuthor($author);
 
-        $advisor = new Person();
+        $advisor = Person::new();
         $advisor->setLastName('Bar');
         $advisor->setDateOfBirth('1900-01-01');
         $advisor->setPlaceOfBirth('Berlin');
 //      $advisorId = $advisor->store();
         $document->addPersonAdvisor($advisor);
 
-        $referee = new Person();
+        $referee = Person::new();
         $referee->setLastName('Baz');
         $referee->setDateOfBirth('1900-01-01');
         $referee->setPlaceOfBirth('Berlin');
 //      $refereeId = $referee->store();
         $document->addPersonReferee($referee);
 
-        $editor = new Person();
+        $editor = Person::new();
         $editor->setLastName('TestEditor');
         $document->addPersonEditor($editor);
 
@@ -2060,12 +2056,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $relation = new Enrichment();
+        $relation = Enrichment::new();
         $relation->setKeyName('Relation');
         $relation->setValue('test-1234');
         $doc->addEnrichment($relation);
 
-        $relation = new Enrichment();
+        $relation = Enrichment::new();
         $relation->setKeyName('Relation');
         $relation->setValue('info:eu-repo/grantAgreement/EC/FP7/1234withPrefix');
         $doc->addEnrichment($relation);
@@ -2146,7 +2142,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setType('periodicalpart');
-        $series = new Series(7);
+        $series = Series::get(7);
         $doc->addSeries($series)->setNumber('1337');
         $docId = $doc->store();
 
@@ -2426,65 +2422,65 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc->setPageNumber('10');
         $doc->setCreatingCorporation('Foo Creating Corp.');
 
-        $identifierUrn = new Identifier();
+        $identifierUrn = Identifier::new();
         $identifierUrn->setType('urn');
         $identifierUrn->setValue('urn:nbn:de:foo:opus-4711');
-        $identifierIssn = new Identifier();
+        $identifierIssn = Identifier::new();
         $identifierIssn->setType('issn');
         $identifierIssn->setValue('0953-4563');
         $doc->setIdentifier([$identifierUrn, $identifierIssn]);
 
-        $ddc33x = new Collection(45); // sichtbar
-        $ddc334 = new Collection(402); // unsichtbar
-        $ddc34x = new Collection(46); // sichtbar
+        $ddc33x = Collection::get(45); // sichtbar
+        $ddc334 = Collection::get(402); // unsichtbar
+        $ddc34x = Collection::get(46); // sichtbar
         $doc->setCollection([$ddc33x, $ddc334, $ddc34x]);
 
-        $titleMainDeu = new TitleAbstract();
+        $titleMainDeu = TitleAbstract::new();
         $titleMainDeu->setLanguage('deu');
         $titleMainDeu->setType('main');
         $titleMainDeu->setValue('TitleMainInDocumentLanguage');
-        $titleMainEng = new TitleAbstract();
+        $titleMainEng = TitleAbstract::new();
         $titleMainEng->setLanguage('eng');
         $titleMainEng->setType('main');
         $titleMainEng->setValue('TitleMainInOtherLanguage');
         $doc->setTitleMain([$titleMainDeu, $titleMainEng]);
 
-        $titleSubDeu = new TitleAbstract();
+        $titleSubDeu = TitleAbstract::new();
         $titleSubDeu->setLanguage('deu');
         $titleSubDeu->setType('sub');
         $titleSubDeu->setValue('TitleSubInDocumentLanguage');
-        $titleSubEng = new TitleAbstract();
+        $titleSubEng = TitleAbstract::new();
         $titleSubEng->setLanguage('eng');
         $titleSubEng->setType('sub');
         $titleSubEng->setValue('TitleSubInOtherLanguage');
         $doc->setTitleSub([$titleSubDeu, $titleSubEng]);
 
-        $titleParent = new TitleAbstract();
+        $titleParent = TitleAbstract::new();
         $titleParent->setLanguage('deu');
         $titleParent->setType('parent');
         $titleParent->setValue('TitleParentInDocumentLanguage');
         $doc->setTitleParent([$titleParent]);
 
-        $abstractDeu = new TitleAbstract();
+        $abstractDeu = TitleAbstract::new();
         $abstractDeu->setLanguage('deu');
         $abstractDeu->setType('abstract');
         $abstractDeu->setValue('TitleAbstractInDocumentLanguage');
-        $abstractEng = new TitleAbstract();
+        $abstractEng = TitleAbstract::new();
         $abstractEng->setLanguage('eng');
         $abstractEng->setType('abstract');
         $abstractEng->setValue('TitleAbstractInOtherLanguage');
         $doc->setTitleAbstract([$abstractEng, $abstractDeu]);
 
-        $doc->setThesisPublisher([new DnbInstitute(2), new DnbInstitute(4)]);
+        $doc->setThesisPublisher([DnbInstitute::get(2), DnbInstitute::get(4)]);
 
-        $editor = new Person();
+        $editor = Person::new();
         $editor->setFirstName('John');
         $editor->setLastName('Doe');
         $doc->addPersonEditor($editor);
 
-        $doc->addSeries(new Series(1))->setNumber(1);
-        $doc->addSeries(new Series(2))->setNumber(2);
-        $doc->addSeries(new Series(3))->setNumber(3);
+        $doc->addSeries(Series::get(1))->setNumber(1);
+        $doc->addSeries(Series::get(2))->setNumber(2);
+        $doc->addSeries(Series::get(3))->setNumber(3);
 
         $docId = $doc->store();
 
@@ -2595,15 +2591,15 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->setPublisherPlace('publisherPlace');
 
-        $f1 = new File();
+        $f1 = File::new();
         $f1->setPathName('invisible-in-oai.pdf');
         $f1->setVisibleInOai(false);
         $doc->addFile($f1);
 
-        $licencePresent = new Licence(1);
+        $licencePresent = Licence::get(1);
         $doc->addLicence($licencePresent);
 
-        $licenceMissing = new Licence(2);
+        $licenceMissing = Licence::get(2);
         $doc->addLicence($licenceMissing);
 
         $docId = $doc->store();
@@ -2629,20 +2625,20 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->setPublisherPlace('publisherPlace');
 
-        $f1 = new File();
+        $f1 = File::new();
         $f1->setPathName('visible-in-oai.pdf');
         $f1->setVisibleInOai(true);
         $doc->addFile($f1);
 
-        $f2 = new File();
+        $f2 = File::new();
         $f2->setPathName('visible-in-oai.txt');
         $f2->setVisibleInOai(true);
         $doc->addFile($f2);
 
-        $licencePresent = new Licence(1);
+        $licencePresent = Licence::get(1);
         $doc->addLicence($licencePresent);
 
-        $licenceMissing = new Licence(2);
+        $licenceMissing = Licence::get(2);
         $doc->addLicence($licenceMissing);
 
         $docId = $doc->store();
@@ -3346,7 +3342,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     private function addTitleParent($doc, $language, $value)
     {
-        $titleParent = new TitleAbstract();
+        $titleParent = TitleAbstract::new();
         $titleParent->setType('parent');
         $titleParent->setLanguage($language);
         $titleParent->setValue($value);
@@ -3363,7 +3359,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     private function addIdentifier($doc, $value, $type)
     {
-        $identifier = new Identifier();
+        $identifier = Identifier::new();
         $identifier->setType($type);
         $identifier->setValue($value);
 

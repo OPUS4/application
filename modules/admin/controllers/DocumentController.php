@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Controller for showing and editing a document in the administration.
@@ -60,7 +58,7 @@ class Admin_DocumentController extends Application_Controller_Action
 
     /**
      * Produces metadata overview page of a document.
-     * @return Document
+     * @return DocumentInterface
      */
     public function indexAction()
     {
@@ -236,8 +234,8 @@ class Admin_DocumentController extends Application_Controller_Action
      * Liefert ein Formular, dessen Elemente mit den Werten des übergebenen Dokuments
      * initialisiert sind.
      *
-     * @param $document Document
-     * @param $editSession Admin_Model_DocumentEditSession
+     * @param DocumentInterface $document
+     * @param Admin_Model_DocumentEditSession $editSession
      *
      * @return Admin_Form_Document|null
      */

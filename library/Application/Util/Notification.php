@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,18 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Notification
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2012-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO remove concept of 'context' - class should not implement different context variations (use OO principles)
  */
 
-use Opus\Document;
-use Opus\Job;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Job;
 use Opus\Job\Worker\MailNotification;
 use Opus\Common\Model\ModelException;
 
@@ -50,11 +47,11 @@ class Application_Util_Notification extends Application_Model_Abstract
 
     /**
      *
-     * @param Document $document das Dokument auf das sich die Notifizierung bezieht
-     * @param String $url vollständiger Deeplink, der in der Mail angezeigt werden soll
-     * @param boolean $notifySubmitter Wenn false, wird der Submitter nicht notifiziert
-     * @param array $notifyAuthors Bitmaske, die für jeden Autor (über den Index referenziert) angibt, ob ihm/ihr eine
-     *                             E-Mail gesendet werden kann (wenn false, dann wird keine Notifizierung versendet)
+     * @param DocumentInterface $document Dokument auf das sich die Notifizierung bezieht
+     * @param String            $url vollständiger Deeplink, der in der Mail angezeigt werden soll
+     * @param boolean           $notifySubmitter Wenn false, wird der Submitter nicht notifiziert
+     * @param array             $notifyAuthors Bitmaske, die für jeden Autor (über den Index referenziert) angibt, ob ihm/ihr eine
+     *                                         E-Mail gesendet werden kann (wenn false, dann wird keine Notifizierung versendet)
      *
      * TODO this class should not collect recipients on its own -> recipients should be provided
      */
@@ -155,10 +152,8 @@ class Application_Util_Notification extends Application_Model_Abstract
     }
 
     /**
-     * @param $document Document
-     * @param $docId
-     * @param $authors
-     * @param $title
+     * @param DocumentInterface $document
+     * @param array             $authors
      * @return string
      *
      * TODO refactor for single document parameter?
@@ -306,7 +301,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         foreach ($recipients as $recipient) {
             // only send if email address has not been used before
             if (! in_array($recipient['address'], $addressesUsed)) {
-                $job = new Job();
+                $job = Job::new();
                 $job->setLabel(MailNotification::LABEL);
                 $job->setData([
                     'subject' => $subject,

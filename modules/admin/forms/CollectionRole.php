@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO OaiName could be optional since it is usually the same as Name (which could be used as default)
  *
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 
 class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
 {
@@ -60,8 +59,12 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
         $this->setRemoveEmptyCheckbox(false);
         $this->setUseNameAsLabel(true);
 
+        $fieldName = CollectionRole::describeField(CollectionRole::FIELD_NAME);
+
         $this->addElement('text', self::ELEMENT_NAME, [
-            'required' => true, 'size' => 70, 'maxlength' => CollectionRole::getFieldMaxLength('Name')
+            'required' => true,
+            'size' => 70,
+            'maxlength' => $fieldName->getMaxSize()
         ]);
         $this->getElement(self::ELEMENT_NAME)->addValidators([
                 new Application_Form_Validate_CollectionRoleNameUnique(),
@@ -72,8 +75,12 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
             'required' => false, 'size' => 70
         ]);
 
+        $fieldOaiName = CollectionRole::describeField(CollectionRole::FIELD_OAI_NAME);
+
         $this->addElement('text', self::ELEMENT_OAI_NAME, [
-            'required' => true, 'size' => 30, 'maxlength' => CollectionRole::getFieldMaxLength('OaiName')
+            'required' => true,
+            'size' => 30,
+            'maxlength' => $fieldOaiName->getMaxSize()
         ]);
         $this->getElement(self::ELEMENT_OAI_NAME)->addValidator(
             new Application_Form_Validate_CollectionRoleOaiNameUnique()
@@ -94,7 +101,7 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
     }
 
     /**
-     * @param $collectionRole CollectionRole
+     * @param $collectionRole CollectionRoleInterface
      */
     public function populateFromModel($collectionRole)
     {
@@ -119,7 +126,7 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract
     }
 
     /**
-     * @param $collectionRole CollectionRole
+     * @param $collectionRole CollectionRoleInterface
      */
     public function updateModel($collectionRole)
     {

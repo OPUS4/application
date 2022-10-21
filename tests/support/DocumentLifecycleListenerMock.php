@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,42 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Cronjob
- * @package     Tests
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Model\DocumentLifecycleListener;
 
 /**
- * Mock used by DbCleanTemporary
+ * TODO This class is used by unit tests in two places and meets two different testing requirements. This different
+ *      responsibilities should be separated.
  */
-class OpusDocumentMock extends Document
+class DocumentLifecycleListenerMock extends DocumentLifecycleListener
 {
 
-    public function changeServerDateModified($date)
+    /**
+     * Circumvents setting of ServerDateModified and ServerDatePublished for testing.
+     * @param $document
+     */
+    public function preStore($document)
     {
-        $this->setServerDateModified($date);
-        // Start transaction
-        $dbadapter = $this->getTableRow()->getTable()->getAdapter();
-        $dbadapter->beginTransaction();
+        $dateModified = $document->getServerDateModified();
+        parent::preStore($document);
 
-        // store internal and external fields
-        try {
-            $id = $this->_storeInternalFields();
-            $this->_postStoreInternalFields();
-            $this->_storeExternalFields();
-            $this->_postStoreExternalFields();
-        } catch (Exception $e) {
-            $dbadapter->rollBack();
-            throw $e;
+        if ($dateModified !== null) {
+            $document->setServerDateModified($dateModified);
         }
 
-        // commit transaction
-        $dbadapter->commit();
-
-        $this->_postStore();
+        $document->setServerDatePublished(null);
     }
 }

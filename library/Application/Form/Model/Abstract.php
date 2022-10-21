@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,10 +24,13 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright Copyright (c) 2008, OPUS 4 development team
+ * @license   http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Model\AbstractDb;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * Abstrakte Basisklasse für Model-Formulare.
@@ -34,11 +38,6 @@ use Opus\Model\NotFoundException;
  * Die Model-Formulare können zusammen mit Application_Controller_Action_CRUD fuer die Verwaltung von Modellen eines
  * Typs eingesetzt werden.
  *
- * @category    Application
- * @package     Application_Form_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 abstract class Application_Form_Model_Abstract extends Application_Form_AbstractViewable implements Application_Form_IModel
 {
@@ -72,13 +71,13 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * Name der Modelklasse fuer Formular.
      * @var string
      */
-    private $_modelClass;
+    private $modelClass;
 
     /**
      * Most model IDs are numeric. If not set to false;
      * @var bool
      */
-    private $_verifyModelIdIsNumeric = true;
+    private $verifyModelIdIsNumeric = true;
 
     /**
      * Initialisiert die Formularelement und Dekoratoren.
@@ -169,7 +168,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
         $model = null;
 
         try {
-            $model = new $modelClass($modelId);
+            $model = $modelClass::get($modelId);
         } catch (NotFoundException $omnfe) {
             $this->getLogger()->err($omnfe->getMessage());
             throw new Application_Exception(__METHOD__ . " Model with ID '$modelId' not found.");
@@ -213,7 +212,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      */
     public function getModelClass()
     {
-        return $this->_modelClass;
+        return $this->modelClass;
     }
 
     /**
@@ -222,7 +221,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      */
     public function setModelClass($modelClass)
     {
-        $this->_modelClass = $modelClass;
+        $this->modelClass = $modelClass;
     }
 
     /**
@@ -246,7 +245,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      */
     public function setVerifyModelIdIsNumeric($enabled)
     {
-        $this->_verifyModelIdIsNumeric = $enabled;
+        $this->verifyModelIdIsNumeric = $enabled;
     }
 
     /**
@@ -255,6 +254,6 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      */
     public function getVerifyModelIdIsNumeric()
     {
-        return $this->_verifyModelIdIsNumeric;
+        return $this->verifyModelIdIsNumeric;
     }
 }

@@ -214,7 +214,13 @@ class Application_Form_Confirmation extends Application_Form_Abstract
      */
     public function getModelClassName()
     {
-        return $this->getTranslator()->translate(preg_replace('/\\\\/', '_', $this->_modelClass));
+        if (strpos($this->_modelClass, 'Opus\\Common\\') === 0) {
+            $modelType = $this->_modelClass::getModelType();
+            $translationKey = 'Opus_' . $modelType;
+        } else {
+            $translationKey = preg_replace('/\\\\/', '_', $this->_modelClass);
+        }
+        return $this->getTranslator()->translate($translationKey);
     }
 
     /**

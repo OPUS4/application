@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Identifier;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Identifier;
+use Opus\Common\IdentifierInterface;
 
 /**
  * Anzeigefeld für den Registrierungsstatus von lokalen DOIs
@@ -65,14 +64,14 @@ class Admin_Form_Document_RegistrationNote extends Admin_Form_AbstractDocumentSu
         if (is_string($model) && is_numeric($model)) {
             // Identifier-ID übergeben
             try {
-                $model = new Identifier($model);
+                $model = Identifier::get($model);
             } catch (NotFoundException $e) {
                 // ignore silently
                 return;
             }
         }
 
-        if (! ($model instanceof Identifier)) {
+        if (! ($model instanceof IdentifierInterface)) {
             return;
         }
         if (! $model->isLocalDoi()) {

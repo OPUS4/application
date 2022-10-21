@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Cronjob
- * @package     Tests
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 require_once('CronTestCase.php');
 
-use Opus\Licence;
-use Opus\Db\DocumentXmlCache;
+use Opus\Common\Repository;
+use Opus\Common\Licence;
 
 /**
  *
@@ -47,34 +45,32 @@ class UpdateDocumentCacheTest extends CronTestCase
     public function testUpdateOnLicenceChange()
     {
         $document = $this->createTestDocument();
-        $document->store();
+        $docId = $document->store();
 
-        $documentCacheTable = new DocumentXmlCache();
+        $documentCache = Repository::getInstance()->getDocumentXmlCache();
 
-        $docXmlCache = $documentCacheTable->find($document->getId(), '1')->current()->xml_data;
+        $docXmlCache = $documentCache->getData($docId, '1');
         $domDoc = new DomDocument();
         $domDoc->loadXML($docXmlCache);
         $licences = $domDoc->getElementsByTagName('Licence');
         $this->assertTrue($licences->length == 0, 'Expected no Licence element in dom.');
 
-        $licence = new Licence();
+        $licence = Licence::new();
         $licence->setNameLong('TestLicence');
         $licence->setLinkLicence('http://example.org/licence');
         $licenceId = $licence->store();
         $document->setServerState('published');
         $document->setLicence($licence);
-        $docId = $document->store();
+        $document->store();
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $licence->setNameLong('TestLicenceAltered');
         $licence->store();
 
-        $docXmlCacheResult = $documentCacheTable->find($document->getId(), '1');
-
-        $this->assertTrue($docXmlCacheResult->count() == 0, 'Expected empty document xml cache');
+        $this->assertFalse($documentCache->hasCacheEntry($docId, '1'), 'Expected empty document xml cache');
 
         $this->executeScript('cron-update-document-cache.php');
-        $docXmlCacheAfter = $documentCacheTable->find($docId, '1')->current()->xml_data;
+        $docXmlCacheAfter = $documentCache->getData($docId, '1');
         $domDocAfter = new DomDocument();
         $domDocAfter->loadXML($docXmlCacheAfter);
         $licencesAfter = $domDocAfter->getElementsByTagName('Licence');

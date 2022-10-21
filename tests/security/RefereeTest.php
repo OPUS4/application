@@ -25,19 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
-use Opus\UserRole;
+use Opus\Common\Account;
+use Opus\Common\UserRole;
 
 class RefereeTest extends ControllerTestCase
 {
 
     protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
-    private $_refereeAccount;
+    private $refereeAccount;
 
     public function setUp()
     {
@@ -45,13 +45,13 @@ class RefereeTest extends ControllerTestCase
 
         $userRole = UserRole::fetchByName('reviewer');
 
-        $account = new Account();
+        $account = Account::new();
         $account->setLogin('referee');
         $account->setPassword('refereereferee');
         $account->setRole([$userRole]);
         $account->store();
 
-        $this->_refereeAccount = $account;
+        $this->refereeAccount = $account;
 
         $this->enableSecurity();
         $this->loginUser('referee', 'refereereferee');
@@ -62,8 +62,8 @@ class RefereeTest extends ControllerTestCase
         $this->logoutUser();
         $this->restoreSecuritySetting();
 
-        if (! is_null($this->_refereeAccount)) {
-            $this->_refereeAccount->delete();
+        if (! is_null($this->refereeAccount)) {
+            $this->refereeAccount->delete();
         }
 
         parent::tearDown();

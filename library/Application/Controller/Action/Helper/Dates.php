@@ -1,6 +1,6 @@
 <?PHP
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
+use Opus\Common\Date;
 
 /**
  * Controller helper for handling conversion between Date and strings.

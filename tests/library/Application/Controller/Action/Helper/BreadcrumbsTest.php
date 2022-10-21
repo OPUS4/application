@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_Controller_Action_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Title;
+use Opus\Common\Document;
+use Opus\Common\Title;
 
 class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTestCase
 {
@@ -142,7 +139,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
         $document->setLanguage('deu');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('01234567890123456789012345678901234567890123456789'); // 50 Zeichen lang
 
@@ -159,7 +156,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $document = $this->createTestDocument();
         $document->setLanguage('deu');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('012345678901234567890123456789012345678ü123'); // 50 Zeichen lang
 

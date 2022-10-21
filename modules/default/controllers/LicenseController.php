@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
  */
 
-use Opus\Licence;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Licence;
 
 class LicenseController extends Application_Controller_Action
 {
@@ -55,7 +52,7 @@ class LicenseController extends Application_Controller_Action
         // Load document
         $licId = $this->getRequest()->getParam('licId');
         try {
-            $license = new Licence($licId);
+            $license = Licence::get($licId);
 
             $this->view->license = $license;
         } catch (NotFoundException $e) {

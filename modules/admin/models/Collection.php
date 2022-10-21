@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Collection;
+use Opus\Common\Document;
+use Opus\Common\Collection;
 use Opus\Common\Model\ModelException;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
 
 class Admin_Model_Collection
 {
@@ -51,7 +49,7 @@ class Admin_Model_Collection
             return;
         }
         try {
-            $this->_collection = new Collection($id);
+            $this->_collection = Collection::get($id);
         } catch (NotFoundException $e) {
             throw new Admin_Model_Exception('id parameter value unknown');
         }
@@ -59,7 +57,7 @@ class Admin_Model_Collection
 
     private function initNewCollection()
     {
-        $this->_collection = new Collection();
+        $this->_collection = Collection::new();
         $this->_collection->setVisible('1');
         $this->_collection->setVisiblePublish('1');
     }

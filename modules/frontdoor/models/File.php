@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\File;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\File;
 use Opus\Security\IRealm;
 
 class Frontdoor_Model_File
@@ -46,7 +44,7 @@ class Frontdoor_Model_File
     const ILLEGAL_FILENAME_MESSAGE_KEY = 'illegal_argument_filename';
 
     /**
-     * @var Document
+     * @var DocumentInterface
      */
     private $_doc;
 
@@ -62,8 +60,8 @@ class Frontdoor_Model_File
 
     /**
      * Frontdoor_Model_File constructor.
-     * @param $docId int OPUS document id number
-     * @param $filename string Name of file
+     * @param int    $docId OPUS document id number
+     * @param string $filename Name of file
      */
     public function __construct($docId, $filename)
     {

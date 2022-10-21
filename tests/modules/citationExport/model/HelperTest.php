@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DnbInstitute;
-use Opus\Document;
+use Opus\Common\DnbInstitute;
+use Opus\Common\Document;
 
 class CitationExport_Model_HelperTest extends ControllerTestCase
 {
@@ -84,7 +81,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $document = Document::get($this->_documentId);
 
         $document->setType('masterthesis');
-        $institute = new DnbInstitute(4);
+        $institute = DnbInstitute::get(4);
         $document->addThesisPublisher($institute);
 
         $document->store();
@@ -105,7 +102,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $document->setType('masterthesis');
 
-        $institute = new DnbInstitute();
+        $institute = DnbInstitute::new();
         $institute->setName('Test Uni');
         $institute->setDepartment('Test Dep');
         $institute->setIsPublisher(true);
@@ -133,7 +130,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $document = Document::get($this->_documentId);
 
         $document->setType('doctoralthesis');
-        $institute = new DnbInstitute(4);
+        $institute = DnbInstitute::get(4);
         $document->addThesisPublisher($institute);
 
         $document->store();

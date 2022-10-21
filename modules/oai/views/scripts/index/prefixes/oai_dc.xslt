@@ -143,7 +143,7 @@
     <xsl:template match="TitleMain" mode="oai_dc">
         <dc:title>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language, 'part1')" />
+                <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language, 'part1')" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
             <xsl:if test="starts-with($oai_set,'openaire')  and ../TitleSub/@Value != ''">
@@ -187,7 +187,7 @@
         <dc:subject>
             <xsl:if test="@language != ''">
                 <xsl:attribute name="xml:lang">
-                    <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language, 'part1')" />
+                    <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language, 'part1')" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:value-of select="@Value" />
@@ -203,7 +203,7 @@
     <xsl:template match="TitleAbstract" mode="oai_dc">
         <dc:description>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language, 'part1')" />
+                <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language, 'part1')" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dc:description>
@@ -327,7 +327,7 @@
          <xsl:if test="starts-with($oai_set,'openaire')">
             <dc:source>
                 <xsl:attribute name="xml:lang">
-                    <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language, 'part1')" />
+                    <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language, 'part1')" />
                 </xsl:attribute>
                 <xsl:value-of select="@Value" />
             </dc:source>

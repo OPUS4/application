@@ -24,14 +24,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Admin_Form_File
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
+use Opus\Common\File;
 
 class Admin_Form_File_HashesTest extends ControllerTestCase
 {
@@ -42,7 +39,7 @@ class Admin_Form_File_HashesTest extends ControllerTestCase
     {
         $form = new Admin_Form_File_Hashes();
 
-        $file = new File(116); // MD5 und SHA512
+        $file = File::get(116); // MD5 und SHA512
 
         $form->populateFromModel($file);
 
@@ -55,7 +52,7 @@ class Admin_Form_File_HashesTest extends ControllerTestCase
     {
         $form = new Admin_Form_File_Hashes();
 
-        $file = new File(121); // keine Hashes
+        $file = File::get(121); // keine Hashes
 
         $form->populateFromModel($file);
 

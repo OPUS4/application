@@ -29,16 +29,17 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
-use Opus\DnbInstitute;
-use Opus\Document;
-use Opus\Identifier;
-use Opus\Licence;
+use Opus\Common\Date;
+use Opus\Common\DnbInstitute;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Identifier;
+use Opus\Common\Licence;
 use Opus\Common\Model\ModelException;
-use Opus\Person;
-use Opus\Subject;
-use Opus\Title;
-use Opus\TitleAbstract;
+use Opus\Common\Person;
+use Opus\Common\Subject;
+use Opus\Common\Title;
+use Opus\Common\TitleAbstract;
 
 class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 {
@@ -103,7 +104,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleJournalPaper($doc)
     {
@@ -134,7 +135,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleConferencePaper($doc)
     {
@@ -165,7 +166,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleThesis($doc)
     {
@@ -194,7 +195,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleWorkingPaper($doc)
     {
@@ -230,7 +231,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleWorkingPaperWithContributingCorporation($doc)
     {
@@ -265,7 +266,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleWorkingPaperWithPublisher($doc)
     {
@@ -292,7 +293,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleBook($doc)
     {
@@ -320,7 +321,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function handleBookPart($doc)
     {
@@ -557,7 +558,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      * @param array $tags
      */
     private function assertThesisPublisher($doc, $tags)
@@ -587,7 +588,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @return Document
+     * @return DocumentInterface
      */
     private function createJournalPaper()
     {
@@ -626,7 +627,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param string $docType
-     * @return Document
+     * @return DocumentInterface
      * @throws ModelException
      */
     private function createTestDoc($docType)
@@ -661,14 +662,14 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      * @param int $num
      */
     private function addAuthors($doc, $num)
     {
         $authors = [];
         for ($i = 0; $i < $num; $i++) {
-            $author = new Person();
+            $author = Person::new();
             $author->setLastName('lastName-' . $i);
             if ($i % 2 == 0) {
                 // nur jeder zweite Autor bekommt einen Vornamen
@@ -680,18 +681,18 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addTitles($doc)
     {
         $titles = [];
-        $title = new Title();
+        $title = Title::new();
         $title->setType('main');
         $title->setLanguage('deu');
         $title->setValue('titlemain-deu');
         $titles[] = $title;
 
-        $title = new Title();
+        $title = Title::new();
         $title->setType('main');
         $title->setLanguage('eng');
         $title->setValue('titlemain-eng');
@@ -701,7 +702,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
 
         $titles = [];
-        $title = new Title();
+        $title = Title::new();
         $title->setType('sub');
         $title->setLanguage('eng');
         $title->setValue('titlesub-eng');
@@ -711,7 +712,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
 
         $titles = [];
-        $title = new Title();
+        $title = Title::new();
         $title->setType('parent');
         $title->setLanguage('deu');
         $title->setValue('titleparent-eng');
@@ -721,19 +722,19 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addAbstracts($doc)
     {
         $abstracts = [];
 
-        $abstr = new TitleAbstract();
+        $abstr = TitleAbstract::new();
         $abstr->setType('abstract');
         $abstr->setLanguage('deu');
         $abstr->setValue('abstract1-deu');
         $abstracts[] = $abstr;
 
-        $abstr = new TitleAbstract();
+        $abstr = TitleAbstract::new();
         $abstr->setType('abstract');
         $abstr->setLanguage('deu');
         $abstr->setValue('abstract2-deu');
@@ -743,28 +744,28 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addIdentifiers($doc)
     {
         $identifers = [];
 
-        $identifer = new Identifier();
+        $identifer = Identifier::new();
         $identifer->setType('doi');
         $identifer->setValue('doi' . $doc->getId());
         $identifers[] = $identifer;
 
-        $identifer = new Identifier();
+        $identifer = Identifier::new();
         $identifer->setType('urn');
         $identifer->setValue('urn' . $doc->getId());
         $identifers[] = $identifer;
 
-        $identifer = new Identifier();
+        $identifer = Identifier::new();
         $identifer->setType('issn');
         $identifer->setValue('issn');
         $identifers[] = $identifer;
 
-        $identifer = new Identifier();
+        $identifer = Identifier::new();
         $identifer->setType('isbn');
         $identifer->setValue('isbn');
         $identifers[] = $identifer;
@@ -773,19 +774,19 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addSubjects($doc)
     {
         $subjects = [];
 
-        $subject = new Subject();
+        $subject = Subject::new();
         $subject->setType('type1');
         $subject->setValue('value1');
         $subject->setLanguage('deu');
         $subjects[] = $subject;
 
-        $subject = new Subject();
+        $subject = Subject::new();
         $subject->setType('type2');
         $subject->setValue('value2');
         $subject->setLanguage('deu');
@@ -795,16 +796,16 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addLicence($doc)
     {
-        $licence = new Licence(3);
+        $licence = Licence::get(3);
         $doc->setLicence($licence);
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addFile($doc)
     {
@@ -833,11 +834,11 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
     private function addThesisPublisher($doc)
     {
-        $institute = new DnbInstitute(3);
+        $institute = DnbInstitute::get(3);
         $doc->setThesisPublisher($institute);
     }
 

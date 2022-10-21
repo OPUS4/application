@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,25 +24,21 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-use Opus\Note;
-
-/**
- * Unterformular fuer Bemerkungen/Notizen.
  *
- * @category    Application
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Note;
+
+/**
+ * Unterformular fuer Bemerkungen/Notizen.
+ */
 class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm
 {
-
-    const ELEMENT_ID = 'Id';
+    const ELEMENT_ID         = 'Id';
     const ELEMENT_VISIBILITY = 'Visibility';
-    const ELEMENT_MESSAGE = 'Message';
+    const ELEMENT_MESSAGE    = 'Message';
 
     public function init()
     {
@@ -89,7 +86,7 @@ class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm
             $noteId = null;
         }
 
-        $note = new Note($noteId);
+        $note = Note::get($noteId);
 
         $this->updateModel($note);
 

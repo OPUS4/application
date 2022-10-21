@@ -25,16 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
 use Opus\Common\Log;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Repository;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
-use Opus\Common\Repository;
 
 class Oai_Model_Server extends Application_Model_Abstract
 {
@@ -258,7 +259,7 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     protected function setupProcessor()
     {
-        $this->_proc->registerPHPFunctions('Opus\Language::getLanguageCode');
+        $this->_proc->registerPHPFunctions('Opus\Common\Language::getLanguageCode');
         Application_Xslt::registerViewHelper(
             $this->_proc,
             [
@@ -353,7 +354,9 @@ class Oai_Model_Server extends Application_Model_Abstract
         // Set backup date if database query does not return a date.
         $earliestDate = DateTime::createFromFormat("Y-m-d", '1970-01-01');
 
-        $earliestDateFromDb = Document::getEarliestPublicationDate();
+        $earliestDateFromDb = Repository::getInstance()->getModelRepository(Document::class)
+            ->getEarliestPublicationDate();
+
         if (! is_null($earliestDateFromDb)) {
             // TODO: Do we expect the full ISO format or Y-m-d? ZEND_DATE::ISO_8601 was probably less strict here.
             $earliestDate = DateTime::createFromFormat(DateTime::ATOM, $earliestDateFromDb);
@@ -588,11 +591,11 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Create xml structure for one record
      *
-     * @param  Document $document
+     * @param  DocumentInterface $document
      * @param  string        $metadataPrefix
      * @return void
      */
-    private function createXmlRecord(Document $document)
+    private function createXmlRecord($document)
     {
         $docId = $document->getId();
         $domNode = $this->getDocumentXmlDomNode($document);
@@ -723,9 +726,9 @@ class Oai_Model_Server extends Application_Model_Abstract
      * Add rights element to output.
      *
      * @param \DOMNode $domNode
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
-    private function _addAccessRights(DOMNode $domNode, Document $doc)
+    private function _addAccessRights($domNode, $doc)
     {
         $fileElement = $domNode->ownerDocument->createElement('Rights');
         $fileElement->setAttribute('Value', $this->_xmlFactory->getAccessRights($doc));
@@ -776,7 +779,7 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @return DOMNode
      * @throws Exception
      */

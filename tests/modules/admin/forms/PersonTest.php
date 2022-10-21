@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Person;
+use Opus\Common\Document;
+use Opus\Common\Person;
 
 /**
  * Unit Test fuer Formularklasse zum Editieren einer Person.
@@ -64,7 +62,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
 
         $form = new Admin_Form_Person();
 
-        $person = new Person();
+        $person = Person::new();
 
         $person->setFirstName('John');
         $person->setLastName('Doe');
@@ -116,7 +114,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form->getElement('IdentifierMisc')->setValue('5678');
 
 
-        $person = new Person();
+        $person = Person::new();
 
         $form->updateModel($person);
 
@@ -148,7 +146,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('not instance of Opus\Person', $messages[0]);
+        $this->assertContains('not instance of PersonInterface', $messages[0]);
     }
 
     public function testGetModel()

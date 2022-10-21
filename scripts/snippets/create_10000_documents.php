@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,10 +35,10 @@
  * TODO move as command to opus4dev tool
  */
 
-use Opus\Collection;
-use Opus\Date;
-use Opus\Document;
-use Opus\Person;
+use Opus\Common\Collection;
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\Person;
 
 for ($i = 1; $i < 10000; $i++) {
     $d = Document::new();
@@ -56,12 +55,12 @@ for ($i = 1; $i < 10000; $i++) {
     $date->setYear(1990 + ($i % 23));
     $d->setPublishedDate($date);
 
-    $p = new Person();
+    $p = Person::new();
     $p->setFirstName("foo-" . ($i % 7));
     $p->setLastName("bar-" . ($i % 5));
     $p = $d->addPersonAuthor($p);
 
-    $c = new Collection(15990 + ($i % 103));
+    $c = Collection::get(15990 + ($i % 103));
     $d->addCollection($c);
 
     $s = $d->addSubject()->setType('ddc');

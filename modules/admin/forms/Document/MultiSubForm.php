@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * SubForm um mehrere Unterformulare (z.B. Patente) zu verwalten.
@@ -156,7 +154,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     /**
      * Erzeugt Unterformulare abhängig von den Metadaten im Dokument.
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      */
     public function populateFromModel($document)
     {
@@ -180,7 +178,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
     /**
      * Holt vom Dokument den Wert des konfigurierten Feldes.
-     * @param Document $document
+     * @param DocumentInterface $document
      * @return array
      */
     public function getFieldValues($document)
@@ -287,7 +285,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     /**
      * Aktualisiert das Dokument.
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      */
     public function updateModel($document)
     {

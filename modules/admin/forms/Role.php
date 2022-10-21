@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 /**
  * Form for creating and editing a role.
@@ -54,7 +52,7 @@ class Admin_Form_Role extends Application_Form_Model_Abstract
         $section = empty($id) ? 'new' : 'edit';
 
         if (! empty($id)) {
-            $role = new UserRole($id);
+            $role = UserRole::get($id);
             $this->populateFromModel($role);
         }
     }
@@ -64,13 +62,13 @@ class Admin_Form_Role extends Application_Form_Model_Abstract
         parent::init();
 
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus\UserRole');
+        $this->setModelClass(UserRole::class);
 
         $name = $this->createElement('text', self::ELEMENT_NAME, [
             'required' => true
         ]);
 
-        $maxLength = UserRole::getFieldMaxLength('Name');
+        $maxLength = UserRole::describeField(UserRole::FIELD_NAME)->getMaxSize();
 
         $name->addValidator('regex', false, ['pattern' => '/^[a-z][a-z0-9]/i'])
             ->addValidator('stringLength', false, ['min' => 3, 'max' => $maxLength])

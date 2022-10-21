@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Enrichment;
-use Opus\Identifier;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Enrichment;
+use Opus\Common\Identifier;
 use Opus\Doi\DoiException;
 use Opus\Doi\DoiManager;
 
@@ -137,7 +135,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Erzeugt Unterformulare abhängig von den Metadaten im Dokument.
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      */
     public function populateFromModel($document)
     {
@@ -248,7 +246,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      * bei bereits veröffentlichten Dokumenten soll die Checkbox zum automatischen
      * Setzen der ID nicht angezeigt werden
      *
-     * @param Document $document das zu editierende Dokument
+     * @param DocumentInterface $document das zu editierende Dokument
      * @return bool liefert true zurück, wenn die Checkbox entfernt wurde
      */
     private function removeCheckboxForPublishedDocs($document)
@@ -338,7 +336,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
                     // wenn nur noch ein Eingabefeld für Identifier des Typs übrig bleibt: Generieren-Button anzeigen
                     if (count($this->getSubForms()) == 1) {
-                        $firstIdForm = reset($this->getSubForms());
+                        $firstIdForm = reset($this->getSubForms()); // TODO ERROR ?
                         $this->addGenerateButton($firstIdForm, false);
                         // TODO ohne den nachfolgenden Aufruf wird der Button nicht neben, sondern über dem Input-Field ausgegeben
                         $this->prepareSubFormDecorators($firstIdForm);
@@ -417,7 +415,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Aktualisiert das in der Datenbank gespeicherte Dokument (hier: seine Identifier)
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      */
     public function updateModel($document)
     {
@@ -454,7 +452,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             }
 
             while ($identifierValuesIndex < $identifierValuesCount) {
-                $identifier = new Identifier();
+                $identifier = Identifier::new();
                 $identifier->setType($this->_typeShort);
                 $identifier->setValue($identifierValues[$identifierValuesIndex]);
                 $identifiers[] = $identifier;
@@ -470,7 +468,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Behandlung des Enrichments opus.doi.autoCreate bzw. opus.urn.autoCreate in Abhängigkeit vom Status der Checkbox
      *
-     * @param $document
+     * @param DocumentInterface $document
      */
     private function handleEnrichment($document)
     {
@@ -494,7 +492,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             }
 
             if (! $enrichmentExists) {
-                $enrichment = new Enrichment();
+                $enrichment = Enrichment::new();
                 $enrichment->setKeyName($enrichmentKeyName);
                 $enrichment->setValue($enrichmentValue);
                 $newEnrichments[] = $enrichment;

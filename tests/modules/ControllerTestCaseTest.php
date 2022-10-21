@@ -29,9 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\DocumentFinder\DefaultDocumentFinder;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
 use Opus\Security\Realm;
 
 class ControllerTestCaseTest extends ControllerTestCase

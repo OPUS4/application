@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,24 +26,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\Person;
-use Opus\Series;
+use Opus\Common\Collection;
+use Opus\Common\Person;
+use Opus\Common\Series;
 
 /**
  * Administrative work with document metadata.
- *
- * @category    Application
- * @package     Module_Admin
  *
  * TODO handle state as a facet
  * TODO redirect to remove invalid parameters from URL
@@ -126,7 +119,7 @@ class Admin_DocumentsController extends Application_Controller_Action
 
         if (! empty($collectionId)) {
             // TODO add as filter facet
-            $collection = new Collection($collectionId);
+            $collection = Collection::get($collectionId);
             $result = $collection->getDocumentIds();
             $this->view->collection = $collection;
             if ($collection->isRoot()) {
@@ -140,7 +133,7 @@ class Admin_DocumentsController extends Application_Controller_Action
             }
         } elseif (! empty($seriesId)) {
             // TODO add as filter facet
-            $series = new Series($seriesId);
+            $series = Series::get($seriesId);
             $this->view->series = $series;
             $result = $series->getDocumentIdsSortedBySortKey();
         } else {
@@ -170,7 +163,9 @@ class Admin_DocumentsController extends Application_Controller_Action
 
                 $role = $this->getParam('role', 'all');
 
-                $result = Person::getPersonDocuments($person, $state, $role, $sortOrder, ! $sortReverse);
+                $persons = Person::getModelRepository();
+
+                $result = $persons->getPersonDocuments($person, $state, $role, $sortOrder, ! $sortReverse);
 
                 $this->view->person = $person;
 

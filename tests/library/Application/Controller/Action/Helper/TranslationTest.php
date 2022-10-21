@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,16 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Identifier;
-use Opus\Language;
-use Opus\Note;
-use Opus\Person;
+use Opus\Common\Identifier;
+use Opus\Common\Language;
+use Opus\Common\Note;
+use Opus\Common\Person;
 use Opus\Model\Dependent\Link\DocumentPerson;
 use Opus\Common\Model\ModelException;
 
@@ -170,7 +169,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
     public function testTranslationOfNoteVisibilityValues()
     {
-        $model = new Note();
+        $model = Note::new();
         $values = $model->getField('Visibility')->getDefault();
 
         foreach ($values as $value) {
@@ -200,7 +199,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
 
     public function testTranslationOfOpusIdentifierFields()
     {
-        $model = new Identifier();
+        $model = Identifier::new();
 
         $fieldNames = $model->describe();
 
@@ -209,7 +208,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
                 // do not provide translations for DOI specific fields
                 continue;
             }
-            $key = $this->helper->getKeyForField('Opus\Identifier', $name);
+            $key = $this->helper->getKeyForField(Identifier::class, $name);
             $this->assertTrue(
                 $this->translate->isTranslated($key),
                 "Translation key '$key' is missing."
@@ -220,7 +219,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     public function testTranslationOfDocumentPersonFields()
     {
         $model = new DocumentPerson();
-        $target = new Person();
+        $target = Person::new();
         $model->setModel($target);
 
         $fieldNames = $model->describe();

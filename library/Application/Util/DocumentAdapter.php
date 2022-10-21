@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Util
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
-use Opus\Date;
-use Opus\Document;
+use Opus\Common\Account;
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Wrapper around Document to prepare presentation.
@@ -54,7 +53,7 @@ class Application_Util_DocumentAdapter
 
     /**
      * Wrapped document.
-     * @var Document
+     * @var DocumentInterface
      */
     public $document = null;
 
@@ -83,7 +82,7 @@ class Application_Util_DocumentAdapter
             $this->_view = $view;
         }
 
-        if ($value instanceof Document) {
+        if ($value instanceof DocumentInterface) {
             $this->document = $value;
             $this->docId = $this->document->getId();
         } else {
@@ -94,7 +93,7 @@ class Application_Util_DocumentAdapter
 
     /**
      * Returns the Document object for this adapter.
-     * @return Document
+     * @return DocumentInterface
      */
     public function getDocument()
     {
@@ -343,7 +342,7 @@ class Application_Util_DocumentAdapter
                 continue;
             }
             $userId = $e->getValue();
-            $account = new Account($userId);
+            $account = Account::get($userId);
             $return[$account->getId()] = strtolower($account->getLogin());
         }
         return $return;
@@ -357,7 +356,7 @@ class Application_Util_DocumentAdapter
                 continue;
             }
             $userId = $e->getValue();
-            $account = new Account($userId);
+            $account = Account::get($userId);
             $return[$account->getId()] = strtolower($account->getLogin());
         }
         return $return;

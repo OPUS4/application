@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Title;
+use Opus\Common\Title;
 
 /**
  * Class Rss_IndexControllerTest
@@ -90,7 +90,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
         $doc1->setLanguage('eng');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('test document for OPUSVIER-1726');
         $title->setLanguage('eng');
         $doc1->setTitleMain($title);
@@ -114,7 +114,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
         $doc2->setLanguage('eng');
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('another test document for OPUSVIER-1726');
         $title->setLanguage('eng');
         $doc2->setTitleMain($title);

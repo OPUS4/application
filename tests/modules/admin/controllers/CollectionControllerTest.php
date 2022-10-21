@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\CollectionRole;
+use Opus\Common\Collection;
+use Opus\Common\CollectionRole;
 
 /**
  * Basic unit tests for the collections controller in admin module.
@@ -55,7 +52,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->emptyCollectionRole = new CollectionRole();
+        $this->emptyCollectionRole = CollectionRole::new();
         $this->emptyCollectionRole->setName("test1role");
         $this->emptyCollectionRole->setOaiName("test1role");
         $this->emptyCollectionRole->setDisplayBrowsing("Name");
@@ -63,7 +60,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->emptyCollectionRole->setPosition(100);
         $this->emptyCollectionRole->store();
 
-        $this->nonEmptyCollectionRole = new CollectionRole();
+        $this->nonEmptyCollectionRole = CollectionRole::new();
         $this->nonEmptyCollectionRole->setName("test2role");
         $this->nonEmptyCollectionRole->setOaiName("test2role");
         $this->nonEmptyCollectionRole->setDisplayBrowsing("Name");
@@ -74,13 +71,13 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->rootCollection = $this->nonEmptyCollectionRole->addRootCollection();
         $this->rootCollection->store();
 
-        $this->collection = new Collection();
+        $this->collection = Collection::new();
         $this->collection->setName("first collection");
         $this->collection->setNumber("123");
         $this->rootCollection->addFirstChild($this->collection);
         $this->collection->store();
 
-        $this->anotherCollection = new Collection();
+        $this->anotherCollection = Collection::new();
         $this->anotherCollection->setName("last collection");
         $this->anotherCollection->setNumber("987");
         $this->rootCollection->addLastChild($this->anotherCollection);

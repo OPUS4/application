@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Person;
+use Opus\Common\Person;
 
 /**
  * @covers Admin_PersonController
@@ -113,7 +110,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
         preg_match('/person\/(\d+)\//', $location, $matches);
         $personId = $matches[1];
 
-        $person = new Person($personId);
+        $person = Person::get($personId);
 
         $lastName = $person->getLastName();
 
@@ -196,7 +193,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
     {
         $document = $this->createTestDocument();
 
-        $person = new Person();
+        $person = Person::new();
         $person->setLastName('Testy-EditlinkedAction');
 
         $person = $document->addPersonTranslator($person);
@@ -221,7 +218,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/admin/document/edit/id/' . $documentId
             . '/continue/updateperson/person/' . $personId);
 
-        $person = new Person($personId);
+        $person = Person::get($personId);
 
         $this->assertEquals('Testy', $person->getLastName());
         $this->assertEquals('Simone', $person->getFirstName());
@@ -395,7 +392,9 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $this->assertQuery('div.pagination-next');
         $this->assertQuery('div.pagination-last');
 
-        $personsCount = Person::getAllPersonsCount();
+        $persons = Person::getModelRepository();
+
+        $personsCount = $persons->getAllPersonsCount();
 
         $pages = ceil($personsCount / 50);
 

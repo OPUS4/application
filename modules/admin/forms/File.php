@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,21 +24,18 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
-use Opus\UserRole;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\File;
+use Opus\Common\UserRole;
 use Opus\Model\AbstractDb;
-use Opus\Model\NotFoundException;
 
 /**
  * Formular fuer Anzeige/Editieren einer Datei.
- *
- * @category    Application
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 {
@@ -165,7 +163,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
         if (isset($defaults[$this->getName()])) {
             $fileId = $defaults[$this->getName()][self::ELEMENT_ID];
-            $file = new File($fileId);
+            $file = File::get($fileId);
             $this->getSubForm(self::SUBFORM_HASHES)->populateFromModel($file);
             $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
         } else {
@@ -207,7 +205,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
         if (strlen(trim($fileId)) > 0 && is_numeric($fileId)) {
             try {
-                $file = new File($fileId);
+                $file = File::get($fileId);
             } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown file ID = '$fileId'.");
                 throw new Application_Exception("Unknown file ID = '$fileId'.");

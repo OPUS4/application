@@ -25,21 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Config;
-use Opus\Common\LoggingTrait;
+use Opus\Common\Document;
 use Opus\Common\DocumentFinderInterface;
-use Opus\Db\TableGateway;
-use Opus\Document;
-use Opus\Doi\DoiManager;
-use Opus\File;
-use Opus\Common\Repository;
-use Opus\UserRole;
+use Opus\Common\DocumentInterface;
+use Opus\Common\LoggingTrait;
 use Opus\Common\Model\ModelException;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Db\TableGateway;
+use Opus\Doi\DoiManager;
+use Opus\Common\File;
+use Opus\Common\Repository;
+use Opus\Common\UserRole;
 use Opus\Security\AuthAdapter;
 use Opus\Security\Realm;
 use Opus\Security\SecurityException;
@@ -682,7 +683,7 @@ class ControllerTestCase extends TestCase
     /**
      * Removes a test document from the database.
      *
-     * @param $value Document|int
+     * @param $value DocumentInterface|int
      * @throws ModelException
      */
     public function removeDocument($value)
@@ -692,7 +693,7 @@ class ControllerTestCase extends TestCase
         }
 
         $doc = $value;
-        if (! ($value instanceof Document)) {
+        if (! ($value instanceof DocumentInterface)) {
             try {
                 $doc = Document::get($value);
             } catch (NotFoundException $e) {
@@ -760,7 +761,7 @@ class ControllerTestCase extends TestCase
     /**
      * Erzeugt ein Testdokument, das nach der Testausführung automatisch aufgeräumt wird.
      *
-     * @return Document
+     * @return DocumentInterface
      * @throws ModelException
      */
     protected function createTestDocument()
@@ -823,7 +824,7 @@ class ControllerTestCase extends TestCase
         }
 
         $this->assertTrue(is_readable($filepath));
-        $file = new File();
+        $file = File::new();
         $file->setPathName(basename($filepath));
         $file->setTempFile($filepath);
         if (array_key_exists($filename, $this->testFiles)) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,20 +24,16 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
+use Opus\Common\File;
 use Opus\Common\Model\ModelException;
 
 /**
  * Controller fuer die Verwaltung der Dateien eines Dokuments.
- *
- * @category    Application
- * @package     Admin
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO redundanter Code mit DocumentController
  */
@@ -362,7 +359,7 @@ class Admin_FilemanagerController extends Application_Controller_Action
             }
         } else {
             // Show confirmation page
-            $file = new File($fileId);
+            $file = File::get($fileId);
 
             $form->setModel($file);
             $form->setModelDisplayName($file->getPathName());

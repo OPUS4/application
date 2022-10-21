@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,20 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
-use Opus\Date;
+use Opus\Common\CollectionRole;
+use Opus\Common\Date;
 use Opus\Common\Log;
-use Opus\Note;
-use Opus\Person;
-use Opus\Title;
+use Opus\Common\Note;
+use Opus\Common\Person;
+use Opus\Common\Title;
 
 /**
  * Unit tests for Admin_DocumentController.
@@ -94,7 +91,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $person = new Person();
+        $person = Person::new();
         $person->setFirstName("Johnny");
         $person->setLastName("Test");
         $dateOfBirth = new Date('2010-01-01');
@@ -156,7 +153,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $abstract = new Title();
+        $abstract = Title::new();
         $abstract->setLanguage("eng");
         $abstract->setValue("foo\nbar\n\nbaz");
         $doc->addTitleAbstract($abstract);
@@ -178,7 +175,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 
-        $note = new Note();
+        $note = Note::new();
         $note->setMessage("foo\nbar\n\nbaz");
         $note->setVisibility("public");
         $doc->addNote($note);
@@ -196,7 +193,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testDisplayCollectionNumberAndNameOnOverviewPageForDDCCollection()
     {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
-        $role = new CollectionRole(2);
+        $role = CollectionRole::get(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -214,7 +211,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testDisplayCollectionNumberAndNameOnAssignmentPageForDDCCollection()
     {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
-        $role = new CollectionRole(2);
+        $role = CollectionRole::get(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();

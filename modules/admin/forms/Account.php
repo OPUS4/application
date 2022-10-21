@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
+use Opus\Common\Account;
 
 /**
  * Account administration form.
@@ -73,7 +71,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
         parent::__construct();
 
         if ($this->getMode() === self::MODE_EDIT) {
-            $account = new Account($id);
+            $account = Account::get($id);
             $this->populateFromModel($account);
         }
 
@@ -89,7 +87,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
 
         $this->setLabelPrefix('admin_account_label_');
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus\Account');
+        $this->setModelClass(Account::class);
 
         $this->addElement('login', self::ELEMENT_LOGIN);
 
@@ -117,7 +115,8 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
 
     /**
      * Populate the form values from Account instance.
-     * @param $account Account
+     *
+     * @param AccountInterface $account
      */
     public function populateFromModel($account)
     {
@@ -198,7 +197,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
 
             if (! empty($accountId)) {
                 $this->setMode(self::MODE_EDIT);
-                $account = new Account($accountId);
+                $account = Account::get($accountId);
                 $values['oldLogin'] = $account->getLogin();
             }
         }
@@ -229,7 +228,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
         $accountId = $this->getElementValue(self::ELEMENT_MODEL_ID);
 
         if (! empty($accountId)) {
-            $account = new Account($accountId);
+            $account = Account::get($accountId);
             $oldLogin = $account->getLogin();
         } else {
             $oldLogin = null;
@@ -245,7 +244,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
         $accountId = $this->getElementValue(self::ELEMENT_MODEL_ID);
 
         if (! empty($accountId)) {
-            $account = new Account($accountId);
+            $account = Account::get($accountId);
             $oldLogin = $account->getLogin();
         } else {
             $oldLogin = null;

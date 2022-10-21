@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,18 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Sascha Szott
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2021
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\CollectionRole;
+use Opus\Common\Collection;
+use Opus\Common\CollectionRole;
 use Opus\Common\Config;
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Import\AdditionalEnrichments;
 
 class DepositTestHelper extends PHPUnit_Framework_Assert
@@ -116,7 +113,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
             $rootCollection = $collectionRole->getRootCollection();
 
             // create temporary collection
-            $collection = new Collection();
+            $collection = Collection::new();
             $timestamp = time();
             $this->collectionNumber = 'sword-test-number-' . $timestamp;
             $collection->setNumber($this->collectionNumber);
@@ -137,7 +134,7 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
     public function removeImportCollection()
     {
         if (! is_null($this->collectionId)) {
-            $collection = new Collection($this->collectionId);
+            $collection = Collection::get($this->collectionId);
             $collection->delete();
             $this->collectionId = null;
         }

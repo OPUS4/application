@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,14 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Title;
+use Opus\Common\Document;
+use Opus\Common\Title;
+use Opus\Common\TitleInterface;
 
 /**
  * Unit Tests für MulitSubForm Formular das mehrere Unterformular des gleichen Typs verwalten kann.
@@ -135,7 +135,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $values = $form->getFieldValues($document);
 
         $this->assertEquals(2, count($values));
-        $this->assertTrue($values[0] instanceof Title);
+        $this->assertTrue($values[0] instanceof TitleInterface);
         $this->assertEquals('sub', $values[0]->getType());
     }
 
@@ -529,17 +529,17 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel1');
         $title->setLanguage('deu');
         $document->addTitleParent($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel2');
         $title->setLanguage('eng');
         $document->addTitleParent($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel3');
         $title->setLanguage('rus');
         $document->addTitleParent($title);
@@ -567,17 +567,17 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel1');
         $title->setLanguage('deu');
         $document->addTitleParent($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel2');
         $title->setLanguage('eng');
         $document->addTitleParent($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel3');
         $title->setLanguage('rus');
         $document->addTitleParent($title);

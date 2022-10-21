@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 use Opus\Common\Log;
 
 class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
@@ -113,7 +110,7 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
      * Allocates member variables of currentElement with found attributes in XML Documenttype for element "field".
      * Parses for top elements "field" and their atrributes.
      *
-     * @param DomElement $field
+     * @param \DomElement $field
      * @param Publish_Model_FormElement $currentElement
      *
      * @return false: field has no attributes

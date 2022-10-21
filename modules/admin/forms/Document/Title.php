@@ -24,14 +24,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Title;
+use Opus\Common\Title;
 
 /**
  * Unterformular fuer das Editieren von Titeln.
@@ -134,7 +131,7 @@ class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
     {
         $titleId = $this->getElementValue(self::ELEMENT_ID);
 
-        $title = new Title($titleId);
+        $title = Title::get($titleId);
 
         $this->updateModel($title);
 
