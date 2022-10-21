@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Document;
-use Opus\DocumentFinder\DefaultDocumentFinder;
+use Opus\Common\DocumentFinderInterface;
 use Opus\Common\Model\NotFoundException;
 use Opus\Security\Realm;
 
@@ -436,6 +436,6 @@ class ControllerTestCaseTest extends ControllerTestCase
     {
         $finder = $this->getDocumentFinder();
 
-        $this->assertInstanceOf(DefaultDocumentFinder::class, $finder);
+        $this->assertInstanceOf(DocumentFinderInterface::class, $finder);
     }
 }
