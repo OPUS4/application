@@ -214,7 +214,7 @@ class Application_Util_Notification extends Application_Model_Abstract
             );
         }
 
-        return '';
+        return null;
     }
 
     public function getTemplate($template, $docId, $authors, $title, $url)
@@ -225,7 +225,7 @@ class Application_Util_Notification extends Application_Model_Abstract
                 "could not find mail template based on application configuration: '$templateFileName'"
                 . ' does not exist or is not readable'
             );
-            return ''; // TODO throw exception?
+            return null; // TODO throw exception?
         }
         ob_start();
         extract([
