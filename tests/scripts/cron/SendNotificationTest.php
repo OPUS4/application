@@ -31,7 +31,7 @@
 require_once('CronTestCase.php');
 
 use Opus\Common\Job;
-use Opus\Job\Worker\MailNotification;
+use Opus\Job\MailNotification;
 
 /**
  * Dieser Test benötigt das opus-smtp-dumpserver.php ausgeführt wird, um prüfen zu können, ob Nachrichten verschickt

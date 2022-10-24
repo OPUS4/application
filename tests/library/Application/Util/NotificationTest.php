@@ -33,7 +33,7 @@ use Opus\Common\Job;
 use Opus\Common\Log;
 use Opus\Common\Person;
 use Opus\Common\Title;
-use Opus\Job\Worker\MailNotification;
+use Opus\Job\MailNotification;
 
 class Application_Util_NotificationTest extends ControllerTestCase
 {

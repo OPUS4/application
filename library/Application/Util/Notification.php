@@ -33,7 +33,7 @@
 
 use Opus\Common\DocumentInterface;
 use Opus\Common\Job;
-use Opus\Job\Worker\MailNotification;
+use Opus\Job\MailNotification;
 use Opus\Common\Model\ModelException;
 
 class Application_Util_Notification extends Application_Model_Abstract
@@ -197,6 +197,8 @@ class Application_Util_Notification extends Application_Model_Abstract
         if (isset($config->notification->document->submitted->subject)) {
             return $config->notification->document->submitted->subject;
         }
+
+        return '';
     }
 
     public function getMailBody($docId, $authors, $title, $url)
@@ -211,6 +213,8 @@ class Application_Util_Notification extends Application_Model_Abstract
                 $url
             );
         }
+
+        return '';
     }
 
     public function getTemplate($template, $docId, $authors, $title, $url)
@@ -221,7 +225,7 @@ class Application_Util_Notification extends Application_Model_Abstract
                 "could not find mail template based on application configuration: '$templateFileName'"
                 . ' does not exist or is not readable'
             );
-            return;
+            return ''; // TODO throw exception?
         }
         ob_start();
         extract([
