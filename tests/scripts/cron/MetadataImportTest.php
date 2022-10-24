@@ -35,6 +35,9 @@ use Opus\Common\Repository;
 use Opus\Common\Document;
 use Opus\Common\Job;
 use Opus\Import\Worker\MetadataImportWorker;
+use Opus\Import\Xml\MetadataImportInvalidXmlException;
+use Opus\Import\Xml\MetadataImportSkippedDocumentsException;
+use Opus\Job\InvalidJobException;
 
 class MetadataImportTest extends CronTestCase
 {
@@ -77,7 +80,7 @@ class MetadataImportTest extends CronTestCase
         $this->assertEquals(1, count($failedJobs), 'Expected one failed job in queue');
 
         // TODO Opus\\\\Job... is necessary to match Opus\\Job... in the actual error message - Fix!
-        $this->assertJobException(array_pop($failedJobs), 'Opus\\\\Job\\\\Worker\\\\InvalidJobException');
+        $this->assertJobException(array_pop($failedJobs), InvalidJobException::class);
     }
 
     public function testJobFailedWithSkippedDocumentsException()
@@ -93,7 +96,7 @@ class MetadataImportTest extends CronTestCase
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
         $failedJobs = Job::getByLabels([MetadataImportWorker::LABEL], null, Job::STATE_FAILED);
         $this->assertEquals(1, count($failedJobs), 'Expected one failed job in queue');
-        $this->assertJobException(array_pop($failedJobs), 'Opus\\\\Import\\\\Xml\\\\MetadataImportSkippedDocumentsException');
+        $this->assertJobException(array_pop($failedJobs), MetadataImportSkippedDocumentsException::class);
     }
 
     public function testJobFailedWithInvalidXmlException()
@@ -109,9 +112,8 @@ class MetadataImportTest extends CronTestCase
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
         $failedJobs = Job::getByLabels([MetadataImportWorker::LABEL], null, Job::STATE_FAILED);
         $this->assertEquals(1, count($failedJobs), 'Expected one failed job in queue');
-        $this->assertJobException(array_pop($failedJobs), 'Opus\\\\Import\\\\Xml\\\\MetadataImportInvalidXmlException');
+        $this->assertJobException(array_pop($failedJobs), MetadataImportInvalidXmlException::class);
     }
-
 
     public function testJobSuccess()
     {
@@ -132,6 +134,6 @@ class MetadataImportTest extends CronTestCase
 
     private function assertJobException($job, $exception)
     {
-        $this->assertStringStartsWith('{"exception":"' . $exception . '"', $job->getErrors());
+        $this->assertStringStartsWith('{"exception":"' . addslashes($exception) . '"', $job->getErrors());
     }
 }
