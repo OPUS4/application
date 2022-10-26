@@ -42,8 +42,8 @@ use Opus\Common\File;
 use Opus\Common\Repository;
 use Opus\Common\UserRole;
 use Opus\Security\AuthAdapter;
-use Opus\Security\Realm;
-use Opus\Security\SecurityException;
+use Opus\Common\Security\Realm;
+use Opus\Common\Security\SecurityException;
 
 /**
  * Base class for controller tests.

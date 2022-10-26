@@ -33,7 +33,7 @@ use Opus\Common\CollectionRole;
 use Opus\Common\Date;
 use Opus\Common\Identifier;
 use Opus\Common\Person;
-use Opus\Security\Realm;
+use Opus\Common\Security\Realm;
 use Opus\Common\Subject;
 use Opus\Common\Title;
 

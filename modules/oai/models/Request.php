@@ -32,7 +32,7 @@
 
 use Opus\Common\Date;
 use Opus\Common\Log;
-use Opus\Security\Realm;
+use Opus\Common\Security\Realm;
 
 /**
  * TODO documentation is not existent - especially the fact that 'validate' functions are called dynamically

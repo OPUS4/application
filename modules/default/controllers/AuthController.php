@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Default
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Pascal-Nicolas Becker <becker@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Security\AuthAdapter;
-use Opus\Security\AuthAdapter\Ldap;
+use Opus\Security\Ldap\LdapAuthAdapter;
 
 /**
  * Provides actions for basic authenticating login and logout.
@@ -145,7 +142,7 @@ class AuthController extends Application_Controller_Action
         // Overwrite auth adapter if config-key is set.
         $config = $this->getConfig();
         if (isset($config, $config->authenticationModule) and ($config->authenticationModule === 'Ldap')) {
-            $auth = new Ldap();
+            $auth = new LdapAuthAdapter();
         }
 
         // Perfom authentication attempt

@@ -31,7 +31,7 @@
 
 use Opus\Common\Account;
 use Opus\Common\Config;
-use Opus\Security\SecurityException;
+use Opus\Common\Security\SecurityException;
 
 /**
  * Basic unit tests for account module.

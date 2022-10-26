@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\Repository;
-use Opus\Security\Realm;
+use Opus\Common\Security\Realm;
 
 /**
  * Export plugin for exporting documents as XML.

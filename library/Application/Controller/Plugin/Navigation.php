@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,18 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Controller
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Security\Realm;
+
 /**
  * Initialize the navigation bar.
- *
- * @category    Application
- * @package     Controller
  */
 class Application_Controller_Plugin_Navigation extends \Zend_Controller_Plugin_Abstract
 {
@@ -57,7 +54,7 @@ class Application_Controller_Plugin_Navigation extends \Zend_Controller_Plugin_A
         }
 
         // Create a Realm instance.
-        $realm = \Opus\Security\Realm::getInstance();
+        $realm = Realm::getInstance();
 
         // Der folgende Code sorgt dafür, daß für Nutzer mit Zugriff auf das 'admin' und das 'review' Modul der Link
         // zu den Review Seiten in der Administration angezeigt wird.

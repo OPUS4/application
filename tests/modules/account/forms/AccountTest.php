@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\Account;
-use Opus\Security\SecurityException;
+use Opus\Common\Security\SecurityException;
 
 /**
  * Basic unit tests for account form for users.

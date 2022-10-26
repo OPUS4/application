@@ -32,7 +32,7 @@
 use Opus\Common\Account;
 use Opus\Common\Log;
 use Opus\Common\Person;
-use Opus\Security\SecurityException;
+use Opus\Common\Security\SecurityException;
 
 class Publish_Model_LoggedUser
 {

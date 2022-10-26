@@ -33,7 +33,7 @@ use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\File;
-use Opus\Security\Realm;
+use Opus\Common\Security\Realm;
 
 /**
  * Class Oai_Model_Container

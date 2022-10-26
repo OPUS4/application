@@ -33,7 +33,7 @@ use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\File;
-use Opus\Security\IRealm;
+use Opus\Common\Security\RealmInterface;
 
 class Frontdoor_Model_File
 {
@@ -122,7 +122,7 @@ class Frontdoor_Model_File
 
     private function isDocumentAccessAllowed($docId, $realm)
     {
-        if (! ($realm instanceof IRealm)) {
+        if (! ($realm instanceof RealmInterface)) {
             return false;
         }
         return $realm->checkDocument($docId) || $this->getAclHelper()->accessAllowed('documents');
@@ -130,7 +130,7 @@ class Frontdoor_Model_File
 
     private function isFileAccessAllowed($file, $realm)
     {
-        if (is_null($file) or ! ($realm instanceof IRealm)) {
+        if (is_null($file) or ! ($realm instanceof RealmInterface)) {
             return false;
         }
 

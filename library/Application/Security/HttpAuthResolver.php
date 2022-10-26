@@ -30,8 +30,8 @@
  */
 
 use Opus\Common\Account;
-use Opus\Security\Realm;
-use Opus\Security\SecurityException;
+use Opus\Common\Security\Realm;
+use Opus\Common\Security\SecurityException;
 
 /**
  * HTTP auth resolver using OPUS accounts.
