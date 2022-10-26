@@ -127,8 +127,8 @@
            <xsl:apply-templates select="Subject" />
        </xsl:if>
        <xsl:choose>
-         <xsl:when test="normalize-space(ComletedDate/@Year)">
-             <xsl:text>Y1  - </xsl:text><xsl:value-of select="ComletedDate/@Year" />
+         <xsl:when test="normalize-space(CompletedDate/@Year)">
+             <xsl:text>Y1  - </xsl:text><xsl:value-of select="CompletedDate/@Year" />
          </xsl:when>
          <xsl:when test="string-length(PublishedDate/@Year)>0">
              <xsl:text>Y1  - </xsl:text><xsl:value-of select="PublishedDate/@Year" />
