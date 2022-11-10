@@ -3,7 +3,7 @@
   "description": "Application Environment for Opus 4",
   "license": "GPL-2.0+",
   "require": {
-    "php": ">=7.0 <7.2",
+    "php": ">=7.1",
     "ext-intl": "*",
     "ext-gd": "*",
     "ext-mcrypt": "*",
@@ -20,7 +20,7 @@
     "ext-simplexml": "*",
     "ext-fileinfo": "*",
     "ext-readline": "*",
-    "zendframework/zendframework1": "1.12.*",
+    "shardj/zf1-future": "1.21.*",
     "jpgraph/jpgraph": "dev-master",
     "solarium/solarium": "3.8.*",
     "opus4-repo/opus4-common": "4.7.2.x-dev",
