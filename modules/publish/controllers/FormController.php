@@ -206,6 +206,19 @@ class Publish_FormController extends Application_Controller_Action
         $this->view->languageSelectorDisabled = true;
         $this->view->title = 'publish_controller_index';
 
+        $request = $this->getRequest();
+
+        $selectedType = null;
+
+        if ($request->isPost()) {
+            $postData = $request->getPost();
+            if (isset($postData['DocumentType'])) {
+                // TODO validate type
+                $selectedType = $postData['DocumentType'];
+                $this->session->selectedType = $selectedType;
+            }
+        }
+
         if (isset($this->session->documentType)) {
             $this->view->subtitle = $this->view->translate($this->session->documentType);
         }
@@ -305,6 +318,10 @@ class Publish_FormController extends Application_Controller_Action
             }
 
             // form is valid: move to third form step (confirmation page)
+            if ($selectedType !== null) {
+                $this->view->subtitle = $this->view->translate($selectedType);
+            }
+
             return $this->showCheckPage($form);
         }
 

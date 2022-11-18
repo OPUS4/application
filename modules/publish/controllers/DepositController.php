@@ -109,15 +109,25 @@ class Publish_DepositController extends Application_Controller_Action
         }
 
         try {
+            $selectedType = null;
+
+            if (isset($this->session->selectedType)) {
+                $selectedType = $this->session->selectedType;
+            }
+
             $depositData = new Publish_Model_Deposit();
-            $depositData->storeDocument($this->session->documentId, $this->log, $this->depositData);
+            $depositData->storeDocument($this->session->documentId, $this->log, $this->depositData, $selectedType);
         } catch (Publish_Model_Exception $e) {
             throw new Application_Exception('publish_error_unexpected');
         }
 
         $document = $depositData->getDocument();
         $document->setServerState('unpublished');
-        $this->addSourceEnrichment($document);
+        
+
+        $enrichments = $document->getEnrichment();
+        if ($this->checkOpusSourceIsDoi($enrichments) == true)
+        {$this->addSourceDoi($document);} else {$this->addSourceEnrichment($document);}
 
         try {
             $docId = $document->store();
@@ -186,16 +196,45 @@ class Publish_DepositController extends Application_Controller_Action
     }
 
     /**
-     * Fügt das interne Enrichment opus.import mit dem Wert 'publish' zum Dokument hinzu.
+     * Fügt das interne Enrichment opus.source mit dem Wert 'publish' zum Dokument hinzu.
      *
      * @param Document $document
      * @throws ModelException
      */
-    private function addSourceEnrichment($document)
+    private function addSourceEnrichment($document)    
     {
         $enrichment = new Enrichment();
         $enrichment->setKeyName('opus.source');
         $enrichment->setValue('publish');
         $document->addEnrichment($enrichment);
     }
+
+    /**
+     * Fügt das interne Enrichment opus.source mit dem Wert 'doi-import' zum Dokument hinzu.
+     *
+     * @param Document $document
+     * @throws ModelException
+     */
+
+    private function addSourceDoi($document)    
+    {
+        $enrichment = new Enrichment();
+        $enrichment->setKeyName('opus.source');
+        $enrichment->setValue('doi-import');
+        $document->addEnrichment($enrichment);
+    }
+        
+    private function checkOpusSourceIsDoi($enrichments)
+    {
+        foreach ($enrichments as $enrichment) {
+                $value = $enrichment->getValue();
+                //$this->getLogger()->warn("KeyName: " . $enrichment->getKeyName());
+                //$this->getLogger()->warn("Value: " . $enrichment->getValue());
+                if ($value == 'crossref') 
+                {return true;} 
+            
+        }
+        return false;
+    }
+    
 }
