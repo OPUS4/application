@@ -42,15 +42,14 @@ class CronTestCase extends ControllerTestCase
     protected static $lockDir;
     private $jobIds = [];
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         self::$scriptPath = realpath(dirname(__FILE__) . '/../../../scripts/cron') . '/';
         self::$lockDir = realpath(self::$scriptPath . '/../../workspace/cache/');
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         if (! empty($this->jobIds)) {
             foreach ($this->jobIds as $jobId) {
                 try {

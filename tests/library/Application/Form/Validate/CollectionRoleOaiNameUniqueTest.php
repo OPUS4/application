@@ -38,15 +38,14 @@ class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends Controll
 
     private $validator;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->validator = new Application_Form_Validate_CollectionRoleOaiNameUnique();
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $collectionRole = CollectionRole::fetchByName('NewTestColRoleName');
         if (! is_null($collectionRole)) {
             $collectionRole->delete();

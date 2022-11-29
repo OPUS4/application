@@ -25,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -41,7 +38,7 @@ class Setup_Form_TranslationTest extends ControllerTestCase
 
     protected $additionalResources = 'Translation';
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $database = new \Opus\Translate\Dao();
         $database->removeAll();

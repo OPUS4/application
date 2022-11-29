@@ -47,7 +47,7 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
     protected $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->notification = new Application_Util_Notification();

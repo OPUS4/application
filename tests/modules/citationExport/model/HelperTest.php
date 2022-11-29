@@ -41,8 +41,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
     private $_helper;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $document = $this->createTestDocument();

@@ -40,8 +40,7 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
 
     protected $additionalResources = 'database';
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         // delete import collections
@@ -52,8 +51,7 @@ class Application_Update_AddImportCollectionTest extends ControllerTestCase
         }
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $enrichmentKey = EnrichmentKey::fetchByName('opus.test.key');
 
         if (! is_null($enrichmentKey)) {

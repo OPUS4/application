@@ -46,7 +46,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     private $form;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -40,8 +40,7 @@ class DbCleanTemporaryTest extends CronTestCase
 
     private $doc;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
         $this->doc = Document::new();
         $this->doc->setLifecycleListener(new DocumentLifecycleListenerMock());

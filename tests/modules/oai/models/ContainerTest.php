@@ -44,8 +44,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     private $roleId;
     private $userId;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
         $config = $this->getConfig();
         if (! isset($config->workspacePath)) {
@@ -54,8 +53,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $this->workspacePath = $config->workspacePath;
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         if (! is_null($this->roleId)) {
             $testRole = UserRole::get($this->roleId);
             $testRole->delete();

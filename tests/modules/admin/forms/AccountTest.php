@@ -38,8 +38,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
 
     private $account;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $user = Account::new();
@@ -50,8 +49,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
         $this->account = $user;
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         if (! is_null($this->account)) {
             $this->account->delete();
         }

@@ -38,7 +38,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
     private $_guestExportEnabled;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -48,8 +48,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
         $this->_guestExportEnabled = in_array('export', $modules);
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         // restore guest access to export module
         $guest = UserRole::fetchByName('guest');
 

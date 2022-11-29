@@ -44,8 +44,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
     private $nonEmptyCollectionRole = null;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $this->emptyCollectionRole = CollectionRole::new();
@@ -68,8 +67,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $rootCollection->store();
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $database = new \Opus\Translate\Dao();
         $database->removeAll();
 

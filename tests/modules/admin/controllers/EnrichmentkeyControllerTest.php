@@ -50,8 +50,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
      */
     private $allEnrichmentKeys = [];
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->setController('enrichmentkey');
         parent::setUp();
         foreach (EnrichmentKey::getAll() as $value) {

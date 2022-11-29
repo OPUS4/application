@@ -38,7 +38,7 @@ class Oai_Model_XmlFactoryTest extends ControllerTestCase
 
     private $_xmlFactory;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

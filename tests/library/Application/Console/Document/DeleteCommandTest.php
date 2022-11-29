@@ -44,8 +44,7 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
      */
     protected $documents;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $documents = [];

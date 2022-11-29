@@ -25,12 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * @covers Admin_FilebrowserController
  */
 class Admin_FilebrowserControllerTest extends ControllerTestCase
@@ -40,8 +39,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
     private $documentId;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $document = $this->createTestDocument();

@@ -42,8 +42,7 @@ class Account_Form_AccountTest extends ControllerTestCase
 
     private $account = null;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         try {
@@ -58,8 +57,7 @@ class Account_Form_AccountTest extends ControllerTestCase
         $this->account = $account;
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         if (! is_null($this->account)) {
             $this->account->delete();
         }

@@ -46,7 +46,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     private $licenceIds = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -62,8 +62,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         }
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $licences = Licence::getAll();
 
         if (count($this->licenceIds) < count($licences)) {

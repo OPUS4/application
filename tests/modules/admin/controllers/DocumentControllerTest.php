@@ -48,8 +48,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
     private $expectedNavigationLinks;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         // Die Links werden aus den Fieldset Legenden der Unterformulare generiert (nur 1. Ebene)

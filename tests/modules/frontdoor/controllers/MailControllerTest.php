@@ -47,7 +47,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
     private $authorDocumentId;
     private $authorId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $document = $this->createTestDocument();

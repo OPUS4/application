@@ -44,8 +44,7 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
 
     private $_docId;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $collectionRole = CollectionRole::new();
@@ -70,8 +69,7 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
         $this->_docId = $document->store();
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $collectionRole = CollectionRole::get($this->collectionRoleId);
         $collectionRole->delete();
 

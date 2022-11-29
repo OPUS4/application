@@ -39,8 +39,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
 
     private $roleId;
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         if (! is_null($this->roleId)) {
             try {
                 $role = CollectionRole::get($this->roleId);

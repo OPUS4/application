@@ -43,7 +43,7 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     private $documentId = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

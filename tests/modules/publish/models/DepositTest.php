@@ -40,8 +40,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
 
     private $enrichmentKey;
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         parent::tearDown();
 
         // das Entfernen des in den Tests neu angelegten EnrichmentKeys darf erst

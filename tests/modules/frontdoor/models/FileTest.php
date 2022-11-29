@@ -43,8 +43,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     const FILENAME_UNPUBLISHED_DOC = 'bar.html';
     const EXPECTED_EXCEPTION = "Test failed: expected Exception";
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
     }

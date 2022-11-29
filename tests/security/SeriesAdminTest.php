@@ -42,7 +42,7 @@ class SeriesAdminTest extends ControllerTestCase
 
     private $roleName = 'test-seriesadmin';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->enableSecurity();
@@ -62,7 +62,7 @@ class SeriesAdminTest extends ControllerTestCase
         $this->loginUser($this->userName, 'seriesadminpwd');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->logoutUser();
         $this->restoreSecuritySetting();

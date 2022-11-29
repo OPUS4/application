@@ -47,7 +47,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
      */
     private $plugin;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

@@ -44,7 +44,7 @@ class Admin_ReportControllerTest extends ControllerTestCase
 
     private $docIds;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -66,7 +66,7 @@ class Admin_ReportControllerTest extends ControllerTestCase
         ]);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (! is_null($this->docIds)) {
             // removed previously created test documents from database

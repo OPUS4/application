@@ -49,14 +49,14 @@ class MetadataImportTest extends CronTestCase
     private $xmlDir;
 
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->documentImported = false;
         $this->xmlDir = dirname(dirname(dirname(__FILE__))) . '/import/';
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->documentImported) {
             $finder = Repository::getInstance()->getDocumentFinder();

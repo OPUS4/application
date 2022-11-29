@@ -45,7 +45,7 @@ class Account_IndexControllerTest extends ControllerTestCase
 
     private $user;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -56,7 +56,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->user->store();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->user->delete();
         parent::tearDown();

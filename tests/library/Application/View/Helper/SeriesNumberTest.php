@@ -38,7 +38,7 @@ class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
 
     private $_helper = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

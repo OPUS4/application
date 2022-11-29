@@ -36,8 +36,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
 
     protected $_logger;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $writer = new \Zend_Log_Writer_Null;
         $this->_logger = new \Zend_Log($writer);
         parent::setUp();

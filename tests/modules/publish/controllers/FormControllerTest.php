@@ -42,8 +42,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
     protected $additionalResources = 'all';
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
         $this->useGerman();
     }

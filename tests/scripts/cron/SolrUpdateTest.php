@@ -42,7 +42,7 @@ class SolrUpdateTest extends CronTestCase
 
     private $document;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->document = $this->createTestDocument();

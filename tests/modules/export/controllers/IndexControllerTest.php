@@ -47,7 +47,7 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     private $_removeExportFromGuest = false;
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->_removeExportFromGuest) {
             $this->removeAccessOnModuleExportForGuest();

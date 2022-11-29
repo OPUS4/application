@@ -38,7 +38,7 @@ class Application_View_Helper_FormDocumentsTest extends ControllerTestCase
 
     private $_helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

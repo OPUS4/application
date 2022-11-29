@@ -45,7 +45,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
     protected $additionalResources = 'all';
 
-    public function tearDown()
+    public function tearDown(): void
     {
         // Cleanup of Log File
         $config = $this->getConfig();

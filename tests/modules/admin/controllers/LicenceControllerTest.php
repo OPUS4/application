@@ -41,7 +41,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
 
     protected $additionalResources = 'all';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->setController('licence');
 

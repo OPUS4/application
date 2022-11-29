@@ -56,7 +56,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
      */
     private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

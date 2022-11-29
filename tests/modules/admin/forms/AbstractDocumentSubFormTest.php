@@ -42,8 +42,7 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
 
     private $form;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
         $this->form = $this->getForm();
     }

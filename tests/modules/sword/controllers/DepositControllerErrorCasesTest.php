@@ -43,8 +43,7 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
 
     private $testHelper;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
         $this->testHelper = new DepositTestHelper();
         $this->testHelper->setupTmpDir();

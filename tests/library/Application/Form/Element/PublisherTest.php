@@ -36,7 +36,7 @@ class Application_Form_Element_PublisherTest extends FormElementTestCase
 
     protected $additionalResources = 'database';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_formElementClass = 'Application_Form_Element_Publisher';
         $this->_expectedDecorators = [

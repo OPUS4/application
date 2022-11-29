@@ -42,8 +42,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     private $documentId = null;
     private $person = null;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $document = $this->createTestDocument();

@@ -48,14 +48,12 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
     private $testModels = [];
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->setController('dnbinstitute');
         parent::setUp();
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         if (isset($this->roleId) && isset($this->userId)) {
             $testRole = UserRole::get($this->roleId);
             $testRole->delete();

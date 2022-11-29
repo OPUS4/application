@@ -41,8 +41,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
     private $navigation = null;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $this->helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('breadcrumbs');

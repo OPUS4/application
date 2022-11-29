@@ -40,7 +40,7 @@ class Application_Security_AclProviderTest extends ControllerTestCase
     private $roleId;
     private $userId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -60,8 +60,7 @@ class Application_Security_AclProviderTest extends ControllerTestCase
         $this->loginUser('role_tester', 'role_tester');
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $testRole = UserRole::get($this->roleId);
         $testRole->delete();
         $userAccount = Account::get($this->userId);

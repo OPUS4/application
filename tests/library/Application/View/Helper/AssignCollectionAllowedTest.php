@@ -40,7 +40,7 @@ class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTest
 
     private $_role;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -56,8 +56,7 @@ class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTest
         $this->_role = $role;
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $this->_role->delete();
 
         parent::tearDown();

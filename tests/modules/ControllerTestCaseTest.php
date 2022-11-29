@@ -41,8 +41,7 @@ class ControllerTestCaseTest extends ControllerTestCase
 
     protected $configModifiable = true;
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $this->restoreSecuritySetting();
         parent::tearDown();
     }

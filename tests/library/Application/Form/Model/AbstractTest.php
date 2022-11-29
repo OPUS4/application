@@ -42,7 +42,7 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
 
     private $form;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->form = $this->getForm();

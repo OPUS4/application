@@ -45,8 +45,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
     private $author4Id;
     private $unpublishedDocumentId;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
         $document = $this->createTestDocument();
         $document->setServerState('published');

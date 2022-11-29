@@ -42,7 +42,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
      */
     private static $testEnrichmentKeyName = 'TestEnrichmentKey';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_formElementClass = 'Application_Form_Element_EnrichmentKey';
         $this->_expectedDecorators = [
@@ -64,8 +64,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         $enrichmentKey->store();
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         parent::tearDown();
 
         // remove previously created enrichment key

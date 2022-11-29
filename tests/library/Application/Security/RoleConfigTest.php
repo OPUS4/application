@@ -41,14 +41,14 @@ class Application_Security_RoleConfigTest extends ControllerTestCase
 
     private $guestRole;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->guestRole = UserRole::get(2);
         $this->guestRole->appendAccessModule('documents');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->guestRole->removeAccessModule('documents');

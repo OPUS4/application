@@ -41,7 +41,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
     private $session;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->session = new \Zend_Session_Namespace();

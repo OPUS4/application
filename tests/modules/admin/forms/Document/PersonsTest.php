@@ -41,7 +41,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
 
     private $roles;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

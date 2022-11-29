@@ -63,7 +63,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();

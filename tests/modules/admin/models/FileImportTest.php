@@ -42,8 +42,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
 
     private $importFolder;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $this->model = new Admin_Model_FileImport();
@@ -52,8 +51,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
         $this->_clearImportFolder();
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $this->_clearImportFolder();
         parent::tearDown();
     }

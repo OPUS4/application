@@ -42,7 +42,7 @@ class Application_ConfigurationTest extends ControllerTestCase
      */
     private $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->makeConfigurationModifiable();

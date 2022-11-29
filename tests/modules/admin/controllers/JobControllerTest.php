@@ -41,7 +41,7 @@ class Admin_JobControllerTest extends ControllerTestCase
 
     private $jobIds = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -63,7 +63,7 @@ class Admin_JobControllerTest extends ControllerTestCase
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $testJobs = Job::getAll($this->jobIds);
         foreach ($testJobs as $job) {

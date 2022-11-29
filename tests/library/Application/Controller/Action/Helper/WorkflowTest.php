@@ -41,7 +41,7 @@ class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCa
 
     private $__workflowHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

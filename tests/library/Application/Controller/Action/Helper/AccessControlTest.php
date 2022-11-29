@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -39,8 +39,7 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
 
     private $accessControl;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
         $acl = Application_Security_AclProvider::getAcl();
@@ -48,8 +47,7 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
         $this->accessControl = new Application_Controller_Action_Helper_AccessControl();
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $acl = Application_Security_AclProvider::getAcl();
         $acl->deny('guest', 'accounts');
         parent::tearDown();

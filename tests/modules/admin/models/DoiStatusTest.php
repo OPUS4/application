@@ -39,8 +39,7 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
 
     private $docId;
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         if (! is_null($this->docId)) {
             // removed previously created test document from database
             $doc = Document::get($this->docId);

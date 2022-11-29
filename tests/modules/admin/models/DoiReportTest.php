@@ -44,8 +44,7 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
 
     private $docIds;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $this->adjustConfiguration([

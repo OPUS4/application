@@ -34,7 +34,7 @@ class Oai_Model_RequestTest extends ControllerTestCase
 
     private $request;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

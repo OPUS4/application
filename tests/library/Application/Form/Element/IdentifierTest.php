@@ -36,7 +36,7 @@ class Application_Form_Element_IdentifierTest extends FormElementTestCase
 
     protected $additionalResources = ['database', 'translation'];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_formElementClass = 'Application_Form_Element_Identifier';
         $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',

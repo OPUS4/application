@@ -48,8 +48,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase
     private $anotherCollection = null;
     private $rootCollection = null;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $this->emptyCollectionRole = CollectionRole::new();
@@ -84,8 +83,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->anotherCollection->store();
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         if (! is_null($this->nonEmptyCollectionRole) && ! is_null($this->nonEmptyCollectionRole->getId())) {
             $this->nonEmptyCollectionRole->delete();
         }

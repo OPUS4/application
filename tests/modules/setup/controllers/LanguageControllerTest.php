@@ -25,11 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -46,7 +42,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
     protected $additionalResources = 'all';
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $database = $this->getTranslationManager();
         $database->removeAll();

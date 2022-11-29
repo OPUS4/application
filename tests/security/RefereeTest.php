@@ -39,7 +39,7 @@ class RefereeTest extends ControllerTestCase
 
     private $refereeAccount;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -57,7 +57,7 @@ class RefereeTest extends ControllerTestCase
         $this->loginUser('referee', 'refereereferee');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->logoutUser();
         $this->restoreSecuritySetting();

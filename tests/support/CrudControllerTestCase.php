@@ -54,8 +54,7 @@ abstract class CrudControllerTestCase extends ControllerTestCase
         $this->controller = $value;
     }
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->controllerPath = '/' . $this->module . '/' . $this->controller;
         parent::setUp();
 
@@ -75,8 +74,7 @@ abstract class CrudControllerTestCase extends ControllerTestCase
         return $this->controllerPath;
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         if ($this->createsModels) {
             $this->deleteNewModels();
         }

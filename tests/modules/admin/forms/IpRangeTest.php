@@ -42,7 +42,7 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
 
     private $_modelId = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -53,7 +53,7 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $this->_modelId = $model->store();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (! is_null($this->_modelId)) {
             $range = Iprange::get($this->_modelId);

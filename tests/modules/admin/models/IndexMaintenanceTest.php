@@ -41,7 +41,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
 
     protected $additionalResources = 'database';
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (! is_null($this->config)) {
             Config::set($this->config); // TODO why is this here?

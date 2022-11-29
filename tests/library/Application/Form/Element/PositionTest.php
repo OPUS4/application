@@ -36,7 +36,7 @@ class Application_Form_Element_PositionTest extends FormElementTestCase
 
     protected $additionalResources = ['database', 'translation'];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_formElementClass = 'Application_Form_Element_Position';
         $this->_expectedDecorators = [

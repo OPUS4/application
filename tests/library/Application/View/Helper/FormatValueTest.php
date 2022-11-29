@@ -42,7 +42,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
     private $__helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->__helper = new Application_View_Helper_FormatValue();

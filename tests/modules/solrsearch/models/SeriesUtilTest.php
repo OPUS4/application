@@ -40,7 +40,7 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
 
     private $model;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -51,7 +51,7 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
         $this->model = new Solrsearch_Model_SeriesUtil();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->restoreVisiblitySettings();
 

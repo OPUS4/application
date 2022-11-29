@@ -40,7 +40,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     private $_update = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -49,8 +49,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $this->_update->setQuietMode(true);
     }
 
-    public function tearDown()
-    {
+    public function tearDown(): void    {
     }
 
     public function licenceMatchProvider()

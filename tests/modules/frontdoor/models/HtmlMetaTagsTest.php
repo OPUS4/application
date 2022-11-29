@@ -56,8 +56,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
      */
     private $currDate;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
         $this->htmlMetaTags = new Frontdoor_Model_HtmlMetaTags(
             $this->getConfig(),

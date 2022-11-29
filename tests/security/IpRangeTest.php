@@ -38,13 +38,13 @@ class IpRangeTest extends ControllerTestCase
 
     protected $additionalResources = ['database', 'view', 'navigation', 'mainMenu', 'translation'];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->enableSecurity();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->restoreSecuritySetting();
         parent::tearDown();

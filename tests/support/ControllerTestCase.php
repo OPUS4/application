@@ -96,16 +96,14 @@ class ControllerTestCase extends TestCase
         parent::setUp();
     }
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         $this->setUpWithEnv(APPLICATION_ENV);
     }
 
     /**
      * Clean up database instances.
      */
-    public function tearDown()
-    {
+    public function tearDown(): void    {
         $this->logoutUser();
         $this->resetSearch();
 

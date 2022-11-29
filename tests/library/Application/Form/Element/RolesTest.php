@@ -39,7 +39,7 @@ class Application_Form_Element_RolesTest extends FormElementTestCase
 
     protected $additionalResources = 'database';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_formElementClass = 'Application_Form_Element_Roles';
         $this->_expectedDecoratorCount = 4;

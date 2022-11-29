@@ -43,7 +43,7 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
 
     private $account;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->validator = new Application_Form_Validate_LoginAvailable();
@@ -56,7 +56,7 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
         $this->account = $user;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (! is_null($this->account)) {
             $this->account->delete();

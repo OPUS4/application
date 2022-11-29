@@ -45,8 +45,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     private $documentId;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $document = $this->createTestDocument();

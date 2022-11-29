@@ -41,7 +41,7 @@ class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
 
     private $__datesHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

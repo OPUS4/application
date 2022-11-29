@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -39,8 +39,7 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
 
     private $documents;
 
-    public function setUp()
-    {
+    public function setUp(): void    {
         parent::setUp();
 
         $this->documents = \Zend_Controller_Action_HelperBroker::getStaticHelper('Documents');
