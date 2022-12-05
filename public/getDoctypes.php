@@ -1,4 +1,5 @@
 <?php
+// TODO move into a controller class and use configuration object (not bypassing everything)
 $content = file_get_contents('../application/configs/config.ini');
 if (preg_match('/[\\n]documentTypes.include =([a-z, ]+)[\\n]/i',$content,$matches))
 {   $includes = array_map('trim',explode(",",$matches[1]));  
