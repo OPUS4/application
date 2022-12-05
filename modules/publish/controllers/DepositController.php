@@ -123,11 +123,14 @@ class Publish_DepositController extends Application_Controller_Action
 
         $document = $depositData->getDocument();
         $document->setServerState('unpublished');
-        
+
 
         $enrichments = $document->getEnrichment();
-        if ($this->checkOpusSourceIsDoi($enrichments) == true)
-        {$this->addSourceDoi($document);} else {$this->addSourceEnrichment($document);}
+        if ($this->checkOpusSourceIsDoi($enrichments) == true) {
+            $this->addSourceDoi($document);
+        } else {
+            $this->addSourceEnrichment($document);
+        }
 
         try {
             $docId = $document->store();
@@ -201,7 +204,7 @@ class Publish_DepositController extends Application_Controller_Action
      * @param Document $document
      * @throws ModelException
      */
-    private function addSourceEnrichment($document)    
+    private function addSourceEnrichment($document)
     {
         $enrichment = new Enrichment();
         $enrichment->setKeyName('opus.source');
@@ -216,25 +219,24 @@ class Publish_DepositController extends Application_Controller_Action
      * @throws ModelException
      */
 
-    private function addSourceDoi($document)    
+    private function addSourceDoi($document)
     {
         $enrichment = new Enrichment();
         $enrichment->setKeyName('opus.source');
         $enrichment->setValue('doi-import');
         $document->addEnrichment($enrichment);
     }
-        
+
     private function checkOpusSourceIsDoi($enrichments)
     {
         foreach ($enrichments as $enrichment) {
                 $value = $enrichment->getValue();
                 //$this->getLogger()->warn("KeyName: " . $enrichment->getKeyName());
                 //$this->getLogger()->warn("Value: " . $enrichment->getValue());
-                if ($value == 'crossref') 
-                {return true;} 
-            
+            if ($value == 'crossref') {
+                return true;
+            }
         }
         return false;
     }
-    
 }
