@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,23 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Frontdoor
- * @author      Julian Heise <heise@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\Config;
-use Opus\Date;
-use Opus\Document;
-use Opus\Log;
-use Opus\Note;
-use Opus\Title;
+use Opus\Common\Collection;
+use Opus\Common\CollectionRole;
+use Opus\Common\Config;
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Log;
+use Opus\Common\Note;
+use Opus\Common\Title;
 
 /**
  * Class Frontdoor_IndexControllerTest.
@@ -55,7 +52,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     /**
      * Document to count on :)
      *
-     * @var Document
+     * @var DocumentInterface
      */
     protected $_document = null;
     protected $_document_col = null;
@@ -77,12 +74,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->_document = $this->createTestDocument();
         $this->_document->setType("doctoral_thesis");
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('Titel');
         $this->_document->addTitleMain($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('eng');
         $title->setValue('Title');
         $this->_document->addTitleMain($title);
@@ -96,13 +93,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         // create collection test document
         $this->_document_col = $this->createTestDocument();
-        $this->_document_col->addCollection(new Collection(40)); // invisible collection
-        $this->_document_col->addCollection(new Collection(16214)); // visible collection with invisible collection role
-        $this->_document_col->addCollection(new Collection(1031)); // visible collection with visible collection role
+        $this->_document_col->addCollection(Collection::get(40)); // invisible collection
+        $this->_document_col->addCollection(Collection::get(16214)); // visible collection with invisible collection role
+        $this->_document_col->addCollection(Collection::get(1031)); // visible collection with visible collection role
 
         // collection role ID = 10 (sichbar)
-        $this->_document_col->addCollection(new Collection(16136)); // versteckte Collection (Role = 10)
-        $this->_document_col->addCollection(new Collection(15991)); // sichbare Collection (Role = 10);
+        $this->_document_col->addCollection(Collection::get(16136)); // versteckte Collection (Role = 10)
+        $this->_document_col->addCollection(Collection::get(15991)); // sichbare Collection (Role = 10);
         $this->_document_col->setServerState('published');
         $this->_document_col->store();
     }
@@ -587,7 +584,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 
-        $abstract = new Title();
+        $abstract = Title::new();
         $abstract->setLanguage("eng");
         $abstract->setValue("foo\nbar\n\nbaz");
         $doc->addTitleAbstract($abstract);
@@ -609,7 +606,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 
-        $note = new Note();
+        $note = Note::new();
         $note->setMessage("foo\nbar\n\nbaz");
         $note->setVisibility("public");
         $doc->addNote($note);
@@ -629,7 +626,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651NameNumber()
     {
-        $role = new CollectionRole(7);
+        $role = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Name,Number');
         $role->store();
@@ -652,7 +649,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651NumberName()
     {
-        $role = new CollectionRole(7);
+        $role = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Number,Name');
         $role->store();
@@ -675,7 +672,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651Name()
     {
-        $role = new CollectionRole(7);
+        $role = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Name');
         $role->store();
@@ -699,7 +696,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651Number()
     {
-        $role = new CollectionRole(7);
+        $role = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Number');
         $role->store();
@@ -984,12 +981,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $functions = ['addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleAbstract'];
         foreach ($functions as $function) {
             $doc = $this->createTestDocument();
-            $title = new Title();
+            $title = Title::new();
             $title->setLanguage('deu');
             $title->setValue('deutscher Titel');
             $doc->$function($title);
 
-            $title = new Title();
+            $title = Title::new();
             $title->setLanguage('eng');
             $title->setValue('englischer Titel');
             $doc->$function($title);
@@ -1029,12 +1026,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $functions = ['addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleAbstract'];
         foreach ($functions as $function) {
             $doc = $this->createTestDocument();
-            $title = new Title();
+            $title = Title::new();
             $title->setLanguage('deu');
             $title->setValue('deutscher Titel');
             $doc->$function($title);
 
-            $title = new Title();
+            $title = Title::new();
             $title->setLanguage('eng');
             $title->setValue('englischer Titel');
             $doc->$function($title);

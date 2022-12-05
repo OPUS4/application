@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Security\Realm;
-use Opus\Db\DocumentXmlCache;
+use Opus\Common\Document;
+use Opus\Common\Repository;
+use Opus\Common\Security\Realm;
 
 /**
  * Export plugin for exporting documents as XML.
@@ -136,7 +133,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
     /**
      * Sets mime type for response.
-     * @param $mimeType Mime type for response
+     * @param string $mimeType Mime type for response
      */
     public function setContentType($mimeType)
     {
@@ -354,7 +351,16 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         $proc = $this->_proc;
         $xml = $this->_xml;
 
-        $proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', \Zend_Date::now()->setTimeZone('UTC')->getIso()));
+        $proc->setParameter(
+            '',
+            'timestamp',
+            str_replace(
+                '+00:00',
+                'Z',
+                (new DateTime())->setTimezone(new DateTimeZone('UTC'))->format(DateTime::RFC3339)
+            )
+        );
+
         $proc->setParameter('', 'docCount', count($resultIds));
         $proc->setParameter('', 'queryhits', $numOfHits);
 
@@ -390,7 +396,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
      * Returns an empty array, if ID is not present in request, is unknown or the corresponding
      * document is not in serverState published. Otherwise returns a one-element array with docId.
      *
-     * @param $request HTTP request object
+     * @param Zend_Controller_Request_Http $request HTTP request object
      * @return array empty array or one-element array with docId.
      */
     private function getAndValidateDocId($request)
@@ -423,7 +429,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
     /**
      * Returns array with document XML nodes.
-     * @param $documentIds IDs of documents
+     * @param int[] $documentIds IDs of documents
      * @return array Map of document IDs and DOM nodes
      */
     private function getDocumentsXml($documentIds)
@@ -439,7 +445,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
     /**
      * Returns a list of documents from the database.
-     * @param $resultIds ids of documents for export
+     * @param int[] $resultIds ids of documents for export
      * @return array [docId] DocumentXml
      */
     private function getDocumentsFromDatabase($documentIds)
@@ -457,26 +463,25 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
 
     /**
      * Returns a list of documents from cache.
-     * @param $resultIds ids of documents for export
+     * @param int[] $resultIds ids of documents for export
      * @return array Map of docId to  Document XML
      */
-    private function getDocumentsFromCache($documentIds)
+    public function getDocumentsFromCache($documentIds)
     {
         $documents = [];
 
-        $documentCacheTable = new DocumentXmlCache();
-        $docXmlCache = $documentCacheTable->fetchAll(
-            $documentCacheTable->select()->where(
-                'document_id IN (?)',
-                $documentIds
-            )
-        );//->find($this->document->getId(), '1')->current()->xml_data;
+        $documentCache = Repository::getInstance()->getDocumentXmlCache();
+        $documentXml = $documentCache->getData($documentIds, '1'); // TODO what version is used?
 
-        foreach ($docXmlCache as $row) {
+        foreach ($documentIds as $docId) {
+            if (! isset($documentXml[$docId])) {
+                continue;
+            }
+            $xml = $documentXml[$docId];
             $fragment = new DomDocument();
-            $fragment->loadXML($row->xml_data);
+            $fragment->loadXML($xml);
             $node = $fragment->getElementsByTagName('Opus_Document')->item(0);
-            $documents[$row->document_id] = $node;
+            $documents[$docId] = $node;
         }
 
         return $documents;

@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Translate\UnknownTranslationKeyException;
+
 /**
  * Form for adding or editing translations.
  *
@@ -214,7 +216,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
         $translation = $manager->getTranslation($key);
 
         if (is_null($translation)) {
-            throw new \Opus\Translate\UnknownTranslationKeyException("Unknown key '$key'.");
+            throw new UnknownTranslationKeyException("Unknown key '$key'.");
         }
 
         $idElement = $this->getElement(self::ELEMENT_ID);

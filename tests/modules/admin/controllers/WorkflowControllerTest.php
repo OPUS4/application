@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Person;
+use Opus\Common\Document;
+use Opus\Common\Person;
 
 /**
  * Class Admin_WorkflowControllerTest.
@@ -56,7 +53,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("John");
         $author->setLastName("Doe");
         if ($author != '') {
@@ -64,7 +61,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         }
         $doc->addPersonAuthor($author);
 
-        $submitter = new Person();
+        $submitter = Person::new();
         $submitter->setFirstName("John");
         $submitter->setLastName("Submitter");
         if ($submitterMail != '') {
@@ -386,18 +383,18 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
             'author@localhost.de'
         );
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("AFN");
         $author->setLastName("ALN");
         $author->setEmail("A@localhost.de");
         $doc->addPersonAuthor($author);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("BFN");
         $author->setLastName("BLN");
         $doc->addPersonAuthor($author);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("CFN");
         $author->setLastName("CLN");
         $author->setEmail("C@localhost.de");

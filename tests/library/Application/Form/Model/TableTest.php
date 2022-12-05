@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @package     Application_Form_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Licence;
+use Opus\Common\Licence;
 
 class Application_Form_Model_TableTest extends ControllerTestCase
 {
@@ -74,16 +72,13 @@ class Application_Form_Model_TableTest extends ControllerTestCase
         $this->assertEquals($models, $form->getModels());
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Parameter must be array.
-     */
     public function testSetModelNotArray()
     {
         $form = new Application_Form_Model_Table();
 
         $models = Licence::getAll();
 
+        $this->setExpectedException(Application_Exception::class, 'Parameter must be array.');
         $form->setModels('notanarray');
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Person;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Person;
 
 /**
  * Controller fuer die Verwaltung von Personen.
@@ -156,8 +154,10 @@ class Admin_PersonController extends Application_Controller_Action
         $params = $this->getRequest()->getParams();
         $form->populate($params);
 
+        $persons = Person::getModelRepository();
+
         // TODO move into replaceable model class
-        $personsTotal = Person::getAllPersonsCount($role, $filter);
+        $personsTotal = $persons->getAllPersonsCount($role, $filter);
 
         if ($start > $personsTotal) {
             if ($personsTotal > 0 && ($personsTotal > $limit)) {
@@ -169,7 +169,7 @@ class Admin_PersonController extends Application_Controller_Action
 
         $page = intdiv($start, $limit) + 1;
 
-        $persons = Person::getAllPersons($role, $start - 1, $limit, $filter);
+        $persons = $persons->getAllPersons($role, $start - 1, $limit, $filter);
 
         $this->view->headScript()->appendFile($this->view->layoutPath() . '/js/admin.js');
 
@@ -201,7 +201,9 @@ class Admin_PersonController extends Application_Controller_Action
     {
         $person = $this->getPersonCrit();
 
-        $documents = Person::getPersonDocuments($person);
+        $persons = Person::getModelRepository();
+
+        $documents = $persons->getPersonDocuments($person);
 
         $this->view->documents = $documents;
     }
@@ -227,7 +229,9 @@ class Admin_PersonController extends Application_Controller_Action
             );
         }
 
-        $personValues = Person::getPersonValues($person);
+        $personRepository = Person::getModelRepository();
+
+        $personValues = $personRepository->getPersonValues($person);
 
         if (is_null($personValues)) {
             $this->_helper->Redirector->redirectTo(
@@ -277,9 +281,9 @@ class Admin_PersonController extends Application_Controller_Action
 
                             $confirmForm = new Admin_Form_PersonsConfirm();
                             $confirmForm->getElement(Admin_Form_PersonsConfirm::ELEMENT_FORM_ID)->setValue($formId);
-                            $confirmForm->setOldValues(Person::convertToFieldNames($personValues));
+                            $confirmForm->setOldValues($personRepository->convertToFieldNames($personValues));
                             $confirmForm->populateFromModel($person);
-                            $confirmForm->setChanges(Person::convertToFieldNames($changes));
+                            $confirmForm->setChanges($personRepository->convertToFieldNames($changes));
                             $confirmForm->setAction($this->view->url([
                                 'module' => 'admin', 'controller' => 'person', 'action' => 'update'
                             ], null, false));
@@ -353,7 +357,8 @@ class Admin_PersonController extends Application_Controller_Action
                             $changes = $personForm->getChanges();
                             $documents = $form->getDocuments();
 
-                            Person::updateAll($person, $changes, $documents);
+                            $persons = Person::getModelRepository();
+                            $persons->updateAll($person, $changes, $documents);
 
                             $message = 'admin_person_bulk_update_success';
                         }
@@ -546,7 +551,7 @@ class Admin_PersonController extends Application_Controller_Action
             }
 
             try {
-                $person = new Person($personId);
+                $person = Person::get($personId);
             } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . ' ' . $omnfe->getMessage());
                 return $this->returnToMetadataForm($docId);

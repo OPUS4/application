@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,20 +24,16 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-use Opus\EnrichmentKey;
-
-/**
- * Formular für die Anzeige der Enrichment-Tabelle.
  *
- * @category    Application
- * @package     Application_Form_Model
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\EnrichmentKey;
+
+/**
+ * Formular für die Anzeige der Enrichment-Tabelle.
+ */
 class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
 {
     private $enrichmentKeys;

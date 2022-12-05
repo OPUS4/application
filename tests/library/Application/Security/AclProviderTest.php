@@ -25,13 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
-use Opus\Security\Realm;
-use Opus\UserRole;
+use Opus\Common\Account;
+use Opus\Common\UserRole;
 
 class Application_Security_AclProviderTest extends ControllerTestCase
 {
@@ -44,14 +43,15 @@ class Application_Security_AclProviderTest extends ControllerTestCase
     public function setUp()
     {
         parent::setUp();
-        $testRole = new UserRole();
+
+        $testRole = UserRole::new();
         $testRole->setName('_test');
 
         $testRole->appendAccessModule('documents');
 
         $this->roleId = $testRole->store();
 
-        $userAccount = new Account();
+        $userAccount = Account::new();
         $userAccount->setLogin('role_tester')
             ->setPassword('role_tester');
         $userAccount->setRole($testRole);
@@ -62,11 +62,11 @@ class Application_Security_AclProviderTest extends ControllerTestCase
 
     public function tearDown()
     {
-        parent::tearDown();
-        $testRole = new UserRole($this->roleId);
+        $testRole = UserRole::get($this->roleId);
         $testRole->delete();
-        $userAccount = new Account($this->userId);
+        $userAccount = Account::get($this->userId);
         $userAccount->delete();
+        parent::tearDown();
     }
 
     public function testGetAcls()
@@ -86,10 +86,10 @@ class Application_Security_AclProviderTest extends ControllerTestCase
 
     public function testRoleNameLikeUserName()
     {
-        $userAccount = new Account();
+        $userAccount = Account::new();
         $userAccount->setLogin('_test')
             ->setPassword('role_tester');
-        $userAccount->setRole(new UserRole($this->roleId));
+        $userAccount->setRole(UserRole::get($this->roleId));
         $userId = $userAccount->store();
         \Zend_Auth::getInstance()->getStorage()->write('_test');
 

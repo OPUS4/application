@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
-use Opus\Log;
-use Opus\Person;
+use Opus\Common\Account;
+use Opus\Common\Log;
+use Opus\Common\Person;
+use Opus\Common\Security\SecurityException;
 
 class Publish_Model_LoggedUser
 {
-
     private $_log     = null;
     private $_login   = null;
     private $_account = null;
@@ -51,8 +49,13 @@ class Publish_Model_LoggedUser
             return;
         }
 
-        $account = Account::fetchAccountByLogin($login);
-        if (is_null($account) or $account->isNewRecord()) {
+        try {
+            $account = Account::fetchAccountByLogin($login);
+        } catch (SecurityException $ex) {
+            $account = null;
+        }
+
+        if ($account === null || $account->isNewRecord()) {
             $this->_log->err("Error checking logged user: Invalid account returned for user '$login'!");
             return;
         }
@@ -83,7 +86,7 @@ class Publish_Model_LoggedUser
             return;
         }
 
-        $person = new Person();
+        $person = Person::new();
         $person->setFirstName(trim($this->_account->getFirstName()));
         $person->setLastName(trim($this->_account->getLastName()));
         $person->setEmail(trim($this->_account->getEmail()));

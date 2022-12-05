@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
+use Opus\Common\File;
 
 class Admin_Form_FileTest extends ControllerTestCase
 {
@@ -63,7 +60,7 @@ class Admin_Form_FileTest extends ControllerTestCase
         $this->useEnglish();
         $form = new Admin_Form_File();
 
-        $file = new File(126); // hängt an Testdokument 146
+        $file = File::get(126); // hängt an Testdokument 146
 
         $form->populateFromModel($file);
 
@@ -89,7 +86,7 @@ class Admin_Form_FileTest extends ControllerTestCase
     {
         $form = new Admin_Form_File();
 
-        $file = new File(123); // von Dokument 122
+        $file = File::get(123); // von Dokument 122
 
         $form->populateFromModel($file);
 
@@ -180,7 +177,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $form->getElement('Id')->setValue(126); // Datei 'test.pdf' von Dokument 146
 
-        $file = new File(126);
+        $file = File::get(126);
 
         $form->populateFromModel($file);
 
@@ -200,29 +197,23 @@ class Admin_Form_FileTest extends ControllerTestCase
         $this->assertContains('reviewer', $roles);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Bad file ID = 'bla'.
-     */
     public function testGetModelBadId()
     {
         $form = new Admin_Form_File();
 
         $form->getElement('Id')->setValue('bla');
 
+        $this->setExpectedException(Application_Exception::class, 'Bad file ID = \'bla\'.');
         $form->getModel();
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Unknown file ID = '8888'.
-     */
     public function testGetModelUnknownID()
     {
         $form = new Admin_Form_File();
 
         $form->getElement('Id')->setValue('8888');
 
+        $this->setExpectedException(Application_Exception::class, 'Unknown file ID = \'8888\'.');
         $form->getModel();
     }
 
@@ -261,10 +252,6 @@ class Admin_Form_FileTest extends ControllerTestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage File with ID = 5555 not found.
-     */
     public function testValidationUnknownFileLink()
     {
         $form = new Admin_Form_File();
@@ -274,6 +261,7 @@ class Admin_Form_FileTest extends ControllerTestCase
             'Language' => 'eng'
         ];
 
+        $this->setExpectedException(Application_Exception::class, 'File with ID = 5555 not found.');
         $result = $form->isValid($post);
     }
 

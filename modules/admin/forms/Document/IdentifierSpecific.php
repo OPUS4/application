@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Identifier;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Identifier;
 
 class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSubForm
 {
@@ -112,14 +110,14 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
 
         if (strlen(trim($modelId)) > 0) {
             try {
-                $identifier = new Identifier($modelId);
+                $identifier = Identifier::get($modelId);
             } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown identifier ID = '$modelId'.");
             }
         }
 
         if (is_null($identifier)) {
-            $identifier = new Identifier();
+            $identifier = Identifier::new();
             $identifier->setType($this->type);
         }
 

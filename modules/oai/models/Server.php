@@ -25,16 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Log;
-use Opus\Model\NotFoundException;
+use Opus\Common\Log;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Repository;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
-use Opus\Repository;
 
 class Oai_Model_Server extends Application_Model_Abstract
 {
@@ -252,14 +253,13 @@ class Oai_Model_Server extends Application_Model_Abstract
     }
 
     /**
-     * @throws Zend_Date_Exception
      * @throws Zend_Exception
      *
      * TODO factory (function) for processor
      */
     protected function setupProcessor()
     {
-        $this->_proc->registerPHPFunctions('Opus\Language::getLanguageCode');
+        $this->_proc->registerPHPFunctions('Opus\Common\Language::getLanguageCode');
         Application_Xslt::registerViewHelper(
             $this->_proc,
             [
@@ -279,7 +279,11 @@ class Oai_Model_Server extends Application_Model_Abstract
         $this->_proc->setParameter(
             '',
             'dateTime',
-            str_replace('+00:00', 'Z', \Zend_Date::now()->setTimeZone('UTC')->getIso())
+            str_replace(
+                '+00:00',
+                'Z',
+                (new DateTime())->setTimezone(new DateTimeZone('UTC'))->format(DateTime::RFC3339)
+            )
         );
 
         // set OAI base url
@@ -348,13 +352,20 @@ class Oai_Model_Server extends Application_Model_Abstract
         $sampleIdentifier = $this->_configuration->getSampleIdentifier();
 
         // Set backup date if database query does not return a date.
-        $earliestDate = new \Zend_Date('1970-01-01', \Zend_Date::ISO_8601);
+        $earliestDate = DateTime::createFromFormat("Y-m-d", '1970-01-01');
 
-        $earliestDateFromDb = Document::getEarliestPublicationDate();
+        $earliestDateFromDb = Repository::getInstance()->getModelRepository(Document::class)
+            ->getEarliestPublicationDate();
+
         if (! is_null($earliestDateFromDb)) {
-            $earliestDate = new \Zend_Date($earliestDateFromDb, \Zend_Date::ISO_8601);
+            // TODO: Do we expect the full ISO format or Y-m-d? ZEND_DATE::ISO_8601 was probably less strict here.
+            $earliestDate = DateTime::createFromFormat(DateTime::ATOM, $earliestDateFromDb);
+            if ($earliestDate === false) {
+                $earliestDate = DateTime::createFromFormat("Y-m-d", $earliestDateFromDb);
+            }
         }
-        $earliestDateIso = $earliestDate->get('yyyy-MM-dd');
+
+        $earliestDateIso = $earliestDate->format('Y-m-d');
 
         // set parameters for oai-pmh.xslt
         $this->_proc->setParameter('', 'emailAddress', $email);
@@ -565,7 +576,12 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     private function setParamResumption($res, $cursor, $totalIds)
     {
-        $tomorrow = str_replace('+00:00', 'Z', \Zend_Date::now()->addDay(1)->setTimeZone('UTC')->getIso());
+        $tomorrow = str_replace(
+            '+00:00',
+            'Z',
+            (new DateTime())->modify('+1 day')->setTimezone(new DateTimeZone('UTC'))->format(DateTime::RFC3339)
+        );
+
         $this->_proc->setParameter('', 'dateDelete', $tomorrow);
         $this->_proc->setParameter('', 'res', $res);
         $this->_proc->setParameter('', 'cursor', $cursor);
@@ -575,11 +591,11 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Create xml structure for one record
      *
-     * @param  Document $document
+     * @param  DocumentInterface $document
      * @param  string        $metadataPrefix
      * @return void
      */
-    private function createXmlRecord(Document $document)
+    private function createXmlRecord($document)
     {
         $docId = $document->getId();
         $domNode = $this->getDocumentXmlDomNode($document);
@@ -710,9 +726,9 @@ class Oai_Model_Server extends Application_Model_Abstract
      * Add rights element to output.
      *
      * @param \DOMNode $domNode
-     * @param Document $doc
+     * @param DocumentInterface $doc
      */
-    private function _addAccessRights(DOMNode $domNode, Document $doc)
+    private function _addAccessRights($domNode, $doc)
     {
         $fileElement = $domNode->ownerDocument->createElement('Rights');
         $fileElement->setAttribute('Value', $this->_xmlFactory->getAccessRights($doc));
@@ -763,7 +779,7 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @return DOMNode
      * @throws Exception
      */

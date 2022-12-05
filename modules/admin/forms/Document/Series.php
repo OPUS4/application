@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,25 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
+use Opus\Common\Model\NotFoundException;
 use Opus\Model\Dependent\Link\DocumentSeries;
-use Opus\Model\NotFoundException;
+use Opus\Common\Series;
 
 /**
  * Unterformular fuer das Editieren eines Serieneintrags.
  *
  * TODO gibt es gute Lösung die Doc-ID nicht noch einmal im Unterformular zu haben (als Teil der ID)
- *
- * @category    Application
- * @package     Module_Admin
- * @subpackage  Form_Document
  */
 class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
 {
@@ -106,7 +100,7 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
     public function updateModel($seriesLink)
     {
         $seriesId = $this->getElementValue(self::ELEMENT_SERIES_ID);
-        $series = new Series($seriesId);
+        $series = Series::get($seriesId);
         $seriesLink->setModel($series);
         $seriesLink->setNumber($this->getElementValue(self::ELEMENT_NUMBER));
         $seriesLink->setDocSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));

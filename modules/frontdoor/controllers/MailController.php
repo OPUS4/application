@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Simone Finkbeiner-Franke <simone.finkbeiner@ub.uni-stuttgart.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2009-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Mail\SendMail;
+use Opus\Common\Mail\SendMail;
 
 /**
  * Controller for document recommendation starting from Frontdoor
@@ -56,7 +52,7 @@ class Frontdoor_MailController extends Application_Controller_Action
             throw new Application_Exception('missing parameter docId');
         }
 
-        $document = new Document($docId);
+        $document = Document::get($docId);
         $this->view->docId = $docId;
         $this->view->type = $document->getType();
 

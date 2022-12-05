@@ -25,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @author      Michael Lang  (lang@zib.de)
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -49,8 +46,8 @@ if (basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Document;
+use Opus\Common\Repository;
 
 $options = getopt('', ['dryrun', 'type:', 'doctype:', 'enrichment:']);
 
@@ -84,7 +81,7 @@ if ($dryrun) {
     _log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
-$docFinder = Repository::getInstance()->DocumentFinder();
+$docFinder = Repository::getInstance()->getDocumentFinder();
 $docIds = $docFinder->setEnrichmentExists($enrichmentField)->getIds();
 
 _log(count($docIds) . " documents found");

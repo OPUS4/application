@@ -25,11 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Security\Realm;
+use Opus\Common\Security\Realm;
+use Opus\Common\LoggingTrait;
 
 /**
  * Erzeugt das Zend_Acl object für die Prüfung von Nutzerprivilegien.
@@ -41,7 +42,7 @@ use Opus\Security\Realm;
 class Application_Security_AclProvider
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     /**
      * Name der Role, die für ACL Prüfungen verwendet wird.

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,19 +24,15 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Licence;
+use Opus\Common\Licence;
 
 /**
  * Unit Tests für Klasse Admin_LicenceController.
- *
- * @category    Tests
- * @package     Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * @covers Admin_LicenceController
  */
@@ -63,7 +60,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $licence = new Licence();
+        $licence = Licence::new();
 
         $licence->setActive(true);
         $licence->setNameLong('TestNameLong');
@@ -82,7 +79,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
 
         $this->dispatch('/admin/licence/show/id/' . $licenceId);
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $licence->delete();
 
         $this->assertResponseCode(200);
@@ -216,7 +213,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $licence = new Licence();
+        $licence = Licence::new();
 
         $licence->setNameLong('NameLong');
         $licence->setLanguage('deu');
@@ -244,7 +241,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo('/admin/licence/show/id/' . $licenceId);
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
 
         $this->assertEquals(1, $licence->getActive());
         $this->assertEquals('NameLongModified', $licence->getNameLong());
@@ -263,7 +260,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $licence = new Licence();
+        $licence = Licence::new();
 
         $licence->setNameLong('NameLong');
         $licence->setLanguage('deu');
@@ -282,7 +279,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
         $this->dispatch('/admin/licence/edit');
         $this->assertRedirectTo('/admin/licence');
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
 
         $this->assertEquals('NameLong', $licence->getNameLong());
     }
@@ -312,7 +309,7 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
 
     public function createNewModel()
     {
-        $licence = new Licence();
+        $licence = Licence::new();
 
         $licence->setNameLong('Test Licence (LicenceControllerTest::testDeleteAction)');
         $licence->setLinkLicence('testlink');
@@ -323,6 +320,6 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
 
     public function getModel($identifier)
     {
-        return new Licence($identifier);
+        return Licence::get($identifier);
     }
 }

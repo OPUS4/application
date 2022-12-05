@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Security\Realm;
+use Opus\Common\Security\Realm;
 
 class IpRangeTest extends ControllerTestCase
 {

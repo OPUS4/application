@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish Unit Test
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\EnrichmentKey;
-use Opus\Log;
+use Opus\Common\EnrichmentKey;
+use Opus\Common\Date;
+use Opus\Common\Log;
 
 class Publish_Model_DepositTest extends ControllerTestCase
 {
@@ -55,9 +54,6 @@ class Publish_Model_DepositTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @expectedException Publish_Model_FormDocumentNotFoundException
-     */
     public function testInvalidDocumentState()
     {
         $document = $this->createTestDocument();
@@ -66,6 +62,8 @@ class Publish_Model_DepositTest extends ControllerTestCase
 
         $log = Log::get();
         $deposit = new Publish_Model_Deposit($log);
+
+        $this->setExpectedException(Publish_Model_FormDocumentNotFoundException::class);
         $deposit->storeDocument($documentId);
     }
 
@@ -77,7 +75,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
         $document->setServerState('temporary');
         $docId = $document->store();
 
-        $this->enrichmentKey = new EnrichmentKey();
+        $this->enrichmentKey = EnrichmentKey::new();
         $this->enrichmentKey->setName('Foo2Title');
         $this->enrichmentKey->store();
 
@@ -229,7 +227,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
 
         $date = $deposit->castStringToOpusDate('2017/03/12');
 
-        $this->assertInstanceOf('Opus\Date', $date);
+        $this->assertInstanceOf(Date::class, $date);
 
         $this->assertEquals('2017', $date->getYear());
 
@@ -248,7 +246,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
 
         $date = $deposit->castStringToOpusDate('12.03.2017');
 
-        $this->assertInstanceOf('Opus\Date', $date);
+        $this->assertInstanceOf(Date::class, $date);
 
         $this->assertEquals('2017', $date->getYear());
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,7 +25,14 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Model\ModelException;
+use Opus\Common\Model\ModelInterface;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * CRUD Controller for Opus Application.
@@ -46,12 +54,6 @@
  * - Redirect mit Exception beim Delete
  * - Redirect mit Exception beim Speichern)
  * - Formular anzeigen
- *
- * @category    Application
- * @package     Application_Controller
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2018, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Controller_ActionCRUD extends Application_Controller_Action
 {
@@ -124,7 +126,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
     /**
      * Klasse für OPUS Model.
-     * @var \Opus\Model\AbstractModel
+     * @var ModelInterface
      */
     private $_modelClass = null;
 
@@ -317,7 +319,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
                         try {
                             $model->store();
-                        } catch (\Opus\Model\ModelException $ome) {
+                        } catch (ModelException $ome) {
                             // Speichern fehlgeschlagen
                             return ['message' => self::SAVE_FAILURE];
                         }
@@ -378,7 +380,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
                 // Model löschen
                 try {
                     $this->deleteModel($model);
-                } catch (\Opus\Model\ModelException $ome) {
+                } catch (ModelException $ome) {
                     $this->getLogger()->err(__METHOD__ . ' ' . $ome->getMessage());
                     return ['message' => self::DELETE_FAILURE];
                 }
@@ -496,13 +498,13 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     public function getNewModel()
     {
         $modelClass = $this->getModelClass();
-        return new $modelClass();
+        return $modelClass::new();
     }
 
     /**
      * Liefert Instanz des Models.
      * @param type $modelId
-     * @return \modelClass
+     * @return ModelInterface
      */
     public function getModel($modelId)
     {
@@ -511,8 +513,8 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
             if (strlen(trim($modelId)) !== 0) {
                 try {
-                    return new $modelClass($modelId);
-                } catch (\Opus\Model\NotFoundException $omnfe) {
+                    return $modelClass::get($modelId);
+                } catch (NotFoundException $omnfe) {
                     $this->getLogger()->err(__METHOD__ . ':' . $omnfe->getMessage());
                 }
             }
@@ -585,7 +587,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
     /**
      * Liefert die Model-Klasse die verwaltet wird.
-     * @return null|\Opus\Model\AbstractModel
+     * @return null|string
      */
     public function getModelClass()
     {

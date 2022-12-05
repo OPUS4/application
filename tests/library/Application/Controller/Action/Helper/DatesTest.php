@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Controller_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
+use Opus\Common\Date;
 
 /**
  * Unit Test for class Admin_Model_Workflow.
@@ -106,6 +104,14 @@ class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
         $this->assertNull($date);
     }
 
+    public function testGetOpusDateIsDateOnly()
+    {
+        $this->useEnglish();
+        $date = $this->__datesHelper->getOpusDate('2010/01/14');
+        $this->assertTrue($date->isDateOnly());
+        $this->assertEquals('2010-01-14', $date->__toString());
+    }
+
     public function testGetDateStringGerman()
     {
         $this->useGerman();
@@ -126,5 +132,41 @@ class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
         $date = new Date('2005');
         $this->assertFalse($date->isValid());
         $this->assertEquals(null, $this->__datesHelper->getDateString($date));
+    }
+
+    /**
+     * @return string[][]
+     */
+    public function dateValuesProvider()
+    {
+        return [
+            ['1998-07-22'],
+            ['2010-2-5T0:00:00CET'],
+            ['2003-6-2T0:00:00CEST'],
+            ['2002-8-10T0:00:00CEST'],
+            ['1999-01-12T00:00:00CET'],
+            ['2000-07-05T00:00:00CEST'],
+            ['2016-02-01T00:00:00+01:00'],
+            ['2017-07-27'],
+            ['2016-05-04T00:00:00CEST'],
+            ['2014-08-27T14:45:19+02:00'],
+        ];
+    }
+
+    /**
+     * @dataProvider dateValuesProvider
+     */
+    public function testDatesAreNotChangedByTimestampFormat($datestr)
+    {
+        $this->useEnglish();
+
+        $date = new Date($datestr);
+
+        $dateParts = mb_split('-', (mb_split('T', $datestr))[0]);
+        $dateOnly = sprintf('%04d/%02d/%02d', $dateParts[0], $dateParts[1], $dateParts[2]);
+
+        $output = $this->__datesHelper->getDateString($date);
+
+        $this->assertEquals($dateOnly, $output);
     }
 }

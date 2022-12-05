@@ -91,10 +91,11 @@ class Application_Controller_Action_Helper_Translation extends \Zend_Controller_
     public function getKeyForField($modelName, $fieldName)
     {
         if ($fieldName === 'Type') {
-            return $this->normalizeModelName($modelName) . '_' . $fieldName;
+            $translationKey = $this->normalizeModelName($modelName) . '_' . $fieldName;
+            return preg_replace('/Opus_Common_/', 'Opus_', $translationKey); // TODO LAMINAS fix keys
         } else {
             switch ($modelName) {
-                case 'Opus\Language':
+                case 'Opus\Common\Language':
                     return $this->normalizeModelName($modelName) . '_' . $fieldName;
                 default:
                     return $fieldName;

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Controller
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Log;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Log;
 
 /**
  * Controller helper for providing workflow support.
@@ -52,7 +50,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Gets called when helper is used like method of the broker.
-     * @param Document $document
+     * @param DocumentInterface $document
      * @return array of strings - Allowed target states for document
      */
     public function direct($document)
@@ -74,7 +72,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Returns true if a transition is allowed for a document.
-     * @param Document $document
+     * @param DocumentInterface $document
      * @param string $targetState
      * @return boolean - True only if transition is allowed
      */
@@ -87,7 +85,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Returns all allowed target states for a document.
-     * @param Document $document
+     * @param DocumentInterface $document
      * @return array of strings - Possible target states for document
      */
     public function getAllowedTargetStatesForDocument($document)
@@ -148,7 +146,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Performs state change on document.
-     * @param Document $document
+     * @param DocumentInterface $document
      * @param string $targetState
      *
      * TODO enforcing permissions and throwing exceptions (OPUSVIER-1959)

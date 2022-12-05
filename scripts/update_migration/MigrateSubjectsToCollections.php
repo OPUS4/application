@@ -1,7 +1,8 @@
 #!/usr/bin/env php5
 <?php
 
-/** This file is part of OPUS. The software OPUS has been originally developed
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
  * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
@@ -25,22 +26,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Thoralf Klein <tklein@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- **/
+ */
 
 // Bootstrapping.
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\Document;
-use Opus\Repository;
-use Opus\EnrichmentKey;
-use Opus\Model\NotFoundException;
+use Opus\Common\Collection;
+use Opus\Common\CollectionRole;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Document;
+use Opus\Common\Repository;
+use Opus\Common\EnrichmentKey;
 
 // Parse arguments.
 global $argc, $argv;
@@ -224,12 +222,12 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName)
 function createEnrichmentKey($name)
 {
     try {
-        $eKey = new EnrichmentKey();
+        $eKey = EnrichmentKey::new();
         $eKey->setName($name)->store();
     } catch (Exception $e) {
     }
 
-    return new EnrichmentKey($name);
+    return EnrichmentKey::get($name);
 }
 
 echo "\nConsult the log file $argv[1] for full details\n";

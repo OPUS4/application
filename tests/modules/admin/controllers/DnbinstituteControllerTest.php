@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,16 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
-use Opus\DnbInstitute;
-use Opus\UserRole;
+use Opus\Common\Account;
+use Opus\Common\DnbInstitute;
+use Opus\Common\UserRole;
 
 /**
  * Class Admin_DnbinstituteControllerTest
@@ -59,9 +57,9 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
     public function tearDown()
     {
         if (isset($this->roleId) && isset($this->userId)) {
-            $testRole = new UserRole($this->roleId);
+            $testRole = UserRole::get($this->roleId);
             $testRole->delete();
-            $userAccount = new Account($this->userId);
+            $userAccount = Account::get($this->userId);
             $userAccount->delete();
         }
 
@@ -79,7 +77,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
     public function createNewModel()
     {
-        $model = new DnbInstitute();
+        $model = DnbInstitute::new();
 
         $model->setName('TestName');
         $model->setCity('TestCity');
@@ -95,7 +93,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
     public function getModel($identifier)
     {
-        return new DnbInstitute($identifier);
+        return DnbInstitute::get($identifier);
     }
 
     private function verifyShow()
@@ -273,7 +271,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
     {
         $this->useEnglish();
 
-        $institute = new DnbInstitute();
+        $institute = DnbInstitute::new();
 
         $institute->updateFromArray([
             'Name' => 'Delete Test Institute',
@@ -297,13 +295,13 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
      */
     public function testUserAccessToInstituteWithInstituteRights()
     {
-        $testRole = new UserRole();
+        $testRole = UserRole::new();
         $testRole->setName('TestRole');
         $testRole->appendAccessModule('admin');
         $testRole->appendAccessModule('resource_institutions');
         $this->roleId = $testRole->store();
 
-        $userAccount = new Account();
+        $userAccount = Account::new();
         $userAccount->setLogin('role_tester')
             ->setPassword('role_tester');
         $userAccount->setRole($testRole);
@@ -325,13 +323,13 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
      */
     public function testUserAccessToInstituteWithoutInstituteRights()
     {
-        $testRole = new UserRole();
+        $testRole = UserRole::new();
         $testRole->setName('TestRole');
         $testRole->appendAccessModule('admin');
         $testRole->appendAccessModule('resource_languages');
         $this->roleId = $testRole->store();
 
-        $userAccount = new Account();
+        $userAccount = Account::new();
         $userAccount->setLogin('role_tester')
             ->setPassword('role_tester');
         $userAccount->setRole($testRole);
@@ -354,13 +352,13 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
      */
     public function testUserAccessToInstituteWithInstituteRightsRegression3245()
     {
-        $testRole = new UserRole();
+        $testRole = UserRole::new();
         $testRole->setName('TestRole');
         $testRole->appendAccessModule('admin');
         $testRole->appendAccessModule('resource_institutions');
         $this->roleId = $testRole->store();
 
-        $userAccount = new Account();
+        $userAccount = Account::new();
         $userAccount->setLogin('role_tester')
             ->setPassword('role_tester');
         $userAccount->setRole($testRole);

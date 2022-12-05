@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
@@ -35,7 +33,7 @@
  * TODO unit testing
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
 {
@@ -65,9 +63,7 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
      * add a checkbox for each PersonSubmitter and PersonAuthor (used to select
      * recipients for publish notification email)
      *
-     * @param Document $document
-     * @param \Zend_Form $form
-     *
+     * @param DocumentInterface $document
      *
      * TODO css notification-option, option-not-available
      * TODO check if submitter matches author -> change type (labeling)

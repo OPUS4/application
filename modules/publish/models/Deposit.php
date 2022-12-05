@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,29 +25,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\Date;
-use Opus\DnbInstitute;
-use Opus\Document;
-use Opus\Enrichment;
-use Opus\Identifier;
-use Opus\Licence;
-use Opus\Note;
-use Opus\Person;
-use Opus\Series;
-use Opus\Subject;
+use Opus\Common\Collection;
+use Opus\Common\Date;
+use Opus\Common\Model\ModelException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\DnbInstitute;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Enrichment;
+use Opus\Common\Identifier;
+use Opus\Common\Licence;
+use Opus\Common\Note;
+use Opus\Common\Person;
+use Opus\Common\Series;
+use Opus\Common\Subject;
 use Opus\Reference;
-use Opus\Title;
-use Opus\Model\ModelException;
-use Opus\Model\NotFoundException;
+use Opus\Common\Title;
 use Opus\Model\Dependent\Link\DocumentPerson;
 
 /**
@@ -301,7 +299,7 @@ class Publish_Model_Deposit
 
             $addFunction = 'add' . $type;
         try {
-            $person = $this->_document->$addFunction(new Person());
+            $person = $this->_document->$addFunction(Person::new());
         } catch (ModelException $e) {
             $this->_log->err(
                 "could not add person of type $type to document " . $this->_docId . " : " . $e->getMessage()
@@ -390,7 +388,7 @@ class Publish_Model_Deposit
         $type = 'Title' . $this->getTitleType($dataKey);
         $this->_log->debug("Title type:" . $type);
         $addFunction = 'add' . $type;
-        $title = new Title();
+        $title = Title::new();
 
         $counter = $this->getCounter($dataKey);
         $this->_log->debug("counter: " . $counter);
@@ -447,7 +445,7 @@ class Publish_Model_Deposit
 
     /**
      * method to prepare a subject object for storing
-     * @param Document $this->document
+     * @param DocumentInterface $this->document
      * @param array $formValues
      * @param string $dataKey current Element of formValues
      * @param array $externalFields
@@ -460,7 +458,7 @@ class Publish_Model_Deposit
         $counter = $this->getCounter($dataKey);
         $this->_log->debug("counter: " . $counter);
 
-        $subject = new Subject();
+        $subject = Subject::new();
 
         if ($type === 'Swd') {
             $subject->setLanguage('deu');
@@ -491,7 +489,7 @@ class Publish_Model_Deposit
      */
     private function storeNoteObject($dataValue)
     {
-        $note = new Note();
+        $note = Note::new();
         $note->setMessage($dataValue);
         $note->setVisibility("private");
         try {
@@ -511,7 +509,7 @@ class Publish_Model_Deposit
     private function storeCollectionObject($dataValue)
     {
         try {
-            $collection = new Collection($dataValue);
+            $collection = Collection::get($dataValue);
         } catch (NotFoundException $e) {
             $this->_log->err('Could not find collection #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();
@@ -540,7 +538,7 @@ class Publish_Model_Deposit
         $this->_log->debug('Deposit: ' . $dataKey . ' and ' . $id . ' = ' . $seriesId);
 
         try {
-            $s = new Series($seriesId);
+            $s = Series::get($seriesId);
         } catch (ModelException $e) {
             $this->_log->err('Could not find series #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();
@@ -564,7 +562,7 @@ class Publish_Model_Deposit
     private function storeLicenceObject($dataValue)
     {
         try {
-            $licence = new Licence($dataValue);
+            $licence = Licence::get($dataValue);
         } catch (ModelException $e) {
             $this->_log->err('Could not find licence #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();
@@ -588,7 +586,7 @@ class Publish_Model_Deposit
     private function storeThesisObject($dataValue, $grantor = false)
     {
         try {
-            $thesis = new DnbInstitute($dataValue);
+            $thesis = DnbInstitute::get($dataValue);
         } catch (ModelException $e) {
             $this->_log->err('Could not find DnbInstitute #' . $dataValue . ' in database');
             throw new Publish_Model_Exception();
@@ -612,7 +610,7 @@ class Publish_Model_Deposit
 
     private function storeIdentifierObject($dataKey, $dataValue)
     {
-        $identifier = new Identifier();
+        $identifier = Identifier::new();
         $identifier->setValue($dataValue);
         try {
             if (strstr($dataKey, 'Old')) {
@@ -711,7 +709,7 @@ class Publish_Model_Deposit
         $this->_log->debug("try to store " . $dataKey . " with id: " . $dataValue);
         $keyName = str_replace('Enrichment', '', $dataKey);
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setValue($dataValue);
         $enrichment->setKeyName($keyName);
 

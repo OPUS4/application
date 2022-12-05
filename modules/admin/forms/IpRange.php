@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Iprange;
+use Opus\Common\Iprange;
 
 /**
  * Form for creating or editing IP ranges.
@@ -61,7 +59,7 @@ class Admin_Form_IpRange extends Application_Form_Model_Abstract
 
         $this->setUseNameAsLabel(true);
         $this->setLabelPrefix('admin_iprange_label_');
-        $this->setModelClass('Opus\Iprange');
+        $this->setModelClass(Iprange::class);
 
         $name = $this->createElement('text', self::ELEMENT_NAME, ['required' => true]);
         $name->addValidator('regex', false, ['pattern' => self::NAME_PATTERN, 'messages' => [
@@ -89,8 +87,8 @@ class Admin_Form_IpRange extends Application_Form_Model_Abstract
     {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($ipRange->getId());
         $this->getElement(self::ELEMENT_NAME)->setValue($ipRange->getName());
-        $this->getElement(self::ELEMENT_STARTING_IP)->setValue($ipRange->getStartingip());
-        $this->getElement(self::ELEMENT_ENDING_IP)->setValue($ipRange->getEndingip());
+        $this->getElement(self::ELEMENT_STARTING_IP)->setValue($ipRange->getStartingIp());
+        $this->getElement(self::ELEMENT_ENDING_IP)->setValue($ipRange->getEndingIp());
         $this->getElement(self::ELEMENT_ROLES)->setValue($ipRange->getRole());
     }
 
@@ -110,8 +108,8 @@ class Admin_Form_IpRange extends Application_Form_Model_Abstract
             $endingIp = $startingIp;
         }
 
-        $ipRange->setStartingip($startingIp);
-        $ipRange->setEndingip($endingIp);
+        $ipRange->setStartingIp($startingIp);
+        $ipRange->setEndingIp($endingIp);
 
         $ipRange->setRole($this->getElement(self::ELEMENT_ROLES)->getRoles());
     }

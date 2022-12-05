@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Sword
- * @author      Sascha Szott
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2019
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Import\AdditionalEnrichments;
 
 /**
  * @covers Sword_DepositController
@@ -230,7 +228,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      * @throws Exception
      */
     private function checkAllFieldsImport($doc)
@@ -374,7 +372,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         foreach ($enrichments as $enrichment) {
             $keyName = $enrichment->getKeyName();
-            if ($keyName != Application_Import_AdditionalEnrichments::OPUS_SOURCE && strpos($keyName, 'opus.import.') !== 0) {
+            if ($keyName != AdditionalEnrichments::OPUS_SOURCE && strpos($keyName, 'opus.import.') !== 0) {
                 // überprüfe hier nur die Enrichments, die nicht automatisch beim Import eines Dokuments angelegt werden
                 $value = $enrichment->getValue();
                 $this->assertTrue($keyName == 'SourceSwb' && $value == 'enrichment1' || $keyName == 'SourceTitle' && $value == 'enrichment2');
@@ -457,7 +455,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
      * @param int $numOfEnrichments
      * @param int $numOfCollections
      * @param string $serverState
-     * @return Document
+     * @return DocumentInterface
      */
     private function depositSuccessful(
         $fileName,

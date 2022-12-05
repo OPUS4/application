@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,32 +26,23 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category   Application
- * @package    Module_Oai
- * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
- * @copyright  Copyright (c) 2009-2021, OPUS 4 development team
+ * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
-use Opus\Log;
-use Opus\Security\Realm;
+use Opus\Common\Date;
+use Opus\Common\Log;
+use Opus\Common\Security\Realm;
 
 /**
- * TODO
+ * TODO documentation is not existent - especially the fact that 'validate' functions are called dynamically
  *
  * @category Application
  * @package Module_Oai
  */
 class Oai_Model_Request
 {
-
-    /**
-     * TODO
-     *
-     * @var string
-     */
-    private $_dateFormat = 'yyyy-MM-dd';
+    const DATE_FORMAT = 'Y-m-d';
 
     /**
      * TODO
@@ -142,54 +134,27 @@ class Oai_Model_Request
     /**
      * Checks for a valide date
      *
-     * @param &$date Date string to proof
+     * @param $date Date string to proof
      * @return boolean
      */
-    private function checkDate(&$date)
+    public function checkDate($datestr)
     {
         // simple proofing
-        $result = \Zend_Date::isDate($date, $this->_dateFormat);
-
-        if (true === $result) {
-             $zd = new \Zend_Date($date, $this->_dateFormat);
-             $result = $date === $zd->get($this->_dateFormat);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Checks if given from date is in preferred date format.
-     *
-     * @param mixed &$date
-     * @return boolean
-     */
-    private function _validateFrom(&$date)
-    {
-        $result = $this->checkDate($date);
-
-        if (false === $result) {
-            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
-            $this->setErrorMessage(
-                'From date "' . $date . '" is not a correct date format ("' . strtoupper($this->_dateFormat) . '").'
-            );
-        }
-
-        return $result;
+        $date = DateTime::createFromFormat(self::DATE_FORMAT, $datestr);
+        return $date !== false && $date->format(self::DATE_FORMAT) === $datestr;
     }
 
     /**
      * Checks the availability of a metadataPrefix.
      *
-     * @param mixed $oaiMetadataPrefix
+     * @param string $oaiMetadataPrefix
      * @return boolean
      *
      * TODO handling case insensitivity of metadataPrefix is spread through the code (here and other places)
      * TODO function handles access control in addition to checking if format is supported (mixed responsibilities)
      */
-    private function _validateMetadataPrefix($oaiMetadataPrefix)
+    private function validateMetadataPrefix($oaiMetadataPrefix)
     {
-
         // we assuming that a metadata prefix file ends with xslt
         $possibleFiles = glob($this->_pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
 
@@ -199,7 +164,7 @@ class Oai_Model_Request
             $availableMetadataPrefixes[] = strtolower(basename($prefixFile, '.xslt'));
         }
 
-        // only adminstrators can request copy_xml format
+        // only administrators can request copy_xml format
         if (! Realm::getInstance()->checkModule('admin')) {
             $availableMetadataPrefixes = array_diff($availableMetadataPrefixes, ['copy_xml']);
         }
@@ -210,8 +175,7 @@ class Oai_Model_Request
             // MetadataPrefix not available.
             $this->setErrorCode(Oai_Model_Error::CANNOTDISSEMINATEFORMAT);
             $this->setErrorMessage(
-                'The metadata format \'' . $oaiMetadataPrefix
-                . '\' given by metadataPrefix is not supported by the item or this repository.'
+                "The metadataPrefix '$oaiMetadataPrefix' is not supported by the item or this repository."
             );
         }
 
@@ -219,50 +183,59 @@ class Oai_Model_Request
     }
 
     /**
-     * Checks if until date is in preferred date format.
+     * Checks if given 'from' date is valid.
      *
-     * @param mixed $date
+     * @param string $from
      * @return boolean
      */
-    private function _validateUntil(&$date)
+    private function validateFrom($from)
     {
-        $result = $this->checkDate($date);
-
-        if (false === $result) {
+        if (! $this->checkDate($from)) {
+            $this->setErrorMessage("From date '$from' is not a correct date format (" . self::DATE_FORMAT . ').');
             $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
-            $this->setErrorMessage(
-                'Until date "' . $date . '" is not a correct date format ("' . strtoupper($this->_dateFormat) . '").'
-            );
+            return false;
         }
 
-        return $result;
+        return true;
+    }
+
+    /**
+     * Checks if given 'until' date is valid.
+     *
+     * @param string $until
+     * @return boolean
+     */
+    private function validateUntil($until)
+    {
+        if (! $this->checkDate($until)) {
+            $this->setErrorMessage("Until date '$until' is not a correct date format (" . self::DATE_FORMAT . ').');
+            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Checks if from date is before until date.
      *
-     * @param mixed $from
-     * @param mixed $until
+     * @param string $from
+     * @param string $until
      * @return boolean
      */
-    private function _validateFromUntilRange($from, $until)
+    public function validateFromUntilRange($from, $until)
     {
-
-        $result = $this->_validateFrom($from);
-        if (false === $result) {
+        if (! $this->validateFrom($from) || ! $this->validateUntil($until)) {
             return false;
-        }
-
-        $result = $this->_validateUntil($until);
-        if (false === $result) {
-            return $result;
         }
 
         $result = true;
 
-        $untilDate = new \Zend_Date($until, $this->_dateFormat);
-        $isEqual = $untilDate->equals($from, $this->_dateFormat);
-        $isLater = $untilDate->isLater($from, $this->_dateFormat);
+        $untilDate = DateTime::createFromFormat(self::DATE_FORMAT, $until);
+        $fromDate  = DateTime::createFromFormat(self::DATE_FORMAT, $from);
+
+        $isEqual = $untilDate->getTimestamp() === $fromDate->getTimestamp();
+        $isLater = $untilDate->getTimestamp() > $fromDate->getTimestamp();
 
         if ((false === $isEqual) and (false === $isLater)) {
             $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
@@ -276,12 +249,13 @@ class Oai_Model_Request
     /**
      * Validates resumption token.
      *
-     * @param  string  $oaiResumptionToken The resumption token to validate.
+     * IMPORTANT function may be called dynamically in 'validate' function
+     *
+     * @param  string $oaiResumptionToken The resumption token to validate.
      * @return boolean
      */
-    private function _validateResumptionToken($oaiResumptionToken)
+    private function validateResumptionToken($oaiResumptionToken)
     {
-
         $tokenWorker = new Oai_Model_Resumptiontokens;
 
         try {
@@ -392,10 +366,10 @@ class Oai_Model_Request
     /**
      * Validate a given oai request.
      *
-     * @param array $request
+     * @param array $oaiRequest
      * @return boolean
      */
-    public function validate(array $oaiRequest)
+    public function validate($oaiRequest)
     {
         $logger = Log::get();
 
@@ -476,7 +450,7 @@ class Oai_Model_Request
         // check if request values are valid
 
         foreach ($oaiRequest as $parameter => $value) {
-            $callname = '_validate' . ucfirst($parameter);
+            $callname = 'validate' . ucfirst($parameter);
             if (true === method_exists($this, $callname)) {
                 $result = $this->$callname($value);
 
@@ -493,7 +467,7 @@ class Oai_Model_Request
         // Proof combination of from and until
         if ((true === array_key_exists('from', $oaiRequest)) and
             (true === array_key_exists('until', $oaiRequest))) {
-                return $this->_validateFromUntilRange($oaiRequest['from'], $oaiRequest['until']);
+                return $this->validateFromUntilRange($oaiRequest['from'], $oaiRequest['until']);
         }
 
         return true;

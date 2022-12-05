@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 
 /**
  * Unit Tests fuer abstrakte Basisklasse fuer Modelle.

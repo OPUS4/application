@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,13 +26,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Controller
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2011-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\LoggingTrait;
+use Opus\Common\Security\Realm;
 
 /**
  * Module-access-checking controller for Opus Applications.
@@ -42,7 +42,7 @@
 class Application_Controller_ModuleAccess extends \Zend_Controller_Action
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     const ACCESS_DENIED_ACTION = 'module-access-denied';
 
@@ -88,7 +88,7 @@ class Application_Controller_ModuleAccess extends \Zend_Controller_Action
 
         $logger->debug("starting authorization check for module '$module'");
 
-        $realm = \Opus\Security\Realm::getInstance();
+        $realm = Realm::getInstance();
 
         if (! $realm->skipSecurityChecks()) {
             // Check, if the user has accesss to the module...

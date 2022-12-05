@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,6 +25,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+
+use Opus\Common\Translate\UnknownTranslationKeyException;
 
 /**
  * Form element for editing translations.
@@ -99,7 +102,7 @@ class Application_Form_Element_Translation extends \Zend_Form_Element_Multi
 
         try {
             $translation = $manager->getTranslation($key);
-        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
+        } catch (UnknownTranslationKeyException $ex) {
             $translation = null;
         }
 
@@ -120,7 +123,7 @@ class Application_Form_Element_Translation extends \Zend_Form_Element_Multi
             try {
                 $translation = $manager->getTranslation($key);
                 $old = $translation['translations'];
-            } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
+            } catch (UnknownTranslationKeyException $ex) {
             }
         }
 

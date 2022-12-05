@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
-use Opus\Job;
-use Opus\Log;
+use Opus\Common\Config;
+use Opus\Common\Job;
+use Opus\Common\Log;
 use Opus\Search\Task\ConsistencyCheck;
 
 class Admin_Model_IndexMaintenance
@@ -97,7 +94,7 @@ class Admin_Model_IndexMaintenance
 
     public function createJob()
     {
-        $job = new Job();
+        $job = Job::new();
         $job->setLabel(ConsistencyCheck::LABEL);
 
         if (! $this->_featureDisabled) {

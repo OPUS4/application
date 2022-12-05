@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Oai
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
-use Opus\UserRole;
+use Opus\Common\File;
+use Opus\Common\UserRole;
+use Opus\Common\Util\File as FileUtil;
 
 /**
  * Class Oai_ContainerControllerTest.
@@ -126,7 +125,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(false);
         $file->setPathName('test.pdf');
         $file->setTempFile($filepath);
@@ -137,7 +136,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
         // cleanup
         $file->delete();
-        \Opus\Util\File::deleteDirectory($path);
+        FileUtil::deleteDirectory($path);
 
         $this->assertResponseCode(500);
         $this->assertContains(
@@ -163,7 +162,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $file = new File();
+        $file = File::new();
         $file->setVisibleInOai(true);
         $file->setPathName('test.pdf');
         $file->setTempFile($filepath);
@@ -174,7 +173,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
 
         // cleanup
         $file->delete();
-        \Opus\Util\File::deleteDirectory($path);
+        FileUtil::deleteDirectory($path);
 
         $this->assertResponseCode(200);
     }

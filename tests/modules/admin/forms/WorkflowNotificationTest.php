@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Person;
+use Opus\Common\Document;
+use Opus\Common\Person;
 
 class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
 {
@@ -45,40 +43,40 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName('John');
         $author->setLastName('Tester');
         $author->setEmail('john@example.org');
         $doc->addPersonAuthor($author);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName('Jane');
         $author->setLastName('Doe');
         $author->setEmail('jane@example.org');
         $doc->addPersonAuthor($author);
 
         // This email is used twice for different authors (John & Anton)
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName('Anton');
         $author->setLastName('Other');
         $author->setEmail('john@example.org');
         $doc->addPersonAuthor($author);
 
         // Jim doesn't have an email address and won't be a recipient
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName('Jim');
         $author->setLastName('Busy');
         $doc->addPersonAuthor($author);
 
         // Jane is author and submitter
-        $submitter = new Person();
+        $submitter = Person::new();
         $submitter->setFirstName('Jane');
         $submitter->setLastName('Doe');
         $submitter->setEmail('jane@example.org');
         $doc->addPersonSubmitter($submitter);
 
         // Bob is just submitter
-        $submitter = new Person();
+        $submitter = Person::new();
         $submitter->setFirstName('Bob');
         $submitter->setLastName('Writer');
         $submitter->setEmail('bob@example.org');
@@ -146,7 +144,7 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
      * Add a checkbox for each PersonSubmitter and PersonAuthor (used to select
      * recipients for publish notification email)
      *
-     * @param Document $document
+     * @param DocumentInterface $document
     protected function addPublishNotificationSelection($document)
     {
         $translator = $this->getTranslator();

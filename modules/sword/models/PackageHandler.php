@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Sword
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2016-2020
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO separate differentiation of ZIP and TAR into separate classes - it should be possible to ADD another class to
  *      support a new type of package - it should not be necessary to MODIFY existing classes for that
  */
+
+use Opus\Import\AbstractPackageReader;
+use Opus\Import\TarPackageReader;
+use Opus\Import\ZipPackageReader;
+
 class Sword_Model_PackageHandler
 {
     private $additionalEnrichments;
@@ -91,7 +94,6 @@ class Sword_Model_PackageHandler
             $tmpDirName = $this->createTmpDir($payload);
             $this->savePackage($payload, $tmpDirName);
 
-
             $statusDoc = $packageReader->readPackage($tmpDirName);
         } finally {
             // TODO copy file before cleanup if error occured
@@ -127,7 +129,7 @@ class Sword_Model_PackageHandler
      * Liefert in Abhängigkeit vom zu verarbeitenden Pakettyp ein passendes Objekt zum Einlesen des Pakets zurück.
      * Liefert null zurück, wenn der Pakettyp nicht verarbeitet werden kann.
      *
-     * @return Application_Import_PackageReader
+     * @return AbstractPackageReader
      *
      * TODO make types configurable and remove explicit TAR/ZIP declarations in this class (use factory class?)
      */
@@ -136,10 +138,10 @@ class Sword_Model_PackageHandler
         $packageReader = null;
         switch ($this->packageType) {
             case self::PACKAGE_TYPE_ZIP:
-                $packageReader = new Application_Import_ZipPackageReader();
+                $packageReader = new ZipPackageReader();
                 break;
             case self::PACKAGE_TYPE_TAR:
-                $packageReader = new Application_Import_TarPackageReader();
+                $packageReader = new TarPackageReader();
                 break;
             default:
                 break;

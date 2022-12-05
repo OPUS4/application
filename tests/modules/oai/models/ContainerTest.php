@@ -1,11 +1,5 @@
 <?php
 
-use Opus\Account;
-use Opus\Date;
-use Opus\Document;
-use Opus\File;
-use Opus\UserRole;
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,14 +25,15 @@ use Opus\UserRole;
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Sascha Szott <szott@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Account;
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\File;
+use Opus\Common\UserRole;
 
 class Oai_Model_ContainerTest extends ControllerTestCase
 {
@@ -62,11 +57,11 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     public function tearDown()
     {
         if (! is_null($this->roleId)) {
-            $testRole = new UserRole($this->roleId);
+            $testRole = UserRole::get($this->roleId);
             $testRole->delete();
         }
         if (! is_null($this->userId)) {
-            $userAccount = new Account($this->userId);
+            $userAccount = Account::get($this->userId);
             $userAccount->delete();
         }
         parent::tearDown();
@@ -159,7 +154,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setPathName('foo.pdf');
         $file->setVisibleInOai(false);
         $doc->addFile($file);
@@ -196,7 +191,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new File();
+        $file = File::new();
         $file->setPathName('test.pdf');
         $file->setVisibleInOai(true);
         $doc->addFile($file);
@@ -358,13 +353,13 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $doc->setServerState('unpublished');
         $unpublishedDocId = $doc->store();
 
-        $testRole = new UserRole();
+        $testRole = UserRole::new();
         $testRole->setName('test_access');
         $testRole->appendAccessDocument($unpublishedDocId);
         $testRole->appendAccessDocument($publishedDocId);
         $this->roleId = $testRole->store();
 
-        $userAccount = new Account();
+        $userAccount = Account::new();
         $userAccount->setLogin('test_account')->setPassword('role_tester_user2');
         $userAccount->setRole($testRole);
         $this->userId = $userAccount->store();
@@ -408,10 +403,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         }
     }
 
-    /**
-     * @expectedException Oai_Model_Exception
-     * @expectedExceptionMessage access to requested document files is embargoed
-     */
     public function testGetAccessibleFilesForEmbargoedDocument()
     {
         $this->enableSecurity();
@@ -434,6 +425,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase
         $this->assertFalse($doc->hasEmbargoPassed()); // not yet passed
 
         $container = new Oai_Model_Container($doc->getId());
+
+        $this->setExpectedException(Oai_Model_Exception::class, 'access to requested document files is embargoed');
         $container->getAccessibleFiles();
     }
 }

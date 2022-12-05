@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\Model\NotFoundException;
+use Opus\Common\Collection;
+use Opus\Common\CollectionInterface;
+use Opus\Common\CollectionRole;
+use Opus\Common\Model\NotFoundException;
 
 class Solrsearch_Model_CollectionList
 {
@@ -50,7 +49,7 @@ class Solrsearch_Model_CollectionList
 
         $collection = null;
         try {
-            $collection = new Collection((int) $collectionId);
+            $collection = Collection::get((int) $collectionId);
         } catch (NotFoundException $e) {
             throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.", 404);
         }
@@ -64,7 +63,7 @@ class Solrsearch_Model_CollectionList
 
         $collectionRole = null;
         try {
-            $collectionRole = new CollectionRole($collection->getRoleId());
+            $collectionRole = CollectionRole::get($collection->getRoleId());
         } catch (NotFoundException $e) {
             throw new Solrsearch_Model_Exception(
                 "Collection role with id '" . $collection->getRoleId() . "' does not exist."
@@ -129,7 +128,7 @@ class Solrsearch_Model_CollectionList
 
         if ($this->_collectionRole->getHideEmptyCollections()) {
             // Collection ausblenden, wenn ihr selbst und den Kind-Collections keine Dokumente zugeordnet
-            $children = array_filter($children, function (Collection $collection) {
+            $children = array_filter($children, function (CollectionInterface $collection) {
                 return $collection->getNumSubtreeEntries() > 0;
             });
         }

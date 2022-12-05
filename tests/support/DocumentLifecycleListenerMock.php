@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Import
- * @author      Gunar Maiwald <maiwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Import_MetadataImportInvalidXmlException extends \Exception
+use Opus\Common\Model\DocumentLifecycleListener;
+
+/**
+ * TODO This class is used by unit tests in two places and meets two different testing requirements. This different
+ *      responsibilities should be separated.
+ */
+class DocumentLifecycleListenerMock extends DocumentLifecycleListener
 {
+
+    /**
+     * Circumvents setting of ServerDateModified and ServerDatePublished for testing.
+     * @param $document
+     */
+    public function preStore($document)
+    {
+        $dateModified = $document->getServerDateModified();
+        parent::preStore($document);
+
+        if ($dateModified !== null) {
+            $document->setServerDateModified($dateModified);
+        }
+
+        $document->setServerDatePublished(null);
+    }
 }

@@ -25,28 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
-use Opus\Repository;
-use Opus\Security\Realm;
+use Opus\Common\Repository;
+use Opus\Common\Security\Realm;
 
 class Application_Util_Document
 {
 
     /**
      *
-     * @var Document
+     * @var DocumentInterface
      */
     private $_document;
 
     /**
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @throws Application_Exception
      */
     public function __construct($document)

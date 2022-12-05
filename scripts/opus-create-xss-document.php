@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,22 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
-use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\DnbInstitute;
-use Opus\Document;
-use Opus\Licence;
-use Opus\Person;
+use Opus\Common\Collection;
+use Opus\Common\CollectionRole;
+use Opus\Common\DnbInstitute;
+use Opus\Common\Document;
+use Opus\Common\Licence;
+use Opus\Common\Person;
 
 $counter = 1;
 function randString($counter)
@@ -89,7 +87,7 @@ $doc->setContributingCorporation(randString($counter++));
 //
 // Persons
 //
-$submitter = new Person();
+$submitter = Person::new();
 $submitter->getField('Email')->setValidator(null);
 $submitter->setFirstName(randString($counter++))
     ->setLastName(randString($counter++))
@@ -99,7 +97,7 @@ $submitter->setFirstName(randString($counter++))
     ->setPlaceOfBirth(randString($counter++));
 $doc->addPersonSubmitter($submitter);
 
-$author = new Person();
+$author = Person::new();
 $author->getField('Email')->setValidator(null);
 $author->setFirstName(randString($counter++))
     ->setLastName(randString($counter++))
@@ -109,28 +107,28 @@ $author->setFirstName(randString($counter++))
     ->setPlaceOfBirth(randString($counter++));
 $doc->addPersonAuthor($author);
 
-$referee = new Person();
+$referee = Person::new();
 $referee->setFirstName('Gyro'.randString($counter++));
 $referee->setLastName('Gearloose'.randString($counter++));
 $referee->setAcademicTitle('Prof. Dr.'.randString($counter++));
 $doc->addPersonReferee($referee);
 
-$editor = new Person();
+$editor = Person::new();
 $editor->setFirstName('Bob'.randString($counter++));
 $editor->setLastName('Foster'.randString($counter++));
 $doc->addPersonEditor($editor);
 
-$advisor = new Person();
+$advisor = Person::new();
 $advisor->setFirstName('Fred'.randString($counter++));
 $advisor->setLastName('Clever'.randString($counter++));
 $doc->addPersonAdvisor($advisor);
 
-$translator = new Person();
+$translator = Person::new();
 $translator->setFirstName('Erika'.randString($counter++));
 $translator->setLastName('Fuchs'.randString($counter++));
 $doc->addPersonTranslator($translator);
 
-$contributor = new Person();
+$contributor = Person::new();
 $contributor->setFirstName('Jeff'.randString($counter++));
 $contributor->setLastName('Smart'.randString($counter++));
 $contributor->store();
@@ -158,7 +156,7 @@ foreach (['addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', '
 //
 // Collections
 //
-$institutesRole = new CollectionRole();
+$institutesRole = CollectionRole::new();
 $institutesRole->setName('institutes'.randString($counter++).rand())
                    ->setOaiName('institutes'.randString($counter++).rand())
                    ->setPosition(1)
@@ -213,7 +211,7 @@ $doc->addIdentifierOpac()->setValue(randString($counter++));
 //
 // DnbInstitutes
 //
-$dnbInstitute = new DnbInstitute();
+$dnbInstitute = DnbInstitute::new();
 $dnbInstitute->setName(randString($counter++).rand())
           ->setAddress(randString($counter++))
           ->setCity(randString($counter++))
@@ -269,7 +267,7 @@ $doc->addNote()
 //
 // Licenses
 //
-$lic = new Licence();
+$lic = Licence::new();
 $lic->setActive(1);
 $lic->setLanguage('deu'.randString($counter++));
 $lic->setLinkLicence(randString($counter++));

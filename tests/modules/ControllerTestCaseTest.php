@@ -25,15 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\DocumentFinderInterface;
-use Opus\DocumentFinder\DefaultDocumentFinder;
-use Opus\Model\NotFoundException;
-use Opus\Security\Realm;
+use Opus\Common\Document;
+use Opus\Common\DocumentFinderInterface;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Security\Realm;
 
 class ControllerTestCaseTest extends ControllerTestCase
 {
@@ -193,16 +192,13 @@ class ControllerTestCaseTest extends ControllerTestCase
         $this->assertTrue(is_writeable($workspacePath));
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage config key 'workspacePath' not defined in config file
-     */
     public function testGetWorkspacePathNotDefined()
     {
         $this->adjustConfiguration([
             'workspacePath' => null
         ]);
 
+        $this->setExpectedException(Exception::class, 'config key \'workspacePath\' not defined in config file');
         $this->getWorkspacePath();
     }
 
@@ -440,6 +436,6 @@ class ControllerTestCaseTest extends ControllerTestCase
     {
         $finder = $this->getDocumentFinder();
 
-        $this->assertInstanceOf(DefaultDocumentFinder::class, $finder);
+        $this->assertInstanceOf(DocumentFinderInterface::class, $finder);
     }
 }

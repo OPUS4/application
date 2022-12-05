@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
-use Opus\UserRole;
+use Opus\Common\AccountInterface;
+use Opus\Common\UserRole;
 
 /**
  * Abstract class for supporting editing of Opus roles in form.
@@ -92,12 +90,12 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
-     * @param $model Account
+     * @param AccountInterface $model
      */
     public function populateFromModel($model)
     {
-        if (! $model instanceof Account) {
-            throw new Exception('Model must be of type Opus_Account');
+        if (! $model instanceof AccountInterface) {
+            throw new Exception('Model must implement AccountInterface');
         }
 
         $this->clearAll();
@@ -147,11 +145,11 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
 
     /**
      * Aktualsiert Model-Instanz mit Werten im Formular.
-     * @param $model
+     * @param AccountInterface $account
      */
     public function updateModel($account)
     {
-        if (! $account instanceof Account) {
+        if (! $account instanceof AccountInterface) {
             throw new Exception('Model must be of type Opus_Account');
         }
 

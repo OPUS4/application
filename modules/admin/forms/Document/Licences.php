@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Licence;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Licence;
 
 /**
  * Formular fuer das Editieren der Lizenzen eines Dokuments.
@@ -86,7 +84,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Setzt die dem Dokument zugewiesenen Lizenzen als ausgewählt im Formular.
-     * @param Document $document
+     * @param DocumentInterface $document
      */
     public function populateFromModel($document)
     {
@@ -102,7 +100,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Aktualisiert die Liste der Lizenzen fuer ein Dokument.
-     * @param Document $document
+     * @param DocumentInterface $document
      */
     public function updateModel($document)
     {
@@ -114,7 +112,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
             if ($element instanceof \Zend_Form_Element_Checkbox) {
                 $licenceId = $element->getCheckedValue();
                 if ($element->getValue() !== '0') {
-                    $docLicences[] = new Licence($licenceId);
+                    $docLicences[] = Licence::get($licenceId);
                 }
             }
         }
@@ -125,7 +123,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
     /**
      * Prueft, ob eine Lizenz einem Dokument zugewiesen ist.
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @param Licence $licence
      * @return boolean true - Lizenz zugewiesen; false - Lizenz nicht zugewiesen
      */

@@ -25,7 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-use Opus\Config;
+use Opus\Common\Config;
+use Opus\Common\LoggingTrait;
 
 /**
  * Abstract base class for model classes.
@@ -39,7 +40,7 @@ use Opus\Config;
 abstract class Application_Model_Abstract
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     /**
      * Configuration for application.

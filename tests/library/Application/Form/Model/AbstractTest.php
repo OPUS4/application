@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,16 +24,16 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Licence;
+use Opus\Common\LicenceInterface;
 
 /**
  * Unit Tests fuer abstrakte Basisklasse fuer Model-Formulare.
- *
- * @category    Application Unit Tests
- * @package     Application_Form_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Form_Model_AbstractTest extends ControllerTestCase
 {
@@ -89,56 +90,49 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
 
     public function testGetModel()
     {
-        $this->form->setModelClass('Opus\Licence');
+        $this->form->setModelClass(Licence::class);
 
         $this->form->getElement('Id')->setValue(1);
 
         $model = $this->form->getModel();
 
         $this->assertNotNull($model);
-        $this->assertInstanceOf('Opus\Licence', $model);
+        $this->assertInstanceOf(LicenceInterface::class, $model);
         $this->assertEquals(1, $model->getId());
     }
 
     public function testGetModelNewInstance()
     {
-        $this->form->setModelClass('Opus\Licence');
+        $this->form->setModelClass(Licence::class);
 
         $model = $this->form->getModel();
 
         $this->assertNotNull($model);
-        $this->assertInstanceOf('Opus\Licence', $model);
+        $this->assertInstanceOf(LicenceInterface::class, $model);
         $this->assertNull($model->getId());
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Model class has not been set.
-     */
     public function testGetModelNoModelClass()
     {
+        $this->setExpectedException(Application_Exception::class, 'Model class has not been set.');
         $this->form->getModel();
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Model-ID must be numeric.
-     */
     public function testGetModelBadModelId()
     {
-        $this->form->setModelClass('Opus\Licence');
+        $this->form->setModelClass(Licence::class);
         $this->form->getElement('Id')->setValue('notAnId');
+
+        $this->setExpectedException(Application_Exception::class, 'Model-ID must be numeric.');
         $this->form->getModel();
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Model with ID '1000' not found.
-     */
     public function testGetModelUnknownModelId()
     {
-        $this->form->setModelClass('Opus\Licence');
+        $this->form->setModelClass(Licence::class);
         $this->form->getElement('Id')->setValue(1000);
+
+        $this->setExpectedException(Application_Exception::class, 'Model with ID \'1000\' not found.');
         $this->form->getModel();
     }
 
@@ -148,9 +142,9 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
      */
     public function testSetGetModelClass()
     {
-        $this->form->setModelClass('Opus\Licence');
+        $this->form->setModelClass(Licence::class);
 
-        $this->assertEquals('Opus\Licence', $this->form->getModelClass());
+        $this->assertEquals(Licence::class, $this->form->getModelClass());
 
         $this->form->setModelClass(null);
 
@@ -195,15 +189,12 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $this->assertNull($method->invoke($this->form, 'enrichment'));
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Model-ID must be numeric.
-     */
     public function testValidateModelIdNotValidNonNumeric()
     {
         $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
         $method->setAccessible(true);
 
+        $this->setExpectedException(Application_Exception::class, 'Model-ID must be numeric.');
         $method->invoke($this->form, 'enrichment');
     }
 

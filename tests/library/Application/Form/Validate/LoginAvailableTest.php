@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,13 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
+use Opus\Common\Account;
 
 /**
  *
@@ -42,25 +41,25 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
 
     private $validator;
 
-    private $_account;
+    private $account;
 
     public function setUp()
     {
         parent::setUp();
         $this->validator = new Application_Form_Validate_LoginAvailable();
 
-        $user = new Account();
+        $user = Account::new();
         $user->setLogin('user');
         $user->setPassword('userpwd');
         $user->store();
 
-        $this->_account = $user;
+        $this->account = $user;
     }
 
     public function tearDown()
     {
-        if (! is_null($this->_account)) {
-            $this->_account->delete();
+        if (! is_null($this->account)) {
+            $this->account->delete();
         }
 
         parent::tearDown();

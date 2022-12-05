@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
-use Opus\Person;
+use Opus\Common\Date;
+use Opus\Common\Person;
 
 /**
  * Form for editing a person across multiple objects.
@@ -127,12 +124,14 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $this->addElement('combobox', self::ELEMENT_ACADEMIC_TITLE, ['label' => 'AcademicTitle']);
 
+        $fieldLastName = Person::describeField(Person::FIELD_LAST_NAME);
+
         $this->addElement(
             'text',
             self::ELEMENT_LAST_NAME,
             [
                 'label' => 'LastName', 'required' => true, 'size' => 50,
-                'maxlength' => Person::getFieldMaxLength('LastName')
+                'maxlength' => $fieldLastName->getMaxSize()
             ]
         );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, ['label' => 'FirstName', 'size' => 50]);
@@ -298,7 +297,9 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         $person = $this->getPerson();
 
         if (! is_null($person)) {
-            $columnName = Person::convertFieldnameToColumn($element->getName());
+            $persons = Person::getModelRepository();
+
+            $columnName = $persons->convertFieldnameToColumn($element->getName());
             if (array_key_exists($columnName, $person)) {
                 $displayValue = $person[$columnName];
             }

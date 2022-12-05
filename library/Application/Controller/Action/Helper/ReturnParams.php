@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Log;
+use Opus\Common\Log;
 
 /**
  * Helper class for getting an array with current request parameters.

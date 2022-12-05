@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
-use Opus\Model\AbstractModel;
-use Opus\Model\Field;
+use Opus\Common\Date;
+use Opus\Common\LoggingTrait;
+use Opus\Common\Model\FieldInterface;
+use Opus\Common\Model\ModelInterface;
+use Opus\Common\DnbInstitute;
 
 /**
  * View Helper for formatting field values.
@@ -46,7 +46,7 @@ use Opus\Model\Field;
 class Application_View_Helper_FormatValue extends \Zend_View_Helper_Abstract
 {
 
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     /**
      * Controller helper for translations.
@@ -95,9 +95,9 @@ class Application_View_Helper_FormatValue extends \Zend_View_Helper_Abstract
 
             if (! empty($modelClass)) {
                 switch ($modelClass) {
-                    case 'Opus\Date':
+                    case Date::class:
                         return $this->formatDate($field->getValue());
-                    case 'Opus\DnbInstitute':
+                    case DnbInstitute::class:
                         $value = $field->getValue();
                         if (isset($value[0])) {
                             return $value[0]->getName();
@@ -136,7 +136,7 @@ class Application_View_Helper_FormatValue extends \Zend_View_Helper_Abstract
     }
 
     /**
-     * Returns Opus\Date values formatted as string.
+     * Returns Date values formatted as string.
      * @param Date $date
      * @return string Formatted date
      */
@@ -152,8 +152,8 @@ class Application_View_Helper_FormatValue extends \Zend_View_Helper_Abstract
     /**
      * Formats value for output on metadata overview page.
      *
-     * @param Field value
-     * @param string Name of model for field
+     * @param mixed $value
+     * @param ModelInterface $model
      * @return string Formatted output
      *
      * TODO some values need to be translated (others don't)
@@ -163,10 +163,10 @@ class Application_View_Helper_FormatValue extends \Zend_View_Helper_Abstract
      */
     public function format($value, $model = null)
     {
-        if ($value instanceof AbstractModel) {
+        if ($value instanceof ModelInterface) {
             return $this->formatModel($value, $model);
         }
-        if ($value instanceof Field) {
+        if ($value instanceof FieldInterface) {
             return $this->formatModel($value, $model);
         } else {
             $this->getLogger()->debug('Formatting ' . $value);

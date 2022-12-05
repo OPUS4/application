@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_CitationExport
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 
 class CitationExport_Model_Helper extends Application_Model_Abstract
 {
@@ -72,7 +71,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
      * @param string $docId
      * @throws CitationExport_Module_Exception in case of an invalid parameter value
      *
-     * @return Document
+     * @return DocumentInterface
      */
     public function getDocument($request)
     {
@@ -117,7 +116,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
 
     /**
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @throws CitationExport_Module_Exception in case of an invalid parameter value
      *
      * @return string
@@ -175,7 +174,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
     /**
      * transform XML output to desired output format
      *
-     * @param Document $document Document that should be transformed
+     * @param DocumentInterface $document Document that should be transformed
      * @param string $template XSLT stylesheet that should be applied
      *
      * @return string document in the given output format as plain text

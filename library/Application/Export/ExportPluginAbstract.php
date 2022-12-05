@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Security\Realm;
 
 /**
  * Class Application_Export_ExportPluginAbstract
@@ -142,7 +142,7 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
     {
         if (isset($this->getConfig()->adminOnly) &&
             filter_var($this->getConfig()->adminOnly, FILTER_VALIDATE_BOOLEAN)) {
-            return ! \Opus\Security\Realm::getInstance()->checkModule('admin');
+            return ! Realm::getInstance()->checkModule('admin');
         }
         return false; // keine Einschränkung des Zugriffs
     }

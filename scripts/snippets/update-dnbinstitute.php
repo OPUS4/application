@@ -25,11 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 /**
  * TODO find out what it does - make command?
  *      it adds ThesisPublisher to specified document types
@@ -41,10 +40,10 @@ if (basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\DnbInstitute;
-use Opus\Document;
-use Opus\Model\NotFoundException;
-use Opus\Repository;
+use Opus\Common\DnbInstitute;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Repository;
 
 //if ($argc < 3) {
 //    echo "Usage: {$argv[0]} <document type> <thesis publisher ID> (dryrun)\n";
@@ -67,7 +66,7 @@ $thesisGrantorId = @$options['grantorid'] ? : null;
 $dryrun = isset($options['dryrun']);
 
 try {
-    $dnbInstitute = new DnbInstitute($thesisPublisherId);
+    $dnbInstitute = DnbInstitute::get($thesisPublisherId);
 } catch (NotFoundException $omnfe) {
     _log("Opus_DnbInstitute with ID <$thesisPublisherId> does not exist.\nExiting...");
     exit;

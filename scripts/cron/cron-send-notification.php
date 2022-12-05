@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Script
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -40,8 +39,8 @@ defined('APPLICATION_ENV')
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Job\Runner;
-use Opus\Job\Worker\MailNotification;
-use Opus\Log;
+use Opus\Job\MailNotification;
+use Opus\Common\Log;
 
 $jobrunner = new Runner;
 $jobrunner->setLogger(Log::get());

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,14 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionInterface;
+use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 
 class Admin_Model_CollectionsTest extends ControllerTestCase
 {
@@ -48,7 +48,7 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $collectionRole = new CollectionRole();
+        $collectionRole = CollectionRole::new();
         $collectionRole->setName('TestCollectionRole-Name');
         $collectionRole->setOaiName('TestCollectionRole-OaiName');
         $collectionRole->setVisible(1);
@@ -72,7 +72,7 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
 
     public function tearDown()
     {
-        $collectionRole = new CollectionRole($this->collectionRoleId);
+        $collectionRole = CollectionRole::get($this->collectionRoleId);
         $collectionRole->delete();
 
         parent::tearDown();
@@ -100,9 +100,9 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
             }
             $this->assertArrayHasKey('isRoot', $collection);
             $this->assertArrayHasKey('role', $collection);
-            $this->assertInstanceOf('Opus\CollectionRole', $collection['role']);
+            $this->assertInstanceOf(CollectionRoleInterface::class, $collection['role']);
             $this->assertArrayHasKey('collection', $collection);
-            $this->assertInstanceOf('Opus\Collection', $collection['collection']);
+            $this->assertInstanceOf(CollectionInterface::class, $collection['collection']);
             $this->assertArrayHasKey('assigned', $collection);
             $this->assertFalse($collection['assigned']);
         }
@@ -134,9 +134,9 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
             }
             $this->assertArrayHasKey('isRoot', $collection);
             $this->assertArrayHasKey('role', $collection);
-            $this->assertInstanceOf('Opus\CollectionRole', $collection['role']);
+            $this->assertInstanceOf(CollectionRoleInterface::class, $collection['role']);
             $this->assertArrayHasKey('collection', $collection);
-            $this->assertInstanceOf('Opus\Collection', $collection['collection']);
+            $this->assertInstanceOf(CollectionInterface::class, $collection['collection']);
             $this->assertArrayHasKey('assigned', $collection);
             $this->assertFalse($collection['assigned']);
         }
@@ -161,9 +161,9 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
             }
             $this->assertArrayHasKey('isRoot', $collection);
             $this->assertArrayHasKey('role', $collection);
-            $this->assertInstanceOf('Opus\CollectionRole', $collection['role']);
+            $this->assertInstanceOf(CollectionRoleInterface::class, $collection['role']);
             $this->assertArrayHasKey('collection', $collection);
-            $this->assertInstanceOf('Opus\Collection', $collection['collection']);
+            $this->assertInstanceOf(CollectionInterface::class, $collection['collection']);
             $this->assertArrayHasKey('assigned', $collection);
             $this->assertFalse($collection['assigned']);
         }

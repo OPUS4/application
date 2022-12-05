@@ -29,10 +29,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Log\LogService;
+use Opus\Common\Log\LogService;
 
 use Opus\Db\DatabaseBootstrap;
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Provide methods to setup and run the application. It also provides a couple of static

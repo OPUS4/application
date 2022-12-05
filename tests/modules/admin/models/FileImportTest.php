@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Admin_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
 
 class Admin_Model_FileImportTest extends ControllerTestCase
 {
@@ -120,21 +118,15 @@ class Admin_Model_FileImportTest extends ControllerTestCase
         unlink($this->importFolder . '/testfile');
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage no files for import
-     */
     public function testAddFilesToDocumentNoFiles()
     {
+        $this->setExpectedException(Application_Exception::class, 'no files for import');
         $this->model->addFilesToDocument(200, null);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage no document found for id 500
-     */
     public function testAddFilesToDocumentUnknownDocument()
     {
+        $this->setExpectedException(Application_Exception::class, 'no document found for id 500');
         $this->model->addFilesToDocument(500, ['testfile']);
     }
 

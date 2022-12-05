@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Log;
-use Opus\Series;
-use Opus\Model\NotFoundException;
+use Opus\Common\Log;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Series;
 
 /**
  * Checks if a number already exists in a series.
@@ -81,7 +80,7 @@ class Application_Form_Validate_SeriesNumberAvailable extends \Zend_Validate_Abs
         }
 
         try {
-            $series = new Series($seriesId);
+            $series = Series::get($seriesId);
         } catch (NotFoundException $omnfe) {
              Log::get()->err(__METHOD__ . $omnfe->getMessage());
             return true;

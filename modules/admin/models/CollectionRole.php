@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
-use Opus\Model\NotFoundException;
+use Opus\Common\CollectionRole;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * TODO überarbeiten (entfernen?)
@@ -52,7 +50,7 @@ class Admin_Model_CollectionRole
             return;
         }
         try {
-            $this->_collectionRole = new CollectionRole((int) $id);
+            $this->_collectionRole = CollectionRole::get((int) $id);
         } catch (NotFoundException $e) {
             throw new Admin_Model_Exception('roleid parameter value unknown');
         }
@@ -63,7 +61,7 @@ class Admin_Model_CollectionRole
      */
     private function initNewCollectionRole()
     {
-        $this->_collectionRole = new CollectionRole();
+        $this->_collectionRole = CollectionRole::new();
         foreach (['Visible', 'VisibleBrowsingStart', 'VisibleFrontdoor', 'VisibleOai'] as $field) {
             $this->_collectionRole->getField($field)->setValue(1);
         }

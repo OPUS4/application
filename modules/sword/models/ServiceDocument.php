@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,7 +32,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
+use Opus\Import\Sword\ImportCollection;
 
 class Sword_Model_ServiceDocument
 {
@@ -130,7 +132,7 @@ class Sword_Model_ServiceDocument
 
     private function setImportCollection($collectionNode)
     {
-        $importCollection = new Sword_Model_ImportCollection();
+        $importCollection = new ImportCollection();
         if ($importCollection->exists()) {
             $node = $this->document->createElementNS('http://www.w3.org/2005/Atom', 'atom:title', $importCollection->getName());
             $collectionNode->appendChild($node);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,20 +26,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Tobias Tappe <tobias.tappe@uni-bielefeld.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\Model\NotFoundException;
+use Opus\Common\Collection;
+use Opus\Common\CollectionRole;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * Controller for administration of collections.
@@ -193,7 +187,7 @@ class Admin_CollectionController extends Application_Controller_Action
         $roleId = $this->getRequest()->getParam('role');
         $id = null;
         if (! is_null($roleId)) {
-            $collectionRole = new CollectionRole($roleId);
+            $collectionRole = CollectionRole::get($roleId);
             $rootCollection = $collectionRole->getRootCollection();
             if (is_null($rootCollection)) {
                 // collection role without root collection: create a new root collection
@@ -302,14 +296,14 @@ class Admin_CollectionController extends Application_Controller_Action
 
             switch ($type) {
                 case 'child':
-                    $refCollection = new Collection($id);
+                    $refCollection = Collection::get($id);
                     $refCollection->addFirstChild($collection);
                     $refCollection->store();
                     $message = $this->view->translate('admin_collections_add', [$collectionModel->getName()]);
                     break;
 
                 case 'sibling':
-                    $refCollection = new Collection($id);
+                    $refCollection = Collection::get($id);
                     $refCollection->addNextSibling($collection);
                     $refCollection->store();
                     $message = $this->view->translate('admin_collections_add', [$collectionModel->getName()]);
@@ -390,7 +384,7 @@ class Admin_CollectionController extends Application_Controller_Action
         }
 
         try {
-            $collection = new Collection($collectionId);
+            $collection = Collection::get($collectionId);
 
             if (is_null($sortBy)) {
                 return $this->_helper->Redirector->redirectToAndExit(
@@ -518,7 +512,7 @@ class Admin_CollectionController extends Application_Controller_Action
 
     private function prepareAssignSubPage($documentId, $collectionId)
     {
-        $collection = new Collection($collectionId);
+        $collection = Collection::get($collectionId);
         $children = $collection->getChildren();
         if (count($children) === 0) {
             // zurück zur Ausgangsansicht

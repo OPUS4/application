@@ -80,21 +80,15 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
         $this->assertEquals('Active', $elements[1]);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage #1 argument must not be null or empty.
-     */
     public function testConstructBadFirstArgument()
     {
+        $this->setExpectedException(Application_Exception::class, '#1 argument must not be null or empty.');
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues(null, 'testmessage');
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage #2 argument must not be null or empty.
-     */
     public function testConstructBadSecondArgument()
     {
+        $this->setExpectedException(Application_Exception::class, '#2 argument must not be null or empty.');
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues('Language', null);
     }
 

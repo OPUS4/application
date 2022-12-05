@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     CitationExport
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Identifier;
-use Opus\Series;
+use Opus\Common\Document;
+use Opus\Common\Identifier;
+use Opus\Common\Series;
 
 /**
  * Class CitationExport_IndexControllerTest.
@@ -341,7 +338,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRisSeriesVisible()
     {
-        $s = new Series(4);
+        $s = Series::get(4);
         $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
@@ -353,7 +350,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRisSeriesInvisible()
     {
-        $s = new Series(3);
+        $s = Series::get(3);
         $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
@@ -452,7 +449,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testIndexActionBibtexSeriesVisible()
     {
         $this->setDocumentType('preprint');
-        $s = new Series(4);
+        $s = Series::get(4);
         $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
@@ -466,7 +463,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testIndexActionBibtexSeriesInvisible()
     {
         $this->setDocumentType('preprint');
-        $s = new Series(3);
+        $s = Series::get(3);
         $doc = Document::get($this->documentId);
         $doc->addSeries($s)->setNumber('SeriesNumber');
         $doc->store();
@@ -752,7 +749,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setType('article');
 
-        $doi = new Identifier();
+        $doi = Identifier::new();
         $doi->setValue('123_345_678');
         $doc->addIdentifierDoi($doi);
 

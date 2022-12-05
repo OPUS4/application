@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Gunar Maiwald <maiwald@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
 use Opus\Enrichment\AbstractType;
 
 /**
@@ -87,10 +84,10 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         $this->setLabelPrefix('Opus_EnrichmentKey');
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus\EnrichmentKey');
+        $this->setModelClass(EnrichmentKey::class);
         $this->setVerifyModelIdIsNumeric(false);
 
-        $nameMaxLength = EnrichmentKey::getFieldMaxLength('Name');
+        $nameMaxLength = EnrichmentKey::describeField(EnrichmentKey::FIELD_NAME)->getMaxSize();
 
         $name = $this->createElement('text', self::ELEMENT_NAME, [
             'required' => true,
@@ -158,7 +155,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
-     * @param $model Enrichmentkey
+     * @param EnrichmentKeyInterface $model
      */
     public function populateFromModel($enrichmentKey)
     {
@@ -204,7 +201,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
     /**
      * Aktualisiert Model-Instanz mit Werten im Formular.
-     * @param $enrichmentKey Enrichmentkey
+     * @param EnrichmentKeyInterface $enrichmentKey
      */
     public function updateModel($enrichmentKey)
     {

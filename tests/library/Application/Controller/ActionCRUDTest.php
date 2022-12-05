@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,20 +24,18 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Licence;
+use Opus\Common\Licence;
+use Opus\Common\LicenceInterface;
 
 /**
  * Class Application_Controller_ActionCRUDTest
  *
  * Erstellt und löscht Lizenzen.
- *
- * @category    Application Unit Test
- * @package     Application_Controller_Action
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Controller_ActionCRUDTest extends ControllerTestCase
 {
@@ -103,12 +102,9 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $this->assertEquals('Admin_Form_Licence', $controller->getFormClass());
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage not instance of Application_Form_IModel
-     */
     public function testSetFormClassBadClass()
     {
+        $this->setExpectedException(Application_Exception::class, 'not instance of Application_Form_IModel');
         $this->controller->setFormClass('Opus\Document');
     }
 
@@ -136,7 +132,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $model = $this->controller->getModel(2);
 
         $this->assertNotNull($model);
-        $this->assertInstanceOf(Licence::class, $model);
+        $this->assertInstanceOf(LicenceInterface::class, $model);
         $this->assertEquals(2, $model->getId());
     }
 
@@ -178,7 +174,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $model = $this->controller->getNewModel();
 
         $this->assertNotNull($model);
-        $this->assertInstanceOf(Licence::class, $model);
+        $this->assertInstanceOf(LicenceInterface::class, $model);
         $this->assertNull($model->getId());
     }
 
@@ -201,7 +197,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     public function testGetEditModelForm()
     {
-        $model = new Licence(2);
+        $model = Licence::get(2);
 
         $form = $this->controller->getEditModelForm($model);
 
@@ -236,7 +232,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     public function testGetConfirmationForm()
     {
-        $model = new Licence(2);
+        $model = Licence::get(2);
         $form = $this->controller->getConfirmationForm($model);
         $this->assertNotNull($form);
         $this->assertInstanceOf('Application_Form_Confirmation', $form);
@@ -283,7 +279,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
         $licenceId = $params['id'];
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $licence->delete();
     }
 
@@ -421,7 +417,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     public function testHandleConfirmationPostYes()
     {
-        $licence = new Licence();
+        $licence = Licence::new();
 
         $licence->setNameLong(__METHOD__);
         $licence->setLanguage('deu');

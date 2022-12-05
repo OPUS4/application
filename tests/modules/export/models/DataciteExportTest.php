@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Sascha Szott <opus-development@saschaszott.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Identifier;
-use Opus\Person;
-use Opus\Title;
+use Opus\Common\Document;
+use Opus\Common\Identifier;
+use Opus\Common\Person;
+use Opus\Common\Title;
 
 class Export_Model_DataciteExportTest extends ControllerTestCase
 {
@@ -80,17 +78,17 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $doc->setLanguage('deu');
         $docId = $doc->store();
 
-        $doi = new Identifier();
+        $doi = Identifier::new();
         $doi->setType('doi');
         $doi->setValue('10.2345/opustest-' . $docId);
         $doc->setIdentifier([$doi]);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName('John');
         $author->setLastName('Doe');
         $doc->setPersonAuthor([$author]);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Meaningless title');
         $title->setLanguage('deu');
         $doc->setTitleMain([$title]);

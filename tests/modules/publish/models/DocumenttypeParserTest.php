@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish Unit Test
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -45,12 +43,11 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
         parent::setUp();
     }
 
-    /**
-     * @expectedException Application_Exception
-     */
     public function testConstructorWithWrongDom()
     {
+        $this->setExpectedException(Application_Exception::class);
         $dom = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('irgendwas');
+
         $model = new Publish_Model_DocumenttypeParser($dom, null);
         $this->assertNull($model->dom);
     }
@@ -62,15 +59,15 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
         $this->assertInstanceOf('DOMDocument', $model->dom);
     }
 
-    /**
-     * @expectedException Application_Exception
-     */
     public function testConstructorWithCorrectDomAndWrongForm()
     {
         $session = new \Zend_Session_Namespace('Publish');
         $session->documentType = 'irgendwas';
         $dom = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
+
+        $this->setExpectedException(Application_Exception::class);
         $form = new Publish_Form_PublishingSecond($this->_logger);
+
         $model = new Publish_Model_DocumenttypeParser($dom, $form);
         $this->assertInstanceOf('DOMDocument', $model->dom);
     }
@@ -86,9 +83,6 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
         $this->assertInstanceOf('Publish_Form_PublishingSecond', $model->form);
     }
 
-    /**
-     * @expectedException Publish_Model_FormIncorrectFieldNameException
-     */
     public function testInccorectFieldName()
     {
 
@@ -115,12 +109,11 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
         }
 
         $model = new Publish_Model_DocumenttypeParser($dom, new Publish_Form_PublishingSecond($this->_logger));
+
+        $this->setExpectedException(Publish_Model_FormIncorrectFieldNameException::class);
         $model->parse();
     }
 
-    /**
-     * @expectedException Publish_Model_FormIncorrectEnrichmentKeyException
-     */
     public function testIncorrectEnrichmentKey()
     {
 
@@ -150,6 +143,8 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
         }
 
         $model = new Publish_Model_DocumenttypeParser($dom, new Publish_Form_PublishingSecond($this->_logger));
+
+        $this->setExpectedException(Publish_Model_FormIncorrectEnrichmentKeyException::class);
         $model->parse();
     }
 }

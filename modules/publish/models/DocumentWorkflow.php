@@ -25,14 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2011-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 
 class Publish_Model_DocumentWorkflow
 {
@@ -40,7 +38,7 @@ class Publish_Model_DocumentWorkflow
     const DOCUMENT_STATE = 'temporary';
 
     /**
-     * @var Document
+     * @var DocumentInterface
      */
     private $_document;
 
@@ -48,7 +46,7 @@ class Publish_Model_DocumentWorkflow
      * Create and initialize document object.
      *
      * @param string $documentType
-     * @return Document
+     * @return DocumentInterface
      */
     public function createDocument($documentType)
     {
@@ -74,7 +72,7 @@ class Publish_Model_DocumentWorkflow
      * Load initialized document object (and check document status).
      *
      * @param int $documentId
-     * @return Document
+     * @return DocumentInterface
      * @throws Publish_Model_Exception
      */
     public function loadDocument($documentId)

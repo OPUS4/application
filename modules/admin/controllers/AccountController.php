@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,24 +26,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
-use Opus\UserRole;
+use Opus\Common\Account;
+use Opus\Common\AccountInterface;
+use Opus\Common\UserRole;
 
 /**
  * Controller for administration of user accounts.
  *
- * @category    Application
- * @package     Module_Admin
- *
- * This controller allows creating, editing and removing user accounts.
+  * This controller allows creating, editing and removing user accounts.
  *
  * - For new accounts the login must not already exist.
  * - The password has to be entered twice for validation.
@@ -60,7 +55,7 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
 
     public function init()
     {
-        $this->setFormClass('Admin_Form_Account');
+        $this->setFormClass(Admin_Form_Account::class);
         parent::init();
     }
 
@@ -73,7 +68,7 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
 
     /**
      * Admin and current user account cannot be deleted.
-     * @param Object $account
+     * @param AccountInterface $account
      * @return bool
      */
     public function isDeletable($account)
@@ -111,7 +106,7 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
 
         $this->view->allModules = $modules;
 
-        $account = new Account($id);
+        $account = Account::get($id);
         $this->view->account = $account;
 
         // Get all UserRoles for current Account *plus* 'guest'

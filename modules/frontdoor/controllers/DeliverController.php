@@ -25,22 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * Controller for handling file downloads in the frontdoor.
  */
 
-use Opus\Config;
-use Opus\Document;
-use Opus\File;
+use Opus\Common\Config;
+use Opus\Common\Document;
+use Opus\Common\File;
 use Opus\Pdf\Cover\CoverGeneratorFactory;
 use Opus\Pdf\Cover\CoverGeneratorInterface;
-use Opus\Security\Realm;
+use Opus\Common\Security\Realm;
 
 class Frontdoor_DeliverController extends Application_Controller_Action
 {
@@ -175,7 +171,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $doc = null;
         $docId = $file->getParentId();
         if ($docId !== null) {
-            $doc = new Document($docId);
+            $doc = Document::get($docId);
         }
 
         if ($doc === null) {

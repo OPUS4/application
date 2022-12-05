@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Frontdoor
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Person;
-use Opus\Title;
+use Opus\Common\Person;
+use Opus\Common\Title;
 
 /**
  * Class Frontdoor_MailControllerTest.
@@ -56,7 +54,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
         $document->setServerState('published');
         $document->setType('baz');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('foobartitle');
         $title->setLanguage('deu');
         $document->setTitleMain($title);
@@ -68,12 +66,12 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
         $document->setServerState('published');
         $document->setType('baz');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('foobartitle');
         $title->setLanguage('deu');
         $document->setTitleMain($title);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName('John');
         $author->setLastName('Doe');
         $author->setEmail('doe@example.org');

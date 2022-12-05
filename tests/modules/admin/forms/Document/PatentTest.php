@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,14 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Patent;
+use Opus\Common\Document;
+use Opus\Common\Patent;
 
 /**
  * Unit Tests fuer Admin_Form_Document_Patent.
@@ -91,7 +90,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $form->getElement('Application')->setValue('Patent Title');
         $form->getElement('DateGranted')->setValue('2008/03/20');
 
-        $patent = new Patent();
+        $patent = Patent::new();
 
         $form->updateModel($patent);
 
@@ -246,7 +245,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $form->getElement('Countries')->setValue('Germany');
         $form->getElement('Application')->setValue('description');
 
-        $patent = new Patent();
+        $patent = Patent::new();
 
         $form->updateModel($patent);
 

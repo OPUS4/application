@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Series;
+
 class Admin_Form_Series extends Application_Form_Model_Abstract
 {
 
@@ -44,7 +45,7 @@ class Admin_Form_Series extends Application_Form_Model_Abstract
 
         $this->setRemoveEmptyCheckbox(false);
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus\Series');
+        $this->setModelClass(Series::class);
 
         $this->addElement('text', self::ELEMENT_TITLE, ['required' => true, 'size' => 70]);
         $this->addElement('textarea', self::ELEMENT_INFOBOX);

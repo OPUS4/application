@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,18 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Gunar Maiwald <maiwald@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Enrichment;
-use Opus\EnrichmentKey;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Enrichment;
+use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
 
 /**
  * Class Admin_EnrichmentkeyController
@@ -265,7 +262,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
             if (key_exists($keyName, $mapNamesToEnrichmentKeys)) {
                 $result[] = $mapNamesToEnrichmentKeys[$keyName];
             } else {
-                $newEnrichmentKey = new EnrichmentKey();
+                $newEnrichmentKey = EnrichmentKey::new();
                 $newEnrichmentKey->setName($keyName);
                 $result[] = $newEnrichmentKey;
             }
@@ -280,7 +277,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
      * Enrichment zurückgegeben, die allerdings nicht in der Datenbank persistiert ist.
      *
      * @param $modelId
-     * @return EnrichmentKey|null
+     * @return EnrichmentKeyInterface|null
      */
     public function getModel($modelId)
     {
@@ -289,11 +286,11 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 
             if (strlen(trim($modelId)) !== 0) {
                 try {
-                    return new $modelClass($modelId);
+                    return $modelClass::get($modelId);
                 } catch (NotFoundException $omnfe) {
                     if (in_array($modelId, EnrichmentKey::getAllReferenced())) {
                         // Sonderbehandlung: nicht registrierter, aber in Benutzung befindlicher Enrichment Key
-                        $enrichmentKey = new EnrichmentKey();
+                        $enrichmentKey = EnrichmentKey::new();
                         $enrichmentKey->setName($modelId);
                         return $enrichmentKey;
                     }

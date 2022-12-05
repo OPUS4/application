@@ -25,12 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2011-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
-use Opus\Repository;
+use Opus\Common\CollectionRole;
+use Opus\Common\Repository;
 
 class Oai_Model_Sets extends Application_Model_Abstract
 {
@@ -129,8 +129,8 @@ class Oai_Model_Sets extends Application_Model_Abstract
 
     /**
      * Returns sets for collections of a collection role.
-     * @param $setSpec OAI name for collection role
-     * @param $roleId int Database ID of role
+     * @param string $setSpec OAI name for collection role
+     * @param int    $roleId int Database ID of role
      * @return array
      */
     public function getSetsForCollectionRole($setSpec, $roleId)
@@ -141,7 +141,7 @@ class Oai_Model_Sets extends Application_Model_Abstract
 
         $setSpecPattern = self::SET_SPEC_PATTERN;
 
-        $role = new CollectionRole($roleId);
+        $role = CollectionRole::get($roleId);
         foreach ($role->getOaiSetNames() as $subset) {
             $subSetSpec  = "$setSpec:" . $subset['oai_subset'];
             // $subSetCount = $subset['count'];
