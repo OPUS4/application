@@ -296,7 +296,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             throw $applicationException;
         }
 
-        return $this->createSearchQuery($this->_validateInput($queryBuilderInput,1, $queryBuilderInput['rows']));
+        return $this->createSearchQuery($queryBuilderInput);
     }
 
     public function setViewValues($request, $query, $resultList, $searchType)
