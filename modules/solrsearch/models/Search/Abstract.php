@@ -127,11 +127,8 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
             $input['rows'] = $rows > 0 || ($rows == 0 && $rowsParam == '0') ? $rows : $maxNumber;
 
-            if ($input['start'] > $maxNumber) {
-                $input['start'] = $maxNumber;
-            }
-            if ($input['rows'] + $input['start'] > $maxNumber) {
-                $input['rows'] = $maxNumber - $input['start'];
+            if ($input['rows'] > $maxNumber) {
+                $input['rows'] = $maxNumber;
             }
         }
 
@@ -299,7 +296,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             throw $applicationException;
         }
 
-        return $this->createSearchQuery($queryBuilderInput);
+        return $this->createSearchQuery($this->_validateInput($queryBuilderInput,1, $queryBuilderInput['rows']));
     }
 
     public function setViewValues($request, $query, $resultList, $searchType)
