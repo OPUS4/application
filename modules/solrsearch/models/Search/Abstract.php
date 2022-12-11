@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\Util\Query;
+
 /**
  * Abstract base class for search type implementations.
  *
@@ -119,17 +121,23 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
             // pagination within export was introduced in OPUS 4.2.2
             $startParam = $request->getParam('start', 0);
-            $rowsParam = $request->getParam('rows', $maxNumber);
+            $rowsParam = $request->getParam('rows', 0);
             $start = intval($startParam);
             $rows = intval($rowsParam);
 
-            $input['start'] = $start > 0 ? $start : 0;
+            $rows = $rows > $maxNumber || $rows <= 0 ? $maxNumber : $rows;
 
-            $input['rows'] = $rows > 0 || ($rows == 0 && $rowsParam == '0') ? $rows : $maxNumber;
+            // IMPORTANT: 'start' + 'row' must not exceed 2147483647 (java,lang.Integer.MAX_VALUE)
+            $start = $start < Query::MAX_ROWS ? $start : Query::MAX_ROWS - $rows;
+            $start = $start > 0 ? $start : 0;
 
-            if ($input['rows'] > $maxNumber) {
-                $input['rows'] = $maxNumber;
+            if ($start + $rows > Query::MAX_ROWS) {
+                $rows = Query::MAX_ROWS - $start;
             }
+
+            $input['rows']  = $rows;
+            $input['start'] = $start;
+
         }
 
         foreach ($this->_searchFields as $searchField) {
