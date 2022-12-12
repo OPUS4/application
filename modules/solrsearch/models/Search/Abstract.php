@@ -121,14 +121,30 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
             // pagination within export was introduced in OPUS 4.2.2
             $startParam = $request->getParam('start', 0);
-            $rowsParam = $request->getParam('rows', 0);
+            $rowsParam = $request->getParam('rows', $maxNumber);
             $start = intval($startParam);
-            $rows = intval($rowsParam);
 
-            $rows = $rows > $maxNumber || $rows <= 0 ? $maxNumber : $rows;
+            if (is_string($rowsParam)) {
+                // for invalid values $maxNumber should be used
+                if (ctype_digit($rowsParam)) {
+                    $rows = intval($rowsParam);
+                } else {
+                    $rows = $maxNumber;
+                }
+            } else {
+                $rows = $rowsParam;
+            }
+
+            // rows = 0 should be support to allow just getting the number of possible results (TODO Is it used?)
+            $rows = $rows > $maxNumber || $rows < 0 ? $maxNumber : $rows;
 
             // IMPORTANT: 'start' + 'row' must not exceed 2147483647 (java,lang.Integer.MAX_VALUE)
-            $start = $start < Query::MAX_ROWS ? $start : Query::MAX_ROWS - $rows;
+            if ($start > Query::MAX_ROWS) {
+                $start = Query::MAX_ROWS;
+                $rows  = 0;
+                // TODO throwing exception would be better because this query does not make sense
+                //      need to change tests for changed behaviour
+            }
             $start = $start > 0 ? $start : 0;
 
             if ($start + $rows > Query::MAX_ROWS) {

@@ -370,8 +370,7 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     public function testPaginationIsSupportedInExportWithPaginationParamRows0()
     {
-        // rows = 0 is like not specifying rows at all (max rows is used)
-        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/rows/0', 5, 5);
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/rows/0', 5, 0);
     }
 
     public function testPaginationIsSupportedInExportWithPaginationParamRows2()
