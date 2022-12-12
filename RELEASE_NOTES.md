@@ -1,5 +1,15 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.7.1.2 - 2022-12-13
+
+ORCID und GND-ID werden jetzt in XMetaDissPlus für die Rollen `Author`,
+`Advisor`, `Referee` and `Editor` ausgegeben. 
+
+Ein Bug, der beim seitenweisen Export von Suchergebnissen unter Umständen
+für eine leere Export-Datei gesorgt hat, wurde beseitigt.
+
+--
+
 ## Patch Release 4.7.1.1 - 2022-07-12
 
 Die Sprachen im Konfigurationsparameter `supportedLanguages` werden nun 
