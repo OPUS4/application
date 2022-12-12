@@ -137,7 +137,6 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
             $input['rows']  = $rows;
             $input['start'] = $start;
-
         }
 
         foreach ($this->_searchFields as $searchField) {

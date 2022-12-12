@@ -46,6 +46,7 @@ use Opus\Search\Service;
  */
 class Export_IndexControllerTest extends ControllerTestCase
 {
+    protected $configModifiable = true;
 
     protected $additionalResources = 'all';
 
@@ -441,6 +442,24 @@ class Export_IndexControllerTest extends ControllerTestCase
     public function testPaginationIsSupportedInExportWithExtremeValues5()
     {
         $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/start/2147483646/rows/1', 5, 0);
+    }
+
+    public function testPaginationStartValueLargerThanMaxRows()
+    {
+        $this->enableSecurity();
+        $this->addAccessOnModuleExportForGuest();
+
+        /** setting max rows to 5, so it is less than start = 10 */
+        $this->adjustConfiguration(['plugins' => ['export' => ['default' => ['maxDocumentsGuest' => 5]]]]);
+
+        $this->dispatch('/export/index/csv/searchtype/all/export/xml/start/10/rows/10');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        // first line is CSV header, therefore it should be 6 lines
+        $this->assertEquals(6, substr_count($body, PHP_EOL));
     }
 
     /**
@@ -999,6 +1018,7 @@ class Export_IndexControllerTest extends ControllerTestCase
      */
     private function addAccessOnModuleExportForGuest()
     {
+        $this->_removeExportFromGuest = true;
         return $this->addModuleAccess('export', 'guest');
     }
 
@@ -1008,6 +1028,7 @@ class Export_IndexControllerTest extends ControllerTestCase
      */
     private function removeAccessOnModuleExportForGuest()
     {
+        $this->_removeExportFromGuest = false;
         return $this->removeModuleAccess('export', 'guest');
     }
 
