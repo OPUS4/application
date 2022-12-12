@@ -301,6 +301,8 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
     /**
      * Returns maximum number of rows for export depending on autentication.
      *
+     * IMPORTANT: maxRows must not exceed 2147483647 (java,lang.Integer.MAX_VALUE)
+     *
      * @return int
      */
     public function getMaxRows()
@@ -321,6 +323,11 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
                     $maxRows = $this->getValueIfValid($config->maxDocumentsUser, $maxRows);
                 }
             }
+        }
+
+        // Do not allows configured values to exceed java.lang.Integer.MAX_VALUE (Solr)
+        if ($maxRows > Opus\Search\Util\Query::MAX_ROWS) {
+            $maxRows = Opus\Search\Util\Query::MAX_ROWS;
         }
 
         return $maxRows;
