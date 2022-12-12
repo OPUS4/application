@@ -288,16 +288,16 @@
     <xsl:template match="PersonAuthor" mode="xmetadissplus">
        <dc:creator xsi:type="pc:MetaPers">
          <pc:person>
-			<xsl:if test="normalize-space(@IdentifierGnd)">
-				<xsl:attribute name="ddb:GND-Nr">
-					<xsl:value-of select="@IdentifierGnd"/>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="normalize-space(@IdentifierOrcid)">
-				<ddb:ORCID>
-					<xsl:value-of select="@IdentifierOrcid"/>
-				</ddb:ORCID>
-			</xsl:if>		 
+           <xsl:if test="normalize-space(@IdentifierGnd)">
+             <xsl:attribute name="ddb:GND-Nr">
+               <xsl:value-of select="@IdentifierGnd"/>
+             </xsl:attribute>
+            </xsl:if>
+           <xsl:if test="normalize-space(@IdentifierOrcid)">
+              <ddb:ORCID>
+                <xsl:value-of select="@IdentifierOrcid"/>
+              </ddb:ORCID>
+           </xsl:if>
            <xsl:choose>
              <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
                <pc:name type="nameUsedByThePerson">
@@ -380,16 +380,16 @@
     <xsl:template match="PersonAdvisor" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="advisor">
           <pc:person>
-		  	<xsl:if test="normalize-space(@IdentifierGnd)">
-				<xsl:attribute name="ddb:GND-Nr">
-					<xsl:value-of select="@IdentifierGnd"/>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="normalize-space(@IdentifierOrcid)">
-				<ddb:ORCID>
-					<xsl:value-of select="@IdentifierOrcid"/>
-				</ddb:ORCID>
-			</xsl:if>
+            <xsl:if test="normalize-space(@IdentifierGnd)">
+                <xsl:attribute name="ddb:GND-Nr">
+                    <xsl:value-of select="@IdentifierGnd"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="normalize-space(@IdentifierOrcid)">
+                <ddb:ORCID>
+                    <xsl:value-of select="@IdentifierOrcid"/>
+                </ddb:ORCID>
+            </xsl:if>
             <xsl:choose>
               <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
                 <pc:name type="nameUsedByThePerson">
@@ -421,16 +421,16 @@
     <xsl:template match="PersonReferee" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="referee">
            <pc:person>
-			<xsl:if test="normalize-space(@IdentifierGnd)">
-				<xsl:attribute name="ddb:GND-Nr">
-					<xsl:value-of select="@IdentifierGnd"/>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="normalize-space(@IdentifierOrcid)">
-				<ddb:ORCID>
-					<xsl:value-of select="@IdentifierOrcid"/>
-				</ddb:ORCID>
-			</xsl:if>
+            <xsl:if test="normalize-space(@IdentifierGnd)">
+                <xsl:attribute name="ddb:GND-Nr">
+                    <xsl:value-of select="@IdentifierGnd"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="normalize-space(@IdentifierOrcid)">
+                <ddb:ORCID>
+                    <xsl:value-of select="@IdentifierOrcid"/>
+                </ddb:ORCID>
+            </xsl:if>
              <xsl:choose>
                <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
                  <pc:name type="nameUsedByThePerson">
@@ -462,16 +462,16 @@
     <xsl:template match="PersonEditor" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="editor">
            <pc:person>
-			<xsl:if test="normalize-space(@IdentifierGnd)">
-				<xsl:attribute name="ddb:GND-Nr">
-					<xsl:value-of select="@IdentifierGnd"/>
-				</xsl:attribute>
-			</xsl:if>
-			<xsl:if test="normalize-space(@IdentifierOrcid)">
-				<ddb:ORCID>
-					<xsl:value-of select="@IdentifierOrcid"/>
-				</ddb:ORCID>
-			</xsl:if>
+            <xsl:if test="normalize-space(@IdentifierGnd)">
+                <xsl:attribute name="ddb:GND-Nr">
+                    <xsl:value-of select="@IdentifierGnd"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="normalize-space(@IdentifierOrcid)">
+                <ddb:ORCID>
+                    <xsl:value-of select="@IdentifierOrcid"/>
+                </ddb:ORCID>
+            </xsl:if>
              <xsl:choose>
                <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
                  <pc:name type="nameUsedByThePerson">
