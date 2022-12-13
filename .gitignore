@@ -44,3 +44,4 @@ opus4-solr-jetty.conf
 out
 *.iml
 nbproject
+/testresult-term.txt
