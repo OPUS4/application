@@ -67,9 +67,9 @@ $config = Config::get();
                 <?= $this->element($this->local_doiImportPopulated); ?>
                 <input type="text" name="DocumentType" id="DocumentType" value="" />
                 Dokumenttyp in Crossref:&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="CrossrefDocumentType" id="CrossrefDocumentType" size="35" /> <!-- Für Prod: type="hidden" --> 
-                </br></br>Wird in OPUS angelegt als:
+                <br /><br />Wird in OPUS angelegt als:
                 <input type="text" name="OpusDocumentType" id="OpusDocumentType" size="35" value="<?= $this->translate($GET['DocumentType']) ?>" /> <!-- Für Prod: type="hidden" -->
-                </br></br>
+                <br /><br />
             </span>  
             
             
@@ -105,7 +105,7 @@ $config = Config::get();
 			<?= $this->element($this->PublisherName); ?>
             <?= $this->element($this->PublisherPlace); ?>            
             <?= $this->group($this->groupSubjectUncontrolled); ?>
-            <hr></br>
+            <hr><br />
             
 		   
 			
