@@ -31,6 +31,13 @@
 
 ?>
 
+<?php
+
+use Opus\Common\Config;
+
+$config = Config::get();
+?>
+
 <h2><?= $this->translate($this->title) ?></h2>
 <div class="content">
 <h3 class="document-type" title="<?= $this->translate('selecttype'); ?>"><?= $this->subtitle?></h3>
@@ -118,7 +125,13 @@
 </div>
 
 <!-- Nach Reload nochmal parsen, falls local_doiJson schon gefüllt ist. Anderenfalls würden alle Felder wieder geleert, sobald ein Feld hinzugefügt wird. -->
-<script language="javascript" type="text/javascript">   
+<script language="javascript" type="text/javascript">
+
+    let opusConfig = {
+        "crossrefUrl": '<?= $config->crossref->url ?>',
+        "crossrefMailTo": '<?= $config->crossref->mailTo ?>'
+    }
+
 	 var doiJson = document.getElementById("Enrichmentopus_import_data").value;
  if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "false"){
     parseJson(doiJson);
