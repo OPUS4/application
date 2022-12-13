@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Config;
 use Opus\Common\Document;
 use Opus\Common\Identifier;
 use Opus\Common\Repository;
@@ -38,6 +39,9 @@ use Opus\Common\Repository;
  *
  * This is the start for providing RESTful services for OPUS 4. The module
  * for this controller will likely change later.
+ *
+ * TODO LAMINAS Die einzelnen API Funktionen sollten in separate Klassen ausgelagert werden.
+ * TODO Move controller into separate module
  */
 class ApiController extends Application_Controller_Action
 {
@@ -113,5 +117,41 @@ class ApiController extends Application_Controller_Action
         $response['doiExists'] = $doiExists;
 
         echo json_encode($response);
+    }
+
+    /**
+     * @throws Zend_Http_Client_Exception
+     *
+     * TODO Crossref should be just one possible data source for pre-populating the publish form
+     * TODO data should be processed on server -> simplified format for Javascript code that is source independent
+     */
+    public function crossrefAction()
+    {
+        $doi = $this->getParam('doi');
+
+        if ($doi === null) {
+            // TODO return error message
+            echo json_encode([]);
+            return;
+        }
+
+        $config = Config::get();
+
+        $baseUrl = rtrim($config->crossref->url, '/');
+        $mailTo  = $config->crossref->mailTo;
+
+        $crossrefUrl = $baseUrl . "/$doi";
+
+        if (strlen(trim($mailTo)) > 0) {
+            $crossrefUrl .= "?mailto=$mailTo";
+        }
+
+        $client = new Zend_Http_Client($crossrefUrl);
+        $response = $client->request(Zend_Http_Client::GET);
+
+        // TODO error handling?
+        // TODO processing of response and conversion to OPUS 4 data structure
+
+        echo $response->getBody();
     }
 }
