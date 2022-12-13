@@ -29,6 +29,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Document;
+use Opus\Common\Identifier;
+use Opus\Common\Repository;
+
 /**
  * Provides REST-API for OPUS 4.
  *
@@ -64,8 +68,50 @@ class ApiController extends Application_Controller_Action
             'doctypes' => $doctypes
         ];
 
-        $json = json_encode($response);
+        echo json_encode($response);
+    }
 
-        echo $json;
+    /**
+     * Checks if DOI is already present in repository.
+     *
+     * If a published document with the DOI exists, its document ID will be returned.
+     */
+    public function doicheckAction()
+    {
+        $doi = $this->getParam('doi');
+
+        if ($doi === null) {
+            // TODO return error message
+            echo json_encode([]);
+            return;
+        }
+
+        $response        = [];
+        $response['doi'] = $doi;
+        $doiExists       = false;
+
+        $identifier = Identifier::new();
+        $identifier->setType('doi');
+        $identifier->setValue($doi);
+
+        if (! $identifier->isDoiUnique()) {
+            $doiExists = true;
+
+            $finder = Repository::getInstance()->getDocumentFinder();
+            $finder->setIdentifierValue('doi', $doi);
+            $documentIds = $finder->getIds();
+
+            // there should be only one document with this DOI
+            // TODO handling multiple occurances?
+            $doc = Document::get($documentIds[0]);
+
+            if ($doc->getServerState() === Document::STATE_PUBLISHED) {
+                $response['docId'] = $doc->getId();
+            }
+        }
+
+        $response['doiExists'] = $doiExists;
+
+        echo json_encode($response);
     }
 }
