@@ -33,32 +33,47 @@
  */
 
 use Opus\Import\AbstractPackageReader;
+use Opus\Import\AdditionalEnrichments;
+use Opus\Import\ImportStatusDocument;
 use Opus\Import\TarPackageReader;
 use Opus\Import\ZipPackageReader;
 
 class Sword_Model_PackageHandler
 {
+    /** @var AdditionalEnrichments */
     private $additionalEnrichments;
 
+    /** @var string */
     private $packageType;
 
-    const PACKAGE_TYPE_ZIP = 'zip';
+    public const PACKAGE_TYPE_ZIP = 'zip';
 
-    const PACKAGE_TYPE_TAR = 'tar';
+    public const PACKAGE_TYPE_TAR = 'tar';
 
+    /**
+     * @param string $contentType
+     * @throws Exception
+     */
     public function __construct($contentType)
     {
         $this->setPackageType($contentType);
     }
 
+    /**
+     * @param AdditionalEnrichments $additionalEnrichments
+     */
     public function setAdditionalEnrichments($additionalEnrichments)
     {
         $this->additionalEnrichments = $additionalEnrichments;
     }
 
+    /**
+     * @param string $contentType
+     * @throws Exception
+     */
     private function setPackageType($contentType)
     {
-        if (is_null($contentType) || $contentType === false) {
+        if ($contentType === null || $contentType === false) {
             throw new Exception('Content-Type header is required');
         }
 
@@ -78,18 +93,18 @@ class Sword_Model_PackageHandler
      * Verarbeitet die mit dem SWORD-Request übergebene Paketdatei.
      *
      * @param string $payload der Inhalt der Paketdatei
-     * @return mixed
+     * @return ImportStatusDocument
      */
     public function handlePackage($payload)
     {
         $packageReader = $this->getPackageReader();
-        if (is_null($packageReader)) {
+        if ($packageReader === null) {
             // TODO improve error handling
             return null;
         }
 
         $tmpDirName = null;
-        $statusDoc = null;
+        $statusDoc  = null;
         try {
             $tmpDirName = $this->createTmpDir($payload);
             $this->savePackage($payload, $tmpDirName);
@@ -97,7 +112,7 @@ class Sword_Model_PackageHandler
             $statusDoc = $packageReader->readPackage($tmpDirName);
         } finally {
             // TODO copy file before cleanup if error occured
-            if (! is_null($tmpDirName)) {
+            if ($tmpDirName !== null) {
                 $this->cleanupTmpDir($tmpDirName);
             }
         }
@@ -113,7 +128,7 @@ class Sword_Model_PackageHandler
      */
     private function cleanupTmpDir($tmpDirName)
     {
-        $it = new RecursiveDirectoryIterator($tmpDirName, RecursiveDirectoryIterator::SKIP_DOTS);
+        $it    = new RecursiveDirectoryIterator($tmpDirName, RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
         foreach ($files as $file) {
             if ($file->isDir()) {
@@ -176,8 +191,8 @@ class Sword_Model_PackageHandler
     {
         $baseDirName = Application_Configuration::getInstance()->getTempPath()
             . DIRECTORY_SEPARATOR . md5($payload) . '-' . time() . '-' . rand(10000, 99999);
-        $suffix = 0;
-        $dirName = "$baseDirName-$suffix";
+        $suffix      = 0;
+        $dirName     = "$baseDirName-$suffix";
         while (is_readable($dirName)) {
             // add another suffix to make file name unique (even if collision events are not very likely)
             $suffix++;

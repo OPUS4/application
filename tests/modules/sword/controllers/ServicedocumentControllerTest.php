@@ -34,12 +34,14 @@
  */
 class Sword_ServicedocumentControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var DepositTestHelper */
     private $testHelper;
 
-    private $_credentials = 'sworduser:sworduserpwd';
+    /** @var string */
+    private $credentials = 'sworduser:sworduserpwd';
 
     public function setUp(): void
     {
@@ -82,7 +84,7 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
     public function testIndexActionWithValidPassword()
     {
         $this->testHelper->addImportCollection();
-        $authString = base64_encode($this->_credentials);
+        $authString = base64_encode($this->credentials);
         $this->getRequest()->setHeader('Authorization', 'Basic ' . $authString);
         $this->getRequest()->setMethod('GET');
         $this->dispatch('/sword/servicedocument/index');
@@ -93,7 +95,7 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
     public function testGetActionWithValidPassword()
     {
         $this->testHelper->addImportCollection();
-        $authString = base64_encode($this->_credentials);
+        $authString = base64_encode($this->credentials);
         $this->getRequest()->setHeader('Authorization', 'Basic ' . $authString);
         $this->getRequest()->setMethod('GET');
         $this->dispatch('/sword/servicedocument');
@@ -146,6 +148,9 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
         $this->checkServiceSubtree($root);
     }
 
+    /**
+     * @param DOMNodeList $root
+     */
     private function checkServiceSubtree($root)
     {
         $this->assertEquals(1, $root->length);
@@ -172,6 +177,9 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
         $this->checkWorkspaceSubtree($workspaceNode->childNodes);
     }
 
+    /**
+     * @param DOMNodeList $root
+     */
     private function checkWorkspaceSubtree($root)
     {
         $this->assertEquals(2, $root->length);
@@ -190,6 +198,9 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
         $this->checkCollectionSubtree($collectionNode->childNodes);
     }
 
+    /**
+     * @param DOMNodeList $root
+     */
     private function checkCollectionSubtree($root)
     {
         $this->assertEquals(8, $root->length);
@@ -210,6 +221,9 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
         $this->testHelper->assertNodeProperties(7, $root, 'dcterms:abstract', 'sword.collection.default.abstract');
     }
 
+    /**
+     * @param DOMNode $domNode
+     */
     private function checkAcceptPackagingNode($domNode)
     {
         $this->assertEquals('sword:acceptPackaging', $domNode->nodeName);
