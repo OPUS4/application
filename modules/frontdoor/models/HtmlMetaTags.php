@@ -42,31 +42,26 @@ use Opus\Common\DocumentInterface;
  */
 class Frontdoor_Model_HtmlMetaTags
 {
-    /**
-     * @var Zend_Config
-     */
+    /** @var Zend_Config */
     private $config;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $fullUrl;
 
     /**
      * Mapping of document types to meta tags types.
+     *
      * @var array
      */
     private $mapping;
 
     /**
-     * Frontdoor_Model_HtmlMetaTags constructor.
-     *
      * @param Zend_Config $config
-     * @param string $fullUrl
+     * @param string      $fullUrl
      */
     public function __construct($config, $fullUrl)
     {
-        $this->config = $config;
+        $this->config  = $config;
         $this->fullUrl = $fullUrl;
     }
 
@@ -98,10 +93,12 @@ class Frontdoor_Model_HtmlMetaTags
 
         $this->handleIdentifierDoi($document, $metas);
 
-        if ($this->isJournalPaper($document) ||
+        if (
+            $this->isJournalPaper($document) ||
             $this->isConferencePaper($document) ||
             $this->isWorkingPaper($document) ||
-            $this->isOther($document)) {
+            $this->isOther($document)
+        ) {
             $this->handleIdentifierIssn($document, $metas);
         }
 
@@ -167,13 +164,13 @@ class Frontdoor_Model_HtmlMetaTags
         $dateStr = null;
 
         $datePublished = $document->getPublishedDate();
-        if (! is_null($datePublished)) {
+        if ($datePublished !== null) {
             $dateStr = $datePublished->getDateTime()->format('Y-m-d');
         } else {
             $dateStr = $document->getPublishedYear();
         }
 
-        if (! is_null($dateStr)) {
+        if ($dateStr !== null) {
             $metas[] = ["DC.date", $dateStr];
             $metas[] = ["DC.issued", $dateStr];
             $metas[] = ["citation_date", $dateStr];
@@ -188,7 +185,7 @@ class Frontdoor_Model_HtmlMetaTags
     private function handleTitles($document, &$metas)
     {
         $subtitlesByLang = [];
-        $subtitles = $document->getTitleSub();
+        $subtitles       = $document->getTitleSub();
         if (! empty($subtitles)) {
             // Aufspaltung der Untertitel nach Sprache (eigentlich darf pro Sprache höchstens
             // ein Untertitel existieren)
@@ -224,7 +221,7 @@ class Frontdoor_Model_HtmlMetaTags
                 }
 
                 $helper = new Application_View_Helper_LanguageWebForm();
-                $lang = $helper->languageWebForm($lang);
+                $lang   = $helper->languageWebForm($lang);
 
                 $metas[] = ['DC.title', $titleValue, ['lang' => $lang]];
                 $metas[] = ['citation_title', $titleValue, ['lang' => $lang]];
@@ -257,9 +254,9 @@ class Frontdoor_Model_HtmlMetaTags
         foreach ($document->getTitleAbstract() as $abstract) {
             $abstractValue = trim($abstract->getValue());
             if ($abstractValue !== '') {
-                $lang = $abstract->getLanguage();
-                $helper = new Application_View_Helper_LanguageWebForm(); // TODO avoid object creation
-                $lang = $helper->languageWebForm($lang);
+                $lang    = $abstract->getLanguage();
+                $helper  = new Application_View_Helper_LanguageWebForm(); // TODO avoid object creation
+                $lang    = $helper->languageWebForm($lang);
                 $metas[] = ['DC.description', $abstractValue, ['lang' => $lang]];
                 $metas[] = ['description', $abstractValue, ['lang' => $lang]];
                 $metas[] = ['dcterms.abstract', $abstractValue, ['lang' => $lang]];
@@ -348,8 +345,8 @@ class Frontdoor_Model_HtmlMetaTags
     private function handleFrontdoorUrl($document, &$metas)
     {
         $frontdoorUrl = $this->fullUrl . '/frontdoor/index/index/docId/' . $document->getId();
-        $metas[] = ['DC.identifier', $frontdoorUrl];
-        $metas[] = ['citation_abstract_html_url', $frontdoorUrl];
+        $metas[]      = ['DC.identifier', $frontdoorUrl];
+        $metas[]      = ['citation_abstract_html_url', $frontdoorUrl];
     }
 
     /**
@@ -359,7 +356,7 @@ class Frontdoor_Model_HtmlMetaTags
     private function handleFulltextUrls($document, &$metas)
     {
         if (Application_Xslt::embargoHasPassed($document)) {
-            $config = $this->getConfig();
+            $config       = $this->getConfig();
             $baseUrlFiles = $this->fullUrl;
             if (isset($config, $config->deliver->url->prefix)) {
                 $baseUrlFiles .= $config->deliver->url->prefix;
@@ -368,9 +365,11 @@ class Frontdoor_Model_HtmlMetaTags
             }
 
             foreach ($document->getFile() as $file) {
-                if ((! $file->exists())
-                    or ($file->getVisibleInFrontdoor() !== '1')
-                    or (! Application_Xslt::fileAccessAllowed($file->getId()))) {
+                if (
+                    (! $file->exists())
+                    || ($file->getVisibleInFrontdoor() !== '1')
+                    || (! Application_Xslt::fileAccessAllowed($file->getId()))
+                ) {
                     continue;
                 }
 
@@ -388,7 +387,7 @@ class Frontdoor_Model_HtmlMetaTags
                         $keyName = 'citation_pdf_url';
                         break;
                 }
-                if (! is_null($keyName)) {
+                if ($keyName !== null) {
                     $metas[] = [$keyName, "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName()];
                 }
             }
@@ -405,14 +404,14 @@ class Frontdoor_Model_HtmlMetaTags
         foreach ($document->getSubject() as $subject) {
             $subjectValue = trim($subject->getValue());
             if ($subjectValue !== '') {
-                $metas[] = ['DC.subject', $subjectValue];
-                $metas[] = ['citation_keywords', $subjectValue];
+                $metas[]         = ['DC.subject', $subjectValue];
+                $metas[]         = ['citation_keywords', $subjectValue];
                 $subjectsArray[] = $subjectValue;
             }
         }
         if (! empty($subjectsArray)) {
             $subjectsArray = array_unique($subjectsArray);
-            $metas[] = ['keywords', implode(", ", $subjectsArray)];
+            $metas[]       = ['keywords', implode(", ", $subjectsArray)];
         }
     }
 
@@ -558,10 +557,14 @@ class Frontdoor_Model_HtmlMetaTags
         return $this->getMetatagsType($document) === 'other';
     }
 
+    /**
+     * @param DocumentInterface $document
+     * @return string
+     */
     public function getMetatagsType($document)
     {
         $mappingConfig = $this->getMappingConfig();
-        $docType = $document->getType();
+        $docType       = $document->getType();
         if (isset($mappingConfig[$docType])) {
             return $mappingConfig[$docType];
         } else {
@@ -569,11 +572,14 @@ class Frontdoor_Model_HtmlMetaTags
         }
     }
 
+    /**
+     * @return array
+     */
     public function getMappingConfig()
     {
         $config = $this->getConfig();
 
-        if (is_null($this->mapping) && isset($config)) {
+        if ($this->mapping === null && isset($config)) {
             $mapping = [];
 
             // load default mappings
@@ -592,10 +598,14 @@ class Frontdoor_Model_HtmlMetaTags
         return $this->mapping;
     }
 
+    /**
+     * @param Zend_Config $config
+     * @return array
+     */
     private function loadMapping($config)
     {
         $mapping = [];
-        $types = $config->toArray();
+        $types   = $config->toArray();
         foreach ($types as $metaTagType => $docTypes) {
             foreach ($types[$metaTagType] as $doctype) {
                 $mapping[$doctype] = $metaTagType;
@@ -604,11 +614,17 @@ class Frontdoor_Model_HtmlMetaTags
         return $mapping;
     }
 
+    /**
+     * @return Zend_Config
+     */
     public function getConfig()
     {
         return $this->config;
     }
 
+    /**
+     * @param Zend_Config $config
+     */
     public function setConfig($config)
     {
         $this->config = $config;

@@ -33,22 +33,18 @@ use Opus\Common\Mail\SendMail;
 
 /**
  * Controller for document recommendation starting from Frontdoor
- *
  */
 class Frontdoor_MailController extends Application_Controller_Action
 {
-
     /**
-     *
      * TODO: this action is currently untested and therefore not supported
-     *
      */
     public function indexAction()
     {
         throw new Application_Exception('currently not supported');
         /*
         $docId = $this->getRequest()->getParam('docId');
-        if (is_null($docId)) {
+        if ($docId === null) {
             throw new Application_Exception('missing parameter docId');
         }
 
@@ -85,9 +81,7 @@ class Frontdoor_MailController extends Application_Controller_Action
     }
 
     /**
-     *
      * TODO: this action is currently untested and therefore not supported
-     *
      */
     public function sendmailAction()
     {
@@ -107,7 +101,7 @@ class Frontdoor_MailController extends Application_Controller_Action
 
         $from = '';
         $from = $form->getValue('sender_mail');
-        if ($from == '') {
+        if ($from === '') {
             $config = Config::get();
             if (true === isset($config->mail->opus->address)) {
                 $from = $config->mail->opus->address;
@@ -145,18 +139,16 @@ class Frontdoor_MailController extends Application_Controller_Action
          */
     }
 
-
     /**
      * Send mail to author(s) of document.
      */
     public function toauthorAction()
     {
-
         $docId = $this->getRequest()->getParam('docId');
-        if (is_null($docId)) {
+        if ($docId === null) {
             throw new Application_Exception('missing parameter docId');
         }
-        if (is_Array($docId)) {
+        if (is_array($docId)) {
             $docId = end($docId);
         }
 
@@ -176,9 +168,10 @@ class Frontdoor_MailController extends Application_Controller_Action
         $form->setAction(
             $this->view->url(
                 [
-                    'module' => 'frontdoor',
+                    'module'     => 'frontdoor',
                     'controller' => 'mail',
-                    'action' => 'toauthor']
+                    'action'     => 'toauthor',
+                ]
             )
         );
         $form->setMethod('post');
@@ -186,10 +179,10 @@ class Frontdoor_MailController extends Application_Controller_Action
         $this->view->docId = $docId;
 
         if (! $this->getRequest()->isPost() || ! $form->isValid($this->getRequest()->getPost())) {
-            $this->view->form = $form;
+            $this->view->form   = $form;
             $this->view->author = $authors;
-            $this->view->type = $authorsModel->getDocument()->getType();
-            $this->view->title = $authorsModel->getDocument()->getTitleMain(0)->getValue();
+            $this->view->type   = $authorsModel->getDocument()->getType();
+            $this->view->title  = $authorsModel->getDocument()->getTitleMain(0)->getValue();
             return;
         }
 

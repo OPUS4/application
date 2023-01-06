@@ -35,33 +35,26 @@ use Opus\Common\Config;
 use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
-use Opus\Common\Log;
 use Opus\Common\Note;
 use Opus\Common\Title;
 
 /**
- * Class Frontdoor_IndexControllerTest.
- *
  * @covers Frontdoor_IndexController
  */
 class Frontdoor_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    /**
-     * Document to count on :)
-     *
-     * @var DocumentInterface
-     */
-    protected $_document = null;
-    protected $_document_col = null;
+    /** @var DocumentInterface  Document to count on :) */
+    protected $document;
+
+    /** @var DocumentInterface */
+    protected $documentCol;
 
     /**
      * Provide clean documents and statistics table and remove temporary files.
      * Create document for counting.
-     *
-     * @return void
      */
     public function setUp(): void
     {
@@ -71,44 +64,44 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $path = Config::getInstance()->getTempPath() . '~localstat.xml';
         @unlink($path);
 
-        $this->_document = $this->createTestDocument();
-        $this->_document->setType("doctoral_thesis");
+        $this->document = $this->createTestDocument();
+        $this->document->setType("doctoral_thesis");
 
         $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('Titel');
-        $this->_document->addTitleMain($title);
+        $this->document->addTitleMain($title);
 
         $title = Title::new();
         $title->setLanguage('eng');
         $title->setValue('Title');
-        $this->_document->addTitleMain($title);
+        $this->document->addTitleMain($title);
 
-        $this->_document->store();
+        $this->document->store();
 
         //setting server globals
-        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+        $_SERVER['REMOTE_ADDR']     = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'bla';
         $_SERVER['REDIRECT_STATUS'] = 200;
 
         // create collection test document
-        $this->_document_col = $this->createTestDocument();
-        $this->_document_col->addCollection(Collection::get(40)); // invisible collection
-        $this->_document_col->addCollection(Collection::get(16214)); // visible collection with invisible collection role
-        $this->_document_col->addCollection(Collection::get(1031)); // visible collection with visible collection role
+        $this->documentCol = $this->createTestDocument();
+        $this->documentCol->addCollection(Collection::get(40)); // invisible collection
+        $this->documentCol->addCollection(Collection::get(16214)); // visible collection with invisible collection role
+        $this->documentCol->addCollection(Collection::get(1031)); // visible collection with visible collection role
 
         // collection role ID = 10 (sichbar)
-        $this->_document_col->addCollection(Collection::get(16136)); // versteckte Collection (Role = 10)
-        $this->_document_col->addCollection(Collection::get(15991)); // sichbare Collection (Role = 10);
-        $this->_document_col->setServerState('published');
-        $this->_document_col->store();
+        $this->documentCol->addCollection(Collection::get(16136)); // versteckte Collection (Role = 10)
+        $this->documentCol->addCollection(Collection::get(15991)); // sichbare Collection (Role = 10);
+        $this->documentCol->setServerState('published');
+        $this->documentCol->store();
     }
 
     public function testIndexActionOnPublished()
     {
-        $this->_document->setServerState('published')->store();
-        $doc_id = $this->_document->getId();
-        $this->dispatch('/frontdoor/index/index/docId/' . $doc_id);
+        $this->document->setServerState('published')->store();
+        $docId = $this->document->getId();
+        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
 
         $this->assertResponseCode(200);
         $this->assertController('index');
@@ -121,9 +114,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionOnDeleted()
     {
-        $this->_document->setServerState('deleted')->store();
-        $doc_id = $this->_document->getId();
-        $this->dispatch('/frontdoor/index/index/docId/' . $doc_id);
+        $this->document->setServerState('deleted')->store();
+        $docId = $this->document->getId();
+        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
 
         $this->assertResponseCode(410);
         $this->assertController('index');
@@ -135,9 +128,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionOnUnpublished()
     {
-        $this->_document->setServerState('unpublished')->store();
-        $doc_id = $this->_document->getId();
-        $this->dispatch('/frontdoor/index/index/docId/' . $doc_id);
+        $this->document->setServerState('unpublished')->store();
+        $docId = $this->document->getId();
+        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
 
         $this->assertResponseCode(403);
         $this->assertController('index');
@@ -149,9 +142,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionOnTemporary()
     {
-        $this->_document->setServerState('temporary')->store();
-        $doc_id = $this->_document->getId();
-        $this->dispatch('/frontdoor/index/index/docId/' . $doc_id);
+        $this->document->setServerState('temporary')->store();
+        $docId = $this->document->getId();
+        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
 
         $this->assertResponseCode(403);
         $this->assertController('index');
@@ -163,8 +156,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionOnNonExistent()
     {
-        $doc_id = $this->_document->getId();
-        $this->dispatch('/frontdoor/index/index/docId/' . $doc_id . $doc_id . '100');
+        $docId = $this->document->getId();
+        $this->dispatch('/frontdoor/index/index/docId/' . $docId . $docId . '100');
 
         $this->assertResponseCode(404);
         $this->assertController('index');
@@ -180,11 +173,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testMapopus3Action()
     {
-        $opus3_id = 'foobar-' . rand();
-        $this->_document->addIdentifierOpus3()->setValue($opus3_id);
-        $doc_id = $this->_document->store();
+        $opus3Id = 'foobar-' . rand();
+        $this->document->addIdentifierOpus3()->setValue($opus3Id);
+        $docId = $this->document->store();
 
-        $this->dispatch('/frontdoor/index/mapopus3/oldId/' . $opus3_id);
+        $this->dispatch('/frontdoor/index/mapopus3/oldId/' . $opus3Id);
 
         $this->assertResponseCode(302);
         $this->assertModule('frontdoor');
@@ -192,10 +185,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertAction('mapopus3');
 
         $response = $this->getResponse();
-        $headers = $response->getHeaders();
+        $headers  = $response->getHeaders();
 
         $this->assertEquals('Location', $headers[0]['name']);
-        $this->assertStringEndsWith('/rewrite/index/id/type/opus3-id/value/' . $opus3_id, $headers[0]['value']);
+        $this->assertStringEndsWith('/rewrite/index/id/type/opus3-id/value/' . $opus3Id, $headers[0]['value']);
 
         $this->checkForBadStringsInHtml($response->getBody());
     }
@@ -215,12 +208,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains('<td><em class="data-marker"/></td>', $body);
     }
 
-    /*
+    /**
      * Regression test for OPUSVIER-2165
      */
     public function testFrontdoorTitleRespectsDocumentLanguageDeu()
     {
-        $docId = $this->_document->getId();
+        $docId = $this->document->getId();
 
         $doc = Document::get($docId);
         $doc->setLanguage('deu');
@@ -238,7 +231,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testFrontdoorTitleRespectsDocumentLanguageEng()
     {
-        $docId = $this->_document->getId();
+        $docId = $this->document->getId();
 
         $doc = Document::get($docId);
         $doc->setLanguage('eng');
@@ -256,11 +249,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      *
      * if database does not contain a title in the document's language,
      * the first title is used as page title
-     *
      */
     public function testFrontdoorTitleRespectsDocumentLanguageWithoutCorrespondingTitle()
     {
-        $docId = $this->_document->getId();
+        $docId = $this->document->getId();
 
         $doc = Document::get($docId);
         $doc->setLanguage('fra');
@@ -281,7 +273,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testFrontdoorTitleRespectsDocumentLanguageMultipleCandidates()
     {
-        $docId = $this->_document->getId();
+        $docId = $this->document->getId();
 
         $doc = Document::get($docId);
         $doc->setLanguage('deu');
@@ -301,9 +293,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testIdentifierUrlIsHandledProperlyInFrontdoorForNonProtocolURL()
     {
-        $d = Document::get('91');
+        $d           = Document::get('91');
         $identifiers = $d->getIdentifierUrl();
-        $identifier = $identifiers[0];
+        $identifier  = $identifiers[0];
         $this->assertEquals('www.myexampledomain.de/myexamplepath', $identifier->getValue());
         $this->dispatch('/frontdoor/index/index/docId/91');
         $this->assertEquals(2, substr_count($this->getResponse()->getBody(), 'http://www.myexampledomain.de/myexamplepath'));
@@ -314,9 +306,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testIdentifierUrlIsHandledProperlyInFrontdoorForProtocolURL()
     {
-        $d = Document::get('92');
+        $d           = Document::get('92');
         $identifiers = $d->getIdentifierUrl();
-        $identifier = $identifiers[0];
+        $identifier  = $identifiers[0];
         $this->assertEquals('http://www.myexampledomain.de/myexamplepath', $identifier->getValue());
         $this->dispatch('/frontdoor/index/index/docId/92');
         $this->assertEquals(2, substr_count($this->getResponse()->getBody(), 'http://www.myexampledomain.de/myexamplepath'));
@@ -327,14 +319,14 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testUrlEscapedFileNameDoc1()
     {
-        $d = Document::get(1);
+        $d             = Document::get(1);
         $filePathnames = [];
         foreach ($d->getFile() as $file) {
             $filePathnames[] = $file->getPathName();
         }
 
         $filenameNormal = 'asis-hap.pdf';
-        $filenameWeird = 'asis-hap_\'.pdf';
+        $filenameWeird  = 'asis-hap_\'.pdf';
         $this->assertContains($filenameNormal, $filePathnames, "testdata changed!");
         $this->assertContains($filenameWeird, $filePathnames, "testdata changed!");
 
@@ -351,14 +343,14 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testUrlEscapedFileNameDoc147()
     {
-        $d = Document::get(147);
+        $d             = Document::get(147);
         $filePathnames = [];
         foreach ($d->getFile() as $file) {
             $filePathnames[] = $file->getPathName();
         }
 
         $filenameNormal = 'special-chars-%-"-#-&.pdf';
-        $filenameWeird = "'many'  -  spaces  and  quotes.pdf";
+        $filenameWeird  = "'many'  -  spaces  and  quotes.pdf";
         $this->assertContains($filenameNormal, $filePathnames, "testdata changed!");
         $this->assertContains($filenameWeird, $filePathnames, "testdata changed!");
 
@@ -387,7 +379,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testSubjectSortOrderAlphabetical()
     {
         $this->adjustConfiguration([
-            'frontdoor' => ['subjects' => ['alphabeticalSorting' => self::CONFIG_VALUE_TRUE]]
+            'frontdoor' => ['subjects' => ['alphabeticalSorting' => self::CONFIG_VALUE_TRUE]],
         ]);
 
         // frontdoor.subjects.alphabeticalSorting
@@ -404,11 +396,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testSeries149InVisible()
     {
-        $d = Document::get(149);
-        $seriesIds = [];
+        $d             = Document::get(149);
+        $seriesIds     = [];
         $seriesNumbers = [];
         foreach ($d->getSeries() as $series) {
-            $seriesIds[] = $series->getModel()->getId();
+            $seriesIds[]     = $series->getModel()->getId();
             $seriesNumbers[] = $series->getNumber();
         }
 
@@ -435,13 +427,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testUrlEncodedAuthorNamesDoc150()
     {
-        $d = Document::get(150);
+        $d          = Document::get(150);
         $firstNames = [];
-        $lastNames = [];
+        $lastNames  = [];
 
         foreach ($d->getPersonAuthor() as $author) {
             $firstNames[] = $author->getFirstName();
-            $lastNames[] = $author->getLastName();
+            $lastNames[]  = $author->getLastName();
         }
 
         $this->assertContains('J\"ohn', $firstNames, "testdata changed!");
@@ -463,9 +455,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->adjustConfiguration([
             'printOnDemand' => [
-                'url' => 'http://localhost/',
-                'button' => ''
-            ]
+                'url'    => 'http://localhost/',
+                'button' => '',
+            ],
         ]);
 
         $this->dispatch('/frontdoor/index/index/docId/1');
@@ -479,9 +471,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->adjustConfiguration([
             'printOnDemand' => [
-                'url' => 'http://localhost/',
-                'button' => ''
-            ]
+                'url'    => 'http://localhost/',
+                'button' => '',
+            ],
         ]);
 
         $this->dispatch('/frontdoor/index/index/docId/91');
@@ -626,7 +618,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651NameNumber()
     {
-        $role = CollectionRole::get(7);
+        $role             = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Name,Number');
         $role->store();
@@ -649,7 +641,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651NumberName()
     {
-        $role = CollectionRole::get(7);
+        $role             = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Number,Name');
         $role->store();
@@ -672,7 +664,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651Name()
     {
-        $role = CollectionRole::get(7);
+        $role             = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Name');
         $role->store();
@@ -696,7 +688,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testOPUSVIER2651Number()
     {
-        $role = CollectionRole::get(7);
+        $role             = CollectionRole::get(7);
         $displayFrontdoor = $role->getDisplayFrontdoor();
         $role->setDisplayFrontdoor('Number');
         $role->store();
@@ -719,7 +711,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $this->dispatch('/frontdoor/index/index/docId/' . $this->_document_col->getId());
+        $this->dispatch('/frontdoor/index/index/docId/' . $this->documentCol->getId());
 
         // Sichtbare Collection mit sichtbarer CollectionRole wird angezeigt (Visible = 1, RoleVisibleFrontdoor = true)
         $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'CCS-Classification:');
@@ -730,7 +722,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $this->dispatch('/frontdoor/index/index/docId/' . $this->_document_col->getId());
+        $this->dispatch('/frontdoor/index/index/docId/' . $this->documentCol->getId());
 
         // Unsichtbare CollectionRole (Visible = 0, RoleVisibleFrontdoor = false)
         $this->assertNotQueryContentContains('table.result-data.frontdoordata th.name', 'invisible-collection:');
@@ -740,7 +732,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $this->dispatch('/frontdoor/index/index/docId/' . $this->_document_col->getId());
+        $this->dispatch('/frontdoor/index/index/docId/' . $this->documentCol->getId());
 
         // Unsichtbare Collection
         $this->assertNotQueryContentContains('td', '28 Christliche Konfessionen');
@@ -756,7 +748,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $this->dispatch('/frontdoor/index/index/docId/' . $this->_document_col->getId());
+        $this->dispatch('/frontdoor/index/index/docId/' . $this->documentCol->getId());
 
         // CollectionRole wird angezeigt
         $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'series:');
@@ -938,12 +930,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testFilesInCustomSortOrder()
     {
-        $config = $this->getConfig();
+        $config                                  = $this->getConfig();
         $config->frontdoor->files->customSorting = '1';
 
         $this->dispatch('/frontdoor/index/index/docId/155');
 
-        $body = $this->getResponse()->getBody();
+        $body          = $this->getResponse()->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt');
         $positionFile2 = strpos($body, 'test.txt');
         $positionFile3 = strpos($body, 'test.pdf');
@@ -957,12 +949,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
      */
     public function testFilesInAlphabeticSortOrder()
     {
-        $config = $this->getConfig();
+        $config                                  = $this->getConfig();
         $config->frontdoor->files->customSorting = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/frontdoor/index/index/docId/155');
 
-        $body = $this->getResponse()->getBody();
+        $body          = $this->getResponse()->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt');
         $positionFile2 = strpos($body, 'test.pdf');
         $positionFile3 = strpos($body, 'test.txt');
@@ -980,7 +972,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $functions = ['addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleAbstract'];
         foreach ($functions as $function) {
-            $doc = $this->createTestDocument();
+            $doc   = $this->createTestDocument();
             $title = Title::new();
             $title->setLanguage('deu');
             $title->setValue('deutscher Titel');
@@ -1025,7 +1017,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $functions = ['addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleAbstract'];
         foreach ($functions as $function) {
-            $doc = $this->createTestDocument();
+            $doc   = $this->createTestDocument();
             $title = Title::new();
             $title->setLanguage('deu');
             $title->setValue('deutscher Titel');
@@ -1345,8 +1337,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
         $this->assertContains(
-            'http://scholar.google.de/scholar?hl=de&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe' .
-            '&amp;as_ylo=2007&amp;as_yhi=2007',
+            'http://scholar.google.de/scholar?hl=de&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe'
+            . '&amp;as_ylo=2007&amp;as_yhi=2007',
             $body
         );
     }
@@ -1358,8 +1350,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
         $this->assertContains(
-            'http://scholar.google.de/scholar?hl=en&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe' .
-            '&amp;as_ylo=2007&amp;as_yhi=2007',
+            'http://scholar.google.de/scholar?hl=en&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe'
+            . '&amp;as_ylo=2007&amp;as_yhi=2007',
             $body
         );
     }
@@ -1367,7 +1359,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testGoogleScholarOpenInNewWindowEnabled()
     {
         $this->adjustConfiguration([
-            'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
+            'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE],
         ]);
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1378,7 +1370,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testGoogleScholarOpenInNewWindowDisabled()
     {
         $this->adjustConfiguration([
-            'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
+            'googleScholar' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE],
         ]);
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1389,7 +1381,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testShowDocumentWithFileWithoutLanguage()
     {
         $this->markTestIncomplete('OPUSVIER-3401');
-        $doc = $this->createTestDocument();
+        $doc  = $this->createTestDocument();
         $file = $this->createOpusTestFile('nolang.pdf');
         $doc->addFile($file);
         $docId = $doc->store();
@@ -1400,7 +1392,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testTwitterOpenInNewWindowEnabled()
     {
         $this->adjustConfiguration([
-            'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE]
+            'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_TRUE],
         ]);
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1411,7 +1403,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testTwitterOpenInNewWindowDisabled()
     {
         $this->adjustConfiguration([
-            'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE]
+            'twitter' => ['openInNewWindow' => self::CONFIG_VALUE_FALSE],
         ]);
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
@@ -1423,9 +1415,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $filter = new LogFilter();
 
-        $logger = Log::get();
+        $logger = $this->getLogger();
         $logger->addFilter($filter);
 
+        // TODO LAMINAS assert fails on some systems (order of tests?) - make more robust
         $this->assertEquals(7, $logger->getLevel(), 'Log level should be 7 for test.');
 
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -1438,7 +1431,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
             }
         }
 
-        $output = \Zend_Debug::dump($failedTranslations, null, false);
+        $output = Zend_Debug::dump($failedTranslations, null, false);
 
         // until all messages can be prevented less than 20 is good enough
         $this->assertLessThanOrEqual(1, count($failedTranslations), $output);
@@ -1460,7 +1453,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
         $this->adjustConfiguration([
-            'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_TRUE]]
+            'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_TRUE]],
         ]);
 
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -1472,7 +1465,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testBelongsToBibliographyTurnedOff()
     {
         $this->adjustConfiguration([
-            'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_FALSE]]
+            'frontdoor' => ['metadata' => ['BelongsToBibliography' => self::CONFIG_VALUE_FALSE]],
         ]);
 
         $this->dispatch('/frontdoor/index/index/docId/146');

@@ -33,18 +33,20 @@ use Opus\Common\Person;
 use Opus\Common\Title;
 
 /**
- * Class Frontdoor_MailControllerTest.
- *
  * @covers Frontdoor_MailController
  */
 class Frontdoor_MailControllerTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu', 'translation'];
 
+    /** @var int */
     private $documentId;
 
+    /** @var int */
     private $authorDocumentId;
+
+    /** @var int */
     private $authorId;
 
     public function setUp(): void
@@ -78,8 +80,8 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
         $this->authorId = $author->store();
         $this->assertNotNull($this->authorId);
 
-        $link_person = $document->addPersonAuthor($author);
-        $link_person->setAllowEmailContact('1');
+        $linkPerson = $document->addPersonAuthor($author);
+        $linkPerson->setAllowEmailContact('1');
 
         $this->authorDocumentId = $document->store();
         $this->assertNotNull($this->authorDocumentId);
