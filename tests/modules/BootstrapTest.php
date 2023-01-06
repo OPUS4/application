@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,30 +25,27 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class BootstrapTest extends ControllerTestCase
 {
-
     public function testBootstrap()
     {
         $this->markTestSkipped();
 
-        $count = 0;
+        $count      = 0;
         $iterations = 50;
-        $runtime = microtime(true);
+        $runtime    = microtime(true);
         while (true) {
             $count++;
             $this->setUp();
             if ($count % $iterations === 0) {
-                $delta = (microtime(true) - $runtime) / $iterations;
-                $mem_now = round(memory_get_usage() / 1024 / 1024);
-                $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
-                echo date('Y-m-d H:i:s') . " memory $mem_now MB, peak memory $mem_peak MB\n";
+                $delta   = (microtime(true) - $runtime) / $iterations;
+                $memNow  = round(memory_get_usage() / 1024 / 1024);
+                $memPeak = round(memory_get_peak_usage() / 1024 / 1024);
+                echo date('Y-m-d H:i:s') . " memory $memNow MB, peak memory $memPeak MB\n";
                 echo "runtime per iteration (after $count iterations) (sec): $delta\n";
                 $runtime = microtime(true);
             }

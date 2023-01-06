@@ -31,26 +31,27 @@
 
 /**
  * Tests language resources across modules.
- *
- * @author Jens Schwidder <schwidder@zib.de>
  */
 class LanguageTest extends ControllerTestCase
 {
-
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
         $this->verifyCommandAvailable('xmllint');
     }
 
+    /**
+     * @return array
+     */
     public function getTmxFiles()
     {
-        $dir = APPLICATION_PATH . '/modules';
-        $DirIter = new RecursiveDirectoryIterator($dir);
-        $Iterator = new RecursiveIteratorIterator($DirIter);
-        $Regex = new RegexIterator($Iterator, '/^.+\.tmx$/i', RecursiveRegexIterator::GET_MATCH);
+        $dir      = APPLICATION_PATH . '/modules';
+        $dirIter  = new RecursiveDirectoryIterator($dir);
+        $iterator = new RecursiveIteratorIterator($dirIter);
+        $regex    = new RegexIterator($iterator, '/^.+\.tmx$/i', RecursiveRegexIterator::GET_MATCH);
 
         $files = [];
-        foreach ($Regex as $file) {
+        foreach ($regex as $file) {
             $files[] = [$file[0]];
         }
 
@@ -59,6 +60,7 @@ class LanguageTest extends ControllerTestCase
 
     /**
      * @dataProvider getTmxFiles
+     * @param string $filePath
      */
     public function testTmxFileValid($filePath)
     {

@@ -31,7 +31,7 @@
 
 class JavascriptTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'mainMenu', 'translation'];
 
     public function setUp(): void

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,21 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Application
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Test cases to load all class files.
- *
- * @package Application
- * @category Tests
- *
- * @group RequireTest
  *
  * @coversNothing
  *
@@ -48,7 +40,6 @@
  */
 class RequireTest extends ControllerTestCase
 {
-
     /**
      * Data provider for all classes which should be loadable.
      *
@@ -58,13 +49,13 @@ class RequireTest extends ControllerTestCase
     {
         $modulesPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules';
 
-        $cmd = "find $modulesPath -type f -iname \"*php\"";
+        $cmd        = "find $modulesPath -type f -iname \"*php\"";
         $classFiles = [];
         exec($cmd, $classFiles);
 
         $blacklist = [
             'statistic/models/StatisticGraph',
-            'statistic/models/StatisticGraphThumb'
+            'statistic/models/StatisticGraphThumb',
         ];
 
         $checkClassFiles = [];
@@ -72,10 +63,10 @@ class RequireTest extends ControllerTestCase
             foreach ($blacklist as $excluded) {
                 if (strstr($file, $excluded)) {
                     $file = null;
-                    continue;
+                    break;
                 }
             }
-            if (! is_null($file)) {
+            if ($file !== null) {
                 $checkClassFiles[] = [$file];
             }
         }
@@ -89,9 +80,10 @@ class RequireTest extends ControllerTestCase
      * code coverage report.
      *
      * @dataProvider serverClassesDataProvider
+     * @param string $file
      */
     public function testRequire($file)
     {
-        require_once($file);
+        require_once $file;
     }
 }
