@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -39,7 +38,7 @@
  */
 class AuthControllerTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'mainMenu', 'translation'];
 
     public function testIndexAction()
@@ -63,7 +62,7 @@ class AuthControllerTest extends ControllerTestCase
         $this->dispatch('/auth/index/rmodule/home/rcontroller/index/raction/index');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $treffer = preg_match('/<input.*name="hash".*value="(.*?)".*\/>/', $response->getBody(), $matches);
+        $treffer  = preg_match('/<input.*name="hash".*value="(.*?)".*\/>/', $response->getBody(), $matches);
         $this->assertEquals(1, $treffer);
     }
 
@@ -82,16 +81,16 @@ class AuthControllerTest extends ControllerTestCase
         $this->dispatch('/auth/index/rmodule/home/rcontroller/index/raction/index');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $treffer = preg_match('/<input.*name="hash".*value="(.*?)".*\/>/', $response->getBody(), $matches);
+        $treffer  = preg_match('/<input.*name="hash".*value="(.*?)".*\/>/', $response->getBody(), $matches);
         $this->assertEquals(1, $treffer);
         $hash = $matches[1];
         $this->resetRequest();
         $this->request
             ->setMethod('POST')
             ->setPost([
-                'hash' => $hash,
-                'login' => 'admin',
-                'password' => 'adminadmin'
+                'hash'     => $hash,
+                'login'    => 'admin',
+                'password' => 'adminadmin',
             ]);
         $this->dispatch('/auth/login/rmodule/home/rcontroller/index/raction/index');
         $this->assertRedirect('/home/index/index');
@@ -106,7 +105,7 @@ class AuthControllerTest extends ControllerTestCase
         $this->dispatch('/auth/logout/rmodule/home/rcontroller/index/raction/index');
         $this->assertResponseLocationHeader($this->response, '/home');
         $this->assertResponseCode('302');
-        $this->assertNull(\Zend_Auth::getInstance()->getIdentity());
+        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
     }
 
     public function testLogoutActionAsAnonymous()
@@ -114,7 +113,7 @@ class AuthControllerTest extends ControllerTestCase
         $this->dispatch('/auth/logout/rmodule/home/rcontroller/index/raction/index');
         $this->assertResponseLocationHeader($this->response, '/home');
         $this->assertResponseCode('302');
-        $this->assertNull(\Zend_Auth::getInstance()->getIdentity());
+        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
     }
 
     public function testLogoutActionFromAdministrationModule()
@@ -124,7 +123,7 @@ class AuthControllerTest extends ControllerTestCase
         $this->assertNotContains('Argument 4 passed to Zend_Controller_Action_Helper_Redirector::direct() must be an array, null given', $this->response->outputBody());
         $this->assertResponseLocationHeader($this->response, '/home');
         $this->assertResponseCode('302');
-        $this->assertNull(\Zend_Auth::getInstance()->getIdentity());
+        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
     }
 
     public function testLogoutActionFromAnyModule()
@@ -133,6 +132,6 @@ class AuthControllerTest extends ControllerTestCase
         $this->dispatch('/auth/logout/rmodule/any/rcontroller/index/raction/index');
         $this->assertResponseLocationHeader($this->response, '/home');
         $this->assertResponseCode('302');
-        $this->assertNull(\Zend_Auth::getInstance()->getIdentity());
+        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
     }
 }
