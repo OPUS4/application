@@ -38,10 +38,11 @@ use Opus\Common\Document;
  */
 class Review_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    private $documentId = null;
+    /** @var int */
+    private $documentId;
 
     public function setUp(): void
     {
@@ -94,7 +95,7 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->request
             ->setMethod('POST')
             ->setPost([
-                'selected' => ['1', $this->documentId],
+                'selected'     => ['1', $this->documentId],
                 'buttonSubmit' => 'buttonSubmit',
             ]);
         $this->dispatch('/review/index/index');
@@ -140,7 +141,7 @@ class Review_IndexControllerTest extends ControllerTestCase
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
-                'sureno' => 'no',
+                'sureno'   => 'no',
             ]);
         $this->dispatch('/review/index/clear');
 
@@ -163,7 +164,7 @@ class Review_IndexControllerTest extends ControllerTestCase
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
-                'sureyes' => 'yes',
+                'sureyes'  => 'yes',
             ]);
         $this->dispatch('/review/index/clear');
 
@@ -208,7 +209,7 @@ class Review_IndexControllerTest extends ControllerTestCase
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
-                'sureno' => 'no',
+                'sureno'   => 'no',
             ]);
         $this->dispatch('/review/index/reject');
 
@@ -231,7 +232,7 @@ class Review_IndexControllerTest extends ControllerTestCase
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
-                'sureyes' => 'yes',
+                'sureyes'  => 'yes',
             ]);
         $this->dispatch('/review/index/reject');
 
