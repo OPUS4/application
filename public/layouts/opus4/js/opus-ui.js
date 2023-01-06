@@ -16,7 +16,7 @@ $(function () {
 
         _createAutocomplete: function (elemName, elemId) {
             var selected = this.element.children(":selected"),
-                value = selected.val() ? selected.text() : "";
+                value    = selected.val() ? selected.text() : "";
 
             this.input = $("<input>")
                 .appendTo(this.wrapper)
@@ -48,7 +48,7 @@ $(function () {
         },
 
         _createShowAllButton: function () {
-            var input = this.input,
+            var input   = this.input,
                 wasOpen = false;
 
             $("<a>")

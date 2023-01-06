@@ -30,7 +30,7 @@ $(document).ready(function () {
      * The code here fixes a menu bar at the top of the screen when the user scrolls down, in order to keep the functions
      * always accessible.
      */
-    var $actionbox = $('.fixedMenubar');
+    var $actionbox       = $('.fixedMenubar');
     var $actionboxSpacer = $('<div />', {
         "class": "actionbox-spacer",
         "height": $actionbox.outerHeight()
@@ -40,7 +40,7 @@ $(document).ready(function () {
             if (! $actionbox.hasClass('fixed') && $(window).scrollTop() > $actionbox.offset().top) {
                 $actionbox.before($actionboxSpacer);
                 $actionbox.addClass("fixed");
-            } else if ($actionbox.hasClass('fixed')  && $(window).scrollTop() < $actionboxSpacer.offset().top) {
+            } else if ($actionbox.hasClass('fixed') && $(window).scrollTop() < $actionboxSpacer.offset().top) {
                 $actionbox.removeClass("fixed");
                 $actionboxSpacer.remove();
             }
@@ -120,7 +120,7 @@ $(document).ready(function () {
     $("select.enrichmentKeyName").change(function () {
         var that = $(this);
 
-        var name = that.attr("id");
+        var name         = that.attr("id");
         var inputElement = $("#" + name.replace("KeyName", "Value"));
         if (inputElement) {
             // Wert des Formularfelds löschen, so dass beim Umschalten des EnrichmentKeys kein Wert erscheint

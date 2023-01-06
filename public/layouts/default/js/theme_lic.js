@@ -26,9 +26,9 @@
 $(document).ready(function () {
     // Placeholder support for old browsers
     // ! http://mths.be/placeholder v1.8.7 by @mathias
-    var isInputSupported = 'placeholder' in document.createElement('input'),
+    var isInputSupported    = 'placeholder' in document.createElement('input'),
         isTextareaSupported = 'placeholder' in document.createElement('textarea'),
-        prototype = $.fn,
+        prototype           = $.fn,
         placeholder;
 
     if (isInputSupported && isTextareaSupported) {
@@ -47,7 +47,7 @@ $(document).ready(function () {
                 .trigger('blur.placeholder').end();
         };
 
-        placeholder.input = isInputSupported;
+        placeholder.input    = isInputSupported;
         placeholder.textarea = isTextareaSupported;
 
         $(function () {
@@ -70,7 +70,7 @@ $(document).ready(function () {
     function args(elem)
     {
         // Return an object of element attributes
-        var newAttrs = {},
+        var newAttrs      = {},
             rinlinejQuery = /^jQuery\d+$/;
         $.each(elem.attributes, function (i, attr) {
             if (attr.specified && ! rinlinejQuery.test(attr.name)) {
@@ -95,9 +95,9 @@ $(document).ready(function () {
     function setPlaceholder()
     {
         var $replacement,
-            $input = $(this),
+            $input     = $(this),
             $origInput = $input,
-            id = this.id;
+            id         = this.id;
         if ($input.val() === '') {
             if ($input.is(':password')) {
                 if (! $input.data('placeholder-textinput')) {
