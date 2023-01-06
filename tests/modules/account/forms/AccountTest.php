@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\Account;
+use Opus\Common\AccountInterface;
 use Opus\Common\Security\SecurityException;
 
 /**
@@ -37,12 +38,14 @@ use Opus\Common\Security\SecurityException;
  */
 class Account_Form_AccountTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
-    private $account = null;
+    /** @var AccountInterface  */
+    private $account;
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
         try {
@@ -57,8 +60,9 @@ class Account_Form_AccountTest extends ControllerTestCase
         $this->account = $account;
     }
 
-    public function tearDown(): void    {
-        if (! is_null($this->account)) {
+    public function tearDown(): void
+    {
+        if ($this->account !== null) {
             $this->account->delete();
         }
 
@@ -96,10 +100,10 @@ class Account_Form_AccountTest extends ControllerTestCase
         $this->assertNotNull($form);
 
         $postData = [
-            'username' => 'admin',
-            'roleguest' => '1',
-            'password' => 'notchanged',
-            'confirmPassword' => 'notchanged'
+            'username'        => 'admin',
+            'roleguest'       => '1',
+            'password'        => 'notchanged',
+            'confirmPassword' => 'notchanged',
         ];
 
         $this->assertFalse($form->isValid($postData));
@@ -107,17 +111,17 @@ class Account_Form_AccountTest extends ControllerTestCase
 
     public function testChangedLoginNameValidationNewLoginName()
     {
-        $form = new Account_Form_Account();
+        $form    = new Account_Form_Account();
         $account = Account::fetchAccountByLogin('user');
         $form->populateFromModel($account);
 
         $this->assertNotNull($form);
 
         $postData = [
-            'username' => 'newuser',
+            'username'  => 'newuser',
             'roleguest' => '1',
-            'password' => 'notchanged',
-            'confirm' => 'notchanged'
+            'password'  => 'notchanged',
+            'confirm'   => 'notchanged',
         ];
 
         $this->assertTrue($form->isValid($postData));
@@ -125,7 +129,7 @@ class Account_Form_AccountTest extends ControllerTestCase
 
     public function testEditValidationSameAccount()
     {
-        $form = new Account_Form_Account();
+        $form    = new Account_Form_Account();
         $account = Account::fetchAccountByLogin('user');
         $form->populateFromModel($account);
 
@@ -133,11 +137,11 @@ class Account_Form_AccountTest extends ControllerTestCase
         $this->assertEquals('user', $form->getElement('username')->getValue());
 
         $postData = [
-            'username' => 'user',
-            'oldLogin' => 'user', // added by AccountController based on ID
+            'username'  => 'user',
+            'oldLogin'  => 'user', // added by AccountController based on ID
             'roleguest' => '1',
-            'password' => 'notchanged',
-            'confirm' => 'notchanged'
+            'password'  => 'notchanged',
+            'confirm'   => 'notchanged',
         ];
 
         $this->assertTrue($form->isValid($postData));
@@ -145,15 +149,15 @@ class Account_Form_AccountTest extends ControllerTestCase
 
     public function testValidationMissmatchedPasswords()
     {
-        $form = new Account_Form_Account();
+        $form    = new Account_Form_Account();
         $account = Account::fetchAccountByLogin('user');
         $form->populateFromModel($account);
 
         $postData = [
-            'username' => 'user',
+            'username'  => 'user',
             'roleguest' => '1',
-            'password' => 'password',
-            'confirm' => 'different'
+            'password'  => 'password',
+            'confirm'   => 'different',
         ];
 
         $this->assertFalse($form->isValid($postData));
@@ -166,16 +170,16 @@ class Account_Form_AccountTest extends ControllerTestCase
 
     public function testValidationBadEmail()
     {
-        $form = new Account_Form_Account();
+        $form    = new Account_Form_Account();
         $account = Account::fetchAccountByLogin('user');
         $form->populateFromModel($account);
 
         $postData = [
-            'username' => 'user',
+            'username'  => 'user',
             'roleguest' => '1',
-            'email' => 'notAnEmail',
-            'password' => 'password',
-            'confirm' => 'password'
+            'email'     => 'notAnEmail',
+            'password'  => 'password',
+            'confirm'   => 'password',
         ];
 
         $this->assertFalse($form->isValid($postData));

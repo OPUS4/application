@@ -30,7 +30,9 @@
  */
 
 use Opus\Common\Account;
+use Opus\Common\AccountInterface;
 use Opus\Common\Config;
+use Opus\Common\Model\ModelException;
 use Opus\Common\Security\SecurityException;
 
 /**
@@ -40,9 +42,10 @@ use Opus\Common\Security\SecurityException;
  */
 class Account_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
+    /** @var AccountInterface */
     private $user;
 
     public function setUp(): void
@@ -62,6 +65,10 @@ class Account_IndexControllerTest extends ControllerTestCase
         parent::tearDown();
     }
 
+    /**
+     * @param string $username
+     * @throws ModelException
+     */
     private function deleteUser($username)
     {
         try {
@@ -76,7 +83,7 @@ class Account_IndexControllerTest extends ControllerTestCase
      */
     public function testIndexSuccessAction()
     {
-        $config = Config::get();
+        $config                          = Config::get();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('admin', 'adminadmin');
@@ -92,7 +99,7 @@ class Account_IndexControllerTest extends ControllerTestCase
      */
     public function testIndexDeniedIfEditAccountDisabledAction()
     {
-        $config = Config::get();
+        $config                          = Config::get();
         $config->account->editOwnAccount = self::CONFIG_VALUE_FALSE;
 
         $this->loginUser('admin', 'adminadmin');
@@ -112,14 +119,14 @@ class Account_IndexControllerTest extends ControllerTestCase
 
     public function testChangePasswordFailsOnMissingInputAction()
     {
-        $config = $this->getConfig();
+        $config                          = $this->getConfig();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
         $this->request
             ->setMethod('POST')
             ->setPost([
-                'password' => 'newpassword'
+                'password' => 'newpassword',
             ]);
         $this->dispatch('/account/index/save');
         $this->assertResponseCode(200);
@@ -137,15 +144,15 @@ class Account_IndexControllerTest extends ControllerTestCase
 
     public function testChangePasswordFailsOnNoMatch()
     {
-        $config = $this->getConfig();
+        $config                          = $this->getConfig();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
         $this->request
             ->setMethod('POST')
             ->setPost([
-                'password' => 'newpassword',
-                'confirmPassword' => 'anotherpassword'
+                'password'        => 'newpassword',
+                'confirmPassword' => 'anotherpassword',
             ]);
         $this->dispatch('/account/index/save');
         $this->assertResponseCode(200);
@@ -166,19 +173,19 @@ class Account_IndexControllerTest extends ControllerTestCase
      */
     public function testChangePasswordSuccess()
     {
-        $config = $this->getConfig();
+        $config                          = $this->getConfig();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
         $this->request
             ->setMethod('POST')
             ->setPost([
-                'username' => 'john',
+                'username'  => 'john',
                 'firstname' => '',
-                'lastname' => '',
-                'email' => '',
-                'password' => 'newpassword',
-                'confirm' => 'newpassword'
+                'lastname'  => '',
+                'email'     => '',
+                'password'  => 'newpassword',
+                'confirm'   => 'newpassword',
             ]);
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
@@ -195,19 +202,19 @@ class Account_IndexControllerTest extends ControllerTestCase
      */
     public function testChangePasswordSuccessWithSpecialChars()
     {
-        $config = $this->getConfig();
+        $config                          = $this->getConfig();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
         $this->request
             ->setMethod('POST')
             ->setPost([
-                'username' => 'john',
+                'username'  => 'john',
                 'firstname' => '',
-                'lastname' => '',
-                'email' => '',
-                'password' => 'new@pwd$%',
-                'confirm' => 'new@pwd$%'
+                'lastname'  => '',
+                'email'     => '',
+                'password'  => 'new@pwd$%',
+                'confirm'   => 'new@pwd$%',
             ]);
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
@@ -224,7 +231,7 @@ class Account_IndexControllerTest extends ControllerTestCase
      */
     public function testChangeLoginSuccess()
     {
-        $config = $this->getConfig();
+        $config                          = $this->getConfig();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->deleteUser('john2');
@@ -233,10 +240,10 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'username' => 'john2',
+                'username'  => 'john2',
                 'firstname' => '',
-                'lastname' => '',
-                'email' => ''
+                'lastname'  => '',
+                'email'     => '',
             ]);
         $this->dispatch('/account/index/save');
 
@@ -250,7 +257,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         // Delete user 'john2' if we're done...
         $this->deleteUser('john2');
 
-        $this->setExpectedException(SecurityException::class, 'Account with login name \'john\' not found');
+        $this->expectException(SecurityException::class, 'Account with login name \'john\' not found');
         Account::fetchAccountByLogin('john');
     }
 
