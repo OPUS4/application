@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,23 +25,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Setup
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Translate\Dao;
+
 class Setup_Form_FaqItem extends Application_Form_Translations
 {
+    public const ELEMENT_ID = 'Id';
 
-    const ELEMENT_ID = 'Id';
+    public const ELEMENT_NAME = 'Name';
 
-    const ELEMENT_NAME = 'Name';
+    public const ELEMENT_QUESTION = 'Question';
 
-    const ELEMENT_QUESTION = 'Question';
-
-    const ELEMENT_ANSWER = 'Answer';
+    public const ELEMENT_ANSWER = 'Answer';
 
     public function init()
     {
@@ -48,16 +47,26 @@ class Setup_Form_FaqItem extends Application_Form_Translations
 
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('text', self::ELEMENT_NAME, [
-            'label' => 'Name', 'disabled' => true
+            'label'    => 'Name',
+            'disabled' => true,
         ]);
         $this->addElement('translation', self::ELEMENT_QUESTION, [
-            'textarea' => true, 'label' => 'Question', 'cols' => 90, 'rows' => 12
+            'textarea' => true,
+            'label'    => 'Question',
+            'cols'     => 90,
+            'rows'     => 12,
         ]);
         $this->addElement('translation', self::ELEMENT_ANSWER, [
-            'textarea' => true, 'label' => 'Answer', 'cols' => 90, 'rows' => 12
+            'textarea' => true,
+            'label'    => 'Answer',
+            'cols'     => 90,
+            'rows'     => 12,
         ]);
     }
 
+    /**
+     * @param string $name
+     */
     public function setName($name)
     {
         $this->getElement(self::ELEMENT_ID)->setValue($name);
@@ -72,6 +81,12 @@ class Setup_Form_FaqItem extends Application_Form_Translations
         $this->getElement(self::ELEMENT_ANSWER)->setValue($translations);
     }
 
+    /**
+     * @param string     $key
+     * @param bool       $textaread
+     * @param array|null $customOptions
+     * @return void
+     */
     public function addKey($key, $textaread = false, $customOptions = null)
     {
         // do nothing (not supported) TODO better solution (support specifying name of element instead of using key?)
@@ -79,10 +94,10 @@ class Setup_Form_FaqItem extends Application_Form_Translations
 
     public function updateEntry()
     {
-        $database = new \Opus\Translate\Dao();
-        $manager = new Application_Translate_TranslationManager();
+        $database = new Dao();
+        $manager  = new Application_Translate_TranslationManager();
 
-        $faqId = $this->getElementValue(self::ELEMENT_ID);
+        $faqId    = $this->getElementValue(self::ELEMENT_ID);
         $question = $this->getElement(self::ELEMENT_QUESTION);
 
         if (! $this->isArrayEmpty($question->getValue())) {
@@ -103,6 +118,10 @@ class Setup_Form_FaqItem extends Application_Form_Translations
         $manager->clearCache();
     }
 
+    /**
+     * @param array $data
+     * @return bool
+     */
     protected function isArrayEmpty($data)
     {
         $isEmpty = true;

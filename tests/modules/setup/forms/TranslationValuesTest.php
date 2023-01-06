@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,7 +34,7 @@
  */
 class Setup_Form_TranslationValuesTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'Translation';
 
     public function testInit()
@@ -59,8 +57,8 @@ class Setup_Form_TranslationValuesTest extends ControllerTestCase
         $form->populate([
             'Translation' => [
                 'en' => 'English',
-                'de' => 'Deutsch'
-            ]
+                'de' => 'Deutsch',
+            ],
         ]);
 
         $this->assertEquals('English', $form->getElement('en')->getValue());
@@ -84,7 +82,7 @@ class Setup_Form_TranslationValuesTest extends ControllerTestCase
 
         $this->assertTrue($form->isValid([
             'en' => '',
-            'de' => ''
+            'de' => '',
         ]));
     }
 
@@ -135,7 +133,7 @@ class Setup_Form_TranslationValuesTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'English',
-            'de' => null
+            'de' => null,
         ], $translations);
     }
 
@@ -154,7 +152,7 @@ class Setup_Form_TranslationValuesTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], $translations);
     }
 
@@ -164,7 +162,7 @@ class Setup_Form_TranslationValuesTest extends ControllerTestCase
 
         $data = [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ];
 
         $form->setTranslations($data);
@@ -178,6 +176,9 @@ class Setup_Form_TranslationValuesTest extends ControllerTestCase
         $this->markTestIncomplete('no handling of this situation yet');
     }
 
+    /**
+     * @return Setup_Form_TranslationValues
+     */
     protected function getForm()
     {
         return new Setup_Form_TranslationValues();

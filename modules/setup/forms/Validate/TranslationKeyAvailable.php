@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Setup_Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,27 +34,32 @@
  *
  * Translation keys are not case-sensitive.
  */
-class Setup_Form_Validate_TranslationKeyAvailable extends \Zend_Validate_Abstract
+class Setup_Form_Validate_TranslationKeyAvailable extends Zend_Validate_Abstract
 {
-
     /**
      * Constants for enrichment key not available anymore.
      */
-    const NOT_AVAILABLE = 'isNotAvailable';
+    public const NOT_AVAILABLE = 'isNotAvailable';
 
     /**
      * Error messages.
+     *
+     * @phpcs:disable
      */
     protected $_messageTemplates = [
         self::NOT_AVAILABLE => 'setup_translation_error_key_exists',
     ];
+    // @phpcs:enable
 
     /**
      * Checks if translation key already exists.
+     *
+     * @param string     $value
+     * @param array|null $context
+     * @return bool
      */
     public function isValid($value, $context = null)
     {
-        $value = (string) $value;
         $this->_setValue($value);
 
         $name = null;
@@ -83,8 +86,9 @@ class Setup_Form_Validate_TranslationKeyAvailable extends \Zend_Validate_Abstrac
 
     /**
      * Checks if translation key already exists.
-     * @param string $login
-     * @return boolean
+     *
+     * @param string $name
+     * @return bool
      */
     protected function isTranslationKeyUsed($name)
     {

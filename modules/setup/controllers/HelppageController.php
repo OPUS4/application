@@ -25,25 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Translate\UnknownTranslationKeyException;
 
 /**
- *
  * TODO show instructions for editing help content
  * TODO form for editing help.ini file
  * TODO improve styling of FAQ page
  */
 class Setup_HelppageController extends Application_Controller_Action
 {
-
     public function init()
     {
         parent::init();
@@ -74,7 +68,7 @@ class Setup_HelppageController extends Application_Controller_Action
         $form = new Setup_Form_HelpConfig();
 
         if ($request->isPost()) {
-            $post = $request->getPost();
+            $post   = $request->getPost();
             $result = $form->processPost($post);
             switch ($result) {
                 case $form::RESULT_SAVE:
@@ -91,7 +85,7 @@ class Setup_HelppageController extends Application_Controller_Action
                     break;
             }
 
-            if (is_null($form)) {
+            if ($form === null) {
                 $this->redirectWithParameters();
             }
         } else {
@@ -116,7 +110,7 @@ class Setup_HelppageController extends Application_Controller_Action
 
         $form = null;
 
-        if (! is_null($name)) {
+        if ($name !== null) {
             $form = new Setup_Form_FaqItem();
             $form->setName($name);
 
@@ -146,7 +140,7 @@ class Setup_HelppageController extends Application_Controller_Action
             }
         }
 
-        if (is_null($form)) {
+        if ($form === null) {
             $this->redirectBack();
         } else {
             $this->_helper->renderForm($form);
@@ -188,16 +182,16 @@ class Setup_HelppageController extends Application_Controller_Action
         } catch (UnknownTranslationKeyException $ex) {
         }
 
-        if (is_null($translation)) {
+        if ($translation === null) {
             $this->_helper->Redirector->redirectTo(
                 'add',
                 null,
                 'language',
                 'setup',
                 [
-                    'key' => $key,
+                    'key'       => $key,
                     'keymodule' => 'help',
-                    'back' => 'help'
+                    'back'      => 'help',
                 ]
             );
         } else {
@@ -207,8 +201,8 @@ class Setup_HelppageController extends Application_Controller_Action
                 'language',
                 'setup',
                 [
-                    'key' => $key,
-                    'back' => 'help'
+                    'key'  => $key,
+                    'back' => 'help',
                 ]
             );
         }
@@ -222,7 +216,7 @@ class Setup_HelppageController extends Application_Controller_Action
     }
 
     /**
-     *
+     * @param string $action
      */
     protected function redirectWithParameters($action = 'index')
     {

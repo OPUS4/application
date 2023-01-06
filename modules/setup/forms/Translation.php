@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Setup_Form
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -51,31 +49,27 @@ use Opus\Common\Translate\UnknownTranslationKeyException;
  */
 class Setup_Form_Translation extends Application_Form_Abstract
 {
-
-    const ELEMENT_ID = 'Id';
+    public const ELEMENT_ID = 'Id';
 
     /**
      * @var string Name of translation key.
      */
-    const ELEMENT_KEY = 'Key';
+    public const ELEMENT_KEY = 'Key';
 
     /**
      * @var string Name of module for translation key.
      */
-    const ELEMENT_MODULE = 'KeyModule';
+    public const ELEMENT_MODULE = 'KeyModule';
 
-    /**
-     *
-     */
-    const SUBFORM_TRANSLATION = 'Translation';
+    public const SUBFORM_TRANSLATION = 'Translation';
 
-    const ELEMENT_SAVE = 'Save';
+    public const ELEMENT_SAVE = 'Save';
 
-    const ELEMENT_CANCEL = 'Cancel';
+    public const ELEMENT_CANCEL = 'Cancel';
 
-    const RESULT_SAVE = 'Save';
+    public const RESULT_SAVE = 'Save';
 
-    const RESULT_CANCEL = 'Cancel';
+    public const RESULT_CANCEL = 'Cancel';
 
     public function init()
     {
@@ -86,16 +80,19 @@ class Setup_Form_Translation extends Application_Form_Abstract
             'Errors',
             [['InputWrapper' => 'HtmlTag'], ['class' => 'col-input']],
             ['Label', ['tag' => 'div', 'tagClass' => 'col-label', 'placement' => 'prepend']],
-            [['Wrapper' => 'HtmlTag'], ['class' => 'row']]
+            [['Wrapper' => 'HtmlTag'], ['class' => 'row']],
         ]);
 
         $this->addElement('hidden', self::ELEMENT_ID);
 
         $this->addElement('text', self::ELEMENT_KEY, [
-            'label' => 'setup_language_key', 'size' => 80, 'maxlength' => 100, 'required' => true
+            'label'     => 'setup_language_key',
+            'size'      => 80,
+            'maxlength' => 100,
+            'required'  => true,
         ]);
 
-        $lengthValidator = new \Zend_Validate_StringLength(['max' => 100]);
+        $lengthValidator = new Zend_Validate_StringLength(['max' => 100]);
         $lengthValidator->setMessage('setup_translation_error_key_too_long', $lengthValidator::TOO_LONG);
         // TODO test customized message
 
@@ -110,7 +107,8 @@ class Setup_Form_Translation extends Application_Form_Abstract
         // TODO maybe "virtual modules"
         // TODO automatically use module name as prefix (?)
         $this->addElement('Modules', self::ELEMENT_MODULE, [
-            'label' => 'setup_language_module', 'required' => true
+            'label'    => 'setup_language_module',
+            'required' => true,
         ]);
 
         // TODO add input element for every supported language (separate function)
@@ -119,34 +117,38 @@ class Setup_Form_Translation extends Application_Form_Abstract
 
         $this->addElement('submit', self::ELEMENT_SAVE, [
             'decorators' => [
-                'ViewHelper'
-            ]
+                'ViewHelper',
+            ],
         ]);
         $this->addElement('submit', self::ELEMENT_CANCEL, [
             'decorators' => [
-                'ViewHelper'
-            ]
+                'ViewHelper',
+            ],
         ]);
 
         $this->addDisplayGroup(
             [self::ELEMENT_SAVE, self::ELEMENT_CANCEL],
             'actions',
-            ['order' => 1000, 'decorators' => [
-                'FormElements',
-                [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']]
-            ]]
+            [
+                'order'      => 1000,
+                'decorators' => [
+                    'FormElements',
+                    [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']],
+                ],
+            ]
         );
 
         $this->setDecorators([
             'FormElements',
-            'Form'
+            'Form',
         ]);
     }
 
     /**
      * Processes POST requests for this form.
-     * @param $post array POST data for this form
-     * @param $context array POST data for entire request
+     *
+     * @param array $post POST data for this form
+     * @param array $context POST data for entire request
      * @return string|null Result of processing
      */
     public function processPost($post, $context)
@@ -169,12 +171,12 @@ class Setup_Form_Translation extends Application_Form_Abstract
      */
     public function updateTranslation()
     {
-        $keyId = $this->getElement(self::ELEMENT_ID)->getValue();
-        $key = $this->getElement(self::ELEMENT_KEY)->getValue();
-        $module = $this->getElement(self::ELEMENT_MODULE)->getValue();
+        $keyId        = $this->getElement(self::ELEMENT_ID)->getValue();
+        $key          = $this->getElement(self::ELEMENT_KEY)->getValue();
+        $module       = $this->getElement(self::ELEMENT_MODULE)->getValue();
         $translations = $this->getSubForm(self::SUBFORM_TRANSLATION)->getTranslations();
 
-        $manager = new Application_Translate_TranslationManager();
+        $manager   = new Application_Translate_TranslationManager();
         $translate = $this->getTranslationManager();
 
         if (strlen(trim($keyId)) === 0) {
@@ -184,15 +186,15 @@ class Setup_Form_Translation extends Application_Form_Abstract
             // update key
             $old = $manager->getTranslation($keyId);
 
-            if (is_null($module)) {
+            if ($module === null) {
                 $module = $old['module'];
             }
 
             if ($keyId !== $key || $old['module'] !== $module) {
                 // change name of key
                 $manager->updateTranslation($key, $translations, $module, $keyId);
-            } elseif ($translations != $old['translations']) {
-                if (isset($old['translationsTmx']) && $translations == $old['translationsTmx']) {
+            } elseif ($translations !== $old['translations']) {
+                if (isset($old['translationsTmx']) && $translations === $old['translationsTmx']) {
                     // New values match TMX file (reset instead of updating)
                     $manager->reset($key);
                 } else {
@@ -204,7 +206,8 @@ class Setup_Form_Translation extends Application_Form_Abstract
 
     /**
      * Populates form for a translation key.
-     * @param $key
+     *
+     * @param string $key
      *
      * TODO throw some exceptions :-)
      */
@@ -215,7 +218,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
         // TODO get all keys (in case of multiple entries in database and deal with it)
         $translation = $manager->getTranslation($key);
 
-        if (is_null($translation)) {
+        if ($translation === null) {
             throw new UnknownTranslationKeyException("Unknown key '$key'.");
         }
 
@@ -226,7 +229,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
         $keyElement = $this->getElement(self::ELEMENT_KEY);
         $keyElement->setValue($key);
 
-        $module = $translation['module'];
+        $module        = $translation['module'];
         $moduleElement = $this->getElement(self::ELEMENT_MODULE);
         $moduleElement->setValue($module);
 

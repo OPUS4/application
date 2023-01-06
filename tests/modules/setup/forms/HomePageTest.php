@@ -29,25 +29,30 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Translate\Dao;
+
 class Setup_Form_HomePageTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'Translation';
 
+    /** @var Dao */
     private $database;
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
-        $this->database = new \Opus\Translate\Dao();
+        $this->database = new Dao();
         $this->database->removeAll();
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         $this->database->removeAll();
         $translate = Application_Translate::getInstance();
         $translate->clearCache();
-        \Zend_Translate::clearCache();
+        Zend_Translate::clearCache();
 
         parent::tearDown();
     }
@@ -60,7 +65,7 @@ class Setup_Form_HomePageTest extends ControllerTestCase
         $this->assertNotNull($element);
         $this->assertEquals([
             'en' => 'Home',
-            'de' => 'Einstieg'
+            'de' => 'Einstieg',
         ], $element->getValue());
     }
 
@@ -70,7 +75,7 @@ class Setup_Form_HomePageTest extends ControllerTestCase
 
         $this->database->setTranslation($key, [
             'en' => 'TestHome',
-            'de' => 'TestEinstieg'
+            'de' => 'TestEinstieg',
         ], null);
 
         $translations = $this->database->getTranslationsWithModules();
@@ -85,7 +90,7 @@ class Setup_Form_HomePageTest extends ControllerTestCase
 
         $change = [
             'en' => 'Homepage',
-            'de' => 'Startseite'
+            'de' => 'Startseite',
         ];
 
         $element->setValue($change);

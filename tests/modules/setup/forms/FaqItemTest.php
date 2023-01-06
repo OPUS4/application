@@ -33,17 +33,19 @@ use Opus\Translate\Dao;
 
 class Setup_Form_FaqItemTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'Translation';
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $translations = new Dao();
         $translations->removeAll();
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         $translations = new Dao();
         $translations->removeAll();
 
@@ -63,7 +65,7 @@ class Setup_Form_FaqItemTest extends ControllerTestCase
 
         $content = [
             'en' => 'new contact text',
-            'de' => 'neuer Kontakt text'
+            'de' => 'neuer Kontakt text',
         ];
 
         $element = $form->getElement('Answer');
@@ -87,7 +89,7 @@ class Setup_Form_FaqItemTest extends ControllerTestCase
 
         $content = [
             'en' => 'new imprint text',
-            'de' => 'neuer Impressum text'
+            'de' => 'neuer Impressum text',
         ];
 
         $element = $form->getElement('Answer');
