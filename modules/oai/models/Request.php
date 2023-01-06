@@ -30,112 +30,96 @@
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Date;
 use Opus\Common\Log;
 use Opus\Common\Security\Realm;
 
 /**
  * TODO documentation is not existent - especially the fact that 'validate' functions are called dynamically
- *
- * @category Application
- * @package Module_Oai
  */
 class Oai_Model_Request
 {
-    const DATE_FORMAT = 'Y-m-d';
+    public const DATE_FORMAT = 'Y-m-d';
 
-    /**
-     * TODO
-     *
-     * @var mixed
-     */
-    private $_errorCode = null;
+    /** @var int */
+    private $errorCode;
 
-    /**
-     * TODO
-     *
-     * @var mixed
-     */
-    private $_errorMessage = null;
+    /** @var string */
+    private $errorMessage;
 
-    /**
-     * TODO
-     *
-     * @var mixed
-     */
-    private $_pathToMetadataPrefixFiles = null;
+    /** @var string */
+    private $pathToMetadataPrefixFiles;
 
-    /**
-     * TODO
-     *
-     * @var mixed
-     */
-    private $_resumptionPath = null;
+    /** @var string */
+    private $resumptionPath;
 
-    /**
-     * TODO
-     *
-     * @var array
-     */
-    private $_validArguments = [
-            'verb',
-            'identifier',
-            'metadataPrefix',
-            'from',
-            'until',
-            'set',
-            'resumptionToken',
-        ];
+    /** @var string[] */
+    private $validArguments = [
+        'verb',
+        'identifier',
+        'metadataPrefix',
+        'from',
+        'until',
+        'set',
+        'resumptionToken',
+    ];
 
-    /**
-     * TODO
-     *
-     * @var array
-     */
-    private $_validQueries = [
-            'GetRecord' => [
-                ['required' => ['identifier', 'metadataPrefix'],
-                      'optional' => []],
-                ],
-            'ListRecords' => [
-                ['required' => ['metadataPrefix'],
-                      'optional' => ['from', 'until', 'set']
-                      ],
-                ['required' => ['resumptionToken'],
-                      'optional' => []
-                    ],
-                ],
-            'ListIdentifiers' => [
-                ['required' => ['metadataPrefix'],
-                      'optional' => ['from', 'until', 'set']
-                      ],
-                ['required' => ['resumptionToken'],
-                      'optional' => []
-                    ],
-                ],
-            'ListSets' => [
-                ['required' => [],
-                      'optional' => []
-                      ],
-                ['required' => ['resumptionToken'],
-                      'optional' => []
-                    ],
-                ],
-            'ListMetadataFormats' => [
-                ['required' => [],
-                      'optional' => ['identifier']],
-                ],
-            'Identify' => [
-                ['required' => [],
-                      'optional' => []],
-                ],
-        ];
+    /** @var array */
+    private $validQueries = [
+        'GetRecord'           => [
+            [
+                'required' => ['identifier', 'metadataPrefix'],
+                'optional' => [],
+            ],
+        ],
+        'ListRecords'         => [
+            [
+                'required' => ['metadataPrefix'],
+                'optional' => ['from', 'until', 'set'],
+            ],
+            [
+                'required' => ['resumptionToken'],
+                'optional' => [],
+            ],
+        ],
+        'ListIdentifiers'     => [
+            [
+                'required' => ['metadataPrefix'],
+                'optional' => ['from', 'until', 'set'],
+            ],
+            [
+                'required' => ['resumptionToken'],
+                'optional' => [],
+            ],
+        ],
+        'ListSets'            => [
+            [
+                'required' => [],
+                'optional' => [],
+            ],
+            [
+                'required' => ['resumptionToken'],
+                'optional' => [],
+            ],
+        ],
+        'ListMetadataFormats' => [
+            [
+                'required' => [],
+                'optional' => ['identifier'],
+            ],
+        ],
+        'Identify'            => [
+            [
+                'required' => [],
+                'optional' => [],
+            ],
+        ],
+    ];
 
     /**
      * Checks for a valide date
      *
-     * @param $date Date string to proof
-     * @return boolean
+     * @param string $datestr Date string to proof
+     * @return bool
      */
     public function checkDate($datestr)
     {
@@ -148,7 +132,7 @@ class Oai_Model_Request
      * Checks the availability of a metadataPrefix.
      *
      * @param string $oaiMetadataPrefix
-     * @return boolean
+     * @return bool
      *
      * TODO handling case insensitivity of metadataPrefix is spread through the code (here and other places)
      * TODO function handles access control in addition to checking if format is supported (mixed responsibilities)
@@ -156,7 +140,7 @@ class Oai_Model_Request
     private function validateMetadataPrefix($oaiMetadataPrefix)
     {
         // we assuming that a metadata prefix file ends with xslt
-        $possibleFiles = glob($this->_pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
+        $possibleFiles = glob($this->pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
 
         // we support both spellings, xMetaDissPlus and XMetaDissPlus TODO really?
         $availableMetadataPrefixes = ['xMetaDissPlus'];
@@ -186,7 +170,7 @@ class Oai_Model_Request
      * Checks if given 'from' date is valid.
      *
      * @param string $from
-     * @return boolean
+     * @return bool
      */
     private function validateFrom($from)
     {
@@ -203,7 +187,7 @@ class Oai_Model_Request
      * Checks if given 'until' date is valid.
      *
      * @param string $until
-     * @return boolean
+     * @return bool
      */
     private function validateUntil($until)
     {
@@ -221,7 +205,7 @@ class Oai_Model_Request
      *
      * @param string $from
      * @param string $until
-     * @return boolean
+     * @return bool
      */
     public function validateFromUntilRange($from, $until)
     {
@@ -237,7 +221,7 @@ class Oai_Model_Request
         $isEqual = $untilDate->getTimestamp() === $fromDate->getTimestamp();
         $isLater = $untilDate->getTimestamp() > $fromDate->getTimestamp();
 
-        if ((false === $isEqual) and (false === $isLater)) {
+        if ((false === $isEqual) && (false === $isLater)) {
             $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
             $this->setErrorMessage('Date "' . $from . '" is later than date "' . $until . '".');
             $result = false;
@@ -252,14 +236,14 @@ class Oai_Model_Request
      * IMPORTANT function may be called dynamically in 'validate' function
      *
      * @param  string $oaiResumptionToken The resumption token to validate.
-     * @return boolean
+     * @return bool
      */
     private function validateResumptionToken($oaiResumptionToken)
     {
-        $tokenWorker = new Oai_Model_Resumptiontokens;
+        $tokenWorker = new Oai_Model_Resumptiontokens();
 
         try {
-            $tokenWorker->setResumptionPath($this->_resumptionPath);
+            $tokenWorker->setResumptionPath($this->resumptionPath);
         } catch (Exception $e) {
             // FIXME: should a configuration error hidden like in this case?
             $this->setErrorCode(Oai_Model_Error::BADRESUMPTIONTOKEN);
@@ -282,11 +266,11 @@ class Oai_Model_Request
     /**
      * Returns current error code.
      *
-     * @return mixed
+     * @return int
      */
     public function getErrorCode()
     {
-        return $this->_errorCode;
+        return $this->errorCode;
     }
 
     /**
@@ -296,29 +280,27 @@ class Oai_Model_Request
      */
     public function getErrorMessage()
     {
-        return $this->_errorMessage;
+        return $this->errorMessage;
     }
 
     /**
      * Set current error code.
      *
-     * @param mixed $code
-     * @return void
+     * @param int $code
      */
     protected function setErrorCode($code)
     {
-        $this->_errorCode = $code;
+        $this->errorCode = $code;
     }
 
     /**
      * Set current error message.
      *
      * @param string $message
-     * @return void
      */
     protected function setErrorMessage($message)
     {
-        $this->_errorMessage = $message;
+        $this->errorMessage = $message;
     }
 
     /**
@@ -327,7 +309,7 @@ class Oai_Model_Request
      * There is no check if files are inside given directory!
      *
      * @param mixed $path
-     * @return boolean
+     * @return bool
      */
     public function setPathToMetadataPrefixFiles($path)
     {
@@ -336,7 +318,7 @@ class Oai_Model_Request
         $result = is_dir($realpathToFiles);
 
         if (true === $result) {
-            $this->_pathToMetadataPrefixFiles = $realpathToFiles;
+            $this->pathToMetadataPrefixFiles = $realpathToFiles;
         }
 
         return $result;
@@ -347,8 +329,8 @@ class Oai_Model_Request
      * Checks only if given path is a directory.
      * Returns false if given path is not a directory.
      *
-     * @param mixed $path
-     * @return boolean
+     * @param string $path
+     * @return bool
      */
     public function setResumptionPath($path)
     {
@@ -357,7 +339,7 @@ class Oai_Model_Request
         $result = is_dir($realpathToFiles);
 
         if (true === $result) {
-            $this->_resumptionPath = $realpathToFiles;
+            $this->resumptionPath = $realpathToFiles;
         }
 
         return $result;
@@ -367,7 +349,7 @@ class Oai_Model_Request
      * Validate a given oai request.
      *
      * @param array $oaiRequest
-     * @return boolean
+     * @return bool
      */
     public function validate($oaiRequest)
     {
@@ -375,26 +357,28 @@ class Oai_Model_Request
 
         $errorInformation = [
             'message' => 'General oai request validation error.',
-            'code' => Oai_Model_Error::BADARGUMENT,
+            'code'    => Oai_Model_Error::BADARGUMENT,
         ];
 
         // Evaluate if a proper verb was supplied.
-        if ((false === array_key_exists('verb', $oaiRequest)) or
-            (false === in_array($oaiRequest['verb'], array_keys($this->_validQueries)))) {
+        if (
+            (false === array_key_exists('verb', $oaiRequest)) ||
+            (false === in_array($oaiRequest['verb'], array_keys($this->validQueries)))
+        ) {
             // Invalid or unspecified Verb
             $this->setErrorCode(Oai_Model_Error::BADVERB);
             $this->setErrorMessage('The verb provided in the request is illegal.');
-            $logger->err($this->getErrorCode() . "::" .$this->getErrorMessage());
+            $logger->err($this->getErrorCode() . "::" . $this->getErrorMessage());
             return false;
         }
 
         // Evaluate if any invalid parameters are provided
-        $invalidArguments = array_diff(array_keys($oaiRequest), $this->_validArguments);
+        $invalidArguments = array_diff(array_keys($oaiRequest), $this->validArguments);
         if (false === empty($invalidArguments)) {
             // Error occured
             $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
             $this->setErrorMessage(implode(', ', $invalidArguments));
-            $logger->err($this->getErrorCode() . "::" .$this->getErrorMessage());
+            $logger->err($this->getErrorCode() . "::" . $this->getErrorMessage());
             return false;
         }
 
@@ -402,7 +386,7 @@ class Oai_Model_Request
         $oaiParameters = array_diff(array_keys($oaiRequest), ['verb']);
 
         $valid = false;
-        foreach ($this->_validQueries[$oaiRequest['verb']] as $validRequest) {
+        foreach ($this->validQueries[$oaiRequest['verb']] as $validRequest) {
             $valid = true;
 
             $missingRequiredParameters = array_diff(
@@ -418,24 +402,24 @@ class Oai_Model_Request
             if (false === empty($missingRequiredParameters)) {
                 // Missing required parameter
                 $errorInformation = [
-                        'message' => 'Missing parameter(s) ' . implode(', ', $missingRequiredParameters),
-                        'code' => Oai_Model_Error::BADARGUMENT
-                    ];
-                $valid = false;
+                    'message' => 'Missing parameter(s) ' . implode(', ', $missingRequiredParameters),
+                    'code'    => Oai_Model_Error::BADARGUMENT,
+                ];
+                $valid            = false;
             } elseif (false === empty($unknownParameters)) {
                 // Superflous parameter
                 $errorInformation = [
-                        'message' => 'badArgument ' . implode(', ', $unknownParameters),
-                        'code' => Oai_Model_Error::BADARGUMENT
-                    ];
-                $valid = false;
+                    'message' => 'badArgument ' . implode(', ', $unknownParameters),
+                    'code'    => Oai_Model_Error::BADARGUMENT,
+                ];
+                $valid            = false;
             }
 
             if (true === $valid) {
                 $errorInformation = [
-                        'message' => 'no validation error',
-                        'code' => null
-                    ];
+                    'message' => 'no validation error',
+                    'code'    => null,
+                ];
                 break;
             }
         }
@@ -443,7 +427,7 @@ class Oai_Model_Request
         if (false === $valid) {
             $this->setErrorMessage($errorInformation['message']);
             $this->setErrorCode($errorInformation['code']);
-            $logger->err($this->getErrorCode() . "::" .$this->getErrorMessage());
+            $logger->err($this->getErrorCode() . "::" . $this->getErrorMessage());
             return false;
         }
 
@@ -465,8 +449,10 @@ class Oai_Model_Request
         }
 
         // Proof combination of from and until
-        if ((true === array_key_exists('from', $oaiRequest)) and
-            (true === array_key_exists('until', $oaiRequest))) {
+        if (
+            (true === array_key_exists('from', $oaiRequest)) &&
+            (true === array_key_exists('until', $oaiRequest))
+        ) {
                 return $this->validateFromUntilRange($oaiRequest['from'], $oaiRequest['until']);
         }
 

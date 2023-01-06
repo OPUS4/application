@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,9 +26,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Henning Gerhardt <henning.gerhardt@slub-dresden.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -37,41 +35,20 @@
  */
 class Oai_Model_Resumptiontoken
 {
+    /** @var array Holds dcoument ids */
+    private $documentIds = [];
 
-    /**
-     * Holds dcoument ids
-     *
-     * @var array
-     */
-    private $_documentIds = [];
+    /** @var string Holds metadata prefix information */
+    private $metadataPrefix;
 
-    /**
-     * Holds metadata prefix information
-     *
-     * @var string
-     */
-    private $_metadataPrefix = null;
+    /** @var string Holds resumption id (only if token is stored) */
+    private $resumptionId;
 
-    /**
-     * Holds resumption id (only if token is stored)
-     *
-     * @var string
-     */
-    private $_resumptionId = null;
+    /** @var int Holds start postion */
+    private $startPostition = 0;
 
-    /**
-     * Holds start postion
-     *
-     * @var integer
-     */
-    private $_startPostition = 0;
-
-    /**
-     * Holds total amount of document ids
-     *
-     * @var integer
-     */
-    private $_totalIds = 0;
+    /** @var int Holds total amount of document ids */
+    private $totalIds = 0;
 
     /**
      *  Returns current holded document ids.
@@ -80,7 +57,7 @@ class Oai_Model_Resumptiontoken
      */
     public function getDocumentIds()
     {
-        return $this->_documentIds;
+        return $this->documentIds;
     }
 
     /**
@@ -90,7 +67,7 @@ class Oai_Model_Resumptiontoken
      */
     public function getMetadataPrefix()
     {
-        return $this->_metadataPrefix;
+        return $this->metadataPrefix;
     }
 
     /**
@@ -100,13 +77,13 @@ class Oai_Model_Resumptiontoken
      */
     public function getResumptionId()
     {
-        return $this->_resumptionId;
+        return $this->resumptionId;
     }
 
     /**
      * Returns start position.
      *
-     * @return in
+     * @return int
      */
     public function getStartPosition()
     {
@@ -120,14 +97,13 @@ class Oai_Model_Resumptiontoken
      */
     public function getTotalIds()
     {
-        return $this->_totalIds;
+        return $this->totalIds;
     }
 
     /**
      * Set document ids for this token.
      *
-     * @param $idsToStore Set of document ids to store.
-     * @return void
+     * @param array $idsToStore Set of document ids to store.
      */
     public function setDocumentIds($idsToStore)
     {
@@ -135,48 +111,46 @@ class Oai_Model_Resumptiontoken
             $idsToStore = [$idsToStore];
         }
 
-        $this->_documentIds = $idsToStore;
+        $this->documentIds = $idsToStore;
     }
 
     /**
      * Set metadata prefix information.
      *
      * @param string $prefix
-     * @return void
      */
     public function setMetadataPrefix($prefix)
     {
-        $this->_metadataPrefix = $prefix;
+        $this->metadataPrefix = $prefix;
     }
 
     /**
      * Set resumption id
      *
-     * @return void
+     * @param string $resumptionId
      */
     public function setResumptionId($resumptionId)
     {
-        $this->_resumptionId = $resumptionId;
+        $this->resumptionId = $resumptionId;
     }
 
     /**
      * Set postion where to start on next request.
      *
-     * @param $startPostion Positon where to start on next request
-     * @return void
+     * @param int $startPosition Positon where to start on next request
      */
     public function setStartPosition($startPosition)
     {
-        $this->_startPosition = (int) $startPosition;
+        $this->_startPosition = $startPosition;
     }
 
     /**
      * Set count of document ids for this request.
      *
-     * @return void
+     * @param int $totalIds;
      */
     public function setTotalIds($totalIds)
     {
-        $this->_totalIds = (int) $totalIds;
+        $this->totalIds = $totalIds;
     }
 }

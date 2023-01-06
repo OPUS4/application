@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,24 +26,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @author      Henning Gerhardt <henning.gerhardt@slub-dresden.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009 - 2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * TODO move all processing into model classes for testing and reuse
  * TODO refactor code for returning multiple errors
  */
-
 class Oai_IndexController extends Application_Controller_ModuleAccess
 {
-
     /**
      * Do some initialization on startup of every action
      *
@@ -68,7 +61,6 @@ class Oai_IndexController extends Application_Controller_ModuleAccess
         $element = $this->_xml->createElement('error', 'Unauthorized: Access to module not allowed.');
         $this->_xml->appendChild($element);
     }
-
 
     /**
      * Entry point for all OAI-PMH requests.

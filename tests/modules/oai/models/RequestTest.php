@@ -31,7 +31,7 @@
 
 class Oai_Model_RequestTest extends ControllerTestCase
 {
-
+    /** @var Oai_Model_Request */
     private $request;
 
     public function setUp(): void
@@ -110,7 +110,7 @@ class Oai_Model_RequestTest extends ControllerTestCase
 
         $this->assertTrue($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
-            'verb' => 'ListRecords',
+            'verb'           => 'ListRecords',
         ]));
     }
 
@@ -120,14 +120,14 @@ class Oai_Model_RequestTest extends ControllerTestCase
 
         $this->assertTrue($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
-            'verb' => 'ListRecords',
-            'from' => '2020-09-21'
+            'verb'           => 'ListRecords',
+            'from'           => '2020-09-21',
         ]));
 
         $this->assertFalse($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
-            'verb' => 'ListRecords',
-            'from' => '2020/09/21'
+            'verb'           => 'ListRecords',
+            'from'           => '2020/09/21',
         ]));
     }
 
@@ -137,14 +137,14 @@ class Oai_Model_RequestTest extends ControllerTestCase
 
         $this->assertTrue($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
-            'verb' => 'ListRecords',
-            'until' => '2020-09-21'
+            'verb'           => 'ListRecords',
+            'until'          => '2020-09-21',
         ]));
 
         $this->assertFalse($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
-            'verb' => 'ListRecords',
-            'until' => '2020/09/21'
+            'verb'           => 'ListRecords',
+            'until'          => '2020/09/21',
         ]));
     }
 }
