@@ -34,19 +34,21 @@
  */
 class Home_Model_HelpFilesTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var Home_Model_HelpFiles */
     private $help;
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $this->help = new Home_Model_HelpFiles();
     }
-
 
     public function testGetFiles()
     {
@@ -61,8 +63,8 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
     {
         $this->adjustConfiguration([
             'help' => [
-                'useFiles' => true
-            ]
+                'useFiles' => true,
+            ],
         ]);
 
         $content = $this->help->getContent('contact.de.txt');
@@ -89,8 +91,8 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
     {
         $this->adjustConfiguration([
             'help' => [
-                'useFiles' => true
-            ]
+                'useFiles' => true,
+            ],
         ]);
 
         $helpFiles = $this->help->getFiles();
@@ -120,11 +122,13 @@ class Home_Model_HelpFilesTest extends ControllerTestCase
         $this->markTestIncomplete("File names are translated, but translation resources not yet accessible here.");
         $entries = $this->help->getHelpEntries();
 
+        /* TODO implement
         foreach ($entries as $section) {
             foreach ($section as $file) {
                 // TODO $this->assertTrue();
             }
         }
+        */
     }
 
     public function testIsContentAvailable()

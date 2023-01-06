@@ -33,7 +33,6 @@ use Opus\Common\Repository;
 
 class Home_IndexController extends Application_Controller_Action
 {
-
     /**
      * Do some initialization on startup of every action.
      *
@@ -58,7 +57,7 @@ class Home_IndexController extends Application_Controller_Action
      */
     public function __call($action, $parameters)
     {
-        if (! 'Action' == substr($action, -6)) {
+        if ('Action' !== substr($action, -6)) {
             $this->getLogger()->info(__METHOD__ . ' undefined method: ' . $action);
             parent::__call($action, $parameters);
         }
@@ -87,11 +86,11 @@ class Home_IndexController extends Application_Controller_Action
      */
     public function languageAction()
     {
-        $module = null;
+        $module     = null;
         $controller = null;
-        $action = null;
-        $language = null;
-        $params = [];
+        $action     = null;
+        $language   = null;
+        $params     = [];
 
         foreach ($this->getRequest()->getParams() as $param => $value) {
             switch ($param) {
@@ -123,9 +122,11 @@ class Home_IndexController extends Application_Controller_Action
 
         $appConfig = new Application_Configuration();
 
-        if ($appConfig->isLanguageSelectionEnabled() && ! is_null($language)
-                && Application_Translate::getInstance()->isAvailable($language)) {
-            $sessiondata = new \Zend_Session_Namespace();
+        if (
+            $appConfig->isLanguageSelectionEnabled() && $language !== null
+                && Application_Translate::getInstance()->isAvailable($language)
+        ) {
+            $sessiondata           = new Zend_Session_Namespace();
             $sessiondata->language = $language;
         }
         $this->_helper->Redirector->redirectTo($action, '', $controller, $module, $params);
@@ -148,7 +149,7 @@ class Home_IndexController extends Application_Controller_Action
         // this loads content if answers should be shown on separate pages
         if ($help->getSeparateViewEnabled()) {
             $content = $this->getRequest()->getParam('content');
-            if (! is_null($content)) {
+            if ($content !== null) {
                 // TODO find generic way to handle redirect 'content'
                 if ($content === 'contact') {
                     $this->_helper->Redirector->redirectToAndExit('contact');
@@ -158,8 +159,8 @@ class Home_IndexController extends Application_Controller_Action
                 }
 
                 $this->view->contenttitle = "help_title_$content";
-                $this->view->content = $help->getContent($content);
-                $this->view->contentId = $content;
+                $this->view->content      = $help->getContent($content);
+                $this->view->contentId    = $content;
             }
         }
 
@@ -189,14 +190,15 @@ class Home_IndexController extends Application_Controller_Action
 
     /**
      * Returns basenames of all phtml files.
+     *
      * @return array Basenames of phtml files for 'home' module
      */
     protected function getViewScripts()
     {
         $phtmlFilesAvailable = [];
-        $dir = new \DirectoryIterator($this->view->getScriptPath('index'));
+        $dir                 = new DirectoryIterator($this->view->getScriptPath('index'));
         foreach ($dir as $file) {
-            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
+            if ($file->isFile() && $file->getFilename() !== '.' && $file->getFilename() !== '..' && $file->isReadable()) {
                 array_push($phtmlFilesAvailable, $file->getBasename('.phtml'));
             }
         }
