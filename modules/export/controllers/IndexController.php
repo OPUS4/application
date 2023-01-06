@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Sascha Szott <szott@zib.de>
- * @author      Gunar Maiwald <maiwald@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -42,13 +37,12 @@
  */
 class Export_IndexController extends Application_Controller_ModuleAccess
 {
-
     /**
      * Manages export plugins.
      *
      * @var Application_Export_ExportService
      */
-    private $_exportService;
+    private $exportService;
 
     /**
      * Do some initialization on startup of every action
@@ -63,8 +57,8 @@ class Export_IndexController extends Application_Controller_ModuleAccess
         // Controller outputs plain Xml, so rendering and layout are disabled.
         $this->disableViewRendering(); // TODO there could be plugins requiring rendering
 
-        $this->_exportService = \Zend_Registry::get('Opus_ExportService');
-        $this->_exportService->loadPlugins();
+        $this->exportService = Zend_Registry::get('Opus_ExportService');
+        $this->exportService->loadPlugins();
     }
 
     /**
@@ -87,12 +81,12 @@ class Export_IndexController extends Application_Controller_ModuleAccess
      * @param array $parameters The parameters passed to the action.
      * @return void
      * @throws Zend_Controller_Action_Exception
-     * @throws Application_Exception wenn keine zugehöriges Plugin-Klasse gefunden werden kann
+     * @throws Application_Exception Wenn keine zugehöriges Plugin-Klasse gefunden werden kann.
      */
     public function __call($action, $parameters)
     {
         // TODO what does this code do
-        if (! 'Action' == substr($action, -6)) {
+        if (! 'Action' === substr($action, -6)) {
             $this->getLogger()->info(__METHOD__ . ' undefined method: ' . $action);
             parent::__call($action, $parameters);
         }
@@ -101,9 +95,9 @@ class Export_IndexController extends Application_Controller_ModuleAccess
 
         $this->getLogger()->debug("Request to export plugin $actionName");
 
-        $plugin = $this->_exportService->getPlugin($actionName);
+        $plugin = $this->exportService->getPlugin($actionName);
 
-        if (! is_null($plugin)) {
+        if ($plugin !== null) {
             if ($plugin->isAccessRestricted()) {
                 $this->moduleAccessDeniedAction();
                 return;

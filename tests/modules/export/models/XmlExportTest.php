@@ -33,18 +33,14 @@ use Opus\Common\Repository;
 use Opus\Common\Title;
 
 /**
- * Class Export_Model_XmlExportTest
- *
  * @covers \Export_Model_XmlExport
  */
 class Export_Model_XmlExportTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
-    /**
-     * @var \Export_Model_XmlExport
-     */
+    /** @var Export_Model_XmlExport */
     private $plugin;
 
     public function setUp(): void
@@ -55,10 +51,10 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $plugin->setRequest($this->getRequest());
         $plugin->setResponse($this->getResponse());
         $plugin->init();
-        $plugin->setConfig(new \Zend_Config([
-            'class' => 'Export_Model_XmlExport',
+        $plugin->setConfig(new Zend_Config([
+            'class'             => 'Export_Model_XmlExport',
             'maxDocumentsGuest' => '100',
-            'maxDocumentsUser' => '500',
+            'maxDocumentsUser'  => '500',
         ]));
 
         $this->plugin = $plugin;
@@ -75,12 +71,12 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $docId = $doc->store();
 
         $this->_request->setMethod('POST')->setPost([
-            'searchtype' => 'all'
+            'searchtype' => 'all',
         ]);
 
         $this->plugin->prepareXml();
 
-        $xml = $this->plugin->getXml();
+        $xml   = $this->plugin->getXml();
         $xpath = new DOMXPath($xml);
 
         $result = $xpath->query("//Opus_Document[@Id=\"$docId\"]");
@@ -104,15 +100,15 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $docId = $doc->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'docId' => $docId,
-            'searchtype' => 'id'
+            'docId'      => $docId,
+            'searchtype' => 'id',
         ]);
 
         $this->plugin->prepareXml();
 
-        $xpath = new DOMXPath($this->plugin->getXml());
+        $xpath  = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
-        $count = $result->length;
+        $count  = $result->length;
 
         $this->assertEquals('Deutscher Titel', $result->item(--$count)->childNodes->item(3)->attributes->item(2)->nodeValue);
     }
@@ -120,12 +116,12 @@ class Export_Model_XmlExportTest extends ControllerTestCase
     public function testXmlPreparationForFrontdoorWithWrongDocId()
     {
         $this->getRequest()->setMethod('POST')->setPost([
-            'docId' => 'docId',
-            'searchtype' => 'id'
+            'docId'      => 'docId',
+            'searchtype' => 'id',
         ]);
 
         $this->plugin->prepareXml();
-        $xpath = new DOMXPath($this->plugin->getXml());
+        $xpath  = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
         $this->assertEquals(0, $result->length);
     }
@@ -133,10 +129,10 @@ class Export_Model_XmlExportTest extends ControllerTestCase
     public function testXmlPreparationForFrontdoorWithMissingDocId()
     {
         $this->getRequest()->setMethod('POST')->setPost([
-            'searchtype' => 'id'
+            'searchtype' => 'id',
         ]);
         $this->plugin->prepareXml();
-        $xpath = new DOMXPath($this->plugin->getXml());
+        $xpath  = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
         $this->assertEquals(0, $result->length);
     }
@@ -170,14 +166,14 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $this->getRequest()->setMethod('POST')->setPost([
             'searchtype' => 'all',
-            'sortfield' => 'year',
-            'sortorder' => 'desc',
-            'rows' => '10' // die ersten 10 Dokumente reichen
+            'sortfield'  => 'year',
+            'sortorder'  => 'desc',
+            'rows'       => '10', // die ersten 10 Dokumente reichen
         ]);
 
         $this->plugin->prepareXml();
 
-        $xpath = new DOMXPath($this->plugin->getXml());
+        $xpath  = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
 
         $this->assertEquals(10, $result->length);
@@ -204,12 +200,12 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $this->getRequest()->setMethod('POST')->setPost([
             'searchtype' => 'id',
-            'docId' => $docId
+            'docId'      => $docId,
         ]);
 
         $this->plugin->prepareXml();
 
-        $xpath = new DOMXPath($this->plugin->getXml());
+        $xpath  = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
 
         $this->restoreSecuritySetting();
@@ -225,15 +221,15 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $this->enableSecurity();
         $this->assertSecurityConfigured();
 
-        $doc = $this->createTestDocument();
+        $doc   = $this->createTestDocument();
         $docId = $doc->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
             'searchtype' => 'id',
-            'docId' => $docId
+            'docId'      => $docId,
         ]);
 
-        $this->setExpectedException('Application_Export_Exception');
+        $this->expectException(Application_Export_Exception::class);
         $this->plugin->prepareXml();
 
         $this->restoreSecuritySetting();
@@ -280,27 +276,31 @@ class Export_Model_XmlExportTest extends ControllerTestCase
         $plugin->setDownloadEnabled(null);
 
         $this->adjustConfiguration([
-            'export' => ['download' => self::CONFIG_VALUE_FALSE]
+            'export' => ['download' => self::CONFIG_VALUE_FALSE],
         ]);
 
         $this->assertFalse($plugin->isDownloadEnabled());
     }
 
+    /**
+     * @return array
+     */
     public function setDownloadEnabledInvalidArgumentProvider()
     {
         return [
             ['on'],
             [123],
-            [1]
+            [1],
         ];
     }
 
     /**
      * @dataProvider setDownloadEnabledInvalidArgumentProvider
+     * @param mixed $argument
      */
     public function testSetDownloadEnabledInvalidArgument($argument)
     {
-        $this->setExpectedException(InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->plugin->setDownloadEnabled($argument);
     }
 
@@ -310,7 +310,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $this->assertEquals('text/xml', $plugin->getContentType());
 
-        $config = new \Zend_Config(['contentType' => 'text/plain']);
+        $config = new Zend_Config(['contentType' => 'text/plain']);
 
         $plugin->setContentType(null); // clear cached content type
 
@@ -325,7 +325,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setContentType(null);
 
-        $plugin->setConfig(new \Zend_Config([]));
+        $plugin->setConfig(new Zend_Config([]));
 
         $this->assertEquals('text/xml', $plugin->getContentType());
     }
@@ -347,7 +347,7 @@ class Export_Model_XmlExportTest extends ControllerTestCase
 
         $plugin->setAttachmentFilename(null); // clear cached name
 
-        $plugin->setConfig(new \Zend_Config(['attachmentFilename' => 'article.pdf']));
+        $plugin->setConfig(new Zend_Config(['attachmentFilename' => 'article.pdf']));
 
         $this->assertEquals('article.pdf', $plugin->getAttachmentFilename());
     }

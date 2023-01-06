@@ -31,16 +31,18 @@
 
 class Export_BibtexExportTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'all';
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $this->adjustConfiguration([
-            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']]
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']],
         ]);
     }
 
@@ -71,11 +73,10 @@ class Export_BibtexExportTest extends ControllerTestCase
      * language  = {de}
      * }
      */
-
     public function testExportSingleDocument()
     {
         $this->adjustConfiguration([
-            'export' => ['download' => self::CONFIG_VALUE_FALSE]
+            'export' => ['download' => self::CONFIG_VALUE_FALSE],
         ]);
 
         $this->dispatch('/export/index/bibtex/searchtype/id/docId/146');
@@ -94,8 +95,8 @@ class Export_BibtexExportTest extends ControllerTestCase
     public function testExportLatestDocuments()
     {
         $this->adjustConfiguration([
-            'export' => ['download' => self::CONFIG_VALUE_FALSE],
-            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']]
+            'export'       => ['download' => self::CONFIG_VALUE_FALSE],
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']],
         ]);
 
         $this->dispatch('/export/index/bibtex/searchtype/latest');
@@ -110,7 +111,7 @@ class Export_BibtexExportTest extends ControllerTestCase
     public function testExportLatestDocumentsWithCustomRows()
     {
         $this->adjustConfiguration([
-            'export' => ['download' => self::CONFIG_VALUE_FALSE]
+            'export' => ['download' => self::CONFIG_VALUE_FALSE],
         ]);
 
         $this->dispatch('/export/index/bibtex/searchtype/latest/rows/12');

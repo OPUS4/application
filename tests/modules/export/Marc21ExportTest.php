@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Export
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,7 +33,7 @@ use Opus\Common\Model\ModelException;
 
 class Export_Marc21ExportTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     /**
@@ -51,11 +48,12 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $removeAccess = $this->addModuleAccess('export', 'guest');
         $this->enableSecurity();
         $this->adjustConfiguration([
-            'plugins' =>
-                ['export' =>
-                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                ]
-            ]);
+            'plugins'
+                => [
+                    'export'
+                    => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]],
+                ],
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -82,11 +80,12 @@ class Export_Marc21ExportTest extends ControllerTestCase
     {
         $this->enableSecurity();
         $this->adjustConfiguration([
-            'plugins' =>
-                ['export' =>
-                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                ]
-            ]);
+            'plugins'
+                => [
+                    'export'
+                    => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]],
+                ],
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -118,11 +117,12 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $removeAccess = $this->addModuleAccess('export', 'docsadmin');
         $this->enableSecurity();
         $this->adjustConfiguration([
-            'plugins' =>
-                ['export' =>
-                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                ]
-            ]);
+            'plugins'
+                => [
+                    'export'
+                    => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]],
+                ],
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
@@ -161,9 +161,9 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $this->adjustConfiguration([
             'plugins' => [
                 'export' => [
-                    'marc21' => ['adminOnly' => self::CONFIG_VALUE_TRUE]
-                ]
-            ]
+                    'marc21' => ['adminOnly' => self::CONFIG_VALUE_TRUE],
+                ],
+            ],
         ]);
 
         $doc = $this->createTestDocument();
@@ -191,11 +191,12 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $this->enableSecurity();
 
         $this->adjustConfiguration([
-            'plugins' =>
-                ['export' =>
-                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_TRUE]]
-                ]
-            ]);
+            'plugins'
+                => [
+                    'export'
+                    => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_TRUE]],
+                ],
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -234,11 +235,12 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $this->enableSecurity();
 
         $this->adjustConfiguration([
-            'plugins' =>
-                ['export' =>
-                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                ]
-            ]);
+            'plugins'
+                => [
+                    'export'
+                    => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]],
+                ],
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -275,11 +277,12 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $this->enableSecurity();
 
         $this->adjustConfiguration([
-            'plugins' =>
-                ['export' =>
-                    ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]
-                ]
-            ]);
+            'plugins'
+                => [
+                    'export'
+                    => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]],
+                ],
+        ]);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');

@@ -32,23 +32,25 @@
 use Opus\Common\Config;
 use Opus\Common\Log;
 
-class Export_Bootstrap extends \Zend_Application_Module_Bootstrap
+/**
+ * @phpcs:disable PSR2.Methods.MethodDeclaration
+ */
+class Export_Bootstrap extends Zend_Application_Module_Bootstrap
 {
-
     protected function _initExport()
     {
         $updateInProgress = Application_Configuration::isUpdateInProgress();
 
-        if (! \Zend_Registry::isRegistered('Opus_Exporter')) {
+        if (! Zend_Registry::isRegistered('Opus_Exporter')) {
             if (! $updateInProgress) {
                  Log::get()->warn(__METHOD__ . ' exporter not found');
             }
             return;
         }
 
-        $exporter = \Zend_Registry::get('Opus_Exporter');
+        $exporter = Zend_Registry::get('Opus_Exporter');
 
-        if (is_null($exporter)) {
+        if ($exporter === null) {
             if (! $updateInProgress) {
                  Log::get()->warn(__METHOD__ . ' exporter not found');
             }
@@ -61,47 +63,47 @@ class Export_Bootstrap extends \Zend_Application_Module_Bootstrap
         if (isset($config->export->stylesheet->frontdoor)) {
             $exporter->addFormats([
                 'xml' => [
-                    'name' => 'XML',
+                    'name'        => 'XML',
                     'description' => 'Export XML', // TODO frontdoor_export_xml
-                    'module' => 'export',
-                    'controller' => 'index',
-                    'action' => 'index',
-                    'search' => false,
-                    'params' => [
-                        'export' => 'xml',
+                    'module'      => 'export',
+                    'controller'  => 'index',
+                    'action'      => 'index',
+                    'search'      => false,
+                    'params'      => [
+                        'export'     => 'xml',
                         'searchtype' => 'id',
-                        'stylesheet' => $config->export->stylesheet->frontdoor
-                    ]
-                ]
+                        'stylesheet' => $config->export->stylesheet->frontdoor,
+                    ],
+                ],
             ]);
         }
 
         if (isset($config->export->stylesheet->search)) {
             $exporter->addFormats([
                 'xml2' => [
-                    'name' => 'XML',
+                    'name'        => 'XML',
                     'description' => 'Export XML',
-                    'module' => 'export',
-                    'controller' => 'index',
-                    'action' => 'index',
-                    'frontdoor' => false,
-                    'params' => [
-                        'export' => 'xml',
-                        'stylesheet' => $config->export->stylesheet->search
-                    ]
-                ]
+                    'module'      => 'export',
+                    'controller'  => 'index',
+                    'action'      => 'index',
+                    'frontdoor'   => false,
+                    'params'      => [
+                        'export'     => 'xml',
+                        'stylesheet' => $config->export->stylesheet->search,
+                    ],
+                ],
             ]);
         }
 
         $exporter->addFormats([
             'csv' => [
-                'name' => 'CSV',
+                'name'        => 'CSV',
                 'description' => 'Export CSV',
-                'module' => 'export',
-                'controller' => 'index',
-                'action' => 'csv',
-                'frontdoor' => false
-            ]
+                'module'      => 'export',
+                'controller'  => 'index',
+                'action'      => 'csv',
+                'frontdoor'   => false,
+            ],
         ]);
     }
 }

@@ -31,9 +31,10 @@
 
 class Export_Model_XsltExportTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var Export_Model_XmlExport */
     private $plugin;
 
     public function setUp(): void

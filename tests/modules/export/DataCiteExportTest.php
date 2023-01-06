@@ -39,9 +39,10 @@ use Opus\Common\Title;
 
 class Export_DataCiteExportTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function testExportOfValidDataCiteXML()
@@ -192,9 +193,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->adjustConfiguration([
             'plugins' => [
                 'export' => [
-                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
-                ]
-            ]
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE],
+                ],
+            ],
         ]);
 
         $doc = $this->createTestDocument();
@@ -227,9 +228,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->adjustConfiguration([
             'plugins' => [
                 'export' => [
-                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
-                ]
-            ]
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE],
+                ],
+            ],
         ]);
 
         $doc = $this->createTestDocument();
@@ -259,9 +260,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->adjustConfiguration([
             'plugins' => [
                 'export' => [
-                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
-                ]
-            ]
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE],
+                ],
+            ],
         ]);
 
         $doc = $this->createTestDocument();
@@ -295,9 +296,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->adjustConfiguration([
             'plugins' => [
                 'export' => [
-                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
-                ]
-            ]
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE],
+                ],
+            ],
         ]);
 
         $doc = $this->createTestDocument();
@@ -349,18 +350,17 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $title->setLanguage('deu');
         $doc->setTitleMain([$title]);
 
-        $docId = $doc->store();
-        return $docId;
+        return $doc->store();
     }
 
     private function adaptDoiConfiguration()
     {
         $this->adjustConfiguration([
             'doi' => [
-                'autoCreate' => false,
-                'prefix' => '10.2345',
-                'localPrefix' => 'opustest'
-            ]
+                'autoCreate'  => false,
+                'prefix'      => '10.2345',
+                'localPrefix' => 'opustest',
+            ],
         ]);
     }
 }

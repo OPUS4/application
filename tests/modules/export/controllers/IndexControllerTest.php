@@ -31,25 +31,24 @@
 
 use Opus\Common\Document;
 use Opus\Common\FileInterface;
-use Opus\Common\Title;
 use Opus\Common\Model\ModelException;
+use Opus\Common\Title;
 use Opus\Search\Service;
 
 /**
- * Class Export_IndexControllerTest.
- *
  * @covers Export_IndexController
  */
 class Export_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    private $_removeExportFromGuest = false;
+    /** @var bool */
+    private $removeExportFromGuest = false;
 
     public function tearDown(): void
     {
-        if ($this->_removeExportFromGuest) {
+        if ($this->removeExportFromGuest) {
             $this->removeAccessOnModuleExportForGuest();
         }
 
@@ -58,7 +57,6 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     /**
      * expectedException Application_Exception
-     *
      */
     public function testUnknownAction()
     {
@@ -117,7 +115,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $response = $this->getResponse();
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
         $this->assertContains('<export-example>', $response->getBody());
-        $this->assertTrue(substr_count($response->getBody(), '<doc>') == 1);
+        $this->assertTrue(substr_count($response->getBody(), '<doc>') === 1);
     }
 
     public function testIndexActionInvalidCollectionSearchMissingIdParam()
@@ -148,7 +146,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $response = $this->getResponse();
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
         $this->assertContains('<export-example>', $response->getBody());
-        $this->assertTrue(substr_count($response->getBody(), '<doc>') == 6);
+        $this->assertTrue(substr_count($response->getBody(), '<doc>') === 6);
     }
 
     public function testIndexActionInvalidSeriesSearchMissingIdParam()
@@ -184,10 +182,10 @@ class Export_IndexControllerTest extends ControllerTestCase
      */
     public function testRequestToRawXmlIsDenied()
     {
-        $this->_removeExportFromGuest = $this->addAccessOnModuleExportForGuest();
+        $this->removeExportFromGuest = $this->addAccessOnModuleExportForGuest();
 
         // enable security
-        $config = $this->getConfig();
+        $config           = $this->getConfig();
         $config->security = self::CONFIG_VALUE_TRUE;
 
         $this->dispatch('/export/index/index/export/xml');
@@ -206,12 +204,12 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->requireSolrConfig();
 
         // role guest needs privilege to access module export
-        $this->_removeExportFromGuest = $this->addAccessOnModuleExportForGuest();
+        $this->removeExportFromGuest = $this->addAccessOnModuleExportForGuest();
 
         // manipulate solr configuration
         $config = $this->getConfig();
-        $host = $config->searchengine->index->host;
-        $port = $config->searchengine->index->port;
+        $host   = $config->searchengine->index->host;
+        $port   = $config->searchengine->index->port;
         $this->disableSolr();
 
         $config->security = self::CONFIG_VALUE_TRUE;
@@ -289,6 +287,11 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     /**
      * helper function for tests related to OPUSVIER-2488
+     *
+     * @param string $url
+     * @param int    $numOfTestDocs
+     * @param int    $rows
+     * @param int    $start
      */
     private function helperForOPUSVIER2488($url, $numOfTestDocs, $rows, $start = 0)
     {
@@ -464,7 +467,6 @@ class Export_IndexControllerTest extends ControllerTestCase
     /**
      * begin: tests for OPUSVIER-2778
      */
-
     public function testPublistActionWithoutAnyParameter()
     {
         $this->dispatch('/export/index/publist');
@@ -516,7 +518,6 @@ class Export_IndexControllerTest extends ControllerTestCase
     /**
      * begin: tests for OPUSVIER-2779
      */
-
     public function testPublistActionWithNonexistentStylesheet()
     {
         $this->dispatch('/export/index/publist/stylesheet/example/role/publists/number/coll_visible');
@@ -528,8 +529,6 @@ class Export_IndexControllerTest extends ControllerTestCase
     /**
      * begin: tests for OPUSVIER-2780
      */
-
-
     public function testPublistActionWithNonexistentRole()
     {
         $this->dispatch('/export/index/publist/stylesheet/default/role/nonexistent/number/coll_visible');
@@ -589,7 +588,6 @@ class Export_IndexControllerTest extends ControllerTestCase
     /**
      * begin: tests for OPUSVIER-2866
      */
-
     public function testPublistActionWithoutStylesheetParameterInUrl()
     {
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
@@ -605,7 +603,7 @@ class Export_IndexControllerTest extends ControllerTestCase
             $config->plugins->export->publist->stylesheet = 'invalid';
         } else {
             $this->adjustConfiguration([
-                'plugins' => ['export' => ['publist' => ['stylesheet' => 'invalid']]]
+                'plugins' => ['export' => ['publist' => ['stylesheet' => 'invalid']]],
             ]);
         }
 
@@ -624,7 +622,7 @@ class Export_IndexControllerTest extends ControllerTestCase
             $config->plugins->export->publist->stylesheet = 'raw';
         } else {
             $this->adjustConfiguration([
-                'plugins' => ['export' => ['publist' => ['stylesheet' => 'raw']], true]
+                'plugins' => ['export' => ['publist' => ['stylesheet' => 'raw']], true],
             ]);
         }
 
@@ -632,7 +630,7 @@ class Export_IndexControllerTest extends ControllerTestCase
             $config->plugins->export->publist->stylesheetDirectory = 'stylesheets';
         } else {
             $this->adjustConfiguration([
-                'plugins' => ['export' => ['publist' => ['stylesheetDirectory' => 'stylesheets']], true]
+                'plugins' => ['export' => ['publist' => ['stylesheetDirectory' => 'stylesheets']], true],
             ]);
         }
 
@@ -644,11 +642,9 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->assertContains('</export>', $response->getBody());
     }
 
-
     /**
      * begin: tests for OPUSVIER-2867
      */
-
     public function testPublistActionGroupedByPublishedYear()
     {
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
@@ -689,8 +685,9 @@ class Export_IndexControllerTest extends ControllerTestCase
      * 1. $oldConfig and $config are references to the same object
      * 2. Undoing changes are not necessary, as Zend_Config is initialized per test.
      * May apply to other tests as well.
+     *
+     * @param array $options
      */
-
     protected function setPublistConfig($options)
     {
     }
@@ -703,7 +700,7 @@ class Export_IndexControllerTest extends ControllerTestCase
             $config->plugins->export->publist->groupby->completedyear = self::CONFIG_VALUE_TRUE;
         } else {
             $this->adjustConfiguration([
-                'plugins' => ['export' => ['publist' => ['groupby' => ['completedyear' => self::CONFIG_VALUE_TRUE]]]]
+                'plugins' => ['export' => ['publist' => ['groupby' => ['completedyear' => self::CONFIG_VALUE_TRUE]]]],
             ]);
         }
 
@@ -717,10 +714,9 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->assertRegExp('/<h4 id="opus-year-2011">2011<\/h4>.*<h4 id="opus-year-2009">2009<\/h4>/', $normalizedResponseBody);
     }
 
-    /*
+    /**
      * OPUSVIER: 2888
      */
-
     public function testPublistActionAbsoluteUrls()
     {
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
@@ -729,7 +725,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->assertRegexp('/<a href="http:\/\/.*\/frontdoor\/index\/index\/docId\/113">/', $response->getBody());
     }
 
-    /*
+    /**
      * OPUSVIER: 2892
      */
     public function testNoNamespaceDefinitonsInDefaultLayout()
@@ -743,9 +739,9 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains(' xmlns:xsl=', $response->getBody());
     }
 
-    /*
-    * OPUSVIER: 2889
-    */
+    /**
+     * OPUSVIER: 2889
+     */
     public function testPrefixesForIdClassAndAnchorInDefaultLayout()
     {
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
@@ -787,9 +783,17 @@ class Export_IndexControllerTest extends ControllerTestCase
     public function testPublistActionDisplaysUrlencodedFiles()
     {
         $this->adjustConfiguration([
-            'plugins' => ['export' => ['publist' => ['file' => ['allow' => [
-                'mimetype' => ['application/xhtml+xml' => 'HTML']
-            ]]]]]
+            'plugins' => [
+                'export' => [
+                    'publist' => [
+                        'file' => [
+                            'allow' => [
+                                'mimetype' => ['application/xhtml+xml' => 'HTML'],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         // explicitly re-initialize mime type config to apply changes in Zend_Config
@@ -807,7 +811,7 @@ class Export_IndexControllerTest extends ControllerTestCase
             'Failed setting configuration option'
         );
 
-        $doc = Document::get(92);
+        $doc  = Document::get(92);
         $file = $doc->getFile(1);
         $this->assertTrue($file instanceof FileInterface, 'Test setup has changed.');
         $this->assertEquals('datei mit unüblichem Namen.xhtml', $file->getPathName(), 'Test setup has changed.');
@@ -816,7 +820,6 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         $this->assertEquals('coll_visible', $collection->getNumber(), 'Test setup has changed');
         $this->assertEquals(1, $collection->getVisible(), 'Test setup has changed');
-
 
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
@@ -888,7 +891,7 @@ class Export_IndexControllerTest extends ControllerTestCase
 
     /**
      * Regressionstest für OPUSVIER-3391.
-     * // TODO refactor - bootstrapping happens before so the helpers need to be adjusted - better way?
+     * TODO refactor - bootstrapping happens before so the helpers need to be adjusted - better way?
      */
     public function testExportedFilePath()
     {
@@ -897,7 +900,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $view = $this->getView();
         $view->getHelper('ServerUrl')->setHost('localhost');
         $view->getHelper('ServerUrl')->setScheme('https');
-        \Zend_Controller_Front::getInstance()->setBaseUrl('/opus4');
+        Zend_Controller_Front::getInstance()->setBaseUrl('/opus4');
 
         $this->dispatch('/export/index/index/docId/146/export/xml/stylesheet/example/searchtype/id');
         $this->assertXpathContentContains('//file', $opusUrl . '/files/146/test.pdf');
@@ -970,7 +973,7 @@ class Export_IndexControllerTest extends ControllerTestCase
     public function testNonAdminAccessOnUnrestrictedMarc21ExportAllowed()
     {
         $this->adjustConfiguration([
-            'plugins' => ['export' => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]]
+            'plugins' => ['export' => ['marc21' => ['adminOnly' => self::CONFIG_VALUE_FALSE]]],
         ]);
 
         $exportAccessProvided = $this->addAccessOnModuleExportForGuest();
@@ -1000,6 +1003,8 @@ class Export_IndexControllerTest extends ControllerTestCase
     /**
      * Zugriffsrecht auf das Module export entziehen.
      * Gibt true zurück, wenn der Zugriff auf das Module export entzogen wurde.
+     *
+     * @return bool
      */
     private function removeAccessOnModuleExportForGuest()
     {

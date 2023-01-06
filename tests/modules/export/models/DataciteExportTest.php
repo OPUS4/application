@@ -36,7 +36,7 @@ use Opus\Common\Title;
 
 class Export_Model_DataciteExportTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testExecuteWithMissingDocId()
@@ -45,19 +45,19 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $plugin->setRequest($this->getRequest());
         $plugin->setResponse($this->getResponse());
 
-        $this->setExpectedException('Application_Exception');
+        $this->expectException(Application_Exception::class);
         $plugin->execute();
     }
 
     public function testExecuteWithUnknownDocId()
     {
-        $plugin = new Export_Model_DataciteExport();
+        $plugin  = new Export_Model_DataciteExport();
         $request = $this->getRequest();
         $request->setParam('docId', -1);
         $plugin->setRequest($request);
         $plugin->setResponse($this->getResponse());
 
-        $this->setExpectedException('Application_Exception');
+        $this->expectException(Application_Exception::class);
         $plugin->execute();
     }
 
@@ -65,9 +65,9 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
     {
         $this->adjustConfiguration([
             'doi' => [
-                'prefix' => '10.2345',
-                'localPrefix' => 'opustest'
-            ]
+                'prefix'      => '10.2345',
+                'localPrefix' => 'opustest',
+            ],
         ]);
 
         // Testdokument mit allen Pflichtfeldern anlegen
@@ -95,7 +95,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
 
         $doc->store();
 
-        $plugin = new Export_Model_DataciteExport();
+        $plugin  = new Export_Model_DataciteExport();
         $request = $this->getRequest();
         $request->setParam('docId', $docId);
         $plugin->setRequest($request);
@@ -117,12 +117,12 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $doc->setServerState('published');
         $docId = $doc->store();
 
-        $plugin = new Export_Model_DataciteExport();
+        $plugin  = new Export_Model_DataciteExport();
         $request = $this->getRequest();
         $request->setParam('docId', $docId);
         $plugin->setRequest($request);
         $plugin->setResponse($this->getResponse());
-        $view = new \Zend_View();
+        $view = new Zend_View();
         $plugin->setView($view);
 
         $result = $plugin->execute();
@@ -142,14 +142,14 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $doc->setServerState('published');
         $docId = $doc->store();
 
-        $plugin = new Export_Model_DataciteExport();
+        $plugin  = new Export_Model_DataciteExport();
         $request = $this->getRequest();
         $request->setParam('docId', $docId);
         $request->setParam('validate', 'false');
         $plugin->setRequest($request);
         $plugin->setResponse($this->getResponse());
 
-        $view = new \Zend_View();
+        $view = new Zend_View();
         $plugin->setView($view);
 
         $result = $plugin->execute();
@@ -168,7 +168,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $doc->setServerState('published');
         $docId = $doc->store();
 
-        $plugin = new Export_Model_DataciteExport();
+        $plugin  = new Export_Model_DataciteExport();
         $request = $this->getRequest();
         $request->setParam('docId', $docId);
         $request->setParam('validate', 'no');
