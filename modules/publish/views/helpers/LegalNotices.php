@@ -25,30 +25,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Publish_View_Helper_LegalNotices extends \Zend_View_Helper_Abstract
+class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract
 {
-
+    /** @var Zend_View_Interface */
     public $view;
 
     /**
      * Method informs the user if the current document belongs to bibliography.
      * The view helper can be used anywhere in the publish process: on index, specific form or check page.
+     *
+     * @param Zend_Form $form
      * @return String (html output)
      */
     public function legalNotices($form)
     {
-        $session = new \Zend_Session_Namespace('Publish');
+        $session = new Zend_Session_Namespace('Publish');
 
-        if (! is_null($form->getElement('LegalNotices'))) {
-            $fieldset = new Publish_View_Helper_Element();
+        if ($form->getElement('LegalNotices') !== null) {
+            $fieldset       = new Publish_View_Helper_Element();
             $fieldset->view = $this->view;
-            $elementData = $form->getElementAttributes('LegalNotices');
+            $elementData    = $form->getElementAttributes('LegalNotices');
             return $fieldset->element($elementData);
         }
 
@@ -59,22 +58,22 @@ class Publish_View_Helper_LegalNotices extends \Zend_View_Helper_Abstract
         $form->addElement($element);
 
         $elementData = [
-            'id' => 'LegalNotices',
-            'label' => 'LegalNotices',
-            'req' => 'required',
-            'type' => 'Zend_Form_Element_Checkbox',
-            'createType' => 'checkbox',
-            'header' => 'header_LegalNotices',
-            'value' => '1',
-            'check' => '',
-            'disabled' => '0',
-            'error' => [],
-            'DT_external' => true
-            ];
+            'id'          => 'LegalNotices',
+            'label'       => 'LegalNotices',
+            'req'         => 'required',
+            'type'        => 'Zend_Form_Element_Checkbox',
+            'createType'  => 'checkbox',
+            'header'      => 'header_LegalNotices',
+            'value'       => '1',
+            'check'       => '',
+            'disabled'    => '0',
+            'error'       => [],
+            'DT_external' => true,
+        ];
 
         $session->DT_externals['LegalNotices'] = $elementData;
 
-        $fieldset = new Publish_View_Helper_Element();
+        $fieldset       = new Publish_View_Helper_Element();
         $fieldset->view = $this->view;
         return $fieldset->element($elementData);
     }

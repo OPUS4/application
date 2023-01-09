@@ -31,27 +31,29 @@
 
 class Publish_Model_FormElementTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
-    protected $_logger;
+    /** @var Zend_Log */
+    protected $logger;
 
-    public function setUp(): void    {
-        $writer = new \Zend_Log_Writer_Null;
-        $this->_logger = new \Zend_Log($writer);
+    public function setUp(): void
+    {
+        $writer       = new Zend_Log_Writer_Null();
+        $this->logger = new Zend_Log($writer);
         parent::setUp();
     }
 
     public function testUnrequiredFirstNames()
     {
-        $session = new \Zend_Session_Namespace('Publish');
+        $session               = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
 
-        $form = new Publish_Form_PublishingSecond($this->_logger);
-        $name = 'PersonAuthor';
-        $required = true;
-        $formElement = 'text';
-        $datatype = 'Person';
+        $form         = new Publish_Form_PublishingSecond($this->logger);
+        $name         = 'PersonAuthor';
+        $required     = true;
+        $formElement  = 'text';
+        $datatype     = 'Person';
         $multiplicity = 1;
 
         $element = new Publish_Model_FormElement($form, $name, $required, $formElement, $datatype, $multiplicity);
@@ -59,8 +61,8 @@ class Publish_Model_FormElementTest extends ControllerTestCase
         $subformElements = $element->getSubFormElements();
 
         foreach ($subformElements as $sub) {
-            /* @var $sub Zend_Form_Element */
-            if ($sub->getName() == 'PersonAuthorFirstName') {
+            /** @var Zend_Form_Element $sub */
+            if ($sub->getName() === 'PersonAuthorFirstName') {
                 $this->assertFalse($sub->isRequired());
             }
         }

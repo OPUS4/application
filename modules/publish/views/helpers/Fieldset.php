@@ -25,22 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
+class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
 {
-
-    protected $_disable = false;
+    /** @var bool */
+    protected $disable = false;
 
     public function fieldset()
     {
     }
 
+    /**
+     * @param array  $field
+     * @param string $options
+     * @return string
+     */
     public function renderHtmlText($field, $options)
     {
         $fieldset = "";
@@ -54,8 +56,8 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
             }
 
             if ($field['disabled'] === true) {
-                $fieldset .= " disabled='1' ";
-                $this->_disable = true;
+                $fieldset     .= " disabled='1' ";
+                $this->disable = true;
             }
 
             $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
@@ -68,6 +70,11 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
         return $fieldset;
     }
 
+    /**
+     * @param array  $field
+     * @param string $options
+     * @return string
+     */
     public function renderHtmlTextarea($field, $options)
     {
         $fieldset = "\n\t\t\t\t<textarea name='" . $field['id'] . "' class='form-textarea' ";
@@ -78,8 +85,8 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
         }
 
         if ($field['disabled'] === true) {
-            $fieldset .= " disabled='1' ";
-            $this->_disable = true;
+            $fieldset     .= " disabled='1' ";
+            $this->disable = true;
         }
 
         $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
@@ -88,11 +95,15 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
         return $fieldset;
     }
 
-    // TODO: wofür wird der Parameter $options benötigt?
+    /**
+     * @param array  $field
+     * @param string $options TODO wofür wird der Parameter $options benötigt?
+     * @return string
+     */
     public function renderHtmlSelect($field, $options)
     {
         // TODO move style to CSS
-        $fieldset = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id']
+        $fieldset  = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id']
             . '" class="form-selectfield"  id="' . $field['id'] . '"';
         $fieldset .= ' title="' . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . '"';
         if ($field['disabled'] === true) {
@@ -109,7 +120,7 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
             $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="'
                 . htmlspecialchars($option, ENT_QUOTES) . '"';
 
-            if ($option == $field['value'] || $key == $field['value']) {
+            if ($option === $field['value'] || $key === $field['value']) {
                 $fieldset .= ' selected="selected"';
             }
 
@@ -124,20 +135,24 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
         return $fieldset;
     }
 
-    // TODO: wofür wird der Parameter $options benötigt?
+    /**
+     * @param array  $field
+     * @param string $options TODO wofür wird der Parameter $options benötigt?
+     * @return string
+     */
     public function renderHtmlCheckbox($field, $options)
     {
-        $fieldset = "<input type='hidden' name='" . $field['id'] . "' value='0' />";
+        $fieldset  = "<input type='hidden' name='" . $field['id'] . "' value='0' />";
         $fieldset .= "\n\t\t\t\t<input type='checkbox' class='form-checkbox' name='" . $field['id'] . "' id='"
             . $field['id'] . "' ";
         $fieldset .= "value='" . $field['value'] . "' ";
-        if ($field['check'] == 'checked') {
+        if ($field['check'] === 'checked') {
             $fieldset .= " checked='checked' ";
         }
 
         if ($field['disabled'] === true) {
-            $fieldset .= " disabled='disabled' ";
-            $this->_disable = true;
+            $fieldset     .= " disabled='disabled' ";
+            $this->disable = true;
         }
 
         $fieldset .= " />\n";
@@ -145,9 +160,14 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
         return $fieldset;
     }
 
+    /**
+     * @param array  $field
+     * @param string $options
+     * @return string
+     */
     public function renderHtmlFile($field, $options)
     {
-        $fieldset = "<input type='file' name='" . $field['id'] . "' id='" . $field['id']
+        $fieldset  = "<input type='file' name='" . $field['id'] . "' id='" . $field['id']
             . "' enctype='multipart/form-data' ";
         $fieldset .= "title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
         if ($options !== null) {
@@ -167,6 +187,9 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
      * Gruppe nicht gerendert.
      * Kann man verhindern, wenn man dem Array ein zusätzliches Feld "isGroup" o.ä. mitgibt, das überprüft, ob es
      * sich tatsächlich um eine Gruppe handelt.
+     *
+     * @param array $field
+     * @return string
      */
     public function renderFieldsetErrors($field)
     {
@@ -181,11 +204,15 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
         return $fieldset;
     }
 
+    /**
+     * @param array $buttons
+     * @return string
+     */
     public function renderHtmlButtons($buttons)
     {
         $fieldset = "\n\t\t\t\t<div class='button-wrapper add-delete-wrapper'>";
         foreach ($buttons as $button) {
-            if (! $this->_disable) {
+            if (! $this->disable) {
                 $fieldset .= "<input type='submit' ";
                 if (strstr($button['id'], 'Down') !== false) {
                     $fieldset .= "class='form-button down-button' ";
@@ -209,10 +236,14 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
         }
         $fieldset .= "</div>";
 
-        $this->_disable = false;
+        $this->disable = false;
         return $fieldset;
     }
 
+    /**
+     * @param array $hiddens
+     * @return string
+     */
     public function renderHtmlHidden($hiddens)
     {
         $fieldset = "";
@@ -223,7 +254,13 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
         return $fieldset;
     }
 
-    public function _renderSubmit($value, $options = null, $name = null)
+    /**
+     * @param string      $value
+     * @param string|null $options
+     * @param string|null $name
+     * @return string
+     */
+    public function renderSubmit($value, $options = null, $name = null)
     {
         $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='"
             . htmlspecialchars($this->view->translate($value), ENT_QUOTES) . "' ";
@@ -233,16 +270,21 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
         return $submit;
     }
 
-    // TODO: wofür wird der Parameter $options benötigt?
-    public function _renderHidden($value, $options = null, $name = null)
+    /**
+     * @param string      $value
+     * @param string|null $options TODO wofür wird der Parameter $options benötigt?
+     * @param string|null $name
+     * @return string
+     */
+    public function renderHidden($value, $options = null, $name = null)
     {
-        $hiddenfield = "<input type='hidden' name='" . $name . "' id='" . $name . "' value='" . $value . "' />";
-        return $hiddenfield;
+        return "<input type='hidden' name='" . $name . "' id='" . $name . "' value='" . $value . "' />";
     }
 
     /**
      * Returns the hint string for a required element
-     * @return <type>
+     *
+     * @return string
      */
     public function getRequiredSign()
     {
@@ -252,14 +294,21 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
 
     /**
      * Returns a html String for displaying the group hint
-     * @param <String> Name of element or group
-     * @return <type>
+     *
+     * @param string $name Name of element or group
+     * @return string
      */
     public function getFieldsetHint($name)
     {
         return "<div class='description hint'><p>" . $this->view->translate('hint_' . $name) . "</p></div>";
     }
 
+    /**
+     * @param string $name
+     * @param string $label
+     * @param bool   $required
+     * @return string
+     */
     public function getLabelFor($name, $label, $required)
     {
         $fieldset = "<label for='" . $name . "'>" . htmlspecialchars($this->view->translate($label), ENT_QUOTES);
@@ -272,6 +321,10 @@ class Publish_View_Helper_Fieldset extends \Zend_View_Helper_Abstract
         return $fieldset;
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     public function getLegendFor($name)
     {
         return "<legend>" . $this->view->translate($name) . "</legend>\n\t\t\n\t\t";

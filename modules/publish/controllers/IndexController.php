@@ -25,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Publish_IndexController extends Application_Controller_Action
 {
-
     public function init()
     {
         parent::init();
@@ -47,11 +44,10 @@ class Publish_IndexController extends Application_Controller_Action
      * and different upload fields
      *
      * @return void
-     *
      */
     public function indexAction()
     {
-        $session = new \Zend_Session_Namespace('Publish');
+        $session = new Zend_Session_Namespace('Publish');
 
         //unset all possible session content
         $session->unsetAll();
@@ -60,9 +56,9 @@ class Publish_IndexController extends Application_Controller_Action
 
         $form = new Publish_Form_PublishingFirst();
 
-        $this->view->action_url = $this->view->url(['controller' => 'form', 'action' => 'upload']);
-        $this->view->showBib = $form->bibliographie;
-        $this->view->showRights = $form->showRights;
+        $this->view->action_url   = $this->view->url(['controller' => 'form', 'action' => 'upload']);
+        $this->view->showBib      = $form->bibliographie;
+        $this->view->showRights   = $form->showRights;
         $this->view->enableUpload = $form->enableUpload;
         if (! $form->enableUpload) {
             $this->view->subtitle = 'publish_controller_index_sub_without_file';
@@ -70,10 +66,10 @@ class Publish_IndexController extends Application_Controller_Action
             $this->view->subtitle = 'publish_controller_index_sub';
         }
 
-        //initialize session variables
-        // TODO hide initialization routine
-        $session->documentType = '';
-        $session->documentId = '';
+    //initialize session variables
+    // TODO hide initialization routine
+        $session->documentType     = '';
+        $session->documentId       = '';
         $session->additionalFields = [];
 
         $config = $this->getConfig();
@@ -82,13 +78,13 @@ class Publish_IndexController extends Application_Controller_Action
             $this->view->extensions = $config->publish->filetypes->allowed;
         }
 
-        // Quick bug fix for OPUSVIER-3564
+    // Quick bug fix for OPUSVIER-3564
         $translate = Application_Translate::getInstance();
         if ($translate->isTranslated('tooltip_documentType')) {
             $this->view->documentType['hint'] = 'tooltip_documentType';
         }
 
-        // Adds translated messages for javascript files
+    // Adds translated messages for javascript files
         $javascriptTranslations = $this->view->getHelper('javascriptMessages');
         $javascriptTranslations->getDefaultMessageSet();
     }

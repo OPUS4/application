@@ -25,39 +25,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
 {
-
     /**
      * method to render specific elements of an form
-     * @param <type> $type element type that has to rendered
-     * @param <type> $value value of element or Zend_Form_Element
-     * @param <type> $name name of possible hidden element
-     * @return element to render in view
+     *
+     * @param string      $value value of element or Zend_Form_Element
+     * @param string|null $options
+     * @param string|null $name name of possible hidden element
+     * @return string Element to render in view
      */
     public function group($value, $options = null, $name = null)
     {
         $this->view->count++;
-        if ($name == null && $value == null) {
+        if ($name === null && $value === null) {
             $errorMessage = $this->view->translate('template_error_unknown_field');
             // TODO move to CSS
             return "<br/><div style='width: 400px; color:red;'>$errorMessage</div><br/><br/>";
         }
-        return $this->_renderGroup($value, $options, $name);
+        return $this->renderGroup($value, $options, $name);
     }
 
     /**
      * Method to render a group of elements (group fields, buttons, hidden fields)
-     * @param <Array> $group
+     *
+     * @param array       $group
+     * @param array|null  $options
+     * @param string|null $name
+     * @return string
      */
-    private function _renderGroup($group, $options = null, $name = null)
+    private function renderGroup($group, $options = null, $name = null)
     {
         $fieldset = "";
 
@@ -65,7 +66,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
             return $fieldset;
         }
 
-        if ($this->view->currentAnchor == $group['Name']) {
+        if ($this->view->currentAnchor === $group['Name']) {
             $fieldset .= "<a name='current'></a>";
         }
 
@@ -73,24 +74,26 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
         $fieldset .= $this->getLegendFor($group['Name']);
         $fieldset .= $this->getFieldsetHint($group['Name']);
 
-        $groupCount = 1;
+        $groupCount        = 1;
         $groupElementCount = 0;
-        $index = 0;
+        $index             = 0;
 
         foreach ($group['Fields'] as $field) {
             // besonderer Mechanismus erforderlich für Collection Roles (CRs sind erkennbar, weil nur bei ihnen
             // $group['Counter'] auf null gesetzt wurde)
             // dort kann jede Gruppe aus unterschiedlich vielen Select-Boxen aufgebaut sein
             // daher greift der Mechanismus der Auswertung von $group['Counter'] hier nicht
-            if (is_null($group['Counter']) && $index > 0 && $field['label'] !== 'choose_collection_subcollection'
-                    && $field['label'] !== 'endOfCollectionTree') {
+            if (
+                $group['Counter'] === null && $index > 0 && $field['label'] !== 'choose_collection_subcollection'
+                    && $field['label'] !== 'endOfCollectionTree'
+            ) {
                 $groupCount++;
                 $groupElementCount = 0;
-                $fieldset .= "</div>";
+                $fieldset         .= "</div>";
             }
 
-            if ($groupElementCount == 0) {
-                if ($groupCount % 2 == 0) {
+            if ($groupElementCount === 0) {
+                if ($groupCount % 2 === 0) {
                     $fieldset .= "<div class='form-multiple even'>";
                 } else {
                     $fieldset .= "<div class='form-multiple odd'>";
@@ -135,16 +138,16 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
             $fieldset .= "</div>"; // div.form-item schließen
 
             // Mechanimus für alle Gruppenfelder, die keine Collection Roles sind
-            if (! is_null($group['Counter']) && $groupElementCount === intval($group['Counter'])) {
+            if ($group['Counter'] !== null && $groupElementCount === intval($group['Counter'])) {
                 $groupCount++;
                 $groupElementCount = 0;
-                $fieldset .= "</div>"; // div.form-multiple schließen
+                $fieldset         .= "</div>"; // div.form-multiple schließen
             }
             $index++;
         }
 
         // besonderer Mechanismus für Collection Roles (s.o.)
-        if (is_null($group['Counter'])) {
+        if ($group['Counter'] === null) {
             $fieldset .= "</div>";
         }
 

@@ -34,13 +34,10 @@ use Opus\Common\DocumentInterface;
 
 class Publish_Model_DocumentWorkflow
 {
+    public const DOCUMENT_STATE = 'temporary';
 
-    const DOCUMENT_STATE = 'temporary';
-
-    /**
-     * @var DocumentInterface
-     */
-    private $_document;
+    /** @var DocumentInterface */
+    private $document;
 
     /**
      * Create and initialize document object.
@@ -50,13 +47,13 @@ class Publish_Model_DocumentWorkflow
      */
     public function createDocument($documentType)
     {
-        $this->_document = Document::new();
-        $this->_document->setServerState(self::DOCUMENT_STATE)
+        $this->document = Document::new();
+        $this->document->setServerState(self::DOCUMENT_STATE)
             ->setType($documentType);
 
         $this->initializeDocument();
 
-        return $this->_document;
+        return $this->document;
     }
 
     /**
@@ -77,20 +74,23 @@ class Publish_Model_DocumentWorkflow
      */
     public function loadDocument($documentId)
     {
-        if (! isset($documentId) or ! preg_match('/^\d+$/', $documentId)) {
+        if (! isset($documentId) || ! preg_match('/^\d+$/', $documentId)) {
             throw new Publish_Model_Exception('Invalid document ID given');
         }
 
-        $this->_document = Document::get($documentId);
-        if ($this->_document->getServerState() !== self::DOCUMENT_STATE) {
+        $this->document = Document::get($documentId);
+        if ($this->document->getServerState() !== self::DOCUMENT_STATE) {
             throw new Publish_Model_Exception('Document->ServerState mismatch!');
         }
 
-        return $this->_document;
+        return $this->document;
     }
 
+    /**
+     * @return DocumentInterface
+     */
     public function getDocument()
     {
-        return $this->_document;
+        return $this->document;
     }
 }

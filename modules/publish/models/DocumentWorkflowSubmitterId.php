@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2011-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -35,7 +33,6 @@ use Opus\Common\Log;
 
 class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkflow
 {
-
     /**
      * Initialize custom document fields.
      *
@@ -44,7 +41,7 @@ class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkfl
     protected function initializeDocument()
     {
         $loggedUserModel = new Publish_Model_LoggedUser();
-        $userId = trim($loggedUserModel->getUserId());
+        $userId          = trim($loggedUserModel->getUserId());
 
         if (empty($userId)) {
             $logger = Log::get();

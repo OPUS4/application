@@ -31,44 +31,53 @@
 
 use Opus\Common\Config;
 use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Common\Model\ModelException;
 
 class Publish_FormController extends Application_Controller_Action
 {
+    public const BUTTON_ADD         = 'addMore';
+    public const BUTTON_DELETE      = 'deleteMore';
+    public const BUTTON_BROWSE_UP   = 'browseUp';
+    public const BUTTON_BROWSE_DOWN = 'browseDown';
 
-    const BUTTON_ADD = 'addMore';
-    const BUTTON_DELETE = 'deleteMore';
-    const BUTTON_BROWSE_UP = 'browseUp';
-    const BUTTON_BROWSE_DOWN = 'browseDown';
+    public const STEP = 'step';
 
-    const STEP = 'step';
-
-
+    /** @var Zend_Session_Namespace */
     public $session;
+
+    /** @var DocumentInterface */
     public $document;
 
     public function init()
     {
-        $this->session = new \Zend_Session_Namespace('Publish');
+        $this->session = new Zend_Session_Namespace('Publish');
         parent::init();
     }
 
+    /**
+     * @return void
+     * @throws Application_Exception
+     * @throws Zend_Exception
+     * @throws Zend_Form_Exception
+     */
     public function uploadAction()
     {
         $this->view->languageSelectorDisabled = true;
-        $this->view->title = 'publish_controller_index';
-        $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-        $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
+        $this->view->title                    = 'publish_controller_index';
+        $this->view->requiredHint             = $this->view->translate('publish_controller_required_hint');
+        $this->view->subtitle                 = $this->view->translate('publish_controller_index_sub');
 
         if ($this->getRequest()->isPost() !== true) {
-            return $this->_helper->Redirector->redirectTo('index', '', 'index');
+            $this->_helper->Redirector->redirectTo('index', '', 'index');
+            return;
         }
 
         //initializing
-        $indexForm = new Publish_Form_PublishingFirst($this->view);
-        $postData = $this->getRequest()->getPost();
-        $this->view->showBib = $indexForm->bibliographie;
-        $this->view->showRights = $indexForm->showRights;
+        $indexForm                = new Publish_Form_PublishingFirst($this->view);
+        $postData                 = $this->getRequest()->getPost();
+        $this->view->showBib      = $indexForm->bibliographie;
+        $this->view->showRights   = $indexForm->showRights;
         $this->view->enableUpload = $indexForm->enableUpload;
         if (! $indexForm->enableUpload) {
             $this->view->subtitle = $this->view->translate('publish_controller_index_sub_without_file');
@@ -79,11 +88,12 @@ class Publish_FormController extends Application_Controller_Action
                 'FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than'
                 . ' the expected value in OPUS4 config.ini. Further information can be read in our documentation.'
             );
-            return $this->_helper->Redirector->redirectTo(
+            $this->_helper->Redirector->redirectTo(
                 'index',
                 ['failure' => 'error_empty_post_array'],
                 'index'
             );
+            return;
         }
 
         // Adds translated messages for javascript files
@@ -91,11 +101,11 @@ class Publish_FormController extends Application_Controller_Action
         $javascriptTranslations->getDefaultMessageSet();
 
         //don't allow MAX_FILE_SIZE to get overridden
-        $config = $this->getConfig();
+        $config                    = $this->getConfig();
         $postData['MAX_FILE_SIZE'] = $config->publish->maxfilesize;
 
         $indexForm->populate($postData);
-        $this->_initializeDocument($postData);
+        $this->initializeDocument($postData);
 
         $files = $this->document->getFile();
         if (! empty($files)) {
@@ -111,13 +121,15 @@ class Publish_FormController extends Application_Controller_Action
         // validate fileupload (if the current form contains a file upload field and file upload is enabled in
         // application config)
         if ($indexForm->enableUpload) {
-            if ($indexForm->getElement('fileupload') != null
-                && ! $indexForm->getElement('fileupload')->isValid($postData)) {
+            if (
+                $indexForm->getElement('fileupload') !== null
+                && ! $indexForm->getElement('fileupload')->isValid($postData)
+            ) {
                 $indexForm->setViewValues();
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
             } else {
                 //file valid-> store file
-                $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
+                $this->view->uploadSuccess = $this->storeUploadedFiles($postData);
                 if ($this->view->uploadSuccess) {
                     $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
                 }
@@ -128,7 +140,8 @@ class Publish_FormController extends Application_Controller_Action
 
                 if (array_key_exists('addAnotherFile', $postData)) {
                     $postData['uploadComment'] = "";
-                    return $this->renderScript('index/index.phtml');
+                    $this->renderScript('index/index.phtml');
+                    return;
                 }
             }
         }
@@ -137,17 +150,19 @@ class Publish_FormController extends Application_Controller_Action
         if (! $indexForm->isValid($postData)) {
             $indexForm->setViewValues();
             $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-            return $this->renderScript('index/index.phtml');
+            $this->renderScript('index/index.phtml');
+            return;
         }
 
         //form entries are valid: store data
-        $this->_storeBibliography($postData, $config);
+        $this->storeBibliography($postData, $config);
 
         try {
             $publishForm = $this->createPublishingSecondForm();
         } catch (Publish_Model_FormSessionTimeoutException $e) {
             // Session timed out.
-            return $this->_helper->Redirector->redirectTo('index', '', 'index');
+            $this->_helper->Redirector->redirectTo('index', '', 'index');
+            return;
         }
 
         $this->showTemplate($publishForm);
@@ -155,6 +170,13 @@ class Publish_FormController extends Application_Controller_Action
         $this->renderDocumenttypeForm();
     }
 
+    /**
+     * @param array|null $postData
+     * @return Publish_Form_PublishingSecond
+     * @throws Application_Exception
+     * @throws Publish_Model_FormSessionTimeoutException
+     * @throws Zend_Exception
+     */
     private function createPublishingSecondForm($postData = null)
     {
         $logger = $this->getLogger();
@@ -197,12 +219,12 @@ class Publish_FormController extends Application_Controller_Action
      * Method displays and checks the second form page. It also concerns for extending and reducing form fields.
      * After correct validation the user is redirected to deposit controller for storing data.
      *
-     * @return different types of redirect
+     * @return void Different types of redirect
      */
     public function checkAction()
     {
         $this->view->languageSelectorDisabled = true;
-        $this->view->title = 'publish_controller_index';
+        $this->view->title                    = 'publish_controller_index';
 
         $request = $this->getRequest();
 
@@ -212,7 +234,7 @@ class Publish_FormController extends Application_Controller_Action
             $postData = $request->getPost();
             if (isset($postData['DocumentType'])) {
                 // TODO validate type
-                $selectedType = $postData['DocumentType'];
+                $selectedType                = $postData['DocumentType'];
                 $this->session->selectedType = $selectedType;
             }
         }
@@ -225,7 +247,7 @@ class Publish_FormController extends Application_Controller_Action
 
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
-            if (! is_null($this->session->additionalFields)) {
+            if ($this->session->additionalFields !== null) {
                 $postData = array_merge($this->session->additionalFields, $postData);
             }
 
@@ -242,7 +264,8 @@ class Publish_FormController extends Application_Controller_Action
                         );
                     }
                 }
-                return $this->_helper->Redirector->redirectTo('index', '', 'index');
+                $this->_helper->Redirector->redirectTo('index', '', 'index');
+                return;
             }
 
             //go back and change data
@@ -273,12 +296,13 @@ class Publish_FormController extends Application_Controller_Action
                     $form = $this->createPublishingSecondForm($postData);
                 } catch (Publish_Model_FormSessionTimeoutException $e) {
                     // Session timed out.
-                    return $this->_helper->Redirector->redirectTo('index', '', 'index');
+                    $this->_helper->Redirector->redirectTo('index', '', 'index');
+                    return;
                 }
 
                 $this->setViewValues('form', 'check', '#current', $form);
 
-                if (array_key_exists('LegalNotices', $postData) && $postData['LegalNotices'] != '1') {
+                if (array_key_exists('LegalNotices', $postData) && $postData['LegalNotices'] !== '1') {
                     $legalNotices = $form->getElement('LegalNotices');
                     $legalNotices->setChecked(false);
                 }
@@ -304,12 +328,13 @@ class Publish_FormController extends Application_Controller_Action
                 $form = $this->createPublishingSecondForm($postData);
             } catch (Publish_Model_FormSessionTimeoutException $e) {
                 // Session timed out.
-                return $this->_helper->Redirector->redirectTo('index', '', 'index');
+                $this->_helper->Redirector->redirectTo('index', '', 'index');
+                return;
             }
 
             if (! $form->isValid($postData)) {
                 $form->setViewValues();
-                $this->view->form = $form;
+                $this->view->form             = $form;
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
                 $this->renderDocumenttypeForm();
                 return;
@@ -320,25 +345,28 @@ class Publish_FormController extends Application_Controller_Action
                 $this->view->subtitle = $this->view->translate($selectedType);
             }
 
-            return $this->showCheckPage($form);
+            $this->showCheckPage($form);
+            return;
         }
 
-        return $this->_helper->Redirector->redirectTo('upload');
+        $this->_helper->Redirector->redirectTo('upload');
     }
 
     /**
      * Method initializes the current document object by setting ServerState and DocumentType.
+     *
+     * @param array|null $postData
      */
-    private function _initializeDocument($postData = null)
+    private function initializeDocument($postData = null)
     {
-        $documentType = isset($postData['documentType']) ? $postData['documentType'] : '';
+        $documentType                = $postData['documentType'] ?? '';
         $this->session->documentType = $documentType;
 
         $docModel = new Publish_Model_DocumentWorkflow();
 
-        if (! isset($this->session->documentId) || $this->session->documentId == '') {
+        if (! isset($this->session->documentId) || $this->session->documentId === '') {
             $this->getLogger()->info(__METHOD__ . ' documentType = ' . $documentType);
-            $this->document = $docModel->createDocument($documentType);
+            $this->document            = $docModel->createDocument($documentType);
             $this->session->documentId = $this->document->store();
             $this->getLogger()->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
         } else {
@@ -352,15 +380,18 @@ class Publish_FormController extends Application_Controller_Action
 
     /**
      * Method stores the uploaded files with comment for the current document
+     *
+     * @param array $postData
+     * @return bool
      */
-    private function _storeUploadedFiles($postData)
+    private function storeUploadedFiles($postData)
     {
-        $comment = array_key_exists('uploadComment', $postData) ? $postData['uploadComment'] : '';
-        $upload = new \Zend_File_Transfer_Adapter_Http();
-        $files = $upload->getFileInfo();
+        $comment     = array_key_exists('uploadComment', $postData) ? $postData['uploadComment'] : '';
+        $upload      = new Zend_File_Transfer_Adapter_Http();
+        $files       = $upload->getFileInfo();
         $uploadCount = 0;
 
-        $uploadedFiles = $this->document->getFile();
+        $uploadedFiles      = $this->document->getFile();
         $uploadedFilesNames = [];
         foreach ($uploadedFiles as $upfile) {
             $uploadedFilesNames[$upfile->getPathName()] = $upfile->getPathName();
@@ -414,11 +445,16 @@ class Publish_FormController extends Application_Controller_Action
 
     /**
      * Method sets the bibliography flag in database.
+     *
+     * @param array       $data
+     * @param Zend_Config $config
      */
-    private function _storeBibliography($data, $config)
+    private function storeBibliography($data, $config)
     {
-        if (! isset($config->form->first->bibliographie) ||
-            ! filter_var($config->form->first->bibliographie, FILTER_VALIDATE_BOOLEAN)) {
+        if (
+            ! isset($config->form->first->bibliographie) ||
+            ! filter_var($config->form->first->bibliographie, FILTER_VALIDATE_BOOLEAN)
+        ) {
             return;
         }
 
@@ -438,7 +474,7 @@ class Publish_FormController extends Application_Controller_Action
     private function showTemplate($form)
     {
         $this->view->subtitle = $this->view->translate($this->session->documentType);
-        $this->view->doctype = $this->session->documentType;
+        $this->view->doctype  = $this->session->documentType;
         $this->setViewValues('form', 'check', '#current', $form);
     }
 
@@ -449,11 +485,18 @@ class Publish_FormController extends Application_Controller_Action
      */
     private function showCheckPage($form)
     {
-        $this->view->hint = $this->view->translate('publish_controller_check2');
+        $this->view->hint   = $this->view->translate('publish_controller_check2');
         $this->view->header = $this->view->translate('publish_controller_changes');
         $this->setViewValues('deposit', 'deposit', '', $form, true);
     }
 
+    /**
+     * @param string    $controller
+     * @param string    $action
+     * @param string    $anchor
+     * @param Zend_Form $form
+     * @param bool      $prepareCheck
+     */
     private function setViewValues($controller, $action, $anchor, $form, $prepareCheck = false)
     {
         $url = $this->view->url(['controller' => $controller, 'action' => $action]) . $anchor;
@@ -463,20 +506,24 @@ class Publish_FormController extends Application_Controller_Action
             $form->prepareCheck();
         }
         $this->view->action_url = $url;
-        $this->view->form = $form;
+        $this->view->form       = $form;
     }
 
+    /**
+     * @param array $postData
+     * @throws Publish_Model_FormNoButtonFoundException
+     */
     private function manipulateSession($postData)
     {
         $this->view->currentAnchor = "";
 
         //find out which button was pressed
-        $pressedButtonName = $this->_getPressedButton($postData);
+        $pressedButtonName = $this->getPressedButton($postData);
 
         //find out the resulting workflow and the field to extend
-        $result = $this->_workflowAndFieldFor($pressedButtonName);
+        $result    = $this->workflowAndFieldFor($pressedButtonName);
         $fieldName = $result[0];
-        $workflow = $result[1];
+        $workflow  = $result[1];
 
         // Häufigkeit des Felds im aktuellen Formular (Standard ist 1)
         $currentNumber = 1;
@@ -486,15 +533,15 @@ class Publish_FormController extends Application_Controller_Action
 
         // update collection fields in session member addtionalFields and find out the current level of collection
         // browsing
-        $level = $this->_updateCollectionField($fieldName, $currentNumber, $postData);
+        $level = $this->updateCollectionField($fieldName, $currentNumber, $postData);
 
         $saveName = "";
         //Enrichment-Gruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren
         if (strstr($fieldName, 'Enrichment')) {
-            $saveName = $fieldName;
+            $saveName  = $fieldName;
             $fieldName = str_replace('Enrichment', '', $fieldName);
         }
-        if ($saveName != "") {
+        if ($saveName !== '') {
             $fieldName = $saveName;
         }
 
@@ -521,8 +568,10 @@ class Publish_FormController extends Application_Controller_Action
 
             case 'down':
                 // Browse down in the Collection hierarchy.
-                if (($level == 1 && $postData[$fieldName . '_' . $currentNumber] !== '')
-                    || ($level > 1 && $postData['collId' . $level . $fieldName . '_' . $currentNumber] != '')) {
+                if (
+                    ($level === 1 && $postData[$fieldName . '_' . $currentNumber] !== '')
+                    || ($level > 1 && $postData['collId' . $level . $fieldName . '_' . $currentNumber] !== '')
+                ) {
                     $this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber] = $level + 1;
                 }
                 break;
@@ -546,16 +595,20 @@ class Publish_FormController extends Application_Controller_Action
 
     /**
      * Method to check which button in the form was pressed
+     *
      * @param array $post array of POST request values
-     * @return <String> name of button
+     * @return string Name of button
+     * @throws Publish_Model_FormNoButtonFoundException
      */
-    private function _getPressedButton($post)
+    private function getPressedButton($post)
     {
         foreach ($post as $name => $value) {
-            if (strstr($name, self::BUTTON_ADD) ||
+            if (
+                strstr($name, self::BUTTON_ADD) ||
                     strstr($name, self::BUTTON_DELETE) ||
                     strstr($name, self::BUTTON_BROWSE_DOWN) ||
-                    strstr($name, self::BUTTON_BROWSE_UP)) {
+                    strstr($name, self::BUTTON_BROWSE_UP)
+            ) {
                 return $name;
             }
         }
@@ -564,22 +617,23 @@ class Publish_FormController extends Application_Controller_Action
 
     /**
      * Finds out which button for which field was pressed.
+     *
      * @param string $button button label
-     * @return two-element array with fieldname and workflow
+     * @return array Two-element array with fieldname and workflow
      */
-    private function _workflowAndFieldFor($button)
+    private function workflowAndFieldFor($button)
     {
         $result = [];
-        if (substr($button, 0, 7) == self::BUTTON_ADD) {
+        if (substr($button, 0, 7) === self::BUTTON_ADD) {
             $result[0] = substr($button, 7);
             $result[1] = 'add';
-        } elseif (substr($button, 0, 10) == self::BUTTON_DELETE) {
+        } elseif (substr($button, 0, 10) === self::BUTTON_DELETE) {
             $result[0] = substr($button, 10);
             $result[1] = 'delete';
-        } elseif (substr($button, 0, 10) == self::BUTTON_BROWSE_DOWN) {
+        } elseif (substr($button, 0, 10) === self::BUTTON_BROWSE_DOWN) {
             $result[0] = substr($button, 10);
             $result[1] = 'down';
-        } elseif (substr($button, 0, 8) == self::BUTTON_BROWSE_UP) {
+        } elseif (substr($button, 0, 8) === self::BUTTON_BROWSE_UP) {
             $result[0] = substr($button, 8);
             $result[1] = 'up';
         }
@@ -588,20 +642,21 @@ class Publish_FormController extends Application_Controller_Action
 
     /**
      * Finds the current level of collection browsing for a given field.
+     *
      * @param string $field name of field
      * @param string $value counter of fieldsets
-     * @param array $post Array of post data
+     * @param array  $post Array of post data
      * @return int current level
      */
-    private function _updateCollectionField($field, $value, $post)
+    private function updateCollectionField($field, $value, $post)
     {
         if (! array_key_exists(self::STEP . $field . '_' . $value, $this->session->additionalFields)) {
             return 1;
         }
 
-        $level = $this->session->additionalFields[self::STEP . $field . '_' . $value];
+        $level = (int) $this->session->additionalFields[self::STEP . $field . '_' . $value];
 
-        if ($level == 1) {
+        if ($level === 1) {
             // Root Node
             if (isset($post[$field . '_' . $value]) && $post[$field . '_' . $value] !== '') {
                 $this->session->additionalFields['collId1' . $field . '_' . $value] = $post[$field . '_' . $value];
@@ -614,15 +669,15 @@ class Publish_FormController extends Application_Controller_Action
             }
         }
 
-        return $level;
+        return (int) $level;
     }
 
     private function renderDocumenttypeForm()
     {
-        $docTypeHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-        $templateName = $docTypeHelper->getTemplateName($this->session->documentType);
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $templateName  = $docTypeHelper->getTemplateName($this->session->documentType);
 
-        if (is_null($templateName)) {
+        if ($templateName === null) {
             throw new Application_Exception(
                 'invalid configuration: could not get template name for requested document type'
             );
