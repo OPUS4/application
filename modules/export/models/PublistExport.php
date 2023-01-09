@@ -207,7 +207,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
         }
 
         $role = CollectionRole::fetchByName($roleParam);
-        if ($role->getVisible()) {
+        if (! $role->getVisible()) {
             throw new Application_Exception('specified role is invisible');
         }
 
