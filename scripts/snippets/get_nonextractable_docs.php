@@ -41,13 +41,13 @@ use Opus\Common\Repository;
 
 $host = 'opus4web.zib.de';
 $port = '8984';
-$app = 'solr/opus';
+$app  = 'solr/opus';
 
 $solrServer = new Apache_Solr_Service($host, $port, $app);
 
 $docFinder = Repository::getInstance()->getDocumentFinder();
 
-$overallNumOfFulltexts = 0;
+$overallNumOfFulltexts        = 0;
 $numOfNonExtractableFulltexts = 0;
 
 foreach ($docFinder->getIds() as $id) {
@@ -60,7 +60,7 @@ foreach ($docFinder->getIds() as $id) {
     }
 
     $files = $d->getFile();
-    if (count($files) == 0) {
+    if (count($files) === 0) {
         continue;
     }
 
@@ -70,7 +70,7 @@ foreach ($docFinder->getIds() as $id) {
         try {
             $response = $solrServer->extract(
                 $file->getPath(),
-                [ 'extractOnly' => 'true', 'extractFormat' => 'text' ]
+                ['extractOnly' => 'true', 'extractFormat' => 'text']
             );
         } catch (Exception $e) {
             echo "error while extracting full text for document # " . $d->getId() . " (file name : "
@@ -78,7 +78,7 @@ foreach ($docFinder->getIds() as $id) {
             $numOfNonExtractableFulltexts++;
             continue;
         }
-        if (is_null($response->getRawResponse()) || strlen(trim($response->getRawResponse())) == 0) {
+        if ($response->getRawResponse() === null || strlen(trim($response->getRawResponse())) === 0) {
             echo "non-extractable full text for document # " . $d->getId() . " (file name: "
                 . $file->getPath() . " )\n";
             $numOfNonExtractableFulltexts++;

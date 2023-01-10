@@ -29,8 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
 

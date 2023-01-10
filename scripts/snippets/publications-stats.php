@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2013-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -40,13 +40,13 @@ use Opus\Common\Repository;
 $repository = Repository::getInstance();
 
 $finder = $repository->getDocumentFinder();
-$years = $finder->setServerState('published')->getYearsPublished();
+$years  = $finder->setServerState('published')->getYearsPublished();
 sort($years);
 
 $cumSum = 0;
 foreach ($years as $year) {
     $finder = $repository->getDocumentFinder();
-    $count = $finder->setServerState('published')->setServerDatePublishedRange($year, $year + 1)->getCount();
+    $count  = $finder->setServerState('published')->setServerDatePublishedRange($year, $year + 1)->getCount();
 
     $cumSum += $count;
     echo "year $year: $cumSum ($count)\n";

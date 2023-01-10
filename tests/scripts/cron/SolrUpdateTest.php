@@ -28,18 +28,18 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-require_once('CronTestCase.php');
 
+require_once 'CronTestCase.php';
+
+use Opus\Common\DocumentInterface;
 use Opus\Common\Job;
 
-/**
- *
- */
 class SolrUpdateTest extends CronTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var DocumentInterface */
     private $document;
 
     public function setUp(): void
@@ -54,7 +54,8 @@ class SolrUpdateTest extends CronTestCase
     {
         $this->createJob(Opus\Search\Task\IndexOpusDocument::LABEL, [
             'documentId' => $this->document->getId(),
-            'task' => 'index']);
+            'task'       => 'index',
+        ]);
         $this->executeScript('cron-solr-update.php');
         $allJobs = Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
@@ -66,7 +67,8 @@ class SolrUpdateTest extends CronTestCase
     {
         $this->createJob(Opus\Search\Task\IndexOpusDocument::LABEL, [
             'documentId' => $this->document->getId(),
-            'task' => 'remove']);
+            'task'       => 'remove',
+        ]);
         $this->executeScript('cron-solr-update.php');
         $allJobs = Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
@@ -78,7 +80,8 @@ class SolrUpdateTest extends CronTestCase
     {
         $this->createJob(Opus\Search\Task\IndexOpusDocument::LABEL, [
             'documentId' => $this->document->getId(),
-            'task' => 'do-the-unexpected']);
+            'task'       => 'do-the-unexpected',
+        ]);
         $this->executeScript('cron-solr-update.php');
         $allJobs = Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Job::STATE_FAILED);
         $this->assertEquals(1, count($allJobs), 'Expected one failed job in queue (found ' . count($allJobs) . ')');

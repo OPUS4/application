@@ -1,5 +1,6 @@
 #!/usr/bin/env php5
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,20 +26,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Import
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 /**
- *
  * TODO: dieses Skript wird aktuell nicht in den Tarball / Deb-Package aufgenommen
  * Es ist noch sehr stark an die Anforderungen einer Testinstanz angepasst und
  * müsste vor der offiziellen Aufnahme noch generalisiert werden. Die Steuerung
  * sollte über eine externe Konfigurationsdatei erfolgen, so dass der Quellcode
  * später nicht mehr angepasst werden muss.
- *
  */
 
 use Opus\Import\CsvImporter;

@@ -29,11 +29,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('CronTestCase.php');
+require_once 'CronTestCase.php';
 
-use Opus\Common\Repository;
 use Opus\Common\Document;
 use Opus\Common\Job;
+use Opus\Common\JobInterface;
+use Opus\Common\Repository;
 use Opus\Import\Worker\MetadataImportWorker;
 use Opus\Import\Xml\MetadataImportInvalidXmlException;
 use Opus\Import\Xml\MetadataImportSkippedDocumentsException;
@@ -41,28 +42,29 @@ use Opus\Job\InvalidJobException;
 
 class MetadataImportTest extends CronTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var bool */
     private $documentImported;
 
+    /** @var string */
     private $xmlDir;
-
 
     public function setUp(): void
     {
         parent::setUp();
         $this->documentImported = false;
-        $this->xmlDir = dirname(dirname(dirname(__FILE__))) . '/import/';
+        $this->xmlDir           = dirname(dirname(dirname(__FILE__))) . '/import/';
     }
 
     public function tearDown(): void
     {
         if ($this->documentImported) {
             $finder = Repository::getInstance()->getDocumentFinder();
-            $ids = $finder->getIds();
-            $last_id = array_pop($ids);
-            $doc = Document::get($last_id);
+            $ids    = $finder->getIds();
+            $lastId = array_pop($ids);
+            $doc    = Document::get($lastId);
             $doc->delete();
         }
         parent::tearDown();
@@ -86,7 +88,7 @@ class MetadataImportTest extends CronTestCase
     public function testJobFailedWithSkippedDocumentsException()
     {
         $filename = 'test_import_invalid_collectionid.xml';
-        $xml = new DOMDocument();
+        $xml      = new DOMDocument();
         $this->assertTrue($xml->load($this->xmlDir . $filename), 'Could not load xml as DomDocument');
 
         $this->createJob(MetadataImportWorker::LABEL, ['xml' => $xml->saveXML()]);
@@ -102,7 +104,7 @@ class MetadataImportTest extends CronTestCase
     public function testJobFailedWithInvalidXmlException()
     {
         $filename = 'test_import_schemainvalid.xml';
-        $xml = new DOMDocument();
+        $xml      = new DOMDocument();
         $this->assertTrue($xml->load($this->xmlDir . $filename), 'Could not load xml as DomDocument');
 
         $this->createJob(MetadataImportWorker::LABEL, ['xml' => $xml->saveXML()]);
@@ -118,7 +120,7 @@ class MetadataImportTest extends CronTestCase
     public function testJobSuccess()
     {
         $filename = 'test_import_minimal.xml';
-        $xml = new DOMDocument();
+        $xml      = new DOMDocument();
         $this->assertTrue($xml->load($this->xmlDir . $filename), 'Could not load xml as DomDocument');
 
         $this->createJob(MetadataImportWorker::LABEL, ['xml' => $xml->saveXML()]);
@@ -132,6 +134,10 @@ class MetadataImportTest extends CronTestCase
         $this->documentImported = true;
     }
 
+    /**
+     * @param JobInterface $job
+     * @param string       $exception
+     */
     private function assertJobException($job, $exception)
     {
         $this->assertStringStartsWith('{"exception":"' . addslashes($exception) . '"', $job->getErrors());

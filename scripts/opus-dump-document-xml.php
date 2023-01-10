@@ -53,7 +53,7 @@ foreach ($argv as $docId) {
     $xmlModel->excludeEmptyFields();
     $xmlModel->setStrategy(new Version1());
 
-    $docXml = $xmlModel->getDomDocument();
+    $docXml               = $xmlModel->getDomDocument();
     $docXml->formatOutput = true;
     echo $docXml->saveXml();
 }

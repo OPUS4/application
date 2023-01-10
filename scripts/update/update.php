@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,8 +26,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -43,7 +42,7 @@ set_include_path(
         [
             dirname(dirname(dirname(__FILE__))) . '/library',
             dirname(dirname(dirname(__FILE__))) . '/vendor',
-            get_include_path()
+            get_include_path(),
         ]
     )
 );
@@ -58,7 +57,7 @@ require_once 'opus-php-compatibility.php';
 // TODO OPUSVIER-4420 remove after switching to Laminas/ZF3
 require_once APPLICATION_PATH . '/vendor/opus4-repo/framework/library/OpusDb/Mysqlutf8.php';
 
-$autoloader = \Zend_Loader_Autoloader::getInstance();
+$autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->suppressNotFoundWarnings(false);
 $autoloader->setFallbackAutoloader(true);
 

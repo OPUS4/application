@@ -29,27 +29,29 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Job;
+use Opus\Common\Model\NotFoundException;
 
-/**
- *
- */
 class CronTestCase extends ControllerTestCase
 {
-
+    /** @var string */
     protected static $scriptPath;
+
+    /** @var string */
     protected static $lockDir;
+
+    /** @var array */
     private $jobIds = [];
 
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         self::$scriptPath = realpath(dirname(__FILE__) . '/../../../scripts/cron') . '/';
-        self::$lockDir = realpath(self::$scriptPath . '/../../workspace/cache/');
+        self::$lockDir    = realpath(self::$scriptPath . '/../../workspace/cache/');
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         if (! empty($this->jobIds)) {
             foreach ($this->jobIds as $jobId) {
                 try {
@@ -62,9 +64,13 @@ class CronTestCase extends ControllerTestCase
         parent::tearDown();
     }
 
+    /**
+     * @param string $fileName
+     * @return string
+     */
     protected function executeScript($fileName)
     {
-        $command = self::$scriptPath . 'cron-php-runner.sh ' . self::$scriptPath . $fileName . ' ' . self::$lockDir;
+        $command             = self::$scriptPath . 'cron-php-runner.sh ' . self::$scriptPath . $fileName . ' ' . self::$lockDir;
         $savedApplicationEnv = getenv('APPLICATION_ENV');
         putenv('APPLICATION_ENV=' . APPLICATION_ENV);
         $result = shell_exec($command);
@@ -74,6 +80,10 @@ class CronTestCase extends ControllerTestCase
         return $result;
     }
 
+    /**
+     * @param string $label
+     * @param array  $data
+     */
     protected function createJob($label, $data = [])
     {
         $job = Job::new();

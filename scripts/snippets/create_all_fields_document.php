@@ -47,7 +47,6 @@ $doc->setType('all');
 $doc->setServerState('published');
 $doc->setServerDatePublished('1900-01-01');
 
-
 // damn API. $doc->addPersonSubmiter() doesn't work for link models!
 // -> we should change this in 4.x
 $submitter = Person::new();
@@ -92,9 +91,9 @@ $doc->setArticleNumber('125');
 $doc->setVolume('4');
 $doc->setIssue('18');
 
-$instituteName = 'Institut für empirische Forschung';
+$instituteName  = 'Institut für empirische Forschung';
 $institutesRole = CollectionRole::fetchByName('institutes');
-if (is_null($institutesRole) === true) {
+if ($institutesRole === null) {
     $institutesRole = CollectionRole::new();
     $institutesRole->setName('institutes')
                    ->setOaiName('institutes')
@@ -112,7 +111,7 @@ if (count($instituteCollections) >= 1) {
     $instituteCollection = $instituteCollections[0];
 } else {
     $rootCollection = $institutesRole->getRootCollection();
-    if (is_null($rootCollection) === true) {
+    if ($rootCollection === null) {
         $rootCollection = $institutesRole->addRootCollection();
         $rootCollection->setVisible(1)->store();
         $institutesRole->store();
@@ -170,7 +169,7 @@ foreach (DnbInstitute::getGrantors() as $grantor) {
         break;
     }
 }
-if (is_null($dnbInstitute->getId()) === true) {
+if ($dnbInstitute->getId() === null) {
         $dnbInstitute->setCity('Mousetown')->setIsGrantor(1)->store();
 }
 $doc->setThesisGrantor($dnbInstitute);
@@ -240,13 +239,13 @@ if (count($licences) >= 1) {
 $doc->setLicence($lic);
 
 // check for enrichment keys before creating enrichments
-$enrichmentKeys = EnrichmentKey::getAll();
+$enrichmentKeys     = EnrichmentKey::getAll();
 $enrichmentKeyNames = [];
 foreach ($enrichmentKeys as $enrichmentKey) {
     $enrichmentKeyNames[] = $enrichmentKey->getName();
 }
 $missingEnrichmentKeyNames = array_diff(
-    ['SourceSwb','SourceTitle','ClassRvk','ContributorsName','Event', 'City', 'Country'],
+    ['SourceSwb', 'SourceTitle', 'ClassRvk', 'ContributorsName', 'Event', 'City', 'Country'],
     $enrichmentKeyNames
 );
 if (! empty($missingEnrichmentKeyNames)) {
@@ -269,4 +268,4 @@ $doc->addEnrichment()->setKeyName('City')->setValue('Opus4 OAI-City');
 $doc->addEnrichment()->setKeyName('Country')->setValue('Opus4 OAI-Country');
 
 $doc->store();
-print("Document stored. ID: " . $doc->getId() . "\n");
+print "Document stored. ID: " . $doc->getId() . "\n";

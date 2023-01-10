@@ -33,7 +33,6 @@ use Opus\Common\Document;
 use Opus\Common\Series;
 
 /**
- *
  * Setzt die interne Sortierreihenfolge (doc_sort_order) für die einer
  * Schriftenreihe zugeordneten Dokumente auf Basis der vergebenenen Bandnummern
  * neu.
@@ -88,7 +87,7 @@ foreach (Series::getAll() as $series) {
 
     $seriesCounter = 0;
     foreach ($seriesNumbers as $docId => $seriesNumber) {
-        $doc = Document::get($docId);
+        $doc       = Document::get($docId);
         $allSeries = $doc->getSeries();
         $doc->setSeries([]);
         $doc->store();

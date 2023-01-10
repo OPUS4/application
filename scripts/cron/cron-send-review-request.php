@@ -30,25 +30,22 @@
  */
 
 /**
- *
  * This file is not part of the main OPUS 4 distribution!
  *
  * It is currently used in the matheon module. The tarball
  * creation script prepare_directories.sh ignores this file and
  * does not add it to the tarball.
- *
- *
  */
 
 define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Job\Runner;
-use Opus\Job\MailNotification;
 use Opus\Common\Log;
+use Opus\Job\MailNotification;
+use Opus\Job\Runner;
 
-$jobrunner = new Runner;
+$jobrunner = new Runner();
 $jobrunner->setLogger(Log::get());
 // no waiting between jobs
 $jobrunner->setDelay(0);

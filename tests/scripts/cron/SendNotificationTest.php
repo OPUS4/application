@@ -28,7 +28,8 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-require_once('CronTestCase.php');
+
+require_once 'CronTestCase.php';
 
 use Opus\Common\Job;
 use Opus\Job\MailNotification;
@@ -40,11 +41,10 @@ use Opus\Job\MailNotification;
  * php opus-smtp-dumpserver.php 2>&1 >> opus-smtp-dumpserver.log &
  *
  * TODO kann man das besser automatisieren
- *
  */
 class SendNotificationTest extends CronTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function testSendNotification()
@@ -52,7 +52,7 @@ class SendNotificationTest extends CronTestCase
         $this->createJob(MailNotification::LABEL, [
             'subject' => 'SendNotification Test',
             'message' => 'This is a test message generated in ' . __FILE__,
-            'users' => [['address' => 'user@example.org', 'name' => 'Test User']]
+            'users'   => [['address' => 'user@example.org', 'name' => 'Test User']],
         ]);
         $this->executeScript('cron-send-notification.php');
         $allJobs = Job::getByLabels([MailNotification::LABEL], null, Job::STATE_UNDEFINED);
@@ -66,7 +66,7 @@ class SendNotificationTest extends CronTestCase
         $this->createJob(MailNotification::LABEL, [
             'subject' => 'SendNotification Test',
             'message' => 'This is a test message generated in ' . __FILE__,
-            'users' => ''
+            'users'   => '',
         ]);
         $this->executeScript('cron-send-notification.php');
         $failedJobs = Job::getByLabels([MailNotification::LABEL], null, Job::STATE_FAILED);

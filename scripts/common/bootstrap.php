@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,12 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -39,11 +35,11 @@ set_include_path(
     implode(
         PATH_SEPARATOR,
         [
-        '.',
-        dirname(__FILE__),
-        dirname(dirname(dirname(__FILE__))) . '/library',
-        dirname(dirname(dirname(__FILE__))) . '/vendor',
-        get_include_path(),
+            '.',
+            dirname(__FILE__),
+            dirname(dirname(dirname(__FILE__))) . '/library',
+            dirname(dirname(dirname(__FILE__))) . '/vendor',
+            get_include_path(),
         ]
     )
 );
@@ -55,7 +51,7 @@ defined('APPLICATION_PATH')
 // Define application environment
 // TODO scripts using this might be executed with a different environment than requests to the application
 defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+    || define('APPLICATION_ENV', getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production');
 
 require_once 'autoload.php';
 require_once 'opus-php-compatibility.php';
@@ -64,14 +60,14 @@ require_once 'opus-php-compatibility.php';
 require_once APPLICATION_PATH . '/vendor/opus4-repo/framework/library/OpusDb/Mysqlutf8.php';
 
 // environment initializiation
-$application = new \Zend_Application(
+$application = new Zend_Application(
     APPLICATION_ENV,
     [
         "config" => [
             APPLICATION_PATH . '/application/configs/application.ini',
             APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/console.ini'
-        ]
+            APPLICATION_PATH . '/application/configs/console.ini',
+        ],
     ]
 );
 

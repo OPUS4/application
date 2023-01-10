@@ -54,7 +54,7 @@ $options = getopt('', ['dryrun', 'type:', 'doctype:', 'enrichment:']);
 $dryrun = isset($options['dryrun']);
 
 $doctype = '';
-if (is_null($options['doctype'])) {
+if ($options['doctype'] === null) {
     echo "parameter --doctype not specified; function will be executed for all document types" . PHP_EOL;
 } else {
     $doctype = $options['doctype'];
@@ -67,7 +67,7 @@ if (! isset($options['type']) || empty($options['type'])) {
 }
 
 $enrichmentField = '';
-if (is_null($options['enrichment'])) {
+if ($options['enrichment'] === null) {
     echo "parameter --enrichment not specified; function will now exit" . PHP_EOL;
     exit;
 } else {
@@ -78,24 +78,24 @@ $getType = 'getTitle' . ucfirst(strtolower($options['type']));
 $addType = 'addTitle' . ucfirst(strtolower($options['type']));
 
 if ($dryrun) {
-    _log("TEST RUN: NO DATA WILL BE MODIFIED");
+    log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
 $docFinder = Repository::getInstance()->getDocumentFinder();
-$docIds = $docFinder->setEnrichmentExists($enrichmentField)->getIds();
+$docIds    = $docFinder->setEnrichmentExists($enrichmentField)->getIds();
 
-_log(count($docIds) . " documents found");
+log(count($docIds) . " documents found");
 
 foreach ($docIds as $docId) {
     $doc = Document::get($docId);
-    if ($doc->getType() == $doctype || $doctype == '') {
+    if ($doc->getType() === $doctype || $doctype === '') {
         $enrichments = $doc->getEnrichment();
         foreach ($enrichments as $enrichment) {
             $enrichmentArray = $enrichment->toArray();
-            if ($enrichmentArray['KeyName'] == $enrichmentField) {
+            if ($enrichmentArray['KeyName'] === $enrichmentField) {
                 $titles = $doc->{$getType}();
                 if (count($titles) > 0) {
-                    _log(
+                    log(
                         'Title ' . ucfirst(strtolower($options['type'])) . ' already exists for Document #' . $docId
                         . '. Skipping.. '
                     );
@@ -105,14 +105,17 @@ foreach ($docIds as $docId) {
                     if (! $dryrun) {
                         $doc->store();
                     }
-                    _log('Document #' . $docId . ' updated');
+                    log('Document #' . $docId . ' updated');
                 }
             }
         }
     }
 }
 
-function _log($message)
+/**
+ * @param string $message
+ */
+function log($message)
 {
     echo $message . PHP_EOL;
 }

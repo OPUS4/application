@@ -29,8 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Collection;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * script that imports collections from a text file
@@ -65,8 +65,8 @@ try {
     exit();
 }
 
-if (! is_null($rootCollection)) {
-    $lineCount = 0;
+if ($rootCollection !== null) {
+    $lineCount     = 0;
     $linesImported = 0;
     foreach (file($inputFile) as $line) {
         $lineCount++;
@@ -94,6 +94,5 @@ if (! is_null($rootCollection)) {
 
     echo "$linesImported collections were successfully imported\n";
 }
-
 
 exit();

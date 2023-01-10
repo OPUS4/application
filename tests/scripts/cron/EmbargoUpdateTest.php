@@ -29,18 +29,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('CronTestCase.php');
+require_once 'CronTestCase.php';
 
 use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\Common\Repository;
 
-/**
- *
- */
 class EmbargoUpdateTest extends CronTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function testEmbargoUpdate()
@@ -56,7 +53,7 @@ class EmbargoUpdateTest extends CronTestCase
         $doc->setEmbargoDate($yesterday);
         $expiredId = $doc->store();
 
-        $doc = Document::new();
+        $doc         = Document::new();
         $noEmbargoId = $doc->store();
 
         $doc = Document::new();
@@ -82,10 +79,15 @@ class EmbargoUpdateTest extends CronTestCase
         $this->assertTrue($this->sameDay($twoDaysAgo->getDateTime(), $doc->getServerDateModified()->getDateTime()));
     }
 
+    /**
+     * @param DateTime $firstDate
+     * @param DateTime $secondDate
+     * @return bool
+     */
     private function sameDay($firstDate, $secondDate)
     {
-        $first = $firstDate->format('Y-m-d');
+        $first  = $firstDate->format('Y-m-d');
         $second = $secondDate->format('Y-m-d');
-        return $first == $second;
+        return $first === $second;
     }
 }

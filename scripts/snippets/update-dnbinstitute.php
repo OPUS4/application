@@ -52,79 +52,84 @@ use Opus\Common\Repository;
 
 $options = getopt('', ['doctype:', 'publisherid:', 'grantorid:', 'dryrun']);
 
-if ((! isset($options['publisherid']) || empty($options['publisherid']))
-        && (! isset($options['grantorid']) || empty($options['grantorid']))) {
+if (
+    (! isset($options['publisherid']) || empty($options['publisherid']))
+        && (! isset($options['grantorid']) || empty($options['grantorid']))
+) {
     echo "Usage: {$argv[0]} [--publisherid <thesis publisher ID>] [--grantorid <thesis grantor ID>]"
         . " (--doctype <document type>) (--dryrun)\n";
     echo "publisherid and/or grantorid must be provided.\n";
     exit;
 }
 
-$documentType = @$options['doctype'] ? $options['doctype'] : false;
+$documentType      = @$options['doctype'] ? $options['doctype'] : false;
 $thesisPublisherId = @$options['publisherid'] ? : null;
-$thesisGrantorId = @$options['grantorid'] ? : null;
-$dryrun = isset($options['dryrun']);
+$thesisGrantorId   = @$options['grantorid'] ? : null;
+$dryrun            = isset($options['dryrun']);
 
 try {
     $dnbInstitute = DnbInstitute::get($thesisPublisherId);
 } catch (NotFoundException $omnfe) {
-    _log("Opus_DnbInstitute with ID <$thesisPublisherId> does not exist.\nExiting...");
+    log("Opus_DnbInstitute with ID <$thesisPublisherId> does not exist.\nExiting...");
     exit;
 }
 if ($dryrun) {
-    _log("TEST RUN: NO DATA WILL BE MODIFIED");
+    log("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
 $docFinder = Repository::getInstance()->getDocumentFinder();
 $docFinder->setServerState('published');
-if ($documentType != false) {
+if ($documentType !== false) {
     $docFinder->setDocumentType($documentType);
 }
 
 $docIds = $docFinder->getIds();
 
-_log(count($docIds) . " documents " . ($documentType != false ? "of type '$documentType' " : '') . "found");
+log(count($docIds) . " documents " . ($documentType !== false ? "of type '$documentType' " : '') . "found");
 
 foreach ($docIds as $docId) {
     try {
         $doc = Document::get($docId);
-        if (count($doc->getFile()) == 0) {
-            _log("Document <$docId> has no files, skipping..");
+        if (count($doc->getFile()) === 0) {
+            log("Document <$docId> has no files, skipping..");
             continue;
         }
-        if (! is_null($thesisPublisherId)) {
+        if ($thesisPublisherId !== null) {
             $thesisPublisher = $doc->getThesisPublisher();
             if (empty($thesisPublisher)) {
                 if (! $dryrun) {
                     $doc->setThesisPublisher($dnbInstitute);
                     $doc->store();
                 }
-                _log("Setting ThesisPublisher <$thesisPublisherId> on Document <$docId>");
+                log("Setting ThesisPublisher <$thesisPublisherId> on Document <$docId>");
             } else {
                 $existingThesisPublisherId = $thesisPublisher[0]->getId();
-                _log("ThesisPublisher <{$existingThesisPublisherId[1]}> already set for Document <$docId>");
+                log("ThesisPublisher <{$existingThesisPublisherId[1]}> already set for Document <$docId>");
             }
         }
-        if (! is_null($thesisGrantorId)) {
+        if ($thesisGrantorId !== null) {
             $thesisGrantor = $doc->getThesisGrantor();
             if (empty($thesisGrantor)) {
                 if (! $dryrun) {
                     $doc->setThesisGrantor($dnbInstitute);
                     $doc->store();
                 }
-                _log("Setting ThesisGrantor <$thesisGrantorId> on Document <$docId>");
+                log("Setting ThesisGrantor <$thesisGrantorId> on Document <$docId>");
             } else {
                 $existingThesisGrantorId = $thesisGrantor[0]->getId();
-                _log("ThesisGrantor <{$existingThesisGrantorId[1]}> already set for Document <$docId>");
+                log("ThesisGrantor <{$existingThesisGrantorId[1]}> already set for Document <$docId>");
             }
         }
     } catch (Exception $exc) {
-        _log("Error processing Document with ID $docId!");
-        _log($exc->getMessage());
+        log("Error processing Document with ID $docId!");
+        log($exc->getMessage());
     }
 }
 
-function _log($message)
+/**
+ * @param string $message
+ */
+function log($message)
 {
     echo "$message\n";
 }
