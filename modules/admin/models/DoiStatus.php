@@ -30,46 +30,61 @@
  */
 
 use Opus\Common\DocumentInterface;
+use Opus\Common\IdentifierInterface;
 
 class Admin_Model_DoiStatus
 {
-
+    /** @var int */
     private $docId;
 
+    /** @var string */
     private $doi;
 
+    /** @var bool */
     private $published;
 
+    /** @var string */
     private $doiStatus;
 
     /**
-     * Admin_Model_DoiStatus constructor.
-     *
-     * @param DocumentInterface $doc
+     * @param DocumentInterface   $doc
+     * @param IdentifierInterface $doi
      */
     public function __construct($doc, $doi)
     {
-        $this->docId = $doc->getId();
-        $this->published = ($doc->getServerState() == 'published');
-        $this->doi = $doi->getValue();
+        $this->docId     = $doc->getId();
+        $this->published = $doc->getServerState() === 'published';
+        $this->doi       = $doi->getValue();
         $this->doiStatus = $doi->getStatus();
     }
 
+    /**
+     * @return int
+     */
     public function getDocId()
     {
         return $this->docId;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDoi()
     {
         return $this->doi;
     }
 
+    /**
+     * @return bool
+     */
     public function isPublished()
     {
         return $this->published;
     }
 
+    /**
+     * @return string
+     */
     public function getDoiStatus()
     {
         return $this->doiStatus;

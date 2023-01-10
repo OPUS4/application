@@ -32,50 +32,48 @@
 use Opus\Common\EnrichmentKey;
 use Opus\Common\EnrichmentKeyInterface;
 use Opus\Enrichment\AbstractType;
+use Opus\Enrichment\TypeInterface;
 
 /**
  * Form for creating and editing an enrichment key.
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 {
-
     /**
      * Form element name for enrichment key name.
      */
-    const ELEMENT_NAME = 'Name';
+    public const ELEMENT_NAME = 'Name';
 
     /**
      * Form element for translation of enrichment name.
      */
-    const ELEMENT_DISPLAYNAME = 'DisplayName';
+    public const ELEMENT_DISPLAYNAME = 'DisplayName';
 
     /**
      * Form element name for associated enrichment type.
      */
-    const ELEMENT_TYPE = 'Type';
+    public const ELEMENT_TYPE = 'Type';
 
     /**
      * Form element name for enrichment type options.
      */
-    const ELEMENT_OPTIONS = 'Options';
+    public const ELEMENT_OPTIONS = 'Options';
 
     /**
      * Form element name for validation option.
      */
-    const ELEMENT_VALIDATION = 'Validation';
+    public const ELEMENT_VALIDATION = 'Validation';
 
     /**
      * Pattern for checking valid enrichment key names.
      *
      * Enrichment key have to start with a letter and can use letters, numbers and '.' and '_'.
      */
-    const PATTERN = '/^[a-zA-Z][a-zA-Z0-9_\.]+$/';
+    public const PATTERN = '/^[a-zA-Z][a-zA-Z0-9_\.]+$/';
 
     /**
      * Initialize form elements.
+     *
      * @throws Zend_Form_Exception
      */
     public function init()
@@ -90,20 +88,22 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $nameMaxLength = EnrichmentKey::describeField(EnrichmentKey::FIELD_NAME)->getMaxSize();
 
         $name = $this->createElement('text', self::ELEMENT_NAME, [
-            'required' => true,
-            'label' => 'admin_enrichmentkey_label_name',
-            'maxlength' => $nameMaxLength
+            'required'  => true,
+            'label'     => 'admin_enrichmentkey_label_name',
+            'maxlength' => $nameMaxLength,
         ]);
         $name->addValidator('regex', false, ['pattern' => self::PATTERN]);
         $name->addValidator('StringLength', false, [
             'min' => 1,
-            'max' => $nameMaxLength
+            'max' => $nameMaxLength,
         ]);
         $name->addValidator(new Application_Form_Validate_EnrichmentKeyAvailable());
         $this->addElement($name);
 
         $this->addElement('translation', self::ELEMENT_DISPLAYNAME, [
-            'required' => false, 'size' => 70, 'label' => 'DisplayName'
+            'required' => false,
+            'size'     => 70,
+            'label'    => 'DisplayName',
         ]);
 
         $element = $this->createElement(
@@ -111,13 +111,13 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             self::ELEMENT_TYPE,
             [
                 'label' => 'admin_enrichmentkey_label_type',
-                'id' => 'admin_enrichmentkey_type'
+                'id'    => 'admin_enrichmentkey_type',
             ]
         );
 
         // alle verfügbaren EnrichmentTypes ermitteln und als Auswahlfeld anzeigen
         $availableTypes[''] = ''; // Standardauswahl des Select-Felds soll leer sein
-        $availableTypes = array_merge($availableTypes, AbstractType::getAllEnrichmentTypes());
+        $availableTypes     = array_merge($availableTypes, AbstractType::getAllEnrichmentTypes());
         $element->setMultiOptions($availableTypes);
         $this->addElement($element);
 
@@ -125,9 +125,9 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             'textarea',
             self::ELEMENT_OPTIONS,
             [
-                'label' => 'admin_enrichmentkey_label_options',
-                'id' => 'admin_enrichmentkey_options',
-                'description' => $this->getTranslator()->translate('admin_enrichmentkey_options_description')
+                'label'       => 'admin_enrichmentkey_label_options',
+                'id'          => 'admin_enrichmentkey_options',
+                'description' => $this->getTranslator()->translate('admin_enrichmentkey_options_description'),
             ]
         );
         $this->addElement($element);
@@ -136,9 +136,9 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             'checkbox',
             self::ELEMENT_VALIDATION,
             [
-                'label' => 'admin_enrichmentkey_label_validation',
-                'id' => 'admin_enrichmentkey_validation',
-                'description' => $this->getTranslator()->translate('admin_enrichmentkey_validation_description')
+                'label'       => 'admin_enrichmentkey_label_validation',
+                'id'          => 'admin_enrichmentkey_validation',
+                'description' => $this->getTranslator()->translate('admin_enrichmentkey_validation_description'),
             ]
         );
         $this->addElement($element);
@@ -155,13 +155,14 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
-     * @param EnrichmentKeyInterface $model
+     *
+     * @param EnrichmentKeyInterface $enrichmentKey
      */
     public function populateFromModel($enrichmentKey)
     {
         $name = $enrichmentKey->getName();
 
-        if (! is_null($name)) {
+        if ($name !== null) {
             $this->getElement(self::ELEMENT_DISPLAYNAME)->populateFromTranslations(
                 'Enrichment' . $name
             );
@@ -173,7 +174,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $this->getElement(self::ELEMENT_TYPE)->setValue($enrichmentKey->getType());
 
         $enrichmentType = $this->initEnrichmentType($enrichmentKey->getType());
-        if (! is_null($enrichmentType)) {
+        if ($enrichmentType !== null) {
             $enrichmentType->setOptions($enrichmentKey->getOptions());
 
             $optionsElement = $this->getElement(self::ELEMENT_OPTIONS);
@@ -184,7 +185,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             $validationElement->setValue($enrichmentType->isStrictValidation());
         }
 
-        if (! is_null($enrichmentKey->getType())) {
+        if ($enrichmentKey->getType() !== null) {
             $this->setTypeFieldAsMandatory();
         }
     }
@@ -192,7 +193,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
     /**
      * Setzt einen Wert im Formularlement ELEMENT_NAME.
      *
-     * @param string value der einzutragende Wert
+     * @param string $value Einzutragender Wert
      */
     public function setNameElementValue($value)
     {
@@ -201,6 +202,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
     /**
      * Aktualisiert Model-Instanz mit Werten im Formular.
+     *
      * @param EnrichmentKeyInterface $enrichmentKey
      */
     public function updateModel($enrichmentKey)
@@ -212,13 +214,14 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $enrichmentKey->setName($name);
 
         $enrichmentTypeValue = $this->getElementValue(self::ELEMENT_TYPE);
-        $enrichmentType = $this->initEnrichmentType($enrichmentTypeValue);
-        if (! is_null($enrichmentType)) {
+        $enrichmentType      = $this->initEnrichmentType($enrichmentTypeValue);
+        if ($enrichmentType !== null) {
             $enrichmentKey->setType($enrichmentTypeValue);
 
             $enrichmentType->setOptionsFromString([
-                'options' => $this->getElementValue(self::ELEMENT_OPTIONS),
-                'validation' => $this->getElementValue(self::ELEMENT_VALIDATION)]);
+                'options'    => $this->getElementValue(self::ELEMENT_OPTIONS),
+                'validation' => $this->getElementValue(self::ELEMENT_VALIDATION),
+            ]);
             $enrichmentKey->setOptions($enrichmentType->getOptions());
         }
 
@@ -237,13 +240,12 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      * Erzeugt ein Enrichment-Type Objekt für den übergebenen Typ-Namen bzw. liefert
      * null, wenn der Typ-Name nicht aufgelöst werden kann.
      *
-     * @param $enrichmentTypeName string Name des Enrichment-Typs
-     *
-     * @return mixed
+     * @param string $enrichmentTypeName Name des Enrichment-Typs
+     * @return TypeInterface
      */
     private function initEnrichmentType($enrichmentTypeName)
     {
-        if (is_null($enrichmentTypeName) || $enrichmentTypeName == '') {
+        if ($enrichmentTypeName === null || $enrichmentTypeName === '') {
             return null;
         }
 
@@ -251,24 +253,26 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         $enrichmentTypeName = 'Opus\\Enrichment\\' . $enrichmentTypeName;
         try {
             if (class_exists($enrichmentTypeName, false)) {
-                $enrichmentType = new $enrichmentTypeName();
-                return $enrichmentType;
+                return new $enrichmentTypeName();
             }
             $this->getLogger()->err('could not find class ' . $enrichmentTypeName);
-        } catch (\Throwable $ex) { // TODO Throwable only available in PHP 7+
+        } catch (Throwable $ex) { // TODO Throwable only available in PHP 7+
             $this->getLogger()->err('could not instantiate class ' . $enrichmentTypeName . ': ' . $ex->getMessage());
         }
 
         return null;
     }
 
+    /**
+     * @return Admin_Form_EnrichmentKey
+     */
     public function populate(array $values)
     {
         if (array_key_exists(parent::ELEMENT_MODEL_ID, $values)) {
             $enrichmentKey = EnrichmentKey::fetchByName($values[parent::ELEMENT_MODEL_ID]);
-            if (! is_null($enrichmentKey)) {
+            if ($enrichmentKey !== null) {
                 $enrichmentType = $enrichmentKey->getEnrichmentType();
-                if (! is_null($enrichmentType)) {
+                if ($enrichmentType !== null) {
                     $this->setTypeFieldAsMandatory();
                 }
             }

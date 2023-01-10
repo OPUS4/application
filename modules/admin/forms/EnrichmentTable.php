@@ -30,16 +30,20 @@
  */
 
 use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
 
 /**
  * Formular für die Anzeige der Enrichment-Tabelle.
  */
 class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
 {
+    /** @var Admin_Model_EnrichmentKeys */
     private $enrichmentKeys;
 
+    /** @var array */
     private $managedKeys = [];
 
+    /** @var array */
     private $unmanagedKeys = [];
 
     public function init()
@@ -51,7 +55,7 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
     /**
      * Liefert true, wenn es sich um einen geschützten EnrichmentKey handelt; andernfalls false.
      *
-     * @param EnrichmentKey $model
+     * @param EnrichmentKeyInterface $model
      * @return bool
      */
     public function isProtected($model)
@@ -63,7 +67,7 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
      * Liefert true, wenn der EnrichmentKey in mindestens einem Enrichment eines Dokuments
      * verwendet wird; andernfalls false.
      *
-     * @param EnrichmentKey $model
+     * @param EnrichmentKeyInterface $model
      * @return bool
      */
     public function isUsed($model)
@@ -74,17 +78,17 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
     /**
      * Bestimmt die zu verwendene CSS-Klasse für den übergebenen EnrichmentKey in der Listenansicht.
      *
-     * @param EnrichmentKey $model
+     * @param EnrichmentKeyInterface $model
      * @return string Name der zu nutzenden CSS-Klasse
      */
     public function getRowCssClass($model)
     {
-        if (is_null($model->getId())) {
+        if ($model->getId() === null) {
             // es handelt sich um einen nicht registrierten, in Benutzung befindlichen Enrichment Namen
             return "used";
-        } elseif ($this->isProtected($model) and $this->isUsed($model)) {
+        } elseif ($this->isProtected($model) && $this->isUsed($model)) {
             return "protected used";
-        } elseif (! $this->isUsed($model) and $this->isProtected($model)) {
+        } elseif (! $this->isUsed($model) && $this->isProtected($model)) {
             return "protected unused";
         } elseif ($this->isUsed($model)) {
             return "used";
@@ -101,17 +105,17 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
      * Bestimmt den Übersetzungsschlüssel des anzuzeigenden Tooltips für den übergebenen EnrichmentKey in
      * der Listenansicht.
      *
-     * @param EnrichmentKey $model
+     * @param EnrichmentKeyInterface $model
      * @return string Übersetzungsschlüssel für den Tooltip
      */
     public function getRowTooltip($model)
     {
-        if (is_null($model->getId())) {
+        if ($model->getId() === null) {
             // es handelt sich um einen nicht registrierten, in Benutzung befindlichen Enrichment Namen
             return 'admin_enrichmentkey_unregistered_tooltip';
-        } elseif ($this->isProtected($model) and $this->isUsed($model)) {
+        } elseif ($this->isProtected($model) && $this->isUsed($model)) {
             return 'admin_enrichmentkey_used_tooltip';
-        } elseif (! $this->isUsed($model) and $this->isProtected($model)) {
+        } elseif (! $this->isUsed($model) && $this->isProtected($model)) {
             return 'admin_enrichmentkey_unused_tooltip';
         } elseif ($this->isUsed($model)) {
             return 'admin_enrichmentkey_used_tooltip';
@@ -122,11 +126,15 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
         return "";
     }
 
+    /**
+     * @param EnrichmentKeyInterface[] $models
+     * @throws Application_Exception
+     */
     public function setModels($models)
     {
         parent::setModels($models);
         foreach ($models as $enrichmentKey) {
-            if (is_null($enrichmentKey->getEnrichmentType())) {
+            if ($enrichmentKey->getEnrichmentType() === null) {
                 $this->unmanagedKeys[] = $enrichmentKey;
             } else {
                 $this->managedKeys[] = $enrichmentKey;
@@ -134,11 +142,17 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
         }
     }
 
+    /**
+     * @return array
+     */
     public function getManaged()
     {
         return $this->managedKeys;
     }
 
+    /**
+     * @return array
+     */
     public function getUnmanaged()
     {
         return $this->unmanagedKeys;

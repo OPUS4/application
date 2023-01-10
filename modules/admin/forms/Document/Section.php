@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\DocumentInterface;
+use Opus\Common\Model\ModelInterface;
 
 /**
  * Unterformular fuer Teilbereich der Dokument-Metadaten.
@@ -41,7 +42,9 @@
  */
 class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm
 {
-
+    /**
+     * @param ModelInterface $model
+     */
     public function populateFromModel($model)
     {
         $subforms = $this->getSubForms();
@@ -52,9 +55,8 @@ class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm
     }
 
     /**
-     *
-     * @param type $post
-     * @param type $document
+     * @param array                  $post
+     * @param DocumentInterface|null $document
      *
      * TODO move to base class
      */
@@ -69,6 +71,11 @@ class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm
         }
     }
 
+    /**
+     * @param Zend_Controller_Request_Http $request
+     * @param Zend_Session_Namespace|null  $session
+     * @return void
+     */
     public function continueEdit($request, $session = null)
     {
         $subforms = $this->getSubForms();
@@ -78,6 +85,9 @@ class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm
         }
     }
 
+    /**
+     * @param ModelInterface $model
+     */
     public function updateModel($model)
     {
         $subforms = $this->getSubForms();
@@ -90,6 +100,8 @@ class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm
     /**
      * TODO redundant - look into MultSubForm as base class
      * TODO parameter is hack for OPUSVIER-3232
+     *
+     * @param string $baseName
      */
     public function removeGapsInSubFormOrder($baseName)
     {
@@ -101,7 +113,7 @@ class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm
 
         foreach ($subforms as $index => $subform) {
             $subform->setOrder($pos);
-            $name = $baseName . $pos;
+            $name                   = $baseName . $pos;
             $renamedSubforms[$name] = $subform;
             $this->setOddEven($subform);
             $pos++;
@@ -112,6 +124,8 @@ class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * TODO redundant - look into MultSubForm as base class
+     *
+     * @param Zend_Form $subForm
      */
     public function setOddEven($subForm)
     {
@@ -119,9 +133,9 @@ class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm
 
         $multiWrapper = $subForm->getDecorator('multiWrapper');
 
-        if (! is_null($multiWrapper) && $multiWrapper instanceof \Zend_Form_Decorator_HtmlTag) {
-            $multiClass = $multiWrapper->getOption('class');
-            $markerClass = ($position % 2 == 0) ? 'even' : 'odd';
+        if ($multiWrapper !== null && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
+            $multiClass  = $multiWrapper->getOption('class');
+            $markerClass = $position % 2 === 0 ? 'even' : 'odd';
 
             // TODO nicht 100% robust aber momentan ausreichend
             if (strpos($multiClass, 'even') !== false || strpos($multiClass, 'odd') !== false) {

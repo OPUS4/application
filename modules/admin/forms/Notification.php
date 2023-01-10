@@ -27,18 +27,20 @@
  *
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\Common\DocumentInterface;
+use Opus\Common\PersonInterface;
+
+/**
  * TODO fix processing of elements in WorkflowController (in subform names get prefix)
  * TODO adjust styling of sub form
  * TODO unit testing
  */
-
-use Opus\Common\DocumentInterface;
-
 class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
 {
-
-    private $_document;
+    /** @var DocumentInterface */
+    private $document;
 
     public function init()
     {
@@ -49,7 +51,7 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
         $translator = $this->getTranslator();
 
         $this->addElement('note', 'description', [
-            'value' => "<p>{$translator->translate('admin_workflow_notification_description')}</p>"
+            'value' => "<p>{$translator->translate('admin_workflow_notification_description')}</p>",
         ]);
 
         $this->setDecorators([
@@ -70,14 +72,17 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
      */
     public function addPublishNotificationSelection($document)
     {
-        $this->_document = $document;
+        $this->document = $document;
     }
 
+    /**
+     * @return array
+     */
     public function getRows()
     {
         $translator = $this->getTranslator();
 
-        $document = $this->_document;
+        $document = $this->document;
 
         $submitters = $document->getPersonSubmitter();
 
@@ -85,32 +90,35 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
 
         $options = [];
 
-        if (! is_null($submitters) && count($submitters) > 0) {
-            $submitter = $submitters[0]->getModel();
-            $option = $this->personToArray($submitters[0]);
-            $option['value'] = 'submitter';
-            $option['type'] = $translator->translate('admin_workflow_notification_submitter');
-            $option['checked'] = 1;
+        if ($submitters !== null && count($submitters) > 0) {
+            $submitter            = $submitters[0]->getModel();
+            $option               = $this->personToArray($submitters[0]);
+            $option['value']      = 'submitter';
+            $option['type']       = $translator->translate('admin_workflow_notification_submitter');
+            $option['checked']    = 1;
             $options['submitter'] = $option;
         }
 
         $authors = $document->getPersonAuthor();
 
-        if (! is_null($authors)) {
+        if ($authors !== null) {
             foreach ($authors as $index => $author) {
                 $person = $author->getModel();
-                if (! is_null($submitter)
+                if (
+                    $submitter !== null
                     && $submitter->matches($person)
-                    && $submitter->getEmail() == $person->getEmail()) {
+                    && $submitter->getEmail() === $person->getEmail()
+                ) {
                     $msg = $translator->translate('admin_workflow_notification_submitter_and_author');
+
                     $options['submitter']['type'] = sprintf($msg, $index + 1);
                 } else {
-                    $option = $this->personToArray($author);
-                    $option['value'] = 'author_' . $index;
-                    $pos = $index + 1;
-                    $option['type'] = "$pos. {$translator->translate('admin_workflow_notification_author')}";
-                    $option['checked'] = ($pos = 1) ? '1' : '0';
-                    $options[] = $option;
+                    $option            = $this->personToArray($author);
+                    $option['value']   = 'author_' . $index;
+                    $pos               = $index + 1;
+                    $option['type']    = "$pos. {$translator->translate('admin_workflow_notification_author')}";
+                    $option['checked'] = 1; // TODO LAMINAS BUG old code "$pos = 1 ? '1' : '0';" always "1"
+                    $options[]         = $option;
                 }
             }
         }
@@ -118,6 +126,10 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
         return $options;
     }
 
+    /**
+     * @param PersonInterface $person
+     * @return array
+     */
     public function personToArray($person)
     {
         $translator = $this->getTranslator();
@@ -126,17 +138,15 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
 
         $disabled = false;
 
-        if ($email == '') {
-            $email = " ({$translator->translate('admin_workflow_notification_noemail')})";
+        if ($email === '') {
+            $email    = " ({$translator->translate('admin_workflow_notification_noemail')})";
             $disabled = true;
         }
 
-        $option = [
-            'name' => $person->getDisplayName(),
-            'email' => $email,
-            'disabled' => $disabled
+        return [
+            'name'     => $person->getDisplayName(),
+            'email'    => $email,
+            'disabled' => $disabled,
         ];
-
-        return $option;
     }
 }

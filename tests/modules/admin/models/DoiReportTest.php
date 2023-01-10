@@ -31,27 +31,31 @@
 
 use Opus\Common\Document;
 use Opus\Common\Identifier;
+use Opus\Common\Model\ModelException;
 
 /**
  * TODO test-performance
  */
 class Admin_Model_DoiReportTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var int[] */
     private $docIds;
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $this->adjustConfiguration([
             'doi' => [
-                'prefix' => '10.5072',
-                'localPrefix' => 'opustest'
-            ]
+                'prefix'      => '10.5072',
+                'localPrefix' => 'opustest',
+            ],
         ]);
 
         $this->docIds = [];
@@ -67,17 +71,17 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
     public function testGetDocList()
     {
         $doiReport = new Admin_Model_DoiReport(null);
-        $docList = $doiReport->getDocList();
+        $docList   = $doiReport->getDocList();
         $this->assertCount(4, $docList);
     }
 
     public function testGetDocListWithPublishedFilter()
     {
         $doiReport = new Admin_Model_DoiReport('registered');
-        $docList = $doiReport->getDocList();
+        $docList   = $doiReport->getDocList();
         $this->assertCount(1, $docList);
         $doiStatus = $docList[0];
-        $docId = $this->docIds[2];
+        $docId     = $this->docIds[2];
         $this->assertEquals($docId, $doiStatus->getDocId());
         $this->assertTrue($doiStatus->isPublished());
         $this->assertEquals('10.5072/opustest-' . $docId, $doiStatus->getDoi());
@@ -87,10 +91,10 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
     public function testGetDocListWithUnpublishedFilter()
     {
         $doiReport = new Admin_Model_DoiReport('verified');
-        $docList = $doiReport->getDocList();
+        $docList   = $doiReport->getDocList();
         $this->assertCount(1, $docList);
         $doiStatus = $docList[0];
-        $docId = $this->docIds[3];
+        $docId     = $this->docIds[3];
         $this->assertEquals($docId, $doiStatus->getDocId());
         $this->assertTrue($doiStatus->isPublished());
         $this->assertEquals('10.5072/opustest-' . $docId, $doiStatus->getDoi());
@@ -100,7 +104,7 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
     public function testGetNumDoisForBulkRegistration()
     {
         $doiReport = new Admin_Model_DoiReport(null);
-        $num = $doiReport->getNumDoisForBulkRegistration();
+        $num       = $doiReport->getNumDoisForBulkRegistration();
         $this->assertEquals(1, $num);
     }
 
@@ -113,7 +117,7 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
         $expected = 0;
 
         foreach ($finder->getIds() as $docId) {
-            $doc = Document::get($docId);
+            $doc        = Document::get($docId);
             $identifier = $doc->getIdentifierDoi(0);
             if ($identifier->getStatus() === 'registered') {
                 $expected++;
@@ -121,15 +125,21 @@ class Admin_Model_DoiReportTest extends ControllerTestCase
         }
 
         $doiReport = new Admin_Model_DoiReport(null);
-        $num = $doiReport->getNumDoisForBulkVerification();
+        $num       = $doiReport->getNumDoisForBulkVerification();
         $this->assertEquals($expected, $num);
     }
 
+    /**
+     * @param string $serverState
+     * @param string $doiStatus
+     * @param bool   $local
+     * @throws ModelException
+     */
     private function createTestDocWithDoi($serverState, $doiStatus, $local = true)
     {
         $doc = $this->createTestDocument();
         $doc->setServerState($serverState);
-        $docId = $doc->store();
+        $docId          = $doc->store();
         $this->docIds[] = $docId;
 
         $doi = Identifier::new();

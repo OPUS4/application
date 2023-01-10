@@ -30,7 +30,10 @@
  */
 
 use Opus\Common\Iprange;
+use Opus\Common\IprangeInterface;
+use Opus\Common\Model\NotFoundException;
 use Opus\Common\UserRole;
+use Opus\Common\UserRoleInterface;
 
 /**
  * Basic unit tests for IP range controller in admin module.
@@ -39,7 +42,7 @@ use Opus\Common\UserRole;
  */
 class Admin_IprangeControllerTest extends CrudControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function setUp(): void
@@ -49,11 +52,17 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         parent::setUp();
     }
 
+    /**
+     * @return IprangeInterface[]
+     */
     public function getModels()
     {
         return Iprange::getModelRepository()->getAll();
     }
 
+    /**
+     * @return int
+     */
     public function createNewModel()
     {
         $this->createsModels = true;
@@ -64,12 +73,17 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $ipRange->setEndingIp('127.0.0.2');
         $ipRange->setRole([
             UserRole::fetchByName('reviewer'),
-            UserRole::fetchByName('docsadmin')
+            UserRole::fetchByName('docsadmin'),
         ]);
 
         return $ipRange->store();
     }
 
+    /**
+     * @param int $identifier
+     * @return IprangeInterface
+     * @throws NotFoundException
+     */
     public function getModel($identifier)
     {
         return Iprange::get($identifier);
@@ -100,11 +114,11 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $this->createsModels = true;
 
         $post = [
-            'Name' => 'test range',
+            'Name'       => 'test range',
             'Startingip' => '127.0.0.3',
-            'Endingip' => '127.0.0.4',
-            'Roles' => ['docsadmin', 'guest'],
-            'Save' => 'Speichern'
+            'Endingip'   => '127.0.0.4',
+            'Roles'      => ['docsadmin', 'guest'],
+            'Save'       => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -138,10 +152,10 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $modelCount = count($this->getModels());
 
         $post = [
-            'Name' => 'test range',
+            'Name'       => 'test range',
             'Startingip' => '127.0.0.5',
-            'Endingip' => '127.0.0.6',
-            'Cancel' => 'Abbrechen'
+            'Endingip'   => '127.0.0.6',
+            'Cancel'     => 'Abbrechen',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -180,12 +194,12 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $iprangeId = $this->createNewModel();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $iprangeId,
-            'Name' => 'ModifiedName',
+            'Id'         => $iprangeId,
+            'Name'       => 'ModifiedName',
             'Startingip' => '127.0.0.99',
-            'Endingip' => '127.0.0.100',
-            'Roles' => ['docsadmin', 'jobaccess'],
-            'Save' => 'Abspeichern'
+            'Endingip'   => '127.0.0.100',
+            'Roles'      => ['docsadmin', 'jobaccess'],
+            'Save'       => 'Abspeichern',
         ]);
 
         $this->dispatch('/admin/iprange/edit');
@@ -210,11 +224,11 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $iprangeId = $this->createNewModel();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $iprangeId,
-            'Name' => 'ModifiedName',
+            'Id'         => $iprangeId,
+            'Name'       => 'ModifiedName',
             'Startingip' => '200.0.0.1',
-            'Endingip' => '200.0.0.2',
-            'Cancel' => 'Abbrechen'
+            'Endingip'   => '200.0.0.2',
+            'Cancel'     => 'Abbrechen',
         ]);
 
         $this->dispatch("/admin/iprange/edit");
@@ -239,6 +253,10 @@ class Admin_IprangeControllerTest extends CrudControllerTestCase
         $this->assertQuery('input#ConfirmNo');
     }
 
+    /**
+     * @param UserRoleInterface[] $roles
+     * @param string[]            $expectedRoles
+     */
     public function verifyRoles($roles, $expectedRoles)
     {
         $this->assertCount(count($expectedRoles), $roles);

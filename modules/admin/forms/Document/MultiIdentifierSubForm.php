@@ -37,33 +37,35 @@ use Opus\Doi\DoiManager;
 
 class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_MultiSubForm
 {
-
     /**
      * Name des Buttons zum Entfernen eines Unterformulars (z.B. Identifier).
      */
-    const ELEMENT_REMOVE = 'Remove';
+    public const ELEMENT_REMOVE = 'Remove';
 
     /**
-     * Checkbox, die den Status der automatischen Generierung des Identifiers bei der Veröffentlichung des Dokuments anzeigt
+     * Checkbox, die den Status der automatischen Generierung des Identifiers bei der Veröffentlichung
+     * des Dokuments anzeigt.
      */
-    const ELEMENT_CHK_AUTO = 'Auto';
+    public const ELEMENT_CHK_AUTO = 'Auto';
 
     /**
      * Name des Buttons für die sofortige Generierung eines Identifiers
      */
-    const ELEMENT_GENERATE = 'Generate';
+    public const ELEMENT_GENERATE = 'Generate';
 
     /**
      * Typ des Identifiers
+     *
      * @var string
      */
-    private $_type;
+    private $type;
 
     /**
      * Kurzbezeichnung des Identifier-Typs (doi | urn)
+     *
      * @var string
      */
-    private $_typeShort;
+    private $typeShort;
 
     /**
      * Konstruiert Instanz von Formular.
@@ -73,9 +75,9 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     public function __construct($subFormClass)
     {
         // Typ aus Klassennamen ableiten (Suffix nach dem letzten Unterstrich)
-        $this->_type = substr($subFormClass, strrpos($subFormClass, '_') + 1);
-        $this->_typeShort = strtolower(substr($this->_type, -3));
-        parent::__construct($subFormClass, $this->_type);
+        $this->type      = substr($subFormClass, strrpos($subFormClass, '_') + 1);
+        $this->typeShort = strtolower(substr($this->type, -3));
+        parent::__construct($subFormClass, $this->type);
     }
 
     /**
@@ -90,7 +92,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         // mehrere DOIs / URNs pro Dokument werden nicht unterstützt, so dass der Add-Button obsolet ist
         $this->removeElement(parent::ELEMENT_ADD);
 
-        $this->setLegend('admin_document_section_' . strtolower($this->_type));
+        $this->setLegend('admin_document_section_' . strtolower($this->type));
 
         $this->addCheckbox();
 
@@ -100,15 +102,16 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
                 'TableWrapper',
                 [
                     ['fieldsWrapper' => 'HtmlTag'],
-                    ['tag' => 'div', 'class' => 'fields-wrapper']
+                    ['tag' => 'div', 'class' => 'fields-wrapper'],
                 ],
                 [
-                    'FieldsetWithButtons', [] // Überschrift DOI bzw. URN innerhalb von Identifiers-Block
+                    'FieldsetWithButtons',
+                    [], // Überschrift DOI bzw. URN innerhalb von Identifiers-Block
                 ],
                 [
                     ['divWrapper' => 'HtmlTag'],
-                    ['tag' => 'div', 'class' => 'subform']
-                ]
+                    ['tag' => 'div', 'class' => 'subform'],
+                ],
             ]
         );
 
@@ -117,17 +120,18 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
     /**
      * Adds a checkbox for controlling auto generation of identifier.
+     *
      * @throws Zend_Form_Exception
      */
     private function addCheckbox()
     {
-        $name = self::ELEMENT_CHK_AUTO . $this->_type;
+        $name = self::ELEMENT_CHK_AUTO . $this->type;
         $this->addElement(
             'checkbox',
             $name,
             [
                 'label' => 'admin_document_' . strtolower($name),
-                'order' => 0
+                'order' => 0,
             ]
         );
     }
@@ -139,7 +143,6 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      */
     public function populateFromModel($document)
     {
-
         // muss die Checkbox entfernt werden?
         $removeCheckbox = $this->removeCheckboxForPublishedDocs($document);
 
@@ -148,21 +151,21 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         $this->addGenerateAtPublishCheckbox($document);
 
         $identifier = $document->getIdentifier();
-        $values = $this->filterIdentifier($identifier);
+        $values     = $this->filterIdentifier($identifier);
 
         $offset = $removeCheckbox ? 0 : 1; // Checkbox hat bereits den Offset 0
         if (empty($values)) {
             // es ist noch kein Identifier des Typs für das Dokument gespeichert
-            $this->_addSubForm($offset);
+            $this->addSubFormAndFixOrder($offset);
             return;
         }
 
         // jeden Identifier des Typs anzeigen und ab dem 2. Identifier einen Lösch-Button anbieten
         foreach ($values as $index => $value) {
-            $subForm = $this->_addSubForm($index + $offset, count($values) == 1);
+            $subForm = $this->addSubFormAndFixOrder($index + $offset, count($values) === 1);
             $subForm->populateFromModel($value);
 
-            if ($index == 0 && $this->_typeShort == 'doi') {
+            if ($index === 0 && $this->typeShort === 'doi') {
                 // Status-Anzeige für die erste DOI: Hinweistext, der darauf hinweist, dass registrierte DOIs nicht verändert werden sollten
                 $form = new Admin_Form_Document_RegistrationNote();
                 $form->populateFromModel($value);
@@ -176,14 +179,13 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * @param int $position
      * @param null $disableGenerateButton
-     *
-     * @return \Zend_Form _subFormClass
+     * @return Zend_Form _subFormClass
      */
-    protected function _addSubForm($position, $disableGenerateButton = null)
+    protected function addSubFormAndFixOrder($position, $disableGenerateButton = null)
     {
         $subForm = $this->createSubForm();
 
-        if (is_null($disableGenerateButton)) {
+        if ($disableGenerateButton === null) {
             // Generieren-Button wird angezeigt, weil bislang noch kein Identifier gespeichert wurde
             $this->addGenerateButton($subForm);
         } elseif ($disableGenerateButton) {
@@ -194,12 +196,11 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         $this->prepareSubFormDecorators($subForm);
 
         $subForm->setOrder($position);
-        $this->_setOddEven($subForm);
+        $this->setOddEven($subForm);
         $this->addSubForm($subForm, $this->getSubFormBaseName() . $position);
 
         return $subForm;
     }
-
 
     /**
      * ist das Enrichment opus.doi.autoCreate (analog für URNs: opus.urn.autoCreate) nicht
@@ -210,33 +211,36 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      * Verhalten der DOI- bzw. URN-Generierung beim Veröffentlichen des Dokuments fest
      * und auch die Anzeige der Checkbox (aktiviert oder nicht aktiviert)
      *
+     * @param DocumentInterface $document
      */
     private function addGenerateAtPublishCheckbox($document)
     {
-        $autoGenerateCheckbox = $this->getElement(self::ELEMENT_CHK_AUTO . $this->_type);
+        $autoGenerateCheckbox = $this->getElement(self::ELEMENT_CHK_AUTO . $this->type);
 
-        if (is_null($autoGenerateCheckbox)) {
+        if ($autoGenerateCheckbox === null) {
             return;
         }
 
         // Status der Checkbox aus Enrichment bestimmen (Checkbox aktiv oder nicht aktiv),
         // wenn Enrichment für vorliegendes Dokument gesetzt ist
         $enrichmentKeyName = $this->getEnrichmentKeyName();
-        $enrichment = $document->getEnrichment($enrichmentKeyName);
-        if (! is_null($enrichment)) {
-            $autoGenerateCheckbox->setChecked($enrichment->getValue() == 'true');
+        $enrichment        = $document->getEnrichment($enrichmentKeyName);
+        if ($enrichment !== null) {
+            $autoGenerateCheckbox->setChecked($enrichment->getValue() === 'true');
             return; // Enrichment gefunden: Methode verlassen
         }
 
         // Enrichment wurde nicht gefunden: Status der Checkbox bestimmt sich aus der Konfiguration
         $config = $this->getApplicationConfig();
-        switch ($this->_typeShort) {
+        switch ($this->typeShort) {
             case 'doi':
-                $checkboxValue = isset($config->doi->autoCreate) && filter_var($config->doi->autoCreate, FILTER_VALIDATE_BOOLEAN);
+                $checkboxValue = isset($config->doi->autoCreate)
+                    && filter_var($config->doi->autoCreate, FILTER_VALIDATE_BOOLEAN);
                 $autoGenerateCheckbox->setChecked($checkboxValue);
                 break;
             case 'urn':
-                $checkboxValue = isset($config->urn->autoCreate) && filter_var($config->urn->autoCreate, FILTER_VALIDATE_BOOLEAN);
+                $checkboxValue = isset($config->urn->autoCreate)
+                    && filter_var($config->urn->autoCreate, FILTER_VALIDATE_BOOLEAN);
                 $autoGenerateCheckbox->setChecked($checkboxValue);
                 break;
         }
@@ -251,8 +255,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      */
     private function removeCheckboxForPublishedDocs($document)
     {
-        if ($document->getServerState() == 'published') {
-            $this->removeElement(self::ELEMENT_CHK_AUTO . $this->_type);
+        if ($document->getServerState() === 'published') {
+            $this->removeElement(self::ELEMENT_CHK_AUTO . $this->type);
             return true;
         }
         return false;
@@ -269,7 +273,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         $result = [];
         foreach ($identifiers as $identifier) {
             $type = $identifier->getType();
-            if ($type == $this->_typeShort) {
+            if ($type === $this->typeShort) {
                 $result[] = $identifier;
             }
         }
@@ -280,6 +284,9 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      * Erzeugt Unterformulare basierend auf den Informationen in den POST Daten.
      *
      * TODO was passiert wenn ein invalides Formular auftaucht beim anschließenden $form->populate()?
+     *
+     * @param array                  $post
+     * @param DocumentInterface|null $document
      */
     public function constructFromPost($post, $document = null)
     {
@@ -292,23 +299,24 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         foreach ($keys as $index => $key) {
             // Prüfen ob Unterformluar (array) oder Feld
             if (is_array($post[$key]) && $this->isValidSubForm($post[$key])) {
-                if ((! $removeCheckbox && count($keys) == 2) || ($removeCheckbox && count($keys) == 1)) {
+                if ((! $removeCheckbox && count($keys) === 2) || ($removeCheckbox && count($keys) === 1)) {
                     // nur in diesem Fall wird der Generieren-Button überhaupt angezeigt
-                    if ($post[$key][Admin_Form_Document_IdentifierSpecific::ELEMENT_VALUE] == '') {
-                        $this->_addSubForm($position);
+                    if ($post[$key][Admin_Form_Document_IdentifierSpecific::ELEMENT_VALUE] === '') {
+                        $this->addSubFormAndFixOrder($position);
                     } else {
-                        $subform = $this->_addSubForm($position, true);
+                        $subform      = $this->addSubFormAndFixOrder($position, true);
                         $identifierId = $post[$key][Admin_Form_Document_IdentifierSpecific::ELEMENT_ID];
-                        if (! is_null($identifierId) && $identifierId != '') {
+                        if ($identifierId !== null && $identifierId !== '') {
                             $position++;
-                            // Status-Anzeige für die erste DOI: Hinweistext, der darauf hinweist, dass registrierte DOIs nicht verändert werden sollten
+                            // Status-Anzeige für die erste DOI: Hinweistext, der darauf hinweist,
+                            // dass registrierte DOIs nicht verändert werden sollten
                             $form = new Admin_Form_Document_RegistrationNote();
                             $form->populateFromModel($identifierId);
                             $subform->addSubForm($form, 'RegistrationNoteDOI', $position);
                         }
                     }
                 } else {
-                    $this->_addSubForm($position, false);
+                    $this->addSubFormAndFixOrder($position, false);
                 }
                 $position++;
             }
@@ -330,15 +338,16 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     {
         foreach ($data as $subFormName => $subdata) {
             $subform = $this->getSubForm($subFormName);
-            if (! is_null($subform)) {
+            if ($subform !== null) {
                 if (array_key_exists(self::ELEMENT_REMOVE, $subdata)) {
                     $result = $this->processPostRemove($subFormName, $subdata);
 
                     // wenn nur noch ein Eingabefeld für Identifier des Typs übrig bleibt: Generieren-Button anzeigen
-                    if (count($this->getSubForms()) == 1) {
+                    if (count($this->getSubForms()) === 1) {
                         $firstIdForm = reset($this->getSubForms()); // TODO ERROR ?
                         $this->addGenerateButton($firstIdForm, false);
-                        // TODO ohne den nachfolgenden Aufruf wird der Button nicht neben, sondern über dem Input-Field ausgegeben
+                        // TODO ohne den nachfolgenden Aufruf wird der Button nicht neben,
+                        //      sondern über dem Input-Field ausgegeben
                         $this->prepareSubFormDecorators($firstIdForm);
                     }
 
@@ -347,12 +356,13 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
                 if (array_key_exists(self::ELEMENT_GENERATE, $subdata)) {
                     // ID des Dokuments wird für DOI-Generierung benötigt
-                    $docId = $context['Actions'][Admin_Form_Document_Actions::ELEMENT_ID]; // TODO kann Schlüssel dynamisch ermittelt werden
+                    // TODO kann Schlüssel dynamisch ermittelt werden
+                    $docId = $context['Actions'][Admin_Form_Document_Actions::ELEMENT_ID];
                     return $this->processPostGenerate($subform, $docId);
                 }
 
                 $result = $subform->processPost($subdata, $context);
-                if (! is_null($result)) {
+                if ($result !== null) {
                     if (is_array($result)) {
                         $result['subformName'] = $subFormName;
                     }
@@ -361,7 +371,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             } else {
                 // im POST-Request auch noch die Autogen-Checkbox mitgegeben
                 // ignoriere Checkbox, wenn auf Button Generate / Remove gedrückt wurde
-                if ($subFormName == self::ELEMENT_CHK_AUTO . $this->_type) {
+                if ($subFormName === self::ELEMENT_CHK_AUTO . $this->type) {
                     continue;
                 }
                 $this->getLogger()->err(__METHOD__ . ': Subform with name ' . $subFormName . ' does not exits.');
@@ -371,15 +381,21 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         return null;
     }
 
+    /**
+     * @param Zend_Form $subform
+     * @param int       $docId
+     * @return string
+     * @throws Exception
+     */
     protected function processPostGenerate($subform, $docId)
     {
-        switch ($this->_subFormClass) {
+        switch ($this->subFormClass) {
             case 'Admin_Form_Document_IdentifierDOI':
                 try {
                     $doiManager = new DoiManager();
-                    $doiValue = $doiManager->generateNewDoi($docId);
+                    $doiValue   = $doiManager->generateNewDoi($docId);
                     $subform->setValue($doiValue);
-                    if ($doiValue != '') {
+                    if ($doiValue !== '') {
                         // Generieren-Button deaktivieren
                         $button = $subform->getElement(self::ELEMENT_GENERATE);
                         $button->setAttrib('disabled', 'disabled');
@@ -392,9 +408,9 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             case 'Admin_Form_Document_IdentifierURN':
                 try {
                     $urnGenerator = new Admin_Model_UrnGenerator();
-                    $urnValue = $urnGenerator->generateUrnForDocument($docId);
+                    $urnValue     = $urnGenerator->generateUrnForDocument($docId);
                     $subform->setValue($urnValue);
-                    if ($urnValue != '') {
+                    if ($urnValue !== '') {
                         // Generieren-Button deaktivieren
                         $button = $subform->getElement(self::ELEMENT_GENERATE);
                         $button->setAttrib('disabled', 'disabled');
@@ -405,10 +421,10 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
                 break;
 
             default:
-                throw new Exception('Generate action is not supported for ' . $this->_type);
+                throw new Exception('Generate action is not supported for ' . $this->type);
         }
 
-        $this->_addAnchor($this);
+        $this->addAnchor($this);
         return Admin_Form_Document::RESULT_SHOW;
     }
 
@@ -428,7 +444,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             // DOI, URN und alle anderen Identifier-Typen
             $identifierValues = [];
             foreach ($values as $identifier) {
-                if ($identifier->getValue() != '') {
+                if ($identifier->getValue() !== '') {
                     $identifierValues[] = $identifier->getValue();
                 }
             }
@@ -438,7 +454,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
             $identifiers = [];
             foreach ($document->getIdentifier() as $identifier) {
-                if ($identifier->getType() != $this->_typeShort) {
+                if ($identifier->getType() !== $this->typeShort) {
                     // sammle alle Identifier, die nicht vom aktuell betrachteten Typ sind, ohne weitere Prüfung auf
                     $identifiers[] = $identifier;
                 } else {
@@ -453,7 +469,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
             while ($identifierValuesIndex < $identifierValuesCount) {
                 $identifier = Identifier::new();
-                $identifier->setType($this->_typeShort);
+                $identifier->setType($this->typeShort);
                 $identifier->setValue($identifierValues[$identifierValuesIndex]);
                 $identifiers[] = $identifier;
                 $identifierValuesIndex++;
@@ -472,19 +488,19 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      */
     private function handleEnrichment($document)
     {
-        $autoGenerateCheckbox = $this->getElement(self::ELEMENT_CHK_AUTO . $this->_type);
-        if (! is_null($autoGenerateCheckbox)) {
+        $autoGenerateCheckbox = $this->getElement(self::ELEMENT_CHK_AUTO . $this->type);
+        if ($autoGenerateCheckbox !== null) {
             // Null-Check wichtig, da Checkbox nur bei nicht veröffentlichten Dokumenten angezeigt wird
             $autoGenerateValue = $autoGenerateCheckbox->isChecked();
-            $enrichmentValue = $autoGenerateValue ? 'true' : 'false';
+            $enrichmentValue   = $autoGenerateValue ? 'true' : 'false';
 
             $enrichmentKeyName = $this->getEnrichmentKeyName();
-            $enrichments = $document->getEnrichment();
-            $enrichmentExists = false;
+            $enrichments       = $document->getEnrichment();
+            $enrichmentExists  = false;
 
             $newEnrichments = [];
             foreach ($enrichments as $enrichment) {
-                if ($enrichment->getKeyName() == $enrichmentKeyName) {
+                if ($enrichment->getKeyName() === $enrichmentKeyName) {
                     $enrichmentExists = true;
                     $enrichment->setValue($enrichmentValue);
                 }
@@ -504,12 +520,13 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
     /**
      * Erzeugt neues Unterformular zum Hinzufügen.
-     * @return \Zend_Form _subFormClass
+     *
+     * @return Zend_Form
      */
     public function createSubForm()
     {
-        $classname = $this->_subFormClass;
-        $subform = new $classname();
+        $classname = $this->subFormClass;
+        $subform   = new $classname();
 
         // Entfernen-Button sollte nur ab dem zweiten Identifier angeboten werden
         $firstForm = empty($this->getSubForms());
@@ -517,7 +534,6 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         if (! $firstForm) {
             $this->addRemoveButton($subform);
         }
-
 
         return $subform;
     }
@@ -531,6 +547,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      * Außerdem macht der Button nur dann Sinn, wenn in der Konfiguration im Schlüssel
      * doi.generatorClass der Name einer tatsächlich existierenden Klasse angegeben wurde.
      *
+     * @param Zend_Form $subform
+     * @param bool      $enabled
      */
     private function addGenerateButton($subform, $enabled = true)
     {
@@ -538,7 +556,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             'submit',
             self::ELEMENT_GENERATE,
             [
-                'label' => 'admin_button_generate'
+                'label' => 'admin_button_generate',
             ]
         );
         if (! $enabled) {
@@ -548,11 +566,10 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
         $subform->addElement($button);
     }
 
-
     /**
      * Bereitet die Dekoratoren für das Unterformular vor.
      *
-     * @param $subform \Zend_Form
+     * @param Zend_Form $subform
      */
     protected function prepareSubFormDecorators($subform)
     {
@@ -562,6 +579,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
     /**
      * Erzeugt den Button für das Entfernen des 2. bis n-ten Identifiers des Typs.
+     *
+     * @param Zend_Form $subform
      */
     protected function addRemoveButton($subform)
     {
@@ -569,7 +588,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
             'submit',
             self::ELEMENT_REMOVE,
             [
-                'label' => 'admin_button_remove'
+                'label' => 'admin_button_remove',
             ]
         );
         $subform->addElement($button);
@@ -591,8 +610,9 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      * wird schon innerhalb der Methode removeSubForm aufgerufen)
      *
      * @param string $name Name des Unterformulars das entfernt werden sollte
+     * @return int
      */
-    protected function _removeSubForm($name)
+    protected function removeSubFormAndFixOrder($name)
     {
         $order = $this->getSubForm($name)->getOrder();
         $this->removeSubForm($name);
@@ -602,28 +622,31 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Methode wurde überschrieben, da Spezialbehandlung durch die Checkbox erforderlich ist
      */
-    protected function _removeGapsInSubFormOrder()
+    protected function removeGapsInSubFormOrder()
     {
         $subforms = $this->getSubForms();
 
         $renamedSubforms = [];
 
-        $checkbox = $this->getElement(self::ELEMENT_CHK_AUTO . $this->_type);
-        $pos = is_null($checkbox) ? 0 : 1;
+        $checkbox = $this->getElement(self::ELEMENT_CHK_AUTO . $this->type);
+        $pos      = $checkbox === null ? 0 : 1;
 
         foreach ($subforms as $index => $subform) {
             $subform->setOrder($pos);
-            $name = $this->getSubFormBaseName() . $pos;
+            $name                   = $this->getSubFormBaseName() . $pos;
             $renamedSubforms[$name] = $subform;
-            $this->_setOddEven($subform);
+            $this->setOddEven($subform);
             $pos++;
         }
 
         $this->setSubForms($renamedSubforms);
     }
 
+    /**
+     * @return string
+     */
     private function getEnrichmentKeyName()
     {
-        return 'opus.' .  $this->_typeShort . '.autoCreate';
+        return 'opus.' . $this->typeShort . '.autoCreate';
     }
 }

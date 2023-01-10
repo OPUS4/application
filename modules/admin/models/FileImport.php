@@ -29,9 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
 use Opus\Common\File;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * Model for importing files from a specific folder.
@@ -40,19 +40,18 @@ use Opus\Common\File;
  */
 class Admin_Model_FileImport extends Application_Model_Abstract
 {
-
-    private $_importFolder = null;
+    /** @var string */
+    private $importFolder;
 
     public function __construct()
     {
-        $this->_importFolder = APPLICATION_PATH . '/workspace/incoming';
+        $this->importFolder = APPLICATION_PATH . '/workspace/incoming';
     }
 
     /**
-     *
      * @param string $docId
-     * @param array $files
-     * @throws Application_Exception in case database contains no document with id $docID
+     * @param array  $files
+     * @throws Application_Exception In case database contains no document with id $docID.
      */
     public function addFilesToDocument($docId, $files)
     {
@@ -67,13 +66,13 @@ class Admin_Model_FileImport extends Application_Model_Abstract
             throw new Application_Exception('no document found for id ' . $docId, null, $e);
         }
 
-        $log = $this->getLogger();
+        $log            = $this->getLogger();
         $validFilenames = $this->getNamesOfIncomingFiles();
 
         foreach ($files as $file) {
             $log->debug('check filename ' . $file);
             if (in_array($file, $validFilenames)) {
-                $pathname = $this->_importFolder . DIRECTORY_SEPARATOR . $file;
+                $pathname = $this->importFolder . DIRECTORY_SEPARATOR . $file;
                 $log->info('import file ' . $pathname);
 
                 $docfile = $document->addFile();
@@ -97,12 +96,17 @@ class Admin_Model_FileImport extends Application_Model_Abstract
 
     /**
      * Lists files in import folder.
+     *
+     * @return array
      */
     public function listFiles()
     {
-        return \Zend_Controller_Action_HelperBroker::getStaticHelper('Files')->listFiles($this->_importFolder, true);
+        return Zend_Controller_Action_HelperBroker::getStaticHelper('Files')->listFiles($this->importFolder, true);
     }
 
+    /**
+     * @return array
+     */
     public function getNamesOfIncomingFiles()
     {
         $incomingFilenames = [];
@@ -112,21 +116,27 @@ class Admin_Model_FileImport extends Application_Model_Abstract
         return $incomingFilenames;
     }
 
+    /**
+     * @param string $path
+     */
     public function setImportFolder($path)
     {
-        $this->_importFolder = $path;
+        $this->importFolder = $path;
     }
 
+    /**
+     * @return string
+     */
     public function getImportFolder()
     {
-        return $this->_importFolder;
+        return $this->importFolder;
     }
 
     /**
      * Deletes a single file from a document.
-     * @param type $docId
-     * @param type $fileId
-     * @return type
+     *
+     * @param int $docId
+     * @param int $fileId
      */
     public function deleteFile($docId, $fileId)
     {
@@ -149,8 +159,9 @@ class Admin_Model_FileImport extends Application_Model_Abstract
 
     /**
      * Checks if a file id is formally correct and file exists.
-     * @param string $fileId
-     * @return boolean True if file ID is valid
+     *
+     * @param int $fileId
+     * @return bool True if file ID is valid
      */
     public function isValidFileId($fileId)
     {
@@ -158,10 +169,8 @@ class Admin_Model_FileImport extends Application_Model_Abstract
             return false;
         }
 
-        $file = null;
-
         try {
-            $file = File::get($fileId);
+            File::get($fileId);
         } catch (NotFoundException $omnfe) {
             return false;
         }
@@ -171,9 +180,10 @@ class Admin_Model_FileImport extends Application_Model_Abstract
 
     /**
      * Checks if a file ID is linked to a document.
+     *
      * @param int $docId
-     * @param int $fileId
-     * @return boolean True - if the file is linked to the document
+     * @param int|string $fileId
+     * @return bool True - if the file is linked to the document
      */
     public function isFileBelongsToDocument($docId, $fileId)
     {
@@ -186,7 +196,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract
         $files = $doc->getFile();
 
         foreach ($files as $file) {
-            if ($file->getId() == $fileId) {
+            if ($file->getId() === (int) $fileId) {
                 return true;
             }
         }

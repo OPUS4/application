@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,15 +26,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 ?>
 
 <div id="top">
@@ -103,7 +99,7 @@
         <p><?= $this->translate('admin_documents_maxhitsperpage') ?></p>
         <ul>
             <?PHP foreach ($this->itemCountLinks as $link) : ?>
-                <?PHP if ($link['label'] != $this->maxHitsPerPage && ($link['label'] !== 'all' || $this->maxHitsPerPage != 0)) : ?>
+                <?PHP if ($link['label'] !== $this->maxHitsPerPage && ($link['label'] !== 'all' || $this->maxHitsPerPage !== 0)) : ?>
                     <li><a href="<?= $link['url'] ?>">
                     <?PHP if ($link['label'] === 'all') : ?>
                         <?= $this->translate('admin_documents_maxhitsperpage_all')?><?PHP
@@ -135,8 +131,8 @@
         <h4>Filter</h4>
         <ul>
             <li><?= $this->person['last_name'] ?><?PHP if (isset($this->person['first_name'])) :
-?>,
-            <?= $this->person['first_name'] ?>
+                ?>,
+                <?= $this->person['first_name'] ?>
                 <?PHP endif ?>
             </li>
             <?PHP if (isset($this->person['identifier_orcid'])) : ?>
@@ -153,7 +149,7 @@
     <?PHP endif ?>
     <div id="facetMenu">
         <?PHP if (! isset($this->collectionName) && ! isset($this->series)) : ?>
-            <?PHP include('facet.phtml') ?>
+            <?PHP include 'facet.phtml' ?>
         <?PHP endif ?>
         <?PHP if (isset($this->person)) : ?>
             <?PHP include 'facet-role.phtml' ?>
@@ -167,7 +163,7 @@
 
 <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml') ?>
 
-<?PHP include('results.phtml') ?>
+<?PHP include 'results.phtml' ?>
 
 <?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml') ?>
     </div>

@@ -30,12 +30,13 @@
  */
 
 use Opus\Common\Log;
+
 ?>
 
 <?PHP $document = new Application_Util_DocumentAdapter($this, $this->element->getDocument()) ?>
 
-<?PHP if (! is_null($document)) : ?>
-<?PHP $authors = $document->getAuthors(); ?>
+<?PHP if ($document !== null) : ?>
+    <?PHP $authors = $document->getAuthors(); ?>
 <div id="docinfo">
     <h2><span class="docid"><?=$document->getDocId()?></span> - <?= $this->escape($document->getMainTitle()) ?></h2>
     <?PHP if (! empty($authors)) : ?>
@@ -43,6 +44,6 @@ use Opus\Common\Log;
     <?PHP endif; ?>
 </div>
 <?PHP else : ?>
-<?PHP Log::get()->err('Use of partial \'docinfo.phtml\' without document = null.'); ?>
+    <?PHP Log::get()->err('Use of partial \'docinfo.phtml\' without document = null.'); ?>
 <?PHP endif; ?>
 

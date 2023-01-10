@@ -37,7 +37,7 @@ use Opus\Common\Title;
  */
 class Admin_Form_Document_TitleTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testCreateForm()
@@ -134,9 +134,9 @@ class Admin_Form_Document_TitleTest extends ControllerTestCase
         $form = new Admin_Form_Document_Title();
 
         $post = [
-            'Type' => 'parent',
+            'Type'     => 'parent',
             'Language' => 'rus',
-            'Value' => ''
+            'Value'    => '',
         ];
 
         $this->assertFalse($form->isValid($post));

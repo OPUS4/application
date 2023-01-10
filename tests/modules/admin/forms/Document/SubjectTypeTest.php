@@ -36,7 +36,7 @@ use Opus\Common\Document;
  */
 class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testCreateForm()

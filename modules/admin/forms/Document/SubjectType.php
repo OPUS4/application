@@ -36,27 +36,25 @@ use Opus\Common\DocumentInterface;
  *
  * Diese Klasse überschreibt ein paar Funktion von Admin_Form_Document_MultiSubForm um Unterformulare vom richtigen Typ
  * zu verwenden und die richtigen Werte aus dem Modell zu holen.
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
 {
-
     /**
      * Der Schlagworttyp für den dieses Unterformular verwendet wird.
+     *
      * @var string
      */
-    private $_subjectType;
+    private $subjectType;
 
     /**
      * Konstruiert ein Unterformular für Schlagwörter eines bestimmten Typs.
+     *
      * @param string $type Schlagworttyp (z.B. 'swd', 'psyndex' usw.)
      * @param mixed $options
      */
     public function __construct($type, $options = null)
     {
-        $this->_subjectType = $type;
+        $this->subjectType = $type;
 
         $validator = null;
 
@@ -88,16 +86,17 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
     {
         parent::init();
 
-        $this->setLegend('admin_document_section_subject' . $this->_subjectType);
+        $this->setLegend('admin_document_section_subject' . $this->subjectType);
     }
 
     /**
      * Liefert den Schlagworttyp für das Formular zurück.
+     *
      * @return string Schlagworttyp
      */
     public function getSubjectType()
     {
-        return $this->_subjectType;
+        return $this->subjectType;
     }
 
     /**
@@ -116,14 +115,15 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
 
     /**
      * Erzeugt neues Unterformular Instanz fuer den entsprechenden Schlagworttyp.
-     * @return \Admin_Form_Document_Subject
+     *
+     * @return Admin_Form_Document_Subject
      */
     public function createNewSubFormInstance()
     {
-        if ($this->_subjectType == 'swd') {
+        if ($this->subjectType === 'swd') {
             return new Admin_Form_Document_Subject('swd', 'deu');
         } else {
-            return new Admin_Form_Document_Subject($this->_subjectType);
+            return new Admin_Form_Document_Subject($this->subjectType);
         }
     }
 
@@ -140,7 +140,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
         $subjects = [];
 
         foreach ($values as $value) {
-            if ($value->getType() == $this->_subjectType) {
+            if ($value->getType() === $this->subjectType) {
                 $subjects[] = $value;
             }
         }

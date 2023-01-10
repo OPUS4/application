@@ -33,7 +33,7 @@ use Opus\Common\Collection;
 
 class Admin_Form_CollectionTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testConstructForm()
@@ -131,16 +131,16 @@ class Admin_Form_CollectionTest extends ControllerTestCase
         $form = new Admin_Form_Collection();
 
         $this->assertTrue($form->isValid([
-            'Name' => 'ColName'
-        ]));
-
-        $this->assertTrue($form->isValid([
-            'Number' => 'ColNumber'
-        ]));
-
-        $this->assertTrue($form->isValid([
             'Name' => 'ColName',
-            'Number' => 'ColNumber'
+        ]));
+
+        $this->assertTrue($form->isValid([
+            'Number' => 'ColNumber',
+        ]));
+
+        $this->assertTrue($form->isValid([
+            'Name'   => 'ColName',
+            'Number' => 'ColNumber',
         ]));
     }
 

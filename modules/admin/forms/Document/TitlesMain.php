@@ -36,13 +36,9 @@ use Opus\Common\DocumentInterface;
  *
  * Die Basisklasse wurde erweitert um dafür zu sorgen, dass der Titel in der Dokumentensprache zuerst angezeigt wird.
  * Außerdem wird zusätzlich bei der Validierung geprüft, ob ein Titel in der Dokumentsprache existiert.
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm
 {
-
     /**
      * Konstruiert Unterformular fuer die Haupttitel eines Dokuments.
      */
@@ -60,19 +56,22 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm
         parent::init();
         $this->setDecorators(
             [
-            'FormElements',
-            [['fieldsWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'fields-wrapper']],
-            ['FormErrors', [
-                'placement' => 'prepend',
-                'ignoreSubForms' => true,
-                'onlyCustomFormErrors' => true,
-                'markupListStart' => '<div class="form-errors">',
-                'markupListItemStart' => '',
-                'markupListItemEnd' => '',
-                'markupListEnd' => '</div>'
-            ]],
-            ['FieldsetWithButtons', ['legendButtons' => self::ELEMENT_ADD]],
-            [['divWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'subform']]
+                'FormElements',
+                [['fieldsWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'fields-wrapper']],
+                [
+                    'FormErrors',
+                    [
+                        'placement'            => 'prepend',
+                        'ignoreSubForms'       => true,
+                        'onlyCustomFormErrors' => true,
+                        'markupListStart'      => '<div class="form-errors">',
+                        'markupListItemStart'  => '',
+                        'markupListItemEnd'    => '',
+                        'markupListEnd'        => '</div>',
+                    ],
+                ],
+                ['FieldsetWithButtons', ['legendButtons' => self::ELEMENT_ADD]],
+                [['divWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'subform']],
             ]
         );
     }
@@ -126,7 +125,7 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm
         $sortedValues = [];
 
         foreach ($values as $index => $value) {
-            if ($value->getLanguage() == $doclang) {
+            if ($value->getLanguage() === $doclang) {
                 $sortedValues[] = $value;
                 unset($values[$index]);
                 break;

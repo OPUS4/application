@@ -36,9 +36,10 @@ use Opus\Common\Job;
  */
 class Admin_JobControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var int[] */
     private $jobIds = [];
 
     public function setUp(): void
@@ -56,7 +57,7 @@ class Admin_JobControllerTest extends ControllerTestCase
             $job->setLabel('testjob' . ($i < 5 ? 1 : 2));
             $job->setData([
                 'documentId' => $i,
-                'task' => 'get-me-a-coffee'
+                'task'       => 'get-me-a-coffee',
             ]);
             $job->setState(Job::STATE_FAILED);
             $this->jobIds[] = $job->store();
@@ -75,7 +76,6 @@ class Admin_JobControllerTest extends ControllerTestCase
 
     public function testIndexDisplayFailedWorkerJobs()
     {
-
         $this->dispatch('/admin/job');
         $this->assertResponseCode(200);
         $this->assertQueryContentContains('table.worker-jobs td', 'testjob1');
@@ -84,7 +84,6 @@ class Admin_JobControllerTest extends ControllerTestCase
 
     public function testMonitorFailedWorkerJobs()
     {
-
         $this->dispatch('/admin/job/worker-monitor');
         $this->assertResponseCode(200);
         $this->assertEquals('1', $this->_response->getBody(), 'Expected value 1');

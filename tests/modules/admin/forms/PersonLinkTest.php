@@ -38,7 +38,7 @@ use Opus\Model\Dependent\Link\DocumentPerson;
  */
 class Admin_Form_PersonLinkTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function testConstructForm()
@@ -98,7 +98,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
         $this->assertNull($form->getModel());
 
         $document = Document::get(250);
-        $authors = $document->getPersonAuthor();
+        $authors  = $document->getPersonAuthor();
 
         $this->assertEquals(3, count($authors));
         $form->populateFromModel($authors[0]);
@@ -112,7 +112,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
 
         $post = [
             'PersonId' => '', // Personen ID muss vorhanden sein
-            'Role' => '' // Rolle muss vorhanden sein
+            'Role'     => '', // Rolle muss vorhanden sein
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -129,7 +129,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
 
         $post = [
             'PersonId' => 'tom', // keine ID
-            'Role' => 'unknown' // das ist keine erlaubte Rolle
+            'Role'     => 'unknown', // das ist keine erlaubte Rolle
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -147,7 +147,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
 
         $post = [
             'PersonId' => '310', // Personen ID muss vorhanden sein
-            'Role' => 'author' // Rolle muss vorhanden sein
+            'Role'     => 'author', // Rolle muss vorhanden sein
         ];
 
         $this->assertTrue($form->isValid($post));

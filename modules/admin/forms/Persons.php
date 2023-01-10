@@ -44,66 +44,63 @@ use Opus\Common\Person;
  */
 class Admin_Form_Persons extends Application_Form_Model_Abstract
 {
-
     /**
      * Name fuer Formularelement fuer Feld ID von Person.
      */
-    const ELEMENT_PERSON_ID = 'PersonId';
+    public const ELEMENT_PERSON_ID = 'PersonId';
 
     /**
      * Name fuer Formularelement fuer Feld AcademicTitle.
      */
-    const ELEMENT_ACADEMIC_TITLE = 'AcademicTitle';
+    public const ELEMENT_ACADEMIC_TITLE = 'AcademicTitle';
 
     /**
      * Name fuer Formularelement fuer Feld LastName.
      */
-    const ELEMENT_LAST_NAME = 'LastName';
+    public const ELEMENT_LAST_NAME = 'LastName';
 
     /**
      * Name fuer Formularelement fuer Feld FirstName.
      */
-    const ELEMENT_FIRST_NAME = 'FirstName';
+    public const ELEMENT_FIRST_NAME = 'FirstName';
 
     /**
      * Name fuer Formularelement fuer Feld Email.
      */
-    const ELEMENT_EMAIL = 'Email';
+    public const ELEMENT_EMAIL = 'Email';
 
     /**
      * Name fuer Formularelement fuer Feld PlaceOfBirth.
      */
-    const ELEMENT_PLACE_OF_BIRTH = 'PlaceOfBirth';
+    public const ELEMENT_PLACE_OF_BIRTH = 'PlaceOfBirth';
 
     /**
      * Name fuer Formularelement fuer Feld DateOfBirth.
      */
-    const ELEMENT_DATE_OF_BIRTH = 'DateOfBirth';
+    public const ELEMENT_DATE_OF_BIRTH = 'DateOfBirth';
 
     /**
      * Konstante für Identifier Gnd
      */
-    const ELEMENT_IDENTIFIER_GND = 'IdentifierGnd';
+    public const ELEMENT_IDENTIFIER_GND = 'IdentifierGnd';
 
     /**
      * Konstante für Identifier OrcId
      */
-    const ELEMENT_IDENTIFIER_ORCID = 'IdentifierOrcid';
+    public const ELEMENT_IDENTIFIER_ORCID = 'IdentifierOrcid';
 
     /**
      * Konstante für Identifier Misc
      */
-    const ELEMENT_IDENTIFIER_MISC = 'IdentifierMisc';
+    public const ELEMENT_IDENTIFIER_MISC = 'IdentifierMisc';
 
     /**
      * Konstante für Hash, der Formular identifiziert
      */
-    const ELEMENT_FORM_ID = 'FormId';
+    public const ELEMENT_FORM_ID = 'FormId';
 
-    /**
-     * @var array Identity values for person
-     */
-    private $_person;
+    /** @var array Identity values for person */
+    private $person;
 
     /**
      * Erzeugt die Formularelemente.
@@ -118,7 +115,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
                 'FormElements',
                 'Fieldset',
                 'Form',
-                ['FormHelp', ['message' => 'admin_person_edit_help']]
+                ['FormHelp', ['message' => 'admin_person_edit_help']],
             ]
         );
 
@@ -130,8 +127,10 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
             'text',
             self::ELEMENT_LAST_NAME,
             [
-                'label' => 'LastName', 'required' => true, 'size' => 50,
-                'maxlength' => $fieldLastName->getMaxSize()
+                'label'     => 'LastName',
+                'required'  => true,
+                'size'      => 50,
+                'maxlength' => $fieldLastName->getMaxSize(),
             ]
         );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, ['label' => 'FirstName', 'size' => 50]);
@@ -177,7 +176,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         foreach ($elements as $key => $element) {
             $decorators = $element->getDecorators();
-            $index = array_search('Zend_Form_Decorator_Errors', array_keys($decorators));
+            $index      = array_search('Zend_Form_Decorator_Errors', array_keys($decorators));
 
             // array_splice($decorators, $index + 1, 0, array('UpdateField' => 'Test'));
 
@@ -190,7 +189,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
                     'UpdateField',
                     'ElementHtmlTag',
                     ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
-                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
                 ]);
             }
         }
@@ -198,8 +197,6 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
     /**
      * Looks at UpdateEnabled values to set active attribute of elements.
-     *
-     * @param array $post
      */
     public function populate(array $values)
     {
@@ -207,12 +204,12 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         foreach ($values as $key => $value) {
             if (strpos($key, 'UpdateEnabled')) {
-                if (strtolower($value) == 'on') {
+                if (strtolower($value) === 'on') {
                     $elemName = preg_filter('/(.*)UpdateEnabled/', '$1', $key);
 
                     $element = $this->getElement($elemName);
 
-                    if (! is_null($element)) {
+                    if ($element !== null) {
                         $element->setAttrib('active', true);
                     }
                 }
@@ -220,30 +217,44 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         }
     }
 
+    /**
+     * @param array $person
+     */
     public function setPerson($person)
     {
-        $this->_person = $person;
+        $this->person = $person;
     }
 
+    /**
+     * @return array
+     */
     public function getPerson()
     {
-        return $this->_person;
+        return $this->person;
     }
 
     /**
      * Setzt die Werte der Formularelmente entsprechend der uebergebenen Person Instanz.
-     * @param Person $model
+     *
+     * @param array $values
      */
     public function populateFromModel($values)
     {
         // make sure all keys exist
         $validNames = [
-            'first_name', 'last_name', 'identifier_gnd', 'identifier_orcid', 'identifier_misc',
-            'place_of_birth', 'date_of_birth', 'academic_title', 'email'
+            'first_name',
+            'last_name',
+            'identifier_gnd',
+            'identifier_orcid',
+            'identifier_misc',
+            'place_of_birth',
+            'date_of_birth',
+            'academic_title',
+            'email',
         ];
 
         $defaults = array_fill_keys($validNames, null);
-        $values = array_merge($defaults, $values);
+        $values   = array_merge($defaults, $values);
 
         // set elements with single values (normally)
         // TODO will change for first and last name (once only IDs count)
@@ -260,14 +271,14 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $dates = $values['date_of_birth'];
 
-        if (! is_null($dates)) {
+        if ($dates !== null) {
             if (! is_array($dates)) {
                 $dates = [$dates];
             }
 
             $formattedDates = [];
 
-            $datesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('dates');
+            $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('dates');
 
             foreach ($dates as $date) {
                 $opusDate = new Date($date);
@@ -280,8 +291,9 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
     /**
      * Sets value for identity field, adding a note if multiple values are present.
-     * @param $element
-     * @param $value
+     *
+     * @param Zend_Form_Element $element
+     * @param string|array $value
      *
      * TODO handle $value !== $person[] - can it happen?
      */
@@ -296,7 +308,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
         $person = $this->getPerson();
 
-        if (! is_null($person)) {
+        if ($person !== null) {
             $persons = Person::getModelRepository();
 
             $columnName = $persons->convertFieldnameToColumn($element->getName());
@@ -310,6 +322,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
     /**
      * Ermittelt bei einem Post welcher Button geklickt wurde, also welche Aktion gewünscht ist.
+     *
      * @param array $post
      * @param array $context
      * @return string String fuer gewuenschte Operation
@@ -327,14 +340,17 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
     /**
      * Setzt die Felder einer Person Instanz entsprechend dem Formularinhalt.
-     * @param Person $model
+     *
+     * @param array $values
      */
-    public function updateModel($model)
+    public function updateModel($values)
     {
     }
 
     /**
      * Returns array with changed values for person objects.
+     *
+     * @return array
      */
     public function getChanges()
     {
@@ -349,7 +365,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
                 if ($element->getName() === self::ELEMENT_DATE_OF_BIRTH) {
                     // TODO this date conversion stuff is still too complicated
                     $dateHelper = new Application_Controller_Action_Helper_Dates();
-                    $date = $dateHelper->getOpusDate($value); // get a date with time
+                    $date       = $dateHelper->getOpusDate($value); // get a date with time
                     if ($date !== null) {
                         $date->setDateOnly($date->getDateTime()); // remove time
                         $value = $date->__toString(); // get properly formatted string
@@ -358,7 +374,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
                     }
                 }
 
-                if (strlen(trim($value)) == 0) {
+                if (strlen(trim($value)) === 0) {
                     $value = null;
                 }
 
@@ -371,12 +387,20 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
 
     /**
      * Liefert Instanz von Person zurueck.
-     * @return Person
+     *
+     * @return null
      */
     public function getModel()
     {
+        return null;
     }
 
+    /**
+     * @param array      $data
+     * @param array|null $context
+     * @return bool
+     * @throws Zend_Form_Exception
+     */
     public function isValid($data, $context = null)
     {
         $result = parent::isValid($data, $context);

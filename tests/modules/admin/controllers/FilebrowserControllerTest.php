@@ -34,12 +34,14 @@
  */
 class Admin_FilebrowserControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var int */
     private $documentId;
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $document = $this->createTestDocument();
@@ -136,8 +138,9 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
         $this->request
             ->setMethod('POST')
             ->setPost([
-                'id' => $this->documentId,
-                'file' => 'invalid']);
+                'id'   => $this->documentId,
+                'file' => 'invalid',
+            ]);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);
         $this->assertContains('invalid POST parameter', $this->getResponse()->getBody());
@@ -150,7 +153,8 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
             ->setMethod('POST')
             ->setPost([
                 'docId' => $this->documentId,
-                'file' => 'test.txt']);
+                'file'  => 'test.txt',
+            ]);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/filemanager/index/docId/' . $this->documentId);
     }

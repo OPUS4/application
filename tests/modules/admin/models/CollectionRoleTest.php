@@ -33,14 +33,17 @@ use Opus\Common\CollectionRole;
 
 class Admin_Model_CollectionRoleTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var int */
     private $collectionRoleId;
 
-    private $moveTestColId = null;
+    /** @var int */
+    private $moveTestColId;
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $collectionRole = CollectionRole::new();
@@ -57,11 +60,12 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
         $this->collectionRoleId = $collectionRole->store();
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         $collectionRole = CollectionRole::get($this->collectionRoleId);
         $collectionRole->delete();
 
-        if (! is_null($this->moveTestColId)) {
+        if ($this->moveTestColId !== null) {
             $collectionRole = CollectionRole::get($this->moveTestColId);
             $collectionRole->delete();
         }
@@ -80,7 +84,7 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
 
     public function testConstructModelWithNull()
     {
-        $model = new Admin_Model_CollectionRole();
+        $model          = new Admin_Model_CollectionRole();
         $collectionRole = $model->getObject();
         $this->assertEquals(1, $collectionRole->getVisible());
         $this->assertEquals(1, $collectionRole->getVisibleBrowsingStart());
@@ -90,19 +94,22 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
 
     public function testConstructModelWithEmptyParameter()
     {
-        $this->setExpectedException(Admin_Model_Exception::class, 'missing parameter roleid');
+        $this->expectException(Admin_Model_Exception::class);
+        $this->expectExceptionMessage('missing parameter roleid');
         $model = new Admin_Model_CollectionRole('');
     }
 
     public function testConstructModelWithUnknownId()
     {
-        $this->setExpectedException(Admin_Model_Exception::class, 'roleid parameter value unknown');
+        $this->expectException(Admin_Model_Exception::class);
+        $this->expectExceptionMessage('roleid parameter value unknown');
         $model = new Admin_Model_CollectionRole(2222);
     }
 
     public function testContructModelWithBadParameter()
     {
-        $this->setExpectedException(Admin_Model_Exception::class, 'roleid parameter value unknown');
+        $this->expectException(Admin_Model_Exception::class);
+        $this->expectExceptionMessage('roleid parameter value unknown');
         $model = new Admin_Model_CollectionRole('noId');
     }
 

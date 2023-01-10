@@ -35,16 +35,20 @@ use Opus\Common\CollectionRoleInterface;
 
 class Admin_Model_CollectionsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view'];
 
+    /** @var int */
     private $collectionRoleId;
 
+    /** @var Admin_Model_Collections */
     private $model;
 
-    private $_docId;
+    /** @var int */
+    private $docId;
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
         $collectionRole = CollectionRole::new();
@@ -66,10 +70,11 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
         $document->addCollection($root);
-        $this->_docId = $document->store();
+        $this->docId = $document->store();
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         $collectionRole = CollectionRole::get($this->collectionRoleId);
         $collectionRole->delete();
 
@@ -93,7 +98,7 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
             $this->assertArrayHasKey('name', $collection);
             $this->assertArrayHasKey('hasChildren', $collection);
             $this->assertArrayHasKey('visible', $collection);
-            if (strcmp($collection['name'], 'default_collection_role_TestCollectionRole-Name') == 0) {
+            if (strcmp($collection['name'], 'default_collection_role_TestCollectionRole-Name') === 0) {
                 $this->assertEquals(1, $collection['visible']);
             }
             $this->assertArrayHasKey('isRoot', $collection);
@@ -154,7 +159,7 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
             $this->assertArrayHasKey('name', $collection);
             $this->assertArrayHasKey('hasChildren', $collection);
             $this->assertArrayHasKey('visible', $collection);
-            if (strcmp($collection['name'], 'default_collection_role_no-root-test') == 0) {
+            if (strcmp($collection['name'], 'default_collection_role_no-root-test') === 0) {
                 $this->fail('Collection role no-root-test should not be present in array.');
             }
             $this->assertArrayHasKey('isRoot', $collection);
@@ -169,7 +174,7 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
 
     public function testCollectionRolesInfoForAssigned()
     {
-        $collections = $this->model->getCollectionRolesInfo($this->_docId);
+        $collections = $this->model->getCollectionRolesInfo($this->docId);
 
         $this->assertNotNull($collections);
         $this->assertInternalType('array', $collections);

@@ -43,32 +43,32 @@ use Opus\Model\Dependent\Link\DocumentPerson;
  */
 class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
 {
-
     /**
      * Nachricht für Funktionsaufruf mit falschem Model Parameter.
      */
-    const BAD_MODEL_MESSAGE = ' Called with object that is not instance of Opus\Model\Dependent\Link\DocumentPerson';
+    public const BAD_MODEL_MESSAGE = ' Called with object that is not instance of Opus\Model\Dependent\Link\DocumentPerson';
 
     /**
      * Name fuer Formularelement fuer Feld AllowEmailContact.
      */
-    const ELEMENT_ALLOW_CONTACT = 'AllowContact';
+    public const ELEMENT_ALLOW_CONTACT = 'AllowContact';
 
     /**
      * Name fuer Formularelement fuer Feld Role.
      */
-    const ELEMENT_ROLE = 'Role';
+    public const ELEMENT_ROLE = 'Role';
 
     /**
      * Name fuer Formularelement fuer Feld SortOrder.
      */
-    const ELEMENT_SORT_ORDER = 'SortOrder';
+    public const ELEMENT_SORT_ORDER = 'SortOrder';
 
     /**
      * Link-Model das angezeigt wird.
+     *
      * @var DocumentPerson
      */
-    private $_model = null;
+    private $model;
 
     /**
      * Erzeugt die Formularelemente.
@@ -80,8 +80,10 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
         $this->addElement(
             'hidden',
             Admin_Form_Person::ELEMENT_PERSON_ID,
-            ['required' => true,
-            'validators' => ['Int']]
+            [
+                'required'   => true,
+                'validators' => ['Int'],
+            ]
         );
         $this->addElement('PersonRole', self::ELEMENT_ROLE, ['label' => 'Role']);
         $this->addElement('checkbox', self::ELEMENT_ALLOW_CONTACT, ['label' => 'AllowEmailContact']);
@@ -90,6 +92,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Initialisiert Formular mit Werten aus Model.
+     *
      * @param DocumentPerson $personLink
      */
     public function populateFromModel($personLink)
@@ -99,7 +102,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
             $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($personLink->getSortOrder());
             $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personLink->getModel()->getId());
             $this->getElement(self::ELEMENT_ROLE)->setValue($personLink->getRole());
-            $this->_model = $personLink;
+            $this->model = $personLink;
         } else {
             $this->getLogger()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
         }
@@ -107,6 +110,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Setzt Werte im Model mit dem Inhalt der Formularelemente.
+     *
      * @param DocumentPerson $personLink
      */
     public function updateModel($personLink)
@@ -122,10 +126,11 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Liefert angezeigtes Model.
+     *
      * @return DocumentPerson
      */
     public function getModel()
     {
-        return $this->_model;
+        return $this->model;
     }
 }

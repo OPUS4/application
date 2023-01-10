@@ -31,18 +31,19 @@
 
 class Admin_Model_OptionsTest extends ControllerTestCase
 {
+    /** @var Admin_Model_Options */
+    private $model;
 
-    private $_model;
-
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
-        $this->_model = new Admin_Model_Options();
+        $this->model = new Admin_Model_Options();
     }
 
     public function testGetOptions()
     {
-        $options = $this->_model->getOptions();
+        $options = $this->model->getOptions();
 
         $this->assertInternalType('array', $options);
         $this->assertCount(2, $options);

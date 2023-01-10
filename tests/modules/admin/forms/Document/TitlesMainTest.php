@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DocumentInterface;
+use Opus\Common\Model\ModelException;
 use Opus\Common\Title;
 
 /**
@@ -36,7 +38,7 @@ use Opus\Common\Title;
  */
 class Admin_Form_Document_TitlesMainTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'translation'];
 
     /**
@@ -89,6 +91,10 @@ class Admin_Form_Document_TitlesMainTest extends ControllerTestCase
         $this->assertFalse($form->isDependenciesValid($post, $globalContext));
     }
 
+    /**
+     * @return DocumentInterface
+     * @throws ModelException
+     */
     protected function getTestDocument()
     {
         $document = $this->createTestDocument();
@@ -108,15 +114,18 @@ class Admin_Form_Document_TitlesMainTest extends ControllerTestCase
         return $document;
     }
 
+    /**
+     * @return array[]
+     */
     protected function getPostData()
     {
         return [
             'TitleMain0' => [
-                'Language' => 'eng'
+                'Language' => 'eng',
             ],
             'TitleMain1' => [
-                'Language' => 'deu'
-            ]
+                'Language' => 'deu',
+            ],
         ];
     }
 }

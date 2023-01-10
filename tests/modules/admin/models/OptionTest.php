@@ -31,27 +31,27 @@
 
 class Admin_Model_OptionTest extends ControllerTestCase
 {
-
-    private $_model;
+    /** @var Admin_Model_Option */
+    private $model;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_model = new Admin_Model_Option('test', [
-            'key' => 'supportedLanguages',
-            'type' => 'number',
+        $this->model = new Admin_Model_Option('test', [
+            'key'     => 'supportedLanguages',
+            'type'    => 'number',
             'section' => 'search',
             'options' => [
                 'min' => 11,
-                'max' => 19
-            ]
+                'max' => 19,
+            ],
         ]);
     }
 
     public function testGetOptions()
     {
-        $this->assertEquals(['min' => 11, 'max' => 19], $this->_model->getOptions());
+        $this->assertEquals(['min' => 11, 'max' => 19], $this->model->getOptions());
     }
 
     public function testGetEmptyOptions()
@@ -63,7 +63,7 @@ class Admin_Model_OptionTest extends ControllerTestCase
 
     public function testGetSection()
     {
-        $this->assertEquals('search', $this->_model->getSection());
+        $this->assertEquals('search', $this->model->getSection());
     }
 
     public function testGetDefaultSection()
@@ -75,7 +75,7 @@ class Admin_Model_OptionTest extends ControllerTestCase
 
     public function testGetElementType()
     {
-        $this->assertEquals('number', $this->_model->getElementType());
+        $this->assertEquals('number', $this->model->getElementType());
     }
 
     public function testGetDefaultElementType()
@@ -86,24 +86,24 @@ class Admin_Model_OptionTest extends ControllerTestCase
 
     public function testGetLabel()
     {
-        $this->assertEquals(Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'test', $this->_model->getLabel());
+        $this->assertEquals(Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'test', $this->model->getLabel());
     }
 
     public function testGetDescription()
     {
         $this->assertEquals(
             Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'test_description',
-            $this->_model->getDescription()
+            $this->model->getDescription()
         );
     }
 
     public function testGetName()
     {
-        $this->assertEquals('test', $this->_model->getName());
+        $this->assertEquals('test', $this->model->getName());
     }
 
     public function testGetKey()
     {
-        $this->assertEquals('supportedLanguages', $this->_model->getKey());
+        $this->assertEquals('supportedLanguages', $this->model->getKey());
     }
 }

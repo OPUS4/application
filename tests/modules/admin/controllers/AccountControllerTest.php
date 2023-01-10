@@ -39,7 +39,7 @@ use Opus\Common\Security\SecurityException;
  */
 class Admin_AccountControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public static function tearDownAfterClass(): void
@@ -141,17 +141,17 @@ class Admin_AccountControllerTest extends ControllerTestCase
          $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
-                    'username' => 'wally',
-                    'firstname' => 'wally',
-                    'lastname' => 'walross',
-                    'email' => 'wally@example.org',
-                    'password' => 'dummypassword',
+                    'username'        => 'wally',
+                    'firstname'       => 'wally',
+                    'lastname'        => 'walross',
+                    'email'           => 'wally@example.org',
+                    'password'        => 'dummypassword',
                     'confirmPassword' => 'dummypassword',
-                    'roles' => [
-                        'guest' => '1',
+                    'roles'           => [
+                        'guest'         => '1',
                         'administrator' => '0',
                     ],
-                    'Save' => 'Save'
+                    'Save'            => 'Save',
                 ]);
 
         $this->dispatch('/admin/account/new');
@@ -167,7 +167,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
          $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'Cancel' => 'Cancel'
+                    'Cancel' => 'Cancel',
                 ]);
 
         $this->dispatch('/admin/account/new');
@@ -182,13 +182,13 @@ class Admin_AccountControllerTest extends ControllerTestCase
          $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'password' => 'dummypassword',
+                    'password'        => 'dummypassword',
                     'confirmPassword' => 'dummypassword',
-                    'roles' => [
-                        'guest' => '1',
-                        'administrator' => '0'
+                    'roles'           => [
+                        'guest'         => '1',
+                        'administrator' => '0',
                     ],
-                    'Save' => 'Save'
+                    'Save'            => 'Save',
                 ]);
         $this->dispatch('/admin/account/new');
         $this->assertResponseCode(200);
@@ -205,20 +205,20 @@ class Admin_AccountControllerTest extends ControllerTestCase
     public function testUpdateAction()
     {
         $account = Account::fetchAccountByLogin('wally');
-        $id = $account->getId();
+        $id      = $account->getId();
         $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'Id' => $id,
-                    'username' => 'wally2',
+                    'Id'        => $id,
+                    'username'  => 'wally2',
                     'firstname' => 'wally',
-                    'lastname' => 'walross',
-                    'email' => 'wally@example.org',
-                    'roles' => [
-                        'guest' => '1',
-                        'administrator' => '0'
+                    'lastname'  => 'walross',
+                    'email'     => 'wally@example.org',
+                    'roles'     => [
+                        'guest'         => '1',
+                        'administrator' => '0',
                     ],
-                    'Save' => 'Save'
+                    'Save'      => 'Save',
                 ]);
 
         $this->dispatch('/admin/account/edit');
@@ -233,7 +233,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'Cancel' => 'Cancel'
+                    'Cancel' => 'Cancel',
                 ]);
         $this->dispatch('/admin/account/edit');
         $this->assertModule('admin');
@@ -248,16 +248,16 @@ class Admin_AccountControllerTest extends ControllerTestCase
     public function testUpdateActionMissingInput()
     {
         $account = Account::fetchAccountByLogin('wally2');
-        $id = $account->getId();
+        $id      = $account->getId();
         $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'Id' => $id,
+                    'Id'    => $id,
                     'roles' => [
-                        'roleguest' => '1',
-                        'roleadministrator' => '0'
+                        'roleguest'         => '1',
+                        'roleadministrator' => '0',
                     ],
-                    'Save' => 'Save'
+                    'Save'  => 'Save',
                 ]);
 
         $this->dispatch('/admin/account/edit');
@@ -273,22 +273,22 @@ class Admin_AccountControllerTest extends ControllerTestCase
     public function testUpdateActionChangePassword()
     {
         $account = Account::fetchAccountByLogin('wally2');
-        $id = $account->getId();
+        $id      = $account->getId();
         $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'Id' => $id,
-                    'username' => 'wally2',
-                    'firstname' => 'wally',
-                    'lastname' => 'walross',
-                    'email' => 'wally@example.org',
-                    'password' => 'newpassword',
+                    'Id'              => $id,
+                    'username'        => 'wally2',
+                    'firstname'       => 'wally',
+                    'lastname'        => 'walross',
+                    'email'           => 'wally@example.org',
+                    'password'        => 'newpassword',
                     'confirmPassword' => 'newpassword',
-                    'roles' => [
-                        'roleguest' => '1',
-                        'roleadministrator' => '0'
+                    'roles'           => [
+                        'roleguest'         => '1',
+                        'roleadministrator' => '0',
                     ],
-                    'submit' => 'submit'
+                    'submit'          => 'submit',
                 ]);
 
         $this->dispatch('/admin/account/edit');
@@ -306,12 +306,12 @@ class Admin_AccountControllerTest extends ControllerTestCase
     public function testDeleteAction()
     {
         $account = Account::fetchAccountByLogin('wally2');
-        $id = $account->getId();
+        $id      = $account->getId();
         $this->request
             ->setMethod('POST')
             ->setPost([
-                'Id' => $id,
-                'ConfirmYes' => 'Yes'
+                'Id'         => $id,
+                'ConfirmYes' => 'Yes',
             ]);
 
         $this->dispatch('/admin/account/delete');
@@ -319,7 +319,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
         $this->assertAction('delete');
         $this->assertRedirect('/admin/account/index');
 
-        $this->setExpectedException(SecurityException::class);
+        $this->expectException(SecurityException::class);
         $this->assertNull(Account::fetchAccountByLogin('wally2'));
     }
 

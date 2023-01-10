@@ -33,7 +33,7 @@ use Opus\Common\File;
 
 class Admin_Form_Document_FileTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testConstructForm()

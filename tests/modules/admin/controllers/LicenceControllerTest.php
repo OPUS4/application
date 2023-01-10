@@ -30,6 +30,8 @@
  */
 
 use Opus\Common\Licence;
+use Opus\Common\LicenceInterface;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * Unit Tests für Klasse Admin_LicenceController.
@@ -38,7 +40,7 @@ use Opus\Common\Licence;
  */
 class Admin_LicenceControllerTest extends CrudControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function setUp(): void
@@ -48,6 +50,9 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
         parent::setUp();
     }
 
+    /**
+     * @return LicenceInterface[]
+     */
     public function getModels()
     {
         return Licence::getAll();
@@ -123,18 +128,18 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
         $this->createsModels = true;
 
         $post = [
-            'Active' => '1',
-            'NameLong' => 'TestNameLong',
-            'Language' => 'eng',
-            'LinkLicence' => 'www.example.org/licence',
-            'LinkLogo' => 'www.example.org/licence/logo.png',
-            'DescText' => 'TestDescText',
-            'DescMarkup' => 'TestDescMarkup',
+            'Active'          => '1',
+            'NameLong'        => 'TestNameLong',
+            'Language'        => 'eng',
+            'LinkLicence'     => 'www.example.org/licence',
+            'LinkLogo'        => 'www.example.org/licence/logo.png',
+            'DescText'        => 'TestDescText',
+            'DescMarkup'      => 'TestDescMarkup',
             'CommentInternal' => 'TestCommentInternal',
-            'MimeType' => 'text/plain',
-            'PodAllowed' => '0',
-            'SortOrder' => '100',
-            'Save' => 'Speichern'
+            'MimeType'        => 'text/plain',
+            'PodAllowed'      => '0',
+            'SortOrder'       => '100',
+            'Save'            => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -174,10 +179,10 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
         $modelCount = count($this->getModels());
 
         $post = [
-            'NameLong' => 'TestNameLong',
-            'Language' => 'eng',
+            'NameLong'    => 'TestNameLong',
+            'Language'    => 'eng',
             'LinkLicence' => 'www.example.org/licence',
-            'Cancel' => 'Abbrechen'
+            'Cancel'      => 'Abbrechen',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -222,19 +227,19 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
         $licenceId = $licence->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $licenceId,
-            'Active' => '1',
-            'NameLong' => 'NameLongModified',
-            'Language' => 'eng',
-            'LinkLicence' => 'LinkLicenceModified',
-            'LinkLogo' => 'LinkLogoAdded',
-            'DescText' => 'DescTextAdded',
-            'DescMarkup' => 'DescMarkupAdded',
+            'Id'              => $licenceId,
+            'Active'          => '1',
+            'NameLong'        => 'NameLongModified',
+            'Language'        => 'eng',
+            'LinkLicence'     => 'LinkLicenceModified',
+            'LinkLogo'        => 'LinkLogoAdded',
+            'DescText'        => 'DescTextAdded',
+            'DescMarkup'      => 'DescMarkupAdded',
             'CommentInternal' => 'CommentInternalAdded',
-            'MimeType' => 'text/plain',
-            'PodAllowed' => '1',
-            'SortOrder' => '5',
-            'Save' => 'Abspeichern'
+            'MimeType'        => 'text/plain',
+            'PodAllowed'      => '1',
+            'SortOrder'       => '5',
+            'Save'            => 'Abspeichern',
         ]);
 
         $this->dispatch('/admin/licence/edit');
@@ -269,11 +274,11 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
         $licenceId = $licence->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $licenceId,
-            'NameLong' => 'NameLongModified',
-            'Language' => 'eng',
+            'Id'          => $licenceId,
+            'NameLong'    => 'NameLongModified',
+            'Language'    => 'eng',
             'LinkLicence' => 'LinkLicenceModified',
-            'Cancel' => 'Cancel'
+            'Cancel'      => 'Cancel',
         ]);
 
         $this->dispatch('/admin/licence/edit');
@@ -307,6 +312,9 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
         $this->verifyFlashMessage('controller_crud_model_cannot_delete', self::MESSAGE_LEVEL_FAILURE);
     }
 
+    /**
+     * @return int
+     */
     public function createNewModel()
     {
         $licence = Licence::new();
@@ -318,6 +326,11 @@ class Admin_LicenceControllerTest extends CrudControllerTestCase
         return $licence->store();
     }
 
+    /**
+     * @param int $identifier
+     * @return LicenceInterface
+     * @throws NotFoundException
+     */
     public function getModel($identifier)
     {
         return Licence::get($identifier);

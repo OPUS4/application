@@ -30,25 +30,31 @@
  */
 
 use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Model\ModelException;
 use Opus\Common\Person;
 
 /**
- * Class Admin_WorkflowControllerTest.
- *
  * @covers Admin_WorkflowController
  */
 class Admin_WorkflowControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     private function enablePublishNotification()
     {
-        $config = $this->getConfig();
+        $config                                             = $this->getConfig();
         $config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
-        $config->notification->document->published->email = "published@localhost";
+        $config->notification->document->published->email   = "published@localhost";
     }
 
+    /**
+     * @param string $submitterMail
+     * @param string $authorMail
+     * @return DocumentInterface
+     * @throws ModelException
+     */
     private function createDocWithSubmitterAndAuthor($submitterMail, $authorMail)
     {
         $doc = $this->createTestDocument();
@@ -56,7 +62,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $author = Person::new();
         $author->setFirstName("John");
         $author->setLastName("Doe");
-        if ($author != '') {
+        if ($author !== '') {
             $author->setEmail($authorMail);
         }
         $doc->addPersonAuthor($author);
@@ -64,7 +70,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $submitter = Person::new();
         $submitter->setFirstName("John");
         $submitter->setLastName("Submitter");
-        if ($submitterMail != '') {
+        if ($submitterMail !== '') {
             $submitter->setEmail($submitterMail);
         }
         $doc->addPersonSubmitter($submitter);
@@ -93,7 +99,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'sureno' => 'sureno'
+                    'sureno' => 'sureno',
                 ]);
         $this->dispatch('/admin/workflow/changestate/docId/24/targetState/deleted');
         $this->assertModule('admin');
@@ -113,7 +119,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'sureyes' => 'sureyes'
+                    'sureyes' => 'sureyes',
                 ]);
         $this->dispatch('/admin/workflow/changestate/docId/102/targetState/deleted');
         $this->assertModule('admin');
@@ -156,7 +162,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'sureno' => 'sureno'
+                    'sureno' => 'sureno',
                 ]);
         $this->dispatch('/admin/workflow/changestate/docId/' . $documentId . '/targetState/removed');
         $this->assertModule('admin');
@@ -176,7 +182,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'sureyes' => 'sureyes'
+                    'sureyes' => 'sureyes',
                 ]);
         $this->dispatch('/admin/workflow/changestate/docId/100/targetState/published');
         $this->assertModule('admin');
@@ -205,11 +211,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/document/index/id/100');
 
         $this->assertFalse(
-            $this->getResponse()->getHttpResponseCode() == 200,
+            $this->getResponse()->getHttpResponseCode() === 200,
             "Request was not redirected."
         );
         $this->assertTrue(
-            $this->getResponse()->getHttpResponseCode() != 500,
+            $this->getResponse()->getHttpResponseCode() !== 500,
             "Request produced internal error. " . $this->getResponse()->getBody()
         );
     }
@@ -225,7 +231,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), '<span>123') == 0);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), '<span>123') === 0);
     }
 
     /**
@@ -240,11 +246,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/document/index/id/123');
 
         $this->assertFalse(
-            $this->getResponse()->getHttpResponseCode() == 200,
+            $this->getResponse()->getHttpResponseCode() === 200,
             "Request was not redirected."
         );
         $this->assertTrue(
-            $this->getResponse()->getHttpResponseCode() != 500,
+            $this->getResponse()->getHttpResponseCode() !== 500,
             "Request produced internal error."
         );
     }
@@ -261,11 +267,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 
         $this->assertFalse(
-            $this->getResponse()->getHttpResponseCode() == 200,
+            $this->getResponse()->getHttpResponseCode() === 200,
             "Request was not redirected."
         );
         $this->assertTrue(
-            $this->getResponse()->getHttpResponseCode() != 500,
+            $this->getResponse()->getHttpResponseCode() !== 500,
             "Request produced internal error. " . $this->getResponse()->getBody()
         );
     }
@@ -282,11 +288,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 
         $this->assertFalse(
-            $this->getResponse()->getHttpResponseCode() == 200,
+            $this->getResponse()->getHttpResponseCode() === 200,
             "Request was not redirected."
         );
         $this->assertTrue(
-            $this->getResponse()->getHttpResponseCode() != 500,
+            $this->getResponse()->getHttpResponseCode() !== 500,
             "Request produced internal error. " . $this->getResponse()->getBody()
         );
     }
@@ -434,7 +440,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     public function testConfirmationDisabled()
     {
         $this->adjustConfiguration([
-            'confirmation' => ['document' => ['statechange' => ['enabled' => self::CONFIG_VALUE_FALSE]]]
+            'confirmation' => ['document' => ['statechange' => ['enabled' => self::CONFIG_VALUE_FALSE]]],
         ]);
 
         $this->dispatch('/admin/workflow/changestate/docId/102/targetState/deleted');

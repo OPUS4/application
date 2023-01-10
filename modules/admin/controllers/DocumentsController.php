@@ -42,42 +42,49 @@ use Opus\Common\Series;
  */
 class Admin_DocumentsController extends Application_Controller_Action
 {
+    public const PARAM_HITSPERPAGE    = 'hitsperpage'; // TODO rename to 'limit'
+    public const PARAM_STATE          = 'state';
+    public const PARAM_SORT_BY        = 'sort_order'; // TODO rename to 'sortby'
+    public const PARAM_SORT_DIRECTION = 'sort_reverse'; // TODO rename to 'order'
 
-    const PARAM_HITSPERPAGE = 'hitsperpage'; // TODO rename to 'limit'
-    const PARAM_STATE = 'state';
-    const PARAM_SORT_BY = 'sort_order'; // TODO rename to 'sortby'
-    const PARAM_SORT_DIRECTION = 'sort_reverse'; // TODO rename to 'order'
+    /** @var string[] */
+    protected $sortingOptions = ['id', 'title', 'author', 'publicationDate', 'docType'];
 
-    protected $_sortingOptions = ['id', 'title', 'author', 'publicationDate', 'docType'];
+    /** @var string[] */
+    protected $docOptions = ['all', 'unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted'];
 
-    protected $_docOptions = ['all', 'unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted'];
+    /** @var int */
+    private $maxDocsDefault = 10;
 
-    private $_maxDocsDefault = 10;
-    private $_stateOptionDefault = 'unpublished';
-    private $_sortingOptionDefault = 'id';
+    /** @var string */
+    private $stateOptionDefault = 'unpublished';
 
-    private $_namespace;
+    /** @var string */
+    private $sortingOptionDefault = 'id';
+
+    /** @var Zend_Session_Namespace */
+    private $namespace;
 
     public function init()
     {
         parent::init();
 
-        $config = $this->getConfig();
+        $config                         = $this->getConfig();
         $this->view->linkToAuthorSearch = isset($config->admin->documents->linkToAuthorSearch) &&
             filter_var($config->admin->documents->linkToAuthorSearch, FILTER_VALIDATE_BOOLEAN);
 
         if (isset($config->admin->documents->maxDocsDefault)) {
-            $this->_maxDocsDefault = $config->admin->documents->maxDocsDefault;
+            $this->maxDocsDefault = $config->admin->documents->maxDocsDefault;
         } else {
-            $this->_maxDocsDefault = 10;
+            $this->maxDocsDefault = 10;
         }
 
         if (isset($config->admin->documents->defaultview)) {
             $default = $config->admin->documents->defaultview;
-            if (! in_array($default, $this->_docOptions)) {
+            if (! in_array($default, $this->docOptions)) {
                 $this->getLogger()->err("Option 'admin.documents.defaultview' hat ungegueltigen Wert '$default'.");
             }
-            $this->_stateOptionDefault = $default;
+            $this->stateOptionDefault = $default;
         }
     }
 
@@ -114,18 +121,18 @@ class Admin_DocumentsController extends Application_Controller_Action
         }
 
         $sortReverse = $this->getSortingDirection($data);
-        $state = $this->getStateOption($data);
-        $sortOrder = $this->getSortingOption($data);
+        $state       = $this->getStateOption($data);
+        $sortOrder   = $this->getSortingOption($data);
 
         if (! empty($collectionId)) {
             // TODO add as filter facet
-            $collection = Collection::get($collectionId);
-            $result = $collection->getDocumentIds();
+            $collection             = Collection::get($collectionId);
+            $result                 = $collection->getDocumentIds();
             $this->view->collection = $collection;
             if ($collection->isRoot()) {
-                $collectionRoleName = 'default_collection_role_' . $collection->getRole()->getDisplayName();
+                $collectionRoleName         = 'default_collection_role_' . $collection->getRole()->getDisplayName();
                 $this->view->collectionName = $this->view->translate($collectionRoleName);
-                if ($this->view->collectionName == $collectionRoleName) {
+                if ($this->view->collectionName === $collectionRoleName) {
                     $this->view->collectionName = $collection->getRole()->getDisplayName();
                 }
             } else {
@@ -133,12 +140,12 @@ class Admin_DocumentsController extends Application_Controller_Action
             }
         } elseif (! empty($seriesId)) {
             // TODO add as filter facet
-            $series = Series::get($seriesId);
+            $series             = Series::get($seriesId);
             $this->view->series = $series;
-            $result = $series->getDocumentIdsSortedBySortKey();
+            $result             = $series->getDocumentIdsSortedBySortKey();
         } else {
             if (array_key_exists('last_name', $data)) {
-                $person = [];
+                $person              = [];
                 $person['last_name'] = $data['last_name'];
 
                 if (array_key_exists('first_name', $data)) {
@@ -157,7 +164,7 @@ class Admin_DocumentsController extends Application_Controller_Action
                     $person['identifier_misc'] = $data['identifier_misc'];
                 }
 
-                if (is_null($state)) {
+                if ($state === null) {
                     $state = 'all';
                 }
 
@@ -176,25 +183,25 @@ class Admin_DocumentsController extends Application_Controller_Action
             }
         }
 
-        $this->view->sort_reverse = $sortReverse;
-        $this->view->sortDirection = ($sortReverse) ? 'descending' : 'ascending';
-        $this->view->sort_order = $sortOrder;
-        $this->view->state = $state;
-        $this->view->filter = $filter;
+        $this->view->sort_reverse  = $sortReverse;
+        $this->view->sortDirection = $sortReverse ? 'descending' : 'ascending';
+        $this->view->sort_order    = $sortOrder;
+        $this->view->state         = $state;
+        $this->view->filter        = $filter;
 
         $this->prepareDocStateLinks();
 
-        $urlCallId = [
-            'module' => 'admin',
+        $urlCallId               = [
+            'module'     => 'admin',
             'controller' => 'document',
-            'action' => 'index'
+            'action'     => 'index',
         ];
         $this->view->url_call_id = $this->view->url($urlCallId, 'default', true);
 
         $this->prepareSortingLinks();
 
-        $paginator = \Zend_Paginator::factory($result);
-        $page = 1;
+        $paginator = Zend_Paginator::factory($result);
+        $page      = 1;
         if (array_key_exists('page', $data)) {
             // paginator
             $page = $data['page'];
@@ -227,6 +234,9 @@ class Admin_DocumentsController extends Application_Controller_Action
      * - Session
      * - Konfiguration?
      * - Default
+     *
+     * @param array $params
+     * @return int
      */
     protected function getItemCountPerPage($params)
     {
@@ -237,7 +247,7 @@ class Admin_DocumentsController extends Application_Controller_Action
         }
 
         if (! is_numeric($value)) {
-            $value = $this->_maxDocsDefault;
+            $value = $this->maxDocsDefault;
         }
 
         $this->setOption(self::PARAM_HITSPERPAGE, $value);
@@ -247,15 +257,16 @@ class Admin_DocumentsController extends Application_Controller_Action
 
     /**
      * Ermittelt in welchem Status die angezeigten Dokumente sein sollen.
-     * @param $params Request parameter
+     *
+     * @param array $params Request parameter
      * @return string
      */
     protected function getStateOption($params)
     {
         $value = $this->getOption(self::PARAM_STATE, $params);
 
-        if (! in_array($value, $this->_docOptions)) {
-            $value = $this->_stateOptionDefault;
+        if (! in_array($value, $this->docOptions)) {
+            $value = $this->stateOptionDefault;
         }
 
         $this->setOption(self::PARAM_STATE, $value);
@@ -265,15 +276,16 @@ class Admin_DocumentsController extends Application_Controller_Action
 
     /**
      * Ermittelt wonach die Dokumente sortiert werden sollen.
-     * @param $params Request Parameter
+     *
+     * @param array $params Request Parameter
      * @return string
      */
     protected function getSortingOption($params)
     {
         $value = $this->getOption(self::PARAM_SORT_BY, $params);
 
-        if (! in_array($value, $this->_sortingOptions)) {
-            $value = $this->_sortingOptionDefault;
+        if (! in_array($value, $this->sortingOptions)) {
+            $value = $this->sortingOptionDefault;
         }
 
         $this->setOption(self::PARAM_SORT_BY, $value);
@@ -283,7 +295,8 @@ class Admin_DocumentsController extends Application_Controller_Action
 
     /**
      * Ermittelt die Sortierrrichtung (aufwaerts/abwaerts).
-     * @param $params Request Parameter
+     *
+     * @param array $params Request Parameter
      * @return bool
      */
     protected function getSortingDirection($params)
@@ -293,7 +306,7 @@ class Admin_DocumentsController extends Application_Controller_Action
         if (! is_bool($value) && ! is_numeric($value)) {
             $value = false;
         } else {
-            $value = ($value) ? true : false;
+            $value = $value ? true : false;
         }
 
         $this->setOption(self::PARAM_SORT_DIRECTION, $value);
@@ -303,8 +316,9 @@ class Admin_DocumentsController extends Application_Controller_Action
 
     /**
      * Holt eine Option vom Request oder der Session.
-     * @param $name Name der Option
-     * @param $params Request Parameter
+     *
+     * @param string $name Name der Option
+     * @param array  $params Request Parameter
      * @return mixed|null
      */
     protected function getOption($name, $params)
@@ -314,7 +328,7 @@ class Admin_DocumentsController extends Application_Controller_Action
         if (array_key_exists($name, $params)) {
             $value = $params[$name];
         } else {
-            $value = (isset($namespace->$name)) ? $namespace->$name : null;
+            $value = $namespace->$name ?? null;
         }
 
         return $value;
@@ -323,26 +337,27 @@ class Admin_DocumentsController extends Application_Controller_Action
     /**
      * Setzt Option in der Session.
      *
-     * @param $name Name der Option
-     * @param $value Optionswert
+     * @param string $name Name der Option
+     * @param string $value Optionswert
      */
     protected function setOption($name, $value)
     {
-        $namespace = $this->getSession();
+        $namespace        = $this->getSession();
         $namespace->$name = $value;
     }
 
     /**
      * Liefert die Session für diesen Controller.
+     *
      * @return Zend_Session_Namespace
      */
     protected function getSession()
     {
-        if (is_null($this->_namespace)) {
-            $this->_namespace = new \Zend_Session_Namespace('Admin');
+        if ($this->namespace === null) {
+            $this->namespace = new Zend_Session_Namespace('Admin');
         }
 
-        return $this->_namespace;
+        return $this->namespace;
     }
 
     /**
@@ -366,7 +381,7 @@ class Admin_DocumentsController extends Application_Controller_Action
             $link = [];
 
             $link['label'] = $option;
-            $link['url'] = $this->view->url([self::PARAM_HITSPERPAGE => $option], null, false);
+            $link['url']   = $this->view->url([self::PARAM_HITSPERPAGE => $option], null, false);
 
             $itemCountLinks[$option] = $link;
         }
@@ -381,10 +396,10 @@ class Admin_DocumentsController extends Application_Controller_Action
     {
         $registers = [];
 
-        foreach ($this->_docOptions as $name) {
-            $params = ['module' => 'admin', 'controller' => 'documents', 'action' => 'index'];
-            $params['state'] = $name;
-            $url = $this->view->url($params, null, false);
+        foreach ($this->docOptions as $name) {
+            $params           = ['module' => 'admin', 'controller' => 'documents', 'action' => 'index'];
+            $params['state']  = $name;
+            $url              = $this->view->url($params, null, false);
             $registers[$name] = $url;
         }
 
@@ -398,14 +413,14 @@ class Admin_DocumentsController extends Application_Controller_Action
     {
         $sortingLinks = [];
 
-        foreach ($this->_sortingOptions as $name) {
-            $params = [
-                'module' => 'admin',
+        foreach ($this->sortingOptions as $name) {
+            $params              = [
+                'module'     => 'admin',
                 'controller' => 'documents',
-                'action' => 'index',
-                'sort_order' => $name
+                'action'     => 'index',
+                'sort_order' => $name,
             ];
-            $sortUrl = $this->view->url($params, 'default', false);
+            $sortUrl             = $this->view->url($params, 'default', false);
             $sortingLinks[$name] = $sortUrl;
         }
 
@@ -413,7 +428,7 @@ class Admin_DocumentsController extends Application_Controller_Action
 
         $directionLinks = [];
 
-        $directionLinks['ascending'] = $this->view->url(['sort_reverse' => '0'], 'default', false);
+        $directionLinks['ascending']  = $this->view->url(['sort_reverse' => '0'], 'default', false);
         $directionLinks['descending'] = $this->view->url(['sort_reverse' => '1'], 'default', false);
 
         $this->view->directionLinks = $directionLinks;
@@ -426,13 +441,13 @@ class Admin_DocumentsController extends Application_Controller_Action
         $personRoles = [];
 
         foreach ($roles as $role) {
-            $params = [
-                'module' => 'admin',
+            $params             = [
+                'module'     => 'admin',
                 'controller' => 'documents',
-                'action' => 'index',
-                'role' => $role
+                'action'     => 'index',
+                'role'       => $role,
             ];
-            $roleUrl = $this->view->url($params, 'default', false);
+            $roleUrl            = $this->view->url($params, 'default', false);
             $personRoles[$role] = $roleUrl;
         }
 

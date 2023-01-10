@@ -31,21 +31,22 @@
 
 class Admin_Form_PersonsConfirmTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
-    private $_form;
+    /** @var Admin_Form_PersonsConfirm */
+    private $form;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_form = new Admin_Form_PersonsConfirm();
+        $this->form = new Admin_Form_PersonsConfirm();
     }
 
     public function testConstruct()
     {
-        $form = $this->_form;
+        $form = $this->form;
 
         $subforms = $form->getSubforms();
 
@@ -66,7 +67,7 @@ class Admin_Form_PersonsConfirmTest extends ControllerTestCase
 
     public function testProcessPostBack()
     {
-        $form = $this->_form;
+        $form = $this->form;
 
         $result = $form->processPost(['Back' => 'Zurück'], null);
 
@@ -77,11 +78,11 @@ class Admin_Form_PersonsConfirmTest extends ControllerTestCase
     {
         $this->disableTranslation();
 
-        $form = $this->_form;
+        $form = $this->form;
 
         $person = [
-            'last_name' => 'Doe',
-            'first_name' => 'Jane'
+            'last_name'  => 'Doe',
+            'first_name' => 'Jane',
         ];
 
         $form->populateFromModel($person);

@@ -33,7 +33,7 @@ use Opus\Common\DnbInstitute;
 
 class Admin_Form_DnbInstituteTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function testConstructForm()
@@ -138,7 +138,7 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
 
         $this->assertFalse($form->isValid([
             'Name' => '   ',
-            'City' => ' '
+            'City' => ' ',
         ]));
 
         $this->assertContains('isEmpty', $form->getErrors('Name'));
@@ -151,7 +151,7 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
 
         $this->assertTrue($form->isValid([
             'Name' => 'OPUS 4 University',
-            'City' => 'Berlin'
+            'City' => 'Berlin',
         ]));
     }
 

@@ -30,25 +30,25 @@
  */
 
 use Opus\Common\Iprange;
+use Opus\Common\IprangeInterface;
 
 /**
  * Form for creating or editing IP ranges.
  */
 class Admin_Form_IpRange extends Application_Form_Model_Abstract
 {
+    public const ELEMENT_NAME = 'Name';
 
-    const ELEMENT_NAME = 'Name';
+    public const ELEMENT_STARTING_IP = 'Startingip';
 
-    const ELEMENT_STARTING_IP = 'Startingip';
+    public const ELEMENT_ENDING_IP = 'Endingip';
 
-    const ELEMENT_ENDING_IP = 'Endingip';
-
-    const ELEMENT_ROLES = 'Roles';
+    public const ELEMENT_ROLES = 'Roles';
 
     /**
      * Pattern for valid names of ip ranges.
      */
-    const NAME_PATTERN = '/^[a-z]/i';
+    public const NAME_PATTERN = '/^[a-z]/i';
 
     /**
      * Initializes form and adds display group for roles.
@@ -62,13 +62,20 @@ class Admin_Form_IpRange extends Application_Form_Model_Abstract
         $this->setModelClass(Iprange::class);
 
         $name = $this->createElement('text', self::ELEMENT_NAME, ['required' => true]);
-        $name->addValidator('regex', false, ['pattern' => self::NAME_PATTERN, 'messages' => [
-            'regexNotMatch' => 'validation_error_iprange_name_regexNotMatch'
-        ]]);
-        $name->addValidator('stringLength', false, ['min' => 3, 'max' => 20, 'messages' => [
-            'stringLengthTooShort' => 'validation_error_stringLengthTooShort',
-            'stringLengthTooLong' => 'validation_error_stringLengthTooLong'
-        ]]);
+        $name->addValidator('regex', false, [
+            'pattern'  => self::NAME_PATTERN,
+            'messages' => [
+                'regexNotMatch' => 'validation_error_iprange_name_regexNotMatch',
+            ],
+        ]);
+        $name->addValidator('stringLength', false, [
+            'min'      => 3,
+            'max'      => 20,
+            'messages' => [
+                'stringLengthTooShort' => 'validation_error_stringLengthTooShort',
+                'stringLengthTooLong'  => 'validation_error_stringLengthTooLong',
+            ],
+        ]);
         $this->addElement($name);
 
         $this->addElement('ipAddress', self::ELEMENT_STARTING_IP, ['required' => true]);
@@ -81,7 +88,8 @@ class Admin_Form_IpRange extends Application_Form_Model_Abstract
 
     /**
      * Populates form with values from Iprange instance.
-     * @param $ipRange Iprange
+     *
+     * @param IprangeInterface $ipRange
      */
     public function populateFromModel($ipRange)
     {
@@ -94,14 +102,15 @@ class Admin_Form_IpRange extends Application_Form_Model_Abstract
 
     /**
      * Updates object with values from form elements.
-     * @param $ipRange Iprange
+     *
+     * @param IprangeInterface $ipRange
      */
     public function updateModel($ipRange)
     {
         $ipRange->setName($this->getElementValue(self::ELEMENT_NAME));
 
         $startingIp = $this->getElementValue(self::ELEMENT_STARTING_IP);
-        $endingIp = $this->getElementValue(self::ELEMENT_ENDING_IP);
+        $endingIp   = $this->getElementValue(self::ELEMENT_ENDING_IP);
 
         // starting and ending ip must be set in database
         if (empty($endingIp)) {

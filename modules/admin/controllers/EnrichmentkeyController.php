@@ -29,14 +29,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentKey;
 use Opus\Common\EnrichmentKeyInterface;
+use Opus\Common\Model\NotFoundException;
 
 /**
- * Class Admin_EnrichmentkeyController
- *
  * All enrichment keys are shown, but only enrichment keys that are not protected
  * can be edited or deleted. An enrichment key is protected if it is configured
  * as such in the configuration file or if it is referenced by at least one document.
@@ -46,28 +44,26 @@ use Opus\Common\EnrichmentKeyInterface;
  * enrichmentkey.protected.modules   (for special enrichments used by modules)
  * enrichmentkey.protected.migration (for enrichments created during migration from OPUS 3)
  *
- * @category    Application
- * @package     Module_Admin
- *
  * TODO show protected/referenced in list of keys
  * TODO move to setup area (maybe in own module, but part of setup in administration)
  */
 class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 {
-
     /**
      * Model for handling enrichment keys.
+     *
      * @var Admin_Model_EnrichmentKeys
      */
-    private $_enrichmentKeys;
+    private $enrichmentKeys;
 
     /**
      * Initializes and configures controller.
+     *
      * @throws Application_Exception
      */
     public function init()
     {
-        $this->_enrichmentKeys = new Admin_Model_EnrichmentKeys();
+        $this->enrichmentKeys = new Admin_Model_EnrichmentKeys();
         $this->setVerifyModelIdIsNumeric(false);
         $this->setShowActionEnabled(false);
         $this->setFormClass('Admin_Form_EnrichmentKey');
@@ -76,6 +72,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 
     /**
      * Modifiziert Formular für Indextabelle, so dass angepasstes ViewScript verwendet wird.
+     *
      * @return Admin_Form_EnrichmentTable
      */
     public function getIndexForm()
@@ -92,12 +89,12 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
      * Checks if an enrichment key can be modified. All enrichment keys except protected ones
      * can be modified even if they are referenced in enrichments of documents.
      *
-     * @param $model EnrichmentKey
+     * @param EnrichmentKeyInterface $model
      * @return bool true if model can be edited and deleted, false if model is protected
      */
     public function isModifiable($model)
     {
-        $protectedKeys = $this->_enrichmentKeys->getProtectedEnrichmentKeys();
+        $protectedKeys = $this->enrichmentKeys->getProtectedEnrichmentKeys();
         // hier kann $model->getId() statt $model->getName() verwendet werden,
         // weil die Tabelle enrichmentkeys keine Spalte mit dem Namen 'id' besitzt
         return ! in_array($model->getId(), $protectedKeys);
@@ -115,10 +112,12 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         $form = parent::getNewModelForm();
         if ($this->getRequest()->isGet()) {
             $name = $this->getRequest()->getParam(self::PARAM_MODEL_ID);
-            if (! is_null($name) && trim($name) !== '') {
-                // prüfe, ob bereits ein nicht registrierter Enrichment Key mit den Namen existiert, der in Benutzung ist
-                if (is_null(EnrichmentKey::fetchByName($name)) &&
-                    in_array($name, EnrichmentKey::getAllReferenced())) {
+            if ($name !== null && trim($name) !== '') {
+                // prüfe, ob bereits ein nicht registrierter EnrichmentKey mit den Namen existiert, der in Benutzung ist
+                if (
+                    EnrichmentKey::fetchByName($name) === null &&
+                    in_array($name, EnrichmentKey::getAllReferenced())
+                ) {
                     $form->setNameElementValue($name);
                 }
             }
@@ -132,10 +131,13 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
      * Bei der Erzeugung eines neuen Enrichment Keys ist eine Sonderbehandlung erfolrderlich, wenn ein
      * nicht registrierter Enrichment Key mit geändertem Namen gespeichert werden soll. In diesem Fall
      * müssen alle Dokumente, die den EK referenzieren, den geänderten EK-Namen verwenden.
+     *
+     * @param array|null $post
+     * @return array|string|null
      */
     public function handleModelPost($post = null)
     {
-        if (is_null($post)) {
+        if ($post === null) {
             $post = $this->getRequest()->getPost();
         }
 
@@ -143,18 +145,20 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         // in Dokumenten verwendet und ist er nicht registriert, dann muss überprüft werden, ob eine
         // Registrierung des Enrichment Keys mit gleichzeitiger Umbenennung vorliegt
         $renamingOfUnregisteredKey = false;
-        $oldName = null;
-        $newName = null;
+        $oldName                   = null;
+        $newName                   = null;
 
         if (! in_array(self::PARAM_MODEL_ID, $post) || $post[self::PARAM_MODEL_ID] === '') {
             // Verarbeitung im Kontext der newAction: keine Model-ID im POST Request enthalten oder leer
 
             $oldName = $this->getRequest()->getParam(self::PARAM_MODEL_ID);
-            if (! is_null($oldName) &&
-                is_null(EnrichmentKey::fetchByName($oldName)) &&
-                in_array($oldName, EnrichmentKey::getAllReferenced())) {
+            if (
+                $oldName !== null &&
+                EnrichmentKey::fetchByName($oldName) === null &&
+                in_array($oldName, EnrichmentKey::getAllReferenced())
+            ) {
                 $newName = $post[Admin_Form_EnrichmentKey::ELEMENT_NAME];
-                if (! is_null($newName) && $oldName !== $newName) {
+                if ($newName !== null && $oldName !== $newName) {
                     // Neuregistrierung mit gleichzeitiger Umbenennung des Enrichment Keys
                     $renamingOfUnregisteredKey = true;
                 }
@@ -166,7 +170,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         if ($renamingOfUnregisteredKey && is_array($result) && in_array(self::SAVE_SUCCESS, $result)) {
             // Enrichment Key wurde erfolgreich registriert: Umbenennung des EK in den Dokumenten durchführen
             $enrichmentKey = EnrichmentKey::fetchByName($newName);
-            if (! is_null($enrichmentKey)) {
+            if ($enrichmentKey !== null) {
                 // es hat eine Umbenennung mit gleichzeitiger Registrierung stattgefunden: nach der erfolgreichen
                 // Registrierung des Enrichment Key muss der Name des EK in allen Dokumenten geändert werden
                 $enrichmentKey->rename($enrichmentKey->getName(), $oldName);
@@ -186,8 +190,8 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
             $enrichmentKey = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
 
             // dem Enrichment Key muss mindestens ein Dokument zugeordnet sein, sonst ist die Operation nicht ausführbar
-            if (! is_null($enrichmentKey) && in_array($enrichmentKey->getName(), EnrichmentKey::getAllReferenced())) {
-                if (is_null($enrichmentKey->getId())) {
+            if ($enrichmentKey !== null && in_array($enrichmentKey->getName(), EnrichmentKey::getAllReferenced())) {
+                if ($enrichmentKey->getId() === null) {
                     // Sonderbehandlung für nicht registrierte Enrichment Keys, die in Dokuemten verwendet werden
                     $result = $this->initConfirmationForm($enrichmentKey, true);
                 } elseif ($this->isDeletable($enrichmentKey)) {
@@ -205,26 +209,39 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     }
 
     /**
-     * @param EnrichmentKey $model
-     * @param bool $unregistered
+     * @param EnrichmentKeyInterface $model
+     * @param bool                   $unregistered
      * @return Application_Form_Confirmation
      */
     private function initConfirmationForm($model, $unregistered = false)
     {
-        $form = $this->getConfirmationForm($model, $unregistered);
+        $modelName = $model->getName();
+        $form      = $this->getConfirmationForm($model, $unregistered);
         if ($unregistered) {
-            $form->setLegend($this->view->translate('admin_enrichmentkey_remove_unregistered_from_documents_title', $model->getName()));
-            $form->setQuestion($this->view->translate('admin_enrichmentkey_remove_unregistered_from_documents_description', $model->getName()));
+            $form->setLegend($this->view->translate(
+                'admin_enrichmentkey_remove_unregistered_from_documents_title',
+                $modelName
+            ));
+            $form->setQuestion($this->view->translate(
+                'admin_enrichmentkey_remove_unregistered_from_documents_description',
+                $modelName
+            ));
             $form->getElement(Application_Form_Confirmation::ELEMENT_MODEL_ID)->setValue($model->getName());
         } else {
-            $form->setLegend($this->view->translate('admin_enrichmentkey_remove_from_documents_title', $model->getName()));
-            $form->setQuestion($this->view->translate('admin_enrichmentkey_remove_from_documents_description', $model->getName()));
+            $form->setLegend($this->view->translate(
+                'admin_enrichmentkey_remove_from_documents_title',
+                $modelName
+            ));
+            $form->setQuestion($this->view->translate(
+                'admin_enrichmentkey_remove_from_documents_description',
+                $modelName
+            ));
         }
         return $form;
     }
 
     /**
-     * @param EnrichmentKey $model
+     * @param EnrichmentKeyInterface $model
      */
     public function deleteModel($model)
     {
@@ -240,6 +257,9 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         }
     }
 
+    /**
+     * @return array
+     */
     public function getAllModels()
     {
         // determine names of all enrichment keys
@@ -248,7 +268,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         $registeredEnrichmentKeys = parent::getAllModels();
         $mapNamesToEnrichmentKeys = [];
         foreach ($registeredEnrichmentKeys as $enrichmentKey) {
-            $name = $enrichmentKey->getName();
+            $name                            = $enrichmentKey->getName();
             $mapNamesToEnrichmentKeys[$name] = $enrichmentKey;
             if (! in_array($name, $allKeyNames)) {
                 $allKeyNames[] = $name;
@@ -259,7 +279,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
 
         $result = [];
         foreach ($allKeyNames as $keyName) {
-            if (key_exists($keyName, $mapNamesToEnrichmentKeys)) {
+            if (array_key_exists($keyName, $mapNamesToEnrichmentKeys)) {
                 $result[] = $mapNamesToEnrichmentKeys[$keyName];
             } else {
                 $newEnrichmentKey = EnrichmentKey::new();
@@ -276,12 +296,12 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
      * Wird der nicht registrierte EnrichmentKey Name in Dokumenten verwendet, so wird ebenfalls eine Instanz von
      * Enrichment zurückgegeben, die allerdings nicht in der Datenbank persistiert ist.
      *
-     * @param $modelId
+     * @param int $modelId
      * @return EnrichmentKeyInterface|null
      */
     public function getModel($modelId)
     {
-        if (is_null($modelId) || is_numeric($modelId) || ! $this->getVerifyModelIdIsNumeric()) {
+        if ($modelId === null || is_numeric($modelId) || ! $this->getVerifyModelIdIsNumeric()) {
             $modelClass = $this->getModelClass();
 
             if (strlen(trim($modelId)) !== 0) {

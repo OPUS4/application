@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,16 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DocumentInterface;
+
 class Admin_Form_Person_DocumentsTest extends ControllerTestCase
 {
-
     public function testConstruct()
     {
         $form = new Admin_Form_Person_Documents();
@@ -51,7 +50,7 @@ class Admin_Form_Person_DocumentsTest extends ControllerTestCase
         $form->setDocuments([1, 2]);
 
         $data = [
-            'Documents' => [2]
+            'Documents' => [2],
         ];
 
         $form->populate($data);
@@ -81,7 +80,7 @@ class Admin_Form_Person_DocumentsTest extends ControllerTestCase
         $this->assertArrayHasKey(5, $options);
 
         foreach ($options as $docId => $doc) {
-            $this->assertInstanceOf('Opus\Document', $doc);
+            $this->assertInstanceOf(DocumentInterface::class, $doc);
             $this->assertEquals($docId, $doc->getId());
         }
     }
@@ -91,8 +90,8 @@ class Admin_Form_Person_DocumentsTest extends ControllerTestCase
         $form = new Admin_Form_Person_Documents();
 
         $person = [
-            'last_name' => 'Tester',
-            'first_name' => 'John'
+            'last_name'  => 'Tester',
+            'first_name' => 'John',
         ];
 
         $form->setDocuments([2, 6], $person);

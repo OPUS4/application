@@ -37,7 +37,7 @@ use Opus\Common\Identifier;
  */
 class Admin_Form_Document_IdentifierTest extends ControllerTestCase
 {
-
+    /** @var string[]  */
     protected $additionalResources = ['database'];
 
     public function testCreateForm()
@@ -63,9 +63,9 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Identifier();
 
-        $document = Document::get(146);
+        $document    = Document::get(146);
         $identifiers = $document->getIdentifier();
-        $identifier = $identifiers[0];
+        $identifier  = $identifiers[0];
 
         $form->populateFromModel($identifier);
 
@@ -114,8 +114,8 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Identifier();
 
-        $document = Document::get(146);
-        $identifiers = $document->getIdentifier();
+        $document     = Document::get(146);
+        $identifiers  = $document->getIdentifier();
         $identifierId = $identifiers[0]->getId();
 
         $form->getElement('Id')->setValue($identifierId);

@@ -37,7 +37,6 @@ use Opus\Common\Note;
  */
 class Admin_Form_Document_NoteTest extends ControllerTestCase
 {
-
     public function testCreateForm()
     {
         $form = new Admin_Form_Document_Note();
@@ -133,7 +132,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
 
         $post = [
             'Visibility' => '0',
-            'Message' => ''
+            'Message'    => '',
         ];
 
         $this->assertFalse($form->isValid($post));

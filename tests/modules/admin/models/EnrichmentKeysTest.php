@@ -29,13 +29,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Translate\Dao;
+
 class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
-    public function tearDown(): void    {
-        $database = new \Opus\Translate\Dao();
+    public function tearDown(): void
+    {
+        $database = new Dao();
         $database->removeAll();
 
         parent::tearDown();
@@ -45,10 +48,14 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
     {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $config = new \Zend_Config(['enrichmentkey' => ['protected' => [
-            'modules' => 'pkey1,pkey2',
-            'migration' => 'pkey3,pkey4'
-        ]]]);
+        $config = new Zend_Config([
+            'enrichmentkey' => [
+                'protected' => [
+                    'modules'   => 'pkey1,pkey2',
+                    'migration' => 'pkey3,pkey4',
+                ],
+            ],
+        ]);
 
         $model->setConfig($config);
 
@@ -60,9 +67,13 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
         $this->assertContains('pkey3', $protectedKeys);
         $this->assertContains('pkey4', $protectedKeys);
 
-        $config = new \Zend_Config(['enrichmentkey' => ['protected' => [
-            'migration' => 'pkey3,pkey4'
-        ]]]);
+        $config = new Zend_Config([
+            'enrichmentkey' => [
+                'protected' => [
+                    'migration' => 'pkey3,pkey4',
+                ],
+            ],
+        ]);
 
         $model->setConfig($config);
         $model->setProtectedEnrichmentKeys(null);
@@ -73,9 +84,13 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
         $this->assertContains('pkey3', $protectedKeys);
         $this->assertContains('pkey4', $protectedKeys);
 
-        $config = new \Zend_Config(['enrichmentkey' => ['protected' => [
-            'modules' => 'pkey1,pkey2',
-        ]]]);
+        $config = new Zend_Config([
+            'enrichmentkey' => [
+                'protected' => [
+                    'modules' => 'pkey1,pkey2',
+                ],
+            ],
+        ]);
 
         $model->setConfig($config);
         $model->setProtectedEnrichmentKeys(null);
@@ -91,7 +106,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
     {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $config = new \Zend_Config([]);
+        $config = new Zend_Config([]);
 
         $model->setConfig($config);
 
@@ -103,7 +118,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 
     public function testCreateTranslations()
     {
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
 
         $model = new Admin_Model_EnrichmentKeys();
@@ -126,14 +141,14 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 
     public function testCreateTranslationsDoNotOverwriteExistingValues()
     {
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
 
         $hintKey = 'hint_EnrichmentMyTestEnrichment';
 
         $database->setTranslation($hintKey, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], 'default');
 
         $model = new Admin_Model_EnrichmentKeys();
@@ -154,12 +169,12 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
             if ($key !== 'hint_EnrichmentMyTestEnrichment') {
                 $this->assertEquals([
                     'en' => 'MyTestEnrichment',
-                    'de' => 'MyTestEnrichment'
+                    'de' => 'MyTestEnrichment',
                 ], $translations[$key]);
             } else {
                 $this->assertEquals([
                     'en' => 'English',
-                    'de' => 'Deutsch'
+                    'de' => 'Deutsch',
                 ], $translations[$key]);
             }
         }
@@ -167,7 +182,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 
     public function testChangeNamesOfTranslationKeys()
     {
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
 
         $model = new Admin_Model_EnrichmentKeys();
@@ -196,7 +211,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
     {
         $model = new Admin_Model_EnrichmentKeys();
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
 
         $name = 'TestEnrichment';

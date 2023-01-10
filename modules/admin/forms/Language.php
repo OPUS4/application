@@ -30,19 +30,18 @@
  */
 
 use Opus\Common\Language;
+use Opus\Common\LanguageInterface;
 
-/**
- */
 class Admin_Form_Language extends Application_Form_Model_Abstract
 {
-    const ELEMENT_ACTIVE  = 'Active';
-    const ELEMENT_PART2B  = 'Part2B';
-    const ELEMENT_PART2T  = 'Part2T';
-    const ELEMENT_PART1   = 'Part1';
-    const ELEMENT_SCOPE   = 'Scope';
-    const ELEMENT_TYPE    = 'Type';
-    const ELEMENT_REFNAME = 'RefName';
-    const ELEMENT_COMMENT = 'Comment';
+    public const ELEMENT_ACTIVE  = 'Active';
+    public const ELEMENT_PART2B  = 'Part2B';
+    public const ELEMENT_PART2T  = 'Part2T';
+    public const ELEMENT_PART1   = 'Part1';
+    public const ELEMENT_SCOPE   = 'Scope';
+    public const ELEMENT_TYPE    = 'Type';
+    public const ELEMENT_REFNAME = 'RefName';
+    public const ELEMENT_COMMENT = 'Comment';
 
     public function init()
     {
@@ -63,6 +62,9 @@ class Admin_Form_Language extends Application_Form_Model_Abstract
         $this->addElement('text', self::ELEMENT_COMMENT);
     }
 
+    /**
+     * @param LanguageInterface $language
+     */
     public function populateFromModel($language)
     {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($language->getId());
@@ -76,6 +78,9 @@ class Admin_Form_Language extends Application_Form_Model_Abstract
         $this->getElement(self::ELEMENT_COMMENT)->setValue($language->getComment());
     }
 
+    /**
+     * @param LanguageInterface $language
+     */
     public function updateModel($language)
     {
         $language->setActive($this->getElementValue(self::ELEMENT_ACTIVE));

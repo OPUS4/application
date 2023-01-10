@@ -29,27 +29,32 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Document;
 use Opus\Common\Collection;
+use Opus\Common\CollectionInterface;
+use Opus\Common\Document;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
 
 class Admin_Model_Collection
 {
+    /** @var CollectionInterface|null */
+    private $collection;
 
-    private $_collection = null;
-
+    /**
+     * @param int|null $id TODO BUG int cannot be null
+     * @throws Admin_Model_Exception
+     */
     public function __construct($id = null)
     {
         if ($id === '') {
             throw new Admin_Model_Exception('missing parameter id');
         }
-        if (is_null($id)) {
+        if ($id === null) {
             $this->initNewCollection();
             return;
         }
         try {
-            $this->_collection = Collection::get($id);
+            $this->collection = Collection::get($id);
         } catch (NotFoundException $e) {
             throw new Admin_Model_Exception('id parameter value unknown');
         }
@@ -57,44 +62,55 @@ class Admin_Model_Collection
 
     private function initNewCollection()
     {
-        $this->_collection = Collection::new();
-        $this->_collection->setVisible('1');
-        $this->_collection->setVisiblePublish('1');
+        $this->collection = Collection::new();
+        $this->collection->setVisible('1');
+        $this->collection->setVisiblePublish('1');
     }
 
     /**
-     *
-     * @return Collection
+     * @return CollectionInterface
      */
     public function getObject()
     {
-        return $this->_collection;
+        return $this->collection;
     }
 
+    /**
+     * @return int|false
+     */
     public function delete()
     {
-        if (is_null($this->_collection)) {
-            return;
+        if ($this->collection === null) {
+            return false;
         }
-        $parents = $this->_collection->getParents();
-        $this->_collection->delete();
+        $parents = $this->collection->getParents();
+        $this->collection->delete();
         return $parents[1]->getId();
     }
 
+    /**
+     * @param bool|int|string $visibility
+     * @return int|false
+     * @throws ModelException
+     */
     public function setVisiblity($visibility)
     {
-        if (is_null($this->_collection)) {
-            return;
+        if ($this->collection === null) {
+            return false; // TODO BUG throw exception, let PHP 8 handle it
         }
-        $this->_collection->setVisible($visibility);
-        $this->_collection->store();
-        $parents = $this->_collection->getParents();
+        $this->collection->setVisible($visibility);
+        $this->collection->store();
+        $parents = $this->collection->getParents();
         return $parents[1]->getId();
     }
 
+    /**
+     * @param int $documentId
+     * @throws Admin_Model_Exception
+     */
     public function addDocument($documentId)
     {
-        if (is_null($documentId)) {
+        if ($documentId === null) {
             throw new Admin_Model_Exception('missing document id');
         }
         $document = null;
@@ -103,18 +119,21 @@ class Admin_Model_Collection
         } catch (ModelException $e) {
             throw new Admin_Model_Exception('invalid document id');
         }
-        $document->addCollection($this->_collection);
+        $document->addCollection($this->collection);
         $document->store();
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
-        if (count($this->_collection->getParents()) === 1) {
+        if (count($this->collection->getParents()) === 1) {
             // die Wurzel einer Collection-Hierarchie hat selbst keinen Namen/Number: in diesem Fall wird der Name
             // der Collection Role verwendet
-            return $this->_collection->getRole()->getDisplayName();
+            return $this->collection->getRole()->getDisplayName();
         }
-        return $this->_collection->getNumberAndName();
+        return $this->collection->getNumberAndName();
     }
 
     /**
@@ -126,7 +145,7 @@ class Admin_Model_Collection
      */
     public function move($newPosition)
     {
-        if (is_null($newPosition)) {
+        if ($newPosition === null) {
             throw new Admin_Model_Exception('missing parameter pos');
         }
 
@@ -135,7 +154,7 @@ class Admin_Model_Collection
             throw new Admin_Model_Exception('cannot move collection to position ' . $newPosition);
         }
 
-        $parents = $this->_collection->getParents();
+        $parents = $this->collection->getParents();
         if (count($parents) < 2) {
             throw new Admin_Model_Exception('cannot move root collection');
         }
@@ -148,7 +167,7 @@ class Admin_Model_Collection
         // find current position of collection
         $oldPosition = 0;
         foreach ($siblings as $position => $sibling) {
-            if ($sibling->getId() === $this->_collection->getId()) {
+            if ($sibling->getId() === $this->collection->getId()) {
                 $oldPosition = $position;
             }
         }
@@ -164,9 +183,9 @@ class Admin_Model_Collection
         }
 
         if ($newPosition > $oldPosition) {
-            $this->_collection->moveAfterNextSibling();
+            $this->collection->moveAfterNextSibling();
         } elseif ($newPosition < $oldPosition) {
-            $this->_collection->moveBeforePrevSibling();
+            $this->collection->moveBeforePrevSibling();
         }
         return $parents[1]->getId();
     }

@@ -39,7 +39,6 @@ use Opus\Common\Series;
  */
 class Admin_SeriesController extends Application_Controller_ActionCRUD
 {
-
     /**
      * Konfiguriere Formularklasse für den Controller.
      */
@@ -52,6 +51,7 @@ class Admin_SeriesController extends Application_Controller_ActionCRUD
 
     /**
      * Setzt Defaultwerte für das Formular.
+     *
      * @return Series
      */
     public function getNewModel()
@@ -64,6 +64,7 @@ class Admin_SeriesController extends Application_Controller_ActionCRUD
 
     /**
      * Modifiziert Formular für Indextabelle, so daß angepasstes ViewScript verwendet wird.
+     *
      * @return Application_Form_Model_Table
      */
     public function getIndexForm()

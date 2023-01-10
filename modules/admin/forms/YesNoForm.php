@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_Form_YesNoForm extends \Zend_Form
+class Admin_Form_YesNoForm extends Zend_Form
 {
+    public const ELEMENT_YES = 'sureyes';
 
-    const ELEMENT_YES = 'sureyes';
-
-    const ELEMENT_NO = 'sureno';
+    public const ELEMENT_NO = 'sureno';
 
     /**
      * Build easy form for yes/no questions.
@@ -46,10 +42,10 @@ class Admin_Form_YesNoForm extends \Zend_Form
      */
     public function init()
     {
-        $sureyes = new \Zend_Form_Element_Submit(self::ELEMENT_YES);
+        $sureyes = new Zend_Form_Element_Submit(self::ELEMENT_YES);
         $sureyes->setLabel('answer_yes');
 
-        $sureno = new \Zend_Form_Element_Submit(self::ELEMENT_NO);
+        $sureno = new Zend_Form_Element_Submit(self::ELEMENT_NO);
         $sureno->setLabel('answer_no');
 
         $this->addElements([$sureyes, $sureno]);

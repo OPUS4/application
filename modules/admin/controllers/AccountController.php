@@ -37,7 +37,7 @@ use Opus\Common\UserRole;
 /**
  * Controller for administration of user accounts.
  *
-  * This controller allows creating, editing and removing user accounts.
+ * This controller allows creating, editing and removing user accounts.
  *
  * - For new accounts the login must not already exist.
  * - The password has to be entered twice for validation.
@@ -52,13 +52,15 @@ use Opus\Common\UserRole;
  */
 class Admin_AccountController extends Application_Controller_ActionCRUD
 {
-
     public function init()
     {
         $this->setFormClass(Admin_Form_Account::class);
         parent::init();
     }
 
+    /**
+     * @return Application_Form_Model_Table
+     */
     public function getIndexForm()
     {
         $form = parent::getIndexForm();
@@ -68,6 +70,7 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
 
     /**
      * Admin and current user account cannot be deleted.
+     *
      * @param AccountInterface $account
      * @return bool
      */
@@ -75,9 +78,13 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
     {
         $login = $account->getLogin();
 
-        return ((\Zend_Auth::getInstance()->getIdentity() !== strtolower($login)) && ($login !== 'admin'));
+        return (Zend_Auth::getInstance()->getIdentity() !== strtolower($login)) && ($login !== 'admin');
     }
 
+    /**
+     * @param AccountInterface $model
+     * @return Application_Form_IModel
+     */
     public function getEditModelForm($model)
     {
         $form = parent::getEditModelForm($model);
@@ -90,6 +97,8 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
      *
      * TODO update look of page
      * TODO move code into model classes for easier testing
+     *
+     * @return AccountInterface // TODO BUG ???
      */
     public function showAction()
     {
@@ -106,7 +115,7 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
 
         $this->view->allModules = $modules;
 
-        $account = Account::get($id);
+        $account             = Account::get($id);
         $this->view->account = $account;
 
         // Get all UserRoles for current Account *plus* 'guest'
@@ -116,7 +125,7 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
         }
 
         $guestRole = UserRole::fetchByName('guest');
-        if (! is_null($guestRole)) {
+        if ($guestRole !== null) {
             $roles[] = $guestRole;
         }
 
@@ -127,7 +136,7 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
         }
 
         foreach ($roles as $role) {
-            $roleName = $role->getName();
+            $roleName    = $role->getName();
             $roleModules = $role->listAccessModules();
 
             foreach ($roleModules as $module) {

@@ -36,14 +36,13 @@ use Opus\Common\DocumentInterface;
  */
 class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
 {
-
     /**
      * Ergebnis wenn keine weiteren Aktionen ausgeführt werden müssen.
      *
      * Unterformulare, die einen POST erfolgreich abgearbeitet haben, zum Beispiel ein Unterformular entfernt oder
      * hinzugefügt haben melden dieses Signal, um zu zeigen, daß das Formular wieder ausgegeben werden kann.
      */
-    const RESULT_SHOW = 'show';
+    public const RESULT_SHOW = 'show';
 
     /**
      * Ergebnis von Unterformular, wenn die angezeigte Seite gewechselt werden soll.
@@ -51,7 +50,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
      * Unterformulare, die Aufgrund des POST möchten, daß zu einer anderen Seite gewechselt wird schicken, dieses
      * Ergebnis zusammen mit den notwendigen Informationen für den Seitenwechsel.
      */
-    const RESULT_SWITCH_TO = 'switch';
+    public const RESULT_SWITCH_TO = 'switch';
 
     /**
      * POST Ergebnis für Klick auf Speichern-Button.
@@ -59,7 +58,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
      * Es gibt zwei Buttons in den Unterformularen 'ActionBox' und 'Actions'. Bei beiden liefert processPost dieses
      * Ergebnis zurück, wenn auf 'Speichern' geklickt wurde.
      */
-    const RESULT_SAVE = 'save';
+    public const RESULT_SAVE = 'save';
 
     /**
      * POST Ergebnis für Klick auf Abbrechen-Button.
@@ -67,14 +66,14 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
      * Es gibt zwei Buttons in den Unterformularen 'ActionBox' und 'Actions'. Bei beiden liefert processPost dieses
      * Ergebnis zurück, wenn auf 'Abbrechen' geklickt wurde.
      */
-    const RESULT_CANCEL = 'cancel';
+    public const RESULT_CANCEL = 'cancel';
 
     /**
      * POST Ergebnis für das Abspeichern und weiter editieren des selben Dokuments.
      *
      * TODO Button wird zur Zeit nicht angezeigt (Designentscheidung)
      */
-    const RESULT_SAVE_AND_CONTINUE = 'saveAndContinue';
+    public const RESULT_SAVE_AND_CONTINUE = 'saveAndContinue';
 
     /**
      * Globale Nachricht für das Formular.
@@ -84,12 +83,10 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
      *
      * @var string
      */
-    private $_message = null;
+    private $message;
 
-    /**
-     * @var DocumentInterface
-     */
-    private $_document;
+    /** @var DocumentInterface */
+    private $document;
 
     /**
      * Konstruiert das Metadaten-Formular aus verschiedenen Unterformularen und den Aktion Buttons.
@@ -102,8 +99,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
             'FormElements',
             [
                 ['wrapperDivClose' => 'HtmlTag'],
-                ['tag' => 'div', 'closeOnly' => 'true', 'placement' => 'append']
-            ]
+                ['tag' => 'div', 'closeOnly' => 'true', 'placement' => 'append'],
+            ],
         ]);
 
         $this->addSubForm(new Admin_Form_ActionBox($this), 'ActionBox');
@@ -131,11 +128,12 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
                     'admin_document_error_repeated_series'
                 ),
                 [
-                'columns' => [
-                    [],
-                    ['label' => 'Opus_Model_Dependent_Link_DocumentSeries_Number'],
-                    ['label' => 'Opus_Model_Dependent_Link_DocumentSeries_SortOrder']
-                ]]
+                    'columns' => [
+                        [],
+                        ['label' => 'Opus_Model_Dependent_Link_DocumentSeries_Number'],
+                        ['label' => 'Opus_Model_Dependent_Link_DocumentSeries_SortOrder'],
+                    ],
+                ]
             ),
             'Series'
         );
@@ -145,10 +143,12 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
                 'Admin_Form_Document_Enrichment',
                 'Enrichment',
                 null,
-                ['columns' => [
-                    ['label' => 'KeyName'],
-                    ['label' => 'Value']
-                ]]
+                [
+                    'columns' => [
+                        ['label' => 'KeyName'],
+                        ['label' => 'Value'],
+                    ],
+                ]
             ),
             'Enrichments'
         );
@@ -183,10 +183,12 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Populates form from model values.
+     *
+     * @param DocumentInterface $document
      */
     public function populateFromModel($document)
     {
-        $this->_document = $document;
+        $this->document = $document;
 
         $subforms = $this->getSubForms();
 
@@ -197,7 +199,10 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Konstruiert Formular mit Unterformularen basierend auf POST Daten.
-     * @param array $data
+     *
+     * @param array                  $data
+     * @param DocumentInterface|null $document
+     * @return Admin_Form_Document
      */
     public static function getInstanceFromPost($data, $document = null)
     {
@@ -220,7 +225,10 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Verarbeitet POST Request vom Formular.
-     * @param type $data
+     *
+     * @param array $data
+     * @param array $context
+     * @return array|null
      */
     public function processPost($data, $context)
     {
@@ -232,7 +240,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
                 // TODO process return value (exit from loop if success)
                 $result = $form->processPost($data[$name], $data);
 
-                if (! is_null($result)) {
+                if ($result !== null) {
                     return $result;
                 }
             }
@@ -243,8 +251,9 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Setzt das Editieren eines Documents nach dem Hinzufügen einer Person/Collection auf einer anderen Seite fort.
-     * @param $request
-     * @param null $session
+     *
+     * @param Zend_Controller_Request_Http $request
+     * @param Zend_Session_Namespace|null  $session
      */
     public function continueEdit($request, $session = null)
     {
@@ -263,14 +272,15 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
      *
      * - ein TitleMain in Document-Language muss vorhanden sein (Document_General und Document_TitleMain)
      *
-     * @param array $data
-     * @param array $context
+     * @param array      $data
+     * @param array|null $context
+     * @return bool
      */
     public function isValid($data, $context = null)
     {
         $result = parent::isValid($data, $context);
 
-        return ($result & $this->isDependenciesValid($data, $data)) == 1;
+        return ($result & $this->isDependenciesValid($data, $data)) === 1;
     }
 
     /**
@@ -278,8 +288,6 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
      *
      * Der 'Fieldset' Decorator wird entfernt, damit das gesamte Formular nicht auch noch eine extra Überschrift
      * bekommt.
-     *
-     * @return void|Zend_Form_SubForm
      */
     public function loadDefaultDecorators()
     {
@@ -290,20 +298,22 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Setzt die globale Nachricht für das Formular.
-     * @param $message string Nachricht
+     *
+     * @param string $message Nachricht
      */
     public function setMessage($message)
     {
-        $this->_message = $message;
+        $this->message = $message;
     }
 
     /**
      * Liefert die globale Nachricht für das Formular.
+     *
      * @return null|string
      */
     public function getMessage()
     {
-        return $this->_message;
+        return $this->message;
     }
 
     /**
@@ -316,10 +326,10 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
     {
         parent::prepareRenderingAsView();
 
-        if (! is_null($this->_document)) {
-            if (count($this->_document->getFile()) > 0) {
+        if ($this->document !== null) {
+            if (count($this->document->getFile()) > 0) {
                 $subform = new Admin_Form_Document_Files();
-                $subform->populateFromModel($this->_document);
+                $subform->populateFromModel($this->document);
                 $this->addSubForm($subform, 'Files');
             }
         }

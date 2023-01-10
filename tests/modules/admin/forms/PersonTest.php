@@ -37,7 +37,7 @@ use Opus\Common\Person;
  */
 class Admin_Form_PersonTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function testCreateForm()
@@ -113,7 +113,6 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form->getElement('IdentifierOrcid')->setValue('3456');
         $form->getElement('IdentifierMisc')->setValue('5678');
 
-
         $person = Person::new();
 
         $form->updateModel($person);
@@ -156,8 +155,8 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form = new Admin_Form_Person();
 
         $document = Document::get(146);
-        $persons = $document->getPerson();
-        $person = $persons[0]->getModel();
+        $persons  = $document->getPerson();
+        $person   = $persons[0]->getModel();
 
         $form->getElement('PersonId')->setValue($person->getId());
         $form->getElement('AcademicTitle')->setValue('Prof. Dr.');
@@ -221,8 +220,8 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form = new Admin_Form_Person();
 
         $post = [
-            'LastName' => '', // Pflichtfeld
-            'DateOfBirth' => 'Sonntag' //
+            'LastName'    => '', // Pflichtfeld
+            'DateOfBirth' => 'Sonntag',
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -230,8 +229,8 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $this->assertContains('dateFalseFormat', $form->getErrors('DateOfBirth'));
 
         $post = [
-            'LastName' => 'Doe', // Pflichtfeld
-            'DateOfBirth' => '1990/02/01'
+            'LastName'    => 'Doe', // Pflichtfeld
+            'DateOfBirth' => '1990/02/01',
         ];
 
         $this->assertTrue($form->isValid($post));
@@ -244,8 +243,8 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form = new Admin_Form_Person();
 
         $post = [
-            'LastName' => 'Doe', // Pflichtfeld
-            'DateOfBirth' => '01.02.1990'
+            'LastName'    => 'Doe', // Pflichtfeld
+            'DateOfBirth' => '01.02.1990',
         ];
 
         $this->assertTrue($form->isValid($post));
@@ -256,7 +255,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form = new Admin_Form_Person();
 
         $post = [
-            'Save' => 'Speichern'
+            'Save' => 'Speichern',
         ];
 
         $this->assertEquals('save', $form->processPost($post, null));
@@ -267,7 +266,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form = new Admin_Form_Person();
 
         $post = [
-            'Cancel' => 'Abbrechen'
+            'Cancel' => 'Abbrechen',
         ];
 
         $this->assertEquals('cancel', $form->processPost($post, null));

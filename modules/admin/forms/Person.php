@@ -40,76 +40,75 @@ use Opus\Common\PersonInterface;
  */
 class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
 {
-
     /**
      * Name fuer Formularelement fuer Feld ID von Person.
      */
-    const ELEMENT_PERSON_ID = 'PersonId';
+    public const ELEMENT_PERSON_ID = 'PersonId';
 
     /**
      * Name fuer Formularelement fuer Feld AcademicTitle.
      */
-    const ELEMENT_ACADEMIC_TITLE = 'AcademicTitle';
+    public const ELEMENT_ACADEMIC_TITLE = 'AcademicTitle';
 
     /**
      * Name fuer Formularelement fuer Feld LastName.
      */
-    const ELEMENT_LAST_NAME = 'LastName';
+    public const ELEMENT_LAST_NAME = 'LastName';
 
     /**
      * Name fuer Formularelement fuer Feld FirstName.
      */
-    const ELEMENT_FIRST_NAME = 'FirstName';
+    public const ELEMENT_FIRST_NAME = 'FirstName';
 
     /**
      * Name fuer Formularelement fuer Feld Email.
      */
-    const ELEMENT_EMAIL = 'Email';
+    public const ELEMENT_EMAIL = 'Email';
 
     /**
      * Name fuer Formularelement fuer Feld PlaceOfBirth.
      */
-    const ELEMENT_PLACE_OF_BIRTH = 'PlaceOfBirth';
+    public const ELEMENT_PLACE_OF_BIRTH = 'PlaceOfBirth';
 
     /**
      * Name fuer Formularelement fuer Feld DateOfBirth.
      */
-    const ELEMENT_DATE_OF_BIRTH = 'DateOfBirth';
+    public const ELEMENT_DATE_OF_BIRTH = 'DateOfBirth';
 
     /**
      * Name fuer Button zum Speichern.
      */
-    const ELEMENT_SAVE = 'Save';
+    public const ELEMENT_SAVE = 'Save';
 
     /**
      * Name fuer Button zum Abbrechen.
      */
-    const ELEMENT_CANCEL = 'Cancel';
+    public const ELEMENT_CANCEL = 'Cancel';
 
     /**
      * Konstante fuer POST Ergebnis 'abspeichern'.
      */
-    const RESULT_SAVE = 'save';
+    public const RESULT_SAVE = 'save';
 
     /**
      * Konstante fuer POST Ergebnis 'abbrechen'.
      */
-    const RESULT_CANCEL = 'cancel';
+    public const RESULT_CANCEL = 'cancel';
 
     /**
      * Konstante für Identifier Gnd
      */
-    const ELEMENT_IDENTIFIER_GND = 'IdentifierGnd';
+    public const ELEMENT_IDENTIFIER_GND = 'IdentifierGnd';
 
     /**
      * Konstante für Identifier OrcId
      */
-    const ELEMENT_IDENTIFIER_ORCID = 'IdentifierOrcid';
+    public const ELEMENT_IDENTIFIER_ORCID = 'IdentifierOrcid';
 
     /**
      * Konstante für Identifier Misc
      */
-    const ELEMENT_IDENTIFIER_MISC = 'IdentifierMisc';
+    public const ELEMENT_IDENTIFIER_MISC = 'IdentifierMisc';
 
     /**
      * Erzeugt die Formularelemente.
@@ -120,10 +119,10 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
 
         $this->setDecorators(
             [
-            'FormElements',
-            'Fieldset',
-            [['divWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'subform']],
-            'Form'
+                'FormElements',
+                'Fieldset',
+                [['divWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'subform']],
+                'Form',
             ]
         );
 
@@ -134,8 +133,12 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
         $this->addElement(
             'text',
             self::ELEMENT_LAST_NAME,
-            ['label' => 'LastName', 'required' => true,
-            'size' => 50, 'maxlength' => $fieldLastName->getMaxSize()]
+            [
+                'label'     => 'LastName',
+                'required'  => true,
+                'size'      => 50,
+                'maxlength' => $fieldLastName->getMaxSize(),
+            ]
         );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, ['label' => 'FirstName', 'size' => 50]);
         $this->addElement('Email', self::ELEMENT_EMAIL, ['label' => 'Email']);
@@ -152,46 +155,51 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
             $this->getElements(),
             'fields',
             [
-            'decorators' => [
-                'FormElements',
-                [['fieldsWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'fields-wrapper']],
-            ]
+                'decorators' => [
+                    'FormElements',
+                    [['fieldsWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'fields-wrapper']],
+                ],
             ]
         );
 
         $this->addElement(
             'submit',
             self::ELEMENT_SAVE,
-            ['decorators' => [
-            'ViewHelper',
-            [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']],
-            ]]
+            [
+                'decorators' => [
+                    'ViewHelper',
+                    [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']],
+                ],
+            ]
         );
         $this->addElement(
             'submit',
             self::ELEMENT_CANCEL,
-            ['decorators' => [
-            'ViewHelper',
-            [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']],
-            ]]
+            [
+                'decorators' => [
+                    'ViewHelper',
+                    [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']],
+                ],
+            ]
         );
         $this->addDisplayGroup(
             [self::ELEMENT_SAVE, self::ELEMENT_CANCEL],
             'actions',
             [
-            'order' => 100,
-            'decorators' => [
-                'FormElements',
-                [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
-                [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']]
-            ]
+                'order'      => 100,
+                'decorators' => [
+                    'FormElements',
+                    [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
+                    [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']],
+                ],
             ]
         );
     }
 
     /**
      * Setzt die Werte der Formularelmente entsprechend der uebergebenen Person Instanz.
-     * @param Person $model
+     *
+     * @param PersonInterface $person
      */
     public function populateFromModel($person)
     {
@@ -212,6 +220,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Ermittelt bei einem Post welcher Button geklickt wurde, also welche Aktion gewünscht ist.
+     *
      * @param array $post
      * @param array $context
      * @return string String fuer gewuenschte Operation
@@ -229,7 +238,8 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Setzt die Felder einer Person Instanz entsprechend dem Formularinhalt.
-     * @param Person $model
+     *
+     * @param PersonInterface $model
      */
     public function updateModel($model)
     {
@@ -251,7 +261,8 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Liefert Instanz von Person zurueck.
-     * @return Person
+     *
+     * @return PersonInterface
      */
     public function getModel()
     {

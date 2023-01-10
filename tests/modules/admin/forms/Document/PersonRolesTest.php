@@ -31,7 +31,7 @@
 
 class Admin_Form_Document_PersonRolesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     private $roles;
 
     public function setUp(): void
@@ -39,14 +39,14 @@ class Admin_Form_Document_PersonRolesTest extends ControllerTestCase
         parent::setUp();
 
         $this->roles = [
-            'author' => 'author',
-            'editor' => 'editor',
-            'translator' => 'translator',
+            'author'      => 'author',
+            'editor'      => 'editor',
+            'translator'  => 'translator',
             'contributor' => 'contributor',
-            'other' => 'other',
-            'advisor' => 'advisor',
-            'referee' => 'referee',
-            'submitter' => 'submitter'
+            'other'       => 'other',
+            'advisor'     => 'advisor',
+            'referee'     => 'referee',
+            'submitter'   => 'submitter',
         ];
     }
 
@@ -92,7 +92,7 @@ class Admin_Form_Document_PersonRolesTest extends ControllerTestCase
         $form = new Admin_Form_Document_PersonRoles();
 
         $post = [
-            'RoleContributor' => 'Beitragende Person'
+            'RoleContributor' => 'Beitragende Person',
         ];
 
         $result = $form->processPost($post, null);

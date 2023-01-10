@@ -33,11 +33,13 @@ use Opus\Common\CollectionRole;
 
 class Admin_Model_Collections extends Application_Model_Abstract
 {
-
+    /** @var Zend_View_Interface */
     private $view;
 
     /**
      * Returns array with information about collection roles.
+     *
+     * @param int|null $documentId
      * @return array
      *
      * TODO using view in action helper is not best design
@@ -50,18 +52,18 @@ class Admin_Model_Collections extends Application_Model_Abstract
 
         foreach ($collectionRoles as $collectionRole) {
             $rootCollection = $collectionRole->getRootCollection();
-            if (! is_null($rootCollection)) {
+            if ($rootCollection !== null) {
                 $collection = [
-                    'id' => $rootCollection->getId(),
-                    'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
+                    'id'          => $rootCollection->getId(),
+                    'name'        => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
                     'hasChildren' => $rootCollection->hasChildren(),
-                    'visible' => $collectionRole->getVisible(),
-                    'isRoot' => true,
-                    'role' => $collectionRole,
-                    'collection' => $rootCollection
+                    'visible'     => $collectionRole->getVisible(),
+                    'isRoot'      => true,
+                    'role'        => $collectionRole,
+                    'collection'  => $rootCollection,
                 ];
 
-                if (! is_null($documentId)) {
+                if ($documentId !== null) {
                     $collection['assigned'] = $rootCollection->holdsDocumentById($documentId);
                 } else {
                     $collection['assigned'] = false;
@@ -74,6 +76,9 @@ class Admin_Model_Collections extends Application_Model_Abstract
         return $collections;
     }
 
+    /**
+     * @param Zend_View_Interface $view
+     */
     public function setView($view)
     {
         $this->view = $view;

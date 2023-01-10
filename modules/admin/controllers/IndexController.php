@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,24 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
- * @author      Jens Schwidder (schwidder@zib.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Main menu for administration module.
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_IndexController extends Application_Controller_Action
 {
-
     /**
      * Shows main menu.
      */
@@ -71,6 +63,9 @@ class Admin_IndexController extends Application_Controller_Action
         $this->renderSubmenu('admin_title_settings');
     }
 
+    /**
+     * @param string $title
+     */
     protected function renderSubmenu($title)
     {
         $this->view->title = $this->view->translate($title);

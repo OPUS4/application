@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -35,15 +36,13 @@ use Opus\Common\Job;
  */
 class Admin_JobController extends Application_Controller_Action
 {
-
     public function indexAction()
     {
-
         $config = $this->getConfig();
 
         if (isset($config->runjobs->asynchronous) && filter_var($config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)) {
-            $this->view->asyncjobs = true;
-            $this->view->failedJobCount = Job::getCountPerLabel(Job::STATE_FAILED);
+            $this->view->asyncjobs           = true;
+            $this->view->failedJobCount      = Job::getCountPerLabel(Job::STATE_FAILED);
             $this->view->unprocessedJobCount = Job::getCountPerLabel(Job::STATE_UNDEFINED);
         } else {
             $this->view->asyncjobs = false;
@@ -54,7 +53,6 @@ class Admin_JobController extends Application_Controller_Action
     {
         $this->view->title = $this->view->translate('admin_title_job');
     }
-
 
     /**
      * TODO review functionality and create ticket

@@ -29,70 +29,86 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\File;
+use Opus\Common\FileInterface;
+use Opus\Common\HashValueInterface;
 
 /**
  * Klasse fuer die Handhabung von Datei-Hashes.
  */
 class Admin_Model_Hash
 {
+    /** @var HashValueInterface */
+    private $hash;
 
-    private $_hash = null;
+    /** @var FileInterface */
+    private $file;
 
     /**
-     * @var File
+     * @param FileInterface      $file
+     * @param HashValueInterface $hash
      */
-    private $_file = null;
-
     public function __construct($file, $hash)
     {
-        $this->_hash = $hash;
-        $this->_file = $file;
+        $this->hash = $hash;
+        $this->file = $file;
     }
 
+    /**
+     * @return string|null
+     */
     public function getHashType()
     {
-        return $this->_hash->getType();
+        return $this->hash->getType();
     }
 
+    /**
+     * @return false|string
+     */
     public function getSignatureType()
     {
         return substr($this->getHashType(), 0, 3);
     }
 
+    /**
+     * @return string|null
+     */
     public function getSoll()
     {
-        return $this->_hash->getValue();
+        return $this->hash->getValue();
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function canVerify()
     {
-        return $this->_file->canVerify();
+        return $this->file->canVerify();
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function checkFilePermission()
     {
-        return $this->_file->isReadable();
+        return $this->file->isReadable();
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function checkFileExists()
     {
-        return $this->_file->exists();
+        return $this->file->exists();
     }
 
+    /**
+     * @return string|null
+     * @throws Exception
+     */
     public function getIst()
     {
-        if ($this->_file->exists() && $this->getSignatureType() !== 'gpg' && $this->_file->canVerify()) {
-            return $this->_file->getRealHash($this->getHashType());
+        if ($this->file->exists() && $this->getSignatureType() !== 'gpg' && $this->file->canVerify()) {
+            return $this->file->getRealHash($this->getHashType());
         } else {
             return null;
         }

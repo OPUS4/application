@@ -39,9 +39,10 @@ use Opus\Common\Identifier;
  */
 class Admin_ReportControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var int[] */
     private $docIds;
 
     public function setUp(): void
@@ -51,24 +52,24 @@ class Admin_ReportControllerTest extends ControllerTestCase
         // modify DOI config
         $this->adjustConfiguration([
             'doi' => [
-                'prefix' => '10.5072',
+                'prefix'      => '10.5072',
                 'localPrefix' => 'opustest',
-                'registration' =>
-                    [
-                        'datacite' =>
-                            [
-                                'username' => 'test',
-                                'password' => 'secret',
-                                'serviceUrl' => 'http://192.0.2.1:54321'
-                            ]
-                    ]
-            ]
+                'registration'
+                    => [
+                        'datacite'
+                            => [
+                                'username'   => 'test',
+                                'password'   => 'secret',
+                                'serviceUrl' => 'http://192.0.2.1:54321',
+                            ],
+                    ],
+            ],
         ]);
     }
 
     public function tearDown(): void
     {
-        if (! is_null($this->docIds)) {
+        if ($this->docIds !== null) {
             // removed previously created test documents from database
             foreach ($this->docIds as $docId) {
                 $doc = Document::get($docId);
@@ -158,8 +159,8 @@ class Admin_ReportControllerTest extends ControllerTestCase
 
         $this->request->setMethod('POST')
             ->setPost([
-                'op' => 'register',
-                'docId' => $docId
+                'op'    => 'register',
+                'docId' => $docId,
             ]);
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(302);
@@ -175,8 +176,8 @@ class Admin_ReportControllerTest extends ControllerTestCase
 
         $this->request->setMethod('POST')
             ->setPost([
-                'op' => 'verify',
-                'docId' => $docId
+                'op'    => 'verify',
+                'docId' => $docId,
             ]);
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(302);
@@ -192,8 +193,8 @@ class Admin_ReportControllerTest extends ControllerTestCase
 
         $this->request->setMethod('POST')
             ->setPost([
-                'op' => 'verify',
-                'docId' => $docId
+                'op'    => 'verify',
+                'docId' => $docId,
             ]);
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(302);
@@ -208,7 +209,7 @@ class Admin_ReportControllerTest extends ControllerTestCase
 
         $this->request->setMethod('POST')
             ->setPost([
-                'op' => 'register'
+                'op' => 'register',
             ]);
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(302);
@@ -223,7 +224,7 @@ class Admin_ReportControllerTest extends ControllerTestCase
 
         $this->request->setMethod('POST')
             ->setPost([
-                'op' => 'verify'
+                'op' => 'verify',
             ]);
         $this->dispatch('/admin/report/doi');
         $this->assertResponseCode(302);
@@ -246,11 +247,16 @@ class Admin_ReportControllerTest extends ControllerTestCase
         $this->createTestDocWithDoi('published', null, false);
     }
 
+    /**
+     * @param string $serverState
+     * @param string $doiStatus
+     * @param bool   $local
+     */
     private function createTestDocWithDoi($serverState, $doiStatus, $local = true)
     {
         $doc = Document::new();
         $doc->setServerState($serverState);
-        $docId = $doc->store();
+        $docId          = $doc->store();
         $this->docIds[] = $docId;
 
         $doi = Identifier::new();

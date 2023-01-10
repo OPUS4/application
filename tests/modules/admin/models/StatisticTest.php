@@ -25,14 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Admin_Model_StatisticsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     /**
@@ -68,7 +67,7 @@ class Admin_Model_StatisticsTest extends ControllerTestCase
     public function testMonthStatistics()
     {
         $statistics = new Admin_Model_Statistics();
-        $months = $statistics->getMonthStatistics(2010);
+        $months     = $statistics->getMonthStatistics(2010);
         $this->assertEquals(16, $months[1], 'wrong publication count of month Jan returned');
         $this->assertEquals(6, $months[2], 'wrong publication count of month Feb returned');
         $this->assertEquals(25, $months[3], 'wrong publication count of month March returned');
@@ -87,7 +86,7 @@ class Admin_Model_StatisticsTest extends ControllerTestCase
     public function testTypeStatistics()
     {
         $statistics = new Admin_Model_Statistics();
-        $types = $statistics->getTypeStatistics(2010);
+        $types      = $statistics->getTypeStatistics(2010);
         $this->assertEquals(15, $types['article'], 'wrong publication count of Article returned');
         $this->assertNotContains('masterthesis', $types, 'Document types should not contain data with 0 documents');
         $this->assertEquals(2, $types['conferenceobject'], 'wrong publication count of conferenceobject returned');
@@ -110,13 +109,13 @@ class Admin_Model_StatisticsTest extends ControllerTestCase
         $this->assertEquals(142, $statistics->getNumDocsUntil(2013), 'wrong publication count of documents until 2013');
     }
 
-    /*
+    /**
      * tests getYears() of Statistic Model
      */
     public function testGetYears()
     {
         $statistics = new Admin_Model_Statistics();
-        $years = $statistics->getYears();
+        $years      = $statistics->getYears();
         $this->assertContains('2002', $years);
         $this->assertContains('2003', $years);
         $this->assertContains('2004', $years);

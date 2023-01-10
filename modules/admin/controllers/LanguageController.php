@@ -30,15 +30,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\LanguageInterface;
+
 /**
  * Language controller of the admin module.
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_LanguageController extends Application_Controller_ActionCRUD
 {
-
     /**
      * List all available collection role instances
      *
@@ -50,6 +48,10 @@ class Admin_LanguageController extends Application_Controller_ActionCRUD
         parent::init();
     }
 
+    /**
+     * @param LanguageInterface $model
+     * @return bool
+     */
     public function isDeletable($model)
     {
         return ! $model->isUsed();
