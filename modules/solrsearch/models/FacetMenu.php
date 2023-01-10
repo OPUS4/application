@@ -32,15 +32,14 @@
 use Opus\Common\CollectionRole;
 
 /**
- * Class Solrsearch_Model_FacetMenu
- *
  * TODO refactor as view helper or something better
  */
 class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
 {
-
     /**
      * Resolves the facet-options from URL and builds a result array with the number of facets to display.
+     *
+     * @param array $paramSet
      * @return array result[facet_name] = number
      */
     public function buildFacetArray($paramSet)
@@ -53,6 +52,10 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
      * This merges facets configurations and actual facet results.
      *
      * TODO create Facet objects here an populate with data (might be moved later, but is a start)
+     *
+     * @param Base                         $result
+     * @param Zend_Controller_Request_Http $request
+     * @return array
      */
     public function getFacets($result, $request)
     {
@@ -69,19 +72,19 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
         foreach ($facets as $name) {
             $facet = $facetManager->getFacet($name);
 
-            if (is_null($facet)) {
+            if ($facet === null) {
                 continue;
             }
 
             $indexFieldName = $facet->getIndexField();
-            $facetValue = $request->getParam($name . 'fq', '');
+            $facetValue     = $request->getParam($name . 'fq', '');
 
             if (isset($indexFields[$indexFieldName]) && (count($indexFields[$indexFieldName]) > 0 || $facetValue !== '')) {
                 $this->getLogger()->debug("found $name facet in search results");
 
                 $values = $indexFields[$indexFieldName];
 
-                if (is_null($facet) || ! $facet->isAllowed()) {
+                if ($facet === null || ! $facet->isAllowed()) {
                     continue;
                 }
 
@@ -92,7 +95,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
                     $facet->setShowFacetExtender(false);
                 } else {
                     // TODO encapsulate in Facet object
-                    $facet->setShowFacetExtender($facet->getLimit() <= sizeof($values));
+                    $facet->setShowFacetExtender($facet->getLimit() <= count($values));
                 }
 
                 $facet->setOpen(isset($openFacets[$name]));
@@ -104,7 +107,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
         // Hide institutes facet if collection does not exist or is hidden TODO handle somewhere else
         $institutes = CollectionRole::fetchByName('institutes');
 
-        if (is_null($institutes) || ! $institutes->getVisible()) {
+        if ($institutes === null || ! $institutes->getVisible()) {
             unset($facetArray['institute']);
         }
 

@@ -33,30 +33,30 @@ use Opus\Common\Series;
 
 class Solrsearch_Model_SeriesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testConstructWithInvalidSeriesId()
     {
-        $this->setExpectedException('Solrsearch_Model_Exception');
+        $this->expectException(Solrsearch_Model_Exception::class);
         new Solrsearch_Model_Series(null);
     }
 
     public function testConstructWithUnknownSeriesId()
     {
-        $this->setExpectedException('Solrsearch_Model_Exception');
+        $this->expectException(Solrsearch_Model_Exception::class);
         new Solrsearch_Model_Series(999);
     }
 
     public function testConstructWithInvisibleSeries()
     {
-        $this->setExpectedException('Solrsearch_Model_Exception');
+        $this->expectException(Solrsearch_Model_Exception::class);
         new Solrsearch_Model_Series(3);
     }
 
     public function testConstructWithEmptyVisibleSeries()
     {
-        $this->setExpectedException('Solrsearch_Model_Exception');
+        $this->expectException(Solrsearch_Model_Exception::class);
         new Solrsearch_Model_Series(8);
     }
 

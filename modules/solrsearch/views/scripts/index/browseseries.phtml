@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,25 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 ?>
 
 <h2><?= htmlspecialchars($this->title) ?></h2>
 
 <div id="seriesbar">
     <?php $classAttribute = '' ?>
-    <?php if (! is_null($this->logoFilename)) : ?>
+    <?php if ($this->logoFilename !== null) : ?>
     <div id="serieslogo">
         <img src="<?= $this->baseUrl() . '/series_logos/' . $this->seriesId . '/' . $this->logoFilename ?>"/>
     </div>
     <?php else : ?>
-    <?php $classAttribute = 'class="max-width-available"' ?>
+        <?php $classAttribute = 'class="max-width-available"' ?>
     <?php endif ?>
 
     <div id="seriesinfobox" <?= $classAttribute ?>>

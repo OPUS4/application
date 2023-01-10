@@ -31,15 +31,20 @@
 
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Series;
+use Opus\Common\SeriesInterface;
 
 class Solrsearch_Model_Series
 {
+    /** @var SeriesInterface */
+    private $series;
 
-    private $_series;
-
+    /**
+     * @param int $seriesId
+     * @throws Solrsearch_Model_Exception
+     */
     public function __construct($seriesId)
     {
-        if (is_null($seriesId)) {
+        if ($seriesId === null) {
             throw new Solrsearch_Model_Exception('Could not browse series due to missing id parameter.', 400);
         }
 
@@ -60,30 +65,42 @@ class Solrsearch_Model_Series
                 404
             );
         }
-        $this->_series = $s;
+        $this->series = $s;
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
-        return $this->_series->getId();
+        return $this->series->getId();
     }
 
+    /**
+     * @return string
+     */
     public function getTitle()
     {
-        return $this->_series->getTitle();
+        return $this->series->getTitle();
     }
 
+    /**
+     * @return string
+     */
     public function getInfobox()
     {
-        return $this->_series->getInfobox();
+        return $this->series->getInfobox();
     }
 
+    /**
+     * @return string|null
+     */
     public function getLogoFilename()
     {
         $logoDir = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'series_logos'
-            . DIRECTORY_SEPARATOR . $this->_series->getId();
+            . DIRECTORY_SEPARATOR . $this->series->getId();
         if (is_readable($logoDir)) {
-            $iterator = new \DirectoryIterator($logoDir);
+            $iterator = new DirectoryIterator($logoDir);
             foreach ($iterator as $fileinfo) {
                 if ($fileinfo->isFile()) {
                     return $fileinfo->getFilename();

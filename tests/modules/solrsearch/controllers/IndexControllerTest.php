@@ -31,32 +31,37 @@
 
 use Opus\Common\CollectionRole;
 use Opus\Common\Date;
+use Opus\Common\DocumentInterface;
 use Opus\Common\Identifier;
+use Opus\Common\Model\ModelException;
 use Opus\Common\Person;
 use Opus\Common\Security\Realm;
 use Opus\Common\Subject;
 use Opus\Common\Title;
 
 /**
- * Class Solrsearch_IndexControllerTest.
- *
  * @covers Solrsearch_IndexController
  */
 class Solrsearch_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /**
+     * @param string $url
+     * @param string $controller
+     * @param string $action
+     */
     private function doStandardControllerTest($url, $controller, $action)
     {
         $this->dispatch($url);
 
         $this->assertResponseCode(200);
 
-        if (! is_null($controller)) {
+        if ($controller !== null) {
             $this->assertController($controller);
         }
-        if (! is_null($action)) {
+        if ($action !== null) {
             $this->assertAction($action);
         }
 
@@ -86,29 +91,31 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/latest', 'index', 'search');
         $this->checkForBadStringsInHtml($this->getResponse()->getBody());
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 10);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') === 10);
     }
 
     public function testLatestActionWith20Hits()
     {
         $this->doStandardControllerTest('/solrsearch/index/search/rows/20/searchtype/latest', 'index', 'search');
         $this->checkForBadStringsInHtml($this->getResponse()->getBody());
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 20);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') === 20);
     }
 
     public function testLatestActionWithNegativeNumberOfHits()
     {
         $this->doStandardControllerTest('/solrsearch/index/search/rows/-1/searchtype/latest', 'index', 'search');
         $this->checkForBadStringsInHtml($this->getResponse()->getBody());
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 10);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') === 10);
     }
 
     public function testLatestActionWithTooLargeNumberOfHits()
     {
         $this->doStandardControllerTest('/solrsearch/index/search/rows/1000/searchtype/latest', 'index', 'search');
         // we need to mask 'fehler' in metadata (otherwise checkForBadStringsInHtml will assume an error has occurred)
-        $this->checkForBadStringsInHtml(str_replace('IMU–Sensorfehler', 'IMU–Sensorxxxxxx', $this->getResponse()->getBody()));
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 100);
+        $this->checkForBadStringsInHtml(
+            str_replace('IMU–Sensorfehler', 'IMU–Sensorxxxxxx', $this->getResponse()->getBody())
+        );
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') === 100);
     }
 
     public function testSearchdispatchAction()
@@ -117,7 +124,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
                 ->setMethod('POST')
                 ->setPost([
                     'searchtype' => 'simple',
-                    'query' => '*:*'
+                    'query'      => '*:*',
                 ]);
         $this->dispatch('/solrsearch/index/searchdispatch');
         $this->assertRedirect();
@@ -125,7 +132,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
                 ->setMethod('POST')
                 ->setPost([
                     'searchtype' => 'advanced',
-                    'author' => 'a*'
+                    'author'     => 'a*',
                 ]);
         $this->dispatch('/solrsearch/index/searchdispatch');
         $this->assertRedirect();
@@ -159,12 +166,20 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testWildcardQuestionMarkUppercaseQuerySearch()
     {
-        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+Do%3Fum%3Fnt', null, null);
+        $this->doStandardControllerTest(
+            '/solrsearch/index/search/searchtype/simple/query/test+Do%3Fum%3Fnt',
+            null,
+            null
+        );
         $numberOfHitsUpper = substr_count($this->getResponse()->getBody(), 'result_box');
 
         $this->getResponse()->clearBody();
 
-        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+do%3Fum%3Fnt', null, null);
+        $this->doStandardControllerTest(
+            '/solrsearch/index/search/searchtype/simple/query/test+do%3Fum%3Fnt',
+            null,
+            null
+        );
         $numberOfHitsLower = substr_count($this->getResponse()->getBody(), 'result_box');
 
         $this->assertTrue($numberOfHitsLower > 0);
@@ -281,7 +296,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
                 ->setMethod('POST')
                 ->setPost([
                     'searchtype' => 'simple',
-                    'query' => ''
+                    'query'      => '',
                 ]);
         $this->dispatch('/solrsearch/index/searchdispatch');
         $this->assertRedirect();
@@ -293,7 +308,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->request
                 ->setMethod('POST')
                 ->setPost([
-                    'searchtype' => 'advanced'
+                    'searchtype' => 'advanced',
                 ]);
         $this->dispatch('/solrsearch/index/searchdispatch');
         $this->assertRedirect();
@@ -338,7 +353,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertGreaterThan(10, $docCount, "Test requires at least 11 documents.");
 
         $startLast = floor(($docCount - 1) / 10) * 10; // 10 results per page, multiple of 10
-        $start = $startLast - 10;
+        $start     = $startLast - 10;
 
         $this->doStandardControllerTest(
             "/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article/start/$start",
@@ -351,7 +366,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $body = $this->getResponse()->getBody();
 
         // check four next/last page links are all the same
-        $this->assertTrue(4 == substr_count($body, "$link/start/$startLast/rows/10\""));
+        $this->assertTrue(4 === substr_count($body, "$link/start/$startLast/rows/10\""));
         $this->assertNotContains("$link/start/19/rows/10\">", $body);
         $this->assertEquals($docCount, $this->getNumOfHits());
     }
@@ -362,7 +377,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     public function testLastPageUrlEqualsNextPageUrlDocTypeDoctoralThesis()
     {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/doctoralthesis', null, null);
-        $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/10/rows/10"'));
+        $this->assertTrue(4 === substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/10/rows/10"'));
         $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/17/rows/10"', $this->getResponse()->getBody());
         $this->assertEquals(18, $this->getNumOfHits());
     }
@@ -391,14 +406,14 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             'testcatchallsearch_publisher_name',
             'testcatchallsearch_publisher_place',
             'testcatchallsearch_creating_corporation',
-            'testcatchallsearch_contributing_corporation'
+            'testcatchallsearch_contributing_corporation',
         ];
 
         // check that each catch all search for given query terms returns one hit
         foreach ($queries as $query) {
             $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/' . $query, null, null);
             $hits = $this->getNumOfHits();
-            $this->assertTrue(substr_count($this->getResponse()->getBody(), '<strong>1</strong>') == 4, $query . " (hits = '$hits')");
+            $this->assertTrue(substr_count($this->getResponse()->getBody(), '<strong>1</strong>') === 4, $query . " (hits = '$hits')");
             $this->assertEquals(1, $hits);
             $this->getResponse()->clearBody();
         }
@@ -475,12 +490,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertContains('/rss/index/index/searchtype/simple/query/thissearchtermdoesnotexist" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
     }
 
-
-    /**
-     * series search related test cases
-     *
-     */
-
     public function testSeriesSearchWithInvalidId()
     {
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/12345');
@@ -541,17 +550,21 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertContains('Lorem ipsum dolor sit amet,', $body);
 
         // pagination links
-        $this->assertTrue(substr_count($body, '/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10"') == 4);
+        $this->assertEquals(
+            4,
+            substr_count($body, '/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10"')
+        );
 
         // sorting links
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/seriesnumber/sortorder/asc', $body);
-        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/seriesnumber/sortorder/desc', $body);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/year/sortorder/asc', $body);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/year/sortorder/desc', $body);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/title/sortorder/asc', $body);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/title/sortorder/desc', $body);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/asc', $body);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/desc', $body);
+        $commonBase = '/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10';
+        $this->assertContains($commonBase . '/sortfield/seriesnumber/sortorder/asc', $body);
+        $this->assertNotContains($commonBase . '/sortfield/seriesnumber/sortorder/desc', $body);
+        $this->assertContains($commonBase . '/sortfield/year/sortorder/asc', $body);
+        $this->assertContains($commonBase . '/sortfield/year/sortorder/desc', $body);
+        $this->assertContains($commonBase . '/sortfield/title/sortorder/asc', $body);
+        $this->assertContains($commonBase . '/sortfield/title/sortorder/desc', $body);
+        $this->assertContains($commonBase . '/sortfield/author/sortorder/asc', $body);
+        $this->assertContains($commonBase . '/sortfield/author/sortorder/desc', $body);
     }
 
     public function testSeriesSearchPaginationWorks()
@@ -573,7 +586,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
         // pagination links
         $count = substr_count($body, '/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10"');
-        $this->assertTrue($count == 4);
+        $this->assertEquals(4, $count);
     }
 
     public function testSeriesSearchRespectsDefaultDocSortOrder()
@@ -587,7 +600,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/desc" ', $responseBody);
 
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = [146, 93, 92, 94, 91];
+        $seriesIds    = [146, 93, 92, 94, 91];
         foreach ($seriesIds as $seriesId) {
             preg_match("/\/frontdoor\/index\/index.*\/docId\/$seriesId/", $responseBody, $matches, PREG_OFFSET_CAPTURE);
             $this->assertNotEmpty($matches, "Document $seriesId not found!");
@@ -606,7 +619,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/asc" ', $responseBody);
 
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = array_reverse([146, 93, 92, 94, 91]);
+        $seriesIds    = array_reverse([146, 93, 92, 94, 91]);
         foreach ($seriesIds as $seriesId) {
             preg_match("/\/frontdoor\/index\/index.*\/docId\/$seriesId/", $responseBody, $matches, PREG_OFFSET_CAPTURE);
             $this->assertNotEmpty($matches, "Document $seriesId not found!");
@@ -685,8 +698,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
 
-        $id = Identifier::new();
-        $field = $id->getField('Type');
+        $id              = Identifier::new();
+        $field           = $id->getField('Type');
         $identifierTypes = array_keys($field->getDefault());
 
         foreach ($identifierTypes as $identifierType) {
@@ -709,6 +722,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         }
     }
 
+    /**
+     * @return array[]
+     */
     public function catchAllSearchConsidersAllPersonsProvider()
     {
         return [
@@ -719,13 +735,17 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             ['personreferee-opusvier-2484', 'referee', true],
             ['personother-opusvier-2484', 'other', true],
             ['persontranslator-opusvier-2484', 'translator', true],
-            ['personsubmitter-opusvier-2484', 'submitter', false]
+            ['personsubmitter-opusvier-2484', 'submitter', false],
         ];
     }
 
     /**
      * test for OPUSVIER-2484 and regression test for OPUSVIER-2539
+     *
      * @dataProvider catchAllSearchConsidersAllPersonsProvider
+     * @param string $lastName
+     * @param string $role
+     * @param bool   $contains
      */
     public function testCatchAllSearchConsidersAllPersons($lastName, $role, $contains)
     {
@@ -786,7 +806,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     public function testFacetLimitWithGlobalSetting()
     {
         // manipulate application configuration
-        $config = $this->getConfig();
+        $config                                = $this->getConfig();
         $config->search->facet->default->limit = '5';
 
         $numOfSubjects = 10;
@@ -808,10 +828,10 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             'searchengine' => [
                 'solr' => [
                     'facetlimit' => [
-                        'subject' => '5'
-                    ]
-                ]
-            ]
+                        'subject' => '5',
+                    ],
+                ],
+            ],
         ]);
 
         $numOfSubjects = 10;
@@ -838,6 +858,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertXPath('//div[@id="institute_facet"]//a[contains(@href, "#institute_facet")]');
     }
 
+    /**
+     * @param int $numOfSubjects
+     * @return DocumentInterface
+     * @throws ModelException
+     */
     private function addSampleDocWithMultipleSubjects($numOfSubjects = 0)
     {
         $doc = $this->createTestDocument();
@@ -851,7 +876,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         for ($index = 0; $index < $numOfSubjects; $index++) {
             $subject = Subject::new();
             if ($index < 10) {
-                $subject->setValue('subject' . '0' . $index);
+                $subject->setValue('subject0' . $index);
             } else {
                 $subject->setValue('subject' . $index);
             }
@@ -870,10 +895,10 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             'searchengine' => [
                 'solr' => [
                     'sortcrit' => [
-                        'institute' => 'lexi'
-                    ]
-                ]
-            ]
+                        'institute' => 'lexi',
+                    ],
+                ],
+            ],
         ]);
 
         $this->dispatch('/solrsearch/index/search/searchtype/all');
@@ -890,7 +915,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             'Entwerfen von Schiffen und Schiffssicherheit M-6',
             'Fluiddynamik und Schiffstheorie M-8',
             'Geotechnik und Baubetrieb B-5',
-            'Hochfrequenztechnik E-3'];
+            'Hochfrequenztechnik E-3',
+        ];
 
         $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="institute_facet"');
 
@@ -906,18 +932,23 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             'Abwasserwirtschaft und Gewässerschutz B-2',
             'Bauwesen',
             'Biomechanik M-3',
-            'Verfahrenstechnik'];
+            'Verfahrenstechnik',
+        ];
         $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="institute_facet"');
     }
 
     public function testFacetSortForYearInverted()
     {
         $this->adjustConfiguration([
-            'search' => ['facet' => ['year' => [
-                'sort' => 'lexi',
-                'indexField' => 'published_year_inverted'
-            ]]],
-            'searchengine' => ['solr' => ['facets' => 'year,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute']]
+            'search'       => [
+                'facet' => [
+                    'year' => [
+                        'sort'       => 'lexi',
+                        'indexField' => 'published_year_inverted',
+                    ],
+                ],
+            ],
+            'searchengine' => ['solr' => ['facets' => 'year,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute']],
         ]);
 
         $this->dispatch('/solrsearch/index/search/searchtype/all');
@@ -932,7 +963,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             '2007',
             '2005',
             '2004',
-            '2003'
+            '2003',
         ];
 
         $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
@@ -952,18 +983,23 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             '1979',
             '1962',
             '1963',
-            '1975'
+            '1975',
         ];
 
         // Wenn es hier bei den Tests Probleme gibt AssumptionChecker für die Diagnose verwenden (in tests/support).
         $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
     }
 
+    /**
+     * @param string $response
+     * @param array  $searchStrings
+     * @param string $startString
+     */
     private function assertPositions($response, $searchStrings, $startString)
     {
         $startPos = strpos($response, $startString);
         $this->assertFalse($startPos === false);
-        $lastPos = $startPos;
+        $lastPos      = $startPos;
         $loopComplete = true;
         for ($i = 0; $i < 10; $i++) {
             $lastPos = strpos($response, '>' . $searchStrings[$i] . '</a>', $lastPos);
@@ -976,6 +1012,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertTrue($loopComplete);
     }
 
+    /**
+     * @return string
+     */
     private function getNumOfHits()
     {
         $document = new DOMDocument();
@@ -1119,10 +1158,12 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
         $this->adjustConfiguration([
-            'search' => ['facet' => [
-                'author_facet' => ['limit' => '3'],
-                'year' => ['limit' => '15']
-            ]]
+            'search' => [
+                'facet' => [
+                    'author_facet' => ['limit' => '3'],
+                    'year'         => ['limit' => '15'],
+                ],
+            ],
         ]);
         $this->dispatch('/solrsearch/index/search/searchtype/all/');
         $this->assertQueryContentContains("//div[@id='author_facet_facet']/div/a", ' + more');
@@ -1225,8 +1266,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->loginUser('admin', 'adminadmin');
 
         $this->adjustConfiguration([
-            'export' => ['stylesheet' => ['search' => 'example']],
-            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']]
+            'export'       => ['stylesheet' => ['search' => 'example']],
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '10']],
         ]);
 
         $this->dispatch('/solrsearch/index/search/searchtype/latest');
@@ -1277,7 +1318,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testEnableHideEmptyCollectionsForCollectionRoleMSC()
     {
-        $collRole = CollectionRole::fetchByName('msc');
+        $collRole             = CollectionRole::fetchByName('msc');
         $hideEmptyCollections = $collRole->getHideEmptyCollections();
         $collRole->setHideEmptyCollections(1);
         $collRole->store();
@@ -1293,7 +1334,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testDisableHideEmptyCollectionsForCollectionRoleMSC()
     {
-        $collRole = CollectionRole::fetchByName('msc');
+        $collRole             = CollectionRole::fetchByName('msc');
         $hideEmptyCollections = $collRole->getHideEmptyCollections();
         $collRole->setHideEmptyCollections(0);
         $collRole->store();
@@ -1307,6 +1348,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->assertContains('06-XX ORDER, LATTICES, ORDERED ALGEBRAIC STRUCTURES', $this->getResponse()->getBody());
     }
 
+    /**
+     * @return array
+     */
     public function robotsTestProvider()
     {
         return [
@@ -1317,18 +1361,20 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
             ['/solrsearch/browse/doctypes'],
             ['/home', null],
             ['/publish'],
-            ['/auth/login']
+            ['/auth/login'],
         ];
     }
 
     /**
      * @dataProvider robotsTestProvider
+     * @param string $uri
+     * @param string $result
      */
     public function testIndexRobotsNoindexNofollow($uri, $result = 'noindex, nofollow')
     {
         $this->dispatch($uri);
 
-        if (! is_null($result)) {
+        if ($result !== null) {
             $this->assertXpath("//meta[@name='robots' and @content='$result']");
         } else {
             $this->assertNotXpath('//meta[@name="robots"]');

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,25 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Solrsearch_Model_Search
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Solrsearch_Model_Search_BasicTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
     public function testCreateQueryBuilderInputFromRequest()
     {
         $request = $this->getRequest();
-        $request->setParams(['searchtype' => 'all',
-            'start' => '0',
-            'rows' => '1337',
-            'sortOrder' => 'desc']);
+        $request->setParams([
+            'searchtype' => 'all',
+            'start'      => '0',
+            'rows'       => '1337',
+            'sortOrder'  => 'desc',
+        ]);
 
         $queryBuilder = new Solrsearch_Model_Search_Basic();
 
@@ -65,7 +65,7 @@ class Solrsearch_Model_Search_BasicTest extends ControllerTestCase
         $request->setParams(['searchtype' => 'all']);
 
         $queryBuilder = new Solrsearch_Model_Search_Basic();
-        $result = $queryBuilder->createQueryBuilderInputFromRequest($request);
+        $result       = $queryBuilder->createQueryBuilderInputFromRequest($request);
 
         $this->assertEquals($result['rows'], 1337);
     }

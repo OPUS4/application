@@ -31,13 +31,14 @@
 
 class Solrsearch_Model_Search_AdvancedTest extends ControllerTestCase
 {
+    /** @var Solrsearch_Model_Search_Advanced */
+    private $search;
 
-    private $_search;
-
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
-        $this->_search = new Solrsearch_Model_Search_Advanced();
+        $this->search = new Solrsearch_Model_Search_Advanced();
     }
 
     public function testPerformSearch()

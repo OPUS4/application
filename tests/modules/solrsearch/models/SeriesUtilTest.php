@@ -33,11 +33,13 @@ use Opus\Common\Series;
 
 class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var array */
     private $visibilities = [];
 
+    /** @var Solrsearch_Model_SeriesUtil */
     private $model;
 
     public function setUp(): void
@@ -98,9 +100,9 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
         $this->adjustConfiguration([
             'browsing' => [
                 'series' => [
-                    'sortByTitle' => self::CONFIG_VALUE_TRUE
-                ]
-            ]
+                    'sortByTitle' => self::CONFIG_VALUE_TRUE,
+                ],
+            ],
         ]);
 
         $series = $this->model->getVisibleSeries();
