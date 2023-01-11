@@ -31,16 +31,19 @@
 
 use Opus\Common\CollectionRole;
 use Opus\Common\Model\NotFoundException;
+use Opus\Translate\Dao;
 
 class Application_Update_ConvertCollectionRoleTranslationsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
+    /** @var int */
     private $roleId;
 
-    public function tearDown(): void    {
-        if (! is_null($this->roleId)) {
+    public function tearDown(): void
+    {
+        if ($this->roleId !== null) {
             try {
                 $role = CollectionRole::get($this->roleId);
                 $role->delete();
@@ -48,7 +51,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
             }
         }
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
 
         parent::tearDown();
@@ -72,7 +75,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
 
         $role = CollectionRole::get($this->roleId);
 
-        $name = $role->getName();
+        $name    = $role->getName();
         $oaiName = $role->getOaiName();
 
         $this->assertEquals($oaiName, $name);
@@ -102,7 +105,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
 
         $manager->setTranslation("default_collection_role_$invalidName", [
             'en' => 'Translation EN',
-            'de' => 'Translation DE'
+            'de' => 'Translation DE',
         ], 'default');
 
         $update = new Application_Update_ConvertCollectionRoleTranslations();
@@ -111,7 +114,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
 
         $role = CollectionRole::get($this->roleId);
 
-        $name = $role->getName();
+        $name    = $role->getName();
         $oaiName = $role->getOaiName();
 
         $this->assertEquals($oaiName, $name);
@@ -120,7 +123,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
 
         $this->assertEquals([
             'en' => 'Translation EN',
-            'de' => 'Translation DE'
+            'de' => 'Translation DE',
         ], $translation['translations']);
 
         $this->assertFalse($manager->keyExists("default_collection_role_$invalidName"));
@@ -144,7 +147,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
 
         $role = CollectionRole::get($this->roleId);
 
-        $name = $role->getName();
+        $name    = $role->getName();
         $oaiName = $role->getOaiName();
 
         $this->assertEquals("ColRole{$this->roleId}", $name);
@@ -155,7 +158,7 @@ class Application_Update_ConvertCollectionRoleTranslationsTest extends Controlle
 
         $this->assertEquals([
             'en' => $invalidName,
-            'de' => $invalidName
+            'de' => $invalidName,
         ], $translation['translations']);
     }
 }

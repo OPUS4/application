@@ -29,11 +29,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Translate\Dao;
+
 class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var string */
     private $testPath;
 
     public function setUp(): void
@@ -48,11 +51,12 @@ class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
 
         $this->testPath = $path;
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         parent::tearDown();
     }
 
@@ -63,19 +67,19 @@ class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
         $tmxFile->fromArray([
             'test_admin_title' => [
                 'de' => 'Deutscher Titel',
-                'en' => 'English Title'
+                'en' => 'English Title',
             ],
             'test_description' => [
                 'de' => 'Beschreibung',
-                'en' => 'Description'
-            ]
+                'en' => 'Description',
+            ],
         ]);
 
         $filePath = $this->testPath . '/test.tmx';
 
         $tmxFile->save($filePath);
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
 
         // Check translations not in database
         $this->assertNull($database->getTranslation('test_admin_title'));
@@ -96,14 +100,14 @@ class Application_Update_ImportCustomTranslationsTest extends ControllerTestCase
 
         $this->assertEquals([
             'de' => 'Deutscher Titel',
-            'en' => 'English Title'
+            'en' => 'English Title',
         ], $translation);
 
         $translation = $database->getTranslation('test_description');
 
         $this->assertEquals([
             'de' => 'Beschreibung',
-            'en' => 'Description'
+            'en' => 'Description',
         ], $translation);
     }
 }
