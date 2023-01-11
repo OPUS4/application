@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Config;
 use Opus\Common\LoggingTrait;
+use Opus\Translate\Dao;
+use Opus\Translate\DatabaseAdapter;
 
 /**
  * Erweiterung von Zend_Translate, um Übersetzungsressourcen für Module zu laden.
@@ -45,71 +45,84 @@ use Opus\Common\LoggingTrait;
  * modules. Loading the translations for a module only when a request is directed at that module might not load all the
  * necessary translations if this module uses resources from another module that has not been loaded.
  */
-class Application_Translate extends \Zend_Translate
+class Application_Translate extends Zend_Translate
 {
-
     use LoggingTrait;
 
     /**
      * Schlüssel für Zend_Translate in Zend_Registry.
      */
-    const REGISTRY_KEY = 'Zend_Translate';
+    public const REGISTRY_KEY = 'Zend_Translate';
 
+    /** @var bool */
     private $loaded = false;
 
     /**
      * Logger.
+     *
      * @var Zend_Log
      */
-    private $_logger;
+    private $logger;
 
-    static private $instance;
+    /** @var self */
+    private static $instance;
 
     /**
      * Optionen für Zend_Translate.
      *
      * @var array
      */
-    private $_options = [
-        'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
-        'logPriority' => \Zend_Log::WARN,
-        'adapter' => 'tmx',
-        'locale' => 'en',
-        'clear' => false,
-        'scan' => \Zend_Translate::LOCALE_FILENAME,
-        'ignore' => '.',
-        'disableNotices' => true
+    private $options = [
+        'logMessage'     => "Unable to translate key '%message%' into locale '%locale%'",
+        'logPriority'    => Zend_Log::WARN,
+        'adapter'        => 'tmx',
+        'locale'         => 'en',
+        'clear'          => false,
+        'scan'           => Zend_Translate::LOCALE_FILENAME,
+        'ignore'         => '.',
+        'disableNotices' => true,
     ];
 
     /**
      * Konstruiert Klasse für Übersetzungen in OPUS Applikation.
+     *
+     * @param array|null $options
      */
     public function __construct($options = null)
     {
-        $options = (! is_null($options)) ? array_merge($this->getOptions(), $options) : $this->getOptions();
+        $options = $options !== null ? array_merge($this->getOptions(), $options) : $this->getOptions();
         parent::__construct($options);
     }
 
+    /**
+     * @return self
+     */
     public static function getInstance()
     {
-        if (is_null(self::$instance)) {
+        if (self::$instance === null) {
             self::$instance = new Application_Translate();
         }
 
         return self::$instance;
     }
 
+    /**
+     * @param self $instance
+     */
     public static function setInstance($instance)
     {
         self::$instance = $instance;
-        \Zend_Registry::set(self::REGISTRY_KEY, $instance);
+        Zend_Registry::set(self::REGISTRY_KEY, $instance);
     }
+
     /**
      * Loads all modules.
+     *
+     * @param bool $reload
      */
     public function loadModules($reload = false)
     {
-        if (! $this->loaded or $reload) {
+        if (! $this->loaded || $reload) {
             $modules = Application_Modules::getInstance()->getModules();
 
             foreach ($modules as $name => $module) {
@@ -130,12 +143,12 @@ class Application_Translate extends \Zend_Translate
     public function loadDatabase($reload = false)
     {
         // TODO use cache
-        $translate = new \Zend_Translate([
-            'adapter' => 'Opus\Translate\DatabaseAdapter',
-            'content' => 'all',
-            'locale' => 'en',
+        $translate = new Zend_Translate([
+            'adapter'        => DatabaseAdapter::class,
+            'content'        => 'all',
+            'locale'         => 'en',
             'disableNotices' => true,
-            'reload' => $reload
+            'reload'         => $reload,
         ]);
 
         $locales = Application_Configuration::getInstance()->getSupportedLanguages();
@@ -143,13 +156,16 @@ class Application_Translate extends \Zend_Translate
         foreach ($locales as $locale) {
             $this->addTranslation([
                 'content' => $translate,
-                'locale' => $locale
+                'locale'  => $locale,
             ]);
         }
 
         unset($translate); // TODO Garbage collection? Does it work?
     }
 
+    /**
+     * @param bool $reload
+     */
     public function loadTranslations($reload = false)
     {
         $this->loadModules($reload);
@@ -160,7 +176,8 @@ class Application_Translate extends \Zend_Translate
      * Lädt TMX Dateien aus einem Verzeichnis.
      *
      * @param string $directory Pfad zum Verzeichnis
-     * @param string $warnIfMissing Optionally warn in log file if folder is missing
+     * @param bool   $warnIfMissing Optionally warn in log file if folder is missing
+     * @param bool   $reload
      * @return boolean
      *
      * TODO better than supressing the warning would be for each module to register language directories in bootstrap
@@ -169,7 +186,7 @@ class Application_Translate extends \Zend_Translate
     {
         $path = realpath($directory);
 
-        if (($path === false) or (! is_dir($path)) or (! is_readable($path))) {
+        if (($path === false) || (! is_dir($path)) || (! is_readable($path))) {
             if ($warnIfMissing) {
                 $this->getLogger()->warn(__METHOD__ . " Directory '$directory' not found.");
             }
@@ -196,7 +213,7 @@ class Application_Translate extends \Zend_Translate
             // Otherwise there is a mechanism preventing repeated loading in the parent class.
             $options = array_merge([
                 'content' => $path . DIRECTORY_SEPARATOR . $file,
-                'reload' => $reload
+                'reload'  => $reload,
             ], $this->getOptions());
 
             $this->addTranslation($options);
@@ -207,32 +224,31 @@ class Application_Translate extends \Zend_Translate
 
     /**
      * Liefert die Optionen für Zend_Translate.
+     *
      * @return array
      */
     public function getOptions()
     {
-        $options = array_merge($this->_options, [
-            'log' => $this->getLogger(),
-            'logUntranslated' => $this->isLogUntranslatedEnabled()
+        return array_merge($this->options, [
+            'log'             => $this->getLogger(),
+            'logUntranslated' => $this->isLogUntranslatedEnabled(),
         ]);
-        return $options;
     }
 
     /**
-     *
      * @return bool
      */
     public function isLogUntranslatedEnabled()
     {
         $config = Config::get();
-        return (isset($config->log->untranslated)) ?
+        return isset($config->log->untranslated) ?
             filter_var($config->log->untranslated, FILTER_VALIDATE_BOOLEAN) : false;
     }
 
     /**
      * Translates language names utilizing PHP functions.
      *
-     * @param $langId
+     * @param string $langId
      * @return string
      */
     public function translateLanguage($langId)
@@ -247,7 +263,9 @@ class Application_Translate extends \Zend_Translate
 
     /**
      * Returns translations for a key from TMX or database source.
-     * @param $key
+     *
+     * @param string $key
+     * @return array
      *
      * TODO can this be done without knowing the sources?
      */
@@ -262,7 +280,7 @@ class Application_Translate extends \Zend_Translate
         $translations = [];
 
         foreach ($languages as $language) {
-            $translation = $this->translate($key, $language);
+            $translation             = $this->translate($key, $language);
             $translations[$language] = $translation;
         }
 
@@ -271,12 +289,14 @@ class Application_Translate extends \Zend_Translate
 
     /**
      * Stores custom translations for a key.
-     * @param $key
-     * @param $translations
+     *
+     * @param string $key
+     * @param array  $translations
+     * @param string $module
      */
     public function setTranslations($key, $translations, $module = 'default')
     {
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
 
         $database->setTranslation($key, $translations, $module);
 
@@ -290,12 +310,12 @@ class Application_Translate extends \Zend_Translate
      */
     public function clear()
     {
-        $translate = new \Zend_Translate([
-            'adapter' => 'array',
-            'content' => ['en' => [], 'de' => []],
-            'locale' => 'en',
+        $translate = new Zend_Translate([
+            'adapter'        => 'array',
+            'content'        => ['en' => [], 'de' => []],
+            'locale'         => 'en',
             'disableNotices' => true,
-            'clear' => true
+            'clear'          => true,
         ]);
 
         $this->addTranslation($translate);
@@ -303,6 +323,9 @@ class Application_Translate extends \Zend_Translate
         $translate = null;
     }
 
+    /**
+     * @return array
+     */
     public function getTmxFiles()
     {
         return $this->files;

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -45,18 +43,19 @@ use Opus\Database;
  */
 class Application_Update extends Application_Update_PluginAbstract
 {
-
     /**
      * Path to update scripts.
+     *
      * @var string
      */
-    private $_scriptsPath = '/scripts/update';
+    private $scriptsPath = '/scripts/update';
 
     /**
      * Enables confirmation before an update step is executed.
-     * @var boolean
+     *
+     * @var bool
      */
-    private $_confirmSteps = false;
+    private $confirmSteps = false;
 
     /**
      * Bootstrap Zend_Application for update process.
@@ -65,7 +64,7 @@ class Application_Update extends Application_Update_PluginAbstract
     {
         $configFiles = [
             APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini'
+            APPLICATION_PATH . '/application/configs/config.ini',
         ];
 
         $consoleIniPath = APPLICATION_PATH . '/application/configs/console.ini';
@@ -74,15 +73,15 @@ class Application_Update extends Application_Update_PluginAbstract
             $configFiles[] = $consoleIniPath;
         }
 
-        $application = new \Zend_Application(APPLICATION_ENV, ["config" => $configFiles]);
+        $application = new Zend_Application(APPLICATION_ENV, ["config" => $configFiles]);
 
         // setup logging for updates
         $options = $application->mergeOptions($application->getOptions(), [
-            'log' => [
+            'log'              => [
                 'filename' => 'update.log',
-                'level' => 'INFO'
+                'level'    => 'INFO',
             ],
-            'updateInProgress' => true
+            'updateInProgress' => true,
         ]);
 
         $application->setOptions($options);
@@ -92,7 +91,8 @@ class Application_Update extends Application_Update_PluginAbstract
 
     /**
      * Parses command line arguments and configures update.
-     * @param $arguments
+     *
+     * @param array $arguments
      */
     public function processArguments($arguments)
     {
@@ -163,7 +163,7 @@ class Application_Update extends Application_Update_PluginAbstract
             }
 
             // even if a step is skipped the version is updated - scripts can be executed manually again
-            $number = ( int )substr($basename, 0, 3);
+            $number = (int) substr($basename, 0, 3);
 
             $this->setVersion($number);
         }
@@ -175,20 +175,20 @@ class Application_Update extends Application_Update_PluginAbstract
      * If not the script is skipped, but the version is updated anyway. This is meant as a way
      * to skip update steps if necessary, while still updating to the current version.
      *
-     * @param $script
+     * @param string $name
+     * @return bool
      */
     public function confirmRunningScript($name)
     {
         $answer = readline("Run script '$name' [Y|n]?");
 
-        return strlen(trim($answer)) == 0 || $answer === 'Y' || $answer === 'y';
+        return strlen(trim($answer)) === 0 || $answer === 'Y' || $answer === 'y';
     }
 
     /**
      * Execute update script.
      *
-     * @param $script
-     *
+     * @param string $script
      * @throws Application_Update_Exception
      */
     public function runScript($script)
@@ -219,35 +219,36 @@ class Application_Update extends Application_Update_PluginAbstract
      *
      * Returns all PHP files starting with a three digit number.
      *
-     * @param $version Current version of the installation
-     * @param $targetVersion Target version of update
+     * @param int|null $version Current version of the installation
+     * @param int|null $targetVersion Target version of update
+     * @return string[]
      *
      * TODO only accepts all lowercase '.php'
      */
     public function getUpdateScripts($version = null, $targetVersion = null)
     {
-        $files = new DirectoryIterator(APPLICATION_PATH . $this->_scriptsPath);
+        $files = new DirectoryIterator(APPLICATION_PATH . $this->scriptsPath);
 
         $updateScripts = [];
 
         foreach ($files as $file) {
             $filename = $file->getBasename();
-            if (strrchr($filename, '.') == '.php' && preg_match('/^\d{3}-.*/', $filename)) {
+            if (strrchr($filename, '.') === '.php' && preg_match('/^\d{3}-.*/', $filename)) {
                 $updateScripts[] = $file->getPathname();
             }
         }
 
-        if (! is_null($version)) {
+        if ($version !== null) {
             $updateScripts = array_filter($updateScripts, function ($value) use ($version) {
                 $number = substr(basename($value), 0, 3);
-                return ($number > $version);
+                return $number > $version;
             });
         }
 
-        if (! is_null($targetVersion)) {
+        if ($targetVersion !== null) {
             $updateScripts = array_filter($updateScripts, function ($value) use ($targetVersion) {
                 $number = substr(basename($value), 0, 3);
-                return ($number <= $targetVersion);
+                return $number <= $targetVersion;
             });
         }
 
@@ -261,7 +262,7 @@ class Application_Update extends Application_Update_PluginAbstract
      *
      * This version is not the release version, but an internal version number used to controll updates.
      *
-     * @return null
+     * @return string|null
      */
     public function getVersion()
     {
@@ -277,7 +278,7 @@ class Application_Update extends Application_Update_PluginAbstract
             $result = $pdo->query($sql)->fetch();
 
             if (isset($result['version'])) {
-                $version = ( int )$result['version'];
+                $version = (int) $result['version'];
             }
         } catch (PDOException $pdoex) {
             // TODO logging
@@ -291,13 +292,13 @@ class Application_Update extends Application_Update_PluginAbstract
      *
      * This version is the internal version used for controlling updates and not the release version.
      *
-     * @param $version int
+     * @param int $version
      *
      * TODO escaping $version before logging?
      */
     public function setVersion($version)
     {
-        if (! is_int($version) and ! ctype_digit($version)) {
+        if (! is_int($version) && ! ctype_digit($version)) {
             $this->log("Cannot set OPUS version '$version'.");
             return;
         }
@@ -314,19 +315,21 @@ class Application_Update extends Application_Update_PluginAbstract
 
     /**
      * Sets if every update step should be confirmed before running.
-     * @param $enabled
+     *
+     * @param bool $enabled
      */
     public function setConfirmSteps($enabled)
     {
-        $this->_confirmSteps = $enabled;
+        $this->confirmSteps = $enabled;
     }
 
     /**
      * Returns current setting for confirming update steps.
+     *
      * @return bool
      */
     public function getConfirmSteps()
     {
-        return $this->_confirmSteps;
+        return $this->confirmSteps;
     }
 }

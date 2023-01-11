@@ -33,7 +33,6 @@ use Opus\Search\SearchException;
 
 class Application_SearchExceptionTest extends ControllerTestCase
 {
-
     public function testConstructForServerUnreachable()
     {
         $cause = new SearchException('test', SearchException::SERVER_UNREACHABLE);

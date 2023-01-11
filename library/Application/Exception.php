@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,30 +25,33 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application
- * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Application_Exception
- *
  * TODO NAMESPACE change name
  */
-class Application_Exception extends \Exception
+class Application_Exception extends Exception
 {
+    /** @var int */
+    protected $httpResponseCode;
 
-    protected $_httpResponseCode = null;
-
+    /**
+     * @param int $code
+     * @return $this;
+     */
     public function setHttpResponseCode($code)
     {
-        $this->_httpResponseCode = $code;
+        $this->httpResponseCode = $code;
+        return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getHttpResponseCode()
     {
-        return $this->_httpResponseCode;
+        return $this->httpResponseCode;
     }
 }
