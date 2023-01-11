@@ -31,7 +31,7 @@
 
 class Application_Security_HttpAuthResolverTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function setUp(): void

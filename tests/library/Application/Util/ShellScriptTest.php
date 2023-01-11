@@ -31,7 +31,7 @@
 
 class Application_Util_ShellScriptTest extends ControllerTestCase
 {
-
+    /** @var string */
     private $scriptPath;
 
     public function setUp(): void

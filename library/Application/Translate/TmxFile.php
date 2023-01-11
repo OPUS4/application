@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,11 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -58,7 +55,7 @@ class Application_Translate_TmxFile
      * template for new tmx files
      */
 
-    const TEMPLATE = '<?xml version="1.0" encoding="UTF-8"?>
+    public const TEMPLATE = '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de"
@@ -70,9 +67,12 @@ class Application_Translate_TmxFile
      * Internal representation of the file
      *
      * TODO change internal storage to allow for additional attributes
+     *
+     * @var array
      */
     private $data = [];
 
+    /** @var array */
     private $extraData = [];
 
     /**
@@ -91,7 +91,7 @@ class Application_Translate_TmxFile
     /**
      * Export as DomDocument object.
      *
-     * @return DomDocument
+     * @return DOMDocument
      */
     public function getDomDocument()
     {
@@ -128,7 +128,8 @@ class Application_Translate_TmxFile
      * multiple times. If keys exist in more than
      * one file, the last key overwrites the previously loaded.
      *
-     * @param $fileName full path of file to load
+     * @param string $fileName full path of file to load
+     * @param bool   $addCdataWrapper
      * @return bool true on success or false on failure
      */
     public function load($fileName, $addCdataWrapper = true)
@@ -140,25 +141,32 @@ class Application_Translate_TmxFile
             $tmx = preg_replace('/(?<!]]>)<\/seg>/i', ']]></seg>', $tmx);
         }
 
-        $result = $this->loadWithDom($tmx);
-        return $result;
+        return $this->loadWithDom($tmx);
     }
 
+    /**
+     * @param string $tmx
+     * @return bool|DOMDocument
+     */
     protected function loadWithDom($tmx)
     {
-        $dom = new DOMDocument();
+        $dom                     = new DOMDocument();
         $dom->substituteEntities = false;
-        $result = @$dom->loadXML($tmx); // supress warning since return value is checked
+        $result                  = @$dom->loadXML($tmx); // supress warning since return value is checked
         if ($result) {
-            $newData = $this->domToArray($dom);
+            $newData    = $this->domToArray($dom);
             $this->data = array_replace_recursive($this->data, $newData);
         }
         return $result;
     }
 
+    /**
+     * @param string $tmx
+     * @return true
+     */
     protected function loadWithParser($tmx)
     {
-        $parser = new Application_Translate_TmxParser();
+        $parser       = new Application_Translate_TmxParser();
         $translations = $parser->parse($tmx);
 
         /* foreach ($translations as $key => $data) {
@@ -172,23 +180,23 @@ class Application_Translate_TmxFile
     /**
      * Save to file
      *
-     * @param $fileName string Full path of file to save
+     * @param string $fileName Full path of file to save
      * @return bool true on success or false on failure
      */
     public function save($fileName)
     {
         $domDocument = $this->arrayToDom($this->data);
-        return ($domDocument->save($fileName) !== false);
+        return $domDocument->save($fileName) !== false;
     }
 
     /**
      * Set a segment value for the given translation.
      * If either the unit or the translation is not yet set, it will be added.
      *
-     * @param string $key Key identifier of translation
-     * @param string $language Language identifier of translation
-     * @param string $text Value to set for translation
-     *
+     * @param string      $key Key identifier of translation
+     * @param string      $language Language identifier of translation
+     * @param string      $text Value to set for translation
+     * @param null|string $module
      * @return self fluent Interface
      */
     public function setTranslation($key, $language, $text, $module = null)
@@ -203,7 +211,7 @@ class Application_Translate_TmxFile
 
         $this->fromArray($tmxArray);
 
-        if (! is_null($module)) {
+        if ($module !== null) {
             $this->setModuleForKey($key, $module);
         }
 
@@ -213,13 +221,13 @@ class Application_Translate_TmxFile
     /**
      * Checks if a translation exists.
      *
-     * @param $key string Translation key
-     * @param null $language Optionally what language to look for
+     * @param string      $key Translation key
+     * @param string|null $language Optionally what language to look for
      * @return bool
      */
     public function hasTranslation($key, $language = null)
     {
-        if (is_null($language)) {
+        if ($language === null) {
             return isset($this->data[$key]);
         } else {
             return isset($this->data[$key][$language]);
@@ -232,8 +240,8 @@ class Application_Translate_TmxFile
      * TODO find by key?
      * TODO find by content?
      *
-     * @param $needle
-     * @param null $language
+     * @param string      $needle
+     * @param string|null $language
      */
     public function findTranslation($needle, $language = null)
     {
@@ -250,13 +258,17 @@ class Application_Translate_TmxFile
     /**
      * Removes entry from translation file.
      *
-     * @param $key string Translation key
+     * @param string $key Translation key
      */
     public function removeTranslation($key)
     {
         unset($this->data[$key]);
     }
 
+    /**
+     * @param string $key
+     * @param string $module
+     */
     public function setModuleForKey($key, $module)
     {
         if (! is_array($this->extraData)) {
@@ -270,6 +282,10 @@ class Application_Translate_TmxFile
         $this->extraData[$key]['module'] = $module;
     }
 
+    /**
+     * @param string $key
+     * @return array|null
+     */
     public function getModuleForKey($key)
     {
         if (isset($this->extraData[$key]['module'])) {
@@ -282,7 +298,7 @@ class Application_Translate_TmxFile
     /**
      * Converts TMX DOM document to array structure.
      *
-     * @param $domDocument
+     * @param DOMDocument $domDocument
      * @return array
      */
     protected function domToArray($domDocument)
@@ -292,18 +308,18 @@ class Application_Translate_TmxFile
         $translationUnits = [];
 
         foreach ($tuElements as $tu) {
-            $key = $tu->attributes->getNamedItem('tuid')->textContent;
+            $key                    = $tu->attributes->getNamedItem('tuid')->textContent;
             $translationUnits[$key] = [];
 
             $module = $tu->attributes->getNamedItem('creationtool');
-            if (! is_null($module)) {
+            if ($module !== null) {
                 $this->setModuleForKey($key, $module->nodeValue);
             }
 
             // process language entries (TUV-elements)
             foreach ($tu->getElementsByTagName('tuv') as $child) {
-                $lang = $child->attributes->getNamedItem('lang')->nodeValue;
-                $translation = $child->getElementsByTagName('seg')->item(0)->nodeValue;
+                $lang                          = $child->attributes->getNamedItem('lang')->nodeValue;
+                $translation                   = $child->getElementsByTagName('seg')->item(0)->nodeValue;
                 $translationUnits[$key][$lang] = $translation;
             }
         }
@@ -313,7 +329,7 @@ class Application_Translate_TmxFile
     /**
      * Converts array structure to TMX DOM document.
      *
-     * @param $array
+     * @param array $array
      * @return DOMDocument
      */
     protected function arrayToDom($array)
@@ -321,7 +337,7 @@ class Application_Translate_TmxFile
         $dom = new DOMDocument();
 
         $dom->preserveWhiteSpace = false;
-        $dom->formatOutput = true;
+        $dom->formatOutput       = true;
         $dom->substituteEntities = false;
 
         $dom->loadXML(self::TEMPLATE);
@@ -333,14 +349,14 @@ class Application_Translate_TmxFile
             $tuElement->setAttribute('tuid', $unitName);
             $tuElement->setAttribute('creationtool', $module);
             $bodyElement = $dom->getElementsByTagName('body')->item(0);
-            $tuNode = $bodyElement->appendChild($tuElement);
+            $tuNode      = $bodyElement->appendChild($tuElement);
             foreach ($variants as $lang => $text) {
                 $tuvElement = $dom->createElement('tuv');
                 $tuvElement->setAttribute('xml:lang', $lang);
                 $segElement = $dom->createElement('seg');
-                $tuvNode = $tuNode->appendChild($tuvElement);
-                $segNode = $tuvNode->appendChild($segElement);
-                $textNode = $dom->createCDATASection($text);
+                $tuvNode    = $tuNode->appendChild($tuvElement);
+                $segNode    = $tuvNode->appendChild($segElement);
+                $textNode   = $dom->createCDATASection($text);
                 $segNode->appendChild($textNode);
             }
         }

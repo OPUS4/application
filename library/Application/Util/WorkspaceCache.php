@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,24 +25,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Util
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * TODO maybe merge with a Workspace or Mainenance or "whatever" class
  */
 
+/**
+ * TODO maybe merge with a Workspace or Mainenance or "whatever" class
+ */
 class Application_Util_WorkspaceCache
 {
-
     /**
      * Remove all translation cache files.
      */
     public function clearTranslations()
     {
-        $files = new \DirectoryIterator(Application_Configuration::getInstance()->getWorkspacePath() . '/cache');
+        $files = new DirectoryIterator(Application_Configuration::getInstance()->getWorkspacePath() . '/cache');
 
         foreach ($files as $file) {
             $basename = $file->getBasename();

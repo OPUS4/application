@@ -31,7 +31,7 @@
 
 class Application_Security_AccessTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function setUp(): void

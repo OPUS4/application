@@ -36,9 +36,8 @@ use Opus\Common\Security\SecurityException;
 /**
  * HTTP auth resolver using OPUS accounts.
  */
-class Application_Security_HttpAuthResolver implements \Zend_Auth_Adapter_Http_Resolver_Interface
+class Application_Security_HttpAuthResolver implements Zend_Auth_Adapter_Http_Resolver_Interface
 {
-
     /**
      * Returns password for user from database.
      *

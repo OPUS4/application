@@ -30,30 +30,25 @@
  */
 
 use Opus\Common\DocumentInterface;
-use Opus\Model\Xml;
-use Opus\Model\Xml\Version1;
 use Opus\Common\Repository;
 use Opus\Common\Security\Realm;
+use Opus\Model\Xml;
+use Opus\Model\Xml\Version1;
 
 class Application_Util_Document
 {
+    /** @var DocumentInterface */
+    private $document;
 
     /**
-     *
-     * @var DocumentInterface
-     */
-    private $_document;
-
-    /**
-     *
      * @param DocumentInterface $document
      * @throws Application_Exception
      */
     public function __construct($document)
     {
-        $this->_document = $document;
+        $this->document = $document;
         if (! $this->checkPermission()) {
-            throw new Application_Exception('document access for id ' . $this->_document->getId() . ' not allowed');
+            throw new Application_Exception('document access for id ' . $this->document->getId() . ' not allowed');
         }
     }
 
@@ -62,11 +57,11 @@ class Application_Util_Document
      */
     private function checkPermission()
     {
-        if ($this->_document->getServerState() === 'published') {
+        if ($this->document->getServerState() === 'published') {
             return true;
         }
-        $accessControl = \Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
-        return Realm::getInstance()->checkDocument($this->_document->getId())
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        return Realm::getInstance()->checkDocument($this->document->getId())
                 || $accessControl->accessAllowed('documents');
     }
 
@@ -79,9 +74,9 @@ class Application_Util_Document
         $cache = Repository::getInstance()->getDocumentXmlCache();
 
         $xmlModel = new Xml();
-        $xmlModel->setModel($this->_document);
+        $xmlModel->setModel($this->document);
         $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
-        $xmlModel->setStrategy(new Version1);
+        $xmlModel->setStrategy(new Version1());
         if ($useCache) {
               $xmlModel->setXmlCache($cache);
         }

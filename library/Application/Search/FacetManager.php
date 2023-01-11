@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,25 +25,23 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Search
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Application_Search_FacetManager
  * TODO allow adding search path for types
  */
 class Application_Search_FacetManager
 {
-
+    /** @var Zend_Config */
     private $config;
-
 
     /**
      * TODO need to get limit?
+     *
+     * @param string $name
+     * @return Application_Search_Facet
      */
     public function getFacet($name)
     {
@@ -61,18 +60,21 @@ class Application_Search_FacetManager
                 $type = "Application_Search_Facet_$type";
             }
         } else {
-            $type = 'Application_Search_Facet';
+            $type = Application_Search_Facet::class;
         }
 
         if (class_exists($type)) {
             $facet = new $type($name, $config->toArray());
-        } else {
-            // TODO handle error
         }
+        // TODO BUG handle class does not exist error
 
         return $facet;
     }
 
+    /**
+     * @param string $name
+     * @return Zend_Config
+     */
     public function getFacetConfig($name)
     {
         // replace dot with dash because dots have a meaning in INI files
@@ -82,7 +84,7 @@ class Application_Search_FacetManager
         // cache configuration
         $config = $this->getConfig();
 
-        $default = new \Zend_Config($config->search->facet->default->toArray(), true);
+        $default = new Zend_Config($config->search->facet->default->toArray(), true);
 
         if (isset($config->search->facet->$name)) {
             $facetConfig = $default->merge($config->search->facet->$name);
@@ -93,9 +95,12 @@ class Application_Search_FacetManager
         return $facetConfig;
     }
 
+    /**
+     * @return Zend_Config
+     */
     public function getConfig()
     {
-        if (is_null($this->config)) {
+        if ($this->config === null) {
             $this->config = Application_Configuration::getInstance()->getConfig();
         }
         return $this->config;
@@ -103,6 +108,8 @@ class Application_Search_FacetManager
 
     /**
      * TODO overlaps with Opus\Search\Config
+     *
+     * @return array
      */
     public function getActiveFacets()
     {
@@ -120,7 +127,7 @@ class Application_Search_FacetManager
         if (in_array('year_inverted', $facets)) {
             $temp = array_flip($facets);
             unset($temp['year_inverted']);
-            $facets = array_flip($facets);
+            $facets   = array_flip($facets);
             $facets[] = 'year';
         }
 

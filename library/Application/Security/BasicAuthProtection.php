@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,27 +25,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Security
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_Security_BasicAuthProtection
 {
-
+    /**
+     * @param Zend_Controller_Request_Http  $request
+     * @param Zend_Controller_Response_Http $response
+     * @return false|string
+     * @throws Zend_Auth_Adapter_Exception
+     */
     public static function accessAllowed($request, $response)
     {
         $adapter = new Application_Security_HttpAuthAdapter([
             'accept_schemes' => 'basic',
-            'realm' => 'opus-sword'
+            'realm'          => 'opus-sword',
         ]);
 
         $adapter->setBasicResolver(new Application_Security_HttpAuthResolver());
         $adapter->setRequest($request);
         $adapter->setResponse($response);
 
-        $auth = \Zend_Auth::getInstance();
+        $auth   = Zend_Auth::getInstance();
         $result = $auth->authenticate($adapter);
 
         if (! $result->isValid()) {
