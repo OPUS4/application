@@ -31,9 +31,8 @@
 
 use Opus\Common\Security\Realm;
 
-class Application_View_Helper_FileAccessAllowed extends \Zend_View_Helper_Abstract
+class Application_View_Helper_FileAccessAllowed extends Zend_View_Helper_Abstract
 {
-
     /**
      * Checks if user has access to file,
      *
@@ -42,7 +41,7 @@ class Application_View_Helper_FileAccessAllowed extends \Zend_View_Helper_Abstra
      */
     public function fileAccessAllowed($fileId = null)
     {
-        if (is_null($fileId)) {
+        if ($fileId === null) {
             return false;
         }
 

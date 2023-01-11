@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,16 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function testRenderTranslationEditLink()
@@ -43,8 +41,8 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
         $html = $helper->translationEditLink('help_index_general');
 
         $this->assertEquals(
-            '<a id="help_index_general" href="/setup/language/edit/key/help_index_general/back/help">' .
-            '<i class="fas fa-edit"></i></a>',
+            '<a id="help_index_general" href="/setup/language/edit/key/help_index_general/back/help">'
+            . '<i class="fas fa-edit"></i></a>',
             $html
         );
     }
@@ -52,7 +50,7 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
     public function testRenderOnlyIfSetupAccess()
     {
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,help']]]
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,help']]],
         ]);
 
         $helper = $this->getHelper();
@@ -68,8 +66,8 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
 
         $html = $helper->translationEditLink('help_index_general');
         $this->assertEquals(
-            '<a id="help_index_general" href="/setup/language/edit/key/help_index_general/back/help">' .
-            '<i class="fas fa-edit"></i></a>',
+            '<a id="help_index_general" href="/setup/language/edit/key/help_index_general/back/help">'
+            . '<i class="fas fa-edit"></i></a>',
             $html
         );
     }
@@ -77,7 +75,7 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
     public function testRenderOnlyIfKeyEditable()
     {
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => 'default']]]
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default']]],
         ]);
 
         $helper = $this->getHelper();
@@ -87,7 +85,7 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
         $this->assertEquals('', $html);
 
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,help']]]
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,help']]],
         ]);
 
         // TODO enable editing of help module
@@ -95,12 +93,15 @@ class Application_View_Helper_TranslationEditLinkTest extends ControllerTestCase
         $html = $helper->translationEditLink('help_index_general');
 
         $this->assertEquals(
-            '<a id="help_index_general" href="/setup/language/edit/key/help_index_general/back/help">' .
-            '<i class="fas fa-edit"></i></a>',
+            '<a id="help_index_general" href="/setup/language/edit/key/help_index_general/back/help">'
+            . '<i class="fas fa-edit"></i></a>',
             $html
         );
     }
 
+    /**
+     * @return Application_View_Helper_TranslationEditLink
+     */
     protected function getHelper()
     {
         $helper = new Application_View_Helper_TranslationEditLink();

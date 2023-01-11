@@ -30,21 +30,24 @@
  */
 
 use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 
 class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
-    private $_helper;
+    /** @var Application_View_Helper_AssignCollectionAllowed */
+    private $helper;
 
-    private $_role;
+    /** @var CollectionRoleInterface */
+    private $role;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_AssignCollectionAllowed();
+        $this->helper = new Application_View_Helper_AssignCollectionAllowed();
 
         $role = CollectionRole::new();
         $role->setName('TestCollectionRole');
@@ -53,99 +56,100 @@ class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTest
         $role->setDisplayFrontdoor('Name');
         $role->store();
 
-        $this->_role = $role;
+        $this->role = $role;
     }
 
-    public function tearDown(): void    {
-        $this->_role->delete();
+    public function tearDown(): void
+    {
+        $this->role->delete();
 
         parent::tearDown();
     }
 
     public function testRootCollectionNotAllowed()
     {
-        $this->assertFalse($this->_helper->assignCollectionAllowed([
+        $this->assertFalse($this->helper->assignCollectionAllowed([
             'isRoot' => true,
-            'role' => $this->_role
+            'role'   => $this->role,
         ]));
     }
 
     public function testRootCollectionAllowed()
     {
-        $this->_role->setAssignRoot(1);
-        $this->_role->setAssignLeavesOnly(0);
-        $this->_role->store();
+        $this->role->setAssignRoot(1);
+        $this->role->setAssignLeavesOnly(0);
+        $this->role->store();
 
-        $this->assertTrue($this->_helper->assignCollectionAllowed([
+        $this->assertTrue($this->helper->assignCollectionAllowed([
             'isRoot' => true,
-            'role' => $this->_role
+            'role'   => $this->role,
         ]));
     }
 
     public function testNonLeafCollectionNotAllowed()
     {
-        $this->_role->setAssignLeavesOnly(1);
-        $this->_role->store();
+        $this->role->setAssignLeavesOnly(1);
+        $this->role->store();
 
-        $this->assertFalse($this->_helper->assignCollectionAllowed([
+        $this->assertFalse($this->helper->assignCollectionAllowed([
             'isLeaf' => false,
-            'role' => $this->_role
+            'role'   => $this->role,
         ]));
     }
 
     public function testNonLeafCollectionAllowed()
     {
-        $this->_role->setAssignLeavesOnly(0);
-        $this->_role->store();
+        $this->role->setAssignLeavesOnly(0);
+        $this->role->store();
 
-        $this->assertTrue($this->_helper->assignCollectionAllowed([
+        $this->assertTrue($this->helper->assignCollectionAllowed([
             'isLeaf' => false,
-            'role' => $this->_role
+            'role'   => $this->role,
         ]));
     }
 
     public function testLeafCollectionAllowed()
     {
-        $this->_role->setAssignLeavesOnly(1);
-        $this->_role->store();
+        $this->role->setAssignLeavesOnly(1);
+        $this->role->store();
 
-        $this->assertTrue($this->_helper->assignCollectionAllowed([
+        $this->assertTrue($this->helper->assignCollectionAllowed([
             'isLeaf' => true,
-            'role' => $this->_role
+            'role'   => $this->role,
         ]));
 
-        $this->_role->setAssignLeavesOnly(0);
-        $this->_role->store();
+        $this->role->setAssignLeavesOnly(0);
+        $this->role->store();
 
-        $this->assertTrue($this->_helper->assignCollectionAllowed([
+        $this->assertTrue($this->helper->assignCollectionAllowed([
             'isLeaf' => true,
-            'role' => $this->_role
+            'role'   => $this->role,
         ]));
     }
 
     public function testRootNotAllowedIfNotLeafAndLeavesOnly()
     {
-        $this->_role->setAssignRoot(1);
-        $this->_role->setAssignLeavesOnly(1);
-        $this->_role->store();
+        $this->role->setAssignRoot(1);
+        $this->role->setAssignLeavesOnly(1);
+        $this->role->store();
 
-        $this->assertFalse($this->_helper->assignCollectionAllowed([
+        $this->assertFalse($this->helper->assignCollectionAllowed([
             'isRoot' => true,
             'isLeaf' => false,
-            'role' => $this->_role
+            'role'   => $this->role,
         ]));
     }
 
     public function testRootAllowedIfLeaf()
     {
-        $this->_role->setAssignRoot(1);
-        $this->_role->setAssignLeavesOnly(1);
-        $this->_role->store();
+        $this->role->setAssignRoot(1);
+        $this->role->setAssignLeavesOnly(1);
+        $this->role->store();
 
-        $this->assertTrue($this->_helper->assignCollectionAllowed([
+        $this->assertTrue($this->helper->assignCollectionAllowed([
             'isRoot' => true,
             'isLeaf' => true,
-            'role' => $this->_role
+            'role'   => $this->role,
         ]));
     }
 
@@ -154,47 +158,47 @@ class Application_View_Helper_AssignCollectionAllowedTest extends ControllerTest
      */
     public function testNotAllowedIfAlreadyAssigned()
     {
-        $this->_role->setAssignRoot(1);
-        $this->_role->setAssignLeavesOnly(0);
-        $root = $this->_role->addRootCollection();
-        $this->_role->store();
+        $this->role->setAssignRoot(1);
+        $this->role->setAssignLeavesOnly(0);
+        $root = $this->role->addRootCollection();
+        $this->role->store();
 
         $document = $this->createTestDocument();
-        $docId = $document->store();
+        $docId    = $document->store();
 
-        $this->assertTrue($this->_helper->assignCollectionAllowed([
-            'role' => $this->_role,
-            'collection' => $root
+        $this->assertTrue($this->helper->assignCollectionAllowed([
+            'role'       => $this->role,
+            'collection' => $root,
         ], $docId));
 
         $document->addCollection($root);
         $docId = $document->store();
 
-        $this->assertFalse($this->_helper->assignCollectionAllowed([
-            'role' => $this->_role,
-            'collection' => $root
+        $this->assertFalse($this->helper->assignCollectionAllowed([
+            'role'       => $this->role,
+            'collection' => $root,
         ], $docId));
     }
 
     public function testNotAllowedIfAlreadyAssignedUseAssignedOption()
     {
-        $this->_role->setAssignRoot(1);
-        $this->_role->setAssignLeavesOnly(0);
-        $root = $this->_role->addRootCollection();
-        $this->_role->store();
+        $this->role->setAssignRoot(1);
+        $this->role->setAssignLeavesOnly(0);
+        $root = $this->role->addRootCollection();
+        $this->role->store();
 
         $document = $this->createTestDocument();
-        $docId = $document->store();
+        $docId    = $document->store();
 
-        $this->assertTrue($this->_helper->assignCollectionAllowed([
-            'assigned' => false
+        $this->assertTrue($this->helper->assignCollectionAllowed([
+            'assigned' => false,
         ], $docId));
 
         $document->addCollection($root);
         $docId = $document->store();
 
-        $this->assertFalse($this->_helper->assignCollectionAllowed([
-            'assigned' => true
+        $this->assertFalse($this->helper->assignCollectionAllowed([
+            'assigned' => true,
         ], $docId));
     }
 }

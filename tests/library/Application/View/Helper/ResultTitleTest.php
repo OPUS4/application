@@ -29,11 +29,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\Result\ResultMatch;
+
 class Application_View_Helper_ResultTitleTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'translation'];
 
+    /** @var Application_View_Helper_ResultTitle */
     protected $helper;
 
     public function setUp(): void
@@ -41,7 +44,7 @@ class Application_View_Helper_ResultTitleTest extends ControllerTestCase
         parent::setUp();
 
         $this->helper = new Application_View_Helper_ResultTitle();
-        $view = $this->getView();
+        $view         = $this->getView();
         $this->helper->setView($view);
 
         $this->useEnglish();
@@ -57,7 +60,7 @@ class Application_View_Helper_ResultTitleTest extends ControllerTestCase
 
         $docId = $document->store();
 
-        $result = new \Opus\Search\Result\Match($docId);
+        $result                     = new ResultMatch($docId);
         $this->helper->view->result = $result;
 
         $output = $this->helper->resultTitle();
@@ -73,9 +76,9 @@ class Application_View_Helper_ResultTitleTest extends ControllerTestCase
         $this->application->bootstrap('translation');
 
         $document = $this->createTestDocument();
-        $docId = $document->store();
+        $docId    = $document->store();
 
-        $result = new \Opus\Search\Result\Match($docId);
+        $result                     = new ResultMatch($docId);
         $this->helper->view->result = $result;
 
         $output = $this->helper->resultTitle();
@@ -91,13 +94,13 @@ class Application_View_Helper_ResultTitleTest extends ControllerTestCase
         $this->application->bootstrap('translation');
 
         $document = $this->createTestDocument();
-        $docId = $document->store();
+        $docId    = $document->store();
 
-        $result = new \Opus\Search\Result\Match($docId);
+        $result                     = new ResultMatch($docId);
         $this->helper->view->result = $result;
 
-        $this->helper->view->start = 10;
-        $this->helper->view->rows = 20;
+        $this->helper->view->start      = 10;
+        $this->helper->view->rows       = 20;
         $this->helper->view->searchType = 'all';
 
         $output = $this->helper->resultTitle();

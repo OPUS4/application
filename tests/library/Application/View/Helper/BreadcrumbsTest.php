@@ -29,20 +29,19 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Class BreadcrumbsTest.
- *
- */
 class Application_View_Helper_BreadcrumbsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'mainMenu', 'navigation', 'translation'];
 
-    private $page = null;
+    /** @var Zend_Navigation_Page */
+    private $page;
 
-    private $breadcrumbs = null;
+    /** @var Application_View_Helper_Breadcrumbs */
+    private $breadcrumbs;
 
-    private $view = null;
+    /** @var Zend_View */
+    private $view;
 
     public function setUp(): void
     {

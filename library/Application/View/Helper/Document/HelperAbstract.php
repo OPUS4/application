@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View_Helper_Document_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\DocumentInterface;
 
 /**
  * Abstract base class for document focused view helpers.
@@ -38,45 +38,54 @@ abstract class Application_View_Helper_Document_HelperAbstract extends Applicati
 {
     /**
      * Determines if preferably the title matching the user interface language should be used.
+     *
      * @var bool
      */
-    private $_preferUserInterfaceLanguage = null;
+    private $preferUserInterfaceLanguage;
 
     /**
      * Returns if user interface language should be used.
+     *
      * @return bool true if user interface language should be used
      */
     public function isPreferUserInterfaceLanguage()
     {
         $config = $this->getConfig();
 
-        if (is_null($this->_preferUserInterfaceLanguage)) {
-            $this->_preferUserInterfaceLanguage = isset($config->search->result->display->preferUserInterfaceLanguage) &&
+        if ($this->preferUserInterfaceLanguage === null) {
+            $this->preferUserInterfaceLanguage = isset($config->search->result->display->preferUserInterfaceLanguage) &&
                 filter_var($config->search->result->display->preferUserInterfaceLanguage, FILTER_VALIDATE_BOOLEAN);
         }
 
-        return $this->_preferUserInterfaceLanguage;
+        return $this->preferUserInterfaceLanguage;
     }
 
     /**
      * Set if user interface language should be used.
-     * @param $enabled bool
+     *
+     * @param bool $enabled
      */
     public function setPreferUserInterfaceLanguage($enabled)
     {
-        $this->_preferUserInterfaceLanguage = filter_var($enabled, FILTER_VALIDATE_BOOLEAN);
+        $this->preferUserInterfaceLanguage = filter_var($enabled, FILTER_VALIDATE_BOOLEAN);
     }
 
+    /**
+     * @return mixed
+     */
     public function getResult()
     {
         return $this->view->result;
     }
 
+    /**
+     * @return null|DocumentInterface
+     */
     public function getDocument()
     {
         $result = $this->getResult();
 
-        if (! is_null($result)) {
+        if ($result !== null) {
             return $result->getDocument();
         } else {
             return null;

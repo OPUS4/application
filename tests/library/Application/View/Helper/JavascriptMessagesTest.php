@@ -31,9 +31,10 @@
 
 class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
+    /** @var Application_View_Helper_JavascriptMessages */
     private $helper;
 
     public function setUp(): void
@@ -52,11 +53,11 @@ class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
      */
     public function testJavascriptMessages()
     {
-        $Messages = [
+        $messages = [
             'key1' => 'message1',
-            'key2' => 'message2'
+            'key2' => 'message2',
         ];
-        $this->helper->setMessages($Messages);
+        $this->helper->setMessages($messages);
 
         $expectation = '        <script type="text/javascript">' . "\n"
             . '            opus4Messages["key1"] = "message1";' . "\n"
@@ -76,23 +77,23 @@ class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
         $this->helper->addMessage('identifierInvalidFormat');
         $this->helper->addMessage('testkey564'); // key must not exit for test to work
 
-        $Messages = [
-            'key1' => 'message1',
+        $messages = [
+            'key1'                    => 'message1',
             'identifierInvalidFormat' => "'%value%' is malformed.",
-            'testkey564' => 'testkey564'
+            'testkey564'              => 'testkey564',
         ];
 
-        $this->assertEquals($Messages, $this->helper->getMessages());
+        $this->assertEquals($messages, $this->helper->getMessages());
     }
 
     public function testSetMessages()
     {
-        $Messages = [
+        $messages = [
             'key1' => 'message1',
-            'key2' => 'message2'
+            'key2' => 'message2',
         ];
-        $this->helper->setMessages($Messages);
-        $this->assertEquals($Messages, $this->helper->getMessages());
+        $this->helper->setMessages($messages);
+        $this->assertEquals($messages, $this->helper->getMessages());
     }
 
     /**
@@ -102,7 +103,7 @@ class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
     public function testSetNullMessages()
     {
         $this->helper->setMessages(null);
-        $reality = $this->helper->javascriptMessages();
+        $reality     = $this->helper->javascriptMessages();
         $expectation = '        <script type="text/javascript">' . "\n"
             . '        </script>' . "\n";
         $this->assertEquals($expectation, $reality);

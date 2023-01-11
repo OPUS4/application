@@ -29,14 +29,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- *
- */
 class Application_View_Helper_IsAuthenticatedTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view'];
 
+    /** @var Application_View_Helper_IsAuthenticated */
     private $helper;
 
     public function setUp(): void

@@ -31,43 +31,43 @@
 
 class Application_View_Helper_HighlightTest extends ControllerTestCase
 {
-
-    private $_helper;
+    /** @var Application_View_Helper_Highlight */
+    private $helper;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_Highlight();
+        $this->helper = new Application_View_Helper_Highlight();
     }
 
     public function testHighlight()
     {
-        $this->assertEquals('Muster<b>mann</b>', $this->_helper->highlight('Mustermann', 'mann'));
+        $this->assertEquals('Muster<b>mann</b>', $this->helper->highlight('Mustermann', 'mann'));
     }
 
     public function testHighlightCaseInsensitive()
     {
-        $this->assertEquals('Muster<b>mann</b>', $this->_helper->highlight('Mustermann', 'MaNn'));
+        $this->assertEquals('Muster<b>mann</b>', $this->helper->highlight('Mustermann', 'MaNn'));
     }
 
     public function testHighlightMultiple()
     {
-        $this->assertEquals('<b>Man</b>n <b>man</b>n', $this->_helper->highlight('Mann mann', 'man'));
+        $this->assertEquals('<b>Man</b>n <b>man</b>n', $this->helper->highlight('Mann mann', 'man'));
     }
 
     public function testCustomWrapping()
     {
-        $this->assertEquals('<i>Muster</i>mann', $this->_helper->highlight('Mustermann', 'muster', '<i>', '</i>'));
+        $this->assertEquals('<i>Muster</i>mann', $this->helper->highlight('Mustermann', 'muster', '<i>', '</i>'));
     }
 
     public function testHighlightStringWithDelimiter()
     {
-        $this->assertEquals('<b>Mus/ter</b>mann', $this->_helper->highlight('Mus/termann', 'mus/ter'));
+        $this->assertEquals('<b>Mus/ter</b>mann', $this->helper->highlight('Mus/termann', 'mus/ter'));
     }
 
     public function testHighlightWithEmptyString()
     {
-        $this->assertEquals('Ján', $this->_helper->highlight('Ján', null));
+        $this->assertEquals('Ján', $this->helper->highlight('Ján', null));
     }
 }

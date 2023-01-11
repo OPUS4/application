@@ -30,10 +30,10 @@
  */
 
 use Opus\Common\Date;
+use Opus\Common\DnbInstitute;
 use Opus\Common\LoggingTrait;
 use Opus\Common\Model\FieldInterface;
 use Opus\Common\Model\ModelInterface;
-use Opus\Common\DnbInstitute;
 
 /**
  * View Helper for formatting field values.
@@ -43,34 +43,36 @@ use Opus\Common\DnbInstitute;
  * TODO Explore options to remove overlap with ShowModel view helper
  *      (ShowModel combines value formatting and layout).
  */
-class Application_View_Helper_FormatValue extends \Zend_View_Helper_Abstract
+class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
 {
-
     use LoggingTrait;
 
     /**
      * Controller helper for translations.
+     *
      * @var Application_Controller_Action_Helper_Translation
      */
-    private $_translation;
+    private $translation;
 
     /**
      * Controller helper for handling of dates.
+     *
      * @var Application_Controller_Action_Helper_Dates
      */
-    private $_dates;
+    private $dates;
 
     /**
      * Constructs Application_View_Helper_FormatValue.
      */
     public function __construct()
     {
-        $this->_translation = \Zend_Controller_Action_HelperBroker::getStaticHelper('Translation');
-        $this->_dates = \Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $this->translation = Zend_Controller_Action_HelperBroker::getStaticHelper('Translation');
+        $this->dates       = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
     }
 
     /**
      * Returns instance of the view helper.
+     *
      * @return Application_View_Helper_FormatValue
      */
     public function formatValue()
@@ -80,8 +82,9 @@ class Application_View_Helper_FormatValue extends \Zend_View_Helper_Abstract
 
     /**
      * Formats value that is instance of AbstractModel.
-     * @param AbstractModel $field
-     * @param string Name of model for field (default = null)
+     *
+     * @param FieldInterface $field
+     * @param string|null    $model
      * @return string Formatted output
      */
     public function formatModel($field, $model = null)
@@ -119,7 +122,7 @@ class Application_View_Helper_FormatValue extends \Zend_View_Helper_Abstract
                     return $this->view->translateLanguage($value);
                 } elseif ($field->isSelection()) {
                     Application_Form_Element_Language::getLanguageList(); // initializes language list translations
-                    $key = $this->_translation->getKeyForValue($model, $field->getName(), $value);
+                    $key = $this->translation->getKeyForValue($model, $field->getName(), $value);
                     return $this->view->translate($key);
                 } elseif ($field->isCheckbox()) {
                     if ($value) {
@@ -137,23 +140,24 @@ class Application_View_Helper_FormatValue extends \Zend_View_Helper_Abstract
 
     /**
      * Returns Date values formatted as string.
+     *
      * @param Date $date
      * @return string Formatted date
      */
     public function formatDate($date)
     {
-        if (! ($date instanceof Date)) {
+        if (! $date instanceof Date) {
             return $date;
         } else {
-            return $this->_dates->getDateString($date);
+            return $this->dates->getDateString($date);
         }
     }
 
     /**
      * Formats value for output on metadata overview page.
      *
-     * @param mixed $value
-     * @param ModelInterface $model
+     * @param mixed  $value
+     * @param string $model
      * @return string Formatted output
      *
      * TODO some values need to be translated (others don't)

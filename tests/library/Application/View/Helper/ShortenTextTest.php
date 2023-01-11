@@ -31,7 +31,6 @@
 
 class Application_View_Helper_ShortenTextTest extends ControllerTestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -43,7 +42,7 @@ class Application_View_Helper_ShortenTextTest extends ControllerTestCase
         $helper = new Application_View_Helper_ShortenText();
 
         $this->adjustConfiguration([
-            'frontdoor' => ['numOfShortAbstractChars' => '10']
+            'frontdoor' => ['numOfShortAbstractChars' => '10'],
         ]);
 
         $this->assertEquals('short text', $helper->shortenText('short text'));
@@ -69,7 +68,7 @@ class Application_View_Helper_ShortenTextTest extends ControllerTestCase
         $helper = new Application_View_Helper_ShortenText();
 
         $this->adjustConfiguration([
-            'frontdoor' => ['numOfShortAbstractChars' => '10']
+            'frontdoor' => ['numOfShortAbstractChars' => '10'],
         ]);
 
         $this->assertEquals(10, $helper->getMaxLength());
@@ -77,7 +76,7 @@ class Application_View_Helper_ShortenTextTest extends ControllerTestCase
         $helper->setMaxLength(null);
 
         $this->adjustConfiguration([
-            'frontdoor' => ['numOfShortAbstractChars' => 'bla']
+            'frontdoor' => ['numOfShortAbstractChars' => 'bla'],
         ]);
 
         $this->assertEquals(0, $helper->getMaxLength());
@@ -88,7 +87,7 @@ class Application_View_Helper_ShortenTextTest extends ControllerTestCase
         $helper = new Application_View_Helper_ShortenText();
 
         $this->adjustConfiguration([
-            'frontdoor' => ['numOfShortAbstractChars' => '10']
+            'frontdoor' => ['numOfShortAbstractChars' => '10'],
         ]);
 
         $this->assertEquals(10, $helper->getMaxLength());

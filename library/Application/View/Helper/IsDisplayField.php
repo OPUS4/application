@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Xslt
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_View_Helper_IsDisplayField extends \Zend_View_Helper_Abstract
-{
 
+class Application_View_Helper_IsDisplayField extends Zend_View_Helper_Abstract
+{
     /**
      * Check if a field should be displayed in the frontdoor.
+     *
      * @param string $name Name of field
      * @return bool
      */
@@ -42,12 +41,12 @@ class Application_View_Helper_IsDisplayField extends \Zend_View_Helper_Abstract
     {
         $config = Application_Configuration::getInstance()->getConfig();
 
-        if (is_null($config)) {
+        if ($config === null) {
             return false;
         }
 
         if (isset($config->frontdoor->metadata->$name)) {
-            return $config->frontdoor->metadata->$name == 1;
+            return filter_var($config->frontdoor->metadata->$name, FILTER_VALIDATE_BOOLEAN);
         } else {
             return false;
         }

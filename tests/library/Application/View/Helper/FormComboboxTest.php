@@ -31,19 +31,19 @@
 
 class Application_View_Helper_FormComboboxTest extends ControllerTestCase
 {
-
-    private $_helper;
+    /** @var Application_View_Helper_FormCombobox */
+    private $helper;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_FormCombobox();
+        $this->helper = new Application_View_Helper_FormCombobox();
     }
 
     public function testFormComboboxWithoutValues()
     {
-        $output = $this->_helper->formCombobox('email');
+        $output = $this->helper->formCombobox('email');
 
         $this->assertEquals(
             "<div class=\"ui-widget\">\n    <select name=\"email\" class=\"combobox\">\n</select>\n</div>\n",
@@ -53,7 +53,7 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
 
     public function testFormComboboxWithOptions()
     {
-        $output = $this->_helper->formCombobox(
+        $output = $this->helper->formCombobox(
             'city',
             null,
             null,
@@ -66,7 +66,7 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
 
     public function testFormComboboxWithValue()
     {
-        $output = $this->_helper->formCombobox(
+        $output = $this->helper->formCombobox(
             'city',
             'Bremen',
             null,
@@ -80,7 +80,7 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
 
     public function testFormComboboxWithValueMatchingOption()
     {
-        $output = $this->_helper->formCombobox(
+        $output = $this->helper->formCombobox(
             'city',
             'Hamburg',
             null,

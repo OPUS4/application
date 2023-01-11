@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Partial
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <div class="changes-table-wrapper">
@@ -46,12 +45,12 @@
     <?PHP foreach ($this->element->getPreparedChanges() as $name => $values) : ?>
         <tr class="<?= $values['action'] ?>" title="<?= $this->translate("admin_person_edit_change_tooltip_{$values['action']}") ?>">
             <td class="fieldname"><?= $this->translate($name) ?></td>
-            <?PHP if ($values['action'] != 'notmodified') : ?>
+            <?PHP if ($values['action'] !== 'notmodified') : ?>
                 <td class="old-value"><?= $this->htmlList($this->escapeValue($values['old'], true), false, false, false) ?></td>
                 <td class="change-arrow"><div class="fa fa-chevron-right"></div></td>
                 <td class="new-value"><?= $this->htmlList($this->escapeValue($values['new'], true), false, false, false) ?></td>
             <?PHP else : ?>
-                <?PHP if (! empty($values['old']) or (! is_array($values['old']) && strlen($values['old'] == 0))) : ?>
+                <?PHP if (! empty($values['old']) || (! is_array($values['old']) && strlen($values['old']) === 0)) : ?>
                     <td class="old-value" colspan="3"><?= $this->htmlList($this->escapeValue($values['old'], true), false, false, false) ?></td>
                 <?PHP else : ?>
                     <td class="not-set" colspan="3"></td>

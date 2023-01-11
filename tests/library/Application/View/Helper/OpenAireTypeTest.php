@@ -31,8 +31,8 @@
 
 class Application_View_Helper_OpenAireTypeTest extends ControllerTestCase
 {
-
-    private $helper = null;
+    /** @var Application_View_Helper_OpenAireType */
+    private $helper;
 
     public function setUp(): void
     {
@@ -41,6 +41,9 @@ class Application_View_Helper_OpenAireTypeTest extends ControllerTestCase
         $this->helper = new Application_View_Helper_OpenAireType();
     }
 
+    /**
+     * @return string[][]
+     */
     public function typeDataProvider()
     {
         return [
@@ -61,12 +64,14 @@ class Application_View_Helper_OpenAireTypeTest extends ControllerTestCase
             ['image', 'other'],
             ['movingimage', 'other'],
             ['radio', 'other'],
-            ['sound', 'other']
+            ['sound', 'other'],
         ];
     }
 
     /**
      * @dataProvider typeDataProvider
+     * @param string $type
+     * @param string $name
      */
     public function testOpenAireType($type, $name)
     {

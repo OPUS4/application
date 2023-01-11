@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,12 +34,16 @@
  *
  * TODO cleanup in connection with refactoring of Admin_CollectionController
  */
-class Application_View_Helper_AssignCollectionAllowed extends \Zend_View_Helper_Abstract
+class Application_View_Helper_AssignCollectionAllowed extends Zend_View_Helper_Abstract
 {
-
+    /**
+     * @param array $collection
+     * @param int   $docId
+     * @return bool
+     */
     public function assignCollectionAllowed($collection, $docId = null)
     {
-        if (! is_null($docId)) {
+        if ($docId !== null) {
             if (isset($collection['assigned']) && $collection['assigned']) {
                 return false;
             } elseif (isset($collection['collection'])) {
@@ -52,20 +54,23 @@ class Application_View_Helper_AssignCollectionAllowed extends \Zend_View_Helper_
             }
         }
 
-
         $role = null;
 
         if (isset($collection['role'])) {
             $role = $collection['role'];
         }
 
-        if (isset($collection['isLeaf']) && ! $collection['isLeaf'] && ! is_null($role)
-            && $role->getAssignLeavesOnly() == 1) {
+        if (
+            isset($collection['isLeaf']) && ! $collection['isLeaf'] && $role !== null
+            && $role->getAssignLeavesOnly()
+        ) {
             return false;
         }
 
-        if (isset($collection['isRoot']) && $collection['isRoot'] && ! is_null($role)
-            && $role->getAssignRoot() == 0) {
+        if (
+            isset($collection['isRoot']) && $collection['isRoot'] && $role !== null
+            && ! $role->getAssignRoot()
+        ) {
             return false;
         }
 

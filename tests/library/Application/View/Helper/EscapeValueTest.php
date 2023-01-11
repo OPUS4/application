@@ -31,38 +31,40 @@
 
 class Application_View_Helper_EscapeValueTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
-    private $_helper;
+    /** @var Application_View_Helper_EscapeValue */
+    private $helper;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_EscapeValue();
-        $this->_helper->setView($this->getView());
+        $this->helper = new Application_View_Helper_EscapeValue();
+        $this->helper->setView($this->getView());
     }
 
     public function testEscapeValueNull()
     {
-        $this->assertEquals('', $this->_helper->escapeValue(null));
+        $this->assertEquals('', $this->helper->escapeValue(null));
     }
 
     public function testEscapeValueSimple()
     {
-        $this->assertEquals('SimpleValue', $this->_helper->escapeValue('SimpleValue'));
+        $this->assertEquals('SimpleValue', $this->helper->escapeValue('SimpleValue'));
     }
 
     public function testEscapeValueHtml()
     {
-        $this->assertEquals('&lt;b&gt;HTML&lt;/b&gt;', $this->_helper->escapeValue('<b>HTML</b>'));
+        $this->assertEquals('&lt;b&gt;HTML&lt;/b&gt;', $this->helper->escapeValue('<b>HTML</b>'));
     }
 
     public function testEscapeValueArray()
     {
-        $this->assertEquals(['Value1', '&lt;b&gt;Value2&lt;/b&gt;'], $this->_helper->escapeValue([
-            'Value1', '<b>Value2</b>'
+        $this->assertEquals(['Value1', '&lt;b&gt;Value2&lt;/b&gt;'], $this->helper->escapeValue([
+            'Value1',
+            '<b>Value2</b>',
         ]));
     }
 
@@ -71,23 +73,23 @@ class Application_View_Helper_EscapeValueTest extends ControllerTestCase
         $this->assertEquals([
             '&lt;b&gt;Value1&lt;/b&gt;',
             ['Value2a', '&lt;i&gt;Value2b&lt;/i&gt;'],
-            'Value3'
-        ], $this->_helper->escapeValue([
+            'Value3',
+        ], $this->helper->escapeValue([
             '<b>Value1</b>',
             ['Value2a', '<i>Value2b</i>'],
-            'Value3'
+            'Value3',
         ]));
     }
 
     public function testEscapeValueHighlightNullEnglish()
     {
         $this->useEnglish();
-        $this->assertEquals('<span class="null">NULL</span>', $this->_helper->escapeValue(null, true));
+        $this->assertEquals('<span class="null">NULL</span>', $this->helper->escapeValue(null, true));
     }
 
     public function testEscapeValueHighlightNullGerman()
     {
         $this->useGerman();
-        $this->assertEquals('<span class="null">LEER</span>', $this->_helper->escapeValue(null, true));
+        $this->assertEquals('<span class="null">LEER</span>', $this->helper->escapeValue(null, true));
     }
 }

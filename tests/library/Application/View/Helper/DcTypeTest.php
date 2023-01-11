@@ -28,10 +28,11 @@
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_View_Helper_DcTypeTest extends ControllerTestCase
 {
-
-    private $helper = null;
+    /** @var Application_View_Helper_DcType */
+    private $helper;
 
     public function setUp(): void
     {

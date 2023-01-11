@@ -29,15 +29,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- *
- */
 class Application_View_Helper_AccessAllowedTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view'];
 
-    private $__helper;
+    /** @var Application_View_Helper_AccessAllowed */
+    private $helper;
 
     public function setUp(): void
     {
@@ -47,11 +45,12 @@ class Application_View_Helper_AccessAllowedTest extends ControllerTestCase
         $this->assertSecurityConfigured();
         $acl = Application_Security_AclProvider::getAcl();
         $acl->allow('guest', 'accounts');
-        $this->__helper = new Application_View_Helper_AccessAllowed();
-        $this->__helper->setView($this->getView());
+        $this->helper = new Application_View_Helper_AccessAllowed();
+        $this->helper->setView($this->getView());
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         $acl = Application_Security_AclProvider::getAcl();
         $acl->deny('guest', 'accounts');
         parent::tearDown();
@@ -59,11 +58,11 @@ class Application_View_Helper_AccessAllowedTest extends ControllerTestCase
 
     public function testAccessAllowed()
     {
-        $user = \Zend_Auth::getInstance()->getIdentity();
+        $user = Zend_Auth::getInstance()->getIdentity();
         $this->assertEquals('', $user, "expected no user to be set (should use default 'guest' as default)");
-        $allowedDocuments = $this->__helper->accessAllowed('documents');
+        $allowedDocuments = $this->helper->accessAllowed('documents');
         $this->assertFalse($allowedDocuments, "expected access denied to resource 'documents'");
-        $allowedAccount = $this->__helper->accessAllowed('accounts');
+        $allowedAccount = $this->helper->accessAllowed('accounts');
         $this->assertTrue($allowedAccount, "expected access allowed to module 'account'");
     }
 }

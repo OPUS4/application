@@ -29,20 +29,17 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\File;
-
 /**
  * View Helper fuer Link zu Datei.
  *
  * Wird in der Dateientabelle in der Metadaten-Übersicht verwendet.
  */
-class Application_View_Helper_MimeTypeAsCssClass extends \Zend_View_Helper_Abstract
+class Application_View_Helper_MimeTypeAsCssClass extends Zend_View_Helper_Abstract
 {
-
     /**
      * Rendert Link fuer Datei.
      *
-     * @param $file File
+     * @param string $mimeType
      * @return string HTML output
      */
     public function mimeTypeAsCssClass($mimeType)

@@ -31,23 +31,21 @@
 
 class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
-    /**
-     * @var Application_View_Helper_LanguageWebForm
-     */
-    private $_helper;
+    /** @var Application_View_Helper_LanguageWebForm */
+    private $helper;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->useEnglish();
-        $this->_helper = new Application_View_Helper_LanguageWebForm();
+        $this->helper = new Application_View_Helper_LanguageWebForm();
     }
 
     /**
-     * @return data-provider with long and short language form.
+     * @return array data-provider with long and short language form.
      */
     public function langProvider()
     {
@@ -57,17 +55,20 @@ class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
             ['spa', 'es'],
             ['ita', 'it'],
             ['fra', 'fr'],
-            ['rus', 'ru']
+            ['rus', 'ru'],
         ];
     }
 
     /**
      * Unittest for languageWebForm.
+     *
      * @covers Application_View_Helper_LanguageWebForm::languageWebForm
      * @dataProvider langProvider
+     * @param string $long
+     * @param string $short
      */
     public function testLanguageWebForm($long, $short)
     {
-        $this->assertEquals($this->_helper->languageWebForm($long), $short);
+        $this->assertEquals($this->helper->languageWebForm($long), $short);
     }
 }
