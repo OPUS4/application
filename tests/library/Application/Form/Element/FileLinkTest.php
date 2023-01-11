@@ -33,16 +33,24 @@ use Opus\Common\File;
 
 class Application_Form_Element_FileLinkTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_FileLink';
-        $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
-        $this->_staticViewHelper = 'fileLink';
+        $this->formElementClass       = 'Application_Form_Element_FileLink';
+        $this->expectedDecoratorCount = 8;
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Placeholder',
+            'Description',
+            'ElementHint',
+            'Errors',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+        ];
+        $this->staticViewHelper       = 'fileLink';
         parent::setUp();
     }
 
@@ -72,7 +80,7 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
 
         $file = $element->getValue();
 
-        $this->assertInstanceOf('Opus\File', $file);
+        $this->assertInstanceOf(\Opus\File::class, $file);
         $this->assertEquals(130, $file->getId());
     }
 
@@ -94,7 +102,8 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $this->setExpectedException(Application_Exception::class, 'File with ID = 5555 not found.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('File with ID = 5555 not found.');
         $element->setValue(5555);
     }
 
@@ -102,7 +111,8 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $this->setExpectedException(Application_Exception::class, 'Value must not be null.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Value must not be null.');
         $element->setValue(null);
     }
 
@@ -118,7 +128,8 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $this->setExpectedException(Application_Exception::class, 'File with ID = 5555 not found.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('File with ID = 5555 not found.');
         $this->assertFalse($element->isValid(5555)); // File 5555 does not exist
     }
 }

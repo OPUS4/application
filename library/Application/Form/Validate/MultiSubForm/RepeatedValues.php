@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,70 +25,84 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @package     TODO
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-
 class Application_Form_Validate_MultiSubForm_RepeatedValues implements Application_Form_Validate_IMultiSubForm
 {
+    /** @var string */
+    private $elementName;
 
-    private $_elementName;
+    /** @var string */
+    private $message;
 
-    private $_message;
+    /** @var Zend_Form_Element[]|null  */
+    private $otherElements;
 
-    private $_otherElements;
-
+    /**
+     * @param string     $elementName
+     * @param string     $message
+     * @param array|null $otherElements
+     * @throws Application_Exception
+     */
     public function __construct($elementName, $message, $otherElements = null)
     {
-        if (is_null($elementName) || strlen(trim($elementName)) == 0) {
+        if ($elementName === null || strlen(trim($elementName)) === 0) {
             throw new Application_Exception(__METHOD__ . ' #1 argument must not be null or empty.');
         }
 
-        if (is_null($message) || strlen(trim($message)) == 0) {
+        if ($message === null || strlen(trim($message)) === 0) {
             throw new Application_Exception(__METHOD__ . ' #2 argument must not be null or empty.');
         }
 
-        if (! is_null($otherElements) && ! is_array($otherElements)) {
+        if ($otherElements !== null && ! is_array($otherElements)) {
             $otherElements = [$otherElements];
         }
 
-        $this->_elementName = $elementName;
-        $this->_otherElements = $otherElements;
+        $this->elementName   = $elementName;
+        $this->otherElements = $otherElements;
 
         $translator = Application_Translate::getInstance();
 
         if ($translator->isTranslated($message)) {
-            $this->_message = $translator->translate($message);
+            $this->message = $translator->translate($message);
         } else {
-            $this->_message = $message;
+            $this->message = $message;
         }
     }
 
+    /**
+     * @param array      $data
+     * @param array|null $context
+     * @return bool
+     */
     public function isValid($data, $context = null)
     {
         return true;
     }
 
+    /**
+     * @param Zend_Form $form
+     * @param array     $data
+     * @param array     $context
+     */
     public function prepareValidation($form, $data, $context = null)
     {
         $position = 0;
 
-        $values = $this->getValues($this->_elementName, $data);
+        $values = $this->getValues($this->elementName, $data);
 
         foreach ($form->getSubForms() as $name => $subform) {
             if (array_key_exists($name, $data)) {
-                $element = $subform->getElement($this->_elementName);
-                if (! is_null($element)) {
-                    if (is_null($this->_otherElements)) {
+                $element = $subform->getElement($this->elementName);
+                if ($element !== null) {
+                    if ($this->otherElements === null) {
                         $element->addValidator(
                             new Application_Form_Validate_DuplicateValue(
                                 $values,
                                 $position++,
-                                $this->_message
+                                $this->message
                             )
                         );
                     } else {
@@ -95,8 +110,8 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
                             new Application_Form_Validate_DuplicateMultiValue(
                                 $values,
                                 $position++,
-                                $this->_message,
-                                $this->_otherElements
+                                $this->message,
+                                $this->otherElements
                             )
                         );
                     }
@@ -105,6 +120,11 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
         }
     }
 
+    /**
+     * @param string $name
+     * @param array  $context
+     * @return array
+     */
     public function getValues($name, $context)
     {
         $values = [];
@@ -112,7 +132,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
         foreach ($context as $index => $subform) {
             $value = null;
 
-            if (is_null($this->_otherElements)) {
+            if ($this->otherElements === null) {
                 // einfache Werte aus einem Feld
                 if (isset($subform[$name])) {
                     $value = $subform[$name];
@@ -121,7 +141,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
                 // komplexe Werte aus mehreren Feldern
                 $value = [];
 
-                foreach ($this->_otherElements as $element) {
+                foreach ($this->otherElements as $element) {
                     if (isset($subform[$element])) {
                         $value[] = $subform[$element];
                     }
@@ -132,7 +152,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
                 }
             }
 
-            if (! is_null($value)) {
+            if ($value !== null) {
                 $values[] = $value;
             }
         }
@@ -140,18 +160,27 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
         return $values;
     }
 
+    /**
+     * @return string
+     */
     public function getElementName()
     {
-        return $this->_elementName;
+        return $this->elementName;
     }
 
+    /**
+     * @return string
+     */
     public function getMessage()
     {
-        return $this->_message;
+        return $this->message;
     }
 
+    /**
+     * @return Zend_Form_Element[]|null
+     */
     public function getOtherElements()
     {
-        return $this->_otherElements;
+        return $this->otherElements;
     }
 }

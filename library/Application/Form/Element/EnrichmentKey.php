@@ -36,7 +36,6 @@ use Opus\Common\EnrichmentKey;
  */
 class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();
@@ -46,12 +45,12 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
 
         $this->setDisableTranslator(true); // keys are translated below if possible
 
-        foreach ($options as $index => $option) {
+        foreach ($options as $option) {
             $keyName = $option->getName();
 
             // die folgenden beiden Enrichments sollen indirekt über Checkboxen
             // im Abschnitt DOI / URN verwaltet werden
-            if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
+            if ($keyName === 'opus.doi.autoCreate' || $keyName === 'opus.urn.autoCreate') {
                 continue;
             }
 
@@ -61,27 +60,37 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
         $this->resetValidator();
     }
 
+    /**
+     * @param string $keyName
+     * @return $this
+     */
     private function addKeyNameAsOption($keyName)
     {
         $translationKey = 'Enrichment' . $keyName;
 
         $translator = Application_Translate::getInstance();
-        if (! is_null($translator) && ($translator->isTranslated($translationKey))) {
+        if ($translator !== null && ($translator->isTranslated($translationKey))) {
             $this->addMultiOption($keyName, $translator->translate($translationKey));
         } else {
             $this->addMultiOption($keyName, $keyName);
         }
+
+        return $this;
     }
 
+    /**
+     * @throws Zend_Form_Exception
+     * @throws Zend_Validate_Exception
+     */
     private function resetValidator()
     {
         $translator = Application_Translate::getInstance();
-        $message = 'validation_error_unknown_enrichmentkey';
-        if (! is_null($translator) && $translator->isTranslated($message)) {
+        $message    = 'validation_error_unknown_enrichmentkey';
+        if ($translator !== null && $translator->isTranslated($message)) {
             $message = $translator->translate($message);
         }
 
-        $validator = new \Zend_Validate_InArray(array_keys($this->getMultiOptions()));
+        $validator = new Zend_Validate_InArray(array_keys($this->getMultiOptions()));
         $validator->setMessage($message);
         $this->addValidator($validator);
     }
@@ -89,7 +98,8 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
     /**
      * Prüft, ob der übergebene EnrichmentKey-Name bereits in der Auswahl existiert
      *
-     * @param $keyName
+     * @param string $keyName
+     * @return bool
      */
     public function hasKeyName($keyName)
     {
@@ -97,9 +107,10 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
     }
 
     /**
-     * Fügt den übergebenen EnrichmentKey-Namen zur Auswahl hinzu, sofern er nicht bereits existiert.
+     * Fuegt den uebergebenen EnrichmentKey-Namen zur Auswahl hinzu, sofern er nicht bereits existiert.
      *
-     * @param $keyName
+     * @param string $keyName
+     * @return $this
      */
     public function addKeyNameIfMissing($keyName)
     {
@@ -107,5 +118,7 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
             $this->addKeyNameAsOption($keyName);
             $this->resetValidator();
         }
+
+        return $this;
     }
 }

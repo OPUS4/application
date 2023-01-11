@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
- * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -39,48 +37,49 @@
  *
  * TODO don't add delimiter internally - just accept a complete regular expression
  */
-class Application_Form_Validate_Filename extends \Zend_Validate_Abstract
+class Application_Form_Validate_Filename extends Zend_Validate_Abstract
 {
-    /**
-     * @var int maximal filename length
-     */
+    /** @var int maximal filename length */
     protected $filenameMaxLength = 0;
 
-    /**
-     * @var string the format is a empty string. If this is used as regex, it matches always.
-     */
+    /** @var string the format is a empty string. If this is used as regex, it matches always. */
     protected $filenameFormat = '';
 
     /**
      * Error message key for invalid filename length
      */
-    const MSG_NAME_LENGTH = 'nameLength';
+    public const MSG_NAME_LENGTH = 'nameLength';
 
     /**
      * Error message key for malformed filename
      */
-    const MSG_NAME_FORMAT = 'format';
+    public const MSG_NAME_FORMAT = 'format';
 
     /**
      * Error message Templates
+     *
      * @var array
+     * @phpcs:disable
      */
     protected $_messageTemplates = [
         self::MSG_NAME_LENGTH => "filenameLengthError",
-        self::MSG_NAME_FORMAT => "filenameFormatError"
+        self::MSG_NAME_FORMAT => "filenameFormatError",
     ];
+    // @phpcs:enable
 
     /**
      * variables for messageTemplates
+     *
      * @var array
+     * @phpcs:disable
      */
     protected $_messageVariables = [
         'size' => 'filenameMaxLength',
     ];
+    // @phpcs:enable
 
     /**
-     * Application_Form_Validate_Filename constructor.
-     * @param $options
+     * @param array|null $options
      */
     public function __construct($options = null)
     {
@@ -92,24 +91,36 @@ class Application_Form_Validate_Filename extends \Zend_Validate_Abstract
         }
     }
 
+    /**
+     * @return int
+     */
     public function getFilenameMaxLength()
     {
         return $this->filenameMaxLength;
     }
 
+    /**
+     * @return string
+     */
     public function getFilenameFormat()
     {
         return $this->filenameFormat;
     }
 
+    /**
+     * @param int $value
+     */
     public function setFilenameMaxLength($value)
     {
         $this->filenameMaxLength = $value;
     }
 
+    /**
+     * @param string $value
+     */
     public function setFilenameFormat($value)
     {
-        if ($this->validateFilenameFormat("<$value>") == false) {
+        if ($this->validateFilenameFormat("<$value>") === false) {
             $this->filenameFormat = null;
         } else {
             $this->filenameFormat = $value;
@@ -121,7 +132,7 @@ class Application_Form_Validate_Filename extends \Zend_Validate_Abstract
      *
      * Verifies that the regular expression is generally valid.
      *
-     * @param $value -> a regular expression, which is validated here.
+     * @param string $value -> a regular expression, which is validated here.
      * @return bool
      */
     public function validateFilenameFormat($value)
@@ -139,8 +150,8 @@ class Application_Form_Validate_Filename extends \Zend_Validate_Abstract
     /**
      * Check the size and the format of a filename.
      *
-     * @param mixed $value
-     * @param null $file
+     * @param string     $value
+     * @param array|null $file
      * @return bool
      */
     public function isValid($value, $file = null)
@@ -156,7 +167,7 @@ class Application_Form_Validate_Filename extends \Zend_Validate_Abstract
             }
         }
 
-        if (strlen($data['filename']) > $this->filenameMaxLength and $this->filenameMaxLength != 0) {
+        if (strlen($data['filename']) > $this->filenameMaxLength && $this->filenameMaxLength !== 0) {
             $this->_error(self::MSG_NAME_LENGTH);
             return false;
         }

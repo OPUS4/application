@@ -31,13 +31,12 @@
 
 class Application_Form_Element_HiddenTest extends FormElementTestCase
 {
-
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Hidden';
-        $this->_expectedDecoratorCount = 2;
-        $this->_expectedDecorators = ['ViewHelper', 'HtmlTag'];
-        $this->_staticViewHelper = 'formHidden';
+        $this->formElementClass       = 'Application_Form_Element_Hidden';
+        $this->expectedDecoratorCount = 2;
+        $this->expectedDecorators     = ['ViewHelper', 'HtmlTag'];
+        $this->staticViewHelper       = 'formHidden';
 
         parent::setUp();
     }

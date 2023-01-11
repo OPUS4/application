@@ -31,18 +31,18 @@
 
 class Application_Form_Element_DocumentsTest extends ControllerTestCase
 {
-
-    private $_element;
+    /** @var Application_Form_Element_Documents */
+    private $element;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_element = new Application_Form_Element_Documents('Documents');
+        $this->element = new Application_Form_Element_Documents('Documents');
     }
 
     public function testViewHelper()
     {
-        $this->assertEquals('formDocuments', $this->_element->getAttrib('helper'));
+        $this->assertEquals('formDocuments', $this->element->getAttrib('helper'));
     }
 }

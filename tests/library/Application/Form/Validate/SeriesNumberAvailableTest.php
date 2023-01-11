@@ -25,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function testIsValidTrue()
@@ -41,7 +39,7 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
         $context = [
-            'SeriesId' => '1'
+            'SeriesId' => '1',
         ];
 
         $this->assertTrue($validator->isValid('10/10', $context));
@@ -52,7 +50,7 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
         $context = [
-            'SeriesId' => '1' // mit Dokument 146 (number = '5/5') verknuepft
+            'SeriesId' => '1', // mit Dokument 146 (number = '5/5') verknuepft
         ];
 
         $this->assertFalse($validator->isValid('5/5', $context));
@@ -68,8 +66,8 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
         $context = [
-            'Id' => 146,
-            'SeriesId' => '1' // mit Dokument 146 (number = '5/5') verknuepft
+            'Id'       => 146,
+            'SeriesId' => '1', // mit Dokument 146 (number = '5/5') verknuepft
         ];
 
         $this->assertTrue($validator->isValid('5/5', $context));
@@ -96,7 +94,7 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
         $context = [
-            'SeriesId' => 300
+            'SeriesId' => 300,
         ];
 
         $this->assertTrue($validator->isValid('5/5', $context));
@@ -107,7 +105,7 @@ class Application_Form_Validate_SeriesNumberAvailableTest extends ControllerTest
         $validator = new Application_Form_Validate_SeriesNumberAvailable();
 
         $context = [
-            'SeriesId' => 'bla'
+            'SeriesId' => 'bla',
         ];
 
         $this->assertTrue($validator->isValid('5/5', $context));

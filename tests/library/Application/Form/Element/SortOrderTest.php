@@ -28,18 +28,27 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_Form_Element_SortOrderTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_SortOrder';
-        $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
-        $this->_staticViewHelper = 'viewFormDefault';
+        $this->formElementClass       = 'Application_Form_Element_SortOrder';
+        $this->expectedDecoratorCount = 8;
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Placeholder',
+            'Description',
+            'ElementHint',
+            'Errors',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+        ];
+        $this->staticViewHelper       = 'viewFormDefault';
         parent::setUp();
     }
 

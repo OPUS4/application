@@ -34,28 +34,26 @@ use Opus\Common\Model\ModelException;
 
 class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
-    /**
-     * @var string Name des Enrichment-Keys, der für Testzwecke angelegt wird
-     */
+    /** @var string Name des Enrichment-Keys, der für Testzwecke angelegt wird */
     private static $testEnrichmentKeyName = 'TestEnrichmentKey';
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_EnrichmentKey';
-        $this->_expectedDecorators = [
+        $this->formElementClass       = 'Application_Form_Element_EnrichmentKey';
+        $this->expectedDecorators     = [
             'ViewHelper',
             'Errors',
             'Description',
             'ElementHtmlTag',
             'LabelNotEmpty',
             'dataWrapper',
-            'ElementHint'
+            'ElementHint',
         ];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
+        $this->expectedDecoratorCount = count($this->expectedDecorators);
+        $this->staticViewHelper       = 'viewFormSelect';
         parent::setUp();
 
         // create a new enrichment key with an untranslated name
@@ -64,12 +62,13 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         $enrichmentKey->store();
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         parent::tearDown();
 
         // remove previously created enrichment key
         $enrichmentKey = EnrichmentKey::get(self::$testEnrichmentKeyName);
-        if (! is_null($enrichmentKey)) {
+        if ($enrichmentKey !== null) {
             $enrichmentKey->delete();
         }
     }
@@ -79,7 +78,6 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
      */
     public function testOptions()
     {
-
         // NOTE: This also refreshes the cache for enrichment keys. Static state can carry over between tests.
         $allOptions = EnrichmentKey::getAll();
 
@@ -150,7 +148,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         $enrichmentKey->setName('thisnamedoesnotexist');
         $enrichmentKey->store();
 
-        $element = $this->getElement();
+        $element                              = $this->getElement();
         $optionsAfterInsertOfNewEnrichmentKey = $element->getMultiOptions();
 
         $this->assertEquals(count($options), count($optionsAfterInsertOfNewEnrichmentKey));
@@ -158,7 +156,7 @@ class Application_Form_Element_EnrichmentKeyTest extends FormElementTestCase
         // Cache zurücksetzen, so dass der neu angelegte Enrichment-Key berücksichtigt wird
         EnrichmentKey::getAll(true);
 
-        $element = $this->getElement();
+        $element                              = $this->getElement();
         $optionsAfterInsertOfNewEnrichmentKey = $element->getMultiOptions();
 
         // jetzt sollte der neu eingefügte Enrichment-Key für das Formularelement sichtbar sein

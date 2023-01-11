@@ -25,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
- * @author      Sascha Szott <opus-development@saschaszott.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,12 +33,16 @@ use Opus\Common\Validate\CollectionRoleName;
 
 class Application_Form_Validate_CollectionRoleName extends CollectionRoleName
 {
+    public const NAME_CONTAINS_INVALID_CHAR = 'containsInvalidChar';
 
-    const NAME_CONTAINS_INVALID_CHAR = 'containsInvalidChar';
-
+    /**
+     * @var string[]
+     * @phpcs:disable
+     */
     protected $_messageTemplates = [
-        self::NAME_CONTAINS_INVALID_CHAR => 'admin_collectionroles_error_name_contains_invalid_char'
+        self::NAME_CONTAINS_INVALID_CHAR => 'admin_collectionroles_error_name_contains_invalid_char',
     ];
+    // @phpcs:enable
 
     /**
      * Returns true if and only if $value meets the validation requirements
@@ -50,9 +51,9 @@ class Application_Form_Validate_CollectionRoleName extends CollectionRoleName
      * getMessages() will return an array of messages that explain why the
      * validation failed.
      *
-     * @param mixed $value
-     * @return boolean
-     * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @param string $value
+     * @return bool
+     * @throws Zend_Validate_Exception If validation of $value is impossible.
      */
     public function isValid($value)
     {

@@ -37,9 +37,10 @@ use Opus\Common\LicenceInterface;
  */
 class Application_Form_Model_AbstractTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Application_Form_Model_Abstract */
     private $form;
 
     public function setUp(): void
@@ -48,9 +49,12 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $this->form = $this->getForm();
     }
 
+    /**
+     * @return Application_Form_Model_Abstract
+     */
     private function getForm()
     {
-        return $this->getMockForAbstractClass('Application_Form_Model_Abstract');
+        return $this->getMockForAbstractClass(Application_Form_Model_Abstract::class);
     }
 
     public function testInit()
@@ -114,7 +118,8 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
 
     public function testGetModelNoModelClass()
     {
-        $this->setExpectedException(Application_Exception::class, 'Model class has not been set.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Model class has not been set.');
         $this->form->getModel();
     }
 
@@ -123,7 +128,8 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $this->form->setModelClass(Licence::class);
         $this->form->getElement('Id')->setValue('notAnId');
 
-        $this->setExpectedException(Application_Exception::class, 'Model-ID must be numeric.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Model-ID must be numeric.');
         $this->form->getModel();
     }
 
@@ -132,7 +138,8 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $this->form->setModelClass(Licence::class);
         $this->form->getElement('Id')->setValue(1000);
 
-        $this->setExpectedException(Application_Exception::class, 'Model with ID \'1000\' not found.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Model with ID \'1000\' not found.');
         $this->form->getModel();
     }
 
@@ -194,7 +201,8 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
         $method->setAccessible(true);
 
-        $this->setExpectedException(Application_Exception::class, 'Model-ID must be numeric.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Model-ID must be numeric.');
         $method->invoke($this->form, 'enrichment');
     }
 

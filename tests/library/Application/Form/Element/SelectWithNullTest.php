@@ -31,14 +31,20 @@
 
 class Application_Form_Element_SelectWithNullTest extends FormElementTestCase
 {
-
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_SelectWithNull';
-        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper', 'ElementHint'];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
+        $this->formElementClass       = 'Application_Form_Element_SelectWithNull';
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+            'ElementHint',
+        ];
+        $this->expectedDecoratorCount = count($this->expectedDecorators);
+        $this->staticViewHelper       = 'viewFormSelect';
         parent::setUp();
     }
 

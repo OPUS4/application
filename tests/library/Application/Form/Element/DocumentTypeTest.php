@@ -31,17 +31,23 @@
 
 class Application_Form_Element_DocumentTypeTest extends FormElementTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_DocumentType';
-        $this->_expectedDecorators = [
-            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper', 'ElementHint'
+        $this->formElementClass       = 'Application_Form_Element_DocumentType';
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+            'ElementHint',
         ];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
+        $this->expectedDecoratorCount = count($this->expectedDecorators);
+        $this->staticViewHelper       = 'viewFormSelect';
         parent::setUp();
     }
 
@@ -49,7 +55,7 @@ class Application_Form_Element_DocumentTypeTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $types = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocumentTypes();
+        $types = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocumentTypes();
 
         $this->assertEquals(count($types), count($element->getMultiOptions()));
 

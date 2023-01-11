@@ -34,9 +34,10 @@
  */
 class Application_Form_Validate_LanguageUsedOnceOnlyTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
+    /** @var string[] */
     private $selectedLanguages;
 
     public function setUp(): void

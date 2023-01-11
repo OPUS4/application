@@ -31,15 +31,20 @@
 
 class Application_Form_Element_ThemeTest extends FormElementTestCase
 {
-
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Theme';
-        $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper', 'ElementHint'];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
+        $this->formElementClass       = 'Application_Form_Element_Theme';
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+            'ElementHint',
+        ];
+        $this->expectedDecoratorCount = count($this->expectedDecorators);
+        $this->staticViewHelper       = 'viewFormSelect';
         parent::setUp();
     }
 
@@ -79,7 +84,8 @@ class Application_Form_Element_ThemeTest extends FormElementTestCase
 
     public function testFindThemesInvalidPath()
     {
-        $this->setExpectedException(InvalidArgumentException::class, 'Argument should be a valid path.');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument should be a valid path.');
         Application_Form_Element_Theme::findThemes('/invalidPath');
     }
 }

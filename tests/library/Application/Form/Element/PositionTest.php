@@ -33,17 +33,23 @@ use Opus\Common\CollectionRole;
 
 class Application_Form_Element_PositionTest extends FormElementTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Position';
-        $this->_expectedDecorators = [
-            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper', 'ElementHint'
+        $this->formElementClass       = 'Application_Form_Element_Position';
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+            'ElementHint',
         ];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
+        $this->expectedDecoratorCount = count($this->expectedDecorators);
+        $this->staticViewHelper       = 'viewFormSelect';
         parent::setUp();
 
         $this->useEnglish();

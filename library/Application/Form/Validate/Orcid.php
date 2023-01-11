@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,61 +25,54 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Class Application_Form_Validate_Orcid
- *
- * @category    Application
- * @package     Form_Validate
- */
-class Application_Form_Validate_Orcid extends \Zend_Validate_Abstract
+class Application_Form_Validate_Orcid extends Zend_Validate_Abstract
 {
-
     /**
      * Constant for message for invalid format.
      */
-    const NOT_VALID_FORMAT = 'notValidFormat';
+    public const NOT_VALID_FORMAT = 'notValidFormat';
 
     /**
      * Constant for message for invalid checksum.
      */
-    const NOT_VALID_CHECKSUM = 'notValidChecksum';
+    public const NOT_VALID_CHECKSUM = 'notValidChecksum';
 
     /**
      * Pattern for checking ORC-ID format.
      */
-    const PATTERN = '/\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/';
+    public const PATTERN = '/\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/';
 
     /**
      * Translation keys for validation messages.
-     * @var array
+     *
+     * @var string[]
+     * @phpcs:disable
      */
     protected $_messageTemplates = [
-        self::NOT_VALID_FORMAT => 'validation_error_person_orcid',
-        self::NOT_VALID_CHECKSUM => 'validation_error_person_orcid_checksum'
+        self::NOT_VALID_FORMAT   => 'validation_error_person_orcid',
+        self::NOT_VALID_CHECKSUM => 'validation_error_person_orcid_checksum',
     ];
+    // @phpcs:enable
 
     /**
      * Returns true if the orcid identifier can be validated.
      *
      * @param  mixed $value
-     * @return boolean
-     * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @return bool
+     * @throws Zend_Validate_Exception If validation of $value is impossible.
      */
     public function isValid($value)
     {
-        if (strlen($value) != 19 || ! preg_match(self::PATTERN, $value)) {
+        if (strlen($value) !== 19 || ! preg_match(self::PATTERN, $value)) {
             $this->_error(self::NOT_VALID_FORMAT);
             return false;
         }
 
-        if ($this->generateCheckDigit(substr($value, 0, 18)) != substr($value, -1)) {
+        if ($this->generateCheckDigit(substr($value, 0, 18)) !== substr($value, -1)) {
             $this->_error(self::NOT_VALID_CHECKSUM);
             return false;
         }
@@ -89,20 +83,20 @@ class Application_Form_Validate_Orcid extends \Zend_Validate_Abstract
     /**
      * Generates the ORC-ID check digit.
      *
-     * @param string number without check digit
+     * @param string $baseDigits Number without check digit
      * @return string check digit
      */
     public static function generateCheckDigit($baseDigits)
     {
         $total = 0;
         for ($i = 0; $i < strlen($baseDigits); $i++) {
-            if ($baseDigits{$i} != '-') {
-                $digit = intval($baseDigits{$i});
+            if ($baseDigits[$i] !== '-') {
+                $digit = intval($baseDigits[$i]);
                 $total = ($total + $digit) * 2;
             }
         }
         $remainder = $total % 11;
-        $result = (12 - $remainder) % 11;
-        return $result == 10 ? "X" : (string) $result;
+        $result    = (12 - $remainder) % 11;
+        return $result === 10 ? "X" : (string) $result;
     }
 }

@@ -29,31 +29,28 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Class Application_Form_Validate_AtLeastOneNotEmptyTest
- */
 class Application_Form_Validate_AtLeastOneNotEmptyTest extends TestCase
 {
-
-    private $_validator;
+    /** @var Application_Form_Validate_AtLeastOneNotEmpty */
+    private $validator;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->_validator = new Application_Form_Validate_AtLeastOneNotEmpty();
-        $this->_validator->addElement('name');
-        $this->_validator->addElement('number');
+        $this->validator = new Application_Form_Validate_AtLeastOneNotEmpty();
+        $this->validator->addElement('name');
+        $this->validator->addElement('number');
     }
 
     public function testIsValidFalse()
     {
-        $this->assertFalse($this->_validator->isValid(null, []));
+        $this->assertFalse($this->validator->isValid(null, []));
     }
 
     public function testIsValidTrue()
     {
         // TODO use case? $this->assertTrue($this->_validator->isValid('value', array()));
-        $this->assertTrue($this->_validator->isValid(null, ['name' => 'Test']));
-        $this->assertTrue($this->_validator->isValid(null, ['number' => '12']));
+        $this->assertTrue($this->validator->isValid(null, ['name' => 'Test']));
+        $this->assertTrue($this->validator->isValid(null, ['number' => '12']));
     }
 }

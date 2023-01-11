@@ -29,16 +29,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DnbInstitute;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
-use Opus\Common\DnbInstitute;
 
 /**
  * Select Element für Thesis Grantor Institute.
  */
 class Application_Form_Element_Grantor extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();
@@ -46,7 +45,7 @@ class Application_Form_Element_Grantor extends Application_Form_Element_Select
         $this->setRequired(true);
         $this->setDisableTranslator(true); // Grantor institutes are not translated
 
-        $validator = new \Zend_Validate_Int();
+        $validator = new Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 

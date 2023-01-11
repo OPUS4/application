@@ -31,18 +31,18 @@
 
 use PHPUnit\Framework\TestCase;
 
-/**
- *
- */
 class Application_Form_Validate_RequiredIfTest extends TestCase
 {
-
+    /** @var Application_Form_Validate_RequiredIf */
     private $validator;
 
     protected function setUp(): void
     {
         $this->validator = new Application_Form_Validate_RequiredIf([
-            'target' => 'FieldB', 'targetValue' => null, 'negate' => false]);
+            'target'      => 'FieldB',
+            'targetValue' => null,
+            'negate'      => false,
+        ]);
     }
 
     /**
@@ -50,7 +50,7 @@ class Application_Form_Validate_RequiredIfTest extends TestCase
      */
     public function testRequiredValid()
     {
-        $context = [];
+        $context           = [];
         $context['FieldB'] = 'notEmpty';
 
         $this->assertTrue($this->validator->isValid('value', $context));
@@ -61,29 +61,23 @@ class Application_Form_Validate_RequiredIfTest extends TestCase
      */
     public function testRequiredFailed()
     {
-        $context = [];
+        $context           = [];
         $context['FieldB'] = 'notEmpty';
 
         $this->assertFalse($this->validator->isValid(null, $context));
     }
 
-    /**
-     *
-     */
     public function testRequiredValidTargetEmpty()
     {
-        $context = [];
+        $context           = [];
         $context['FieldB'] = null;
 
         $this->assertTrue($this->validator->isValid('hasValue', $context));
     }
 
-    /**
-     *
-     */
     public function testRequiredFailedTargetEmpty()
     {
-        $context = [];
+        $context           = [];
         $context['FieldB'] = null;
 
         $this->assertTrue($this->validator->isValid(null, $context));

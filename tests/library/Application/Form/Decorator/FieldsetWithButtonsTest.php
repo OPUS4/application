@@ -28,21 +28,24 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_Form_Decorator_FieldsetWithButtonsTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'view';
 
-    private $decorator = null;
+    /** @var Application_Form_Decorator_FieldsetWithButtons */
+    private $decorator;
 
-    private $form = null;
+    /** @var Zend_Form_SubForm */
+    private $form;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->form = new \Zend_Form_SubForm();
-        $this->form->setView(new \Zend_View());
+        $this->form = new Zend_Form_SubForm();
+        $this->form->setView(new Zend_View());
         $this->form->setLegend('Test');
 
         $this->decorator = new Application_Form_Decorator_FieldsetWithButtons();

@@ -31,23 +31,32 @@
 
 class Application_Form_Element_CollectionDisplayFormatTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
-    private $keys = null;
+    /** @var string[] */
+    private $keys;
 
-    private $values = null;
+    /** @var string[] */
+    private $values;
 
     public function setUp(): void
     {
-        $this->keys = ['Name', 'Number', 'NameNumber', 'NumberName'];
+        $this->keys   = ['Name', 'Number', 'NameNumber', 'NumberName'];
         $this->values = ['Name', 'Number', 'Name,Number', 'Number,Name'];
 
-        $this->_formElementClass = 'Application_Form_Element_CollectionDisplayFormat';
-        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper', 'ElementHint'];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
+        $this->formElementClass       = 'Application_Form_Element_CollectionDisplayFormat';
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+            'ElementHint',
+        ];
+        $this->expectedDecoratorCount = count($this->expectedDecorators);
+        $this->staticViewHelper       = 'viewFormSelect';
 
         parent::setUp();
     }

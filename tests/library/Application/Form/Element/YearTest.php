@@ -31,16 +31,24 @@
 
 class Application_Form_Element_YearTest extends FormElementTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['translation'];
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Year';
-        $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
-        $this->_staticViewHelper = 'viewFormDefault';
+        $this->formElementClass       = 'Application_Form_Element_Year';
+        $this->expectedDecoratorCount = 8;
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Placeholder',
+            'Description',
+            'ElementHint',
+            'Errors',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+        ];
+        $this->staticViewHelper       = 'viewFormDefault';
         parent::setUp();
     }
 

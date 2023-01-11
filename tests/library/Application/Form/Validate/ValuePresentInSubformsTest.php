@@ -34,7 +34,7 @@
  */
 class Application_Form_Validate_ValuePresentInSubformsTest extends ControllerTestCase
 {
-
+    /** @var string[][] */
     private $postData;
 
     public function setUp(): void
@@ -44,19 +44,18 @@ class Application_Form_Validate_ValuePresentInSubformsTest extends ControllerTes
         $this->postData = [
             'TitleMain0' => [
                 'Language' => 'deu',
-                'Value' => 'Titel 1'
+                'Value'    => 'Titel 1',
             ],
             'TitleMain1' => [
                 'Language' => 'eng',
-                'Value' => 'Title 2'
+                'Value'    => 'Title 2',
             ],
             'TitleMain2' => [
                 'Language' => 'fra',
-                'Value' => 'Titel 3'
-            ]
+                'Value'    => 'Titel 3',
+            ],
         ];
     }
-
 
     public function testConstruct()
     {

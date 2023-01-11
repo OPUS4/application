@@ -31,19 +31,27 @@
 
 class Application_Form_Element_LanguageTypeTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
-    private $keys = null;
+    /** @var string[] */
+    private $keys;
 
     public function setUp(): void
     {
-        $this->keys = ['Null', 'A', 'C', 'E', 'H', 'L', 'S'];
-        $this->_formElementClass = 'Application_Form_Element_LanguageType';
-        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper', 'ElementHint'];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
+        $this->keys                   = ['Null', 'A', 'C', 'E', 'H', 'L', 'S'];
+        $this->formElementClass       = 'Application_Form_Element_LanguageType';
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+            'ElementHint',
+        ];
+        $this->expectedDecoratorCount = count($this->expectedDecorators);
+        $this->staticViewHelper       = 'viewFormSelect';
         parent::setUp();
     }
 

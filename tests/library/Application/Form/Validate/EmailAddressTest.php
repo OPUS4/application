@@ -31,23 +31,29 @@
 
 class Application_Form_Validate_EmailAddressTest extends TestCase
 {
-
-    private $_validator;
+    /** @var Application_Form_Validate_EmailAddress */
+    private $validator;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->_validator = new Application_Form_Validate_EmailAddress();
+        $this->validator = new Application_Form_Validate_EmailAddress();
     }
 
+    /**
+     * @return array
+     */
     public function validEmails()
     {
         return [
-            ['test@example.org']
+            ['test@example.org'],
         ];
     }
 
+    /**
+     * @return array
+     */
     public function badEmails()
     {
         return [
@@ -55,23 +61,25 @@ class Application_Form_Validate_EmailAddressTest extends TestCase
             ['test@example'],
             ['example.org'],
             ['test'],
-            [' ']
+            [' '],
         ];
     }
 
     /**
      * @dataProvider validEmails
+     * @param string $address
      */
     public function testValidTrue($address)
     {
-        $this->assertTrue($this->_validator->isValid($address));
+        $this->assertTrue($this->validator->isValid($address));
     }
 
     /**
      * @dataProvider badEmails
+     * @param string $address
      */
     public function testValidFalse($address)
     {
-        $this->assertFalse($this->_validator->isValid($address));
+        $this->assertFalse($this->validator->isValid($address));
     }
 }

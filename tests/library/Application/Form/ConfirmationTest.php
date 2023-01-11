@@ -41,9 +41,10 @@ use Opus\Common\Licence;
  */
 class Application_Form_ConfirmationTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
+    /** @var Application_Form_Confirmation */
     private $form;
 
     public function setUp(): void
@@ -53,6 +54,9 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
         $this->form = $this->getForm();
     }
 
+    /**
+     * @return Application_Form_Confirmation
+     */
     private function getForm()
     {
         return new Application_Form_Confirmation(Licence::class);
@@ -83,13 +87,15 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testConstructFormNull()
     {
-        $this->setExpectedException(Application_Exception::class, 'construct without parameter');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('construct without parameter');
         new Application_Form_Confirmation(null);
     }
 
     public function testConstructFormEmpty()
     {
-        $this->setExpectedException(Application_Exception::class, 'construct without parameter');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('construct without parameter');
         new Application_Form_Confirmation('   ');
     }
 
@@ -151,8 +157,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
         $form = new Application_Form_Confirmation(Language::class);
 
         $post = [
-            'Id' => '100',
-            'ConfirmYes' => 'Ja'
+            'Id'         => '100',
+            'ConfirmYes' => 'Ja',
         ];
 
         $this->assertTrue($form->isConfirmed($post));
@@ -163,8 +169,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
         $form = new Application_Form_Confirmation(Language::class);
 
         $post = [
-            'Id' => '100',
-            'ConfirmNo' => 'Nein'
+            'Id'        => '100',
+            'ConfirmNo' => 'Nein',
         ];
 
         $this->assertFalse($form->isConfirmed($post));
@@ -175,8 +181,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
         $form = new Application_Form_Confirmation(Language::class);
 
         $post = [
-            'Id' => '',
-            'ConfirmYes' => 'Ja'
+            'Id'         => '',
+            'ConfirmYes' => 'Ja',
         ];
 
         $this->assertFalse($form->isConfirmed($post));
@@ -188,8 +194,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
         $form = new Application_Form_Confirmation(Language::class);
 
         $post = [
-            'Id' => '100',
-            'ConfirmYes' => 'Ja'
+            'Id'         => '100',
+            'ConfirmYes' => 'Ja',
         ];
 
         $this->assertEquals(Application_Form_Confirmation::RESULT_YES, $form->processPost($post));
@@ -200,8 +206,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
         $form = new Application_Form_Confirmation(Language::class);
 
         $post = [
-            'Id' => '100',
-            'ConfirmNo' => 'Nein'
+            'Id'        => '100',
+            'ConfirmNo' => 'Nein',
         ];
 
         $this->assertEquals(Application_Form_Confirmation::RESULT_NO, $form->processPost($post));
@@ -240,19 +246,22 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testSetModelNull()
     {
-        $this->setExpectedException(Application_Exception::class, 'must be Opus\Model\AbstractDb');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('must be Opus\Model\AbstractDb');
         $this->form->setModel(null);
     }
 
     public function testSetModelNotObject()
     {
-        $this->setExpectedException(Application_Exception::class, 'must be Opus\Model\AbstractDb');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('must be Opus\Model\AbstractDb');
         $this->form->setModel('notamodel');
     }
 
     public function testSetModelBadModel()
     {
-        $this->setExpectedException(Application_Exception::class, 'not instance of');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('not instance of');
         $this->form->setModel(new Date());
     }
 

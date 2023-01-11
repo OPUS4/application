@@ -31,7 +31,6 @@
 
 class Application_Form_Element_HitsPerPageTest extends ControllerTestCase
 {
-
     public function setUp(): void
     {
         parent::setUp();
@@ -59,7 +58,7 @@ class Application_Form_Element_HitsPerPageTest extends ControllerTestCase
     public function testInitWithCustomDefaultRows()
     {
         $this->adjustConfiguration([
-            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '15']]
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '15']],
         ]);
 
         $element = new Application_Form_Element_HitsPerPage('rows');

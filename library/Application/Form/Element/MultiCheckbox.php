@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_MultiCheckbox extends \Zend_Form_Element_MultiCheckbox
-{
 
+class Application_Form_Element_MultiCheckbox extends Zend_Form_Element_MultiCheckbox
+{
     public function init()
     {
         parent::init();
@@ -40,20 +38,27 @@ class Application_Form_Element_MultiCheckbox extends \Zend_Form_Element_MultiChe
         $this->addPrefixPath(
             'Application_Form_Decorator',
             'Application/Form/Decorator',
-            \Zend_Form::DECORATOR
+            Zend_Form::DECORATOR
         );
     }
 
     public function loadDefaultDecorators()
     {
-        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) === 0) {
             $this->setDecorators(
                 [
-                'ViewHelper',
-                'ElementHtmlTag',
-                ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true]],
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                    'ViewHelper',
+                    'ElementHtmlTag',
+                    [
+                        'LabelNotEmpty',
+                        [
+                            'tag'        => 'div',
+                            'tagClass'   => 'label',
+                            'placement'  => 'prepend',
+                            'disableFor' => true,
+                        ],
+                    ],
+                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
                 ]
             );
         }
@@ -70,6 +75,9 @@ class Application_Form_Element_MultiCheckbox extends \Zend_Form_Element_MultiChe
         }
     }
 
+    /**
+     * @return string
+     */
     public function getStaticViewHelper()
     {
         return 'viewFormMultiCheckbox';

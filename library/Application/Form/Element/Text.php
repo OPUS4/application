@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,9 +34,8 @@
  *
  * Zur Zeit nur vom Metadaten-Formular genutzt.
  */
-class Application_Form_Element_Text extends \Zend_Form_Element_Text implements Application_Form_IElement
+class Application_Form_Element_Text extends Zend_Form_Element_Text implements Application_Form_IElement
 {
-
     /**
      * Hinweis, der mit dem Feld angezeigt werden sollte.
      *
@@ -50,9 +47,10 @@ class Application_Form_Element_Text extends \Zend_Form_Element_Text implements A
      *
      * @var string
      */
-    private $_hint;
+    private $hint;
 
-    private $_staticViewHelper = 'viewFormDefault';
+    /** @var string */
+    private $staticViewHelper = 'viewFormDefault';
 
     /**
      * Initialisiert das Formularelement.
@@ -66,7 +64,7 @@ class Application_Form_Element_Text extends \Zend_Form_Element_Text implements A
         $this->addPrefixPath(
             'Application_Form_Decorator',
             'Application/Form/Decorator',
-            \Zend_Form::DECORATOR
+            Zend_Form::DECORATOR
         );
     }
 
@@ -75,7 +73,7 @@ class Application_Form_Element_Text extends \Zend_Form_Element_Text implements A
      */
     public function loadDefaultDecorators()
     {
-        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) === 0) {
             $this->setDecorators([
                 'ViewHelper',
                 'Placeholder',
@@ -84,27 +82,31 @@ class Application_Form_Element_Text extends \Zend_Form_Element_Text implements A
                 'Errors',
                 'ElementHtmlTag',
                 ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
             ]);
         }
     }
 
     /**
      * Setzt den Hinweis für das Formularelement.
-     * @param $hint Hinweis
+     *
+     * @param string $hint Hinweis
+     * @return $this
      */
     public function setHint($hint)
     {
-        $this->_hint = $hint;
+        $this->hint = $hint;
+        return $this;
     }
 
     /**
      * Liefert den Hinweis für das Formularelement.
+     *
      * @return string
      */
     public function getHint()
     {
-        return $this->_hint;
+        return $this->hint;
     }
 
     /**
@@ -119,13 +121,21 @@ class Application_Form_Element_Text extends \Zend_Form_Element_Text implements A
         $this->removeDecorator('Placeholder');
     }
 
+    /**
+     * @return string
+     */
     public function getStaticViewHelper()
     {
-        return $this->_staticViewHelper;
+        return $this->staticViewHelper;
     }
 
+    /**
+     * @param string $viewHelper
+     * @return $this
+     */
     public function setStaticViewHelper($viewHelper)
     {
-        $this->_staticViewHelper = $viewHelper;
+        $this->staticViewHelper = $viewHelper;
+        return $this;
     }
 }

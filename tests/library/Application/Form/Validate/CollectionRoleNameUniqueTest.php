@@ -31,9 +31,10 @@
 
 class Application_Form_Validate_CollectionRoleNameUniqueTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Application_Form_Validate_CollectionRoleNameUnique */
     private $validator;
 
     public function setUp(): void

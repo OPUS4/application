@@ -36,12 +36,11 @@
  */
 class Application_Form_Element_SubmitTest extends FormElementTestCase
 {
-
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Submit';
-        $this->_expectedDecoratorCount = 3;
-        $this->_expectedDecorators = ['ViewHelper', 'ElementHtmlTag', 'dataWrapper'];
+        $this->formElementClass       = 'Application_Form_Element_Submit';
+        $this->expectedDecoratorCount = 3;
+        $this->expectedDecorators     = ['ViewHelper', 'ElementHtmlTag', 'dataWrapper'];
         parent::setUp();
     }
 }

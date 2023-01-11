@@ -38,16 +38,15 @@ use Opus\Common\Identifier;
  */
 class Application_Form_Element_Identifier extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();
 
         $identifier = Identifier::new();
-        $types = $identifier->getField('Type')->getDefault();
+        $types      = $identifier->getField('Type')->getDefault();
 
         foreach ($types as $type) {
-            if ($type != 'urn' && $type != 'doi') {
+            if ($type !== 'urn' && $type !== 'doi') {
                 $this->addMultiOption($type, 'Opus_Identifier_Type_Value_' . ucfirst($type));
             }
         }

@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,20 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- *
  * TODO override setLabel for more robust translation
  */
 class Application_Form_Element_DocumentType extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();
@@ -45,7 +41,7 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
         $this->setLabel($this->getView()->translate($this->getName()));
         $this->setRequired(true);
 
-        $docTypeHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
 
         $options = $docTypeHelper->getDocumentTypes();
 
@@ -54,7 +50,7 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
         $translator = Application_Translate::getInstance();
 
         foreach ($options as $index => $type) {
-            if (! is_null($translator) && $translator->isTranslated($index)) {
+            if ($translator !== null && $translator->isTranslated($index)) {
                 $label = $translator->translate($index);
             } else {
                 $label = $index;
@@ -64,6 +60,8 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
     }
 
     /**
+     * @param string $value
+     * @return $this
      */
     public function setValue($value)
     {
@@ -71,16 +69,16 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
 
         $translator = Application_Translate::getInstance();
 
-        if (! is_null($translator) && $translator->isTranslated($value)) {
+        if ($translator !== null && $translator->isTranslated($value)) {
             $label = $translator->translate($value);
         } else {
             $label = $value;
         }
 
-        if (is_null($option)) {
+        if ($option === null) {
             $this->addMultiOption($value, $label);
         }
 
-        parent::setValue($value);
+        return parent::setValue($value);
     }
 }

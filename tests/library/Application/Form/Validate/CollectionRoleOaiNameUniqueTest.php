@@ -33,9 +33,10 @@ use Opus\Common\CollectionRole;
 
 class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Application_Form_Validate_CollectionRoleOaiNameUnique */
     private $validator;
 
     public function setUp(): void
@@ -45,9 +46,10 @@ class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends Controll
         $this->validator = new Application_Form_Validate_CollectionRoleOaiNameUnique();
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         $collectionRole = CollectionRole::fetchByName('NewTestColRoleName');
-        if (! is_null($collectionRole)) {
+        if ($collectionRole !== null) {
             $collectionRole->delete();
         }
         parent::tearDown();
@@ -79,7 +81,7 @@ class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends Controll
         $collectionRole->setOaiName('NewTestColRoleOaiName');
         $collectionRole->store();
 
-        $method = new ReflectionMethod('Application_Form_Validate_CollectionRoleOaiNameUnique', '_getModel');
+        $method = new ReflectionMethod(Application_Form_Validate_CollectionRoleOaiNameUnique::class, 'getModel');
         $method->setAccessible(true);
 
         $model = $method->invoke($this->validator, ['NewTestColRoleOaiName']);

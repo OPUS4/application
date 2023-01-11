@@ -30,14 +30,19 @@
  */
 class Application_Form_Element_TextareaTest extends FormElementTestCase
 {
-
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Textarea';
-        $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper'];
-        $this->_staticViewHelper = 'viewFormTextarea';
+        $this->formElementClass       = 'Application_Form_Element_Textarea';
+        $this->expectedDecoratorCount = 6;
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+        ];
+        $this->staticViewHelper       = 'viewFormTextarea';
         parent::setUp();
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,6 +24,9 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
@@ -30,18 +34,15 @@
  *
  * Ersetzt den normalen ViewHelper Dekorator, um statt INPUT-Elementen, einfach nur den Wert des Formularelements in
  * einem DIV auszugeben. Das wird für die statische Ansicht von Formularen, z.B. Metadaten-Übersicht verwendet.
- *
- * @category    Application
- * @package     Application_Form_Decorator
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Decorator_ViewHelper extends \Zend_Form_Decorator_ViewHelper
+class Application_Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper
 {
+    /** @var bool */
+    private $viewOnlyEnabled = false;
 
-    private $_viewOnlyEnabled = false;
-
+    /**
+     * @return string
+     */
     public function getHelper()
     {
         if ($this->isViewOnlyEnabled()) {
@@ -57,7 +58,7 @@ class Application_Form_Decorator_ViewHelper extends \Zend_Form_Decorator_ViewHel
                 $helper = 'viewForm' . ucfirst($type);
                 try {
                     $element->getView()->getHelper($helper);
-                } catch (\Zend_Loader_PluginLoader_Exception $zlpe) {
+                } catch (Zend_Loader_PluginLoader_Exception $zlpe) {
                     $helper = 'viewFormDefault';
                 }
             }
@@ -68,21 +69,28 @@ class Application_Form_Decorator_ViewHelper extends \Zend_Form_Decorator_ViewHel
         }
     }
 
+    /**
+     * @param bool $enabled
+     * @return $this
+     */
     public function setViewOnlyEnabled($enabled)
     {
-        $this->_viewOnlyEnabled = $enabled;
+        $this->viewOnlyEnabled = $enabled;
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function isViewOnlyEnabled()
     {
         $enabled = $this->getOption('viewOnlyEnabled');
 
-        if (! is_null($enabled)) {
+        if ($enabled !== null) {
             $this->removeOption('viewOnlyEnabled');
-            $this->_viewOnlyEnabled = $enabled;
+            $this->viewOnlyEnabled = $enabled;
         }
 
-        return $this->_viewOnlyEnabled;
+        return $this->viewOnlyEnabled;
     }
 }

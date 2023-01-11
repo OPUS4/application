@@ -34,17 +34,22 @@
  */
 class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_SupportedLanguages';
-        $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = [
-            'ViewHelper', 'Description', 'Errors', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        $this->formElementClass       = 'Application_Form_Element_SupportedLanguages';
+        $this->expectedDecoratorCount = 6;
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Description',
+            'Errors',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
         ];
-        $this->_staticViewHelper = 'viewFormMultiCheckbox';
+        $this->staticViewHelper       = 'viewFormMultiCheckbox';
         parent::setUp();
     }
 
@@ -86,7 +91,8 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         $this->assertNotNull($options);
         $this->assertInternalType('array', $options);
         $this->assertEquals([
-            'en' => 'Englisch', 'de' => 'Deutsch'
+            'en' => 'Englisch',
+            'de' => 'Deutsch',
         ], $options);
     }
 
@@ -101,7 +107,8 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         $this->assertNotNull($options);
         $this->assertInternalType('array', $options);
         $this->assertEquals([
-            'en' => 'English', 'de' => 'German'
+            'en' => 'English',
+            'de' => 'German',
         ], $options);
     }
 

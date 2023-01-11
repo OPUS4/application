@@ -28,17 +28,19 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_Form_TableHeaderTest extends TestCase
 {
+    /** @var Application_Form_TableHeader */
+    private $form;
 
-    private $form = null;
-
+    /** @var array */
     private $columns = [
         ['label' => null, 'class' => 'file'],
         ['label' => 'files_column_size', 'class' => 'size'],
         ['label' => 'files_column_language', 'class' => 'language'],
         ['label' => 'files_column_frontdoor', 'class' => 'visiblefrontdoor'],
-        ['label' => 'files_column_oai', 'class' => 'visibleoai']
+        ['label' => 'files_column_oai', 'class' => 'visibleoai'],
     ];
 
     public function setUp(): void
@@ -61,13 +63,15 @@ class Application_Form_TableHeaderTest extends TestCase
 
     public function testConstructFormNull()
     {
-        $this->setExpectedException(Application_Exception::class, 'Parameter \'columns\' must be array.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Parameter \'columns\' must be array.');
         new Application_Form_TableHeader(null);
     }
 
     public function testConstructFormNotArray()
     {
-        $this->setExpectedException(Application_Exception::class, 'Parameter \'columns\' must be array.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Parameter \'columns\' must be array.');
         new Application_Form_TableHeader('notAnArray');
     }
 

@@ -31,16 +31,21 @@
 
 class Application_Form_Element_TextTest extends FormElementTestCase
 {
-
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Text';
-        $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = [
-            'ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        $this->formElementClass       = 'Application_Form_Element_Text';
+        $this->expectedDecoratorCount = 8;
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Placeholder',
+            'Description',
+            'ElementHint',
+            'Errors',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
         ];
-        $this->_staticViewHelper = 'viewFormDefault';
+        $this->staticViewHelper       = 'viewFormDefault';
         parent::setUp();
     }
 

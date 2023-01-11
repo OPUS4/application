@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -34,9 +32,8 @@
 /**
  * Angepasste Klasse für Textarea Formularelemente.
  */
-class Application_Form_Element_Textarea extends \Zend_Form_Element_Textarea implements Application_Form_IElement
+class Application_Form_Element_Textarea extends Zend_Form_Element_Textarea implements Application_Form_IElement
 {
-
     /**
      * Initialisiert das Formularelement.
      *
@@ -47,31 +44,34 @@ class Application_Form_Element_Textarea extends \Zend_Form_Element_Textarea impl
         parent::init();
 
         // TODO move to setDefaultAttribs()
-        if (is_null($this->getAttrib('rows'))) {
+        if ($this->getAttrib('rows') === null) {
             $this->setAttrib('rows', 6);
         }
 
-        if (is_null($this->getAttrib('cols'))) {
+        if ($this->getAttrib('cols') === null) {
             $this->setAttrib('cols', 70);
         }
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators()
     {
-        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) === 0) {
             $this->setDecorators([
                 'ViewHelper',
                 'Errors',
                 'Description',
                 'ElementHtmlTag',
                 ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
             ]);
         }
     }
 
+    /**
+     * @return null
+     */
     public function getHint()
     {
         return null; // kein Textarea bekannt das Hints benötigen würde
@@ -88,6 +88,9 @@ class Application_Form_Element_Textarea extends \Zend_Form_Element_Textarea impl
         }
     }
 
+    /**
+     * @return string
+     */
     public function getStaticViewHelper()
     {
         return 'viewFormTextarea';

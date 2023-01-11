@@ -31,37 +31,37 @@
 
 class Application_Form_Validate_OrcidTest extends ControllerTestCase
 {
-
-    private $_validator;
+    /** @var Application_Form_Validate_Orcid */
+    private $validator;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->_validator = new Application_Form_Validate_Orcid();
+        $this->validator = new Application_Form_Validate_Orcid();
     }
 
     public function testIsValidFalseFormat()
     {
-        $this->assertFalse($this->_validator->isValid(''));
-        $this->assertFalse($this->_validator->isValid('Hallo'));
-        $this->assertFalse($this->_validator->isValid('1234567890'));
-        $this->assertFalse($this->_validator->isValid('0000000218250097'));
-        $this->assertFalse($this->_validator->isValid('0000-00X0-0000-0000'));
-        $this->assertArrayHasKey('notValidFormat', $this->_validator->getMessages());
-        $this->assertCount(1, $this->_validator->getMessages());
+        $this->assertFalse($this->validator->isValid(''));
+        $this->assertFalse($this->validator->isValid('Hallo'));
+        $this->assertFalse($this->validator->isValid('1234567890'));
+        $this->assertFalse($this->validator->isValid('0000000218250097'));
+        $this->assertFalse($this->validator->isValid('0000-00X0-0000-0000'));
+        $this->assertArrayHasKey('notValidFormat', $this->validator->getMessages());
+        $this->assertCount(1, $this->validator->getMessages());
     }
 
     public function testIsValidFalseChecksum()
     {
-        $this->assertFalse($this->_validator->isValid('0000-0002-1825-009X'));
-        $this->assertArrayHasKey('notValidChecksum', $this->_validator->getMessages());
-        $this->assertCount(1, $this->_validator->getMessages());
+        $this->assertFalse($this->validator->isValid('0000-0002-1825-009X'));
+        $this->assertArrayHasKey('notValidChecksum', $this->validator->getMessages());
+        $this->assertCount(1, $this->validator->getMessages());
     }
 
     public function testIsValidTrue()
     {
-        $this->assertTrue($this->_validator->isValid('0000-0002-1825-0097'));
-        $this->assertTrue($this->_validator->isValid('0000-0002-1825-010X'));
+        $this->assertTrue($this->validator->isValid('0000-0002-1825-0097'));
+        $this->assertTrue($this->validator->isValid('0000-0002-1825-010X'));
     }
 
     public function testGenerateCheckDigit()

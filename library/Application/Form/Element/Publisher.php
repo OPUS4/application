@@ -38,7 +38,6 @@ use Opus\Common\Model\NotFoundException;
  */
 class Application_Form_Element_Publisher extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();
@@ -46,7 +45,7 @@ class Application_Form_Element_Publisher extends Application_Form_Element_Select
         $this->setRequired(true);
         $this->setDisableTranslator(true); // publishing institutions are not translated
 
-        $validator = new \Zend_Validate_Int();
+        $validator = new Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 
@@ -63,7 +62,7 @@ class Application_Form_Element_Publisher extends Application_Form_Element_Select
      * If $value is a valid DNB institute a corresponding option is added to select if necessary.
      *
      * @param mixed $value
-     * @return void|\Zend_Form_Element
+     * @return void|Zend_Form_Element
      * @throws ModelException
      */
     public function setValue($value)

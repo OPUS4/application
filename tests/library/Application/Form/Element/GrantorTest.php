@@ -33,17 +33,23 @@ use Opus\Common\DnbInstitute;
 
 class Application_Form_Element_GrantorTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Grantor';
-        $this->_expectedDecorators = [
-            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper', 'ElementHint'
+        $this->formElementClass       = 'Application_Form_Element_Grantor';
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+            'ElementHint',
         ];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
+        $this->expectedDecoratorCount = count($this->expectedDecorators);
+        $this->staticViewHelper       = 'viewFormSelect';
         parent::setUp();
     }
 
@@ -77,7 +83,7 @@ class Application_Form_Element_GrantorTest extends FormElementTestCase
 
         $optionCount = count($element->getMultiOptions());
 
-        $grantors = DnbInstitute::getGrantors();
+        $grantors   = DnbInstitute::getGrantors();
         $publishers = DnbInstitute::getPublishers();
 
         $nonGrantors = array_diff($publishers, $grantors);

@@ -31,15 +31,20 @@
 
 class Application_Form_Element_ComboboxTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Combobox';
-        $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = [
-            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'
+        $this->formElementClass       = 'Application_Form_Element_Combobox';
+        $this->expectedDecoratorCount = 6;
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
         ];
         parent::setUp();
     }

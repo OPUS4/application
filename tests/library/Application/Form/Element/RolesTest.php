@@ -36,15 +36,15 @@ use Opus\Common\UserRole;
  */
 class Application_Form_Element_RolesTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Roles';
-        $this->_expectedDecoratorCount = 4;
-        $this->_expectedDecorators = ['ViewHelper', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
-        $this->_staticViewHelper = 'viewFormMultiCheckbox';
+        $this->formElementClass       = 'Application_Form_Element_Roles';
+        $this->expectedDecoratorCount = 4;
+        $this->expectedDecorators     = ['ViewHelper', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
+        $this->staticViewHelper       = 'viewFormMultiCheckbox';
         parent::setUp();
     }
 
@@ -97,7 +97,7 @@ class Application_Form_Element_RolesTest extends FormElementTestCase
         $this->assertCount(count($expectedRoles), $roles);
 
         foreach ($roles as $role) {
-            $this->assertInstanceOf('Opus\UserRole', $role);
+            $this->assertInstanceOf(\Opus\UserRole::class, $role);
             $this->assertContains($role->getName(), $expectedRoles);
 
             // removed already checked roles from expectation

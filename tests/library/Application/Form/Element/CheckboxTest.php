@@ -31,15 +31,20 @@
 
 class Application_Form_Element_CheckboxTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
     public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Checkbox';
-        $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = [
-            'ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'Label', 'dataWrapper'
+        $this->formElementClass       = 'Application_Form_Element_Checkbox';
+        $this->expectedDecoratorCount = 6;
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'Label',
+            'dataWrapper',
         ];
         parent::setUp();
     }

@@ -33,7 +33,7 @@ use Opus\Common\File;
 
 class Application_Form_Decorator_FileHashTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testRenderWithoutElement()
@@ -47,7 +47,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
     {
         $decorator = new Application_Form_Decorator_FileHash();
 
-        $decorator->setElement(new \Zend_Form_Element_Text('text'));
+        $decorator->setElement(new Zend_Form_Element_Text('text'));
 
         $this->assertEquals('content', $decorator->render('content'));
     }
@@ -56,9 +56,9 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
     {
         $element = new Application_Form_Element_FileHash('name');
 
-        $file = File::get(116);
+        $file   = File::get(116);
         $hashes = $file->getHashValue();
-        $hash = $hashes[0];
+        $hash   = $hashes[0];
 
         $this->assertEquals('MD5', $hash->getType());
 
@@ -84,9 +84,9 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
         $this->useEnglish();
         $element = new Application_Form_Element_FileHash('name');
 
-        $file = File::get(116);
+        $file   = File::get(116);
         $hashes = $file->getHashValue();
-        $hash = $hashes[0];
+        $hash   = $hashes[0];
 
         $this->assertEquals('MD5', $hash->getType());
 
@@ -113,7 +113,7 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
         $this->useEnglish();
         $element = new Application_Form_Element_FileHash('name');
 
-        $file = File::get(123);
+        $file   = File::get(123);
         $hashes = $file->getHashValue();
 
         $hash = $hashes[0];
@@ -139,11 +139,11 @@ class Application_Form_Decorator_FileHashTest extends ControllerTestCase
     {
         $this->useEnglish();
         $config = $this->getConfig();
-        $config->merge(new \Zend_Config(['checksum' => ['maxVerificationSize' => '0']]));
+        $config->merge(new Zend_Config(['checksum' => ['maxVerificationSize' => '0']]));
 
         $element = new Application_Form_Element_FileHash('name');
 
-        $file = File::get(116);
+        $file   = File::get(116);
         $hashes = $file->getHashValue();
 
         $hash = $hashes[0];

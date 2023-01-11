@@ -34,6 +34,7 @@
  */
 class Application_Form_AbstractTest extends ControllerTestCase
 {
+    /** @var Application_Form_Abstract */
     private $form;
 
     public function setUp(): void
@@ -43,20 +44,23 @@ class Application_Form_AbstractTest extends ControllerTestCase
         $this->form = $this->getForm();
     }
 
+    /**
+     * @return Application_Form_Abstract
+     */
     private function getForm()
     {
-        return $this->getMockForAbstractClass('Application_Form_Abstract');
+        return $this->getMockForAbstractClass(Application_Form_Abstract::class);
     }
 
     public function testInit()
     {
         $this->form->init();
 
-        $paths = $this->form->getPluginLoader(\Zend_Form::DECORATOR)->getPaths();
+        $paths = $this->form->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
         $this->assertArrayHasKey('Application_Form_Decorator_', $paths);
         $this->assertContains('Application/Form/Decorator/', $paths['Application_Form_Decorator_']);
 
-        $paths = $this->form->getPluginLoader(\Zend_Form::ELEMENT)->getPaths();
+        $paths = $this->form->getPluginLoader(Zend_Form::ELEMENT)->getPaths();
         $this->assertArrayHasKey('Application_Form_Element_', $paths);
         $this->assertContains('Application/Form/Element/', $paths['Application_Form_Element_']);
     }
@@ -73,14 +77,14 @@ class Application_Form_AbstractTest extends ControllerTestCase
     public function testGetLogger()
     {
         $this->assertNotNull($this->form->getLogger());
-        $this->assertInstanceOf(\Zend_Log::class, $this->form->getLogger());
+        $this->assertInstanceOf(Zend_Log::class, $this->form->getLogger());
     }
 
     public function testGetElementValue()
     {
         $form = $this->form;
 
-        $elementText = new \Zend_Form_Element_Text('text');
+        $elementText = new Zend_Form_Element_Text('text');
         $form->addElement($elementText);
 
         $elementText->setValue('Test Test');
@@ -92,7 +96,7 @@ class Application_Form_AbstractTest extends ControllerTestCase
         $elementText->setValue('0');
         $this->assertEquals('0', $form->getElementValue('text'));
 
-        $elementCheckbox = new \Zend_Form_Element_Checkbox('checkbox');
+        $elementCheckbox = new Zend_Form_Element_Checkbox('checkbox');
         $form->addElement($elementCheckbox);
 
         $elementCheckbox->setChecked(true);
@@ -191,8 +195,8 @@ class Application_Form_AbstractTest extends ControllerTestCase
     public function testAddElementRequiredExistingValidatorMessages()
     {
         $this->form->addElement('text', 'test', [
-            'required' => true,
-            'validators' => ['notEmpty']
+            'required'   => true,
+            'validators' => ['notEmpty'],
         ]);
 
         $element = $this->form->getElement('test');
@@ -247,13 +251,13 @@ class Application_Form_AbstractTest extends ControllerTestCase
         $config = $this->form->getApplicationConfig();
 
         $this->assertNotNull($config);
-        $this->assertInstanceOf(\Zend_Config::class, $config);
+        $this->assertInstanceOf(Zend_Config::class, $config);
         $this->assertSame($config, $this->getConfig());
     }
 
     public function testSetApplicationConfig()
     {
-        $config = new \Zend_Config(['test' => true]);
+        $config = new Zend_Config(['test' => true]);
 
         $this->form->setApplicationConfig($config);
 
