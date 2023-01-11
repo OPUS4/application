@@ -31,14 +31,15 @@
 
 class AccountSecurity14Test extends AccessModuleSetupAndAdminTest
 {
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
         parent::setUpTests('security14', 'security14pwd', [
-            'module_admin' => false,
-            'module_setup' => false,
+            'module_admin'          => false,
+            'module_setup'          => false,
             'controller_staticpage' => true,
-            'controller_helppage' => false,
-            'controller_language' => false
+            'controller_helppage'   => false,
+            'controller_language'   => false,
         ]);
     }
 }

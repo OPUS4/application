@@ -31,9 +31,10 @@
 
 class LicencesAdminTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function setUp(): void

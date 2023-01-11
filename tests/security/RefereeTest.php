@@ -30,13 +30,15 @@
  */
 
 use Opus\Common\Account;
+use Opus\Common\AccountInterface;
 use Opus\Common\UserRole;
 
 class RefereeTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
+    /** @var AccountInterface */
     private $refereeAccount;
 
     public function setUp(): void
@@ -62,7 +64,7 @@ class RefereeTest extends ControllerTestCase
         $this->logoutUser();
         $this->restoreSecuritySetting();
 
-        if (! is_null($this->refereeAccount)) {
+        if ($this->refereeAccount !== null) {
             $this->refereeAccount->delete();
         }
 

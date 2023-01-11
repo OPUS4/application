@@ -31,13 +31,14 @@
 
 class AccountSecurity20Test extends AccessModuleAdminOneResourceOnlyTest
 {
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
         parent::setUpTests('security20', 'security20pwd', [
-            'module_admin' => true,
-            'module_setup' => false,
+            'module_admin'     => true,
+            'module_setup'     => false,
             'indexmaintenance' => false,
-            'job' => true
+            'job'              => true,
         ]);
     }
 }

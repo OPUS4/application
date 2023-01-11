@@ -31,18 +31,21 @@
 
 class FullAdminTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'navigation', 'mainMenu', 'translation'];
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
         $this->enableSecurity();
         $this->loginUser('security1', 'security1pwd');
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();

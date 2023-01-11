@@ -31,9 +31,10 @@
 
 class ReviewerAndFullAdminTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation', 'view', 'mainMenu', 'navigation'];
 
     public function setUp(): void

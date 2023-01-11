@@ -34,12 +34,16 @@ use Opus\Common\UserRole;
 
 class SeriesAdminTest extends ControllerTestCase
 {
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation', 'view', 'navigation', 'mainMenu'];
 
+    /** @var string */
     private $userName = 'seriesadminuser';
 
+    /** @var string */
     private $roleName = 'test-seriesadmin';
 
     public function setUp(): void

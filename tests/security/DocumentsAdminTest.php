@@ -31,17 +31,20 @@
 
 class DocumentsAdminTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'all';
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
         $this->enableSecurity();
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();
