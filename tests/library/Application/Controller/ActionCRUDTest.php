@@ -31,20 +31,22 @@
 
 use Opus\Common\Licence;
 use Opus\Common\LicenceInterface;
+use Opus\Document;
+use Opus\EnrichmentKey;
 
 /**
- * Class Application_Controller_ActionCRUDTest
- *
  * Erstellt und löscht Lizenzen.
  */
 class Application_Controller_ActionCRUDTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
-    private $controller = null;
+    /** @var Application_Controller_ActionCRUD */
+    private $controller;
 
-    private $licenceIds = null;
+    /** @var int[] */
+    private $licenceIds;
 
     public function setUp(): void
     {
@@ -62,7 +64,8 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         }
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         $licences = Licence::getAll();
 
         if (count($this->licenceIds) < count($licences)) {
@@ -76,6 +79,9 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         parent::tearDown();
     }
 
+    /**
+     * @param array $messages
+     */
     private function verifyMessages($messages)
     {
         $this->assertArrayHasKey(Application_Controller_ActionCRUD::SAVE_SUCCESS, $messages);
@@ -85,6 +91,9 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $this->assertArrayHasKey(Application_Controller_ActionCRUD::INVALID_ID, $messages);
     }
 
+    /**
+     * @return Application_Controller_ActionCRUD
+     */
     private function getController()
     {
         return new Application_Controller_ActionCRUD($this->getRequest(), $this->getResponse());
@@ -103,8 +112,9 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     public function testSetFormClassBadClass()
     {
-        $this->setExpectedException(Application_Exception::class, 'not instance of Application_Form_IModel');
-        $this->controller->setFormClass('Opus\Document');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('not instance of Application_Form_IModel');
+        $this->controller->setFormClass(Document::class);
     }
 
     public function testIsClassSupportedTrue()
@@ -157,7 +167,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $model = $this->controller->getModel('City');
 
         $this->assertNotNull($model);
-        $this->assertInstanceOf('Opus\EnrichmentKey', $model);
+        $this->assertInstanceOf(EnrichmentKey::class, $model);
         $this->assertEquals('City', $model->getName());
     }
 
@@ -217,7 +227,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     {
         $this->controller->setMessages([
             'saveSuccess' => 'success',
-            'saveFailure' => 'failure'
+            'saveFailure' => 'failure',
         ]);
     }
 
@@ -232,7 +242,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     public function testGetConfirmationForm()
     {
         $model = Licence::get(2);
-        $form = $this->controller->getConfirmationForm($model);
+        $form  = $this->controller->getConfirmationForm($model);
         $this->assertNotNull($form);
         $this->assertInstanceOf('Application_Form_Confirmation', $form);
         $this->assertEquals(2, $form->getModelId());
@@ -248,7 +258,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     public function testHandlePostCancel()
     {
         $result = $this->controller->handleModelPost([
-            'Cancel' => 'Abbrechen'
+            'Cancel' => 'Abbrechen',
         ]);
 
         $this->assertNotNull($result);
@@ -259,10 +269,10 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     public function testHandlePostSave()
     {
         $result = $this->controller->handleModelPost([
-            'Save' => 'Abspeichern',
-            'NameLong' => 'New Test Licence',
-            'Language' => 'deu',
-            'LinkLicence' => 'www.example.org/licence'
+            'Save'        => 'Abspeichern',
+            'NameLong'    => 'New Test Licence',
+            'Language'    => 'deu',
+            'LinkLicence' => 'www.example.org/licence',
         ]);
 
         $this->assertNotNull($result);
@@ -289,10 +299,10 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $this->assertFalse($this->controller->getShowActionEnabled());
 
         $result = $this->controller->handleModelPost([
-            'Save' => 'Abspeichern',
-            'NameLong' => 'New Test Licence',
-            'Language' => 'deu',
-            'LinkLicence' => 'www.example.org/licence'
+            'Save'        => 'Abspeichern',
+            'NameLong'    => 'New Test Licence',
+            'Language'    => 'deu',
+            'LinkLicence' => 'www.example.org/licence',
         ]);
 
         $this->assertNotNull($result);
@@ -305,10 +315,10 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     public function testHandlePostSaveInvalid()
     {
         $result = $this->controller->handleModelPost([
-            'Save' => 'Abspeichern',
-            'NameLong' => '', // is required
-            'Language' => 'abc',
-            'LinkLicence' => 'www.example.org/licence'
+            'Save'        => 'Abspeichern',
+            'NameLong'    => '', // is required
+            'Language'    => 'abc',
+            'LinkLicence' => 'www.example.org/licence',
         ]);
 
         $this->assertNotNull($result);
@@ -321,11 +331,11 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     public function testHandlePostSaveInvalidId()
     {
         $result = $this->controller->handleModelPost([
-            'Save' => 'Abspeichern',
-            'Id' => 1000,
-            'NameLong' => 'Test Licence',
-            'Language' => 'deu',
-            'LinkLicence' => 'www.example.org/licence'
+            'Save'        => 'Abspeichern',
+            'Id'          => 1000,
+            'NameLong'    => 'Test Licence',
+            'Language'    => 'deu',
+            'LinkLicence' => 'www.example.org/licence',
         ]);
 
         $this->assertNotNull($result);
@@ -347,11 +357,11 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     public function testHandlePostGetPostIfParamNull()
     {
         $this->getRequest()->setMethod('POST')->setPost([
-            'Save' => 'Abspeichern',
-            'Id' => 1000,
-            'NameLong' => 'Test Licence',
-            'Language' => 'deu',
-            'LinkLicence' => 'www.example.org/licence'
+            'Save'        => 'Abspeichern',
+            'Id'          => 1000,
+            'NameLong'    => 'Test Licence',
+            'Language'    => 'deu',
+            'LinkLicence' => 'www.example.org/licence',
         ]);
 
         $result = $this->controller->handleModelPost();
@@ -377,8 +387,8 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     public function testHandleConfirmationPostNo()
     {
         $result = $this->controller->handleConfirmationPost([
-            'Id' => '1',
-            'ConfirmNo' => 'Nein'
+            'Id'        => '1',
+            'ConfirmNo' => 'Nein',
         ]);
 
         $this->assertNotNull($result);
@@ -389,8 +399,8 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     public function testHandleConfirmationPostInvalidId()
     {
         $result = $this->controller->handleConfirmationPost([
-            'Id' => '1000',
-            'ConfirmYes' => 'Ja'
+            'Id'         => '1000',
+            'ConfirmYes' => 'Ja',
         ]);
 
         $this->assertNotNull($result);
@@ -403,8 +413,8 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     public function testHandleConfirmationPostNoParamNull()
     {
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => '1',
-            'ConfirmNo' => 'Nein'
+            'Id'        => '1',
+            'ConfirmNo' => 'Nein',
         ]);
 
         $result = $this->controller->handleConfirmationPost();
@@ -425,8 +435,8 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $licenceId = $licence->store();
 
         $result = $this->controller->handleConfirmationPost([
-            'Id' => $licenceId,
-            'ConfirmYes' => 'Ja'
+            'Id'         => $licenceId,
+            'ConfirmYes' => 'Ja',
         ]);
 
         $this->assertNotNull($result);

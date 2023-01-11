@@ -34,12 +34,13 @@ use Opus\Common\Date;
 /**
  * Controller helper for handling conversion between Date and strings.
  */
-class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_Helper_Abstract
 {
     /**
      * Gets called when helper is used like method of the broker.
+     *
      * @param string $datestr Date string
-     * @return
+     * @return Date
      */
     public function direct($datestr)
     {
@@ -48,6 +49,7 @@ class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action
 
     /**
      * Checks if date string is valid for current locale.
+     *
      * @param string $datestr Date string
      * @return boolean TRUE - Only if date string is valid for current local
      */
@@ -58,15 +60,16 @@ class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action
 
     /**
      * Converts string to Date depending on current language.
+     *
      * @param string $datestr Date string
      * @return Date
      */
     public function getOpusDate($datestr)
     {
-        if (! is_null($datestr) && $this->isValid($datestr)) {
+        if ($datestr !== null && $this->isValid($datestr)) {
             $dateFormat = $this->getDateFormat();
-            $date = DateTime::createFromFormat($dateFormat, $datestr);
-            $dateModel = new Date();
+            $date       = DateTime::createFromFormat($dateFormat, $datestr);
+            $dateModel  = new Date();
             $dateModel->setDateOnly($date);
             return $dateModel;
         } else {
@@ -77,13 +80,14 @@ class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action
 
     /**
      * Converts Date into string depending on current language.
+     *
      * @param Date $date Date
      * @return string Date string for current language
      */
     public function getDateString($date)
     {
         // Protect against invalid dates
-        if (! is_null($date) && $date->isValid()) {
+        if ($date !== null && $date->isValid()) {
             $dateFormat = $this->getDateFormat();
             return $date->getDateTime()->format($dateFormat);
         } else {

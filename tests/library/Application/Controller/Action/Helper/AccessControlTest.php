@@ -34,12 +34,14 @@
  */
 class Application_Controller_Action_Helper_AccessControlTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var Application_Controller_Action_Helper_AccessControl */
     private $accessControl;
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
         $acl = Application_Security_AclProvider::getAcl();
@@ -47,7 +49,8 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
         $this->accessControl = new Application_Controller_Action_Helper_AccessControl();
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         $acl = Application_Security_AclProvider::getAcl();
         $acl->deny('guest', 'accounts');
         parent::tearDown();
@@ -55,7 +58,7 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
 
     public function testAccessAllowed()
     {
-        $user = \Zend_Auth::getInstance()->getIdentity();
+        $user = Zend_Auth::getInstance()->getIdentity();
         $this->assertEquals('', $user, "expected no user to be set (should use default 'guest' as default)");
 
         $allowedDocuments = $this->accessControl->accessAllowed('documents');
@@ -67,19 +70,22 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
 
     public function testAccessAllowedForEmptyResource()
     {
-        $this->setExpectedException(Application_Exception::class, '#1 argument must not be empty|null');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('#1 argument must not be empty|null');
         $this->accessControl->accessAllowed('  ');
     }
 
     public function testAccessAllowedForNullResource()
     {
-        $this->setExpectedException(Application_Exception::class, '#1 argument must not be empty|null');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('#1 argument must not be empty|null');
         $this->accessControl->accessAllowed(null);
     }
 
     public function testAccessAllowedForUnknownResource()
     {
-        $this->setExpectedException(\Zend_Acl_Exception::class, 'Resource \'unknown\' not found');
+        $this->expectException(Zend_Acl_Exception::class);
+        $this->expectExceptionMessage('Resource \'unknown\' not found');
         $this->assertFalse($this->accessControl->accessAllowed('unknown'));
     }
 }

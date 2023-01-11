@@ -30,20 +30,23 @@
  *
  * TODO test checkFile
  */
+
 class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase
 {
-
+    /** @var Zend_Controller_Action_Helper_Abstract */
     private $helper;
 
+    /** @var string */
     private $folder;
 
+    /** @var string[] */
     private $localTestFiles = ['test.pdf', 'test.txt', 'test.png'];
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('Files');
+        $this->helper = Zend_Controller_Action_HelperBroker::getStaticHelper('Files');
 
         $this->assertNotNull($this->helper, 'Files Action Helper not available.');
 
@@ -54,7 +57,8 @@ class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase
         }
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         foreach ($this->localTestFiles as $file) {
             unlink($this->folder . '/' . $file);
         }

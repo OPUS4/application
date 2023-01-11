@@ -31,7 +31,7 @@
 
 class Application_Configuration_ModuleTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function testIsRegistered()

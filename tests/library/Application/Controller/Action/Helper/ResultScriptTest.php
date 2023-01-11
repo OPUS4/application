@@ -31,9 +31,10 @@
 
 class Application_Controller_Action_Helper_ResultScriptTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var Application_Controller_Action_Helper_ResultScript */
     protected $helper;
 
     public function setUp(): void
@@ -51,7 +52,7 @@ class Application_Controller_Action_Helper_ResultScriptTest extends ControllerTe
     public function testCustomScriptDoesNotExist()
     {
         $this->adjustConfiguration([
-            'search' => ['result' => ['script' => 'result.phtml']]
+            'search' => ['result' => ['script' => 'result.phtml']],
         ]);
 
         $script = $this->helper->direct();
@@ -62,7 +63,7 @@ class Application_Controller_Action_Helper_ResultScriptTest extends ControllerTe
     public function testCustomScriptExists()
     {
         $this->adjustConfiguration([
-            'search' => ['result' => ['script' => 'result.phtml']]
+            'search' => ['result' => ['script' => 'result.phtml']],
         ]);
 
         touch(APPLICATION_PATH . '/application/configs/templates/result.phtml');

@@ -34,22 +34,29 @@ use Opus\Common\Title;
 
 class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'database', 'navigation'];
 
-    private $helper = null;
+    /** @var Zend_Controller_Action_Helper_Abstract */
+    private $helper;
 
-    private $navigation = null;
+    /** @var Zend_View_Helper_Navigation */
+    private $navigation;
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
-        $this->helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('breadcrumbs');
+        $this->helper     = Zend_Controller_Action_HelperBroker::getStaticHelper('breadcrumbs');
         $this->navigation = $this->getView()->navigation();
         $this->helper->setNavigation($this->navigation);
         $this->helper->setView($this->getView());
     }
 
+    /**
+     * @param string $label
+     * @return mixed
+     */
     private function getPage($label)
     {
         return $this->navigation->findOneBy('label', $label);
@@ -100,7 +107,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
     public function testSetGetNavigation()
     {
-        $navigation = new \Zend_Navigation();
+        $navigation = new Zend_Navigation();
 
         $this->helper->setNavigation($navigation);
         $this->assertEquals($navigation, $this->helper->getNavigation());

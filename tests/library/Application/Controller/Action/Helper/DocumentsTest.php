@@ -34,15 +34,17 @@ use Opus\Common\DocumentInterface;
 
 class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Zend_Controller_Action_Helper_Abstract */
     private $documents;
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
-        $this->documents = \Zend_Controller_Action_HelperBroker::getStaticHelper('Documents');
+        $this->documents = Zend_Controller_Action_HelperBroker::getStaticHelper('Documents');
     }
 
     public function testGetDocumentForIdForValidId()
@@ -93,7 +95,7 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $lastId = 0;
 
         foreach ($documents as $value) {
-            $this->assertTrue(ctype_digit($value));
+            $this->assertInternalType('int', $value);
             $this->assertGreaterThan($lastId, $value); // check ascending order
             $lastId = $value;
         }
@@ -109,27 +111,30 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $lastId = max($documents) + 1; // start with something greater than the greatest ID
 
         foreach ($documents as $value) {
-            $this->assertTrue(ctype_digit($value));
+            $this->assertInternalType('int', $value);
             $this->assertLessThan($lastId, $value); // check descending order
             $lastId = $value;
         }
     }
 
+    /**
+     * @return array
+     */
     public function stateProvider()
     {
         return [
-            'published' => ['published'],
-            'restricted' => ['restricted'],
+            'published'   => ['published'],
+            'restricted'  => ['restricted'],
             'unpublished' => ['unpublished'],
-            'deleted' => ['deleted'],
-            'inprogress' => ['inprogress'],
-            'audited' => ['audited']
+            'deleted'     => ['deleted'],
+            'inprogress'  => ['inprogress'],
+            'audited'     => ['audited'],
         ];
     }
 
     /**
-     * @param $state
      * @dataProvider stateProvider
+     * @param string $state
      */
     public function testGetSortedDocumentIdsForState($state)
     {

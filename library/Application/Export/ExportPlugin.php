@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -40,36 +38,40 @@
  */
 interface Application_Export_ExportPlugin
 {
-
     /**
      * Returns name of plugin.
+     *
      * @return mixed
      */
     public function getName();
 
     /**
      * Sets the plugin configuration.
-     * @param \Zend_Config $config
+     *
+     * @param null|Zend_Config $config
      */
-    public function setConfig(\Zend_Config $config = null);
+    public function setConfig($config = null);
 
     /**
      * Sets the HTTP request being processed.
-     * @param \Zend_Controller_Request_Http $request
+     *
+     * @param Zend_Controller_Request_Abstract $request
      */
-    public function setRequest(\Zend_Controller_Request_Http $request);
+    public function setRequest($request);
 
     /**
      * Sets the HTTP response.
-     * @param \Zend_Controller_Response_Http $response
+     *
+     * @param Zend_Controller_Response_Abstract $response
      */
-    public function setResponse(\Zend_Controller_Response_Http $response);
+    public function setResponse($response);
 
     /**
      * Sets the view objekt for rendering the response.
-     * @param \Zend_View $view
+     *
+     * @param Zend_View_Interface $view
      */
-    public function setView(\Zend_View $view);
+    public function setView($view);
 
     /**
      * Main function performing export.

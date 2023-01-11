@@ -37,23 +37,22 @@
  */
 class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
-    /**
-     * @var Application_Controller_Action_Helper_DocumentTypes Instance of DocumentTypes helper for testing.
-     */
+    /** @var Application_Controller_Action_Helper_DocumentTypes Instance of DocumentTypes helper for testing. */
     private $docTypeHelper;
 
     /**
      * Setup tests.
      */
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
-        $this->docTypeHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $this->docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
     }
 
-    /*
+    /**
      * Testet, ob die Validierung der Dokumenttypen korrekt ist.
      */
     public function testDoctypeValidation()
@@ -65,7 +64,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $this->assertFalse($validationArray['demo_invalid']);
     }
 
-    /*
+    /**
      * Testet, ob die Dokumenttypen, die inkludiert oder exkludiert sind, ausgegeben werden
      */
     public function testActiveDoctypes()
@@ -78,18 +77,18 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $this->assertArrayNotHasKey('article', $validationArray);
     }
 
-    /*
+    /**
      * Testet, ob die korrekte Fehlermeldung ausgegeben wird, wenn das Dokument nicht validiert werden kann
      */
     public function testErrorMessage()
     {
         $this->docTypeHelper->validate('demo_invalid');
-        $errors = $this->docTypeHelper->getErrors();
+        $errors            = $this->docTypeHelper->getErrors();
         $demoInvalidErrors = $errors['demo_invalid'];
-        $this->assertEquals("Element '{http://www.opus-repository.org/schema/documenttype}field', " .
-            "attribute 'dataType': The attribute 'dataType' is not allowed.\n", $demoInvalidErrors[0]->message);
-        $this->assertEquals("Element '{http://www.opus-repository.org/schema/documenttype}default', " .
-            "attribute 'Value': The attribute 'Value' is not allowed.\n", $demoInvalidErrors[1]->message);
+        $this->assertEquals("Element '{http://www.opus-repository.org/schema/documenttype}field', "
+            . "attribute 'dataType': The attribute 'dataType' is not allowed.\n", $demoInvalidErrors[0]->message);
+        $this->assertEquals("Element '{http://www.opus-repository.org/schema/documenttype}default', "
+            . "attribute 'Value': The attribute 'Value' is not allowed.\n", $demoInvalidErrors[1]->message);
     }
 
     /**
@@ -166,13 +165,13 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
     public function testGetDocumentThrowsException()
     {
-        $this->setExpectedException('Application_Exception');
+        $this->expectException(Application_Exception::class);
         $this->docTypeHelper->getDocument('article');
     }
 
     public function testGetDocumentThrowsSchemaInvalidException()
     {
-        $this->setExpectedException('Application_Exception');
+        $this->expectException(Application_Exception::class);
         $this->docTypeHelper->getDocument('demo_invalid');
     }
 
@@ -193,7 +192,6 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     /**
      * Test getting document types twice.
      */
-
     public function testGetDocumentTypesTwice()
     {
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
@@ -222,7 +220,8 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
         unset($config->publish->path->documenttypes);
 
-        $this->setExpectedException(Application_Exception::class, 'Path to document types not configured');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Path to document types not configured');
         $this->docTypeHelper->getDocTypesPath();
     }
 
@@ -232,7 +231,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     public function testTranslationOfDocumentTypes()
     {
         $excludeFromTranslationCheck = ['demo_invalid', 'foobar', 'barbaz', 'bazbar'];
-        $translate = Application_Translate::getInstance();
+        $translate                   = Application_Translate::getInstance();
 
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
@@ -261,7 +260,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
                 $xml = new DOMDocument();
                 $xml->load($fileinfo->getPathname());
                 $result = $xml->schemaValidate($this->docTypeHelper->getXmlSchemaPath());
-                if ($fileinfo->getFilename() == 'demo_invalid.xml' || $fileinfo->getFilename() == 'demo_invalidfieldname.xml') {
+                if ($fileinfo->getFilename() === 'demo_invalid.xml' || $fileinfo->getFilename() === 'demo_invalidfieldname.xml') {
                     $this->assertFalse($result, $fileinfo->getFilename() . ' is valid');
                 } else {
                     $this->assertTrue($result, $fileinfo->getFilename() . ' is not valid');
@@ -278,9 +277,9 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
      */
     public function testDocumentTypesAndTemplates()
     {
-        $config = $this->getConfig();
+        $config    = $this->getConfig();
         $templates = $this->getFileNames($config->publish->path->documenttemplates, '.phtml');
-        $types = $this->getFileNames($config->publish->path->documenttypes, '.xml');
+        $types     = $this->getFileNames($config->publish->path->documenttypes, '.xml');
 
         // Test-Templates und -Dokumenttypen werden von der Prüfung ausgenommen
         unset($templates['barfoo']);
@@ -297,11 +296,16 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $this->assertEmpty($array2, 'Template missing for doctype: ' . implode(", ", $array2));
     }
 
+    /**
+     * @param string $path
+     * @param string $extension
+     * @return array
+     */
     private function getFileNames($path, $extension)
     {
         $fileNames = [];
 
-        if ($path instanceof \Zend_Config) {
+        if ($path instanceof Zend_Config) {
             $path = $path->toArray();
         }
 
@@ -330,9 +334,9 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $this->adjustConfiguration([
             'publish' => [
                 'path' => [
-                    'documenttypes' => APPLICATION_PATH . '/application/configs/doctypes'
-                ]
-            ]
+                    'documenttypes' => APPLICATION_PATH . '/application/configs/doctypes',
+                ],
+            ],
         ]);
 
         $paths = $this->docTypeHelper->getDocTypesPath();
