@@ -36,19 +36,23 @@ use Opus\Common\Log;
  * Base class for application tests.
  *
  * TODO any effect vvv ?
+ *
  * @preserveGlobalState disabled
  */
-class TestCase extends ZendTestCase
+class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
 {
-
+    /** @var Zend_Application */
     protected $application;
 
+    /** @var string */
     protected $applicationEnv = APPLICATION_ENV;
 
+    /** @var bool */
     protected $configModifiable = false;
 
     /**
      * Allows specifying additional resources that should be loaded during bootstrapping, e.g. 'database'.
+     *
      * @var string|array
      */
     protected $additionalResources;
@@ -56,15 +60,13 @@ class TestCase extends ZendTestCase
     /**
      * Overwrite standard setUp method, no database connection needed.  Will
      * create a file listing of class files instead.
-     *
-     * @return void
      */
     public function setUp(): void
     {
         $this->cleanupBefore();
 
         $this->application = $this->getApplication();
-        $this->bootstrap = [$this, 'appBootstrap'];
+        $this->bootstrap   = [$this, 'appBootstrap'];
 
         parent::setUp();
 
@@ -86,23 +88,27 @@ class TestCase extends ZendTestCase
     public function cleanupBefore()
     {
         // FIXME Does it help with the mystery bug?
-        \Zend_Registry::_unsetInstance();
+        Zend_Registry::_unsetInstance();
 
         $this->resetAutoloader();
     }
 
+    /**
+     * @return Zend_Application
+     * @throws Zend_Application_Exception
+     */
     public function getApplication()
     {
-        return new \Zend_Application(
+        return new Zend_Application(
             $this->applicationEnv,
-            ["config" => [
-                APPLICATION_PATH . '/tests/simple.ini'
-            ]]
+            [
+                "config" => [
+                    APPLICATION_PATH . '/tests/simple.ini',
+                ],
+            ]
         );
     }
 
-    /**
-     */
     public function appBootstrap()
     {
         $resources = ['configuration', 'logging', 'modules'];
@@ -127,8 +133,8 @@ class TestCase extends ZendTestCase
      */
     public function resetAutoloader()
     {
-        \Zend_Loader_Autoloader::resetInstance();
-        $autoloader = \Zend_Loader_Autoloader::getInstance();
+        Zend_Loader_Autoloader::resetInstance();
+        $autoloader = Zend_Loader_Autoloader::getInstance();
         $autoloader->suppressNotFoundWarnings(false);
         $autoloader->setFallbackAutoloader(true);
     }
@@ -152,10 +158,13 @@ class TestCase extends ZendTestCase
      */
     public function makeConfigurationModifiable()
     {
-        $config = new \Zend_Config([], true);
+        $config = new Zend_Config([], true);
         Config::set($config->merge(Config::get()));
     }
 
+    /**
+     * @return Zend_Config
+     */
     protected function getConfig()
     {
         return Config::get();

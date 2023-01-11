@@ -33,44 +33,76 @@ use Opus\Common\Security\RealmInterface;
 
 class MockRealm implements RealmInterface
 {
-
+    /** @var bool */
     private $fileAllowed;
+
+    /** @var bool */
     private $docAllowed;
 
+    /**
+     * @param bool $fileAllowed
+     * @param bool $docAllowed
+     */
     public function __construct($fileAllowed, $docAllowed)
     {
         $this->fileAllowed = $fileAllowed;
-        $this->docAllowed = $docAllowed;
+        $this->docAllowed  = $docAllowed;
     }
 
-    public function checkDocument($document_id = null)
+    /**
+     * @param int $docId
+     * @return bool
+     */
+    public function checkDocument($docId = null)
     {
         return $this->docAllowed;
     }
 
-    public function checkFile($file_id = null)
+    /**
+     * @param int $fileId
+     * @return bool
+     */
+    public function checkFile($fileId = null)
     {
         return $this->fileAllowed;
     }
 
-    public function checkModule($module_name = null)
+    /**
+     * @param string $moduleName
+     * @return bool
+     */
+    public function checkModule($moduleName = null)
     {
         return true;
     }
 
+    /**
+     * @return string[]
+     */
     public function getRoles()
     {
         return ['guest'];
     }
 
+    /**
+     * @param string $username
+     */
     public function setUser($username)
     {
     }
 
+    /**
+     * @param string $ipaddress
+     */
     public function setIp($ipaddress)
     {
     }
 
+    /**
+     * @param string      $privilege
+     * @param string|null $documentServerState
+     * @param int|null    $fileId
+     */
     public function check($privilege, $documentServerState = null, $fileId = null)
     {
     }

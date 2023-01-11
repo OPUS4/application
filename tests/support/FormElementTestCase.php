@@ -28,27 +28,36 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 abstract class FormElementTestCase extends ControllerTestCase
 {
+    /** @var string */
+    protected $formElementClass;
 
-    protected $_formElementClass = null;
+    /** @var int */
+    protected $expectedDecoratorCount = -1;
 
-    protected $_expectedDecoratorCount = -1;
+    /** @var string[] */
+    protected $expectedDecorators = ['ViewHelper'];
 
-    protected $_expectedDecorators = ['ViewHelper'];
+    /** @var string */
+    protected $staticViewHelper;
 
-    protected $_staticViewHelper;
-
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         parent::setUp();
 
-        $this->assertNotNull($this->_formElementClass, 'No form element class configured.');
-        $this->assertNotEquals(-1, $this->_expectedDecorators, 'Expected decorator count not configured.');
+        $this->assertNotNull($this->formElementClass, 'No form element class configured.');
+        $this->assertNotEquals(-1, $this->expectedDecorators, 'Expected decorator count not configured.');
     }
 
+    /**
+     * @param array|null $options
+     * @return Zend_Form_Element
+     */
     protected function getElement($options = null)
     {
-        return new $this->_formElementClass('name', $options);
+        return new $this->formElementClass('name', $options);
     }
 
     public function testLoadDefaultDecorators()
@@ -61,15 +70,15 @@ abstract class FormElementTestCase extends ControllerTestCase
 
         $element->loadDefaultDecorators();
 
-        $this->assertEquals($this->_expectedDecoratorCount, count($element->getDecorators()));
+        $this->assertEquals($this->expectedDecoratorCount, count($element->getDecorators()));
 
         $this->assertEquals(
-            $this->_expectedDecoratorCount,
-            count($this->_expectedDecorators),
+            $this->expectedDecoratorCount,
+            count($this->expectedDecorators),
             'Configured expected decorators do not match expected count.'
         );
 
-        foreach ($this->_expectedDecorators as $decorator) {
+        foreach ($this->expectedDecorators as $decorator) {
             $this->assertTrue(
                 $element->getDecorator($decorator) !== false,
                 "Decorator '$decorator' fehlt.'"
@@ -109,7 +118,7 @@ abstract class FormElementTestCase extends ControllerTestCase
     {
         $element = $this->getElement();
 
-        $paths = $element->getPluginLoader(\Zend_Form::DECORATOR)->getPaths();
+        $paths = $element->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
         $this->assertArrayHasKey('Application_Form_Decorator_', $paths);
         $this->assertContains('Application/Form/Decorator/', $paths['Application_Form_Decorator_']);
     }
@@ -118,8 +127,8 @@ abstract class FormElementTestCase extends ControllerTestCase
     {
         $element = $this->getElement();
 
-        if (isset($this->_staticViewHelper)) {
-            $this->assertEquals($this->_staticViewHelper, $element->getStaticViewHelper());
+        if (isset($this->staticViewHelper)) {
+            $this->assertEquals($this->staticViewHelper, $element->getStaticViewHelper());
         } else {
             // if method exists _staticViewHelper should be configured for testing
             $this->assertFalse(

@@ -29,32 +29,44 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Model\ModelInterface;
 use Opus\Common\Model\NotFoundException;
 
 abstract class CrudControllerTestCase extends ControllerTestCase
 {
-
+    /** @var int[] */
     private $oldModelIds;
 
+    /** @var string */
     private $module = 'admin';
 
-    private $controller = null;
+    /** @var string */
+    private $controller;
 
+    /** @var string */
     private $controllerPath;
 
+    /** @var bool */
     protected $createsModels;
 
+    /**
+     * @param string $value
+     */
     public function setModule($value)
     {
         $this->module = $value;
     }
 
+    /**
+     * @param string $value
+     */
     public function setController($value)
     {
         $this->controller = $value;
     }
 
-    public function setUp(): void    {
+    public function setUp(): void
+    {
         $this->controllerPath = '/' . $this->module . '/' . $this->controller;
         parent::setUp();
 
@@ -69,12 +81,16 @@ abstract class CrudControllerTestCase extends ControllerTestCase
         }
     }
 
+    /**
+     * @return string
+     */
     public function getControllerPath()
     {
         return $this->controllerPath;
     }
 
-    public function tearDown(): void    {
+    public function tearDown(): void
+    {
         if ($this->createsModels) {
             $this->deleteNewModels();
         }
@@ -203,6 +219,10 @@ abstract class CrudControllerTestCase extends ControllerTestCase
 
     abstract public function createNewModel();
 
+    /**
+     * @param int|string $identifier
+     * @return ModelInterface
+     */
     abstract public function getModel($identifier);
 
     public function testDeleteActionYes()
@@ -212,8 +232,8 @@ abstract class CrudControllerTestCase extends ControllerTestCase
         $modelId = $this->createNewModel();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $modelId,
-            'ConfirmYes' => 'Ja'
+            'Id'         => $modelId,
+            'ConfirmYes' => 'Ja',
         ]);
 
         $this->dispatch($this->controllerPath . '/delete');
@@ -236,8 +256,8 @@ abstract class CrudControllerTestCase extends ControllerTestCase
         $modelId = $this->createNewModel();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $modelId,
-            'ConfirmNo' => 'Nein'
+            'Id'        => $modelId,
+            'ConfirmNo' => 'Nein',
         ]);
 
         $this->dispatch($this->controllerPath . '/delete/id/' . $modelId);

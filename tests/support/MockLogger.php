@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,27 +34,40 @@
  *
  * TODO Unterscheidung von Nachrichten in Log-Leveln?
  */
-class MockLogger extends \Zend_Log
+class MockLogger extends Zend_Log
 {
-
+    /** @var array */
     private $messages = [];
 
+    /** @var Zend_Log|null */
     private $logger;
 
+    /**
+     * @param Zend_Log|null $logger
+     */
     public function __construct($logger = null)
     {
         parent::__construct();
         $this->logger = $logger;
     }
 
+    /**
+     * @param string $message
+     * @param string $priority
+     * @param mixed  $extras
+     * @throws Zend_Log_Exception
+     */
     public function log($message, $priority, $extras = null)
     {
         $this->messages[] = $message;
-        if (! is_null($this->logger)) {
+        if ($this->logger !== null) {
             $this->logger->log($message, $priority, $extras);
         }
     }
 
+    /**
+     * @return array
+     */
     public function getMessages()
     {
         return $this->messages;

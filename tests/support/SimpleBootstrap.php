@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,22 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Support
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * TODO take care of duplicated code (from regular bootstrap) - maybe SimpleBootstrap is not needed anymore?
  */
 
 use Opus\Common\Config;
 use Opus\Common\Log;
 use Opus\Common\Log\LogService;
 
-class SimpleBootstrap extends \Zend_Application_Bootstrap_Bootstrap
+/**
+ * TODO take care of duplicated code (from regular bootstrap) - maybe SimpleBootstrap is not needed anymore?
+ */
+class SimpleBootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-
     /**
      * Load application configuration file and register the configuration
      * object with the Zend registry under 'Zend_Config'.
@@ -51,13 +49,14 @@ class SimpleBootstrap extends \Zend_Application_Bootstrap_Bootstrap
      * $config = $registry->get('Zend_Config');
      * </code>
      *
-     * @throws Exception          Exception is thrown if configuration level is invalid.
      * @return Zend_Config
-     *
+     * @throws Exception Exception is thrown if configuration level is invalid.
+     * @phpcs:disable PSR2.Methods.MethodDeclaration
      */
     protected function _initConfiguration()
     {
-        $config = new \Zend_Config($this->getOptions(), true);
+        // @phpcs:enable
+        $config = new Zend_Config($this->getOptions(), true);
         Config::set($config);
         return $config;
     }
@@ -65,12 +64,13 @@ class SimpleBootstrap extends \Zend_Application_Bootstrap_Bootstrap
     /**
      * Setup Logging
      *
-     * @throws Exception If logging file couldn't be opened.
      * @return Zend_Log
-     *
+     * @throws Exception If logging file couldn't be opened.
+     * @phpcs:disable PSR2.Methods.MethodDeclaration
      */
     protected function _initLogging()
     {
+        // @phpcs:enable
         $this->bootstrap('Configuration');
 
         $logFilename = "opus-console.log";
