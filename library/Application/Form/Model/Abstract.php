@@ -38,7 +38,7 @@ use Opus\Model\AbstractDb;
  * Die Model-Formulare können zusammen mit Application_Controller_Action_CRUD fuer die Verwaltung von Modellen eines
  * Typs eingesetzt werden.
  */
-abstract class Application_Form_Model_Abstract extends Application_Form_AbstractViewable implements Application_Form_IModel
+abstract class Application_Form_Model_Abstract extends Application_Form_AbstractViewable implements Application_Form_ModelFormInterface
 {
     /**
      * Name von Formularelement fuer Model-ID.

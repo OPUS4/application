@@ -105,7 +105,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
      * Wird das Formular für einen bereits in Benutzung befindlichen Enrichment Key, der noch nicht registriert ist,
      * aufgerufen, so wird das Formularfeld für den Namen bereits gefüllt.
      *
-     * @return Application_Form_IModel
+     * @return Application_Form_ModelFormInterface
      */
     public function getNewModelForm()
     {
@@ -241,7 +241,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     }
 
     /**
-     * @param EnrichmentKeyInterface $model
+     * @param ModelInterface $model
      */
     public function deleteModel($model)
     {

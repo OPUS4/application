@@ -34,7 +34,7 @@
  *
  * TODO IMPORTANT use setElementDecorators in form classes instead of adding decorators in element classes
  */
-class Application_Form_Element_Select extends Zend_Form_Element_Select implements Application_Form_IElement
+class Application_Form_Element_Select extends Zend_Form_Element_Select implements Application_Form_FormElementInterface
 {
     /** @var string */
     private $hint;

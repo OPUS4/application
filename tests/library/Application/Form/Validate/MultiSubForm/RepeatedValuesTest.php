@@ -95,7 +95,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
     {
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues('Institute', 'message');
 
-        $this->assertTrue($instance instanceof Application_Form_Validate_IMultiSubForm);
+        $this->assertTrue($instance instanceof Application_Form_Validate_MultiSubFormInterface);
     }
 
     public function testIsValidReturnsTrue()

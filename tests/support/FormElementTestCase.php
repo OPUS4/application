@@ -105,7 +105,7 @@ abstract class FormElementTestCase extends ControllerTestCase
     {
         $element = $this->getElement();
 
-        if ($element instanceof Application_Form_IElement) {
+        if ($element instanceof Application_Form_FormElementInterface) {
             $element->prepareRenderingAsView();
 
             $this->assertNotNull($element->getDecorator('ViewHelper'));

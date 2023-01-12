@@ -49,7 +49,7 @@ class Frontdoor_Model_File
     /** @var string */
     private $filename;
 
-    /** @var Application_Security_AccessControl */
+    /** @var Application_Security_AccessControlInterface */
     private $accessControl;
 
     /**
@@ -162,7 +162,7 @@ class Frontdoor_Model_File
     }
 
     /**
-     * @return Application_Security_AccessControl
+     * @return Application_Security_AccessControlInterface
      */
     public function getAclHelper()
     {
@@ -174,12 +174,12 @@ class Frontdoor_Model_File
     }
 
     /**
-     * @param Application_Security_AccessControl|null $helper
+     * @param Application_Security_AccessControlInterface|null $helper
      * @throws Application_Exception
      */
     public function setAclHelper($helper)
     {
-        if ($helper instanceof Application_Security_AccessControl || $helper === null) {
+        if ($helper instanceof Application_Security_AccessControlInterface || $helper === null) {
             $this->accessControl = $helper;
         } else {
             throw new Application_Exception(

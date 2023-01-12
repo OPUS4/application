@@ -66,7 +66,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     /**
      * Validierungsextension für die Unterformulare.
      *
-     * @var Application_Form_Validate_IMultiSubForm
+     * @var Application_Form_Validate_MultiSubFormInterface
      */
     private $subformValidator;
 
@@ -81,7 +81,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      *
      * @param string                                       $subFormClass Name der Klasse für Unterformulare
      * @param string                                       $fieldName Name des Document Feldes, das angezeigt werden soll
-     * @param Application_Form_Validate_IMultiSubForm|null $validator Object für Validierungen über Unterformulare hinweg
+     * @param Application_Form_Validate_MultiSubFormInterface|null $validator Object für Validierungen über Unterformulare hinweg
      * @param array|null                                   $options
      */
     public function __construct($subFormClass, $fieldName, $validator = null, $options = null)
@@ -89,7 +89,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         $this->subFormClass = $subFormClass;
         $this->fieldName    = $fieldName;
 
-        if ($validator === null || $validator instanceof Application_Form_Validate_IMultiSubForm) {
+        if ($validator === null || $validator instanceof Application_Form_Validate_MultiSubFormInterface) {
             $this->subformValidator = $validator;
         } else {
             throw new Application_Exception(

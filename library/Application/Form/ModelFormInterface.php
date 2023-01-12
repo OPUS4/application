@@ -35,7 +35,7 @@ use Opus\Common\Model\ModelInterface;
 /**
  * Interface fuer Formulare die Model-Instanzen anzeigen.
  */
-interface Application_Form_IModel
+interface Application_Form_ModelFormInterface
 {
     /**
      * Erzeugt Model-Instanz fuer Formular, entweder neue oder existierende.

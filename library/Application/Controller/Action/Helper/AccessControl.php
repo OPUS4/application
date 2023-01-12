@@ -36,7 +36,7 @@
  *
  * TODO weiter ausbauen und mit Opus\Security\IRealm konsolidieren (Framework vs. Application Security)
  */
-class Application_Controller_Action_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract implements Application_Security_AccessControl
+class Application_Controller_Action_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract implements Application_Security_AccessControlInterface
 {
     /** @var Zend_Acl */
     private $acl;

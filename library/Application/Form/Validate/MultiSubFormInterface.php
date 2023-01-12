@@ -25,66 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Interface for export plugins.
- *
- * The plugins are dynamically registered as actions in the export controller.
- *
- * TODO The export mechanism should/could be separated from the request/response handling.
+ * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
  */
-interface Application_Export_ExportPlugin
+interface Application_Form_Validate_MultiSubFormInterface
 {
     /**
-     * Returns name of plugin.
+     * Bereitet die Validierung vor.
      *
-     * @return mixed
-     */
-    public function getName();
-
-    /**
-     * Sets the plugin configuration.
+     * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
      *
-     * @param null|Zend_Config $config
+     * @param Zend_Form $form
+     * @param array $data
+     * @param array $context
      */
-    public function setConfig($config = null);
+    public function prepareValidation($form, $data, $context = null);
 
     /**
-     * Sets the HTTP request being processed.
+     * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein
+     * sollen.
      *
-     * @param Zend_Controller_Request_Abstract $request
+     * @param array $data
+     * @param array $context
      */
-    public function setRequest($request);
-
-    /**
-     * Sets the HTTP response.
-     *
-     * @param Zend_Controller_Response_Abstract $response
-     */
-    public function setResponse($response);
-
-    /**
-     * Sets the view objekt for rendering the response.
-     *
-     * @param Zend_View_Interface $view
-     */
-    public function setView($view);
-
-    /**
-     * Main function performing export.
-     */
-    public function execute();
-
-    /**
-     * @return bool returns true if plugin access is restricted to administrators
-     */
-    public function isAccessRestricted();
-
-    /**
-     * @return bool returns true if export of unpublished documents is allowed
-     */
-    public function isAllowExportOfUnpublishedDocs();
+    public function isValid($data, $context = null);
 }

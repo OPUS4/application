@@ -32,7 +32,7 @@
 /**
  * Angepasste Klasse für Textarea Formularelemente.
  */
-class Application_Form_Element_Textarea extends Zend_Form_Element_Textarea implements Application_Form_IElement
+class Application_Form_Element_Textarea extends Zend_Form_Element_Textarea implements Application_Form_FormElementInterface
 {
     /**
      * Initialisiert das Formularelement.

@@ -123,7 +123,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     /**
      * Klasse für Model-Formular.
      *
-     * @var Application_Form_IModel
+     * @var Application_Form_ModelFormInterface
      */
     private $formClass;
 
@@ -298,7 +298,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      * Ein POST kann nur Save oder Cancel bedeuten.
      *
      * @param array|null $post
-     * @return Application_Form_IModel|array
+     * @return Application_Form_ModelFormInterface|array
      */
     public function handleModelPost($post = null)
     {
@@ -546,7 +546,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     /**
      * Erzeugt Formular.
      *
-     * @return Application_Form_IModel
+     * @return Application_Form_ModelFormInterface
      */
     public function getModelForm()
     {
@@ -561,7 +561,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      * Erzeugt Formular zum Editieren von Model.
      *
      * @param ModelInterface $model
-     * @return Application_Form_IModel
+     * @return Application_Form_ModelFormInterface
      */
     public function getEditModelForm($model)
     {
@@ -576,7 +576,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     /**
      * Erzeugt Formular zum Hinzufügen eines neuen Models.
      *
-     * @return Application_Form_IModel
+     * @return Application_Form_ModelFormInterface
      */
     public function getNewModelForm()
     {
@@ -589,7 +589,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     /**
      * Liefert Formularklasse für Controller.
      *
-     * @return Application_Form_IModel|null
+     * @return Application_Form_ModelFormInterface|null
      */
     public function getFormClass()
     {
@@ -633,7 +633,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     public function isClassSupported($formClass)
     {
         $form = new $formClass();
-        return $form instanceof Application_Form_IModel ? true : false;
+        return $form instanceof Application_Form_ModelFormInterface ? true : false;
     }
 
     /**

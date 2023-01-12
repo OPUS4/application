@@ -32,7 +32,7 @@
 /**
  * Abstrakte Basisklasse für Formulare, die als View angezeigt werden können.
  */
-class Application_Form_AbstractViewable extends Application_Form_Abstract implements Application_Form_IViewable
+class Application_Form_AbstractViewable extends Application_Form_Abstract implements Application_Form_ViewableInterface
 {
     /**
      * Wird TRUE gesetzt wenn das Formular für die Anzeige als View vorbereitet wird.
@@ -140,7 +140,7 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
         $elements = $this->getElements();
 
         foreach ($elements as $element) {
-            if ($element instanceof Application_Form_IElement) {
+            if ($element instanceof Application_Form_FormElementInterface) {
                 $element->prepareRenderingAsView();
             } else {
                 $decorator = $element->getDecorator('ViewHelper');

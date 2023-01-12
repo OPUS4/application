@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Validate_MultiSubForm_RepeatedValues implements Application_Form_Validate_IMultiSubForm
+class Application_Form_Validate_MultiSubForm_RepeatedValues implements Application_Form_Validate_MultiSubFormInterface
 {
     /** @var string */
     private $elementName;

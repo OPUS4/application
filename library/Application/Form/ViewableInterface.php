@@ -36,7 +36,7 @@
  * Anzeige der Metadaten-Übersicht verwendet. Das selbe wird mit den Formularen für Application_Controller_Action_CRUD
  * gemacht.
  */
-interface Application_Form_IViewable
+interface Application_Form_ViewableInterface
 {
     /**
      * Bereites die Ausgabe des Formulares als View vor.

@@ -32,7 +32,7 @@
 /**
  * Interface fuer OPUS Form Element Klassen.
  */
-interface Application_Form_IElement
+interface Application_Form_FormElementInterface
 {
     /**
      * Liefert Hinweis zum Element-Value, z.B. das eine ISBN ungültig ist.

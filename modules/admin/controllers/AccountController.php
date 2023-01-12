@@ -83,7 +83,7 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
 
     /**
      * @param AccountInterface $model
-     * @return Application_Form_IModel
+     * @return Application_Form_ModelFormInterface
      */
     public function getEditModelForm($model)
     {

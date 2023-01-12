@@ -198,7 +198,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     /**
      * Set Modules to include.
      *
-     * @param array $modules Modules to include
+     * @param array|string|null $modules Modules to include
      */
     public function setModules($modules)
     {

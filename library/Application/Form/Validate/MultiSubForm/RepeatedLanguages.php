@@ -34,7 +34,7 @@
  *
  * TODO Redundanz mit RepeatedInstitutes eliminieren
  */
-class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Application_Form_Validate_IMultiSubForm
+class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Application_Form_Validate_MultiSubFormInterface
 {
     /**
      * Es werden keine Validierungen auf Formularebene ausgeführt.

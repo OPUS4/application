@@ -322,7 +322,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         ]);
 
         $this->assertNotNull($result);
-        $this->assertInstanceOf('Application_Form_IModel', $result);
+        $this->assertInstanceOf(Application_Form_ModelFormInterface::class, $result);
 
         $this->assertEquals('abc', $result->getElement('Language')->getValue());
         $this->assertEquals('www.example.org/licence', $result->getElement('LinkLicence')->getValue());
@@ -468,7 +468,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     {
         $this->assertEquals('getAll', $this->controller->getFunctionNameForGettingModels());
 
-        $this->controller->setFormClass('Admin_Form_Series');
+        $this->controller->setFormClass(Admin_Form_Series::class);
 
         $series = $this->controller->getAllModels();
 
@@ -497,6 +497,6 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
     {
         $form = $this->controller->getIndexForm();
 
-        $this->assertInstanceOf('Application_Form_Model_Table', $form);
+        $this->assertInstanceOf(Application_Form_Model_Table::class, $form);
     }
 }

@@ -46,7 +46,7 @@ class Application_Export_ExportService extends Application_Model_Abstract
      * The plugin is setup for execution.
      *
      * @param string $name Name of plugin/action.
-     * @return null|Application_Export_ExportPlugin
+     * @return null|Application_Export_ExportPluginInterface
      *
      * TODO should the namespace for plugins be limited (security)?
      */

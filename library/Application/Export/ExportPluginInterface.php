@@ -29,11 +29,62 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-interface Application_Security_AccessControl
+/**
+ * Interface for export plugins.
+ *
+ * The plugins are dynamically registered as actions in the export controller.
+ *
+ * TODO The export mechanism should/could be separated from the request/response handling.
+ */
+interface Application_Export_ExportPluginInterface
 {
     /**
-     * @param string $resource
-     * @return bool
+     * Returns name of plugin.
+     *
+     * @return mixed
      */
-    public function accessAllowed($resource);
+    public function getName();
+
+    /**
+     * Sets the plugin configuration.
+     *
+     * @param null|Zend_Config $config
+     */
+    public function setConfig($config = null);
+
+    /**
+     * Sets the HTTP request being processed.
+     *
+     * @param Zend_Controller_Request_Abstract $request
+     */
+    public function setRequest($request);
+
+    /**
+     * Sets the HTTP response.
+     *
+     * @param Zend_Controller_Response_Abstract $response
+     */
+    public function setResponse($response);
+
+    /**
+     * Sets the view objekt for rendering the response.
+     *
+     * @param Zend_View_Interface $view
+     */
+    public function setView($view);
+
+    /**
+     * Main function performing export.
+     */
+    public function execute();
+
+    /**
+     * @return bool returns true if plugin access is restricted to administrators
+     */
+    public function isAccessRestricted();
+
+    /**
+     * @return bool returns true if export of unpublished documents is allowed
+     */
+    public function isAllowExportOfUnpublishedDocs();
 }

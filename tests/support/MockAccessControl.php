@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class MockAccessControl implements Application_Security_AccessControl
+class MockAccessControl implements Application_Security_AccessControlInterface
 {
     /** @var bool */
     private $defaultAnswer;

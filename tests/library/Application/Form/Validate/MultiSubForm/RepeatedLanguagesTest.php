@@ -41,7 +41,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends Contr
     {
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedLanguages();
 
-        $this->assertTrue($instance instanceof Application_Form_Validate_IMultiSubForm);
+        $this->assertTrue($instance instanceof Application_Form_Validate_MultiSubFormInterface);
     }
 
     public function testIsValidReturnsTrue()
