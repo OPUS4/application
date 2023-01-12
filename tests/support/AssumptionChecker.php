@@ -29,8 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use PHPUnit\Framework\TestCase;
-
 /**
  * Wurde für die Diagnose von Abhängigkeiten zwischen den Tests verwendet.
  */

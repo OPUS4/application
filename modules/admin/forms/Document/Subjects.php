@@ -38,9 +38,6 @@ use Opus\Common\DocumentInterface;
  * das Feld "Subject" im Dokument zu aktualisieren.
  *
  * TODO Umgang mit alten Schlagwörtern mit unbekanntem Typ (siehe auch OPUSVIER-2604)
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
 {

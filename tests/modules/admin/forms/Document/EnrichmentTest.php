@@ -33,10 +33,10 @@ use Opus\Common\Document;
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentInterface;
 use Opus\Common\EnrichmentKey;
-use Opus\Enrichment\TypeInterface;
 use Opus\Enrichment\RegexType;
 use Opus\Enrichment\SelectType;
 use Opus\Enrichment\TextType;
+use Opus\Enrichment\TypeInterface;
 
 /**
  * Unit Test für Unterformular für ein Enrichment im Metadaten-Formular.

@@ -26,16 +26,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Michael Lang <lang@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2009-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 

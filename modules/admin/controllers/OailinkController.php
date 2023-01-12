@@ -31,9 +31,6 @@
 
 /**
  * Main entry point for this module.
- *
- * @category    Application
- * @package     Admin
  */
 class Admin_OailinkController extends Application_Controller_Action
 {

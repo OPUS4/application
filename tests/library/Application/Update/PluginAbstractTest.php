@@ -27,10 +27,6 @@
  *
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * @category    Application Unit Test
- * @package     Application_Update
- * @author      Jens Schwidder <schwidder@zib.de>
  */
 
 class Application_Update_PluginAbstractTest extends ControllerTestCase

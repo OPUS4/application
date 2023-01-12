@@ -26,14 +26,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2009-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -41,9 +35,6 @@
 /**
  * Transforms the xml representation of an Opus_Model_Document to oai_pp
  * xml as required by the OAI-PMH protocol.
- *
- * @category    Application
- * @package     Module_Oai
  */
 -->
 <xsl:stylesheet version="1.0"

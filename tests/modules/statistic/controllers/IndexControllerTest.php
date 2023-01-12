@@ -32,7 +32,7 @@
 /**
  * Basic unit tests for IndexController of statistic module.
  *
- * @TODO extend tests
+ * @todo extend tests
  * @covers Statistic_IndexController
  */
 class Statistic_IndexControllerTest extends ControllerTestCase

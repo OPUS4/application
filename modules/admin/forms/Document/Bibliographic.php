@@ -33,9 +33,6 @@ use Opus\Common\DocumentInterface;
 
 /**
  * Unterformular fuer weitere Metadaten eines Dokuments.
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
 {

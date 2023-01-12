@@ -70,7 +70,7 @@ class Crawlers_SitelinksController extends Application_Controller_Action
         if (preg_match('/^\d{4}$/', $year) > 0) {
             $finder = Repository::getInstance()->getDocumentFinder();
             $finder->setServerState('published');
-            $finder->setServerDatePublishedRange($year, strval((int)$year + 1));
+            $finder->setServerDatePublishedRange($year, strval((int) $year + 1));
             $this->view->ids = $finder->getIds();
 
             if (count($this->view->ids) > 0) {
