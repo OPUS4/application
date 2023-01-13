@@ -45,7 +45,10 @@ class Application_View_Helper_FormCombobox extends Zend_View_Helper_FormElement
     public function formCombobox($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
     {
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
+
+        // @phpcs:disable
         extract($info);
+        // @phpcs:enable
 
         $xhtml = "<div class=\"ui-widget\">\n    ";
 

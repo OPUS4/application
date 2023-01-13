@@ -259,12 +259,14 @@ class Application_Util_Notification extends Application_Model_Abstract
             return null; // TODO throw exception?
         }
         ob_start();
+        // @phpcs:disable
         extract([
             "authors" => $authors,
             "title"   => $title,
             "docId"   => $docId,
             "url"     => $url,
         ]);
+        // @phpcs:enable
         require $templateFileName;
         $body = ob_get_contents();
         ob_end_clean();
@@ -294,7 +296,7 @@ class Application_Util_Notification extends Application_Model_Abstract
     }
 
     /**
-     * @param array $emails
+     * @param string $emails
      * @return array
      * @throws Zend_Exception
      */

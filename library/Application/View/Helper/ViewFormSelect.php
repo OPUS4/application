@@ -45,7 +45,9 @@ class Application_View_Helper_ViewFormSelect extends Zend_View_Helper_FormSelect
     public function viewFormSelect($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
     {
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
+        // @phpcs:disable
         extract($info);
+        // @phpcs:enable
 
         return '<div'
             . ' id="' . $this->view->escape($id) . '"'

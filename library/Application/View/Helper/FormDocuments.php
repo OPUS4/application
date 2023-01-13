@@ -51,7 +51,9 @@ class Application_View_Helper_FormDocuments extends Zend_View_Helper_FormElement
     public function formDocuments($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
     {
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
+        // @phpcs:disable
         extract($info);
+        // @phpcs:enable
 
         if (! is_array($options)) {
             return '';

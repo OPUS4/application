@@ -39,7 +39,9 @@ class Application_View_Helper_ViewFormDefault extends Zend_View_Helper_FormEleme
     public function viewFormDefault($name, $value = null, $attribs = null)
     {
         $info = $this->_getInfo($name, $value, $attribs);
+        // @phpcs:disable
         extract($info);
+        // @phpcs:enable
 
         $escapedId    = $this->view->escape($id);
         $escapedValue = $value !== null ? htmlspecialchars($value, ENT_DISALLOWED) : '';

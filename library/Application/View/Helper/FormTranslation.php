@@ -55,8 +55,9 @@ class Application_View_Helper_FormTranslation extends Zend_View_Helper_FormRadio
     public function formTranslation($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
     {
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
-
+        // @phpcs:disable
         extract($info);
+        // @phpcs:enable
 
         // retrieve attributes for labels (prefixed with 'label_' or 'label')
         if ($attribs === null) {
