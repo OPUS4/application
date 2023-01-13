@@ -3,7 +3,7 @@
   "description": "Application Environment for Opus 4",
   "license": "GPL-2.0+",
   "require": {
-    "php": "<=7.4",
+    "php": ">=7.1,<=7.4",
     "ext-intl": "*",
     "ext-gd": "*",
     "ext-mbstring": "*",
