@@ -58,6 +58,6 @@ class Application_View_Helper_Highlight extends Zend_View_Helper_Abstract
 
         $quotedNeedle = preg_quote($needle, '/');
 
-        return preg_replace("/($quotedNeedle)/i", "$prefix$0$suffix", $subject); // TODO BUG? $0
+        return preg_replace("/($quotedNeedle)/i", $prefix . '$0' . $suffix, $subject);
     }
 }
