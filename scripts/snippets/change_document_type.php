@@ -56,13 +56,13 @@ $from = $options['from'];
 $to   = $options['to'];
 
 if ($dryrun) {
-    log("TEST RUN: NO DATA WILL BE MODIFIED");
+    writeMessage("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
 $docFinder = Repository::getInstance()->getDocumentFinder();
 $docIds    = $docFinder->setDocumentType($from)->getIds();
 
-log(count($docIds) . " documents found");
+writeMessage(count($docIds) . " documents found");
 
 foreach ($docIds as $docId) {
     $doc = Document::get($docId);
@@ -70,13 +70,13 @@ foreach ($docIds as $docId) {
     if (! $dryrun) {
         $doc->store();
     }
-    log("Document #$docId changed from '$from' to '$to'");
+    writeMessage("Document #$docId changed from '$from' to '$to'");
 }
 
 /**
  * @param string $message
  */
-function log($message)
+function writeMessage($message)
 {
     echo "$message\n";
 }

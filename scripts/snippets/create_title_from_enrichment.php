@@ -78,13 +78,13 @@ $getType = 'getTitle' . ucfirst(strtolower($options['type']));
 $addType = 'addTitle' . ucfirst(strtolower($options['type']));
 
 if ($dryrun) {
-    log("TEST RUN: NO DATA WILL BE MODIFIED");
+    writeMessage("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
 $docFinder = Repository::getInstance()->getDocumentFinder();
 $docIds    = $docFinder->setEnrichmentExists($enrichmentField)->getIds();
 
-log(count($docIds) . " documents found");
+writeMessage(count($docIds) . " documents found");
 
 foreach ($docIds as $docId) {
     $doc = Document::get($docId);
@@ -95,7 +95,7 @@ foreach ($docIds as $docId) {
             if ($enrichmentArray['KeyName'] === $enrichmentField) {
                 $titles = $doc->{$getType}();
                 if (count($titles) > 0) {
-                    log(
+                    writeMessage(
                         'Title ' . ucfirst(strtolower($options['type'])) . ' already exists for Document #' . $docId
                         . '. Skipping.. '
                     );
@@ -105,7 +105,7 @@ foreach ($docIds as $docId) {
                     if (! $dryrun) {
                         $doc->store();
                     }
-                    log('Document #' . $docId . ' updated');
+                    writeMessage('Document #' . $docId . ' updated');
                 }
             }
         }
@@ -115,7 +115,7 @@ foreach ($docIds as $docId) {
 /**
  * @param string $message
  */
-function log($message)
+function writeMessage($message)
 {
     echo $message . PHP_EOL;
 }

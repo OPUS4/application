@@ -70,11 +70,11 @@ $dryrun            = isset($options['dryrun']);
 try {
     $dnbInstitute = DnbInstitute::get($thesisPublisherId);
 } catch (NotFoundException $omnfe) {
-    log("Opus_DnbInstitute with ID <$thesisPublisherId> does not exist.\nExiting...");
+    writeMessage("Opus_DnbInstitute with ID <$thesisPublisherId> does not exist.\nExiting...");
     exit;
 }
 if ($dryrun) {
-    log("TEST RUN: NO DATA WILL BE MODIFIED");
+    writeMessage("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
 $docFinder = Repository::getInstance()->getDocumentFinder();
@@ -85,13 +85,13 @@ if ($documentType !== false) {
 
 $docIds = $docFinder->getIds();
 
-log(count($docIds) . " documents " . ($documentType !== false ? "of type '$documentType' " : '') . "found");
+writeMessage(count($docIds) . " documents " . ($documentType !== false ? "of type '$documentType' " : '') . "found");
 
 foreach ($docIds as $docId) {
     try {
         $doc = Document::get($docId);
         if (count($doc->getFile()) === 0) {
-            log("Document <$docId> has no files, skipping..");
+            writeMessage("Document <$docId> has no files, skipping..");
             continue;
         }
         if ($thesisPublisherId !== null) {
@@ -101,10 +101,10 @@ foreach ($docIds as $docId) {
                     $doc->setThesisPublisher($dnbInstitute);
                     $doc->store();
                 }
-                log("Setting ThesisPublisher <$thesisPublisherId> on Document <$docId>");
+                writeMessage("Setting ThesisPublisher <$thesisPublisherId> on Document <$docId>");
             } else {
                 $existingThesisPublisherId = $thesisPublisher[0]->getId();
-                log("ThesisPublisher <{$existingThesisPublisherId[1]}> already set for Document <$docId>");
+                writeMessage("ThesisPublisher <{$existingThesisPublisherId[1]}> already set for Document <$docId>");
             }
         }
         if ($thesisGrantorId !== null) {
@@ -114,22 +114,22 @@ foreach ($docIds as $docId) {
                     $doc->setThesisGrantor($dnbInstitute);
                     $doc->store();
                 }
-                log("Setting ThesisGrantor <$thesisGrantorId> on Document <$docId>");
+                writeMessage("Setting ThesisGrantor <$thesisGrantorId> on Document <$docId>");
             } else {
                 $existingThesisGrantorId = $thesisGrantor[0]->getId();
-                log("ThesisGrantor <{$existingThesisGrantorId[1]}> already set for Document <$docId>");
+                writeMessage("ThesisGrantor <{$existingThesisGrantorId[1]}> already set for Document <$docId>");
             }
         }
     } catch (Exception $exc) {
-        log("Error processing Document with ID $docId!");
-        log($exc->getMessage());
+        writeMessage("Error processing Document with ID $docId!");
+        writeMessage($exc->getMessage());
     }
 }
 
 /**
  * @param string $message
  */
-function log($message)
+function writeMessage($message)
 {
     echo "$message\n";
 }
