@@ -3,7 +3,7 @@
   "description": "Application Environment for Opus 4",
   "license": "GPL-2.0+",
   "require": {
-    "php": ">=7.1",
+    "php": "<=7.4",
     "ext-intl": "*",
     "ext-gd": "*",
     "ext-mbstring": "*",
@@ -19,11 +19,12 @@
     "ext-simplexml": "*",
     "ext-fileinfo": "*",
     "ext-readline": "*",
+    "ext-sockets": "*",
     "shardj/zf1-future": "1.21.*",
     "jpgraph/jpgraph": "dev-master",
     "opus4-repo/opus4-common": "dev-4.7.2-zf1f",
     "opus4-repo/framework": "dev-4.7.2-zf1f",
-    "opus4-repo/search": "dev-4.7.2-zf1f",
+    "opus4-repo/search": "dev-4.7.2-zf1f-solarium3",
     "opus4-repo/opus4-bibtex": "dev-4.7.2-zf1f",
     "opus4-repo/opus4-import": "dev-4.7.2-zf1f",
     "opus4-repo/opus4-pdf": "dev-4.7.2-zf1f",
@@ -32,10 +33,11 @@
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
     "oomphinc/composer-installers-extender": "^2.0",
-    "symfony/console": "*"
+    "symfony/console": "*",
+    "pear/log": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "<9",
+    "phpunit/phpunit": "5.7.*",
     "phploc/phploc": "*",
     "phpmd/phpmd" : "*",
     "sebastian/phpcpd": "*",
