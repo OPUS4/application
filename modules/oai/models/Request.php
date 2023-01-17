@@ -31,9 +31,10 @@
  */
 
 use Opus\Common\Log;
+use Opus\Common\Security\Realm;
 
 /**
- * TODO documentation is not existent - especially the fact that 'validate' functions are called dynamically
+ * TODO BUG documentation is not existent - especially the fact that 'validate' functions are called dynamically
  */
 class Oai_Model_Request
 {
@@ -45,11 +46,11 @@ class Oai_Model_Request
     /** @var string */
     private $errorMessage;
 
-    /* @var string
-    private $pathToMetadataPrefixFiles; */
+    /* @var string */
+    private $pathToMetadataPrefixFiles;
 
-    /** @var string
-    private $resumptionPath; */
+    /** @var string */
+    private $resumptionPath;
 
     /** @var string[] */
     private $validArguments = [
@@ -136,8 +137,7 @@ class Oai_Model_Request
      * TODO handling case insensitivity of metadataPrefix is spread through the code (here and other places)
      * TODO function handles access control in addition to checking if format is supported (mixed responsibilities)
      */
-    /* TODO LAMINAS unused function
-    private function validateMetadataPrefix($oaiMetadataPrefix)
+    public function validateMetadataPrefix($oaiMetadataPrefix)
     {
         // we assuming that a metadata prefix file ends with xslt
         $possibleFiles = glob($this->pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
@@ -165,7 +165,6 @@ class Oai_Model_Request
 
         return $result;
     }
-    */
 
     /**
      * Checks if given 'from' date is valid.
@@ -238,9 +237,8 @@ class Oai_Model_Request
      *
      * @param  string $oaiResumptionToken The resumption token to validate.
      * @return bool
-     *
-     * TODO LAMINAS unused function
-    private function validateResumptionToken($oaiResumptionToken)
+     */
+    public function validateResumptionToken($oaiResumptionToken)
     {
         $tokenWorker = new Oai_Model_Resumptiontokens();
 
@@ -264,7 +262,6 @@ class Oai_Model_Request
 
         return $result;
     }
-     */
 
     /**
      * Returns current error code.

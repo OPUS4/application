@@ -344,7 +344,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
                     // wenn nur noch ein Eingabefeld für Identifier des Typs übrig bleibt: Generieren-Button anzeigen
                     if (count($this->getSubForms()) === 1) {
-                        $subforms = $this->getSubForms();
+                        $subforms    = $this->getSubForms();
                         $firstIdForm = reset($subforms); // TODO ERROR ?
                         $this->addGenerateButton($firstIdForm, false);
                         // TODO ohne den nachfolgenden Aufruf wird der Button nicht neben,
