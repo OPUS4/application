@@ -14,13 +14,19 @@ jobs:
 
     runs-on: ubuntu-22.04
 
+    strategy:
+      matrix:
+        php-versions: ['7.1', '7.4']
+
+    name: PHP ${{ matrix.php-versions }} Test
+
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup PHP 7.4
+      - name: Setup PHP ${{ matrix.php-versions }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: ${{ matrix.php-versions }}
 
       - name: Install Composer and Dependencies
         run: sudo apt-get update && curl -s http://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar install
