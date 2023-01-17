@@ -474,7 +474,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
     /**
      * @param Zend_Controller_Request_Http $request
-     * @return null
+     * @return null|Zend_Form
      */
     public function createForm($request)
     {
@@ -488,8 +488,8 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
     abstract public function createSearchQuery($input);
 
     /**
-     * @param Query $query
-     * @param array $openFacets
+     * @param Query      $query
+     * @param null|array $openFacets
      * @return Base
      * @throws Application_Exception
      * @throws Application_SearchException

@@ -181,7 +181,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract
     /**
      * Checks if a file ID is linked to a document.
      *
-     * @param int $docId
+     * @param int        $docId
      * @param int|string $fileId
      * @return bool True - if the file is linked to the document
      */

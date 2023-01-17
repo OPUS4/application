@@ -58,7 +58,7 @@ function randString($counter)
  * @param string $errstr
  * @param string $errfile
  * @param string $errline
- * @return bool
+ * @return true
  */
 function myErrorHandler($errno, $errstr, $errfile, $errline)
 {

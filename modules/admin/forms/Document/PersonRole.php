@@ -51,8 +51,8 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm
     /**
      * Konstruiert Unterformular fuer Personen in einer Rolle.
      *
-     * @param string $roleName
-     * @param mixed $options
+     * @param string     $roleName
+     * @param null|mixed $options
      */
     public function __construct($roleName, $options = null)
     {
@@ -420,7 +420,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm
      * Wird verwendet, um das doppelte zuweisen einer Person in der selben Rolle zu verhindern.
      *
      * @param int $personId ID für Person
-     * @return null oder Unterformular mit Person-ID
+     * @return Zend_Form|null oder Unterformular mit Person-ID
      */
     public function getSubFormForPerson($personId)
     {

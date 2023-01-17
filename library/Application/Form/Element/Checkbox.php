@@ -85,7 +85,7 @@ class Application_Form_Element_Checkbox extends Zend_Form_Element_Checkbox imple
      * Hinweise sind wie Validierungsfehler, die aber das Abspeichern nicht verhindern und schon beim Aufruf des
      * Formulars für existierende Werte berechnet werden.
      *
-     * @return null
+     * @return null|string
      */
     public function getHint()
     {

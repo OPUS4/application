@@ -166,8 +166,6 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
     /**
      * List all available model instances.
-     *
-     * @return void
      */
     public function indexAction()
     {
@@ -193,8 +191,6 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      * Zeigt das Model an.
      *
      * Für die Anzeige wird das Model-Formular im "View"-Modus verwendet.
-     *
-     * @return void
      */
     public function showAction()
     {
@@ -217,8 +213,6 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
     /**
      * Zeigt Formular für neues Model und erzeugt neues Model.
-     *
-     * @return void
      */
     public function newAction()
     {
@@ -237,8 +231,6 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
 
     /**
      * Edits a model instance
-     *
-     * @return void
      */
     public function editAction()
     {
@@ -481,7 +473,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      *
      * Das Bestätigunsformular ohne Model wird für die Validierung verwendet.
      *
-     * @param PersistableInterface $model
+     * @param null|PersistableInterface $model
      * @return Application_Form_Confirmation
      */
     public function getConfirmationForm($model = null)
@@ -524,7 +516,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      * Liefert Instanz des Models.
      *
      * @param int|string $modelId
-     * @return ModelInterface
+     * @return ModelInterface|null
      */
     public function getModel($modelId)
     {
@@ -748,7 +740,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      * Determines if a model can be edited.
      *
      * @param ModelInterface $model
-     * @return bool true if object can be edited; false - object cannot be edited
+     * @return true true if object can be edited; false - object cannot be edited
      */
     public function isModifiable($model)
     {

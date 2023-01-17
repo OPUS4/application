@@ -60,9 +60,9 @@ class Solrsearch_Model_PaginationUtil
     private $nextPageStartIndex;
 
     /**
-     * @param int $rows number of hits per page
-     * @param int $numHits total number of hits
-     * @param int $startIndex start index
+     * @param int    $rows number of hits per page
+     * @param int    $numHits total number of hits
+     * @param int    $startIndex start index
      * @param string $query search query
      * @param string $searchType search type
      */

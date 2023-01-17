@@ -34,10 +34,11 @@
  * as title (--type). The script is executed for all documents of the specified type (--doctype). If no document type
  * is provided, the script runs for all documents.
  *
- * @param enrichment
- * @param type
- * @param doctype
- * @param dryrun
+ * Command line parameters:
+ * - enrichment
+ * - type
+ * - doctype
+ * - dryrun
  */
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)" . PHP_EOL;

@@ -214,7 +214,7 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action
      * Method stub to be overridden by controllers.  Enables checks for custom
      * properties.
      *
-     * @return bool
+     * @return true
      */
     protected function customAccessCheck()
     {

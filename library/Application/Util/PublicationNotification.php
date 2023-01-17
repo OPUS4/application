@@ -51,9 +51,9 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
      */
 
     /**
-     * @param array|null        $authorAddresses
-     * @param DocumentInterface $document
-     * @param bool              $notifySubmitter
+     * @param array|null             $authorAddresses
+     * @param null|DocumentInterface $document
+     * @param bool                   $notifySubmitter
      * @return array
      * @throws Zend_Exception
      */
@@ -101,7 +101,7 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
      * @param array  $authors
      * @param string $title
      * @param string $url
-     * @return string|void|null
+     * @return string|null
      * @throws Zend_Exception
      */
     public function getMailBody($docId, $authors, $title, $url)
@@ -117,6 +117,8 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
                 $url
             );
         }
+
+        return null;
     }
 
     /**
@@ -131,7 +133,7 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
     }
 
     /**
-     * @return string|void
+     * @return string|null
      * @throws Zend_Exception
      */
     public function getSubjectTemplate()
@@ -140,5 +142,6 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
         if (isset($config->notification->document->published->subject)) {
             return $config->notification->document->published->subject;
         }
+        return null;
     }
 }

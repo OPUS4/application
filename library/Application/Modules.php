@@ -39,7 +39,7 @@ class Application_Modules
     /**
      * Instance of modules manager.
      *
-     * @var Application_Modules
+     * @var self
      */
     private static $moduleManager;
 

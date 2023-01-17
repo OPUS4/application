@@ -165,12 +165,12 @@ class Publish_Model_Validation
     }
 
     /**
-     * @return array|void
+     * @return array|null
      */
     private function validateDate()
     {
         if (! isset($this->session->language)) {
-            return; // TODO BUG
+            return null;
         }
 
         $lang       = $this->session->language;
@@ -305,7 +305,7 @@ class Publish_Model_Validation
 
     /**
      * @param array|null $grantors
-     * @return array|void|null
+     * @return array|null
      * @throws Zend_Validate_Exception
      */
     private function validateThesis($grantors = null)
@@ -318,6 +318,8 @@ class Publish_Model_Validation
             }
             return $this->validateSelect($thesises);
         }
+
+        return null;
     }
 
     /**
@@ -348,7 +350,7 @@ class Publish_Model_Validation
 
     /**
      * @param string|null $datatype
-     * @return array|void|null
+     * @return array|null
      */
     public function selectOptions($datatype = null)
     {
@@ -362,36 +364,31 @@ class Publish_Model_Validation
             case 'Collection':
             case 'CollectionLeaf':
                 return $this->collectionSelect();
-                break;
 
             case 'Language':
                 return $this->languageSelect();
-                break;
 
             case 'Licence':
                 return $this->licenceSelect();
-                break;
 
             case 'List':
                 return $this->listOptions;
-                break;
 
             case 'ThesisGrantor':
                 return $this->thesisSelect(true);
-                break;
 
             case 'ThesisPublisher':
                 return $this->thesisSelect();
-                break;
 
             case 'Series':
                 return $this->seriesSelect();
-                break;
 
             default:
                 //else no select options required
                 break;
         }
+
+        return null;
     }
 
     /**
@@ -463,7 +460,7 @@ class Publish_Model_Validation
     }
 
     /**
-     * @param array $grantors
+     * @param null|array $grantors
      * @return array|null
      */
     private function thesisSelect($grantors = null)
@@ -548,7 +545,7 @@ class Publish_Model_Validation
      * Used for generating a select box.
      *
      * @param bool|null $grantors true -> get thesis grantors; null -> get thesis publishers TODO BUG null
-     * @return Array of Dnb_Institutes Objects
+     * @return array|null of Dnb_Institutes Objects
      */
     private function getThesis($grantors = null)
     {

@@ -77,8 +77,14 @@
       "Composer\\Config::disableProcessTimeout",
       "phpunit --log-junit build/phpunit.xml --colors=always --configuration tests/phpunit.xml"
     ],
-    "cs-check": "phpcs -np --extensions=php,phtml,css,js,inc",
-    "cs-fix": "phpcbf --extensions=php,phtml,css,js,inc",
+    "cs-check": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpcs -np --extensions=php,phtml,css,js,inc"
+    ],
+    "cs-fix": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpcbf --extensions=php,phtml,css,js,inc"
+    ],
     "cs-analysis": "phpcs -n --report=checkstyle --report-file=build/checkstyle.xml",
     "phpmd": "phpmd library xml cleancode,unusedcode,design,naming --reportfile build/phpmd.xml --ignore-violations-on-exit",
     "phploc": "phploc --log-csv build/phploc.csv src",

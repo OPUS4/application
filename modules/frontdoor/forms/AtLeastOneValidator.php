@@ -59,7 +59,6 @@ class Frontdoor_Form_AtLeastOneValidator extends Zend_Validate_Abstract
 
     /**
      * @param Zend_Form_Element $field
-     * @return void
      */
     public function addField(&$field)
     {
@@ -68,8 +67,8 @@ class Frontdoor_Form_AtLeastOneValidator extends Zend_Validate_Abstract
     }
 
     /**
-     * @param string $value
-     * @param array  $context
+     * @param string     $value
+     * @param null|array $context
      * @return bool
      */
     public function isValid($value, $context = null)

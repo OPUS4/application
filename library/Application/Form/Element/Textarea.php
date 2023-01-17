@@ -70,7 +70,7 @@ class Application_Form_Element_Textarea extends Zend_Form_Element_Textarea imple
     }
 
     /**
-     * @return null
+     * @return null|string
      */
     public function getHint()
     {

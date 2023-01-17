@@ -69,7 +69,7 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink
      *
      * @param array $post
      * @param array $context
-     * @return string
+     * @return string|array|null
      */
     public function processPost($post, $context)
     {

@@ -288,7 +288,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
      */
     public function populate(array $values)
     {
-        $result = parent::populate($values);
+        parent::populate($values);
 
         $accountId = $this->getElement(self::ELEMENT_MODEL_ID);
 
@@ -298,7 +298,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
             $this->setMode(self::MODE_NEW);
         }
 
-        return $result;
+        return $this;
     }
 
     /*

@@ -51,7 +51,7 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
      * Checks if date string is valid for current locale.
      *
      * @param string $datestr Date string
-     * @return boolean TRUE - Only if date string is valid for current local
+     * @return bool TRUE - Only if date string is valid for current local
      */
     public function isValid($datestr)
     {
@@ -62,7 +62,7 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
      * Converts string to Date depending on current language.
      *
      * @param string $datestr Date string
-     * @return Date
+     * @return Date|null
      */
     public function getOpusDate($datestr)
     {
@@ -82,7 +82,7 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
      * Converts Date into string depending on current language.
      *
      * @param Date $date Date
-     * @return string Date string for current language
+     * @return string|null Date string for current language
      */
     public function getDateString($date)
     {

@@ -39,7 +39,7 @@ class Application_Exception extends Exception
 
     /**
      * @param int $code
-     * @return $this;
+     * @return $this
      */
     public function setHttpResponseCode($code)
     {

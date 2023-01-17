@@ -42,9 +42,9 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
     /**
      * Gets called when the helper is used like a function of the helper broker.
      *
-     * @param string $sortOrder
-     * @param boolean $sortReverse
-     * @param string $state ('published', 'unpublished', ...)
+     * @param null|string $sortOrder
+     * @param bool        $sortReverse
+     * @param string      $state ('published', 'unpublished', ...)
      * @return array of document identifiers
      */
     public function direct($sortOrder = null, $sortReverse = 0, $state = 'published')
@@ -56,7 +56,7 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
      * Returns Document for provided ID or throws exception.
      *
      * @param string $docId Document identifier
-     * @return DocumentInterface
+     * @return DocumentInterface|null
      */
     public function getDocumentForId($docId)
     {
@@ -78,7 +78,7 @@ class Application_Controller_Action_Helper_Documents extends Zend_Controller_Act
      * Returns documents from database for browsing.
      *
      * @param string|null $sortOrder
-     * @param boolean     $sortReverse
+     * @param bool        $sortReverse
      * @param string|null $state
      * @return int[] Document identifiers
      *

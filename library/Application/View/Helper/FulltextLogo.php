@@ -37,8 +37,8 @@ use Opus\Common\DocumentInterface;
 class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
 {
     /**
-     * @param DocumentInterface $doc
-     * @return string|void
+     * @param null|DocumentInterface $doc
+     * @return string
      * @throws Exception
      */
     public function fulltextLogo($doc = null)
@@ -48,8 +48,8 @@ class Application_View_Helper_FulltextLogo extends Application_View_Helper_Docum
         }
 
         if (! $doc instanceof DocumentInterface) {
-            // TODO log
-            return; // TODO BUG do not return void
+            // TODO log OR throw exception?
+            return '';
         }
 
         $cssClass = "fulltext-logo";

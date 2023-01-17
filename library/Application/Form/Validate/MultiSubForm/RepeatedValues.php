@@ -75,7 +75,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
     /**
      * @param array      $data
      * @param array|null $context
-     * @return bool
+     * @return true
      */
     public function isValid($data, $context = null)
     {
@@ -83,9 +83,9 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
     }
 
     /**
-     * @param Zend_Form $form
-     * @param array     $data
-     * @param array     $context
+     * @param Zend_Form  $form
+     * @param array      $data
+     * @param null|array $context
      */
     public function prepareValidation($form, $data, $context = null)
     {

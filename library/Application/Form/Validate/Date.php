@@ -130,7 +130,7 @@ class Application_Form_Validate_Date extends Zend_Validate_Date
     /**
      * Sets locale and updated input format automatically.
      *
-     * @param Zend_Locale $locale
+     * @param null|Zend_Locale $locale
      */
     public function setLocale($locale = null)
     {

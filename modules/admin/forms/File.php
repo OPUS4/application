@@ -159,7 +159,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
      */
     public function setDefaults(array $defaults)
     {
-        $return = parent::setDefaults($defaults);
+        parent::setDefaults($defaults);
 
         if (isset($defaults[$this->getName()])) {
             $fileId = $defaults[$this->getName()][self::ELEMENT_ID];
@@ -169,7 +169,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
         } else {
             $this->getLogger()->err('No POST data for subform \'' . $this->getName() . '\'.');
         }
-        return $return;
+        return $this;
     }
 
     /**

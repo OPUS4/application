@@ -40,7 +40,6 @@ class Application_Controller_Plugin_Navigation extends Zend_Controller_Plugin_Ab
      * Set up Navigation.
      *
      * @param Zend_Controller_Request_Abstract $request The current request.
-     * @return void
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {

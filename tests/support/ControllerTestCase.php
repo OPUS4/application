@@ -80,9 +80,6 @@ class ControllerTestCase extends TestCase
     /** @var array */
     private $tempFiles = [];
 
-    /** @var Zend_Log */
-    private $logger;
-
     /** @var Application_Translate|null */
     private $translatorBackup;
 
@@ -132,8 +129,6 @@ class ControllerTestCase extends TestCase
 
         $this->additionalChecks();
 
-        $this->logger = null;
-
         DoiManager::setInstance(null);
         Application_Configuration::clearInstance(); // reset Application_Configuration
         Application_Translate::setInstance(null);
@@ -147,8 +142,8 @@ class ControllerTestCase extends TestCase
      *
      * @note A test doesn't need to backup and recover replaced configuration as
      *       this is done in setup and tear-down phases.
-     * @param array $overlay properties to overwrite existing values in configuration
-     * @param callable $callback callback to invoke with adjusted configuration before enabling e.g. to delete some options
+     * @param array         $overlay properties to overwrite existing values in configuration
+     * @param null|callable $callback callback to invoke with adjusted configuration before enabling e.g. to delete some options
      * @return Zend_Config reference on updated configuration
      */
     public function adjustConfiguration($overlay, $callback = null)
@@ -457,7 +452,7 @@ class ControllerTestCase extends TestCase
      * Prüft, ob das XHTML valide ist.
      *
      * @param string|null $body
-     * @return void
+     *
      *
      * TODO die DTD von W3C zu holen ist sehr langsam; sollte aus lokaler Datei geladen werden
      */
@@ -840,8 +835,8 @@ class ControllerTestCase extends TestCase
     }
 
     /**
-     * @param string $filename
-     * @param string $filepath
+     * @param string      $filename
+     * @param null|string $filepath
      * @return FileInterface
      * @throws ModelException
      * @throws Zend_Exception
@@ -1046,7 +1041,7 @@ class ControllerTestCase extends TestCase
 
     public function resetSearch()
     {
-        \Opus\Search\Config::dropCached();
+        Opus\Search\Config::dropCached();
         Service::dropCached();
     }
 

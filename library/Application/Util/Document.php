@@ -53,7 +53,7 @@ class Application_Util_Document
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     private function checkPermission()
     {
@@ -66,7 +66,7 @@ class Application_Util_Document
     }
 
     /**
-     * @param boolean $useCache
+     * @param bool $useCache
      * @return DOMNode Document node
      */
     public function getNode($useCache = true)

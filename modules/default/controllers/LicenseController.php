@@ -43,8 +43,6 @@ class LicenseController extends Application_Controller_Action
 
     /**
      * Display the metadata of a document.
-     *
-     * @return void
      */
     public function indexAction()
     {

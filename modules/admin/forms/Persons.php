@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\Date;
+use Opus\Common\Model\ModelInterface;
 use Opus\Common\Person;
 
 /**
@@ -293,7 +294,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
      * Sets value for identity field, adding a note if multiple values are present.
      *
      * @param Zend_Form_Element $element
-     * @param string|array $value
+     * @param string|array      $value
      *
      * TODO handle $value !== $person[] - can it happen?
      */
@@ -325,7 +326,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
      *
      * @param array $post
      * @param array $context
-     * @return string String fuer gewuenschte Operation
+     * @return string|null String fuer gewuenschte Operation
      */
     public function processPost($post, $context)
     {
@@ -388,7 +389,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     /**
      * Liefert Instanz von Person zurueck.
      *
-     * @return null
+     * @return null|ModelInterface
      */
     public function getModel()
     {

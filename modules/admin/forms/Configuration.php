@@ -47,7 +47,7 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
     private $options;
 
     /**
-     * @param Zend_Config $config
+     * @param null|Zend_Config $config
      */
     public function __construct($config = null)
     {

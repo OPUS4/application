@@ -97,7 +97,7 @@ class Application_Form_Element_RolesTest extends FormElementTestCase
         $this->assertCount(count($expectedRoles), $roles);
 
         foreach ($roles as $role) {
-            $this->assertInstanceOf(\Opus\UserRole::class, $role);
+            $this->assertInstanceOf(Opus\UserRole::class, $role);
             $this->assertContains($role->getName(), $expectedRoles);
 
             // removed already checked roles from expectation

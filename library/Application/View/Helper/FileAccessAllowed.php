@@ -37,7 +37,7 @@ class Application_View_Helper_FileAccessAllowed extends Zend_View_Helper_Abstrac
      * Checks if user has access to file,
      *
      * @param string|int|null $fileId
-     * @return boolean
+     * @return bool
      */
     public function fileAccessAllowed($fileId = null)
     {

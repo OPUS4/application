@@ -376,7 +376,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
 
     /**
      * @param Zend_Form $form
-     * @param string[] $names
+     * @param string[]  $names
      */
     protected function verifySubForms($form, $names)
     {

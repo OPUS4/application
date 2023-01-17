@@ -37,7 +37,7 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase
     /** @var string */
     protected $additionalResources = 'all';
 
-    /** @var false[] */
+    /** @var array */
     private $acls = [
         'module_admin'          => false,
         'module_setup'          => false,
@@ -67,7 +67,7 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase
 
     /**
      * @param string $xpath
-     * @param bool $present
+     * @param bool   $present
      */
     private function assertElement($xpath, $present = true)
     {

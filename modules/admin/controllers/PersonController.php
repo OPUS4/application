@@ -47,9 +47,6 @@ class Admin_PersonController extends Application_Controller_Action
     /** @var Application_Controller_Action_Helper_Documents */
     private $documentsHelper;
 
-    /** @var Application_Controller_Action_Helper_Dates */
-    private $dates;
-
     /**
      * Initializes controller.
      */
@@ -58,7 +55,6 @@ class Admin_PersonController extends Application_Controller_Action
         parent::init();
 
         $this->documentsHelper              = $this->_helper->getHelper('Documents');
-        $this->dates                        = $this->_helper->getHelper('Dates');
         $this->view->contentWrapperDisabled = true;
     }
 

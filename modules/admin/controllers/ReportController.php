@@ -198,7 +198,7 @@ class Admin_ReportController extends Application_Controller_Action
      * als Operation unterstützt.
      *
      * @param DoiManagerStatus $status
-     * @param string $mode
+     * @param string           $mode
      */
     private function handleBulkOperation($status, $mode)
     {

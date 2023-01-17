@@ -74,7 +74,6 @@ class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm
     /**
      * @param Zend_Controller_Request_Http $request
      * @param Zend_Session_Namespace|null  $session
-     * @return void
      */
     public function continueEdit($request, $session = null)
     {

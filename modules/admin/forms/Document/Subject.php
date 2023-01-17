@@ -82,9 +82,9 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
      *
      * Der Typ kommt vom übergeordneten Formular und muss daher auch nicht beim POST mit übermittelt werden.
      *
-     * @param string $type Typ des Schlagwortes
-     * @param string $language Sprache für das Schlagwort, wenn nicht editierbar
-     * @param array $options Weitere Optionen (für Zend_Form_SubForm)
+     * @param string      $type Typ des Schlagwortes
+     * @param null|string $language Sprache für das Schlagwort, wenn nicht editierbar
+     * @param null|array  $options Weitere Optionen (für Zend_Form_SubForm)
      */
     public function __construct($type, $language = null, $options = null)
     {

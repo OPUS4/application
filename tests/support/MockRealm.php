@@ -50,7 +50,7 @@ class MockRealm implements RealmInterface
     }
 
     /**
-     * @param int $docId
+     * @param null|int $docId
      * @return bool
      */
     public function checkDocument($docId = null)
@@ -59,7 +59,7 @@ class MockRealm implements RealmInterface
     }
 
     /**
-     * @param int $fileId
+     * @param null|int $fileId
      * @return bool
      */
     public function checkFile($fileId = null)
@@ -68,8 +68,8 @@ class MockRealm implements RealmInterface
     }
 
     /**
-     * @param string $moduleName
-     * @return bool
+     * @param null|string $moduleName
+     * @return true
      */
     public function checkModule($moduleName = null)
     {

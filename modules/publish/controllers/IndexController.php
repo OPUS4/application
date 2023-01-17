@@ -42,8 +42,6 @@ class Publish_IndexController extends Application_Controller_Action
      * Renders the first form:
      * a list of available document types (that can be configured in config.ini
      * and different upload fields
-     *
-     * @return void
      */
     public function indexAction()
     {

@@ -241,7 +241,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
     /**
      * Setzt Formularaction.
      *
-     * @param Zend_Form $form
+     * @param Zend_Form               $form
      * @param CollectionRoleInterface $collectionRole
      * @return Zend_Form
      */

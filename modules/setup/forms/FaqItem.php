@@ -85,7 +85,6 @@ class Setup_Form_FaqItem extends Application_Form_Translations
      * @param string     $key
      * @param bool       $textaread
      * @param array|null $customOptions
-     * @return void
      */
     public function addKey($key, $textaread = false, $customOptions = null)
     {

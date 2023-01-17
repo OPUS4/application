@@ -37,7 +37,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
     /**
      * hold author information (name, mail)
      *
-     * @var array('name' => ..., 'mail' => ...)
+     * @var array ('name' => ..., 'mail' => ...)
      *
      * TODO LAMINAS name cannot be 'authors' because this creates a conflict with subform 'authors' in Zend_Form code
      */
@@ -45,8 +45,6 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
 
     /**
      * Build mail form
-     *
-     * @return void
      */
     public function init()
     {

@@ -37,8 +37,6 @@ class Admin_Form_YesNoForm extends Zend_Form
 
     /**
      * Build easy form for yes/no questions.
-     *
-     * @return void
      */
     public function init()
     {

@@ -61,9 +61,9 @@ class Oai_Model_RequestTest extends ControllerTestCase
     }
 
     /**
-     * @param string  $from
-     * @param string  $until
-     * @param boolean $result
+     * @param string $from
+     * @param string $until
+     * @param bool   $result
      * @dataProvider dataFromUntilRange
      */
     public function testValidateFromUntilRange($from, $until, $result)
@@ -91,8 +91,8 @@ class Oai_Model_RequestTest extends ControllerTestCase
     }
 
     /**
-     * @param string  $datestr
-     * @param boolean $result
+     * @param string $datestr
+     * @param bool   $result
      * @dataProvider dataCheckDate
      */
     public function testCheckDate($datestr, $result)

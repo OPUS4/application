@@ -47,7 +47,7 @@ class Application_View_Helper_OptionValue extends Application_View_Helper_Abstra
      * @param string      $optionKey Name of option
      * @param string|null $context Context for option name (prefix)
      * @param bool        $escape Escape value before returning
-     * @return mixed|string|Zend_Config
+     * @return null|string|Zend_Config
      */
     public function optionValue($optionKey, $context = null, $escape = false)
     {

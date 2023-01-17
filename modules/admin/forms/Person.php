@@ -223,7 +223,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm
      *
      * @param array $post
      * @param array $context
-     * @return string String fuer gewuenschte Operation
+     * @return string|null String fuer gewuenschte Operation
      */
     public function processPost($post, $context)
     {

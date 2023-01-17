@@ -137,7 +137,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
         $values = $model->getField('Role')->getDefault();
 
         foreach ($values as $value) {
-            $key = $this->helper->getKeyForValue(\Opus\Person::class, 'Role', $value);
+            $key = $this->helper->getKeyForValue(Opus\Person::class, 'Role', $value);
             $this->assertNotEquals(
                 $key,
                 $this->translate->translate($key),
@@ -154,7 +154,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
         return [
             [Title::class],
             [TitleAbstract::class],
-            [\Opus\Identifier::class],
+            [Opus\Identifier::class],
             [Reference::class],
             [Subject::class],
         ];
@@ -238,7 +238,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
         $fieldNames = $model->describe();
 
         foreach ($fieldNames as $name) {
-            $key = $this->helper->getKeyForField(\Opus\Person::class, $name);
+            $key = $this->helper->getKeyForField(Opus\Person::class, $name);
             $this->assertTrue(
                 $this->translate->isTranslated($key),
                 "Translation key '$key' is missing."
@@ -257,7 +257,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
             [TitleAbstract::class],
             [Subject::class],
             [Patent::class],
-            [\Opus\Note::class],
+            [Opus\Note::class],
             [Enrichment::class],
         ];
     }

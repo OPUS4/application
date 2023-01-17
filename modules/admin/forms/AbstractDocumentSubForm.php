@@ -146,7 +146,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      *
      * @param array $data
      * @param array $globalContext
-     * @return boolean true - wenn alle Abhängigkeiten erfüllt sind
+     * @return bool true - wenn alle Abhängigkeiten erfüllt sind
      */
     public function isDependenciesValid($data, $globalContext)
     {
@@ -178,15 +178,15 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
      * possible and therefore create log messages. Unfortunately some of our legends cannot be translated.
      *
      * @param string $legend
-     * @return void|Zend_Form
+     * @return $this
      */
     public function setLegend($legend)
     {
         $translator = $this->getTranslator();
         if ($translator !== null && $translator->isTranslated($legend)) {
-            parent::setLegend($translator->translate($legend));
+            return parent::setLegend($translator->translate($legend));
         } else {
-            parent::setLegend($legend);
+            return parent::setLegend($legend);
         }
     }
 }

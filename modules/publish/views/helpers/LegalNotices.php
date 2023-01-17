@@ -38,7 +38,7 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract
      * The view helper can be used anywhere in the publish process: on index, specific form or check page.
      *
      * @param Zend_Form $form
-     * @return String (html output)
+     * @return string (html output)
      */
     public function legalNotices($form)
     {

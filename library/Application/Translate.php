@@ -57,13 +57,6 @@ class Application_Translate extends Zend_Translate
     /** @var bool */
     private $loaded = false;
 
-    /**
-     * Logger.
-     *
-     * @var Zend_Log
-     */
-    private $logger;
-
     /** @var self */
     private static $instance;
 
@@ -178,7 +171,7 @@ class Application_Translate extends Zend_Translate
      * @param string $directory Pfad zum Verzeichnis
      * @param bool   $warnIfMissing Optionally warn in log file if folder is missing
      * @param bool   $reload
-     * @return boolean
+     * @return bool
      *
      * TODO better than supressing the warning would be for each module to register language directories in bootstrap
      */
@@ -265,7 +258,7 @@ class Application_Translate extends Zend_Translate
      * Returns translations for a key from TMX or database source.
      *
      * @param string $key
-     * @return array
+     * @return array|null
      *
      * TODO can this be done without knowing the sources?
      */

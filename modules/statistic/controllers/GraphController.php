@@ -37,7 +37,6 @@ class Statistic_GraphController extends Application_Controller_Action
      * @param string $title
      * @param array  $dataPdf
      * @param array  $dataFrontdoor
-     * @return void
      */
     protected function buildGraph($title, $dataPdf, $dataFrontdoor)
     {

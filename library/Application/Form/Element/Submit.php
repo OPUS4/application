@@ -47,9 +47,9 @@ class Application_Form_Element_Submit extends Zend_Form_Element_Submit
     }
 
     /**
-     * Lädt die Dekoratoren für Button Element.
+     * Laedt die Dekoratoren für Button Element.
      *
-     * @return $this|Zend_Form_Element_Submit
+     * @return $this
      */
     public function loadDefaultDecorators()
     {

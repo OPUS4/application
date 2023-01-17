@@ -335,7 +335,7 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
     }
 
     /**
-     * @param int $responseCode
+     * @param int    $responseCode
      * @param string $hrefValue
      */
     private function checkErrorDocument($responseCode, $hrefValue)

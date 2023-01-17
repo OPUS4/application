@@ -172,8 +172,8 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm
     /**
      * Wird nach dem Rücksprung von Add/Edit Seite für Person aufgerufen, um das Ergebnis ins Formular einzubringen.
      *
-     * @param Zend_Controller_Request_Http    $request
-     * @param Admin_Model_DocumentEditSession $session
+     * @param Zend_Controller_Request_Http         $request
+     * @param null|Admin_Model_DocumentEditSession $session
      */
     public function continueEdit($request, $session = null)
     {

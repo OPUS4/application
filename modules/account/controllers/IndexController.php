@@ -40,7 +40,7 @@ class Account_IndexController extends Application_Controller_Action
      * Custom access check to be called by parent class.  Returns the value of
      * config key "account.editOwnAccount" if set; false otherwise.
      *
-     * @return boolean
+     * @return bool
      */
     protected function customAccessCheck()
     {

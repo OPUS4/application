@@ -111,7 +111,7 @@ class Application_Configuration_Module implements Application_Configuration_Modu
     /**
      * Validates requirments for using module.
      *
-     * @return bool - true if module can be used
+     * @return true - true if module can be used
      */
     public function validateSetup()
     {
@@ -122,7 +122,7 @@ class Application_Configuration_Module implements Application_Configuration_Modu
     /**
      * Returns true if the module has configurable options.
      *
-     * @return bool true - if module has options
+     * @return false true - if module has options
      */
     public function isConfigurable()
     {

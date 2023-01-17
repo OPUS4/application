@@ -150,7 +150,7 @@ class Sword_DepositController extends Zend_Rest_Controller
      * @param ImportStatusDocument          $statusDoc
      * @param Zend_Controller_Request_Http  $request
      * @param Zend_Controller_Response_Http $response
-     * @param string $userName
+     * @param string                        $userName
      */
     private function returnAtomEntryDocument($statusDoc, $request, $response, $userName)
     {
@@ -224,7 +224,6 @@ class Sword_DepositController extends Zend_Rest_Controller
 
     /**
      * @param Zend_Controller_Response_Abstract $response
-     * @return void
      */
     private function return500($response)
     {

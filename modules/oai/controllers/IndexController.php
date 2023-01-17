@@ -38,8 +38,6 @@ class Oai_IndexController extends Application_Controller_ModuleAccess
 {
     /**
      * Do some initialization on startup of every action
-     *
-     * @return void
      */
     public function init()
     {
@@ -64,8 +62,6 @@ class Oai_IndexController extends Application_Controller_ModuleAccess
 
     /**
      * Entry point for all OAI-PMH requests.
-     *
-     * @return void
      */
     public function indexAction()
     {

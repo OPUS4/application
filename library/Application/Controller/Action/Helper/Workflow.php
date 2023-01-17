@@ -64,7 +64,7 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * Returns true if a requested state is valid.
      *
      * @param string $state
-     * @return boolean TRUE - only if the state string exists
+     * @return bool TRUE - only if the state string exists
      */
     public function isValidState($state)
     {
@@ -77,8 +77,8 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * Returns true if a transition is allowed for a document.
      *
      * @param DocumentInterface $document
-     * @param string $targetState
-     * @return boolean - True only if transition is allowed
+     * @param string            $targetState
+     * @return bool - True only if transition is allowed
      */
     public function isTransitionAllowed($document, $targetState)
     {
@@ -156,7 +156,7 @@ class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Acti
      * Performs state change on document.
      *
      * @param DocumentInterface $document
-     * @param string $targetState
+     * @param string            $targetState
      *
      * TODO enforcing permissions and throwing exceptions (OPUSVIER-1959)
      */

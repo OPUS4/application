@@ -39,9 +39,9 @@ interface Application_Form_Validate_MultiSubFormInterface
      *
      * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
      *
-     * @param Zend_Form $form
-     * @param array $data
-     * @param array $context
+     * @param Zend_Form  $form
+     * @param array      $data
+     * @param null|array $context
      */
     public function prepareValidation($form, $data, $context = null);
 
@@ -49,8 +49,8 @@ interface Application_Form_Validate_MultiSubFormInterface
      * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein
      * sollen.
      *
-     * @param array $data
-     * @param array $context
+     * @param array      $data
+     * @param null|array $context
      */
     public function isValid($data, $context = null);
 }

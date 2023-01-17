@@ -65,7 +65,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
     /**
      * Enables/disables content-disposition attachment.
      *
-     * @var null|boolean
+     * @var null|bool
      */
     protected $downloadEnabled;
 
@@ -360,7 +360,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
      * Sets up an xml document out of the result list.
      *
      * @param array $resultIds An array of document IDs.
-     * @param int $numOfHits total number of hits.
+     * @param int   $numOfHits total number of hits.
      */
     private function handleResults($resultIds, $numOfHits)
     {

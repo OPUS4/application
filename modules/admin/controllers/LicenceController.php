@@ -60,7 +60,7 @@ class Admin_LicenceController extends Application_Controller_ActionCRUD
     /**
      * Prevent used licences from being deleted.
      *
-     * @param Object $licence
+     * @param object $licence
      * @return bool
      */
     public function isDeletable($licence)

@@ -47,7 +47,7 @@ class Admin_Model_Statistics
      * Helper-function (builds up the result array for the statistic-functions).
      *
      * @param Zend_Db_Statement_Interface $select
-     * @param string $name
+     * @param string                      $name
      * @return array
      */
     private function fillResultArray($select, $name)

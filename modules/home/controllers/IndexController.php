@@ -35,8 +35,6 @@ class Home_IndexController extends Application_Controller_Action
 {
     /**
      * Do some initialization on startup of every action.
-     *
-     * @return void
      */
     public function init()
     {
@@ -51,7 +49,7 @@ class Home_IndexController extends Application_Controller_Action
      *
      * @param  string $action     The name of the action that was called.
      * @param  array  $parameters The parameters passed to the action.
-     * @return void
+     *
      *
      * TODO does it make sense? are we using this in the future? now?
      */
@@ -81,8 +79,6 @@ class Home_IndexController extends Application_Controller_Action
 
     /**
      * Switches the language for Zend_Translate and redirects back.
-     *
-     * @return void
      */
     public function languageAction()
     {

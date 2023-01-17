@@ -202,7 +202,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
      *
      * @param array                  $data
      * @param DocumentInterface|null $document
-     * @return Admin_Form_Document
+     * @return self
      */
     public static function getInstanceFromPost($data, $document = null)
     {

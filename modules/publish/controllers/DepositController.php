@@ -63,8 +63,6 @@ class Publish_DepositController extends Application_Controller_Action
     /**
      * stores a delivered form as document in the database
      * uses check_array
-     *
-     * @return void
      */
     public function depositAction()
     {
@@ -182,8 +180,6 @@ class Publish_DepositController extends Application_Controller_Action
     /**
      * Shows a confirmation for the user, when the publication process is
      * finished.
-     *
-     * @return void
      */
     public function confirmAction()
     {

@@ -62,19 +62,19 @@ class Application_Form_Element_Grantor extends Application_Form_Element_Select
      * If $value is a valid DNB institute a corresponding option is added to select if necessary.
      *
      * @param mixed $value
-     * @return void|Zend_Form_Element
+     * @return $this
      * @throws ModelException
      */
     public function setValue($value)
     {
         try {
             $institute = DnbInstitute::get($value);
+            $this->addMultiOption($institute->getId(), $institute->getDisplayName());
+            parent::setValue($value);
         } catch (NotFoundException $omne) {
             parent::setValue($value); // could be blocked, but keeping compatibility just in case
-            return;
         }
 
-        $this->addMultiOption($institute->getId(), $institute->getDisplayName());
-        parent::setValue($value);
+        return $this;
     }
 }

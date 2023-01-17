@@ -36,8 +36,6 @@ class Frontdoor_Form_MailForm extends Zend_Form
 {
     /**
      * Build easy mail form
-     *
-     * @return void
      */
     public function init()
     {

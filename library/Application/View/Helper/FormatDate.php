@@ -39,7 +39,7 @@ class Application_View_Helper_FormatDate extends Zend_View_Helper_Abstract
      * @param int|null $day
      * @param int|null $month
      * @param int|null $year
-     * @return $this|bool|string
+     * @return parent|bool|string
      *
      * TODO behaviour of function is not obvious - clean up
      */

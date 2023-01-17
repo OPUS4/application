@@ -83,7 +83,6 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
 
     /**
      * @param ModelInterface $link
-     * @return void
      */
     public function populateFromModel($link)
     {

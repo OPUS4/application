@@ -52,7 +52,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
      */
     private $allowedMimeTypes;
 
-    /** @var Array containing instances of plugin */
+    /** @var array containing instances of plugin */
     private static $instances;
 
     /**

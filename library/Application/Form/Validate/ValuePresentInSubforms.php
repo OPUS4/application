@@ -72,8 +72,8 @@ class Application_Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abs
      * wurde, schlägt die Validierung fehl, da nicht geprüft werden, daß der Wert in den Unterformularen vorkommt.
      *
      * @param array|string $value
-     * @param array        $context
-     * @return boolean TRUE - wenn der Wert in den Unterformularen vorkommt; FALSE - wenn er nicht vorkommt
+     * @param null|array   $context
+     * @return bool TRUE - wenn der Wert in den Unterformularen vorkommt; FALSE - wenn er nicht vorkommt
      */
     public function isValid($value, $context = null)
     {

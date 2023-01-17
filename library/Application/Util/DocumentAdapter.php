@@ -77,7 +77,7 @@ class Application_Util_DocumentAdapter
     /**
      * Constructs wrapper around document.
      *
-     * @param Zend_View_Interface $view
+     * @param Zend_View_Interface   $view
      * @param int|DocumentInterface $value
      */
     public function __construct($view, $value)
@@ -299,7 +299,7 @@ class Application_Util_DocumentAdapter
      * Returns the search URL for an author.
      *
      * @param string $author
-     * @return string
+     * @return string|null
      */
     public function getAuthorUrl($author)
     {
@@ -343,7 +343,7 @@ class Application_Util_DocumentAdapter
     /**
      * Returns true if the document is deleted.
      *
-     * @return boolean
+     * @return bool
      */
     public function isDeleted()
     {

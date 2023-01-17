@@ -111,11 +111,11 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * EnrichmentKey des Enrichments zugeordnet wurde). Ist kein EnrichmentType zugeordnet, so wird ein einfaches
      * Texteingabefeld verwendet.
      *
-     * @param string $enrichmentValue Wert des anzuzeigenden Enrichments (in der Datenbank)
+     * @param string             $enrichmentValue Wert des anzuzeigenden Enrichments (in der Datenbank)
      * @param EnrichmentKey|null $enrichmentKey EnrichmentKey des Enrichments, für das ein Eingabeformularelement
      *                                               erzeugt werden soll
-     * @param string|null $formValue aktueller Formularwert für das Enrichment (nur bei der Verarbeitung eines
-     *                               POST-Requests gesetzt)
+     * @param string|null        $formValue aktueller Formularwert für das Enrichment (nur bei der Verarbeitung eines
+     *                                      POST-Requests gesetzt)
      */
     private function createValueFormElement($enrichmentValue, $enrichmentKey = null, $formValue = null)
     {
@@ -212,8 +212,8 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * soll dennoch (als erster Eintrag) im Select-Formularfeld zur Auswahl angeboten werden.
      *
      * @param Zend_Form_Element_Select $element Select-Formularfeld
-     * @param SelectType $enrichmentType Enrichment-Typ
-     * @param string $value Wert, der zur Auswahlliste hinzugefügt werden soll
+     * @param SelectType               $enrichmentType Enrichment-Typ
+     * @param string                   $value Wert, der zur Auswahlliste hinzugefügt werden soll
      */
     private function addOptionToSelectElement($element, $enrichmentType, $value)
     {
@@ -372,7 +372,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * im Select-Element ELEMENT_KEY_NAME aufgenommen werden
      *
      * @param string $enrichmentKeyName
-     * @param int $enrichmentId
+     * @param int    $enrichmentId
      */
     private function initEnrichmentKeyNameElement($enrichmentKeyName, $enrichmentId)
     {
@@ -614,8 +614,8 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * zu entfernen. Dies ist aber genau dann erforderlich, wenn keine strikte Validierung stattfindet, und der
      * ursprüngliche Enrichmentwert nicht verändert wurde.
      *
-     * @param null $name
-     * @param bool $suppressArrayNotation
+     * @param string|null $name
+     * @param bool        $suppressArrayNotation
      * @return array
      */
     public function getErrors($name = null, $suppressArrayNotation = false)
@@ -637,7 +637,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * Wichtig: diese Methode muss sowohl beim ersten Formularaufruf (GET-Request) als auch beim
      * Speichern des Formulars (POST-Request) aufgerufen werden, wenn es Validierungsfehler gibt.
      *
-     * @param EnrichmentKey $enrichmentKey Name des Enrichment-Keys
+     * @param null|EnrichmentKey $enrichmentKey Name des Enrichment-Keys
      * @throws Zend_Form_Exception
      */
     private function handleValidationErrorNonStrict($enrichmentKey = null)

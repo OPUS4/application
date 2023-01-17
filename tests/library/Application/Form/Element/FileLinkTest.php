@@ -80,7 +80,7 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
 
         $file = $element->getValue();
 
-        $this->assertInstanceOf(\Opus\File::class, $file);
+        $this->assertInstanceOf(Opus\File::class, $file);
         $this->assertEquals(130, $file->getId());
     }
 

@@ -66,7 +66,6 @@ class Application_Security_RoleConfig
     /**
      * @param Zend_Acl $acl
      * @param string   $roleName
-     * @return void
      * @throws Zend_Exception
      *
      * TODO BUG doesn't return anything

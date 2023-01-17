@@ -39,9 +39,9 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Applic
     /**
      * Es werden keine Validierungen auf Formularebene ausgeführt.
      *
-     * @param array $data
-     * @param array $context
-     * @return boolean Immer true
+     * @param array      $data
+     * @param null|array $context
+     * @return true Immer true
      */
     public function isValid($data, $context = null)
     {
@@ -54,9 +54,9 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Applic
      * Zu jedem Language-Element in den Unterformularen wird ein zusätzlicher Validator hinzugefügt, der die POST Daten
      * für alle Unterformulare und die Position des Formulars mitbekommt, damit die Prüfung ausgeführt werden kann.
      *
-     * @param Zend_Form $form
-     * @param array $data
-     * @param array $context
+     * @param Zend_Form  $form
+     * @param array      $data
+     * @param null|array $context
      */
     public function prepareValidation($form, $data, $context = null)
     {

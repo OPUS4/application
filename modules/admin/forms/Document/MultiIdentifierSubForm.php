@@ -177,8 +177,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Generieren-Button wird nur angezeigt, wenn $disableGenerateButton null oder true ist
      *
-     * @param int $position
-     * @param null $disableGenerateButton
+     * @param int       $position
+     * @param bool|null $disableGenerateButton
      * @return Zend_Form _subFormClass
      */
     protected function addSubFormAndFixOrder($position, $disableGenerateButton = null)
@@ -332,7 +332,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * @param array $data POST Daten für Unterformular
      * @param array $context POST Daten für gesamtes Formular
-     * @return string Ergebnis der Verarbeitung
+     * @return string|null Ergebnis der Verarbeitung
      */
     public function processPost($data, $context)
     {
@@ -344,7 +344,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
 
                     // wenn nur noch ein Eingabefeld für Identifier des Typs übrig bleibt: Generieren-Button anzeigen
                     if (count($this->getSubForms()) === 1) {
-                        $firstIdForm = reset($this->getSubForms()); // TODO ERROR ?
+                        $subforms = $this->getSubForms();
+                        $firstIdForm = reset($subforms); // TODO ERROR ?
                         $this->addGenerateButton($firstIdForm, false);
                         // TODO ohne den nachfolgenden Aufruf wird der Button nicht neben,
                         //      sondern über dem Input-Field ausgegeben
@@ -384,7 +385,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * @param Zend_Form $subform
      * @param int       $docId
-     * @return string
+     * @return string|null
      * @throws Exception
      */
     protected function processPostGenerate($subform, $docId)
@@ -595,7 +596,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     }
 
     /**
-     * @return bool
+     * @return false
      */
     public function isEmpty()
     {

@@ -70,7 +70,7 @@ class Home_Model_HelpFiles extends Application_Translate_Help
      * Returns the content of a help file.
      *
      * @param string $key
-     * @return string Content of file
+     * @return string|null Content of file
      */
     public function getContent($key)
     {

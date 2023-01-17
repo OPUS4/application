@@ -36,8 +36,6 @@ class Admin_OailinkController extends Application_Controller_Action
 {
     /**
      * Shows link to oai module.
-     *
-     * @return void
      */
     public function indexAction()
     {

@@ -47,7 +47,6 @@ class Export_IndexController extends Application_Controller_ModuleAccess
     /**
      * Do some initialization on startup of every action
      *
-     * @return void
      * @throws Zend_Exception
      */
     public function init()
@@ -78,8 +77,7 @@ class Export_IndexController extends Application_Controller_ModuleAccess
      * Maps action calls to export plugins or returns an error message.
      *
      * @param string $action The name of the action that was called.
-     * @param array $parameters The parameters passed to the action.
-     * @return void
+     * @param array  $parameters The parameters passed to the action.
      * @throws Zend_Controller_Action_Exception
      * @throws Application_Exception Wenn keine zugehöriges Plugin-Klasse gefunden werden kann.
      */

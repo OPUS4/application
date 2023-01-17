@@ -34,7 +34,7 @@
  */
 class Application_Xslt
 {
-    /** @var Application_Xslt */
+    /** @var self */
     private static $singleton;
 
     /**
@@ -47,7 +47,7 @@ class Application_Xslt
     /**
      * Returns singleton instance of this class.
      *
-     * @return Application_Xslt
+     * @return self
      */
     public static function getInstance()
     {

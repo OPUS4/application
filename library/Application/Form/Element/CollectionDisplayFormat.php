@@ -53,7 +53,7 @@ class Application_Form_Element_CollectionDisplayFormat extends Application_Form_
     /**
      * Set value of field.
      *
-     * @param String $value
+     * @param string $value
      */
     public function setValue($value)
     {

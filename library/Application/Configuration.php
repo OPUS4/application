@@ -58,23 +58,16 @@ class Application_Configuration extends Config
     /** @var bool Is language selection active in user interface. */
     private $languageSelectionEnabled;
 
-    /**
-     * Path to folder for temporary files.
-     *
-     * @var string
-     */
-    private $tempPath;
-
     /** @var string */
     private $defaultLanguage;
 
-    /** @var Application_Configuration */
+    /** @var self */
     private static $instance;
 
     /**
      * Returns instance of class.
      *
-     * @return Application_Configuration
+     * @return self
      */
     public static function getInstance()
     {
@@ -307,8 +300,8 @@ class Application_Configuration extends Config
      * Updates a value in a Zend_Config object.
      *
      * @param Zend_Config $config
-     * @param string $option Name of option
-     * @param string $value New value for option
+     * @param string      $option Name of option
+     * @param string      $value New value for option
      * @throws Zend_Exception
      * TODO review and if possible replace this code with something simpler
      */

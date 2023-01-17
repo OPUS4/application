@@ -58,14 +58,7 @@ class Application_Form_Element_Theme extends Application_Form_Element_SelectWith
     }
 
     /**
-     * Path to location of available themes.
-     *
-     * @var string
-     */
-    private static $themesPath = '';
-
-    /**
-     * Available themes from directory self::$_themesPath.
+     * Available themes from directory for themes.
      *
      * @var array
      */
@@ -102,7 +95,6 @@ class Application_Form_Element_Theme extends Application_Form_Element_SelectWith
             }
         }
 
-        self::$themesPath = $path;
-        self::$themes     = $themes;
+        self::$themes = $themes;
     }
 }

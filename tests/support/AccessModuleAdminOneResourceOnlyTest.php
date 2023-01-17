@@ -48,9 +48,9 @@ abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase
     ];
 
     /**
-     * @param string $username
-     * @param string $password
-     * @param array  $acls
+     * @param string     $username
+     * @param string     $password
+     * @param null|array $acls
      */
     public function setUpTests($username, $password, $acls = null)
     {
@@ -68,7 +68,7 @@ abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase
 
     /**
      * @param string $xpath
-     * @param bool $present
+     * @param bool   $present
      */
     private function assertElement($xpath, $present = true)
     {

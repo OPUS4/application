@@ -51,8 +51,8 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
     private $parentForm;
 
     /**
-     * @param Zend_Form  $parentForm
-     * @param array|null $options
+     * @param null|Zend_Form $parentForm
+     * @param array|null     $options
      */
     public function __construct($parentForm = null, $options = null)
     {

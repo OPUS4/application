@@ -99,8 +99,6 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      * Gather configuration before action handling.
-     *
-     * @return void
      */
     public function init()
     {
@@ -304,10 +302,9 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Implements response for OAI-PMH verb 'GetRecord'.
      *
-     * @param  array &$oaiRequest Contains full request information
-     * @return void
+     * @param array $oaiRequest Contains full request information
      */
-    protected function handleGetRecord(array &$oaiRequest)
+    protected function handleGetRecord($oaiRequest)
     {
         // Identifier references metadata Urn, not plain Id!
         // Currently implemented as 'oai:foo.bar.de:{docId}' or 'urn:nbn...-123'
@@ -389,9 +386,9 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Implements response for OAI-PMH verb 'ListIdentifiers'.
      *
-     * @param  array &$oaiRequest Contains full request information
+     * @param  array $oaiRequest Contains full request information
      */
-    protected function handleListIdentifiers(array &$oaiRequest)
+    protected function handleListIdentifiers(array $oaiRequest)
     {
         $maxIdentifier = $this->configuration->getMaxListIdentifiers();
         $this->handlingOfLists($oaiRequest, $maxIdentifier);
@@ -400,7 +397,7 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Implements response for OAI-PMH verb 'ListMetadataFormats'.
      *
-     * @param  array &$oaiRequest Contains full request information
+     * @param array $oaiRequest Contains full request information
      */
     protected function handleListMetadataFormats($oaiRequest)
     {
@@ -430,9 +427,9 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Implements response for OAI-PMH verb 'ListRecords'.
      *
-     * @param  array &$oaiRequest Contains full request information
+     * @param array $oaiRequest Contains full request information
      */
-    protected function handleListRecords(&$oaiRequest)
+    protected function handleListRecords($oaiRequest)
     {
         $maxRecords = $this->configuration->getMaxListRecords();
         $this->handlingOfLists($oaiRequest, $maxRecords);
@@ -469,10 +466,10 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Helper method for handling lists.
      *
-     * @param array &$oaiRequest
+     * @param array $oaiRequest
      * @param mixed $maxRecords
      */
-    private function handlingOfLists(array &$oaiRequest, $maxRecords)
+    private function handlingOfLists($oaiRequest, $maxRecords)
     {
         if (true === empty($maxRecords)) {
             $maxRecords = 100;
@@ -656,7 +653,6 @@ class Oai_Model_Server extends Application_Model_Abstract
      * Add spec header information to DOM document.
      *
      * @param mixed $information
-     * @return void
      */
     private function addSpecInformation(DOMNode $document, $information)
     {
@@ -674,7 +670,6 @@ class Oai_Model_Server extends Application_Model_Abstract
      *
      * @param DOMNode $document Document XML serialisation
      * @param string  $docid    Id of the document
-     * @return void
      */
     private function addFrontdoorUrlAttribute(DOMNode $document, $docid)
     {
@@ -689,12 +684,11 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Add download link url attribute to Document XML output.
      *
-     * @param DOMNode $document Document XML serialisation
+     * @param DOMNode $file     Document XML serialisation
      * @param string  $docid    Id of the document
      * @param string  $filename File path name
-     * @return void
      */
-    private function addFileUrlAttribute(DOMNode $file, $docid, $filename)
+    private function addFileUrlAttribute($file, $docid, $filename)
     {
         $url = $this->getBaseUrl() . '/files/' . $docid . '/' . rawurlencode($filename);
 
@@ -722,7 +716,7 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Add rights element to output.
      *
-     * @param DOMNode $domNode
+     * @param DOMNode           $domNode
      * @param DocumentInterface $doc
      */
     private function addAccessRights($domNode, $doc)

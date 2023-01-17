@@ -58,8 +58,6 @@ class Publish_Model_DocumentWorkflow
 
     /**
      * Initialize custom document fields.
-     *
-     * @return void
      */
     protected function initializeDocument()
     {
