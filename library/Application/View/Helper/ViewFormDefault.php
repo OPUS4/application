@@ -28,12 +28,13 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_View_Helper_ViewFormDefault extends Zend_View_Helper_FormElement
 {
     /**
      * @param string      $name
      * @param string|null $value
-     * @param array       $attribs
+     * @param array|null  $attribs
      * @return string
      */
     public function viewFormDefault($name, $value = null, $attribs = null)

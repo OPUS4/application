@@ -40,7 +40,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      * Returns HTMl for rendering export links.
      *
      * @param string|string[]|null $keys Keys for parameters that should be include in export link
-     * @param array                $context
+     * @param array|null           $context
      * @return string HTML
      */
     public function exportLinks($keys = null, $context = null)

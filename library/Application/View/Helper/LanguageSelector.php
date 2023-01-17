@@ -38,7 +38,7 @@ class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract
     /**
      * Get an instance of the view helper.
      *
-     * @return array
+     * @return array|null
      */
     public function languageSelector()
     {

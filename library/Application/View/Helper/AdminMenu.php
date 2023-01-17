@@ -39,7 +39,7 @@ class Application_View_Helper_AdminMenu extends Zend_View_Helper_Abstract
     /**
      * Returns current instance.
      *
-     * @return Application_View_Helper_AdminMenu
+     * @return $this
      */
     public function adminMenu()
     {

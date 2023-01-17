@@ -44,9 +44,9 @@ class Application_View_Helper_OptionValue extends Application_View_Helper_Abstra
      * The idea is to make this automatic for modules later, so that inside a module
      * options can be accessed directly without that prefix (TODO).
      *
-     * @param string $optionKey Name of option
-     * @param string $context Context for option name (prefix)
-     * @param bool   $escape Escape value before returning
+     * @param string      $optionKey Name of option
+     * @param string|null $context Context for option name (prefix)
+     * @param bool        $escape Escape value before returning
      * @return mixed|string|Zend_Config
      */
     public function optionValue($optionKey, $context = null, $escape = false)

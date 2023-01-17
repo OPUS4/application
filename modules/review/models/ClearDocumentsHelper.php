@@ -43,8 +43,8 @@ class Review_Model_ClearDocumentsHelper
     /**
      * Publishes documents and adds the given Person as referee.
      *
-     * @param array $docIds
-     * @param mixed $userId
+     * @param array  $docIds
+     * @param mixed  $userId
      * @param Person $person
      *
      * FIXME capture success or failure for display afterwards
@@ -90,8 +90,8 @@ class Review_Model_ClearDocumentsHelper
     /**
      * Rejects documents and adds the given Person as referee.
      *
-     * @param array $docIds
-     * @param mixed $userId
+     * @param array  $docIds
+     * @param mixed  $userId
      * @param Person $person
      *
      * FIXME capture success or failure for display afterwards

@@ -37,8 +37,8 @@
 class Application_View_Helper_AssignCollectionAllowed extends Zend_View_Helper_Abstract
 {
     /**
-     * @param array $collection
-     * @param int   $docId
+     * @param array    $collection
+     * @param int|null $docId
      * @return bool
      */
     public function assignCollectionAllowed($collection, $docId = null)
