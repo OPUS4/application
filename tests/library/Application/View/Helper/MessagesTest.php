@@ -50,9 +50,36 @@ class Application_View_Helper_MessagesTest extends ControllerTestCase
         $messages[] = ['message' => 'Hello, world!', 'level' => 'error'];
 
         $this->assertEquals(
-            <<<EOT
+            '
 <div class="messages">
   <div class="error">Hello, world!</div>
+</div>
+
+',
+            $helper->messages($messages)
+        );
+    }
+
+    public function testMessagesMultiple()
+    {
+        $this->useEnglish();
+
+        $view = $this->getView();
+
+        $helper = new Application_View_Helper_Messages();
+        $helper->setView($view);
+
+        $messages   = [];
+        $messages[] = ['message' => 'validation_error_int', 'level' => 'error'];
+        $messages[] = ['message' => 'Just a test!', 'level' => 'info'];
+        $messages[] = ['message' => 'Without level.'];
+
+        $this->assertEquals(
+            <<<EOT
+<div class="messages">
+  <div class="error">Please provide a number.</div>
+  <div class="info">Just a test!</div>
+  <div class="">Without level.</div>
 </div>
 
 EOT,
