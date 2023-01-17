@@ -49,15 +49,13 @@ class Application_View_Helper_MessagesTest extends ControllerTestCase
         $messages   = [];
         $messages[] = ['message' => 'Hello, world!', 'level' => 'error'];
 
-        $this->assertEquals(
-            '
+        $expected = <<<TEXT
 <div class="messages">
   <div class="error">Hello, world!</div>
 </div>
+TEXT;
 
-',
-            $helper->messages($messages)
-        );
+        $this->assertEquals($expected, $helper->messages($messages));
     }
 
     public function testMessagesMultiple()
@@ -97,15 +95,13 @@ TEXT;
         $messages   = [];
         $messages[] = ['message' => 'validation_error_int', 'level' => 'error'];
 
-        $this->assertEquals(
-            <<<EOT
+        $expected = <<<TEXT
 <div class="messages">
   <div class="error">Please provide a number.</div>
 </div>
+TEXT;
 
-EOT,
-            $helper->messages($messages)
-        );
+        $this->assertEquals($expected, $helper->messages($messages));
     }
 
     public function testMessagesNone()
@@ -123,14 +119,12 @@ EOT,
 
         $helper->setView($this->getView());
 
-        $this->assertEquals(
-            <<<EOT
+        $expected = <<<TEXT
 <div class="messages">
   <div>No key for this message.</div>
 </div>
+TEXT;
 
-EOT,
-            $helper->messages(['No key for this message.'])
-        );
+        $this->assertEquals($expected, $helper->messages(['No key for this message.']));
     }
 }
