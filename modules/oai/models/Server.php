@@ -300,10 +300,8 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      * Implements response for OAI-PMH verb 'GetRecord'.
-     *
-     * @param array $oaiRequest Contains full request information
      */
-    protected function handleGetRecord($oaiRequest)
+    protected function handleGetRecord(array &$oaiRequest)
     {
         // Identifier references metadata Urn, not plain Id!
         // Currently implemented as 'oai:foo.bar.de:{docId}' or 'urn:nbn...-123'
@@ -384,10 +382,8 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      * Implements response for OAI-PMH verb 'ListIdentifiers'.
-     *
-     * @param  array $oaiRequest Contains full request information
      */
-    protected function handleListIdentifiers(array $oaiRequest)
+    protected function handleListIdentifiers(array &$oaiRequest)
     {
         $maxIdentifier = $this->configuration->getMaxListIdentifiers();
         $this->handlingOfLists($oaiRequest, $maxIdentifier);
@@ -395,10 +391,8 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      * Implements response for OAI-PMH verb 'ListMetadataFormats'.
-     *
-     * @param array $oaiRequest Contains full request information
      */
-    protected function handleListMetadataFormats($oaiRequest)
+    protected function handleListMetadataFormats(array &$oaiRequest)
     {
         if (isset($oaiRequest['identifier'])) {
             try {
@@ -425,10 +419,8 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      * Implements response for OAI-PMH verb 'ListRecords'.
-     *
-     * @param array $oaiRequest Contains full request information
      */
-    protected function handleListRecords($oaiRequest)
+    protected function handleListRecords(array &$oaiRequest)
     {
         $maxRecords = $this->configuration->getMaxListRecords();
         $this->handlingOfLists($oaiRequest, $maxRecords);
@@ -465,10 +457,9 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Helper method for handling lists.
      *
-     * @param array $oaiRequest
      * @param mixed $maxRecords
      */
-    private function handlingOfLists($oaiRequest, $maxRecords)
+    private function handlingOfLists(array &$oaiRequest, $maxRecords)
     {
         if (true === empty($maxRecords)) {
             $maxRecords = 100;
