@@ -229,7 +229,6 @@ class Oai_Model_Server extends Application_Model_Abstract
 
             default:
                 throw new Exception('The verb provided in the request is illegal.', Oai_Model_Error::BADVERB);
-                break;
         }
 
         $doc = $this->proc->transformToDoc($this->xml);
