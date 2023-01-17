@@ -60,35 +60,6 @@ EOT,
         );
     }
 
-    /*
-    public function testMessagesMultiple()
-    {
-        $this->useEnglish();
-
-        $view = $this->getView();
-
-        $helper = new Application_View_Helper_Messages();
-        $helper->setView($view);
-
-        $messages   = [];
-        // TODO BUG the following line causes job fails on GitHub when 'php -l' (lint check) is performed
-        // $messages[ = ['message' => 'validation_error_int', 'level' => 'error'];
-        $messages[ = ['message' => 'Just a test!', 'level' => 'info'];
-        $messages[ = ['message' => 'Without level.'];
-
-        $this->assertEquals(
-            <<<EOT
-<div class="messages">
-  <div class="error">Please provide a number.</div>
-  <div class="info">Just a test!</div>
-  <div class="">Without level.</div>
-</div>
-
-EOT,
-            $helper->messages($messages)
-        );
-    }*/
-
     public function testMessagesTranslation()
     {
         $this->useEnglish();
