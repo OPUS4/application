@@ -74,17 +74,15 @@ class Application_View_Helper_MessagesTest extends ControllerTestCase
         $messages[] = ['message' => 'Just a test!', 'level' => 'info'];
         $messages[] = ['message' => 'Without level.'];
 
-        $this->assertEquals(
-            <<<TEXT
+        $expected = <<<TEXT
 <div class="messages">
   <div class="error">Please provide a number.</div>
   <div class="info">Just a test!</div>
   <div class="">Without level.</div>
 </div>
+TEXT;
 
-TEXT,
-            $helper->messages($messages)
-        );
+        $this->assertEquals($expected, $helper->messages($messages));
     }
 
     public function testMessagesTranslation()
