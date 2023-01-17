@@ -53,6 +53,7 @@ class Application_View_Helper_MessagesTest extends ControllerTestCase
 <div class="messages">
   <div class="error">Hello, world!</div>
 </div>
+
 TEXT;
 
         $this->assertEquals($expected, $helper->messages($messages));
@@ -78,6 +79,7 @@ TEXT;
   <div class="info">Just a test!</div>
   <div class="">Without level.</div>
 </div>
+
 TEXT;
 
         $this->assertEquals($expected, $helper->messages($messages));
@@ -99,6 +101,7 @@ TEXT;
 <div class="messages">
   <div class="error">Please provide a number.</div>
 </div>
+
 TEXT;
 
         $this->assertEquals($expected, $helper->messages($messages));
@@ -123,6 +126,7 @@ TEXT;
 <div class="messages">
   <div>No key for this message.</div>
 </div>
+
 TEXT;
 
         $this->assertEquals($expected, $helper->messages(['No key for this message.']));
