@@ -161,6 +161,25 @@
                 <filter token="searchengine.extract.core" value="${solrExtractCore}" />
             </filterset>
         </copy>
+
+        <copy file="${basedir}/application/configs/console.ini.template"
+              toFile="${basedir}/application/configs/console.ini" filtering="true" overwrite="true">
+            <filterset>
+                <filter token="db.user.name" value="${dbUserName}" />
+                <filter token="db.user.password" value="${dbUserPassword}" />
+                <filter token="db.admin.name" value="${dbAdminName}" />
+                <filter token="db.admin.password" value="${dbAdminPassword}" />
+                <filter token="db.name" value="${dbName}" />
+                <filter token="searchengine.index.host" value="${solrIndexHost}" />
+                <filter token="searchengine.index.port" value="${solrIndexPort}" />
+                <filter token="searchengine.index.path" value="${solrIndexPath}" />
+                <filter token="searchengine.index.core" value="${solrIndexCore}" />
+                <filter token="searchengine.extract.host" value="${solrExtractHost}" />
+                <filter token="searchengine.extract.port" value="${solrExtractPort}" />
+                <filter token="searchengine.extract.path" value="${solrExtractPath}" />
+                <filter token="searchengine.extract.core" value="${solrExtractCore}" />
+            </filterset>
+        </copy>
     </target>
 
     <target name="lint" description="Prüft, ob PHP Dateien Syntaxfehler enthalten.">
