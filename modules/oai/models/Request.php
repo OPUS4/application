@@ -46,7 +46,7 @@ class Oai_Model_Request
     /** @var string */
     private $errorMessage;
 
-    /* @var string */
+    /** @var string */
     private $pathToMetadataPrefixFiles;
 
     /** @var string */
