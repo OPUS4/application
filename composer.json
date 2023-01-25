@@ -85,11 +85,5 @@
     "phpcpd": "phpcpd . --min-lines 3 --min-tokens 30 --log-pmd build/pmd-cpd.xml --progress || true",
     "index": "bin/opus4 index:index",
     "metrics": "phpmetrics --config=phpmetrics.json"
-  },
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../zf1-future"
-    }
-  ]
+  }
 }
