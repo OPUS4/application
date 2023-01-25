@@ -62,11 +62,24 @@ if (isset($this->title)) {
     }
 }
 
+$this->headLink()->prependStylesheet($this->layoutPath() . '/css/custom.css');
+$this->moduleCss();
+$this->headLink()->prependStylesheet($this->layoutPath() . '/css/print.css', 'print');
+
+if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) {
+    // TODO auf CSS-Dateien fuer Admin-Seiten reduzieren
+    $this->headLink()
+        ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
+        ->prependStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print');
+} else {
+    // TODO durch neue CSS-Dateien fuer oeffentliche Seiten ersetzen, einschliesslich CSS fuer Admin-Funktionen fuer
+    //      eingeloggte Administratoren auf den oeffentlichen Seiten
+    $this->headLink()
+        ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
+        ->prependStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print');
+}
+
 $this->headLink()
-    ->prependStylesheet($this->layoutPath() . '/css/custom.css')
-    ->prependStylesheet($this->layoutPath() . '/css/print.css', 'print')
-    ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
-    ->prependStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
     ->prependStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
     ->prependStylesheet($this->layoutPath() . '/fontawesome/css/solid.css')
     ->prependStylesheet($this->layoutPath() . '/fontawesome/css/fontawesome.min.css')
