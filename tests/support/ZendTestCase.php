@@ -189,7 +189,9 @@ abstract class ZendTestCase extends TestCase
         $this->resetResponse();
         Zend_Layout::resetMvcInstance();
         Zend_Controller_Action_HelperBroker::resetHelpers();
-        $this->frontController->resetInstance();
+        if ($this->frontController !== null) {
+            $this->frontController->resetInstance();
+        }
         Zend_Session::$_unitTestEnabled = true;
     }
 

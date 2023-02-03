@@ -179,7 +179,7 @@ class Setup_Form_Translation extends Application_Form_Abstract
         $manager   = new Application_Translate_TranslationManager();
         $translate = $this->getTranslationManager();
 
-        if (strlen(trim($keyId)) === 0) {
+        if ($keyId === null || strlen(trim($keyId)) === 0) {
             // create new key
             $translate->setTranslations($key, $translations, $module);
         } else {

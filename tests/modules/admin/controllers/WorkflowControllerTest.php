@@ -96,7 +96,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
      */
     public function testDeleteActionConfirmNo()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'sureno' => 'sureno',
@@ -116,7 +116,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
      */
     public function testDeleteActionConfirmYes()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'sureyes' => 'sureyes',
@@ -159,7 +159,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $document->setServerState('deleted');
         $documentId = $document->store();
 
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'sureno' => 'sureno',
@@ -179,7 +179,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
      */
     public function testPublishActionConfirmYes()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'sureyes' => 'sureyes',

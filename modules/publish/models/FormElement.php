@@ -138,7 +138,7 @@ class Publish_Model_FormElement
 
         $this->required = $required;
 
-        $this->formElement  = strtolower($formElement);
+        $this->formElement  = $formElement !== null ? strtolower($formElement) : ''; // TODO PHP8
         $this->datatype     = $datatype;
         $this->multiplicity = $multiplicity;
         if (isset($this->datatype)) {

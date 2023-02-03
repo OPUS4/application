@@ -374,7 +374,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
                     }
                 }
 
-                if (strlen(trim($value)) === 0) {
+                if ($value === null || strlen(trim($value)) === 0) {
                     $value = null;
                 }
 

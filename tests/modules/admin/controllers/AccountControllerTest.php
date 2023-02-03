@@ -164,7 +164,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
 
     public function testCreateActionCancel()
     {
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'Cancel' => 'Cancel',
@@ -179,7 +179,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
 
     public function testCreateActionMissingInput()
     {
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'password'        => 'dummypassword',
@@ -206,7 +206,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
     {
         $account = Account::fetchAccountByLogin('wally');
         $id      = $account->getId();
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'Id'        => $id,
@@ -230,7 +230,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
 
     public function testUpdateActionCancel()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'Cancel' => 'Cancel',
@@ -249,7 +249,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
     {
         $account = Account::fetchAccountByLogin('wally2');
         $id      = $account->getId();
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'Id'    => $id,
@@ -274,7 +274,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
     {
         $account = Account::fetchAccountByLogin('wally2');
         $id      = $account->getId();
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'Id'              => $id,
@@ -307,7 +307,7 @@ class Admin_AccountControllerTest extends ControllerTestCase
     {
         $account = Account::fetchAccountByLogin('wally2');
         $id      = $account->getId();
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'Id'         => $id,

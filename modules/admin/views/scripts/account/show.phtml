@@ -39,15 +39,15 @@
     </div>
     <div>
         <div class="label"><?= $this->translate('admin_account_label_firstname') ?></div>
-        <div class="value"><?= htmlspecialchars($this->account->getFirstName()) ?></div>
+        <div class="value"><?= htmlspecialchars($this->account->getFirstName() ?? '') ?></div>
     </div>
     <div>
         <div class="label"><?= $this->translate('admin_account_label_lastname') ?></div>
-        <div class="value"><?= htmlspecialchars($this->account->getLastName()) ?></div>
+        <div class="value"><?= htmlspecialchars($this->account->getLastName() ?? '') ?></div>
     </div>
     <div>
         <div class="label"><?= $this->translate('admin_account_label_email') ?></div>
-        <div class="value"><?= htmlspecialchars($this->account->getEmail()) ?></div>
+        <div class="value"><?= htmlspecialchars($this->account->getEmail() ?? '') ?></div>
     </div>
     <div>
         <div class="label"><?= $this->translate('admin_account_label_roles') ?></div>

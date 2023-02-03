@@ -122,7 +122,7 @@ class Application_View_Helper_JavascriptMessages extends Application_View_Helper
         $output = $indent . '<script type="text/javascript">' . "\n";
         if ($this->javascriptMessages !== null) {
             foreach ($this->javascriptMessages as $key => $message) {
-                $output .= "$indent    opus4Messages[\"$key\"] = \"" . htmlspecialchars($message) . "\";\n";
+                $output .= "$indent    opus4Messages[\"$key\"] = \"" . htmlspecialchars($message, ENT_NOQUOTES) . "\";\n";
             }
         }
         return $output . "$indent</script>\n";

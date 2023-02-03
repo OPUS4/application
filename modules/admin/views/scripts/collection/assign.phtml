@@ -67,7 +67,7 @@
 <table class="collections">
     <?php foreach ($this->collections as $i => $collection) : ?>
     <tr class="<?= $i % 2 === 0 ? 'even' : 'odd'?>">
-        <td class="<?= $collection['visible'] === '1' ? 'visible' : 'invisible' ?><?=$collection['assigned'] ? ' assigned' : '' ?>">
+        <td class="<?= $collection['visible'] ? 'visible' : 'invisible' ?><?=$collection['assigned'] ? ' assigned' : '' ?>">
             <?php if ($collection['hasChildren']) : ?>
                 <a href="<?=$this->url(['module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $collection['id'], 'document' => $this->documentId], null, true)?>"><?=
                     htmlspecialchars($collection['name']) ?></a>

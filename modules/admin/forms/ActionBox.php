@@ -122,7 +122,11 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm
      */
     public function getMessage()
     {
-        return method_exists($this->parentForm, 'getMessage') ? $this->parentForm->getMessage() : null;
+        if ($this->parentForm !== null && method_exists($this->parentForm, 'getMessage')) {
+            return $this->parentForm->getMessage();
+        } else {
+            return null;
+        }
     }
 
     /**

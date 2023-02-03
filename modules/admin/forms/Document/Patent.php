@@ -154,7 +154,7 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
     {
         $patentId = $this->getElement(self::ELEMENT_ID)->getValue();
 
-        if (strlen(trim($patentId)) === 0 || ! is_numeric($patentId)) {
+        if ($patentId === null || strlen(trim($patentId)) === 0 || ! is_numeric($patentId)) {
             $patentId = null;
         }
 

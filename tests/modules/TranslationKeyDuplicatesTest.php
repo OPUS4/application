@@ -38,6 +38,6 @@ class TranslationKeyDuplicatesTest extends ControllerTestCase
     {
         $modulesDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules';
         $output     = shell_exec("find $modulesDir -name '*tmx' -print0 |xargs -r0 grep -h 'tuid=' |sed -e 's/^.*tuid=\"([^\"]+)\".*$/\1/g' |sort |uniq -d");
-        $this->assertNull($output, $output);
+        $this->assertNull($output, $output ?? '');
     }
 }

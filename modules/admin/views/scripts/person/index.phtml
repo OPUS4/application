@@ -61,7 +61,7 @@ $persons = Person::getModelRepository();
 <?PHP foreach ($this->persons as $person) : ?>
     <tr>
         <td class="lastname"><?= $this->highlight(htmlspecialchars($person['last_name']), $this->filter) ?></td>
-        <td class="firstname"><?= $this->highlight(htmlspecialchars($person['first_name']), $this->filter) ?></td>
+        <td class="firstname"><?= $this->highlight(htmlspecialchars($person['first_name'] ?? ''), $this->filter) ?></td>
         <td>
             <div><?= $person['identifier_orcid'] ?></div>
             <div><?= $person['identifier_gnd'] ?></div>

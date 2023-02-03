@@ -641,14 +641,14 @@ class Setup_LanguageController extends Application_Controller_Action
 
         // check if modules parameter is allowed
         $allowedModules = $manager->getAllowedModules();
-        if (($allowedModules !== null && ! in_array($modules, $allowedModules)) || strcasecmp($modules, 'all') === 0) {
+        if ($modules === null || ($allowedModules !== null && ! in_array($modules, $allowedModules)) || strcasecmp($modules, 'all') === 0) {
             // TODO log unknown modules ?
             $modules = null;
         }
 
         $manager->setModules($modules);
 
-        switch (strtolower($state)) {
+        switch (strtolower($state ?? '')) {
             case 'edited':
                 $manager->setState($manager::STATE_EDITED);
                 break;
@@ -659,7 +659,7 @@ class Setup_LanguageController extends Application_Controller_Action
                 $manager->setState(null);
                 break;
         }
-        switch (strtolower($scope)) {
+        switch (strtolower($scope ?? '')) {
             case 'key':
                 $manager->setScope($manager::SCOPE_KEYS);
                 break;

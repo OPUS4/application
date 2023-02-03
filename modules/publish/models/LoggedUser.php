@@ -94,9 +94,18 @@ class Publish_Model_LoggedUser
         }
 
         $person = Person::new();
-        $person->setFirstName(trim($this->account->getFirstName()));
-        $person->setLastName(trim($this->account->getLastName()));
-        $person->setEmail(trim($this->account->getEmail()));
+
+        $firstName = $this->account->getFirstName();
+        if ($firstName !== null) {
+            $person->setFirstName(trim($firstName)); // TODO trimming for values is/should be centralized
+        }
+
+        $person->setLastName(trim($this->account->getLastName() ?? ''));
+
+        $email = $this->account->getEmail();
+        if ($email !== null) {
+            $person->setEmail(trim($email));
+        }
 
         if (! $person->isValid()) {
             $this->log->err('Created Opus_Person object for user \'' . $this->login . '\' is NOT VALID. ');

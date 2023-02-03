@@ -49,7 +49,7 @@ class Admin_StatisticControllerTest extends ControllerTestCase
 
     public function testShowAction()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost(['selectedYear' => '2010']);
         $this->dispatch('/admin/statistic/show');
@@ -66,7 +66,7 @@ class Admin_StatisticControllerTest extends ControllerTestCase
     public function testIndexActionWithWrongYear()
     {
         $this->useEnglish();
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost(['selectedYear' => '1337']);
         $this->dispatch('/admin/statistic/show');
@@ -76,7 +76,7 @@ class Admin_StatisticControllerTest extends ControllerTestCase
     public function testDisplayCurrentYear()
     {
         $this->useGerman();
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost(['selectedYear' => '2010']);
         $this->dispatch('/admin/statistic/show');

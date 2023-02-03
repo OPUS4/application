@@ -134,7 +134,7 @@ class Admin_Form_Notification extends Admin_Form_AbstractDocumentSubForm
     {
         $translator = $this->getTranslator();
 
-        $email = trim($person->getEmail());
+        $email = trim($person->getEmail() ?? '');
 
         $disabled = false;
 

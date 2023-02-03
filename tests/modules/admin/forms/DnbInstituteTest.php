@@ -160,10 +160,13 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase
         $form = new Admin_Form_DnbInstitute();
 
         foreach ($form->getElements() as $name => $element) {
-            $this->assertTrue(
-                strpos($element->getLabel(), 'Opus_DnbInstitute_') === false,
-                "Element '$name' is not translated."
-            );
+            $label = $element->getLabel();
+            if ($label !== null) {
+                $this->assertFalse(
+                    strpos($label, 'Opus_DnbInstitute_'),
+                    "Element '$name' is not translated."
+                );
+            }
         }
     }
 }

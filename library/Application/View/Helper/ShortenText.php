@@ -94,10 +94,12 @@ class Application_View_Helper_ShortenText extends Application_View_Helper_Abstra
      */
     public function setMaxLength($length)
     {
-        if (! is_int($length) && ! ctype_digit($length)) {
-            $length = 0;
+        if (is_int($length)) {
+            $this->maxLength = $length;
+        } elseif (is_string($length) && ctype_digit($length)) {
+            $this->maxLength = intval($length);
+        } else {
+            $this->maxLength = 0;
         }
-
-        $this->maxLength = $length;
     }
 }

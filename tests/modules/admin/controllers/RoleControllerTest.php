@@ -109,7 +109,7 @@ class Admin_RoleControllerTest extends ControllerTestCase
 
     public function testCreateAction()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'Name'                  => 'testrole',
@@ -128,7 +128,7 @@ class Admin_RoleControllerTest extends ControllerTestCase
 
     public function testCreateActionCancel()
     {
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'name'                  => 'testrole',
@@ -146,7 +146,7 @@ class Admin_RoleControllerTest extends ControllerTestCase
 
     public function testCreateActionMissingInput()
     {
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'privilegeadministrate' => '1',
@@ -168,7 +168,7 @@ class Admin_RoleControllerTest extends ControllerTestCase
     {
         $role = UserRole::fetchByName('testrole');
 
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'Name'               => 'testrole2',
@@ -196,7 +196,7 @@ class Admin_RoleControllerTest extends ControllerTestCase
     {
         $role = UserRole::fetchByName('testrole2');
 
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'Name'               => '',

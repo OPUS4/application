@@ -347,7 +347,9 @@ class Application_Translate_TmxFile
 
             $tuElement = $dom->createElement('tu');
             $tuElement->setAttribute('tuid', $unitName);
-            $tuElement->setAttribute('creationtool', $module);
+            if ($module !== null) {
+                $tuElement->setAttribute('creationtool', $module);
+            }
             $bodyElement = $dom->getElementsByTagName('body')->item(0);
             $tuNode      = $bodyElement->appendChild($tuElement);
             foreach ($variants as $lang => $text) {

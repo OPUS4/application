@@ -57,7 +57,8 @@ class Solrsearch_Model_Search_Collection extends Solrsearch_Model_Search_Basic
             $collectionList = new Solrsearch_Model_CollectionList($request->getParam('id'));
         } catch (Solrsearch_Model_Exception $e) {
             $this->getLogger()->debug($e->getMessage());
-            $this->_helper->Redirector->redirectToAndExit('index', '', 'browse', null, [], true); // TODO FIX
+            $redirector = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
+            $redirector->redirectToAndExit('index', '', 'browse', null, [], true); // TODO FIX
             return;
         }
 

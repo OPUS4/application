@@ -53,13 +53,15 @@ class Application_Form_Element_CollectionDisplayFormat extends Application_Form_
     /**
      * Set value of field.
      *
-     * @param String $value
+     * @param string $value
      */
     public function setValue($value)
     {
-        // previous database versions sometimes used spaces in value like "Name, Number"
-        $trimmed = preg_replace('/\s+/', '', $value);
+        if ($value !== null) {
+            // previous database versions sometimes used spaces in value like "Name, Number"
+            $value = preg_replace('/\s+/', '', $value);
+        }
 
-        parent::setValue($trimmed);
+        parent::setValue($value);
     }
 }

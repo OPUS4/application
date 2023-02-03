@@ -120,7 +120,7 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
                 if (count($value) === 0 && $this->isRemoveEmptyElements()) {
                     $this->removeElement($element->getName());
                 }
-            } elseif (trim($value) === '' && $this->isRemoveEmptyElements()) {
+            } elseif (($value === null || trim($value) === '') && $this->isRemoveEmptyElements()) {
                 $this->removeElement($element->getName());
             } elseif ($element instanceof Zend_Form_Element_Checkbox) {
                 if (! $element->isChecked() && $this->isRemoveEmptyCheckbox() && $this->isRemoveEmptyElements()) {

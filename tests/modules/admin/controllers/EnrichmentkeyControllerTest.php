@@ -389,7 +389,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $this->getRequest()->setMethod('POST')->setPost([
             'Id'         => $protectedEnrichmentKeyName,
-            'Name'       => "${protectedEnrichmentKeyName}Modified",
+            'Name'       => "{$protectedEnrichmentKeyName}Modified",
             'Type'       => 'TextType',
             'Options'    => '',
             'Validation' => '0',
@@ -408,7 +408,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('No Opus\Db\EnrichmentKeys with id ClassRvkModified in database.');
 
-        EnrichmentKey::get("${protectedEnrichmentKeyName}Modified");
+        EnrichmentKey::get("{$protectedEnrichmentKeyName}Modified");
         $this->fail('Previous statement should have thrown exception.');
     }
 
@@ -543,7 +543,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $this->getRequest()->setMethod('POST')->setPost([
             'Id'     => $protectedEnrichmentKeyName,
-            'Name'   => "${protectedEnrichmentKeyName}Modified",
+            'Name'   => "{$protectedEnrichmentKeyName}Modified",
             'Cancel' => 'Abbrechen',
         ]);
 
@@ -558,7 +558,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->expectException(NotFoundException::class);
         $this->expectExceptionMessage('No Opus\Db\EnrichmentKeys with id ClassRvkModified in database.');
 
-        EnrichmentKey::get("${protectedEnrichmentKeyName}Modified");
+        EnrichmentKey::get("{$protectedEnrichmentKeyName}Modified");
         $this->fail('Previous statement should have thrown exception.');
     }
 

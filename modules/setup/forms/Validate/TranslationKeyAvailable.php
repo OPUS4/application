@@ -72,6 +72,9 @@ class Setup_Form_Validate_TranslationKeyAvailable extends Zend_Validate_Abstract
             $name = $context;
         }
 
+        $value = $value ?? '';
+        $name  = $name ?? '';
+
         if (strtolower($name) === strtolower($value)) {
             return true;
         }

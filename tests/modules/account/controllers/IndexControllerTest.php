@@ -123,7 +123,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'password' => 'newpassword',
@@ -148,7 +148,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'password'        => 'newpassword',
@@ -177,7 +177,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'username'  => 'john',
@@ -206,7 +206,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'username'  => 'john',

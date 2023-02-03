@@ -138,7 +138,7 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
         foreach ($persons as $index => $person) {
             $fullname = $person->getDisplayName();
             $email    = $person->getEmail();
-            if (strlen(trim($email)) > 0) {
+            if ($email !== null && strlen(trim($email)) > 0) {
                 if (array_key_exists($email, $recipients)) {
                     $entry = $recipients[$email];
                     $names = $entry['name'];

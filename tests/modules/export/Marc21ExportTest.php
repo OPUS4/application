@@ -63,7 +63,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         Application_Security_AclProvider::init();
 
-        $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
+        $this->dispatch("/export/index/marc21/docId/{$docId}/searchtype/id");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -95,7 +95,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         $this->loginUser('admin', 'adminadmin');
 
-        $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
+        $this->dispatch("/export/index/marc21/docId/{$docId}/searchtype/id");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -132,7 +132,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         $this->loginUser('security8', 'security8pwd');
 
-        $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
+        $this->dispatch("/export/index/marc21/docId/{$docId}/searchtype/id");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -172,7 +172,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $doc->setLanguage('eng');
         $docId = $doc->store();
 
-        $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
+        $this->dispatch("/export/index/marc21/docId/{$docId}/searchtype/id");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -206,7 +206,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         $this->loginUser('security8', 'security8pwd');
 
-        $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
+        $this->dispatch("/export/index/marc21/docId/{$docId}/searchtype/id");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -248,7 +248,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $doc->setLanguage('eng');
         $docId = $doc->store();
 
-        $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
+        $this->dispatch("/export/index/marc21/docId/{$docId}/searchtype/id");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -292,7 +292,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
 
         $this->loginUser('security9', 'security9pwd');
 
-        $this->dispatch("/export/index/marc21/docId/${docId}/searchtype/id");
+        $this->dispatch("/export/index/marc21/docId/{$docId}/searchtype/id");
 
         // revert configuration changes
         $this->restoreSecuritySetting();

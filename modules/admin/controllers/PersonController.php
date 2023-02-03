@@ -76,7 +76,7 @@ class Admin_PersonController extends Application_Controller_Action
         // check limit parameter
         $limit = $this->getParam('limit');
 
-        if ((! ctype_digit($limit) || $limit <= 0) && $limit !== null) {
+        if ($limit !== null && (! ctype_digit($limit) || $limit <= 0)) {
             $limit    = null;
             $redirect = true;
         }
@@ -86,7 +86,7 @@ class Admin_PersonController extends Application_Controller_Action
         $allowedRoles = array_merge(['all'], Admin_Form_Document_Persons::getRoles());
 
         // TODO redirect for 'all' (since it is default)
-        if ((! ctype_alpha($role) || ! in_array(strtolower($role), $allowedRoles)) && $role !== null) {
+        if ($role !== null && (! ctype_alpha($role) || ! in_array(strtolower($role), $allowedRoles))) {
             $role     = null;
             $redirect = true;
         }
@@ -94,7 +94,7 @@ class Admin_PersonController extends Application_Controller_Action
         // check page parameter
         $page = $this->getParam('page');
 
-        if ((! ctype_digit($page) || $page <= 0) && $page !== null) {
+        if ($page !== null && (! ctype_digit($page) || $page <= 0)) {
             $page     = null;
             $redirect = true;
         }
@@ -555,7 +555,7 @@ class Admin_PersonController extends Application_Controller_Action
             // Formular anzeigen
             $personId = $this->getRequest()->getParam('personId');
 
-            if (strlen(trim($personId)) === 0 || $personId === null) {
+            if ($personId === null || strlen(trim($personId)) === 0) {
                 $this->getLogger()->err(__METHOD__ . ' No personId parameter.');
                 $this->returnToMetadataForm($docId);
                 return;

@@ -53,7 +53,7 @@ class Admin_FilebrowserController extends Application_Controller_Action
         try {
             $document = Document::get($docId);
         } catch (NotFoundException $e) {
-            throw new Application_Exception('no document found for id ' . $docId, null, $e);
+            throw new Application_Exception('no document found for id ' . $docId, 0, $e);
         }
 
         $this->breadcrumbs->setDocumentBreadcrumb($document);

@@ -70,7 +70,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
         $session->documentId   = '712';
         $session->documentType = 'preprint';
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'back' => '',
@@ -145,7 +145,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
         $doc->setType('preprint');
         $session->documentId = $doc->store();
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'send' => 'Save document',
@@ -205,7 +205,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
         $doc->setType('preprint');
         $session->documentId = $doc->store();
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'abort' => '',

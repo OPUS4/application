@@ -685,9 +685,9 @@ class Publish_FormController extends Application_Controller_Action
 
         $templateFileName = $docTypeHelper->getTemplatePath($templateName);
 
-        $file = new SplFileInfo($templateFileName);
+        $file = $templateFileName !== null ? new SplFileInfo($templateFileName) : null;
 
-        if (! $file->isReadable()) {
+        if ($file === null || ! $file->isReadable()) {
             throw new Application_Exception(
                 'invalid configuration: template file ' . $templateName . '.phtml is not readable or does not exist'
             );

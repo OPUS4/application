@@ -114,6 +114,8 @@ class ControllerTestCase extends TestCase
     public function setUp(): void
     {
         $this->setUpWithEnv(APPLICATION_ENV);
+
+        $this->getRequest()->setRequestUri(''); // prevents PHP warnings because request URI is null
     }
 
     /**

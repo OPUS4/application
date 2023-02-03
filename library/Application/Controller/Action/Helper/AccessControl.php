@@ -65,7 +65,7 @@ class Application_Controller_Action_Helper_AccessControl extends Zend_Controller
     {
         $acl = $this->getAcl();
 
-        if (strlen(trim($resource)) === 0) {
+        if ($resource === null || strlen(trim($resource)) === 0) {
             throw new Application_Exception('#1 argument must not be empty|null');
         }
 

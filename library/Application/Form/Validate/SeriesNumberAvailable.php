@@ -81,8 +81,9 @@ class Application_Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abst
             $seriesId = null;
         }
 
-        if (strlen(trim($seriesId)) === 0 && is_numeric($seriesId)) {
-             Log::get()->err(__METHOD__ . ' Context without \'SeriesId\'.');
+        // TODO BUG this if statement does not make sense, does it?
+        if (strlen(trim($seriesId ?? '')) === 0 && is_numeric($seriesId)) {
+            Log::get()->err(__METHOD__ . ' Context without \'SeriesId\'.');
             return true; // should be captured somewhere else
         }
 

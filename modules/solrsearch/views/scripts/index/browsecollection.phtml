@@ -52,7 +52,7 @@ use Opus\Common\Config;
             <?php if ($id === 0) : ?>
                 <li><a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()], null, true) ?>"><?= $displayNameShortened ?></a></li>
             <?php else : ?>
-                <?php if ($parent->getVisible() === '1') : ?>
+                <?php if ($parent->getVisible()) : ?>
                     <li><a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()], null, true)?>"><?= $displayNameShortened ?></a></li>
                 <?php else : ?>
                     <li class="empty-collection"><?= $displayNameShortened ?></li>

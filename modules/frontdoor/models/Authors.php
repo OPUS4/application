@@ -53,7 +53,7 @@ class Frontdoor_Model_Authors
             try {
                 $this->document = Document::get($arg);
             } catch (NotFoundException $e) {
-                throw new Frontdoor_Model_Exception('invalid value for parameter docId given', null, $e);
+                throw new Frontdoor_Model_Exception('invalid value for parameter docId given', 0, $e);
             }
         }
 

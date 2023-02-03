@@ -64,7 +64,7 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abs
         $value = (string) $value;
         $this->_setValue($value);
 
-        $name = null;
+        $name = '';
 
         if (is_array($context)) {
             if (isset($context['Id'])) {
@@ -74,7 +74,9 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abs
             $name = $context;
         }
 
-        if (strtolower($name) === strtolower($value)) {
+        $value = $value ?? '';
+
+        if ($name === $value || strtolower($name) === strtolower($value)) {
             return true;
         }
 

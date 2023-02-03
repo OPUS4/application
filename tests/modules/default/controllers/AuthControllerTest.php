@@ -85,7 +85,7 @@ class AuthControllerTest extends ControllerTestCase
         $this->assertEquals(1, $treffer);
         $hash = $matches[1];
         $this->resetRequest();
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'hash'     => $hash,

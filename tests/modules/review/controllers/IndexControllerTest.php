@@ -92,7 +92,7 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionClearButtonWithOneDocumentGoesToClear()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected'     => ['1', $this->documentId],
@@ -115,7 +115,7 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testClearActionWithOneDocumentUnconfirmed()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
@@ -137,7 +137,7 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testClearActionWithOneDocumentCanceled()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
@@ -160,7 +160,7 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testClearActionWithOneDocumentConfirmed()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
@@ -183,7 +183,7 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testRejectActionWithOneDocumentUnconfirmed()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
@@ -205,7 +205,7 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testRejectActionWithOneDocumentCanceled()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
@@ -228,7 +228,7 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testRejectActionWithOneDocumentConfirmed()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,

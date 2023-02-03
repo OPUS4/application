@@ -120,7 +120,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
     public function populateFromModel($account)
     {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($account->getId());
-        $this->getElement(self::ELEMENT_LOGIN)->setValue(strtolower($account->getLogin()));
+        $this->getElement(self::ELEMENT_LOGIN)->setValue(strtolower($account->getLogin() ?? ''));
         $this->getElement(self::ELEMENT_FIRST_NAME)->setValue($account->getFirstName());
         $this->getElement(self::ELEMENT_LAST_NAME)->setValue($account->getLastName());
         $this->getElement(self::ELEMENT_EMAIL)->setValue($account->getEmail());
@@ -132,7 +132,7 @@ class Admin_Form_Account extends Application_Form_Model_Abstract
         // current user cannot remode administrator permission
         // TODO does it make sense?
         $adminRoleElement = $rolesForm->getElement('administrator');
-        if (Zend_Auth::getInstance()->getIdentity() === strtolower($account->getLogin())) {
+        if (Zend_Auth::getInstance()->getIdentity() === strtolower($account->getLogin() ?? '')) {
             $adminRoleElement->setAttrib('disabled', true);
         }
     }

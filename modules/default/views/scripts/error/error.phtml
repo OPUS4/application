@@ -36,18 +36,18 @@
 
     <?PHP if ($this->showException) : ?>
         <div class="exceptionMessage">
-            <?= htmlspecialchars($this->errorMessage) ?>
+            <?= htmlspecialchars($this->errorMessage, ENT_NOQUOTES) ?>
         </div>
     <div class="stacktrace">
         <h3>Stacktrace</h3>
         <?PHP /* note: do not use indentation here */ ?>
 <pre>
-        <?= htmlspecialchars($this->exception) ?>
+        <?= htmlspecialchars($this->exception, ENT_NOQUOTES) ?>
 </pre>
     </div>
     <?PHP else : ?>
     <div class="exceptionMessage">
-        <?= htmlspecialchars($this->errorMessage) ?>
+        <?= htmlspecialchars($this->errorMessage, ENT_NOQUOTES) ?>
     </div>
     <?PHP endif; ?>
 

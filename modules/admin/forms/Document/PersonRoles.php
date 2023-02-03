@@ -135,6 +135,6 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
      */
     public function getRoleElementName($role)
     {
-        return self::ELEMENT_PREFIX_ROLE . ucfirst($role);
+        return self::ELEMENT_PREFIX_ROLE . ucfirst($role ?? '');
     }
 }

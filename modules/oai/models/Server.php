@@ -131,7 +131,7 @@ class Oai_Model_Server extends Application_Model_Abstract
             $this->getLogger()->err($errorCode);
             $this->proc->setParameter('', 'oai_error_code', $errorCode);
             $this->getLogger()->err($e->getMessage());
-            $this->proc->setParameter('', 'oai_error_message', htmlentities($e->getMessage()));
+            $this->proc->setParameter('', 'oai_error_message', htmlentities($e->getMessage(), ENT_NOQUOTES));
         } catch (Oai_Model_ResumptionTokenException $e) {
             $this->getLogger()->err($e);
             $this->proc->setParameter('', 'oai_error_code', 'unknown');
@@ -584,7 +584,7 @@ class Oai_Model_Server extends Application_Model_Abstract
 
         $this->proc->setParameter('', 'dateDelete', $tomorrow);
         $this->proc->setParameter('', 'res', $res);
-        $this->proc->setParameter('', 'cursor', $cursor);
+        $this->proc->setParameter('', 'cursor', $cursor ?? '');
         $this->proc->setParameter('', 'totalIds', $totalIds);
     }
 

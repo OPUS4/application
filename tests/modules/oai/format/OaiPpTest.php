@@ -41,7 +41,7 @@ class Oai_Format_OaiPpTest extends ControllerTestCase
     protected $additionalResources = ['database', 'view', 'mainMenu'];
 
     /** @var string[] */
-    private $xpathNamespaces = [
+    protected $xpathNamespaces = [
         'oai'       => "http://www.openarchives.org/OAI/2.0/",
         'oai_dc'    => "http://www.openarchives.org/OAI/2.0/oai_dc/",
         'cc'        => "http://www.d-nb.de/standards/cc/",

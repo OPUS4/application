@@ -362,31 +362,24 @@ class Publish_Model_Validation
             case 'Collection':
             case 'CollectionLeaf':
                 return $this->collectionSelect();
-                break;
 
             case 'Language':
                 return $this->languageSelect();
-                break;
 
             case 'Licence':
                 return $this->licenceSelect();
-                break;
 
             case 'List':
                 return $this->listOptions;
-                break;
 
             case 'ThesisGrantor':
                 return $this->thesisSelect(true);
-                break;
 
             case 'ThesisPublisher':
                 return $this->thesisSelect();
-                break;
 
             case 'Series':
                 return $this->seriesSelect();
-                break;
 
             default:
                 //else no select options required
@@ -495,7 +488,7 @@ class Publish_Model_Validation
         $licences = [];
         if (empty($this->licences)) {
             foreach ($dbLicences = Licence::getAll() as $lic) {
-                if ($lic->getActive() === '1') {
+                if ($lic->getActive()) {
                     $name          = $lic->getDisplayName();
                     $id            = $lic->getId();
                     $licences[$id] = $name;

@@ -283,7 +283,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
         ];
         $validator         = new Application_Form_Validate_Filename($filenameOptions);
 
-        $this->assertEquals(null, preg_match("<{$validator->getFilenameFormat()}>", null));
+        $this->assertEquals(null, preg_match("<{$validator->getFilenameFormat()}>", ''));
     }
 
     /**
