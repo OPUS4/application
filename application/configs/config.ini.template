@@ -53,14 +53,16 @@ db.params.dbname   = @db.name@
 ;SEARCH ENGINE SETTINGS
 searchengine.solr.default.service.default.endpoint.localhost.host = @searchengine.index.host@
 searchengine.solr.default.service.default.endpoint.localhost.port = @searchengine.index.port@
-searchengine.solr.default.service.default.endpoint.localhost.path = @searchengine.index.app@
+searchengine.solr.default.service.default.endpoint.localhost.path = @searchengine.index.path@
+searchengine.solr.default.service.default.endpoint.localhost.core = @searchengine.index.core@
 searchengine.solr.default.service.default.endpoint.localhost.timeout = 10
 ; The text extraction can run on a different solr server as the metadata indexer
 ; does. You can also use the same solr server, then you would have to enter
 ; the same connection as above.
 searchengine.solr.default.service.extract.endpoint.localhost.host = @searchengine.extract.host@
 searchengine.solr.default.service.extract.endpoint.localhost.port = @searchengine.extract.port@
-searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengine.extract.app@
+searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengine.extract.path@
+searchengine.solr.default.service.extract.endpoint.localhost.core = @searchengine.extract.core@
 searchengine.solr.default.service.extract.endpoint.localhost.timeout = 10
 
 ; Turn on to display document titles of search results in user interface language if possible
