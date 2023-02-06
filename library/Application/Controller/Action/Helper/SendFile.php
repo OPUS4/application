@@ -53,9 +53,9 @@ class Application_Controller_Action_Helper_SendFile extends Application_Controll
     /**
      * This method to call when we use   $this->_helper->SendFile(...)
      *
-     * @param string  $file        Absoulte filename of file to send.
-     * @param string  $method      defaults to self::FPASSTHRU, use self::XSENDFILE for X-Sendfile
-     * @param boolean $mustResend Ignore "if-modified-since" header, defaults to false.
+     * @param string $file        Absoulte filename of file to send.
+     * @param string $method      defaults to self::FPASSTHRU, use self::XSENDFILE for X-Sendfile
+     * @param bool   $mustResend Ignore "if-modified-since" header, defaults to false.
      */
     public function sendFile($file, $method = self::FPASSTHRU, $mustResend = false)
     {

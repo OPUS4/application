@@ -49,7 +49,7 @@ class Admin_Model_IndexMaintenance
     private $featureDisabled = true;
 
     /**
-     * @param Zend_Log $logger
+     * @param null|Zend_Log $logger
      * @throws Zend_Exception
      */
     public function __construct($logger = null)

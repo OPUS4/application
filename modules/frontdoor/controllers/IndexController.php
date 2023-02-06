@@ -45,8 +45,6 @@ class Frontdoor_IndexController extends Application_Controller_Action
 
     /**
      * Displays the metadata of a document.
-     *
-     * @return void
      */
     public function indexAction()
     {

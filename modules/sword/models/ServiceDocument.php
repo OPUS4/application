@@ -130,8 +130,8 @@ class Sword_Model_ServiceDocument
     }
 
     /**
-     * @param string $name
-     * @param string $value
+     * @param string     $name
+     * @param string     $value
      * @param DOMElement $rootElement
      * @throws DOMException
      */

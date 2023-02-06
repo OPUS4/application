@@ -134,7 +134,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleAuthors($document, &$metas)
     {
@@ -158,7 +158,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleDates($document, &$metas)
     {
@@ -181,7 +181,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleTitles($document, &$metas)
     {
@@ -233,7 +233,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleJournalTitle($document, &$metas)
     {
@@ -248,7 +248,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleAbstracts($document, &$metas)
     {
@@ -267,7 +267,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleLicences($document, &$metas)
     {
@@ -278,7 +278,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleIdentifierUrn($document, &$metas)
     {
@@ -296,7 +296,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleIdentifierDoi($document, &$metas)
     {
@@ -311,7 +311,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleIdentifierIssn($document, &$metas)
     {
@@ -326,7 +326,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleIdentifierIsbn($document, &$metas)
     {
@@ -341,7 +341,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleFrontdoorUrl($document, &$metas)
     {
@@ -352,7 +352,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleFulltextUrls($document, &$metas)
     {
@@ -397,7 +397,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleKeywords($document, &$metas)
     {
@@ -418,8 +418,8 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param string $value Wert des Metatags
-     * @param array $keys Array mit Metatag-Schlüsseln
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array  $keys Array mit Metatag-Schlüsseln
+     * @param array  $metas Array mit Metatag-Paaren
      */
     private function handleSimpleAttribute($value, $keys, &$metas)
     {
@@ -433,7 +433,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleThesisPublisher($document, &$metas)
     {
@@ -448,7 +448,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleInstitution($document, &$metas)
     {
@@ -467,7 +467,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleConferenceTitle($document, &$metas)
     {
@@ -482,7 +482,7 @@ class Frontdoor_Model_HtmlMetaTags
 
     /**
      * @param DocumentInterface $document
-     * @param array $metas Array mit Metatag-Paaren
+     * @param array             $metas Array mit Metatag-Paaren
      */
     private function handleBookTitle($document, &$metas)
     {

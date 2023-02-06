@@ -1156,7 +1156,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
     /**
      * @param string      $name
      * @param string|null $type
-     * @param array       $options
+     * @param null|array  $options
      * @return EnrichmentInterface
      */
     private function createTestEnrichmentKey($name, $type = null, $options = null)

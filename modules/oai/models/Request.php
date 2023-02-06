@@ -34,7 +34,7 @@ use Opus\Common\Log;
 use Opus\Common\Security\Realm;
 
 /**
- * TODO documentation is not existent - especially the fact that 'validate' functions are called dynamically
+ * TODO BUG documentation is not existent - especially the fact that 'validate' functions are called dynamically
  */
 class Oai_Model_Request
 {
@@ -137,7 +137,7 @@ class Oai_Model_Request
      * TODO handling case insensitivity of metadataPrefix is spread through the code (here and other places)
      * TODO function handles access control in addition to checking if format is supported (mixed responsibilities)
      */
-    private function validateMetadataPrefix($oaiMetadataPrefix)
+    public function validateMetadataPrefix($oaiMetadataPrefix)
     {
         // we assuming that a metadata prefix file ends with xslt
         $possibleFiles = glob($this->pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
@@ -238,7 +238,7 @@ class Oai_Model_Request
      * @param  string $oaiResumptionToken The resumption token to validate.
      * @return bool
      */
-    private function validateResumptionToken($oaiResumptionToken)
+    public function validateResumptionToken($oaiResumptionToken)
     {
         $tokenWorker = new Oai_Model_Resumptiontokens();
 

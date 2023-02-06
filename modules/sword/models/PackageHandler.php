@@ -93,7 +93,7 @@ class Sword_Model_PackageHandler
      * Verarbeitet die mit dem SWORD-Request übergebene Paketdatei.
      *
      * @param string $payload der Inhalt der Paketdatei
-     * @return ImportStatusDocument
+     * @return ImportStatusDocument|null
      */
     public function handlePackage($payload)
     {

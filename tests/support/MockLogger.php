@@ -39,11 +39,11 @@ class MockLogger extends Zend_Log
     /** @var array */
     private $messages = [];
 
-    /** @var Zend_Log|null */
+    /** @var parent|null */
     private $logger;
 
     /**
-     * @param Zend_Log|null $logger
+     * @param parent|null $logger
      */
     public function __construct($logger = null)
     {
@@ -52,9 +52,9 @@ class MockLogger extends Zend_Log
     }
 
     /**
-     * @param string $message
-     * @param string $priority
-     * @param mixed  $extras
+     * @param string     $message
+     * @param string     $priority
+     * @param null|mixed $extras
      * @throws Zend_Log_Exception
      */
     public function log($message, $priority, $extras = null)

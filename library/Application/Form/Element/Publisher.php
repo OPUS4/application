@@ -62,7 +62,7 @@ class Application_Form_Element_Publisher extends Application_Form_Element_Select
      * If $value is a valid DNB institute a corresponding option is added to select if necessary.
      *
      * @param mixed $value
-     * @return void|Zend_Form_Element
+     * @return $this
      * @throws ModelException
      */
     public function setValue($value)
@@ -71,10 +71,12 @@ class Application_Form_Element_Publisher extends Application_Form_Element_Select
             $institute = DnbInstitute::get($value);
         } catch (NotFoundException $omne) {
             parent::setValue($value); // could be blocked, but keeping compatibility just in case
-            return;
+            return $this;
         }
 
         $this->addMultiOption($institute->getId(), $institute->getDisplayName());
         parent::setValue($value);
+
+        return $this;
     }
 }

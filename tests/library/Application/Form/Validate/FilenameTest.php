@@ -37,7 +37,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     /** @var object of configuration */
     private $appConfig;
 
-    /** @var 'config' by itself */
+    /** @var Zend_Config 'config' by itself */
     private $config;
 
     public function setUp(): void
@@ -109,9 +109,8 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     /**
      * Test validation of incorrect arguments with typical parameters.
      *
-     * @param mixed $arg Invalid value to check given by the data provider.
+     * @param mixed  $arg Invalid value to check given by the data provider.
      * @param string $msg Error message.
-     * @return void
      * @dataProvider invalidDataProvider
      */
     public function testInvalidArguments($arg, $msg)
@@ -130,7 +129,6 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      * Test validation of correct arguments with typical parameters.
      *
      * @param mixed $arg Value to check given by the data provider.
-     * @return void
      * @dataProvider validDataProvider
      */
     public function testValidArguments($arg)
@@ -162,7 +160,6 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      * See testDefaultConfigValid and testDefaultConfigInvalid
      *
      * @param mixed $arg value to check given by the data provider.
-     * @return void
      * @dataProvider allDataProvider
      */
     public function testDeactivatedValidation($arg)
@@ -203,7 +200,6 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      * Test the validation of an correct regular expression for a filename-format.
      *
      * @param mixed $arg value to test different filename-formats by a given DataProvider.
-     * @return void
      * @dataProvider validFilenameFormatProvider
      */
     public function testValidateFilenameFormatTrue($arg)
@@ -223,7 +219,6 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      * Test validation of correct arguments in combination with default-configuration.
      *
      * @param mixed $arg value to check given by the data provider.
-     * @return void
      * @dataProvider validDataProvider
      */
     public function testDefaultConfigValid($arg)
@@ -253,7 +248,6 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
      *
      * @param mixed $arg value to check given by the data provider.
      * @param mixed $msg are the error-messages
-     * @return void
      * @dataProvider invalidDataProvider
      */
     public function testDefaultConfigInvalid($arg, $msg)

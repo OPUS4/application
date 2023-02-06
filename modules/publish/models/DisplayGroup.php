@@ -64,9 +64,9 @@ class Publish_Model_DisplayGroup
     private $session;
 
     /**
-     * @param string   $elementName
-     * @param int      $multiplicity
-     * @param Zend_Log $log
+     * @param string                 $elementName
+     * @param int                    $multiplicity
+     * @param Zend_Log               $log
      * @param Zend_Session_Namespace $session
      */
     public function __construct($elementName, Publish_Form_PublishingSecond $form, $multiplicity, $log, $session)
@@ -261,7 +261,7 @@ class Publish_Model_DisplayGroup
      *
      * Wird nur für Collection Roles aufgerufen.
      *
-     * @return array Array of button names
+     * @return array|null Array of button names
      */
     private function browseButtons()
     {

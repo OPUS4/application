@@ -201,8 +201,6 @@ class Application_Bootstrap extends DatabaseBootstrap
 
     /**
      * Setup \Zend_Cache for caching application data and register under '\Zend_Cache_Page'.
-     *
-     * @return void
      */
     protected function _setupPageCache()
     {
@@ -353,8 +351,6 @@ class Application_Bootstrap extends DatabaseBootstrap
 
     /**
      * Initializes navigation container for main menu.
-     *
-     * @return void
      */
     protected function _initMainMenu()
     {

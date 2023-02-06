@@ -101,8 +101,8 @@ class DepositTestHelper extends Assert
     }
 
     /**
-     * @param Zend_Controller_Request_Http  $request
-     * @param string                        $userAgent
+     * @param Zend_Controller_Request_Http $request
+     * @param string                       $userAgent
      */
     public function setValidAuthorizationHeader($request, $userAgent)
     {
@@ -212,8 +212,8 @@ class DepositTestHelper extends Assert
     }
 
     /**
-     * @param int $index
-     * @param mixed $root
+     * @param int    $index
+     * @param mixed  $root
      * @param string $nodeName
      * @param string $nodeValue
      */
@@ -355,7 +355,7 @@ class DepositTestHelper extends Assert
 
     /**
      * @param DocumentInterface $doc
-     * @param int $numOfCollections
+     * @param int               $numOfCollections
      */
     private function assertImportCollection($doc, $numOfCollections = 1)
     {

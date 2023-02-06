@@ -36,12 +36,11 @@
 class Publish_View_Helper_EndTemplate extends Zend_View_Helper_Abstract
 {
     /**
-     * @param int                           $elementCounter
-     * @return string|void
+     * @param int $elementCounter
+     * @return string
      */
     public function endTemplate(Publish_Form_PublishingSecond $form, $elementCounter)
     {
-        $formCount        = 0;
         $elements         = $form->getElements();
         $numberOfElements = count($elements);
 
@@ -57,7 +56,7 @@ class Publish_View_Helper_EndTemplate extends Zend_View_Helper_Abstract
         $formCount = $formCount + $numberOfElements - $groupCount;
 
         if ($formCount === $elementCounter) {
-            return "";
+            return '';
         }
 
         if ($formCount > $elementCounter) {
@@ -67,5 +66,7 @@ class Publish_View_Helper_EndTemplate extends Zend_View_Helper_Abstract
         if ($formCount < $elementCounter) {
             return $this->view->translate('publish_controller_form_template2');
         }
+
+        return '';
     }
 }

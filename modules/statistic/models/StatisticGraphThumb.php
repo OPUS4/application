@@ -44,8 +44,8 @@ class Statistic_Model_StatisticGraphThumb
     protected $bgImg;
 
     /**
-     * @param array  $data
-     * @param string $backgroundImage
+     * @param array       $data
+     * @param null|string $backgroundImage
      */
     public function __construct($data, $backgroundImage = null)
     {

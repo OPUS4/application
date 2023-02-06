@@ -91,8 +91,6 @@ class Admin_DocumentsController extends Application_Controller_Action
     /**
      * Display documents (all or filtered by state)
      *
-     * @return void
-     *
      * TODO separate out collection and series mode (handle as facets?)
      * TODO cleanup
      */

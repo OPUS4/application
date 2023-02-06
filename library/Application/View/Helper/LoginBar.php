@@ -56,10 +56,9 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract
     /**
      * Set the action (controller and module) to perform a login.
      *
-     * @param string $action     Login action name.
-     * @param string $controller (Optional) Login controller name.
-     * @param string $module     (Optional) Login module name.
-     * @return void
+     * @param string      $action     Login action name.
+     * @param null|string $controller (Optional) Login controller name.
+     * @param null|string $module (Optional) Login module name.
      */
     public function setLoginAction($action, $controller = null, $module = null)
     {
@@ -75,10 +74,9 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract
     /**
      * Set the action (controller and module) to perform a logout.
      *
-     * @param string $action     Logout action name.
-     * @param string $controller (Optional) Logout controller name.
-     * @param string $module     (Optional) Logout module name.
-     * @return void
+     * @param string      $action     Logout action name.
+     * @param null|string $controller (Optional) Logout controller name.
+     * @param null|string $module (Optional) Logout module name.
      */
     public function setLogoutAction($action, $controller = null, $module = null)
     {
@@ -94,7 +92,7 @@ class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract
     /**
      * Return an instance of the view helper.
      *
-     * @return Application_View_Helper_LoginBar
+     * @return $this
      */
     public function loginBar()
     {

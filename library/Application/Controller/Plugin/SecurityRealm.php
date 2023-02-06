@@ -44,7 +44,6 @@ class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin
      * Determine the current User's security role and set up Realm.
      *
      * @param Zend_Controller_Request_Abstract $request The current request.
-     * @return void
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {

@@ -39,8 +39,6 @@ class Admin_LanguageController extends Application_Controller_ActionCRUD
 {
     /**
      * List all available collection role instances
-     *
-     * @return void
      */
     public function init()
     {

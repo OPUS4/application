@@ -35,8 +35,6 @@ class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkfl
 {
     /**
      * Initialize custom document fields.
-     *
-     * @return void
      */
     protected function initializeDocument()
     {

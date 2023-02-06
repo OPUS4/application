@@ -65,7 +65,7 @@ class Publish_Model_Deposit
     private $docId;
 
     /**
-     * @param Zend_Log $log
+     * @param null|Zend_Log $log
      */
     public function __construct($log = null)
     {
@@ -581,8 +581,8 @@ class Publish_Model_Deposit
     /**
      * Prepare and store a series in the current document.
      *
-     * @param String $dataKey Fieldname of series number
-     * @param String $dataValue Number of series
+     * @param string $dataKey Fieldname of series number
+     * @param string $dataValue Number of series
      */
     private function storeSeriesObject($dataKey, $dataValue)
     {
@@ -636,8 +636,8 @@ class Publish_Model_Deposit
     /**
      * Prepare and store a dnb institute for the current document.
      *
-     * @param int  $grantor
-     * @param bool $dataValue
+     * @param int  $dataValue
+     * @param bool $grantor
      */
     private function storeThesisObject($dataValue, $grantor = false)
     {

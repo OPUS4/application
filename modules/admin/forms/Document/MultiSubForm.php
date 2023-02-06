@@ -79,10 +79,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     /**
      * Konstruiert Instanz von Fomular.
      *
-     * @param string                                       $subFormClass Name der Klasse für Unterformulare
-     * @param string                                       $fieldName Name des Document Feldes, das angezeigt werden soll
+     * @param string                                               $subFormClass Name der Klasse für Unterformulare
+     * @param string                                               $fieldName Name des Document Feldes, das angezeigt werden soll
      * @param Application_Form_Validate_MultiSubFormInterface|null $validator Object für Validierungen über Unterformulare hinweg
-     * @param array|null                                   $options
+     * @param array|null                                           $options
      */
     public function __construct($subFormClass, $fieldName, $validator = null, $options = null)
     {

@@ -80,7 +80,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm
      * geliefert.
      *
      * @param string $name
-     * @return mixed
+     * @return mixed|null
      *
      * TODO Sind alle Fälle abgedeckt?
      * TODO replace with filter or override getValue($name)
@@ -115,8 +115,8 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm
      * Bei vielen Opus Model Formularen stimmt der Element-Name mit dem Übersetzungsschlüssel überein.
      *
      * @param string|Zend_Form_Element $element
-     * @param null $name
-     * @param null $options
+     * @param string                   $name
+     * @param array|null               $options
      * @return Zend_Form_Element
      */
     public function createElement($element, $name, $options = null)

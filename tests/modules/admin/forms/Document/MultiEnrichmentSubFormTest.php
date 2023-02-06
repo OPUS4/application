@@ -307,8 +307,8 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      * Hilfsfunktion zum Erzeugen eines neuen Enrichment-Keys mit dem übergebenen
      * Namen. Optional kann ein Typ sowie Konfigurationsoptionen übergeben werden.
      *
-     * @param null $type optionaler Typ des Enrichment-Keys
-     * @param null $options optionale Konfigurationsoptionen des Typs
+     * @param string|null $type optionaler Typ des Enrichment-Keys
+     * @param array|null  $options optionale Konfigurationsoptionen des Typs
      * @return EnrichmentKeyInterface neu erzeugter Enrichment-Key
      * @throws ModelException
      */
@@ -337,7 +337,6 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      * @param Zend_Form $form
      * @param string    $name
      * @param string    $valueElementType
-     * @return void
      */
     private function assertEnrichmentSubformWasCreatedProperly($form, $name, $valueElementType)
     {
@@ -359,9 +358,9 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
     }
 
     /**
-     * @param string $keyName
-     * @param string $value
-     * @param string $clickedButton
+     * @param string      $keyName
+     * @param string      $value
+     * @param null|string $clickedButton
      * @return Admin_Form_Document_MultiEnrichmentSubForm
      * @throws Application_Exception
      */

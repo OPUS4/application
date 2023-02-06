@@ -344,7 +344,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
-     * @param int $docId
+     * @param int   $docId
      */
     private function assertCommonMetaTags($tags, $docId)
     {
@@ -416,7 +416,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param array $tags
+     * @param array  $tags
      * @param string $publicationType
      */
     private function assertParentTitle($tags, $publicationType)
@@ -451,7 +451,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
-     * @param int $docId
+     * @param int   $docId
      */
     private function assertCommonIdentifiers($tags, $docId)
     {
@@ -464,7 +464,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
-     * @param int $docId
+     * @param int   $docId
      */
     private function assertFrontdoorUrl($tags, $docId)
     {
@@ -483,7 +483,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
-     * @param int $docId
+     * @param int   $docId
      */
     private function assertUrn($tags, $docId)
     {
@@ -536,7 +536,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
-     * @param int $docId
+     * @param int   $docId
      */
     private function assertFile($tags, $docId)
     {
@@ -555,7 +555,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param DocumentInterface $doc
-     * @param array $tags
+     * @param array             $tags
      */
     private function assertThesisPublisher($doc, $tags)
     {
@@ -566,7 +566,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param array $tags
+     * @param array  $tags
      * @param string $docType
      */
     private function assertDocumentType($tags, $docType)
@@ -575,7 +575,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param array $tags
+     * @param array  $tags
      * @param string $value
      */
     private function assertInstitution($tags, $value)
@@ -684,7 +684,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param DocumentInterface $doc
-     * @param int $num
+     * @param int               $num
      */
     private function addAuthors($doc, $num)
     {

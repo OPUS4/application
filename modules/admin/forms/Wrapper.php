@@ -47,7 +47,7 @@ class Admin_Form_Wrapper extends Zend_Form
     private $subFormName;
 
     /**
-     * @param Zend_Form  $subform
+     * @param parent     $subform
      * @param string     $name
      * @param array|null $options
      */
@@ -72,7 +72,7 @@ class Admin_Form_Wrapper extends Zend_Form
     }
 
     /**
-     * @return Zend_Form|null
+     * @return parent|null
      */
     public function getWrappedForm()
     {

@@ -116,25 +116,13 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     /** @var string */
     private $filterBy;
 
-    /**
-     * Filter translations by state (all, edited, added).
-     *
-     * @var string
-     */
+    /** @var int Filter translations by state (all, edited, added). */
     private $state;
 
-    /**
-     * Filter translations by scope (keys and/or values).
-     *
-     * @var string
-     */
+    /** @var int Filter translations by scope (keys and/or values). */
     private $scope;
 
-    /**
-     * Names of folders containing TMX files.
-     *
-     * @var array
-     */
+    /** @var array Names of folders containing TMX files. */
     private $folders = ['language'];
 
     /** @var array Reference for sorting languages */
@@ -355,7 +343,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
      *   ]
      *
      * @param string $sortKey
-     * @param int $sortOrder
+     * @param int    $sortOrder
      * @return array Translations
      */
     public function getMergedTranslations($sortKey = self::SORT_UNIT, $sortOrder = SORT_ASC)
@@ -399,8 +387,8 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
                     unset($translations[$key]);
                 } else {
                     if (
-                        ! ($entry['state'] === 'added' && $this->state & self::STATE_ADDED) &&
-                        ! ($entry['state'] === 'edited' && $this->state & self::STATE_EDITED)
+                        ! ($entry['state'] === 'added' && $this->state === self::STATE_ADDED) &&
+                        ! ($entry['state'] === 'edited' && $this->state === self::STATE_EDITED)
                     ) {
                         unset($translations[$key]);
                     }
@@ -454,11 +442,11 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
             return true;
         }
 
-        if (($this->scope & self::SCOPE_KEYS || $this->scope === null) && stripos($key, $filter) !== false) {
+        if (($this->scope === self::SCOPE_KEYS || $this->scope === null) && stripos($key, $filter) !== false) {
             return true;
         }
 
-        if ($this->scope & self::SCOPE_TEXT || $this->scope === null) {
+        if ($this->scope === self::SCOPE_TEXT || $this->scope === null) {
             foreach ($values as $lang => $value) {
                 if (stripos($value, $filter) !== false) {
                     return true;
@@ -750,7 +738,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     }
 
     /**
-     * @param string $state
+     * @param int $state
      */
     public function setState($state)
     {

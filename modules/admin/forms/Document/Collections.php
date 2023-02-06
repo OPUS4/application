@@ -237,7 +237,7 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
      * Fügt Unterformular für eine Collection hinzu.
      *
      * @param string $roleName
-     * @param array $data
+     * @param array  $data
      *
      * TODO Sollte roleForm nur bei Bedarf hinzufügen.
      */

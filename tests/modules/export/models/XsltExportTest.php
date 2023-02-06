@@ -55,6 +55,8 @@ class Export_Model_XsltExportTest extends ControllerTestCase
         $doc->setServerState('published');
         $docId = $doc->store();
 
+        $name = $this->plugin->getName();
+
         $this->markTestIncomplete('test rendering of example xslt');
     }
 }

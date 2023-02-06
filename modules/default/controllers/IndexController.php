@@ -45,8 +45,6 @@ class IndexController extends Application_Controller_Action
 
     /**
      * Redirect to default module 'home'.
-     *
-     * @return void
      */
     public function indexAction()
     {

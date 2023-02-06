@@ -32,20 +32,19 @@
 ?>
 
 <?php
-$file     = $this->element->getModel();
-$formId   = 'Document-Files-' . $this->element->getId() . '-';
-$lang     = $file->getLanguage();
-$fileLink = $this->fileLink('FileLink-' . $file->getId(), $file, ['useFileLabel' => true]);
+$file       = $this->element->getModel();
+$formId     = 'Document-Files-' . $this->element->getId() . '-';
+$lang       = $file->getLanguage();
+$langOutput = $lang !== null ? $this->translateLanguage($lang) : '-';
+$fileLink   = $this->fileLink('FileLink-' . $file->getId(), $file, ['useFileLabel' => true]);
+$cssClass   = $this->element->getOrder() % 2 === 0 ? 'even' : 'odd';
 ?>
 
-<tr class="file <?= $this->element->getOrder() % 2 === 0 ? 'even' : 'odd' ?>">
+<tr class="file <?= $cssClass ?>">
     <td id="<?= $formId . 'Label' ?>" class="label"><?= $fileLink ?></td>
     <td id="<?= $formId . 'FileSize' ?>" class="filesize"><?= $this->fileSize(null, $file->getFileSize()) ?></td>
     <td id="<?= $formId . 'MimeType' ?>" class="mimetype"><?= htmlspecialchars($file->getMimeType()) ?></td>
-    <td id="<?= $formId . 'Language' ?>" class="language"
-        ><?= $lang !== null ? $this->translateLanguage($lang) : '-' ?></td>
-    <td id="<?= $formId . 'VisibleInFrontdoor' ?>" class="visiblefrontdoor"
-        ><?= $this->translate($file->getVisibleInFrontdoor() ? 'Field_Value_True' : 'Field_Value_False') ?></td>
-    <td id="<?= $formId . 'VisibleInOai' ?>" class="visibleoai"
-        ><?= $this->translate($file->getVisibleInOai() ? 'Field_Value_True' : 'Field_Value_False') ?></td>
+    <td id="<?= $formId . 'Language' ?>" class="language"><?= $langOutput ?></td>
+    <td id="<?= $formId . 'VisibleInFrontdoor' ?>" class="visiblefrontdoor"><?= $this->translate($file->getVisibleInFrontdoor() ? 'Field_Value_True' : 'Field_Value_False') ?></td>
+    <td id="<?= $formId . 'VisibleInOai' ?>" class="visibleoai"><?= $this->translate($file->getVisibleInOai() ? 'Field_Value_True' : 'Field_Value_False') ?></td>
 </tr>

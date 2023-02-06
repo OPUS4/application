@@ -113,7 +113,7 @@ class Sword_Model_AtomEntryDocument
     }
 
     /**
-     * @param string $userName
+     * @param string                       $userName
      * @param Zend_Controller_Request_Http $request
      * @return SimpleXMLElement
      */
@@ -132,7 +132,7 @@ class Sword_Model_AtomEntryDocument
      * Das ist eine OPUS-spezifische Erweiterung des SWORD-Standards.
      * Daher verwenden wir hier einen separaten Namespace.
      *
-     * @param string $userName
+     * @param string                       $userName
      * @param Zend_Controller_Request_Http $request
      * @return SimpleXMLElement
      */

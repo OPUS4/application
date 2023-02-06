@@ -29,7 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Translate\StorageInterface;
 use Opus\Common\Translate\TranslateException;
 use Opus\Common\Translate\UnknownTranslationKeyException;
 use Opus\Translate\Dao;
@@ -1262,7 +1261,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     }
 
     /**
-     * @return StorageInterface
+     * @return Dao
      */
     protected function getStorageInterface()
     {

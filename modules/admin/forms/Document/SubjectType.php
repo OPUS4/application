@@ -49,8 +49,8 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
     /**
      * Konstruiert ein Unterformular für Schlagwörter eines bestimmten Typs.
      *
-     * @param string $type Schlagworttyp (z.B. 'swd', 'psyndex' usw.)
-     * @param mixed $options
+     * @param string     $type Schlagworttyp (z.B. 'swd', 'psyndex' usw.)
+     * @param null|mixed $options
      */
     public function __construct($type, $options = null)
     {

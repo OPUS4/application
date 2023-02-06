@@ -93,7 +93,7 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
      *
      * @param string     $value Ausgewählte Sprache
      * @param array|null $context POST Daten für gesamtes Unterformular
-     * @return boolean true - wenn die Sprache noch nicht verwendet wurde; ansonten false
+     * @return bool true - wenn die Sprache noch nicht verwendet wurde; ansonten false
      */
     public function isValid($value, $context = null)
     {
@@ -148,7 +148,7 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstr
     /**
      * Translation is required for error messages, even if validated element is not translated (e.g. Languages).
      *
-     * @return bool
+     * @return false
      */
     public function translatorIsDisabled()
     {

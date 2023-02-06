@@ -55,14 +55,14 @@ interface Application_Configuration_ModuleInterface
     /**
      * Returns true if the module has been registered with a custom descriptor.
      *
-     * @return boolean
+     * @return bool
      */
     public function isRegistered();
 
     /**
      * Returns true if 'guest' has access to the module.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic();
 
@@ -76,7 +76,7 @@ interface Application_Configuration_ModuleInterface
     /**
      * Returns true if the module can be configured.
      *
-     * @return boolean
+     * @return bool
      */
     public function isConfigurable();
 }

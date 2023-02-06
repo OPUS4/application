@@ -36,7 +36,7 @@ class Application_View_Helper_FormCombobox extends Zend_View_Helper_FormElement
 {
     /**
      * @param string     $name
-     * @param mixed      $value
+     * @param mixed|null $value
      * @param array|null $attribs
      * @param array|null $options
      * @param string     $listsep

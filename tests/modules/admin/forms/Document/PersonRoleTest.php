@@ -673,7 +673,7 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
 
     /**
      * @param Zend_Form $form
-     * @param array $expected
+     * @param array     $expected
      */
     protected function verifyExpectedOrder($form, $expected)
     {

@@ -50,8 +50,8 @@ class Application_Util_Notification extends Application_Model_Abstract
 
     /**
      * @param DocumentInterface $document Dokument auf das sich die Notifizierung bezieht
-     * @param String            $url vollständiger Deeplink, der in der Mail angezeigt werden soll
-     * @param boolean           $notifySubmitter Wenn false, wird der Submitter nicht notifiziert
+     * @param string            $url vollständiger Deeplink, der in der Mail angezeigt werden soll
+     * @param bool              $notifySubmitter Wenn false, wird der Submitter nicht notifiziert
      * @param array             $notifyAuthors Bitmaske, die für jeden Autor (über den Index referenziert) angibt, ob ihm/ihr eine
      *                                         E-Mail gesendet werden kann (wenn false, dann wird keine Notifizierung versendet)
      *
@@ -94,8 +94,8 @@ class Application_Util_Notification extends Application_Model_Abstract
 
     /**
      * @param DocumentInterface $document
-     * @param string $url
-     * @param array $recipients
+     * @param string            $url
+     * @param array             $recipients
      *
      * TODO this function is only used for PublicatioNotification at the moment - cleanup!
      * TODO needs more tests

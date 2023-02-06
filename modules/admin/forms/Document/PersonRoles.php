@@ -65,8 +65,8 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
     /**
      * Konstruiert Formular zum Ändern der Rolle einer Person.
      *
-     * @param string $role Name der aktuellen Rolle
-     * @param mixed $options
+     * @param null|string $role Name der aktuellen Rolle
+     * @param null|mixed  $options
      */
     public function __construct($role = null, $options = null)
     {
@@ -110,7 +110,7 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
      *
      * @param array $post POST Daten für Formular
      * @param array $context POST Daten für gesamtes Formular
-     * @return array
+     * @return array|null
      */
     public function processPost($post, $context)
     {

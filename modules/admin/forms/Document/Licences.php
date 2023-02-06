@@ -126,7 +126,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
      *
      * @param DocumentInterface $document
      * @param int               $licenceId
-     * @return boolean true - Lizenz zugewiesen; false - Lizenz nicht zugewiesen
+     * @return bool true - Lizenz zugewiesen; false - Lizenz nicht zugewiesen
      */
     public function hasLicence($document, $licenceId)
     {
@@ -147,7 +147,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
      * Die Funktion wird für die Ausgabe des Metadaten-Formulars als Metadaten-Übersicht verwendet, um zu entscheiden,
      * ob das Unterformular für Lizenzen angezeigt werden soll oder nicht.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {

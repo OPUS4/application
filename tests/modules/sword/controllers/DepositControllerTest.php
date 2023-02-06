@@ -397,7 +397,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     /**
      * @param LicenceInterface $licence
-     * @param int $id
+     * @param int              $id
      */
     private function checkLicence($licence, $id)
     {
@@ -447,7 +447,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     /**
      * @param NoteInterface $note
-     * @param string $type
+     * @param string        $type
      */
     private function checkNote($note, $type)
     {
@@ -458,7 +458,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     /**
      * @param DocumentInterface $doc
      * @param string            $type
-     * @param string            $value
+     * @param null|string       $value
      */
     private function checkIdentifier($doc, $type, $value = null)
     {
@@ -606,7 +606,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
      * @param int    $numOfCollections
      * @param string $serverState
      * @param bool   $deleteDoc
-     * @return DocumentInterface|void
+     * @return DocumentInterface|null
      * @throws NotFoundException
      */
     private function checkAtomEntryDocument($checksum, $fileName, $abstractExist, $numOfEnrichments, $numOfCollections, $serverState, $deleteDoc)
@@ -629,6 +629,8 @@ class Sword_DepositControllerTest extends ControllerTestCase
         }
 
         $doc->delete();
+
+        return null;
     }
 
     /**

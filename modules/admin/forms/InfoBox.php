@@ -82,8 +82,8 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
     /**
      * Initialisiert Formular nach POST.
      *
-     * @param array $post
-     * @param DocumentInterface $document
+     * @param array                  $post
+     * @param null|DocumentInterface $document
      */
     public function constructFromPost($post, $document = null)
     {
@@ -112,7 +112,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
      *
      * Dieses Formular soll immer angezeigt werden, daher liefert diese Funktion immer FALSE zurück.
      *
-     * @return boolean FALSE immer
+     * @return false FALSE immer
      */
     public function isEmpty()
     {

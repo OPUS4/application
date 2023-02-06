@@ -41,7 +41,7 @@ class Application_View_Helper_SeriesNumber extends Zend_View_Helper_Abstract
      * Returns the number of a document in a series.
      *
      * @param DocumentInterface $document
-     * @param Series $series
+     * @param Series            $series
      * @return string
      */
     public function seriesNumber($document, $series)

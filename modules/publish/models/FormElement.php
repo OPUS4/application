@@ -224,7 +224,7 @@ class Publish_Model_FormElement
 
     /**
      * @param string $workflow
-     * @return array|void
+     * @return array|null
      * @throws Zend_Exception
      */
     private function implicitFields($workflow)
@@ -265,7 +265,6 @@ class Publish_Model_FormElement
                 }
 
                 return $fields;
-                break;
 
             case 'Series':
                 //creates a additional field for a number
@@ -292,7 +291,6 @@ class Publish_Model_FormElement
                 $element = $select->transform();
 
                 return [$elementNumber, $element];
-                break;
 
             case 'Subject':
             case 'Title':
@@ -343,6 +341,8 @@ class Publish_Model_FormElement
 
                 return [$elementValue, $elementLang];
         }
+
+        return null;
     }
 
     /**
@@ -427,7 +427,7 @@ class Publish_Model_FormElement
     }
 
     /**
-     * @return void|Zend_Form_Element
+     * @return Zend_Form_Element|null
      * @throws Zend_Form_Exception
      */
     public function transform()
@@ -500,6 +500,8 @@ class Publish_Model_FormElement
 
             return $element;
         }
+
+        return null;
     }
 
     /**
@@ -877,7 +879,6 @@ class Publish_Model_FormElement
 
     /**
      * @param Publish_Model_DisplayGroup $group
-     * @return void
      */
     public function setGroup($group)
     {
@@ -904,7 +905,6 @@ class Publish_Model_FormElement
 
     /**
      * @param Zend_Form_Element $subField
-     * @return void
      */
     public function addSubFormElement($subField)
     {

@@ -84,7 +84,7 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm
      *
      * @param array $data
      * @param array $globalContext Daten für das gesamte Metadaten-Formular
-     * @return boolean true - wenn keine Abhängigkeiten verletzt wurden
+     * @return bool true - wenn keine Abhängigkeiten verletzt wurden
      */
     public function isDependenciesValid($data, $globalContext)
     {

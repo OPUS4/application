@@ -76,7 +76,7 @@ class Application_Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstra
 
     /**
      * @param Zend_Form_Element $element
-     * @param string $type
+     * @param string            $type
      * @return string
      */
     public function renderElement($element, $type = 'submit')

@@ -45,7 +45,7 @@ class Oai_Model_Resumptiontoken
     private $resumptionId;
 
     /** @var int Holds start postion */
-    private $startPostition = 0;
+    private $startPosition = 0;
 
     /** @var int Holds total amount of document ids */
     private $totalIds = 0;
@@ -87,7 +87,7 @@ class Oai_Model_Resumptiontoken
      */
     public function getStartPosition()
     {
-        return $this->_startPosition;
+        return $this->startPosition;
     }
 
     /**
@@ -141,13 +141,13 @@ class Oai_Model_Resumptiontoken
      */
     public function setStartPosition($startPosition)
     {
-        $this->_startPosition = $startPosition;
+        $this->startPosition = $startPosition;
     }
 
     /**
      * Set count of document ids for this request.
      *
-     * @param int $totalIds;
+     * @param int $totalIds
      */
     public function setTotalIds($totalIds)
     {

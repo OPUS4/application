@@ -79,7 +79,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $field->setValue('deu');
 
-        $output = $this->helper->format($field, \Opus\Document::class);
+        $output = $this->helper->format($field, Opus\Document::class);
 
         $this->assertTrue(in_array($output, ['German', 'Deutsch']));
     }

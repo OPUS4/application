@@ -46,7 +46,7 @@ class Application_Form_Validate_Password extends Zend_Validate_Abstract
     // @phpcs:enable
 
     /**
-     * @param string $value
+     * @param string     $value
      * @param array|null $context
      * @return bool
      */

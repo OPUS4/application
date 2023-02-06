@@ -90,8 +90,6 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract
 
     /**
      * Build document publishing form whose fields depend on the choosen document type.
-     *
-     * @return void
      */
     public function init()
     {
@@ -275,7 +273,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract
      * Method to find out the element name stemming.
      *
      * @param string $element element name
-     * @return string $name
+     * @return string
      */
     private function getRawElementName($element)
     {

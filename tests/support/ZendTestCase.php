@@ -723,7 +723,7 @@ abstract class ZendTestCase extends TestCase
     /**
      * Assert response code
      *
-     * @param int $code
+     * @param int    $code
      * @param string $message
      */
     public function assertResponseCode($code, $message = '')
@@ -740,7 +740,7 @@ abstract class ZendTestCase extends TestCase
     /**
      * Assert response code
      *
-     * @param int $code
+     * @param int    $code
      * @param string $message
      */
     public function assertNotResponseCode($code, $message = '')
@@ -1084,10 +1084,10 @@ abstract class ZendTestCase extends TestCase
     /**
      * URL Helper
      *
-     * @param  array  $urlOptions
-     * @param  string $name
-     * @param  bool   $reset
-     * @param  bool   $encode
+     * @param  array       $urlOptions
+     * @param  null|string $name
+     * @param  bool        $reset
+     * @param  bool        $encode
      * @throws Exception
      * @throws Zend_Controller_Router_Exception
      * @return string

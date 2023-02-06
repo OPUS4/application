@@ -73,7 +73,7 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
     /**
      * Returns instance of the view helper.
      *
-     * @return Application_View_Helper_FormatValue
+     * @return $this
      */
     public function formatValue()
     {

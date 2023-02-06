@@ -54,7 +54,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
     /**
      * Variable to store document types for additional calls.
      *
-     * @var array($docTypeName => $docTypeName)
+     * @var array ($docTypeName => $docTypeName)
      */
     private $docTypes;
 
@@ -119,7 +119,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      * Checks if a document type is supported.
      *
      * @param string $documentType
-     * @return boolean
+     * @return bool
      */
     public function isValid($documentType)
     {
@@ -163,7 +163,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      * This method does NOT check if the corresponding PHTML file exist or is readable.
      *
      * @param string $documentType
-     * @return string
+     * @return string|null
      */
     public function getTemplateName($documentType)
     {
@@ -459,7 +459,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      * Returns the actual path for a document type definition file.
      *
      * @param string $name Name of document type
-     * @return string Path to document type definition file
+     * @return string|null Path to document type definition file
      */
     public function getPathForDocumentType($name)
     {

@@ -48,12 +48,11 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
     /**
      * Redirects to an action / controller / module, sets a message for the redirect target view.
      *
-     * @param  string $action     The redirect target action
-     * @param  string $message    The message to be displayed
-     * @param  string $controller The redirect target controller
-     * @param  string $module     The redirect target model
-     * @param  array  $params     Parameters for the redirect target action
-     * @return void
+     * @param  string      $action     The redirect target action
+     * @param  null|string $message The message to be displayed
+     * @param  null|string $controller The redirect target controller
+     * @param  null|string $module The redirect target model
+     * @param  array       $params     Parameters for the redirect target action
      */
     public function redirectTo(
         $action,
@@ -68,11 +67,11 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
     /**
      * Performs a permanent (301) redirect.
      *
-     * @param string $action        The target action.
-     * @param string $message       The message to be displayed.
-     * @param string $controller    The target controller.
-     * @param string $module        The target module.
-     * @param array  $params        Optional request parameters.
+     * @param string      $action        The target action.
+     * @param null|string $message The message to be displayed.
+     * @param null|string $controller The target controller.
+     * @param null|string $module The target module.
+     * @param array       $params        Optional request parameters.
      */
     public function redirectToPermanent(
         $action,
@@ -86,11 +85,11 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
     }
 
     /**
-     * @param string $action
-     * @param string $message
-     * @param string $controller
-     * @param string $module
-     * @param array  $params
+     * @param string      $action
+     * @param null|string $message
+     * @param null|string $controller
+     * @param null|string $module
+     * @param array       $params
      * @throws Application_Exception
      */
     public function redirectToPermanentAndExit(
@@ -105,11 +104,11 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
     }
 
     /**
-     * @param string $action
-     * @param string $message
-     * @param string $controller
-     * @param string $module
-     * @param array  $params
+     * @param string      $action
+     * @param null|string $message
+     * @param null|string $controller
+     * @param null|string $module
+     * @param array       $params
      * @throws Application_Exception
      */
     public function redirectToAndExit(

@@ -56,7 +56,6 @@ class Publish_FormController extends Application_Controller_Action
     }
 
     /**
-     * @return void
      * @throws Application_Exception
      * @throws Zend_Exception
      * @throws Zend_Form_Exception
@@ -218,8 +217,6 @@ class Publish_FormController extends Application_Controller_Action
     /**
      * Method displays and checks the second form page. It also concerns for extending and reducing form fields.
      * After correct validation the user is redirected to deposit controller for storing data.
-     *
-     * @return void Different types of redirect
      */
     public function checkAction()
     {

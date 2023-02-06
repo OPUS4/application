@@ -71,8 +71,6 @@ class FakeSMTP
 
     /**
      * Handles incoming connection requests.
-     *
-     * @return void
      */
     public function waitForConnections()
     {
@@ -88,7 +86,6 @@ class FakeSMTP
      *
      * @param resource $socket   The receiving network socket.
      * @param string   $response The message to send.
-     * @return void
      */
     protected function sendSMTPResponse($socket, $response)
     {
@@ -102,7 +99,7 @@ class FakeSMTP
      *
      * @param resource $socket  The client socket.
      * @param string   $request Incoming request.
-     * @return boolean $exit True if the request terminates a connection.
+     * @return bool True if the request terminates a connection.
      */
     protected function handleSMTPRequest($socket, $request)
     {
@@ -153,7 +150,6 @@ class FakeSMTP
      * Starts an SMTP session for a new client connection.
      *
      * @param resource $client The client network socket.
-     * @return void
      */
     protected function startSmtpSession($client)
     {

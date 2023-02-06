@@ -71,8 +71,8 @@ class Application_Search_Facet
     private $indexField;
 
     /**
-     * @param string $name
-     * @param array  $options
+     * @param string     $name
+     * @param null|array $options
      */
     public function __construct($name, $options = null)
     {

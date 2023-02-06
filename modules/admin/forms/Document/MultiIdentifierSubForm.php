@@ -177,8 +177,8 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * Generieren-Button wird nur angezeigt, wenn $disableGenerateButton null oder true ist
      *
-     * @param int $position
-     * @param null $disableGenerateButton
+     * @param int       $position
+     * @param bool|null $disableGenerateButton
      * @return Zend_Form _subFormClass
      */
     protected function addSubFormAndFixOrder($position, $disableGenerateButton = null)

@@ -78,7 +78,7 @@ class Application_Translate_TmxFile
     /**
      * Construct and optionally load TMX file.
      *
-     * @param string $source (optional) full path of file to load
+     * @param null|string $source (optional) full path of file to load
      *                        if no source is provided, an empty file is created.
      */
     public function __construct($source = null)
@@ -115,7 +115,7 @@ class Application_Translate_TmxFile
      * previously imported.
      *
      * @param array $array
-     * @return self Fluid Interface
+     * @return $this Fluid Interface
      */
     public function fromArray($array)
     {
@@ -197,7 +197,7 @@ class Application_Translate_TmxFile
      * @param string      $language Language identifier of translation
      * @param string      $text Value to set for translation
      * @param null|string $module
-     * @return self fluent Interface
+     * @return $this fluent Interface
      */
     public function setTranslation($key, $language, $text, $module = null)
     {

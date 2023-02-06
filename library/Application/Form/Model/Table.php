@@ -59,7 +59,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
      */
     private $viewScript = 'modeltable.phtml';
 
-    /** @var null */
+    /** @var Zend_Controller_Action */
     private $controller;
 
     /**

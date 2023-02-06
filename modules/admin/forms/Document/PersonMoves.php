@@ -75,8 +75,8 @@ class Admin_Form_Document_PersonMoves extends Admin_Form_AbstractDocumentSubForm
     /**
      * Konstruiert Formular.
      *
-     * @param string $position Parameter für besondere Position, z.B. erste oder letzte Stelle
-     * @param mixed $options
+     * @param null|string $position Parameter für besondere Position, z.B. erste oder letzte Stelle
+     * @param null|mixed  $options
      */
     public function __construct($position = null, $options = null)
     {
@@ -149,7 +149,7 @@ class Admin_Form_Document_PersonMoves extends Admin_Form_AbstractDocumentSubForm
      *
      * @param array $post POST Daten für Formular
      * @param array $context POST Daten für gesamtes Formular
-     * @return array
+     * @return array|null
      */
     public function processPost($post, $context)
     {

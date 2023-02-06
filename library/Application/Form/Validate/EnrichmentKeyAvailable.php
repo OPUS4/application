@@ -92,7 +92,7 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abs
      * Checks if a enrichmentkey already used.
      *
      * @param string $name
-     * @return boolean
+     * @return bool
      */
     protected function isEnrichmentKeyUsed($name)
     {

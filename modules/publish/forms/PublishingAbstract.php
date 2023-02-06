@@ -115,7 +115,7 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form
      * Method to build a display group by a number of arrays for fields, hidden fields and buttons.
      *
      * @param Zend_Form_DisplayGroup $displayGroup
-     * @return array $group
+     * @return array
      */
     public function buildViewDisplayGroup($displayGroup)
     {
@@ -148,8 +148,8 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form
     /**
      * Adds submit button to the form.
      *
-     * @param string $name unique button name
      * @param string $label visible button label
+     * @param string $name unique button name
      * @return Zend_Form_Element
      */
     public function addSubmitButton($label, $name)

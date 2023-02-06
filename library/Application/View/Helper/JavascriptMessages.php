@@ -59,7 +59,7 @@ class Application_View_Helper_JavascriptMessages extends Application_View_Helper
      *
      * If no message provided, the function tries to translate the handed key.
      *
-     * @param string $key Message key
+     * @param string      $key Message key
      * @param null|string $message contains an optional message
      */
     public function addMessage($key, $message = null)

@@ -142,7 +142,6 @@ class Oai_Model_Resumptiontokens
      * Set resumption path where the resumption token files are stored.
      *
      * @param string $resPath
-     * @return void
      * @throws Oai_Model_ResumptionTokenException Thrown if directory operations failed.
      */
     public function setResumptionPath($resPath)

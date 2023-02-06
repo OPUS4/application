@@ -41,8 +41,8 @@
 class Application_View_Helper_OptionUrl extends Application_View_Helper_Abstract
 {
     /**
-     * @param string $optionKey
-     * @param string $context
+     * @param string      $optionKey
+     * @param string|null $context
      * @return string|Zend_Config
      */
     public function optionUrl($optionKey, $context = null)

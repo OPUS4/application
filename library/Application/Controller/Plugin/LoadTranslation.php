@@ -39,7 +39,6 @@ class Application_Controller_Plugin_LoadTranslation extends Zend_Controller_Plug
      * Hooks into preDispatch to setup include path for every request.
      *
      * @param Zend_Controller_Request_Abstract $request The request passed to the FrontController.
-     * @return void
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {

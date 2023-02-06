@@ -50,7 +50,7 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate
      * TODO review if the behaviour changes are worth it - is there a better way?
      *
      * @param float|string|null $messageid
-     * @return string|$this
+     * @return parent|string
      */
     public function translate($messageid = -1.1)
     {

@@ -111,7 +111,7 @@ class Publish_Model_ExtendedValidation
     /**
      * Checks if filled first names also have a last name
      *
-     * @return boolean
+     * @return bool
      */
     private function validatePersons()
     {
@@ -130,7 +130,7 @@ class Publish_Model_ExtendedValidation
     /**
      * Checks if there are last names for every filled first name or else there would be an exception from the database.
      *
-     * @return boolean true, if yes
+     * @return bool true, if yes
      */
     private function validateFirstNames()
     {
@@ -191,7 +191,7 @@ class Publish_Model_ExtendedValidation
     /**
      * Checks if there are email adresses for a filled checkbox for email notification.
      *
-     * @return boolean true, if yes
+     * @return bool true, if yes
      */
     private function validateEmailNotification()
     {
@@ -339,7 +339,7 @@ class Publish_Model_ExtendedValidation
     /**
      * Fills empty title languages with current document language
      *
-     * @return bool
+     * @return true
      */
     private function validateTitleValues()
     {
@@ -530,7 +530,7 @@ class Publish_Model_ExtendedValidation
     /**
      * Fills empty language subject fields with current document language
      *
-     * @return boolean
+     * @return true
      */
     private function validateSubjectLanguages()
     {
@@ -557,7 +557,7 @@ class Publish_Model_ExtendedValidation
     /**
      * @param string $dataKey
      * @param string $method
-     * @return mixed
+     * @return mixed|null
      *
      * TODO Prüfen ob dieser "Doppelpack" Sinn macht. Wären zwei Funktionen
      * getCounter und getType nicht vielleicht lesbarer, bzw. es scheint, daß
@@ -588,7 +588,7 @@ class Publish_Model_ExtendedValidation
 
     /**
      * @param string $languageKey
-     * @return bool
+     * @return true
      */
     private function checkLanguageElement($languageKey)
     {

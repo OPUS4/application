@@ -45,7 +45,7 @@ class Application_View_Helper_FormTranslation extends Zend_View_Helper_FormRadio
 
     /**
      * @param string     $name
-     * @param mixed      $value
+     * @param mixed|null $value
      * @param array|null $attribs
      * @param array|null $options
      * @param string     $listsep

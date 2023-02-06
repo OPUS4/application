@@ -116,7 +116,7 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm
      *
      * @param array $data POST Daten für Unterformular
      * @param array $context POST Daten für gesamtes Metadaten-Formular
-     * @return string Ergebnis der Verarbeitung oder NULL
+     * @return string|null Ergebnis der Verarbeitung oder NULL
      */
     public function processPost($data, $context)
     {

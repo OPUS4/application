@@ -41,7 +41,7 @@ class Application_Search_FacetManager
      * TODO need to get limit?
      *
      * @param string $name
-     * @return Application_Search_Facet
+     * @return Application_Search_Facet|null
      */
     public function getFacet($name)
     {

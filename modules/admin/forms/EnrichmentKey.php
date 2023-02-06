@@ -241,7 +241,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      * null, wenn der Typ-Name nicht aufgelöst werden kann.
      *
      * @param string $enrichmentTypeName Name des Enrichment-Typs
-     * @return TypeInterface
+     * @return TypeInterface|null
      */
     private function initEnrichmentType($enrichmentTypeName)
     {
@@ -264,7 +264,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
     }
 
     /**
-     * @return Admin_Form_EnrichmentKey
+     * @return self
      */
     public function populate(array $values)
     {
