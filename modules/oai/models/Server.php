@@ -461,7 +461,6 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Helper method for handling lists.
      *
-     * @param array $oaiRequest
      * @param mixed $maxRecords
      */
     private function handlingOfLists(array &$oaiRequest, $maxRecords)
