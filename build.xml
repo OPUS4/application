@@ -145,6 +145,14 @@
                 <filter token="searchengine.extract.core" value="${solrIndexCore}" />
             </filterset>
         </copy>
+
+        <copy file="${basedir}/application/configs/console.ini.template"
+              toFile="${basedir}/application/configs/console.ini" filtering="true" overwrite="true">
+            <filterset>
+                <filter token="db.admin.name" value="${dbAdminName}" />
+                <filter token="db.admin.password" value="${dbAdminPassword}" />
+            </filterset>
+        </copy>
     </target>
 
     <target name="lint" description="Prüft, ob PHP Dateien Syntaxfehler enthalten.">
