@@ -2,6 +2,7 @@
 <project name="opus4server" default="build" xmlns:if="ant:if" xmlns:unless="ant:unless">
 
     <property environment="env" />
+    <property name="phpVersion" value="8.1" />
     <property name="testpath" value="" />
     <property name="codingstandard" location="${basedir}/vendor/opus4-repo/codesniffer/ruleset.xml" />
     <property name="adminPassword" value="AdminAdmin" />
@@ -18,10 +19,10 @@
     <property name="dbAdminPassword" value="" />
     <property name="solrIndexHost" value="localhost" />
     <property name="solrIndexPort" value="8983" />
-    <property name="solrIndexPath" value="/solr/opus4" />
-    <property name="solrExtractHost" value="localhost" />
-    <property name="solrExtractPort" value="8983" />
-    <property name="solrExtractPath" value="/solr/opus4" />
+    <condition property="solrIndexPath" value="/" else="/solr">
+        <equals arg1="${phpVersion}" arg2="8.1" />
+    </condition>
+    <property name="solrIndexCore" value="opus4" />
 
     <target name="analyse-code" depends="phpcs,phpmd,phpcpd,phploc" />
 
@@ -123,19 +124,6 @@
         <!-- Prepare test configuration. -->
         <copy file="${basedir}/tests/config.ini.template" toFile="${basedir}/tests/config.ini" filtering="true"
               overwrite="true">
-            <filterset>
-                <filter token="db.user.name" value="${dbUserName}" />
-                <filter token="db.user.password" value="${dbUserPassword}" />
-                <filter token="db.admin.name" value="${dbAdminName}" />
-                <filter token="db.admin.password" value="${dbAdminPassword}" />
-                <filter token="db.name" value="${dbName}" />
-                <filter token="searchengine.index.host" value="${solrIndexHost}" />
-                <filter token="searchengine.index.port" value="${solrIndexPort}" />
-                <filter token="searchengine.index.app" value="${solrIndexPath}" />
-                <filter token="searchengine.extract.host" value="${solrExtractHost}" />
-                <filter token="searchengine.extract.port" value="${solrExtractPort}" />
-                <filter token="searchengine.extract.app" value="${solrExtractPath}" />
-            </filterset>
         </copy>
 
         <!-- Prepare main configuration. Needed for scripts like `bin/opus4`. -->
@@ -149,27 +137,12 @@
                 <filter token="db.name" value="${dbName}" />
                 <filter token="searchengine.index.host" value="${solrIndexHost}" />
                 <filter token="searchengine.index.port" value="${solrIndexPort}" />
-                <filter token="searchengine.index.app" value="${solrIndexPath}" />
-                <filter token="searchengine.extract.host" value="${solrExtractHost}" />
-                <filter token="searchengine.extract.port" value="${solrExtractPort}" />
-                <filter token="searchengine.extract.app" value="${solrExtractPath}" />
-            </filterset>
-        </copy>
-
-        <copy file="${basedir}/application/configs/console.ini.template"
-              toFile="${basedir}/application/configs/console.ini" filtering="true" overwrite="true">
-            <filterset>
-                <filter token="db.user.name" value="${dbUserName}" />
-                <filter token="db.user.password" value="${dbUserPassword}" />
-                <filter token="db.admin.name" value="${dbAdminName}" />
-                <filter token="db.admin.password" value="${dbAdminPassword}" />
-                <filter token="db.name" value="${dbName}" />
-                <filter token="searchengine.index.host" value="${solrIndexHost}" />
-                <filter token="searchengine.index.port" value="${solrIndexPort}" />
-                <filter token="searchengine.index.app" value="${solrIndexPath}" />
-                <filter token="searchengine.extract.host" value="${solrExtractHost}" />
-                <filter token="searchengine.extract.port" value="${solrExtractPort}" />
-                <filter token="searchengine.extract.app" value="${solrExtractPath}" />
+                <filter token="searchengine.index.path" value="${solrIndexPath}" />
+                <filter token="searchengine.index.core" value="${solrIndexCore}" />
+                <filter token="searchengine.extract.host" value="${solrIndexHost}" />
+                <filter token="searchengine.extract.port" value="${solrIndexPort}" />
+                <filter token="searchengine.extract.path" value="${solrIndexPath}" />
+                <filter token="searchengine.extract.core" value="${solrIndexCore}" />
             </filterset>
         </copy>
     </target>
