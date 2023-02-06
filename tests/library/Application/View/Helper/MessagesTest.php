@@ -49,15 +49,14 @@ class Application_View_Helper_MessagesTest extends ControllerTestCase
         $messages   = [];
         $messages[] = ['message' => 'Hello, world!', 'level' => 'error'];
 
-        $this->assertEquals(
-            <<<EOT
+        $expected = <<<TEXT
 <div class="messages">
   <div class="error">Hello, world!</div>
 </div>
 
-EOT,
-            $helper->messages($messages)
-        );
+TEXT;
+
+        $this->assertEquals($expected, $helper->messages($messages));
     }
 
     public function testMessagesMultiple()
@@ -74,17 +73,16 @@ EOT,
         $messages[] = ['message' => 'Just a test!', 'level' => 'info'];
         $messages[] = ['message' => 'Without level.'];
 
-        $this->assertEquals(
-            <<<EOT
+        $expected = <<<TEXT
 <div class="messages">
   <div class="error">Please provide a number.</div>
   <div class="info">Just a test!</div>
   <div class="">Without level.</div>
 </div>
 
-EOT,
-            $helper->messages($messages)
-        );
+TEXT;
+
+        $this->assertEquals($expected, $helper->messages($messages));
     }
 
     public function testMessagesTranslation()
@@ -99,15 +97,14 @@ EOT,
         $messages   = [];
         $messages[] = ['message' => 'validation_error_int', 'level' => 'error'];
 
-        $this->assertEquals(
-            <<<EOT
+        $expected = <<<TEXT
 <div class="messages">
   <div class="error">Please provide a number.</div>
 </div>
 
-EOT,
-            $helper->messages($messages)
-        );
+TEXT;
+
+        $this->assertEquals($expected, $helper->messages($messages));
     }
 
     public function testMessagesNone()
@@ -125,14 +122,13 @@ EOT,
 
         $helper->setView($this->getView());
 
-        $this->assertEquals(
-            <<<EOT
+        $expected = <<<TEXT
 <div class="messages">
   <div>No key for this message.</div>
 </div>
 
-EOT,
-            $helper->messages(['No key for this message.'])
-        );
+TEXT;
+
+        $this->assertEquals($expected, $helper->messages(['No key for this message.']));
     }
 }
