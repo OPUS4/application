@@ -113,9 +113,6 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     /** @var string[] Modules to include. */
     private $modules;
 
-    /** @var string */
-    private $filterBy;
-
     /** @var int Filter translations by state (all, edited, added). */
     private $state;
 

@@ -57,7 +57,6 @@ class Oai_Model_DocumentList
     /**
      * Retrieve all document ids for a valid oai request.
      *
-     * @param array &$oaiRequest
      * @return array
      *
      * TODO function contains metadataPrefix specific criteria for generating document list (refactor!)

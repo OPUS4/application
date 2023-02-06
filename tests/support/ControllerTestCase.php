@@ -80,9 +80,6 @@ class ControllerTestCase extends TestCase
     /** @var array */
     private $tempFiles = [];
 
-    /** @var Zend_Log */
-    private $logger;
-
     /** @var Application_Translate|null */
     private $translatorBackup;
 
@@ -134,7 +131,7 @@ class ControllerTestCase extends TestCase
 
         $this->additionalChecks();
 
-        $this->logger = null;
+        $this->setLogger(null);
 
         DoiManager::setInstance(null);
         Application_Configuration::clearInstance(); // reset Application_Configuration

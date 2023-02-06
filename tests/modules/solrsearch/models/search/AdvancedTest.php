@@ -31,6 +31,9 @@
 
 class Solrsearch_Model_Search_AdvancedTest extends ControllerTestCase
 {
+    /** @var string[] */
+    protected $additionalResources = ['database'];
+
     /** @var Solrsearch_Model_Search_Advanced */
     private $search;
 
@@ -45,6 +48,10 @@ class Solrsearch_Model_Search_AdvancedTest extends ControllerTestCase
     {
         $this->markTestIncomplete('TODO - do some testing');
 
-        // $results = $this->_search->performSearch($query);
+        $query = null;
+
+        $results = $this->search->getSearchType(); // $this->search->performSearch($query);
+
+        $this->assertNotNull($results);
     }
 }

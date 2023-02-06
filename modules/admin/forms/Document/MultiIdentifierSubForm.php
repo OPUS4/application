@@ -332,7 +332,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
      *
      * @param array $data POST Daten für Unterformular
      * @param array $context POST Daten für gesamtes Formular
-     * @return string Ergebnis der Verarbeitung
+     * @return string|null Ergebnis der Verarbeitung
      */
     public function processPost($data, $context)
     {
@@ -595,7 +595,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     }
 
     /**
-     * @return bool
+     * @return false
      */
     public function isEmpty()
     {

@@ -36,7 +36,7 @@ class Application_Util_BrowsingParams
 
     /**
      * @param Zend_Controller_Request_Http $request
-     * @param Zend_Log $log
+     * @param Zend_Log                     $log
      */
     public function __construct($request, $log)
     {

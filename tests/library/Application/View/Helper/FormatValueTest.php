@@ -133,7 +133,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $field = $doc->getField('PublicationState');
 
-        $output = $this->helper->format($field, \Opus\Document::class);
+        $output = $this->helper->format($field, Opus\Document::class);
 
         // PublicationState is not translated right now
         $this->assertEquals('draft', $output);

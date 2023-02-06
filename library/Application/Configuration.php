@@ -58,13 +58,6 @@ class Application_Configuration extends Config
     /** @var bool Is language selection active in user interface. */
     private $languageSelectionEnabled;
 
-    /**
-     * Path to folder for temporary files.
-     *
-     * @var string
-     */
-    private $tempPath;
-
     /** @var string */
     private $defaultLanguage;
 

@@ -156,8 +156,8 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract
     /**
      * Formats value for output on metadata overview page.
      *
-     * @param mixed  $value
-     * @param string $model
+     * @param mixed       $value
+     * @param string|null $model
      * @return string Formatted output
      *
      * TODO some values need to be translated (others don't)

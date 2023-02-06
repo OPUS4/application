@@ -49,7 +49,7 @@ class Application_View_Helper_FulltextLogo extends Application_View_Helper_Docum
 
         if (! $doc instanceof DocumentInterface) {
             // TODO log
-            return; // TODO BUG do not return void
+            return '';
         }
 
         $cssClass = "fulltext-logo";

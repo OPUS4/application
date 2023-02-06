@@ -392,7 +392,7 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Implements response for OAI-PMH verb 'ListMetadataFormats'.
      *
-     * @param  array &$oaiRequest Contains full request information
+     * @param  array $oaiRequest Contains full request information
      */
     protected function handleListMetadataFormats($oaiRequest)
     {
@@ -422,7 +422,7 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Implements response for OAI-PMH verb 'ListRecords'.
      *
-     * @param  array &$oaiRequest Contains full request information
+     * @param  array $oaiRequest Contains full request information
      */
     protected function handleListRecords(&$oaiRequest)
     {
@@ -461,7 +461,7 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Helper method for handling lists.
      *
-     * @param array &$oaiRequest
+     * @param array $oaiRequest
      * @param mixed $maxRecords
      */
     private function handlingOfLists(array &$oaiRequest, $maxRecords)

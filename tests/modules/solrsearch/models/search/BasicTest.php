@@ -31,6 +31,9 @@
 
 class Solrsearch_Model_Search_BasicTest extends ControllerTestCase
 {
+    /** @var string[] */
+    protected $additionalResources = ['database'];
+
     /** @var bool */
     protected $configModifiable = true;
 

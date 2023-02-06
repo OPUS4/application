@@ -57,13 +57,6 @@ class Application_Translate extends Zend_Translate
     /** @var bool */
     private $loaded = false;
 
-    /**
-     * Logger.
-     *
-     * @var Zend_Log
-     */
-    private $logger;
-
     /** @var self */
     private static $instance;
 

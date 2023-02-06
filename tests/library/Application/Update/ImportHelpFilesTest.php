@@ -407,7 +407,7 @@ class Application_Update_ImportHelpFilesTest extends ControllerTestCase
     }
 
     /**
-      * @return Dao
+     * @return Dao
      */
     protected function getStorageInterface()
     {
