@@ -1044,7 +1044,7 @@ class ControllerTestCase extends TestCase
 
     public function resetSearch()
     {
-         Opus\Search\Config::dropCached();
+        Opus\Search\Config::dropCached();
         Service::dropCached();
     }
 
