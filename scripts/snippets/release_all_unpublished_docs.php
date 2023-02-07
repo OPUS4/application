@@ -30,9 +30,9 @@
  */
 
 use Opus\Common\Date;
+use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Repository;
-use Opus\Common\Document;
 
 /**
  * Releases all documents in server state unpublished.
@@ -44,20 +44,20 @@ $docFinder = Repository::getInstance()->getDocumentFinder();
 $docFinder->setServerState('unpublished');
 
 foreach ($docFinder->getIds() as $id) {
-    $d = null;
+    $doc = null;
     try {
-        $d = Document::get($id);
+        $doc = Document::get($id);
     } catch (NotFoundException $e) {
         // document with id $id does not exist
         continue;
     }
 
-    if (! is_null($d)) {
+    if ($doc !== null) {
         $date = new Date();
         $date->setNow();
-        $d->setServerState('published');
-        $d->setServerDatePublished($date);
-        $d->store();
+        $doc->setServerState('published');
+        $doc->setServerDatePublished($date);
+        $doc->store();
         echo "publishing of document with id $id was successful\n";
     }
 }

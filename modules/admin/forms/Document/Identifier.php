@@ -29,29 +29,29 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Identifier;
+use Opus\Common\IdentifierInterface;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * Formular fuer einen Identifier eines Dokuments.
  */
 class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
 {
-
     /**
      * Name fuer Formularelement fuer Identifier-Wert.
      */
-    const ELEMENT_VALUE = 'Value';
+    public const ELEMENT_VALUE = 'Value';
 
     /**
      * Name fuer Formularelement fuer Identifier-Id.
      */
-    const ELEMENT_ID = 'Id';
+    public const ELEMENT_ID = 'Id';
 
     /**
      * Name fuer Forumlarelement fuer Identifer-Typ.
      */
-    const ELEMENT_TYPE = 'Type';
+    public const ELEMENT_TYPE = 'Type';
 
     /**
      * Erzeugt Elemente fuer Identifier Formular.
@@ -64,7 +64,8 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
         $this->addElement($typeElement);
 
         $valueElement = $this->createElement('text', self::ELEMENT_VALUE, [
-            'required' => true, 'size' => '80'
+            'required' => true,
+            'size'     => '80',
         ]);
         $valueElement->addValidator(new Application_Form_Validate_Identifier($typeElement));
         $this->addElement($valueElement);
@@ -74,7 +75,8 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
 
     /**
      * Befuehlt Formularelement von Identifier Instanz.
-     * @param Identifier $identifier
+     *
+     * @param IdentifierInterface $identifier
      */
     public function populateFromModel($identifier)
     {
@@ -85,7 +87,8 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
 
     /**
      * Aktualisiert Identifier Instanz aus Formularelementen.
-     * @param Identifier $identifier
+     *
+     * @param IdentifierInterface $identifier
      */
     public function updateModel($identifier)
     {
@@ -96,13 +99,17 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
         $identifier->setValue($value);
     }
 
+    /**
+     * @return IdentifierInterface
+     * @throws Zend_Exception
+     */
     public function getModel()
     {
         $modelId = $this->getElement(self::ELEMENT_ID)->getValue();
 
         $identifier = null;
 
-        if (strlen(trim($modelId)) > 0) {
+        if ($modelId !== null && strlen(trim($modelId)) > 0) {
             try {
                 $identifier = Identifier::get($modelId);
             } catch (NotFoundException $omnfe) {
@@ -110,7 +117,7 @@ class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm
             }
         }
 
-        if (is_null($identifier)) {
+        if ($identifier === null) {
             $identifier = Identifier::new();
         }
 

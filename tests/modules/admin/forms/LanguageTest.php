@@ -33,7 +33,7 @@ use Opus\Common\Language;
 
 class Admin_Form_LanguageTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testConstructForm()
@@ -139,7 +139,7 @@ class Admin_Form_LanguageTest extends ControllerTestCase
 
         $this->assertFalse($form->isValid([
             'RefName' => '   ',
-            'Part2T' => ' '
+            'Part2T'  => ' ',
         ]));
 
         $this->assertContains('isEmpty', $form->getErrors('RefName'));
@@ -152,9 +152,9 @@ class Admin_Form_LanguageTest extends ControllerTestCase
 
         $this->assertFalse($form->isValid([
             'RefName' => 'German',
-            'Part2T' => 'deu',
-            'Scope' => 'X',
-            'Type' => 'Y'
+            'Part2T'  => 'deu',
+            'Scope'   => 'X',
+            'Type'    => 'Y',
         ]));
 
         $this->assertNotContains('isEmpty', $form->getErrors('RefName'));
@@ -169,7 +169,7 @@ class Admin_Form_LanguageTest extends ControllerTestCase
 
         $this->assertTrue($form->isValid([
             'RefName' => 'German',
-            'Part2T' => 'deu',
+            'Part2T'  => 'deu',
         ]));
     }
 }

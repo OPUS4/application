@@ -35,7 +35,6 @@ use Opus\Common\CollectionRole;
 
 class Application_Form_Element_Position extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();

@@ -37,7 +37,7 @@ use Opus\Common\Patent;
  */
 class Admin_Form_Document_PatentTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['translation'];
 
     public function testCreateForm()
@@ -62,8 +62,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $form = new Admin_Form_Document_Patent();
 
         $document = Document::get(146);
-        $patents = $document->getPatent();
-        $patent = $patents[0];
+        $patents  = $document->getPatent();
+        $patent   = $patents[0];
         $patentId = $patent->getId();
 
         $form->populateFromModel($patent);
@@ -132,7 +132,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $this->useEnglish();
 
         $document = Document::get(146);
-        $patents = $document->getPatent();
+        $patents  = $document->getPatent();
         $patentId = $patents[0]->getId();
 
         $form = new Admin_Form_Document_Patent();
@@ -188,7 +188,6 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $this->assertEquals('2008/03/20', $datesHelper->getDateString($patent->getDateGranted()));
     }
 
-
     public function testValidationFalse()
     {
         $this->useEnglish();
@@ -196,9 +195,9 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $form = new Admin_Form_Document_Patent();
 
         $post = [
-            'Number' => '', // ist Pflichtfeld
+            'Number'      => '', // ist Pflichtfeld
             'YearApplied' => 'year', // muss Integer sein
-            'DateGranted' => '2008/02/31' // muss gültiges Datum sein
+            'DateGranted' => '2008/02/31', // muss gültiges Datum sein
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -209,8 +208,8 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $this->assertContains('isEmpty', $form->getErrors('Application'));
 
         $post = [
-            'Number' => '1',
-            'YearApplied' => '-1'
+            'Number'      => '1',
+            'YearApplied' => '-1',
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -224,11 +223,11 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $form = new Admin_Form_Document_Patent();
 
         $post = [
-            'Number' => '1',
+            'Number'      => '1',
             'YearApplied' => '1980',
-            'Countries' => 'Deutschland',
+            'Countries'   => 'Deutschland',
             'Application' => 'Meine tolle Erfindung',
-            'DateGranted' => '2000/03/25'
+            'DateGranted' => '2000/03/25',
         ];
 
         $this->assertTrue($form->isValid($post));
@@ -259,7 +258,7 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase
         $document = Document::get($documentId);
 
         $patents = $document->getPatent();
-        $patent = $patents[0];
+        $patent  = $patents[0];
 
         $this->assertEquals('323', $patent->getNumber());
         $this->assertNotEquals('0000', $patent->getYearApplied());

@@ -30,10 +30,11 @@
  */
 
 use Opus\Common\File;
+use Opus\Common\FileInterface;
 
 class Admin_Form_FileTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testConstructForm()
@@ -43,8 +44,16 @@ class Admin_Form_FileTest extends ControllerTestCase
         $this->assertEquals(10, count($form->getElements()));
 
         $elements = [
-            'Id', 'FileLink', 'FileSize', 'Language', 'Label', 'Comment', 'VisibleIn', 'Roles', 'ServerDateSubmitted',
-            'SortOrder'
+            'Id',
+            'FileLink',
+            'FileSize',
+            'Language',
+            'Label',
+            'Comment',
+            'VisibleIn',
+            'Roles',
+            'ServerDateSubmitted',
+            'SortOrder',
         ];
 
         foreach ($elements as $element) {
@@ -185,7 +194,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $model = $form->getModel();
 
-        $this->assertInstanceOf('Opus\File', $model);
+        $this->assertInstanceOf(FileInterface::class, $model);
         $this->assertEquals(126, $model->getId());
         $this->assertEquals('Testkommentar', $model->getComment());
 
@@ -203,7 +212,8 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $form->getElement('Id')->setValue('bla');
 
-        $this->setExpectedException(Application_Exception::class, 'Bad file ID = \'bla\'.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Bad file ID = \'bla\'.');
         $form->getModel();
     }
 
@@ -213,7 +223,8 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $form->getElement('Id')->setValue('8888');
 
-        $this->setExpectedException(Application_Exception::class, 'Unknown file ID = \'8888\'.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Unknown file ID = \'8888\'.');
         $form->getModel();
     }
 
@@ -224,8 +235,8 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $post = [
             'File0' => [
-                'Id' => 116
-            ]
+                'Id' => 116,
+            ],
         ];
 
         $form->setDefaults($post);
@@ -244,7 +255,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $post = [
             'FileLink' => 123,
-            'Language' => 'deu'
+            'Language' => 'deu',
         ];
 
         $result = $form->isValid($post);
@@ -258,10 +269,11 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $post = [
             'FileLink' => '5555',
-            'Language' => 'eng'
+            'Language' => 'eng',
         ];
 
-        $this->setExpectedException(Application_Exception::class, 'File with ID = 5555 not found.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('File with ID = 5555 not found.');
         $result = $form->isValid($post);
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,17 +26,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Statistic
- * @author      Tobias Leidinger <tobias.leidinger@gmail.com>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-
-class Statistic_Form_Test extends \Zend_Form
+class Statistic_Form_Test extends Zend_Form
 {
-
+    /** @var array */
     public $elementDecorators = [
         'ViewHelper',
         'Errors',
@@ -44,6 +41,7 @@ class Statistic_Form_Test extends \Zend_Form
         [['row' => 'HtmlTag'], ['tag' => 'tr']],
     ];
 
+    /** @var array */
     public $buttonDecorators = [
         'ViewHelper',
         [['data' => 'HtmlTag'], ['tag' => 'td', 'class' => 'element']],
@@ -57,16 +55,16 @@ class Statistic_Form_Test extends \Zend_Form
             'text',
             'document_id',
             [
-            'decorators' => $this->elementDecorators,
-            'label'       => 'Document ID:',
+                'decorators' => $this->elementDecorators,
+                'label'      => 'Document ID:',
             ]
         );
         $this->addElement(
             'text',
             'file_id',
             [
-            'decorators' => $this->elementDecorators,
-            'label'       => 'File ID:',
+                'decorators' => $this->elementDecorators,
+                'label'      => 'File ID:',
             ]
         );
 
@@ -74,16 +72,16 @@ class Statistic_Form_Test extends \Zend_Form
             'text',
             'ip',
             [
-            'decorators' => $this->elementDecorators,
-            'label'       => 'IP:',
+                'decorators' => $this->elementDecorators,
+                'label'      => 'IP:',
             ]
         );
         $this->addElement(
             'text',
             'user_agent',
             [
-            'decorators' => $this->elementDecorators,
-            'label'       => 'User Agent:',
+                'decorators' => $this->elementDecorators,
+                'label'      => 'User Agent:',
             ]
         );
 
@@ -91,17 +89,17 @@ class Statistic_Form_Test extends \Zend_Form
             'submit',
             'save',
             [
-            'decorators' => $this->buttonDecorators,
-            'label'       => 'Submit!',
+                'decorators' => $this->buttonDecorators,
+                'label'      => 'Submit!',
             ]
         );
 
         $this->setDefaults(
             [
                 'document_id' => 1,
-                'file_id' => 1,
-                'user_agent' => '',
-                'ip' => '127.0.0.1'
+                'file_id'     => 1,
+                'user_agent'  => '',
+                'ip'          => '127.0.0.1',
             ]
         );
     }
@@ -110,13 +108,12 @@ class Statistic_Form_Test extends \Zend_Form
     {
         $this->setDecorators(
             [
-            'FormElements',
-            ['HtmlTag', ['tag' => 'table']],
-            'Form',
+                'FormElements',
+                ['HtmlTag', ['tag' => 'table']],
+                'Form',
             ]
         );
     }
-
 
     /*public function init() {
         $document_id = new Zend_Form_Element_Text('document_id');

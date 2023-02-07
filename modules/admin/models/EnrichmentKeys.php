@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,41 +25,36 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @subpackage  Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Translate\Dao;
 
 /**
  * Model for handling operations for enrichment keys.
  *
  * enrichmentkey.protected.modules
  * enrichmentkey.protected.migration
- *
- * @category    Application
- * @package     Module_Admin
- * @subpackage  Model
  */
 class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
 {
-
+    /** @var string[] */
     private $translationKeyPatterns = [
         'hint_Enrichment%s',
         'header_Enrichment%s',
         'group%s',
         'hint_group%s',
         'button_label_add_one_moreEnrichment%s',
-        'button_label_deleteEnrichment%s'
+        'button_label_deleteEnrichment%s',
     ];
 
     /**
      * Enrichment keys that are configured as protected.
+     *
      * @var array
      */
-    private $_protectedKeys;
+    private $protectedKeys;
 
     /**
      * Reads list of protected enrichment keys from configuration.
@@ -69,7 +65,7 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
      */
     public function getProtectedEnrichmentKeys()
     {
-        if (is_null($this->_protectedKeys)) {
+        if ($this->protectedKeys === null) {
             $config = $this->getConfig();
 
             $protectedKeys = [];
@@ -93,25 +89,27 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
                 );
             }
 
-            $this->_protectedKeys = $protectedKeys;
+            $this->protectedKeys = $protectedKeys;
         }
 
-        return $this->_protectedKeys;
+        return $this->protectedKeys;
     }
 
     /**
      * Sets list of protected enrichment keys in model.
-     * @param $keys array
+     *
+     * @param array $keys
      */
     public function setProtectedEnrichmentKeys($keys)
     {
-        $this->_protectedKeys = $keys;
+        $this->protectedKeys = $keys;
     }
 
     /**
      * Setup additional translation keys for an enrichment.
-     * @param $name Name of enrichment
-     * @param null $oldName Optionally old name if it has been changed
+     *
+     * @param string      $name Name of enrichment
+     * @param string|null $oldName Optionally old name if it has been changed
      *
      * TODO create keys if they don't exist
      * TODO what happens if renameKey into keys that already exist?
@@ -120,12 +118,12 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
     {
         $patterns = $this->translationKeyPatterns;
 
-        $database = new \Opus\Translate\Dao();
-        $manager = new Application_Translate_TranslationManager();
+        $database = new Dao();
+        $manager  = new Application_Translate_TranslationManager();
 
-        if (! is_null($oldName) && $name !== $oldName) {
+        if ($oldName !== null && $name !== $oldName) {
             foreach ($patterns as $pattern) {
-                $key = sprintf($pattern, $name);
+                $key    = sprintf($pattern, $name);
                 $oldKey = sprintf($pattern, $oldName);
                 $database->renameKey($oldKey, $key, 'default');
             }
@@ -135,7 +133,7 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
                 if (! $manager->keyExists($key)) {
                     $database->setTranslation($key, [
                         'en' => $name,
-                        'de' => $name
+                        'de' => $name,
                     ], 'default');
                 }
             }
@@ -144,13 +142,14 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
 
     /**
      * Remove translation keys if enrichment is deleted.
-     * @param $name
+     *
+     * @param string $name
      */
     public function removeTranslations($name)
     {
         $patterns = $this->translationKeyPatterns;
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
 
         foreach ($patterns as $pattern) {
             $key = sprintf($pattern, $name);
@@ -158,6 +157,9 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
         }
     }
 
+    /**
+     * @return string[]
+     */
     public function getKeyPatterns()
     {
         return $this->translationKeyPatterns;

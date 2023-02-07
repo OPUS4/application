@@ -38,16 +38,14 @@ use Opus\Common\Security\SecurityException;
  * Identify the Role of the current User and set up Realm with
  * the approriate Role.
  */
-class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugin_Abstract
+class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract
 {
-
     /**
      * Determine the current User's security role and set up Realm.
      *
-     * @param \Zend_Controller_Request_Abstract $request The current request.
-     * @return void
+     * @param Zend_Controller_Request_Abstract $request The current request.
      */
-    public function routeStartup(\Zend_Controller_Request_Abstract $request)
+    public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
         // Create a Realm instance.  Initialize privileges to empty.
         $realm = Realm::getInstance();
@@ -55,7 +53,7 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
         $realm->setIp(null);
 
         // Overwrite default user if current user is logged on.
-        $auth = \Zend_Auth::getInstance();
+        $auth     = Zend_Auth::getInstance();
         $identity = $auth->getIdentity();
 
         if (false === empty($identity)) {
@@ -64,14 +62,14 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
             } catch (SecurityException $e) {
                 // unknown account -> clean identity (e.g. session of deleted user - OPUSVIER-3214)
                 $auth->clearIdentity();
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 // unexpected exception -> clear identity and throw
                 $auth->clearIdentity();
-                throw new \Exception($e);
+                throw new Exception($e);
             }
         }
 
-        if ($request instanceof \Zend_Controller_Request_Http) {
+        if ($request instanceof Zend_Controller_Request_Http) {
             $clientIp = $request->getClientIp(false);
 
             Log::get()->debug("Client-IP: $clientIp");
@@ -89,15 +87,18 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
         if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
             Application_Security_AclProvider::init();
         } else {
-            \Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(null);
-            \Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(null);
+            Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl(null);
+            Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(null);
         }
 
         $this->setupExportFormats();
     }
 
-
-    // adjustments to enable different authentication mechanism for SWORD module
+    /**
+     * adjustments to enable different authentication mechanism for SWORD module
+     *
+     * @param array $groups
+     */
     public function __construct($groups = [])
     {
         $this->groups = [];
@@ -106,9 +107,13 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
         }
     }
 
+    /**
+     * @param string $moduleName
+     * @return string
+     */
     private function getModuleMemberName($moduleName)
     {
-        $member = \Zend_Auth_Storage_Session::MEMBER_DEFAULT;
+        $member = Zend_Auth_Storage_Session::MEMBER_DEFAULT;
         // try to find group of module
         foreach ($this->groups as $id => $modules) {
             if (in_array($moduleName, $modules)) {
@@ -120,12 +125,12 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
         return $member;
     }
 
-    public function preDispatch(\Zend_Controller_Request_Abstract $request)
+    public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        $namespace = \Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
-        $member = $this->getModuleMemberName($request->getModuleName());
-        $storage = new \Zend_Auth_Storage_Session($namespace, $member);
-        \Zend_Auth::getInstance()->setStorage($storage);
+        $namespace = Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
+        $member    = $this->getModuleMemberName($request->getModuleName());
+        $storage   = new Zend_Auth_Storage_Session($namespace, $member);
+        Zend_Auth::getInstance()->setStorage($storage);
     }
 
     /**
@@ -135,14 +140,14 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
      */
     protected function setupExportFormats()
     {
-        if (! \Zend_Registry::isRegistered('Opus_Exporter')) {
+        if (! Zend_Registry::isRegistered('Opus_Exporter')) {
             Log::get()->warn(__METHOD__ . ' exporter not found');
             return;
         }
 
-        $exporter = \Zend_Registry::get('Opus_Exporter');
+        $exporter = Zend_Registry::get('Opus_Exporter');
 
-        if (is_null($exporter)) {
+        if ($exporter === null) {
             Log::get()->warn(__METHOD__ . ' exporter not found');
             return;
         }
@@ -152,27 +157,27 @@ class Application_Controller_Plugin_SecurityRealm extends \Zend_Controller_Plugi
             // hiermit wird nur die Sichtbarkeit des Export-Buttons gesteuert
             $exporter->addFormats([
                 'datacite' => [
-                    'name' => 'DataCite',
+                    'name'        => 'DataCite',
                     'description' => 'Export DataCite-XML',
-                    'module' => 'export',
-                    'controller' => 'index',
-                    'action' => 'datacite',
-                    'search' => false
-                ]
+                    'module'      => 'export',
+                    'controller'  => 'index',
+                    'action'      => 'datacite',
+                    'search'      => false,
+                ],
             ]);
 
             $exporter->addFormats([
                 'marc21' => [
-                    'name' => 'MARC21-XML',
+                    'name'        => 'MARC21-XML',
                     'description' => 'Export MARC21-XML',
-                    'module' => 'export',
-                    'controller' => 'index',
-                    'action' => 'marc21',
-                    'search' => false,
-                    'params' => [
-                        'searchtype' => 'id'
-                    ]
-                ]
+                    'module'      => 'export',
+                    'controller'  => 'index',
+                    'action'      => 'marc21',
+                    'search'      => false,
+                    'params'      => [
+                        'searchtype' => 'id',
+                    ],
+                ],
             ]);
         }
     }

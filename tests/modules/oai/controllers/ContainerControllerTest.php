@@ -34,13 +34,11 @@ use Opus\Common\UserRole;
 use Opus\Common\Util\File as FileUtil;
 
 /**
- * Class Oai_ContainerControllerTest.
- *
  * @covers Oai_ContainerController
  */
 class Oai_ContainerControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function testRequestWithoutDocId()
@@ -77,7 +75,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
     {
         $r = UserRole::fetchByName('guest');
 
-        $modules = $r->listAccessModules();
+        $modules            = $r->listAccessModules();
         $addOaiModuleAccess = ! in_array('oai', $modules);
         if ($addOaiModuleAccess) {
             $r->appendAccessModule('oai');
@@ -85,7 +83,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         }
 
         // enable security
-        $config = $this->getConfig();
+        $config           = $this->getConfig();
         $config->security = self::CONFIG_VALUE_TRUE;
 
         $doc = $this->createTestDocument();
@@ -117,7 +115,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
     {
         // create test file test.pdf in file system
         $config = $this->getConfig();
-        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
+        $path   = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
         mkdir($path, 0777, true);
         $filepath = $path . DIRECTORY_SEPARATOR . 'test.pdf';
         touch($filepath);
@@ -148,13 +146,13 @@ class Oai_ContainerControllerTest extends ControllerTestCase
     public function testRequestPublishedDocWithAccessibleFile()
     {
         $this->markTestIncomplete(
-            'build breaks when running this test on ci system ' .
-            '-- it seems that phpunit does not allow to test for file downloads'
+            'build breaks when running this test on ci system '
+            . '-- it seems that phpunit does not allow to test for file downloads'
         );
 
         // create test file test.pdf in file system
         $config = $this->getConfig();
-        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
+        $path   = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
         mkdir($path, 0777, true);
         $filepath = $path . DIRECTORY_SEPARATOR . 'test.pdf';
         touch($filepath);

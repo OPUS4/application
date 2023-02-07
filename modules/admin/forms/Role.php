@@ -30,28 +30,28 @@
  */
 
 use Opus\Common\UserRole;
+use Opus\Common\UserRoleInterface;
 
 /**
  * Form for creating and editing a role.
  */
 class Admin_Form_Role extends Application_Form_Model_Abstract
 {
+    public const ELEMENT_NAME = 'Name';
 
-    const ELEMENT_NAME = 'Name';
-
-    private static $_protectedRoles = ['administrator', 'guest'];
+    /** @var string[] */
+    private static $protectedRoles = ['administrator', 'guest'];
 
     /**
      * Constructs form.
+     *
      * @param int $id
      */
-    public function __construct($id = null)
+    public function __construct($id = 0)
     {
         parent::__construct();
 
-        $section = empty($id) ? 'new' : 'edit';
-
-        if (! empty($id)) {
+        if ($id !== 0) {
             $role = UserRole::get($id);
             $this->populateFromModel($role);
         }
@@ -65,7 +65,7 @@ class Admin_Form_Role extends Application_Form_Model_Abstract
         $this->setModelClass(UserRole::class);
 
         $name = $this->createElement('text', self::ELEMENT_NAME, [
-            'required' => true
+            'required' => true,
         ]);
 
         $maxLength = UserRole::describeField(UserRole::FIELD_NAME)->getMaxSize();
@@ -76,13 +76,13 @@ class Admin_Form_Role extends Application_Form_Model_Abstract
             ->setAttrib('maxlength', $maxLength);
 
         $name->getValidator('regex')->setMessages([
-            'regexNotMatch' => 'admin_role_name_regexNotMatch'
+            'regexNotMatch' => 'admin_role_name_regexNotMatch',
         ]);
 
         $name->getValidator('stringLength')->setMessages([
-            'stringLengthInvalid' => 'validation_error_stringLengthInvalid',
+            'stringLengthInvalid'  => 'validation_error_stringLengthInvalid',
             'stringLengthTooShort' => 'validation_error_stringLengthTooShort',
-            'stringLengthTooLong' => 'validation_error_stringLengthTooLong'
+            'stringLengthTooLong'  => 'validation_error_stringLengthTooLong',
         ]);
 
         $this->addElement($name);
@@ -90,26 +90,28 @@ class Admin_Form_Role extends Application_Form_Model_Abstract
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
-     * @param $model
+     *
+     * @param UserRoleInterface $model
      */
-    public function populateFromModel($role)
+    public function populateFromModel($model)
     {
-        $this->getElement(self::ELEMENT_MODEL_ID)->setValue($role->getId());
+        $this->getElement(self::ELEMENT_MODEL_ID)->setValue($model->getId());
 
         $nameElement = $this->getElement(self::ELEMENT_NAME);
 
-        $roleName = $role->getName();
+        $roleName = $model->getName();
 
         $nameElement->setValue($roleName);
 
-        if (in_array($roleName, self::$_protectedRoles)) {
+        if (in_array($roleName, self::$protectedRoles)) {
             $nameElement->setAttrib('disabled', 'true');
         }
     }
 
     /**
      * Aktualsiert Model-Instanz mit Werten im Formular.
-     * @param $model
+     *
+     * @param UserRoleInterface $role
      */
     public function updateModel($role)
     {

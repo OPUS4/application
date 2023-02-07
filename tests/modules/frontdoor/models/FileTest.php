@@ -35,15 +35,15 @@ use Opus\Common\FileInterface;
 
 class Frontdoor_Model_FileTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
-    const FILENAME = 'test.xhtml';
-    const FILENAME_DELETED_DOC = 'foo.html';
-    const FILENAME_UNPUBLISHED_DOC = 'bar.html';
-    const EXPECTED_EXCEPTION = "Test failed: expected Exception";
+    public const FILENAME                 = 'test.xhtml';
+    public const FILENAME_DELETED_DOC     = 'foo.html';
+    public const FILENAME_UNPUBLISHED_DOC = 'bar.html';
+    public const EXPECTED_EXCEPTION       = "Test failed: expected Exception";
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
@@ -51,40 +51,43 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
 
     public function testGetFileObjectSuccessfulCase()
     {
-        $file = new Frontdoor_Model_File(92, self::FILENAME);
-        $realm = new MockRealm(true, true);
+        $file     = new Frontdoor_Model_File(92, self::FILENAME);
+        $realm    = new MockRealm(true, true);
         $opusFile = $file->getFileObject($realm);
         $this->assertEquals(self::FILENAME, $opusFile->getPathName());
     }
 
     public function testGetFileObjectDocumentNotFoundException()
     {
-        $this->setExpectedException(Frontdoor_Model_DocumentNotFoundException::class, null, 404);
+        $this->expectException(Frontdoor_Model_DocumentNotFoundException::class);
+        $this->expectExceptionCode(404);
         new Frontdoor_Model_File(99999999999, self::FILENAME);
     }
 
     public function testGetFileObjectDocumentDeletedExceptionIfDocForbidden()
     {
-        $file = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
+        $file  = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
         $realm = new MockRealm(true, false);
 
-        $this->setExpectedException(Frontdoor_Model_DocumentDeletedException::class, null, 404);
+        $this->expectException(Frontdoor_Model_DocumentDeletedException::class);
+        $this->expectExceptionCode(404);
         $file->getFileObject($realm);
     }
 
     public function testGetFileObjectFileAccessNotAllowedExceptionIfFileForbidden()
     {
-        $file = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
+        $file  = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
         $realm = new MockRealm(false, true);
 
-        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class, null, 403);
+        $this->expectException(Frontdoor_Model_FileAccessNotAllowedException::class);
+        $this->expectExceptionCode(403);
         $file->getFileObject($realm);
     }
 
     public function testGetFileObjectNoDocumentDeletedExceptionIfAccessAllowed()
     {
-        $file = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
-        $realm = new MockRealm(true, true);
+        $file     = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
+        $realm    = new MockRealm(true, true);
         $opusFile = $file->getFileObject($realm);
 
         $this->assertTrue($opusFile instanceof FileInterface);
@@ -95,7 +98,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     {
         $file = new Frontdoor_Model_File(92, self::FILENAME);
         $file->setAclHelper(new MockAccessControl(true));
-        $realm = new MockRealm(false, false); // sollte egal sein
+        $realm    = new MockRealm(false, false); // sollte egal sein
         $opusFile = $file->getFileObject($realm);
         $this->assertTrue($opusFile instanceof FileInterface);
     }
@@ -106,34 +109,34 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $file->setAclHelper(new MockAccessControl(false));
         $realm = new MockRealm(false, false); // sollte egal sein
 
-        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class);
+        $this->expectException(Frontdoor_Model_FileAccessNotAllowedException::class);
         $file->getFileObject($realm);
     }
 
     public function testGetFileObjectDocumentAccessNotAllowedException()
     {
-        $file = new Frontdoor_Model_File(124, self::FILENAME_UNPUBLISHED_DOC);
+        $file  = new Frontdoor_Model_File(124, self::FILENAME_UNPUBLISHED_DOC);
         $realm = new MockRealm(true, false);
 
-        $this->setExpectedException(Frontdoor_Model_DocumentAccessNotAllowedException::class);
+        $this->expectException(Frontdoor_Model_DocumentAccessNotAllowedException::class);
         $file->getFileObject($realm);
     }
 
     public function testGetFileObjectFileNotFoundException()
     {
-        $file = new Frontdoor_Model_File(92, 'this_file_does_not_exist.file');
+        $file  = new Frontdoor_Model_File(92, 'this_file_does_not_exist.file');
         $realm = new MockRealm(true, true);
 
-        $this->setExpectedException(Frontdoor_Model_FileNotFoundException::class);
+        $this->expectException(Frontdoor_Model_FileNotFoundException::class);
         $file->getFileObject($realm);
     }
 
     public function testGetFileObjectFileAccessNotAllowedException()
     {
-        $file = new Frontdoor_Model_File(92, self::FILENAME);
+        $file  = new Frontdoor_Model_File(92, self::FILENAME);
         $realm = new MockRealm(false, true);
 
-        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class);
+        $this->expectException(Frontdoor_Model_FileAccessNotAllowedException::class);
         $file->getFileObject($realm);
     }
 
@@ -204,19 +207,19 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
 
     public function testWrongTypeOfRealmNoDocAccess()
     {
-        $file = new Frontdoor_Model_File(124, self::FILENAME_UNPUBLISHED_DOC);
+        $file  = new Frontdoor_Model_File(124, self::FILENAME_UNPUBLISHED_DOC);
         $realm = 'this is an invalid realm object';
 
-        $this->setExpectedException(Frontdoor_Model_DocumentAccessNotAllowedException::class);
+        $this->expectException(Frontdoor_Model_DocumentAccessNotAllowedException::class);
         $file->getFileObject($realm);
     }
 
     public function testWrongTypeOfRealmNoFileAccess()
     {
-        $file = new Frontdoor_Model_File(92, self::FILENAME);
+        $file  = new Frontdoor_Model_File(92, self::FILENAME);
         $realm = 'this is an invalid realm object';
 
-        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class);
+        $this->expectException(Frontdoor_Model_FileAccessNotAllowedException::class);
         $file->getFileObject($realm);
     }
 
@@ -262,7 +265,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $this->assertEquals(0, $opusFile->getVisibleInFrontdoor(), "Testdaten geändert.");
         $this->assertEquals("frontdoor_invisible.txt", $opusFile->getPathName(), "Testdaten geändert.");
 
-        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class);
+        $this->expectException(Frontdoor_Model_FileAccessNotAllowedException::class);
         $model->getFileObject($realm);
     }
 
@@ -276,7 +279,6 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $model = new Frontdoor_Model_File(91, "frontdoor_invisible.txt");
 
         $realm = new MockRealm(true, true);
-
 
         $opusFile = $model->getFileObject($realm);
 
@@ -308,7 +310,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     public function testAccessDeniedForEmbargoedDocument()
     {
         $file = $this->createOpusTestFile('test.pdf');
-        $doc = $this->createTestDocument();
+        $doc  = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
 
@@ -321,7 +323,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $model = new Frontdoor_Model_File($docId, "test.pdf");
         $realm = new MockRealm(true, true);
 
-        $this->setExpectedException(Frontdoor_Model_FileAccessNotAllowedException::class);
+        $this->expectException(Frontdoor_Model_FileAccessNotAllowedException::class);
         $model->getFileObject($realm);
     }
 
@@ -333,7 +335,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     {
         $this->loginUser('security8', 'security8pwd');
         $file = $this->createOpusTestFile('test.pdf');
-        $doc = $this->createTestDocument();
+        $doc  = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
 
@@ -343,8 +345,8 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
 
         $docId = $doc->store();
 
-        $model = new Frontdoor_Model_File($docId, "test.pdf");
-        $realm = new MockRealm(true, true);
+        $model    = new Frontdoor_Model_File($docId, "test.pdf");
+        $realm    = new MockRealm(true, true);
         $opusFile = $model->getFileObject($realm);
 
         $this->assertEquals("test.pdf", $opusFile->getPathName());
@@ -358,7 +360,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     {
         $this->loginUser('admin', 'adminadmin');
         $file = $this->createOpusTestFile('test.pdf');
-        $doc = $this->createTestDocument();
+        $doc  = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
 
@@ -370,7 +372,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
 
         $model = new Frontdoor_Model_File($docId, "test.pdf");
         $realm = new MockRealm(true, true);
-        $file = $model->getFileObject($realm);
+        $file  = $model->getFileObject($realm);
         $this->assertEquals('test.pdf', $file->getPathName());
     }
 
@@ -378,7 +380,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
     {
         $this->loginUser('security8', 'security8pwd');
         $file = $this->createOpusTestFile('test.pdf');
-        $doc = $this->createTestDocument();
+        $doc  = $this->createTestDocument();
         $doc->setServerState('unpublished');
         $doc->addFile($file);
 
@@ -388,8 +390,8 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
 
         $docId = $doc->store();
 
-        $model = new Frontdoor_Model_File($docId, "test.pdf");
-        $realm = new MockRealm(true, true);
+        $model    = new Frontdoor_Model_File($docId, "test.pdf");
+        $realm    = new MockRealm(true, true);
         $opusFile = $model->getFileObject($realm);
 
         $this->assertEquals("test.pdf", $opusFile->getPathName());

@@ -36,69 +36,63 @@ use Opus\Common\Security\Realm;
  * The LoginBar View Helper returns a link to an actual logout controller and action
  * or to a login action respectivly. By default it uses "login" and "logout" actions of
  * the controller "auth" in module "default".
- *
- * @category    Application
- * @package     View
  */
-class Application_View_Helper_LoginBar extends \Zend_View_Helper_Abstract
+class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract
 {
-
     /**
      * Default login action.
      *
      * @var array
      */
-    protected $_loginUrl = ['action' => 'login', 'controller' => 'auth', 'module' => 'default'];
+    protected $loginUrl = ['action' => 'login', 'controller' => 'auth', 'module' => 'default'];
 
     /**
      * Default logout action.
      *
      * @var array
      */
-    protected $_logoutUrl = ['action' => 'logout', 'controller' => 'auth', 'module' => 'default'];
+    protected $logoutUrl = ['action' => 'logout', 'controller' => 'auth', 'module' => 'default'];
 
     /**
      * Set the action (controller and module) to perform a login.
      *
-     * @param string $action     Login action name.
-     * @param string $controller (Optional) Login controller name.
-     * @param string $module     (Optional) Login module name.
-     * @return void
+     * @param string      $action     Login action name.
+     * @param null|string $controller (Optional) Login controller name.
+     * @param null|string $module (Optional) Login module name.
      */
     public function setLoginAction($action, $controller = null, $module = null)
     {
-        $this->_loginUrl['action'] = $action;
-        if (is_null($controller) === false) {
-            $this->_loginUrl['controller'] = $controller;
+        $this->loginUrl['action'] = $action;
+        if ($controller !== null) {
+            $this->loginUrl['controller'] = $controller;
         }
-        if (is_null($module) === false) {
-            $this->_loginUrl['module'] = $module;
+        if ($module !== null) {
+            $this->loginUrl['module'] = $module;
         }
     }
 
     /**
      * Set the action (controller and module) to perform a logout.
      *
-     * @param string $action     Logout action name.
-     * @param string $controller (Optional) Logout controller name.
-     * @param string $module     (Optional) Logout module name.
-     * @return void
+     * @param string      $action     Logout action name.
+     * @param null|string $controller (Optional) Logout controller name.
+     * @param null|string $module (Optional) Logout module name.
      */
     public function setLogoutAction($action, $controller = null, $module = null)
     {
-        $this->_logoutUrl['action'] = $action;
-        if (is_null($controller) === false) {
-            $this->_logoutUrl['controller'] = $controller;
+        $this->logoutUrl['action'] = $action;
+        if ($controller !== null) {
+            $this->logoutUrl['controller'] = $controller;
         }
-        if (is_null($module) === false) {
-            $this->_logoutUrl['module'] = $module;
+        if ($module !== null) {
+            $this->logoutUrl['module'] = $module;
         }
     }
 
     /**
      * Return an instance of the view helper.
      *
-     * @return Application_View_Helper_LoginBar
+     * @return $this
      */
     public function loginBar()
     {
@@ -113,10 +107,10 @@ class Application_View_Helper_LoginBar extends \Zend_View_Helper_Abstract
      */
     public function __toString()
     {
-        $returnParams = \Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
-        $identity = \Zend_Auth::getInstance()->getIdentity();
+        $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
+        $identity     = Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
-            $url = $this->view->url(array_merge($this->_loginUrl, $returnParams->getReturnParameters()));
+            $url = $this->view->url(array_merge($this->loginUrl, $returnParams->getReturnParameters()));
             return '<a rel="nofollow" href="' . $url . '">' . $this->view->translate('default_auth_index') . '</a>';
         }
 
@@ -126,22 +120,22 @@ class Application_View_Helper_LoginBar extends \Zend_View_Helper_Abstract
         // Prüfe, ob Nutzer Zugriff auf Account Modul hat
         $realm = Realm::getInstance();
 
-        if ($realm->checkModule('account') == true) {
+        if ($realm->checkModule('account') === true) {
             // Prüfe, ob Nutzer ihren Account editieren dürfen
             $config = Config::get();
-            if (isset($config) and isset($config->account->editOwnAccount)) {
+            if (isset($config) && isset($config->account->editOwnAccount)) {
                 $addAccountLink = filter_var($config->account->editOwnAccount, FILTER_VALIDATE_BOOLEAN);
             }
         }
 
-        $url = $this->view->url(array_merge($this->_logoutUrl, $returnParams->getReturnParameters()));
+        $url        = $this->view->url(array_merge($this->logoutUrl, $returnParams->getReturnParameters()));
         $logoutLink = '<a rel="nofollow" href="' . $url . '">' . $this->view->translate('default_auth_logout')
             . ' (' . htmlspecialchars($identity) . ')</a>';
 
         if ($addAccountLink) {
             $accountUrl = $this->view->url(['module' => 'account'], null, true);
-            return '<a rel="nofollow" style="padding-right: 1em" href="' . $accountUrl .
-            '">' . $this->view->translate('default_auth_account') . '</a> ' . $logoutLink;
+            return '<a rel="nofollow" style="padding-right: 1em" href="' . $accountUrl
+            . '">' . $this->view->translate('default_auth_account') . '</a> ' . $logoutLink;
         }
 
         return $logoutLink;

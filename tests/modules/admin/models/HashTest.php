@@ -33,12 +33,11 @@ use Opus\Common\Document;
 
 class Admin_Model_HashTest extends ControllerTestCase
 {
-
     public function testCreate()
     {
         $this->markTestIncomplete('No hash in test data.');
-        $doc = Document::get(91);
+        $doc   = Document::get(91);
         $files = $doc->getFiles();
-        $file = $files[0];
+        $file  = $files[0];
     }
 }

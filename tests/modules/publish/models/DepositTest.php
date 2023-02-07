@@ -29,18 +29,20 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\EnrichmentKey;
 use Opus\Common\Date;
+use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
 use Opus\Common\Log;
 
 class Publish_Model_DepositTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
+    /** @var EnrichmentKeyInterface */
     private $enrichmentKey;
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -49,7 +51,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
         // der Datenbank entfernt wurden (ansonsten MySQL-Fehler, weil FK-Constraint
         // fk_document_enrichment_enrichmentkeys in Tabelle document_enrichments
         // verletzt wird)
-        if (! is_null($this->enrichmentKey)) {
+        if ($this->enrichmentKey !== null) {
             $this->enrichmentKey->delete();
         }
     }
@@ -60,10 +62,10 @@ class Publish_Model_DepositTest extends ControllerTestCase
         $document->setServerState('published');
         $documentId = $document->store();
 
-        $log = Log::get();
+        $log     = Log::get();
         $deposit = new Publish_Model_Deposit($log);
 
-        $this->setExpectedException(Publish_Model_FormDocumentNotFoundException::class);
+        $this->expectException(Publish_Model_FormDocumentNotFoundException::class);
         $deposit->storeDocument($documentId);
     }
 
@@ -80,62 +82,62 @@ class Publish_Model_DepositTest extends ControllerTestCase
         $this->enrichmentKey->store();
 
         $data = [
-            'PersonSubmitterFirstName_1' => ['value' => 'Hans', 'datatype' => 'Person', 'subfield' => '0'],
-            'PersonSubmitterLastName_1' => ['value' => 'Hansmann', 'datatype' => 'Person', 'subfield' => '1'],
-            'PersonSubmitterEmail_1' => ['value' => 'test@mail.com', 'datatype' => 'Person', 'subfield' => '1'],
-            'PersonSubmitterPlaceOfBirth_1' => ['value' => 'Stadt', 'datatype' => 'Person', 'subfield' => '1'],
-            'PersonSubmitterDateOfBirth_1' => ['value' => '1970/02/01', 'datatype' => 'Person', 'subfield' => '1'],
-            'PersonSubmitterAcademicTitle_1' => ['value' => 'Dr.', 'datatype' => 'Person', 'subfield' => '1'],
+            'PersonSubmitterFirstName_1'         => ['value' => 'Hans', 'datatype' => 'Person', 'subfield' => '0'],
+            'PersonSubmitterLastName_1'          => ['value' => 'Hansmann', 'datatype' => 'Person', 'subfield' => '1'],
+            'PersonSubmitterEmail_1'             => ['value' => 'test@mail.com', 'datatype' => 'Person', 'subfield' => '1'],
+            'PersonSubmitterPlaceOfBirth_1'      => ['value' => 'Stadt', 'datatype' => 'Person', 'subfield' => '1'],
+            'PersonSubmitterDateOfBirth_1'       => ['value' => '1970/02/01', 'datatype' => 'Person', 'subfield' => '1'],
+            'PersonSubmitterAcademicTitle_1'     => ['value' => 'Dr.', 'datatype' => 'Person', 'subfield' => '1'],
             'PersonSubmitterAllowEmailContact_1' => ['value' => '0', 'datatype' => 'Person', 'subfield' => '1'],
-            'CompletedDate' => ['value' => '2012/2/1', 'datatype' => 'Date', 'subfield' => '0'],
-            'PersonAuthorFirstName_1' => ['value' => 'vorname', 'datatype' => 'Person', 'subfield' => '1'],
-            'PersonAuthorLastName_1' => ['value' => 'nachname', 'datatype' => 'Person', 'subfield' => '0'],
-            'PersonAuthorLastName_2' => ['value' => 'nurNachname', 'datatype' => 'Person', 'subfield' => '0'],
-            'TitleMain_1' => ['value' => 'Entenhausen', 'datatype' => 'Title', 'subfield' => '0'],
-            'TitleMainLanguage_1' => ['value' => 'deu', 'datatype' => 'Language', 'subfield' => '1'],
-            'TitleMain_2' => ['value' => 'Irgendwas sonst', 'datatype' => 'Title', 'subfield' => '0'],
-            'TitleMainLanguage_2' => ['value' => 'eng', 'datatype' => 'Language', 'subfield' => '1'],
-            'Language' => ['value' => 'deu', 'datatype' => 'Language', 'subfield' => '0'],
-            'Note' => ['value' => 'Dies ist ein Kommentar', 'datatype' => 'Note', 'subfield' => '0'],
-            'Licence' => ['value' => '3', 'datatype' => 'Licence', 'subfield' => '0'],
-            'ThesisGrantor' => ['value' => '1', 'datatype' => 'ThesisGrantor', 'subfield' => '0'],
-            'ThesisPublisher' => ['value' => '2', 'datatype' => 'ThesisPublisher', 'subfield' => '0'],
-            'ThesisYearAccepted' => ['value' => '2009', 'datatype' => 'Year', 'subfield' => '0'],
-            'SubjectSwd_1' => ['value' => 'hallo098', 'datatype' => 'Subject', 'subfield' => '0'],
-            'SubjectUncontrolled_1' => ['value' => 'Keyword', 'datatype' => 'Subject', 'subfield' => '0'],
-            'SubjectUncontrolledLanguage_1' => ['value' => 'deu', 'datatype' => 'Language', 'subfield' => '1'],
-            'SubjectMSC_1' => ['value' => '8030', 'datatype' => 'Collection', 'subfield' => '0'],
-            'SubjectJEL_1' => ['value' => '6740', 'datatype' => 'Collection', 'subfield' => '0'],
-            'SubjectPACS_1' => ['value' => '2878', 'datatype' => 'Collection', 'subfield' => '0'],
-            'SubjectBKL_1' => ['value' => '13874', 'datatype' => 'Collection', 'subfield' => '0'],
-            'IdentifierOld' => ['value' => 'Publish_Model_DepositTest_old', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierSerial' => ['value' => 'Publish_Model_DepositTest_serial', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierUuid' => ['value' => 'Publish_Model_DepositTest_uuid', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierIsbn' => ['value' => 'Publish_Model_DepositTest_isbn', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierDoi' => ['value' => 'Publish_Model_DepositTest_doi', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierHandle' => ['value' => 'Publish_Model_DepositTest_handle', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierUrn' => ['value' => 'Publish_Model_DepositTest_urn', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierUrl' => ['value' => 'Publish_Model_DepositTest_url', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierIssn' => ['value' => 'Publish_Model_DepositTest_issn', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierStdDoi' => ['value' => 'Publish_Model_DepositTest_std-doi', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierArxiv' => ['value' => 'Publish_Model_DepositTest_arxiv', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierPubmed' => ['value' => 'Publish_Model_DepositTest_pmid', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierCrisLink' => ['value' => 'Publish_Model_DepositTest_cris-link', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierSplashUrl' => ['value' => 'Publish_Model_DepositTest_splash-url', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierOpus3' => ['value' => 'Publish_Model_DepositTest_opus3-id', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'IdentifierOpac' => ['value' => 'Publish_Model_DepositTest_opac-id', 'datatype' => 'Identifier', 'subfield' => '0'],
-            'ReferenceIsbn' => ['value' => 'Publish_Model_DepositTest_ref_isbn', 'datatype' => 'Reference', 'subfield' => '0'],
-            'ReferenceUrn' => ['value' => 'Publish_Model_DepositTest_ref_urn', 'datatype' => 'Reference', 'subfield' => '0'],
-            'ReferenceHandle' => ['value' => 'Publish_Model_DepositTest_ref_handle', 'datatype' => 'Reference', 'subfield' => '0'],
-            'ReferenceDoi' => ['value' => 'Publish_Model_DepositTest_ref_doi', 'datatype' => 'Reference', 'subfield' => '0'],
-            'ReferenceIssn' => ['value' => 'Publish_Model_DepositTest_ref_issn', 'datatype' => 'Reference', 'subfield' => '0'],
-            'ReferenceUrl' => ['value' => 'Publish_Model_DepositTest_ref_url', 'datatype' => 'Reference', 'subfield' => '0'],
-            'ReferenceCrisLink' => ['value' => 'Publish_Model_DepositTest_ref_crislink', 'datatype' => 'Reference', 'subfield' => '0'],
-            'ReferenceStdDoi' => ['value' => 'Publish_Model_DepositTest_ref_stddoi', 'datatype' => 'Reference', 'subfield' => '0'],
-            'ReferenceSplashUrl' => ['value' => 'Publish_Model_DepositTest_ref_splashurl', 'datatype' => 'Reference', 'subfield' => '0'],
-            'SeriesNumber1' => ['value' => '5', 'datatype' => 'SeriesNumber', 'subfield' => '0'],
-            'Series1' => ['value' => '4', 'datatype' => 'Series', 'subfield' => '1'],
-            'Foo2Title' => ['value' => 'title as enrichment', 'datatype' => 'Enrichment', 'subfield' => '0'],
+            'CompletedDate'                      => ['value' => '2012/2/1', 'datatype' => 'Date', 'subfield' => '0'],
+            'PersonAuthorFirstName_1'            => ['value' => 'vorname', 'datatype' => 'Person', 'subfield' => '1'],
+            'PersonAuthorLastName_1'             => ['value' => 'nachname', 'datatype' => 'Person', 'subfield' => '0'],
+            'PersonAuthorLastName_2'             => ['value' => 'nurNachname', 'datatype' => 'Person', 'subfield' => '0'],
+            'TitleMain_1'                        => ['value' => 'Entenhausen', 'datatype' => 'Title', 'subfield' => '0'],
+            'TitleMainLanguage_1'                => ['value' => 'deu', 'datatype' => 'Language', 'subfield' => '1'],
+            'TitleMain_2'                        => ['value' => 'Irgendwas sonst', 'datatype' => 'Title', 'subfield' => '0'],
+            'TitleMainLanguage_2'                => ['value' => 'eng', 'datatype' => 'Language', 'subfield' => '1'],
+            'Language'                           => ['value' => 'deu', 'datatype' => 'Language', 'subfield' => '0'],
+            'Note'                               => ['value' => 'Dies ist ein Kommentar', 'datatype' => 'Note', 'subfield' => '0'],
+            'Licence'                            => ['value' => '3', 'datatype' => 'Licence', 'subfield' => '0'],
+            'ThesisGrantor'                      => ['value' => '1', 'datatype' => 'ThesisGrantor', 'subfield' => '0'],
+            'ThesisPublisher'                    => ['value' => '2', 'datatype' => 'ThesisPublisher', 'subfield' => '0'],
+            'ThesisYearAccepted'                 => ['value' => '2009', 'datatype' => 'Year', 'subfield' => '0'],
+            'SubjectSwd_1'                       => ['value' => 'hallo098', 'datatype' => 'Subject', 'subfield' => '0'],
+            'SubjectUncontrolled_1'              => ['value' => 'Keyword', 'datatype' => 'Subject', 'subfield' => '0'],
+            'SubjectUncontrolledLanguage_1'      => ['value' => 'deu', 'datatype' => 'Language', 'subfield' => '1'],
+            'SubjectMSC_1'                       => ['value' => '8030', 'datatype' => 'Collection', 'subfield' => '0'],
+            'SubjectJEL_1'                       => ['value' => '6740', 'datatype' => 'Collection', 'subfield' => '0'],
+            'SubjectPACS_1'                      => ['value' => '2878', 'datatype' => 'Collection', 'subfield' => '0'],
+            'SubjectBKL_1'                       => ['value' => '13874', 'datatype' => 'Collection', 'subfield' => '0'],
+            'IdentifierOld'                      => ['value' => 'Publish_Model_DepositTest_old', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierSerial'                   => ['value' => 'Publish_Model_DepositTest_serial', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierUuid'                     => ['value' => 'Publish_Model_DepositTest_uuid', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierIsbn'                     => ['value' => 'Publish_Model_DepositTest_isbn', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierDoi'                      => ['value' => 'Publish_Model_DepositTest_doi', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierHandle'                   => ['value' => 'Publish_Model_DepositTest_handle', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierUrn'                      => ['value' => 'Publish_Model_DepositTest_urn', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierUrl'                      => ['value' => 'Publish_Model_DepositTest_url', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierIssn'                     => ['value' => 'Publish_Model_DepositTest_issn', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierStdDoi'                   => ['value' => 'Publish_Model_DepositTest_std-doi', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierArxiv'                    => ['value' => 'Publish_Model_DepositTest_arxiv', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierPubmed'                   => ['value' => 'Publish_Model_DepositTest_pmid', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierCrisLink'                 => ['value' => 'Publish_Model_DepositTest_cris-link', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierSplashUrl'                => ['value' => 'Publish_Model_DepositTest_splash-url', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierOpus3'                    => ['value' => 'Publish_Model_DepositTest_opus3-id', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'IdentifierOpac'                     => ['value' => 'Publish_Model_DepositTest_opac-id', 'datatype' => 'Identifier', 'subfield' => '0'],
+            'ReferenceIsbn'                      => ['value' => 'Publish_Model_DepositTest_ref_isbn', 'datatype' => 'Reference', 'subfield' => '0'],
+            'ReferenceUrn'                       => ['value' => 'Publish_Model_DepositTest_ref_urn', 'datatype' => 'Reference', 'subfield' => '0'],
+            'ReferenceHandle'                    => ['value' => 'Publish_Model_DepositTest_ref_handle', 'datatype' => 'Reference', 'subfield' => '0'],
+            'ReferenceDoi'                       => ['value' => 'Publish_Model_DepositTest_ref_doi', 'datatype' => 'Reference', 'subfield' => '0'],
+            'ReferenceIssn'                      => ['value' => 'Publish_Model_DepositTest_ref_issn', 'datatype' => 'Reference', 'subfield' => '0'],
+            'ReferenceUrl'                       => ['value' => 'Publish_Model_DepositTest_ref_url', 'datatype' => 'Reference', 'subfield' => '0'],
+            'ReferenceCrisLink'                  => ['value' => 'Publish_Model_DepositTest_ref_crislink', 'datatype' => 'Reference', 'subfield' => '0'],
+            'ReferenceStdDoi'                    => ['value' => 'Publish_Model_DepositTest_ref_stddoi', 'datatype' => 'Reference', 'subfield' => '0'],
+            'ReferenceSplashUrl'                 => ['value' => 'Publish_Model_DepositTest_ref_splashurl', 'datatype' => 'Reference', 'subfield' => '0'],
+            'SeriesNumber1'                      => ['value' => '5', 'datatype' => 'SeriesNumber', 'subfield' => '0'],
+            'Series1'                            => ['value' => '4', 'datatype' => 'Series', 'subfield' => '1'],
+            'Foo2Title'                          => ['value' => 'title as enrichment', 'datatype' => 'Enrichment', 'subfield' => '0'],
         ];
 
         $log = Log::get();
@@ -197,8 +199,22 @@ class Publish_Model_DepositTest extends ControllerTestCase
 
         // the order here matches the order in of identifiers in $data
         $identifierTypes = [
-            'old', 'serial', 'uuid', 'isbn', 'doi', 'handle', 'urn', 'url', 'issn', 'std-doi', 'arxiv',
-            'pmid', 'cris-link', 'splash-url', 'opus3-id', 'opac-id'
+            'old',
+            'serial',
+            'uuid',
+            'isbn',
+            'doi',
+            'handle',
+            'urn',
+            'url',
+            'issn',
+            'std-doi',
+            'arxiv',
+            'pmid',
+            'cris-link',
+            'splash-url',
+            'opus3-id',
+            'opac-id',
         ];
 
         $identifiers = $document->getIdentifier();

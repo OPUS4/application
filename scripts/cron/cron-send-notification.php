@@ -33,16 +33,16 @@
 defined('APPLICATION_ENV')
     || define(
         'APPLICATION_ENV',
-        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production')
+        getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'
     );
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Job\Runner;
-use Opus\Job\MailNotification;
 use Opus\Common\Log;
+use Opus\Job\MailNotification;
+use Opus\Job\Runner;
 
-$jobrunner = new Runner;
+$jobrunner = new Runner();
 $jobrunner->setLogger(Log::get());
 // no waiting between jobs
 $jobrunner->setDelay(0);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,26 +25,25 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View_Helper
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Config;
 
-class Application_View_Helper_LayoutPath extends \Zend_View_Helper_Abstract
+class Application_View_Helper_LayoutPath extends Zend_View_Helper_Abstract
 {
-
+    /**
+     * @return string
+     */
     public function layoutPath()
     {
         $config = Config::get();
-        $theme = 'opus4';
+        $theme  = 'opus4';
         if (isset($config->theme)) {
             $theme = $config->theme;
         }
-        $fc = \Zend_Controller_Front::getInstance();
+        $fc      = Zend_Controller_Front::getInstance();
         $request = $fc->getRequest();
         return $request->getBaseUrl() . '/layouts/' . $theme;
     }

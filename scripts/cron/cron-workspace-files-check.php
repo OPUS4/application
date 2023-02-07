@@ -34,27 +34,27 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Common\Config;
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
 
 // Get files directory...
 $startTime = microtime(true);
-$config = Config::get();
+$config    = Config::get();
 $filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
 
-if ($filesPath == false or empty($filesPath)) {
+if ($filesPath === false || empty($filesPath)) {
     die("ERROR: Failed scanning workspace files path.\n");
 }
 
 echo "INFO: Scanning directory '$filesPath'...\n";
 
 // Iterate over all files
-$count = 0;
+$count  = 0;
 $errors = 0;
 
 foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
-    if ($count > 0 and $count % 100 == 0) {
-        echo "INFO: checked $count entries with ".round($count / (microtime(true) - $startTime))." entries/seconds.\n";
+    if ($count > 0 && $count % 100 === 0) {
+        echo "INFO: checked $count entries with " . round($count / (microtime(true) - $startTime)) . " entries/seconds.\n";
     }
     $count++;
 
@@ -78,7 +78,7 @@ foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
     }
 }
 
-echo "INFO: Checked a total of $count entries with ".round($count / (microtime(true) - $startTime))." entries/seconds.\n";
+echo "INFO: Checked a total of $count entries with " . round($count / (microtime(true) - $startTime)) . " entries/seconds.\n";
 
 if ($errors === 0) {
     exit(0);

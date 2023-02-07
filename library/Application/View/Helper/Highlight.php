@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -35,25 +33,31 @@
  * View helper for wrapping strings inside larger string in HTML for
  * highlighting search terms in results.
  */
-class Application_View_Helper_Highlight extends \Zend_View_Helper_Abstract
+class Application_View_Helper_Highlight extends Zend_View_Helper_Abstract
 {
-
+    /**
+     * @param string      $subject
+     * @param string      $needle
+     * @param string|null $prefix
+     * @param string|null $suffix
+     * @return string
+     */
     public function highlight($subject, $needle, $prefix = null, $suffix = null)
     {
-        if (is_null($needle) || $needle === '') {
+        if ($needle === null || $needle === '') {
             return $subject;
         }
 
-        if (is_null($prefix)) {
+        if ($prefix === null) {
             $prefix = '<b>';
         }
 
-        if (is_null($suffix)) {
+        if ($suffix === null) {
             $suffix = '</b>';
         }
 
         $quotedNeedle = preg_quote($needle, '/');
 
-        return preg_replace("/($quotedNeedle)/i", "$prefix$0$suffix", $subject);
+        return preg_replace("/($quotedNeedle)/i", $prefix . '$0' . $suffix, $subject);
     }
 }

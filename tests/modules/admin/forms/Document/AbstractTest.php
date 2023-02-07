@@ -37,7 +37,7 @@ use Opus\Common\TitleAbstract;
  */
 class Admin_Form_Document_AbstractTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testCreateForm()
@@ -161,7 +161,7 @@ class Admin_Form_Document_AbstractTest extends ControllerTestCase
 
         $post = [
             'Language' => 'rus',
-            'Value' => ' '
+            'Value'    => ' ',
         ];
 
         $this->assertFalse($form->isValid($post));

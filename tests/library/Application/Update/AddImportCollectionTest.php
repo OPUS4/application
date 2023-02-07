@@ -37,26 +37,26 @@ use Opus\Common\EnrichmentKey;
  */
 class Application_Update_AddImportCollectionTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         // delete import collections
         $collectionRole = CollectionRole::fetchByName('Import');
 
-        if (! is_null($collectionRole)) {
+        if ($collectionRole !== null) {
             $collectionRole->delete();
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $enrichmentKey = EnrichmentKey::fetchByName('opus.test.key');
 
-        if (! is_null($enrichmentKey)) {
+        if ($enrichmentKey !== null) {
             $enrichmentKey->delete();
         }
 

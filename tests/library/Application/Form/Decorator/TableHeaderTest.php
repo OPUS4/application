@@ -25,26 +25,25 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_Form_Decorator
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
+    /** @var string[][] */
     private $columns = [
         [
             'label' => 'column1',
-            'class' => 'name'
+            'class' => 'name',
         ],
         [
             'label' => 'column2',
-            'class' => 'size'
-        ]
+            'class' => 'size',
+        ],
     ];
 
     public function testConstruct()
@@ -53,7 +52,7 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
             ['placement' => 'prepend', 'columns' => $this->columns]
         );
 
-        $this->assertEquals(\Zend_Form_Decorator_Abstract::PREPEND, $decorator->getPlacement());
+        $this->assertEquals(Zend_Form_Decorator_Abstract::PREPEND, $decorator->getPlacement());
         $this->assertEquals($this->columns, $decorator->getColumns());
     }
 
@@ -81,8 +80,8 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
 
         $decorator->setColumns($this->columns);
 
-        $form = new \Zend_Form();
-        $form->addSubForm(new \Zend_Form_SubForm(), 'subform1');
+        $form = new Zend_Form();
+        $form->addSubForm(new Zend_Form_SubForm(), 'subform1');
 
         $decorator->setElement($form);
 
@@ -100,8 +99,8 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
 
         $decorator->setColumns([['label' => '<h1>HTML</h1>']]);
 
-        $form = new \Zend_Form();
-        $form->addSubForm(new \Zend_Form_SubForm(), 'subform1');
+        $form = new Zend_Form();
+        $form->addSubForm(new Zend_Form_SubForm(), 'subform1');
 
         $decorator->setElement($form);
 
@@ -121,8 +120,8 @@ class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase
 
         $decorator->setColumns([['label' => 'Value']]);
 
-        $form = new \Zend_Form();
-        $form->addSubForm(new \Zend_Form_SubForm(), 'subform1');
+        $form = new Zend_Form();
+        $form->addSubForm(new Zend_Form_SubForm(), 'subform1');
 
         $decorator->setElement($form);
 

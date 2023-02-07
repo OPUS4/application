@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,20 +24,16 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Angepasste Form Element Klasse für Submit Buttons.
- *
- * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_Submit extends \Zend_Form_Element_Submit
+class Application_Form_Element_Submit extends Zend_Form_Element_Submit
 {
-
     /**
      * Initialisiert Formularelement.
      *
@@ -46,20 +43,21 @@ class Application_Form_Element_Submit extends \Zend_Form_Element_Submit
     {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
     /**
-     * Lädt die Dekoratoren für Button Element.
-     * @return $this|\Zend_Form_Element_Submit
+     * Laedt die Dekoratoren für Button Element.
+     *
+     * @return $this
      */
     public function loadDefaultDecorators()
     {
-        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) === 0) {
             $this->setDecorators([
                 'ViewHelper',
                 'ElementHtmlTag',
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
             ]);
         }
         return $this;

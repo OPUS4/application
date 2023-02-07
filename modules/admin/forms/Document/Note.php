@@ -29,16 +29,18 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Model\NotFoundException;
 use Opus\Common\Note;
+use Opus\Common\NoteInterface;
 
 /**
  * Unterformular fuer Bemerkungen/Notizen.
  */
 class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm
 {
-    const ELEMENT_ID         = 'Id';
-    const ELEMENT_VISIBILITY = 'Visibility';
-    const ELEMENT_MESSAGE    = 'Message';
+    public const ELEMENT_ID         = 'Id';
+    public const ELEMENT_VISIBILITY = 'Visibility';
+    public const ELEMENT_MESSAGE    = 'Message';
 
     public function init()
     {
@@ -47,15 +49,15 @@ class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('checkbox', self::ELEMENT_VISIBILITY, ['label' => 'Opus_Note_Visibility_Value_Public']);
         $this->addElement('textarea', self::ELEMENT_MESSAGE, [
-            'required' => true,
-            'rows' => 4,
+            'required'   => true,
+            'rows'       => 4,
             'decorators' => [
                 'ViewHelper',
                 'Errors',
                 'Description',
                 'ElementHtmlTag',
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
-            ]
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
+            ],
         ]);
 
         $this->getElement(self::ELEMENT_VISIBILITY)
@@ -65,6 +67,9 @@ class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm
         $this->setRemoveEmptyCheckbox(false);
     }
 
+    /**
+     * @param NoteInterface $note
+     */
     public function populateFromModel($note)
     {
         $this->getElement(self::ELEMENT_ID)->setValue($note->getId());
@@ -72,12 +77,19 @@ class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm
         $this->getElement(self::ELEMENT_VISIBILITY)->setChecked($note->getVisibility() === 'public');
     }
 
+    /**
+     * @param NoteInterface $note
+     */
     public function updateModel($note)
     {
         $note->setMessage($this->getElement(self::ELEMENT_MESSAGE)->getValue());
-        $note->setVisibility(($this->getElement(self::ELEMENT_VISIBILITY)->getValue()) ? 'public' : 'private');
+        $note->setVisibility($this->getElement(self::ELEMENT_VISIBILITY)->getValue() ? 'public' : 'private');
     }
 
+    /**
+     * @return NoteInterface
+     * @throws NotFoundException
+     */
     public function getModel()
     {
         $noteId = $this->getElement(self::ELEMENT_ID)->getValue();

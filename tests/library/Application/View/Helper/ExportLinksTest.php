@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,21 +24,17 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Unit tests for view helper for rendering export links.
- *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-
 class Application_View_Helper_ExportLinksTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function testToStringForSearch()
@@ -45,12 +42,12 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
         $exportLink = new Application_View_Helper_ExportLinks();
 
         $this->assertEquals(
-            '<ul>' .
-            '<li><a href="/export/index/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li>' .
-            '<li><a href="/export/index/csv" title="Export CSV" class="export csv">CSV</a></li>' .
-            '<li><a href="/export/index/ris" title="Export RIS" class="export ris">RIS</a></li>' .
-            '<li><a href="/export/index/index/export/xml/stylesheet/example" title="Export XML" class="export xml">XML</a></li>' .
-            '</ul>',
+            '<ul>'
+            . '<li><a href="/export/index/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li>'
+            . '<li><a href="/export/index/csv" title="Export CSV" class="export csv">CSV</a></li>'
+            . '<li><a href="/export/index/ris" title="Export RIS" class="export ris">RIS</a></li>'
+            . '<li><a href="/export/index/index/export/xml/stylesheet/example" title="Export XML" class="export xml">XML</a></li>'
+            . '</ul>',
             $exportLink->toString(null, 'search')
         );
     }
@@ -63,29 +60,29 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
         $exportLink = new Application_View_Helper_ExportLinks();
 
         $this->assertEquals(
-            '<ul>' .
-            '<li><a href="/citationExport/index/download/output/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li>' .
-            '<li><a href="/export/index/datacite" title="Export DataCite-XML" class="export datacite">DataCite</a></li>' .
-            '<li><a href="/export/index/marc21/searchtype/id" title="Export MARC21-XML" class="export marc21-xml">MARC21-XML</a></li>' .
-            '<li><a href="/citationExport/index/download/output/ris" title="Export RIS" class="export ris">RIS</a></li>' .
-            '<li><a href="/export/index/index/export/xml/searchtype/id/stylesheet/example" title="Export XML" class="export xml">XML</a></li>' .
-            '</ul>',
+            '<ul>'
+            . '<li><a href="/citationExport/index/download/output/bibtex" title="Export BibTeX" class="export bibtex">BibTeX</a></li>'
+            . '<li><a href="/export/index/datacite" title="Export DataCite-XML" class="export datacite">DataCite</a></li>'
+            . '<li><a href="/export/index/marc21/searchtype/id" title="Export MARC21-XML" class="export marc21-xml">MARC21-XML</a></li>'
+            . '<li><a href="/citationExport/index/download/output/ris" title="Export RIS" class="export ris">RIS</a></li>'
+            . '<li><a href="/export/index/index/export/xml/searchtype/id/stylesheet/example" title="Export XML" class="export xml">XML</a></li>'
+            . '</ul>',
             $exportLink->toString(null, 'frontdoor')
         );
     }
 
     public function testRenderLink()
     {
-        $page = new \Zend_Navigation_Page_Mvc([
-            'name' => 'bibtex',
+        $page = new Zend_Navigation_Page_Mvc([
+            'name'        => 'bibtex',
             'description' => 'Export BibTeX',
-            'module' => 'citationExport',
-            'controller' => 'index',
-            'action' => 'download',
-            'params' => [
-                'output' => 'bibtex'
+            'module'      => 'citationExport',
+            'controller'  => 'index',
+            'action'      => 'download',
+            'params'      => [
+                'output' => 'bibtex',
             ],
-            'frontdoor' => true
+            'frontdoor'   => true,
         ]);
 
         $page->setParam('docId', 150);

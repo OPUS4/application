@@ -36,7 +36,7 @@ use Opus\Common\Document;
  */
 class Admin_Form_FilesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testConstructForm()
@@ -63,7 +63,7 @@ class Admin_Form_FilesTest extends ControllerTestCase
         $form = new Admin_Form_Files();
 
         $post = [
-            'Add' => 'Upload'
+            'Add' => 'Upload',
         ];
 
         $result = $form->processPost($post, null);
@@ -71,10 +71,10 @@ class Admin_Form_FilesTest extends ControllerTestCase
         $this->assertEquals([
             'result' => 'switch',
             'target' => [
-                'module' => 'admin',
+                'module'     => 'admin',
                 'controller' => 'filemanager',
-                'action' => 'upload'
-            ]
+                'action'     => 'upload',
+            ],
         ], $result);
     }
 
@@ -86,9 +86,9 @@ class Admin_Form_FilesTest extends ControllerTestCase
 
         $post = [
             'File0' => [
-                'Id' => '5555',
-                'Remove' => 'Entfernen'
-            ]
+                'Id'     => '5555',
+                'Remove' => 'Entfernen',
+            ],
         ];
 
         $result = $form->processPost($post, null);
@@ -96,11 +96,11 @@ class Admin_Form_FilesTest extends ControllerTestCase
         $this->assertEquals([
             'result' => 'switch',
             'target' => [
-                'module' => 'admin',
+                'module'     => 'admin',
                 'controller' => 'filemanager',
-                'action' => 'delete',
-                'fileId' => '5555'
-            ]
+                'action'     => 'delete',
+                'fileId'     => '5555',
+            ],
         ], $result);
     }
 
@@ -109,7 +109,7 @@ class Admin_Form_FilesTest extends ControllerTestCase
         $form = new Admin_Form_Files();
 
         $post = [
-            'Import' => 'Import'
+            'Import' => 'Import',
         ];
 
         $result = $form->processPost($post, null);
@@ -117,10 +117,10 @@ class Admin_Form_FilesTest extends ControllerTestCase
         $this->assertEquals([
             'result' => 'switch',
             'target' => [
-                'module' => 'admin',
+                'module'     => 'admin',
                 'controller' => 'filebrowser',
-                'action' => 'index'
-            ]
+                'action'     => 'index',
+            ],
         ], $result);
     }
 
@@ -174,12 +174,12 @@ class Admin_Form_FilesTest extends ControllerTestCase
 
         $post = [
             'File0' => [
-                'Id' => '116'
+                'Id' => '116',
             ],
             'File1' => [
-                'Id' => '127',
-                'Comment' => 'Testkommentar'
-            ]
+                'Id'      => '127',
+                'Comment' => 'Testkommentar',
+            ],
         ];
 
         $form->continueEdit($request, $post);

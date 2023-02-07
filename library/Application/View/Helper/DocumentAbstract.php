@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DocumentInterface;
 use Opus\Common\Language;
 
 /**
@@ -38,9 +39,10 @@ use Opus\Common\Language;
  */
 class Application_View_Helper_DocumentAbstract extends Application_View_Helper_Document_HelperAbstract
 {
-
     /**
      * Prints escaped main title of document.
+     *
+     * @param DocumentInterface|null $document
      * @return null|string
      */
     public function documentAbstract($document = null)
@@ -53,7 +55,7 @@ class Application_View_Helper_DocumentAbstract extends Application_View_Helper_D
             $abstract = $document->getMainAbstract();
         }
 
-        if (! is_null($abstract)) {
+        if ($abstract !== null) {
             return htmlspecialchars($abstract->getValue());
         } else {
             return null;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,57 +24,60 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\DocumentInterface;
 
 /**
  * Helper für das Setzen von dynamischen Breadcrumbs.
- *
- * @category    Application
- * @package     Application_Controller_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Controller_Action_Helper_Breadcrumbs extends Application_Controller_Action_Helper_Abstract
 {
-
     /**
      * TODO centralize
      */
-    const PARAM_DOCUMENT_ID = 'id';
+    public const PARAM_DOCUMENT_ID = 'id';
 
-    const TITLE_MAX_LENGTH = 40;
+    public const TITLE_MAX_LENGTH = 40;
 
-    const TITLE_SHORT_SUFFIX = ' ...';
+    public const TITLE_SHORT_SUFFIX = ' ...';
 
-    private $_navigation = null;
+    /** @var mixed */
+    private $navigation;
 
     public function init()
     {
         parent::init();
     }
 
+    /**
+     * @param string|null $label
+     * @param array|null  $parameters
+     * @return $this
+     */
     public function direct($label = null, $parameters = null)
     {
-        if (! is_null($label) && is_array($parameters)) {
+        if ($label !== null && is_array($parameters)) {
             $this->setParameters($label, $parameters);
         }
         return $this;
     }
 
     /**
-     * @param $document
+     * @param DocumentInterface $document
      *
      * TODO shorten title
      * TODO log page misses
      */
     public function setDocumentBreadcrumb($document)
     {
-        if (! is_null($document)) {
+        if ($document !== null) {
             $title = $this->getDocumentTitle($document);
-            $page = $this->getNavigation()->findOneBy('label', 'admin_document_index');
-            if (! is_null($page)) {
+            $page  = $this->getNavigation()->findOneBy('label', 'admin_document_index');
+            if ($page !== null) {
                 $page->setLabel($title);
                 $page->setParam(self::PARAM_DOCUMENT_ID, $document->getId());
             } else {
@@ -86,6 +90,9 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
 
     /**
      * Setzt das Label eines Breadcrumbs auf den Wert von $value.
+     *
+     * @param string $label
+     * @param string $value
      */
     public function setLabelFor($label, $value)
     {
@@ -96,13 +103,13 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
     /**
      * Setzt Parameter fuer einen Breadcrumb.
      *
-     * @param $label
-     * @param $parameters
+     * @param string $label
+     * @param array  $parameters
      */
     public function setParameters($label, $parameters)
     {
         $page = $this->getNavigation()->findOneBy('label', $label);
-        if (! is_null($page)) {
+        if ($page !== null) {
             foreach ($parameters as $key => $value) {
                 $page->setParam($key, $value);
             }
@@ -111,25 +118,35 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
         }
     }
 
+    /**
+     * @return Zend_View_Helper_Navigation
+     */
     public function getNavigation()
     {
-        if (is_null($this->_navigation)) {
-            $this->_navigation = $this->getActionController()->view->navigation();
+        if ($this->navigation === null) {
+            $this->navigation = $this->getActionController()->view->navigation();
         }
 
-        return $this->_navigation;
+        return $this->navigation;
     }
 
+    /**
+     * @param mixed $navigation
+     */
     public function setNavigation($navigation)
     {
-        $this->_navigation = $navigation;
+        $this->navigation = $navigation;
     }
 
+    /**
+     * @param DocumentInterface $document
+     * @return string
+     */
     public function getDocumentTitle($document)
     {
         $helper = new Application_Util_DocumentAdapter($this->getView(), $document);
-        $title = $helper->getMainTitle();
-        return (mb_strlen($title) > self::TITLE_MAX_LENGTH) ? mb_substr($title, 0, self::TITLE_MAX_LENGTH)
+        $title  = $helper->getMainTitle();
+        return mb_strlen($title) > self::TITLE_MAX_LENGTH ? mb_substr($title, 0, self::TITLE_MAX_LENGTH)
             . self::TITLE_SHORT_SUFFIX : $title;
     }
 }

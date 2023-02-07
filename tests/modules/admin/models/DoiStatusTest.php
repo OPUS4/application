@@ -34,14 +34,15 @@ use Opus\Common\Identifier;
 
 class Admin_Model_DoiStatusTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var int */
     private $docId;
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        if (! is_null($this->docId)) {
+        if ($this->docId !== null) {
             // removed previously created test document from database
             $doc = Document::get($this->docId);
             $doc->delete();
@@ -52,9 +53,9 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
     public function testWithPublishedDoc()
     {
         $this->createTestDocWithDoi('published');
-        $doc = Document::get($this->docId);
+        $doc         = Document::get($this->docId);
         $identifiers = $doc->getIdentifier();
-        $doi = $identifiers[0];
+        $doi         = $identifiers[0];
 
         $doiStatus = new Admin_Model_DoiStatus($doc, $doi);
 
@@ -67,9 +68,9 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
     public function testWithUnpublishedDoc()
     {
         $this->createTestDocWithDoi('unpublished');
-        $doc = Document::get($this->docId);
+        $doc         = Document::get($this->docId);
         $identifiers = $doc->getIdentifier();
-        $doi = $identifiers[0];
+        $doi         = $identifiers[0];
 
         $doiStatus = new Admin_Model_DoiStatus($doc, $doi);
 
@@ -79,6 +80,9 @@ class Admin_Model_DoiStatusTest extends ControllerTestCase
         $this->assertEquals($doi->getStatus(), $doiStatus->getDoiStatus());
     }
 
+    /**
+     * @param string $serverState
+     */
     private function createTestDocWithDoi($serverState)
     {
         $doc = Document::new();

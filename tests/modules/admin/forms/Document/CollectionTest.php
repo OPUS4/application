@@ -36,7 +36,7 @@ use Opus\Common\Collection;
  */
 class Admin_Form_Document_CollectionTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function createForm()

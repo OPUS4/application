@@ -34,14 +34,14 @@ use Opus\Common\Language;
 /**
  * View helper for tranform long language form in short language form (Part2 in Part1).
  */
-class Application_View_Helper_LanguageWebForm extends \Zend_View_Helper_Abstract
+class Application_View_Helper_LanguageWebForm extends Zend_View_Helper_Abstract
 {
     /**
      * Array with transformed language-attributes. So they don't have been computed twice.
      *
      * @var array
      */
-    private $_langCache = [];
+    private $langCache = [];
 
     /**
      * An language-object will be transformed form Part2-form in the Part1-form
@@ -49,15 +49,15 @@ class Application_View_Helper_LanguageWebForm extends \Zend_View_Helper_Abstract
      * Input is an 3-char form of an language (e.g. deu, eng, fra, ita, ...)
      * Output is an 2-char form of an language (e.g. de, en, ...)
      *
-     * @param $value String
-     * @return short language form
+     * @param string $value
+     * @return string Language web form
      */
     public function languageWebForm($value)
     {
-        if (! array_key_exists($value, $this->_langCache)) {
-            $lang = Language::getPropertiesByPart2T($value);
-            $this->_langCache[$value] = $lang['part1'];
+        if (! array_key_exists($value, $this->langCache)) {
+            $lang                    = Language::getPropertiesByPart2T($value);
+            $this->langCache[$value] = $lang['part1'];
         }
-        return $this->_langCache[$value];
+        return $this->langCache[$value];
     }
 }

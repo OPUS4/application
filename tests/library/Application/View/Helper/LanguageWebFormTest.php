@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,31 +25,27 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
-    /**
-     * @var Application_View_Helper_LanguageWebForm
-     */
-    private $_helper;
+    /** @var Application_View_Helper_LanguageWebForm */
+    private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->useEnglish();
-        $this->_helper = new Application_View_Helper_LanguageWebForm();
+        $this->helper = new Application_View_Helper_LanguageWebForm();
     }
 
     /**
-     * @return data-provider with long and short language form.
+     * @return array data-provider with long and short language form.
      */
     public function langProvider()
     {
@@ -58,17 +55,20 @@ class Application_View_Helper_LanguageWebFormTest extends ControllerTestCase
             ['spa', 'es'],
             ['ita', 'it'],
             ['fra', 'fr'],
-            ['rus', 'ru']
+            ['rus', 'ru'],
         ];
     }
 
     /**
      * Unittest for languageWebForm.
+     *
      * @covers Application_View_Helper_LanguageWebForm::languageWebForm
      * @dataProvider langProvider
+     * @param string $long
+     * @param string $short
      */
     public function testLanguageWebForm($long, $short)
     {
-        $this->assertEquals($this->_helper->languageWebForm($long), $short);
+        $this->assertEquals($this->helper->languageWebForm($long), $short);
     }
 }

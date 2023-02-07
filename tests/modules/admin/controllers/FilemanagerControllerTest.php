@@ -40,7 +40,7 @@ use Opus\Common\UserRole;
  */
 class Admin_FilemanagerControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     /**
@@ -267,7 +267,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
     public function testRemoveGuestAccess()
     {
         $document = $this->createTestDocument();
-        $file = $document->addFile();
+        $file     = $document->addFile();
         $file->setPathName('testdatei.txt');
         $documentId = $document->store();
 
@@ -276,23 +276,23 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $fileId = $document->getFile(0)->getId();
 
         $roleGuest = UserRole::fetchByName('guest');
-        $files = $roleGuest->listAccessFiles();
+        $files     = $roleGuest->listAccessFiles();
         $this->assertContains($fileId, $files);
 
         $this->getRequest()->setMethod('POST')->setPost([
             'FileManager' => [
                 'Files' => [
                     'File0' => [
-                        'Id' => $fileId,
-                        'FileLink' => $fileId,
-                        'Language' => 'deu',
-                        'Comment' => 'Testkommentar',
-                        'Roles' => ['administrator'],
-                        'SortOrder' => '0'
-                    ]
+                        'Id'        => $fileId,
+                        'FileLink'  => $fileId,
+                        'Language'  => 'deu',
+                        'Comment'   => 'Testkommentar',
+                        'Roles'     => ['administrator'],
+                        'SortOrder' => '0',
+                    ],
                 ],
-                'Save' => 'Speichern'
-            ]
+                'Save'  => 'Speichern',
+            ],
         ]);
 
         $this->dispatch('/admin/filemanager/index/id/' . $documentId);
@@ -300,7 +300,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/admin/document/index/id/' . $documentId);
 
         $roleGuest = UserRole::fetchByName('guest');
-        $files = $roleGuest->listAccessFiles();
+        $files     = $roleGuest->listAccessFiles();
         $this->assertNotContains($fileId, $files);
     }
 
@@ -363,7 +363,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
     public function testFileSortOrder()
     {
         $this->dispatch('/admin/filemanager/index/id/155');
-        $body = $this->_response->getBody();
+        $body          = $this->_response->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt');
         $positionFile2 = strpos($body, 'test.txt');
         $positionFile3 = strpos($body, 'test.pdf');
@@ -379,7 +379,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
     public function testDocumentFilesWithoutSortOrder()
     {
         $this->dispatch('/admin/filemanager/index/id/92');
-        $body = $this->_response->getBody();
+        $body          = $this->_response->getBody();
         $positionFile1 = strpos($body, 'test.xhtml');
         $positionFile2 = strpos($body, 'datei mit unüblichem Namen.xhtml');
         $this->assertTrue($positionFile1 < $positionFile2);

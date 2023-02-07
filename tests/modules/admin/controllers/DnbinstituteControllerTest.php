@@ -31,30 +31,34 @@
 
 use Opus\Common\Account;
 use Opus\Common\DnbInstitute;
+use Opus\Common\DnbInstituteInterface;
+use Opus\Common\Model\NotFoundException;
 use Opus\Common\UserRole;
 
 /**
- * Class Admin_DnbinstituteControllerTest
- *
  * @covers Admin_DnbinstituteController
  */
 class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var int */
     private $roleId;
+
+    /** @var int */
     private $userId;
 
+    /** @var array */
     private $testModels = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->setController('dnbinstitute');
         parent::setUp();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (isset($this->roleId) && isset($this->userId)) {
             $testRole = UserRole::get($this->roleId);
@@ -70,11 +74,17 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         parent::tearDown();
     }
 
+    /**
+     * @return DnbInstituteInterface[]
+     */
     public function getModels()
     {
         return DnbInstitute::getAll();
     }
 
+    /**
+     * @return int
+     */
     public function createNewModel()
     {
         $model = DnbInstitute::new();
@@ -91,6 +101,11 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         return $model->store();
     }
 
+    /**
+     * @param int $identifier
+     * @return DnbInstituteInterface
+     * @throws NotFoundException
+     */
     public function getModel($identifier)
     {
         return DnbInstitute::get($identifier);
@@ -116,7 +131,6 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
         $this->dispatch('/admin/dnbinstitute/show/id/' . $modelId);
 
-
         $model = $this->getModel($modelId);
         $model->delete();
 
@@ -134,15 +148,15 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         $this->createsModels = true;
 
         $post = [
-            'Name' => 'TestName',
-            'Department' => 'TestDepartment',
-            'City' => 'TestCity',
-            'Address' => 'TestAddress',
-            'Phone' => 'TestPhone',
+            'Name'         => 'TestName',
+            'Department'   => 'TestDepartment',
+            'City'         => 'TestCity',
+            'Address'      => 'TestAddress',
+            'Phone'        => 'TestPhone',
             'DnbContactId' => 'TestDnbContactId',
-            'IsGrantor' => '1',
-            'IsPublisher' => '0',
-            'Save' => 'Speichern',
+            'IsGrantor'    => '1',
+            'IsPublisher'  => '0',
+            'Save'         => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -172,9 +186,9 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         $modelCount = count($this->getModels());
 
         $post = [
-            'Name' => 'TestName',
-            'City' => 'TestCity',
-            'Cancel' => 'Abbrechen'
+            'Name'   => 'TestName',
+            'City'   => 'TestCity',
+            'Cancel' => 'Abbrechen',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -210,16 +224,16 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         $modelId = $this->createNewModel();
 
         $post = [
-            'Id' => $modelId,
-            'Name' => 'NameModified',
-            'Department' => 'DepartmentModified',
-            'Address' => 'AddressModified',
-            'City' => 'CityModified',
-            'Phone' => 'PhoneModified',
+            'Id'           => $modelId,
+            'Name'         => 'NameModified',
+            'Department'   => 'DepartmentModified',
+            'Address'      => 'AddressModified',
+            'City'         => 'CityModified',
+            'Phone'        => 'PhoneModified',
             'DnbContactId' => 'DnbContactIdModified',
-            'IsGrantor' => '0',
-            'IsPublisher' => '1',
-            'Save' => 'Speichern'
+            'IsGrantor'    => '0',
+            'IsPublisher'  => '1',
+            'Save'         => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -248,10 +262,10 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         $modelId = $this->createNewModel();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $modelId,
-            'Name' => 'NameModified',
-            'City' => 'Berlin',
-            'Cancel' => 'Abbrechen'
+            'Id'     => $modelId,
+            'Name'   => 'NameModified',
+            'City'   => 'Berlin',
+            'Cancel' => 'Abbrechen',
         ]);
 
         $this->dispatch('/admin/dnbinstitute/edit');
@@ -263,10 +277,9 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         $this->assertEquals('TestCity', $model->getCity());
     }
 
-    /*
+    /**
      * Testet, ob der Benutzer auf DNB-Institute zugreifen kann, wenn ihm keine Rechte dazu verliehen wurden.
      */
-
     public function testDeleteActionShowForm()
     {
         $this->useEnglish();
@@ -275,7 +288,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
         $institute->updateFromArray([
             'Name' => 'Delete Test Institute',
-            'City' => 'Berlin'
+            'City' => 'Berlin',
         ]);
 
         $instituteId = $institute->store();
@@ -290,7 +303,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         $this->assertQuery('input#ConfirmNo');
     }
 
-    /*
+    /**
      * Testet, ob der Benutzer auf DNB-Institute zugreifen kann, wenn ihm Rechte dazu verliehen wurden.
      */
     public function testUserAccessToInstituteWithInstituteRights()
@@ -313,12 +326,15 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
 
         $this->dispatch('/admin/dnbinstitute/edit/id/1');
         $this->assertResponseCode(200);
-        $this->assertNotRedirectTo('/auth', 'User is not able to edit dnb-institutions, although he has the right to do it');
-        $this->assertQueryContentContains('//label', 'Department', 'User is not able to edit dnb-institutions, ' .
-            'although he has the right to do it');
+        $this->assertNotRedirectTo(
+            '/auth',
+            'User is not able to edit dnb-institutions, although he has the right to do it'
+        );
+        $this->assertQueryContentContains('//label', 'Department', 'User is not able to edit dnb-institutions, '
+            . 'although he has the right to do it');
     }
 
-    /*
+    /**
      * Testet, ob der Benutzer auf DNB-Institute zugreifen kann, wenn ihm keine Rechte dazu verliehen wurden.
      */
     public function testUserAccessToInstituteWithoutInstituteRights()
@@ -347,7 +363,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         );
     }
 
-    /*
+    /**
      * Testet, ob der Benutzer auf DNB-Institute zugreifen kann, wenn ihm Rechte dazu verliehen wurden.
      */
     public function testUserAccessToInstituteWithInstituteRightsRegression3245()
@@ -371,9 +387,9 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         $this->dispatch('/admin/dnbinstitute/edit/id/1');
 
         $this->assertNotRedirect();
-        $this->assertNotRedirectTo('/auth', 'User is not able to edit dnb-institutions, ' .
-            'although he has the right to do it');
-        $this->assertQueryContentContains('//label', 'Department', 'User is not able to edit dnb-institutions, ' .
-            'although he has the right to do it');
+        $this->assertNotRedirectTo('/auth', 'User is not able to edit dnb-institutions, '
+            . 'although he has the right to do it');
+        $this->assertQueryContentContains('//label', 'Department', 'User is not able to edit dnb-institutions, '
+            . 'although he has the right to do it');
     }
 }

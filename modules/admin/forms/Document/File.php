@@ -29,15 +29,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\File;
+use Opus\Common\FileInterface;
 
 /**
  * Formular fuer die Anzeige einer Datei in der Metadaten-Uebersicht.
  */
 class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm
 {
-
-    private $_file = null;
+    /** @var FileInterface|null */
+    private $file;
 
     /**
      * Initialisiert Formular und setzt Dekoratoren.
@@ -48,26 +48,28 @@ class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm
 
         $this->setDecorators(
             [
-            ['ViewScript', ['viewScript' => 'filerow.phtml']]
+                ['ViewScript', ['viewScript' => 'filerow.phtml']],
             ]
         );
     }
 
     /**
      * Setzt die Instanz von File fuer das Formular.
-     * @param File $model
+     *
+     * @param FileInterface|null $model
      */
     public function populateFromModel($model)
     {
-        $this->_file = $model;
+        $this->file = $model;
     }
 
     /**
      * Liefert die gesetzte Instanz von File fuer Formular.
-     * @return null
+     *
+     * @return FileInterface|null
      */
     public function getModel()
     {
-        return $this->_file;
+        return $this->file;
     }
 }

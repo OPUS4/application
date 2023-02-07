@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,19 +32,17 @@
 use Opus\Common\Console\ConsoleColors;
 
 /**
- * Class Application_Update_ImportStaticPages
- *
  * TODO harden code
  * TODO move generic functionality to separate class (maybe TranslationManager)
  */
 class Application_Update_ImportStaticPages extends Application_Update_PluginAbstract
 {
-
+    /** @var bool */
     private $removeFilesEnabled = true;
 
     public function run()
     {
-        $help = new Home_Model_HelpFiles();
+        $help  = new Home_Model_HelpFiles();
         $files = $help->getFiles();
 
         $path = $help->getHelpPath();
@@ -73,8 +72,9 @@ class Application_Update_ImportStaticPages extends Application_Update_PluginAbst
      *
      * Format: [NAME].[LANG].txt
      *
-     * @param $files
-     * @param $key
+     * @param string $name
+     * @param string $key
+     * @param string $module
      */
     public function importFilesAsKey($name, $key, $module)
     {
@@ -98,6 +98,10 @@ class Application_Update_ImportStaticPages extends Application_Update_PluginAbst
         $manager->clearCache();
     }
 
+    /**
+     * @param string $name
+     * @return array
+     */
     public function getTranslations($name)
     {
         $files = $this->getFiles($name);
@@ -107,7 +111,7 @@ class Application_Update_ImportStaticPages extends Application_Update_PluginAbst
         if (count($files) > 0) {
             foreach ($files as $name) {
                 $parts = explode('.', $name);
-                $lang = $parts[1];
+                $lang  = $parts[1];
                 $value = $this->getContent($name);
 
                 $translation[$lang] = $value;
@@ -117,12 +121,16 @@ class Application_Update_ImportStaticPages extends Application_Update_PluginAbst
         return $translation;
     }
 
+    /**
+     * @param string|null $name
+     * @return array
+     */
     public function getFiles($name = null)
     {
         $helpFiles = new Home_Model_HelpFiles();
-        $files = $helpFiles->getFiles();
+        $files     = $helpFiles->getFiles();
 
-        if (! is_null($name)) {
+        if ($name !== null) {
             $files = array_filter($files, function ($value) use ($name) {
                 return strpos($value, $name) === 0;
             });
@@ -131,6 +139,10 @@ class Application_Update_ImportStaticPages extends Application_Update_PluginAbst
         return array_values($files);
     }
 
+    /**
+     * @param string $name
+     * @return string
+     */
     public function getContent($name)
     {
         $help = new Home_Model_HelpFiles();
@@ -142,6 +154,9 @@ class Application_Update_ImportStaticPages extends Application_Update_PluginAbst
         return trim($content);
     }
 
+    /**
+     * @param array $files
+     */
     public function removeFiles($files)
     {
         $help = new Home_Model_HelpFiles();
@@ -154,11 +169,17 @@ class Application_Update_ImportStaticPages extends Application_Update_PluginAbst
         }
     }
 
+    /**
+     * @param bool $enabled
+     */
     public function setRemoveFilesEnabled($enabled)
     {
         $this->removeFilesEnabled = $enabled;
     }
 
+    /**
+     * @return bool
+     */
     public function isRemoveFilesEnabled()
     {
         return $this->removeFilesEnabled;

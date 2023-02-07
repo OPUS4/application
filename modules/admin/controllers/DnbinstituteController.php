@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,22 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DnbInstituteInterface;
+
 class Admin_DnbinstituteController extends Application_Controller_ActionCRUD
 {
-
     public function init()
     {
         $this->setFormClass('Admin_Form_DnbInstitute');
         parent::init();
     }
 
+    /**
+     * @param DnbInstituteInterface $model
+     * @return bool
+     */
     public function isDeletable($model)
     {
         return ! $model->isUsed();

@@ -37,12 +37,13 @@ use Opus\Common\UserRole;
  */
 class Admin_Form_IpRangeTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
-    private $_modelId = null;
+    /** @var int */
+    private $modelId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -50,13 +51,13 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $model->setName('localhost');
         $model->setStartingIp('127.0.0.1');
         $model->setEndingIp('127.0.0.2');
-        $this->_modelId = $model->store();
+        $this->modelId = $model->store();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        if (! is_null($this->_modelId)) {
-            $range = Iprange::get($this->_modelId);
+        if ($this->modelId !== null) {
+            $range = Iprange::get($this->modelId);
             $range->delete();
         }
 
@@ -89,7 +90,7 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $range->setEndingIp('127.0.0.100');
         $range->setRole([
             UserRole::fetchByName('docsadmin'),
-            UserRole::fetchByName('jobaccess')
+            UserRole::fetchByName('jobaccess'),
         ]);
 
         $form->populateFromModel($range);
@@ -110,11 +111,11 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
     {
         $form = new Admin_Form_IpRange();
 
-        $model = Iprange::get($this->_modelId);
+        $model = Iprange::get($this->modelId);
 
         $form->populateFromModel($model);
 
-        $this->assertEquals($this->_modelId, $form->getElement('Id')->getValue());
+        $this->assertEquals($this->modelId, $form->getElement('Id')->getValue());
     }
 
     public function testUpdateModel()
@@ -152,8 +153,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $this->assertFalse($form->isValid([
-            'Name' => '  ',
-            'Startingip' => '  '
+            'Name'       => '  ',
+            'Startingip' => '  ',
         ]));
 
         $this->assertContains('isEmpty', $form->getErrors('Name'));
@@ -165,10 +166,10 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $postData = [
-            'Name' => 'ValidIpTest',
+            'Name'       => 'ValidIpTest',
             'Startingip' => '127.0.0.1',
-            'Endingip' => '127.0.0.2',
-            'Roles' => ['docsadmin', 'reviewer']
+            'Endingip'   => '127.0.0.2',
+            'Roles'      => ['docsadmin', 'reviewer'],
         ];
 
         $this->assertTrue($form->isValid($postData));
@@ -183,8 +184,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $postData = [
-            'Name' => 'ValidIpTest',
-            'Startingip' => '127.0.0.1'
+            'Name'       => 'ValidIpTest',
+            'Startingip' => '127.0.0.1',
         ];
 
         $this->assertTrue($form->isValid($postData));
@@ -199,8 +200,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $this->assertFalse($form->isValid([
-            'Name' => '0local',
-            'Startingip' => '127.0.0.1'
+            'Name'       => '0local',
+            'Startingip' => '127.0.0.1',
         ]));
 
         $this->assertEmpty($form->getErrors('Startingip'));
@@ -213,8 +214,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $this->assertFalse($form->isValid([
-            'Name' => 'To',
-            'Startingip' => '127.0.0.1'
+            'Name'       => 'To',
+            'Startingip' => '127.0.0.1',
         ]));
 
         $this->assertEmpty($form->getErrors('Startingip'));
@@ -227,8 +228,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $this->assertFalse($form->isValid([
-            'Name' => 'To12345678901234567890',
-            'Startingip' => '127.0.0.1'
+            'Name'       => 'To12345678901234567890',
+            'Startingip' => '127.0.0.1',
         ]));
 
         $this->assertEmpty($form->getErrors('Startingip'));
@@ -241,9 +242,9 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $postData = [
-            'Name' => 'ValidIpTest',
+            'Name'       => 'ValidIpTest',
             'Startingip' => '127.0.1',
-            'Endingip' => '127.0.0.2'
+            'Endingip'   => '127.0.0.2',
         ];
 
         $this->assertFalse($form->isValid($postData));
@@ -258,9 +259,9 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $postData = [
-            'Name' => 'ValidIpTest',
+            'Name'       => 'ValidIpTest',
             'Startingip' => '127.0.0.1',
-            'Endingip' => '1a7.0.2.0'
+            'Endingip'   => '1a7.0.2.0',
         ];
 
         $this->assertFalse($form->isValid($postData));
@@ -275,9 +276,9 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $postData = [
-            'Name' => 'ValidIpTest',
+            'Name'       => 'ValidIpTest',
             'Startingip' => 'opus4.kobv.de',
-            'Endingip' => 'opus4.kobv.de'
+            'Endingip'   => 'opus4.kobv.de',
         ];
 
         $this->assertFalse($form->isValid($postData));
@@ -292,9 +293,9 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $postData = [
-            'Name' => 'ValidIpTest',
+            'Name'       => 'ValidIpTest',
             'Startingip' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
-            'Endingip' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334'
+            'Endingip'   => '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
         ];
 
         $this->assertFalse($form->isValid($postData));
@@ -309,10 +310,10 @@ class Admin_Form_IpRangeTest extends ControllerTestCase
         $form = new Admin_Form_IpRange();
 
         $postData = [
-            'Name' => 'ValidIpTest',
+            'Name'       => 'ValidIpTest',
             'Startingip' => '127.0.0.1',
-            'Endingip' => '127.0.0.2',
-            'Roles' => ['docsadmin', 'unknown']
+            'Endingip'   => '127.0.0.2',
+            'Roles'      => ['docsadmin', 'unknown'],
         ];
 
         $this->assertFalse($form->isValid($postData));

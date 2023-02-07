@@ -33,14 +33,15 @@ use Opus\Common\Document;
 
 class Admin_Form_File_UploadTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
-    private $_documentId;
+    /** @var int */
+    private $documentId;
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        $this->removeDocument($this->_documentId);
+        $this->removeDocument($this->documentId);
 
         parent::tearDown();
     }
@@ -106,10 +107,10 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
 
         $fileInfo = [
             [
-                'name' => 'test%202.txt',
-                'type' => 'text/plain',
-                'tmp_name' => 'test'
-            ]
+                'name'     => 'test%202.txt',
+                'type'     => 'text/plain',
+                'tmp_name' => 'test',
+            ],
         ];
 
         $form->setFileInfo($fileInfo);
@@ -145,7 +146,7 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
 
         // entspricht nicht der richtige Struktur, reicht aber für Test
         $fileInfo = [
-            ['file']
+            ['file'],
         ];
 
         $form->setFileInfo($fileInfo);

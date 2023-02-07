@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,35 +25,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
+ * Interface fuer OPUS Form Element Klassen.
  */
-interface Application_Form_Validate_IMultiSubForm
+interface Application_Form_FormElementInterface
 {
+    /**
+     * Liefert Hinweis zum Element-Value, z.B. das eine ISBN ungültig ist.
+     *
+     * Hinweise sind wie Validierungsfehler, die aber das Abspeichern nicht verhindern und schon beim Aufruf des
+     * Formulars für existierende Werte berechnet werden.
+     *
+     * @return string
+     */
+    public function getHint();
 
     /**
-     * Bereitet die Validierung vor.
+     * Ändert die Ausgabe (Dekoratoren) des Elements so, daß es als statischer View statt Formularelement ausgegeben
+     * wird.
      *
-     * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
-     *
-     * @param Zend_Form $form
-     * @param array $data
-     * @param array $context
+     * Statt eines Input-Tags könnte zum Beispiel nur der Wert als einfacher Text ausgegeben werden.
      */
-    public function prepareValidation($form, $data, $context = null);
-
-    /**
-     * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein
-     * sollen.
-     *
-     * @param array $data
-     * @param array $context
-     */
-    public function isValid($data, $context = null);
+    public function prepareRenderingAsView();
 }

@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
 use Opus\Common\Person;
 
 /**
@@ -37,7 +38,7 @@ use Opus\Common\Person;
  */
 class Admin_Form_Person_Documents extends Application_Form_Abstract
 {
-    const ELEMENT_DOCUMENTS = 'Documents';
+    public const ELEMENT_DOCUMENTS = 'Documents';
 
     public function init()
     {
@@ -47,9 +48,15 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
         $this->addElement($documents);
     }
 
+    /**
+     * @param int[]      $documentIds
+     * @param array|null $person
+     * @throws Zend_Form_Exception
+     * @throws NotFoundException
+     */
     public function setDocuments($documentIds, $person = null)
     {
-        if (is_null($documentIds)) {
+        if ($documentIds === null) {
             // TODO do some logging
             return;
         }
@@ -68,12 +75,15 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
         $documents->setMultiOptions($options);
         $documents->setValue($documentIds);
 
-        if (! is_null($person)) {
+        if ($person !== null) {
             $persons = Person::getModelRepository();
             $documents->setAttrib('person', $persons->convertToFieldNames($person));
         }
     }
 
+    /**
+     * @return int[]
+     */
     public function getSelectedDocuments()
     {
         return $this->getElement(self::ELEMENT_DOCUMENTS)->getValue();

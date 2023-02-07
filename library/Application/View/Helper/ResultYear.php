@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,9 +34,9 @@
  */
 class Application_View_Helper_ResultYear extends Application_View_Helper_Document_HelperAbstract
 {
-
     /**
      * Prints escaped main title of document.
+     *
      * @return null|string
      */
     public function resultYear()
@@ -47,9 +45,9 @@ class Application_View_Helper_ResultYear extends Application_View_Helper_Documen
 
         $output = '';
 
-        if (! is_null($result) && $result->getAsset('year')) {
-            $year = $result->getAsset('year');
-            $year = preg_replace('/[0-9]*:/', '', $year);
+        if ($result !== null && $result->getAsset('year')) {
+            $year   = $result->getAsset('year');
+            $year   = preg_replace('/[0-9]*:/', '', $year);
             $output = htmlspecialchars($year);
         }
 

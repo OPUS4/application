@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Setup_Form
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Translate\UnknownTranslationKeyException;
 
 /**
  * Form for reseting a customized translation.
@@ -38,8 +38,8 @@
  */
 class Setup_Form_DeleteKeyConfirmation extends Setup_Form_Confirmation
 {
-
-    private $translationKey = null;
+    /** @var string */
+    private $translationKey;
 
     public function init()
     {
@@ -47,28 +47,38 @@ class Setup_Form_DeleteKeyConfirmation extends Setup_Form_Confirmation
 
         $this->setDecorators([
             ['ViewScript', ['viewScript' => 'language/deletekeyConfirmation.phtml']],
-            'Form'
+            'Form',
         ]);
     }
 
+    /**
+     * @param string $key
+     */
     public function setKey($key)
     {
         $this->translationKey = $key;
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($key);
     }
 
+    /**
+     * @return string
+     */
     public function getKey()
     {
         return $this->translationKey;
     }
 
+    /**
+     * @return array|null
+     * @throws UnknownTranslationKeyException
+     */
     public function getTranslation()
     {
         $manager = new Application_Translate_TranslationManager();
 
         $key = $this->getKey();
 
-        if (! is_null($key)) {
+        if ($key !== null) {
             return $manager->getTranslation($key);
         } else {
             return null;

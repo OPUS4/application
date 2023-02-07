@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,14 +36,17 @@ use Opus\Common\File;
  */
 class Application_Form_Element_FileHashTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
-    protected $_formElementClass = 'Application_Form_Element_FileHash';
+    /** @var string */
+    protected $formElementClass = 'Application_Form_Element_FileHash';
 
-    protected $_expectedDecoratorCount = 4;
+    /** @var int */
+    protected $expectedDecoratorCount = 4;
 
-    protected $_expectedDecorators = ['FileHash', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
+    /** @var string[] */
+    protected $expectedDecorators = ['FileHash', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
 
     public function testGetLabel()
     {
@@ -51,9 +54,9 @@ class Application_Form_Element_FileHashTest extends FormElementTestCase
 
         $element = new Application_Form_Element_FileHash('filehash');
 
-        $file = File::get(116);
+        $file   = File::get(116);
         $hashes = $file->getHashValue();
-        $hash = $hashes[0];
+        $hash   = $hashes[0];
 
         $this->assertEquals('MD5', $hash->getType());
 

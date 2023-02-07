@@ -26,11 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @copyright   Copyright (c) 2009-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 -->

@@ -36,7 +36,7 @@ use Opus\Common\Document;
  */
 class Admin_Form_Document_GeneralTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testCreateForm()
@@ -116,13 +116,13 @@ class Admin_Form_Document_GeneralTest extends ControllerTestCase
         $form = new Admin_Form_Document_General();
 
         $post = [
-            'Language' => '',
-            'Type' => '',
+            'Language'      => '',
+            'Type'          => '',
             'PublishedDate' => 'date1', // muss Datum sein
             'PublishedYear' => 'year1', // muss Integer sein
             'CompletedDate' => '2008/02/31', // muss korrektes Datum sein
             'CompletedYear' => '-1', // muss groesser als 0 sein
-            'EmbargoDate' => '2008/02/31', // muss korrektes Datum sein
+            'EmbargoDate'   => '2008/02/31', // muss korrektes Datum sein
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -143,16 +143,16 @@ class Admin_Form_Document_GeneralTest extends ControllerTestCase
         $form = new Admin_Form_Document_General();
 
         $post = [
-            'Language' => 'deu',
-            'Type' => 'demo',
+            'Language'      => 'deu',
+            'Type'          => 'demo',
             'CompletedDate' => '30.01.2010', // korrektes Datum
         ];
 
         $this->assertTrue($form->isValid($post));
 
         $post = [
-            'Language' => 'bla', // ungültige Sprache
-            'Type' => 'unknown', // ungültiger Typ
+            'Language'      => 'bla', // ungültige Sprache
+            'Type'          => 'unknown', // ungültiger Typ
             'CompletedDate' => '30.02.2010', // ungültiges Datum
         ];
 

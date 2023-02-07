@@ -37,7 +37,7 @@ use Opus\Common\Subject;
  */
 class Admin_Form_Document_SubjectTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testCreateForm()
@@ -78,8 +78,8 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Subject('swd', 'deu');
 
-        $document = Document::get(146);
-        $subjects = $document->getSubject();
+        $document   = Document::get(146);
+        $subjects   = $document->getSubject();
         $subjectSwd = $subjects[0];
 
         $this->assertEquals('swd', $subjectSwd->getType());
@@ -116,7 +116,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
 
         $document = Document::get(146);
         $subjects = $document->getSubject();
-        $subject = $subjects[1];
+        $subject  = $subjects[1];
 
         $this->assertEquals('uncontrolled', $subject->getType());
 
@@ -199,7 +199,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
         $form = new Admin_Form_Document_Subject('swd', 'deu');
 
         $post = [
-            'Value' => ' ' // darf nicht leer sein
+            'Value' => ' ', // darf nicht leer sein
         ];
 
         $this->assertFalse($form->isValid($post));

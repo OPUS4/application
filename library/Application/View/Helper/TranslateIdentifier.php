@@ -31,17 +31,15 @@
 
 use Opus\Common\Identifier;
 
-/**
- *
- */
-class Application_View_Helper_TranslateIdentifier extends \Zend_View_Helper_Translate
+class Application_View_Helper_TranslateIdentifier extends Zend_View_Helper_Translate
 {
-
     /**
+     * @param string|null $type
+     * @return string
      */
     public function translateIdentifier($type = null)
     {
-        if (is_null($type)) {
+        if ($type === null) {
             return $this;
         }
 

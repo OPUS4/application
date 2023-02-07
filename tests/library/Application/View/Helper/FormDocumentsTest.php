@@ -33,29 +33,30 @@ use Opus\Common\Document;
 
 class Application_View_Helper_FormDocumentsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view'];
 
-    private $_helper;
+    /** @var Application_View_Helper_FormDocuments */
+    private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_FormDocuments();
+        $this->helper = new Application_View_Helper_FormDocuments();
     }
 
     public function testFormDocumentsWithoutDocuments()
     {
-        $output = $this->_helper->formDocuments('Documents');
+        $output = $this->helper->formDocuments('Documents');
 
         $this->assertEquals('', $output);
     }
 
     public function testFormDocuments()
     {
-        $output = $this->_helper->formDocuments('Documents', null, null, [
-            1 => Document::get(1)
+        $output = $this->helper->formDocuments('Documents', null, null, [
+            1 => Document::get(1),
         ]);
 
         $this->assertContains('<div class="documents">', $output);

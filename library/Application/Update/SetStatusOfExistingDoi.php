@@ -38,7 +38,6 @@ use Opus\Common\Repository;
  */
 class Application_Update_SetStatusOfExistingDoi extends Application_Update_PluginAbstract
 {
-
     public function run()
     {
         $this->log('Set registration status of all DOIs to "registered"');

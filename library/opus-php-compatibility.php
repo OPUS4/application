@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,25 +25,33 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+// TODO LAMINAS still necessary? probably not -> remove
+
 // Provide boolval function for PHP <5.5
 if (! function_exists('boolval')) {
+    /**
+     * @param mixed $value
+     * @return bool
+     */
     function boolval($value)
     {
         return (bool) $value;
     }
 }
 
-
 // mb_strlen is required to get the total number of bytes in a given string
 // fall back to strlen even if we retrieve the number of characters instead of bytes
 // in PHP installation with multibyte character support
 if (! function_exists('mb_strlen')) {
+    /**
+     * @param string $str
+     * @param string $encoding
+     * @return int
+     */
     function mb_strlen($str, $encoding)
     {
         return strlen($str);
@@ -53,6 +62,11 @@ if (! function_exists('mb_strlen')) {
  * Function for dividing integers used in PersonController.
  */
 if (! function_exists('intdiv')) {
+    /**
+     * @param int $divided
+     * @param int $divisor
+     * @return float|int
+     */
     function intdiv($divided, $divisor)
     {
         return ($divided - $divided % $divisor) / $divisor;

@@ -30,19 +30,18 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Model\Dependent\Link\DocumentPerson;
 use Opus\Common\Person;
+use Opus\Model\Dependent\Link\DocumentPerson;
 
 /**
  * Unterformular fuer eine einem Dokument zugewiesene Person im Metadaten-Formular.
  */
 class Admin_Form_Document_Person extends Admin_Form_PersonLink
 {
-
     /**
      * Name fuer Button zum Editieren der Person.
      */
-    const ELEMENT_EDIT = 'Edit';
+    public const ELEMENT_EDIT = 'Edit';
 
     /**
      * Erzeugt die Formularelemente.
@@ -59,28 +58,30 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink
 
         $this->setDecorators(
             [
-            'PrepareElements',
-            ['ViewScript', ['viewScript' => 'form/personForm.phtml']]
+                'PrepareElements',
+                ['ViewScript', ['viewScript' => 'form/personForm.phtml']],
             ]
         );
     }
 
     /**
      * Verarbeitet POST Daten für Formular.
+     *
      * @param array $post
      * @param array $context
-     * @return string
+     * @return string|array|null
      */
     public function processPost($post, $context)
     {
         if (array_key_exists(self::ELEMENT_EDIT, $post)) {
-            return [ 'result' => Admin_Form_Document::RESULT_SWITCH_TO,
+            return [
+                'result' => Admin_Form_Document::RESULT_SWITCH_TO,
                 'target' => [
-                'module' => 'admin',
-                'controller' => 'person',
-                'action' => 'editlinked',
-                'personId' => $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getValue()
-                ]
+                    'module'     => 'admin',
+                    'controller' => 'person',
+                    'action'     => 'editlinked',
+                    'personId'   => $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getValue(),
+                ],
             ];
         }
 
@@ -93,7 +94,8 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink
      * Die ID für ein DocumentPerson Objekt setzt sich aus Dokument-ID, Person-ID und Rolle
      * zusammen.
      *
-     * @param int $documentId Identifier für das Dokument
+     * @param int    $documentId Identifier für das Dokument
+     * @param string $role
      * @return DocumentPerson
      *
      * TODO rename in getModel() !!!Konflikt mit getModel in PersonLink auflösen
@@ -107,7 +109,7 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink
             $personLink = new DocumentPerson([$personId, $documentId, $role]);
         } catch (NotFoundException $opnfe) {
             $personLink = new DocumentPerson();
-            $person = Person::get($personId);
+            $person     = Person::get($personId);
             $personLink->setModel($person);
         }
 
@@ -116,18 +118,18 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink
 
         $log = $this->getLogger();
 
-        if ($log->getLevel() >= \Zend_Log::DEBUG) {
-            $log->debug(\Zend_Debug::dump($personLink->getId(), 'DocumentPerson-ID', false));
-            $log->debug(\Zend_Debug::dump($personLink->getRole(), 'DocumentPerson-Role', false));
-            $log->debug(\Zend_Debug::dump($personLink->getSortOrder(), 'DocumentPerson-SortOrder', false));
+        if ($log->getLevel() >= Zend_Log::DEBUG) {
+            $log->debug(Zend_Debug::dump($personLink->getId(), 'DocumentPerson-ID', false));
+            $log->debug(Zend_Debug::dump($personLink->getRole(), 'DocumentPerson-Role', false));
+            $log->debug(Zend_Debug::dump($personLink->getSortOrder(), 'DocumentPerson-SortOrder', false));
             $log->debug(
-                \Zend_Debug::dump(
+                Zend_Debug::dump(
                     $personLink->getAllowEmailContact(),
                     'DocumentPerson->AllowEmailContact',
                     false
                 )
             );
-            $log->debug(\Zend_Debug::dump($personLink->getModel()->getId(), 'DocumentPerson-Model-ID', false));
+            $log->debug(Zend_Debug::dump($personLink->getModel()->getId(), 'DocumentPerson-Model-ID', false));
         }
 
         return $personLink;

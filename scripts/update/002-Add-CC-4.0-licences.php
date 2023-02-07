@@ -1,5 +1,3 @@
-#!/usr/bin/env php
-
 <?PHP
 
 /**
@@ -37,14 +35,14 @@
 
 require_once dirname(__FILE__) . '/../common/update.php';
 
-use Opus\Database;
 use Opus\Common\Licence;
+use Opus\Database;
 
 $helper = new Application_Update_Helper();
 
 $licence = Licence::fetchByName('CC BY 4.0');
 
-if (! is_null($licence)) {
+if ($licence !== null) {
     $helper->log('Creative Commons 4.0 seem to be present in database.');
 }
 

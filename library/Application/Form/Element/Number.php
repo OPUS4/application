@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -38,23 +36,22 @@
  */
 class Application_Form_Element_Number extends Application_Form_Element_Text
 {
-
     public function init()
     {
         parent::init();
 
-        if (is_null($this->getAttrib('size'))) {
+        if ($this->getAttrib('size') === null) {
             $this->setAttrib('size', 6);
         }
 
-        $validator = new \Zend_Validate_Int();
+        $validator = new Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 
         $options = [];
 
         $min = $this->getAttrib('min');
-        if (is_null($min)) {
+        if ($min === null) {
             $min = 0;
         } else {
             $this->setAttrib('min', null); // remove from rendered attributes
@@ -62,14 +59,14 @@ class Application_Form_Element_Number extends Application_Form_Element_Text
         $options['min'] = $min;
 
         $max = $this->getAttrib('max');
-        if (is_null($max)) {
-            $validator = new \Zend_Validate_GreaterThan(['min' => $min - 1]); // inclusive not supported in ZF1
+        if ($max === null) {
+            $validator = new Zend_Validate_GreaterThan(['min' => $min - 1]); // inclusive not supported in ZF1
             $validator->setMessage('validation_error_number_tooSmall');
         } else {
             $this->setAttrib('max', null); // remove from rendered attributes
             $options['max'] = $max;
 
-            $validator = new \Zend_Validate_Between(['min' => $min, 'max' => $max]);
+            $validator = new Zend_Validate_Between(['min' => $min, 'max' => $max]);
             $validator->setMessage('validation_error_number_notBetween');
         }
 

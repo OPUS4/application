@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_Form_Decorator
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Form_Decorator_ElementHtmlTagTest extends ControllerTestCase
 {
-
     public function appBootstrap()
     {
         $this->application->bootstrap('configuration');
@@ -51,7 +48,7 @@ class Application_Form_Decorator_ElementHtmlTagTest extends ControllerTestCase
     {
         $decorator = new Application_Form_Decorator_ElementHtmlTag();
 
-        $element = new \Zend_Form_Element_Text('Value');
+        $element = new Zend_Form_Element_Text('Value');
 
         $decorator->setElement($element);
 
@@ -64,7 +61,7 @@ class Application_Form_Decorator_ElementHtmlTagTest extends ControllerTestCase
 
         $decorator->setOption('class', 'Value-data');
 
-        $element = new \Zend_Form_Element_Text('Value');
+        $element = new Zend_Form_Element_Text('Value');
 
         $decorator->setElement($element);
 

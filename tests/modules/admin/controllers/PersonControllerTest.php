@@ -36,7 +36,7 @@ use Opus\Common\Person;
  */
 class Admin_PersonControllerTest extends ControllerTestCase
 {
-
+    /** @var string  */
     protected $additionalResources = 'all';
 
     public function testAssignAction()
@@ -81,7 +81,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
     public function testAssignActionCancel()
     {
         $this->getRequest()->setMethod('POST')->setPost([
-            'Cancel' => 'Abbrechen'
+            'Cancel' => 'Abbrechen',
         ]);
 
         $this->dispatch('/admin/person/assign/document/146/role/advisor');
@@ -97,9 +97,9 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $this->getRequest()->setMethod('POST')->setPost([
             'LastName' => 'Testy-AssignAction',
             'Document' => [
-                'Role' => 'translator'
+                'Role' => 'translator',
             ],
-            'Save' => 'Speichern'
+            'Save'     => 'Speichern',
         ]);
 
         $this->dispatch('/admin/person/assign/document/' . $documentId . '/role/translator');
@@ -182,7 +182,7 @@ class Admin_PersonControllerTest extends ControllerTestCase
     public function testEditlinkedActionCancel()
     {
         $this->getRequest()->setMethod('POST')->setPost([
-            'Cancel' => 'Abbrechen'
+            'Cancel' => 'Abbrechen',
         ]);
 
         $this->dispatch('/admin/person/editlinked/document/146/personId/259');
@@ -203,13 +203,13 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $personId = $person->getModel()->getId();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'PersonId' => $personId,
-            'LastName' => 'Testy',
+            'PersonId'  => $personId,
+            'LastName'  => 'Testy',
             'FirstName' => 'Simone',
-            'Document' => [
-                'Role' => 'translator'
+            'Document'  => [
+                'Role' => 'translator',
             ],
-            'Save' => 'Speichern'
+            'Save'      => 'Speichern',
         ]);
 
         $this->dispatch('/admin/person/editlinked/personId/' . $personId . '/role/translator/document/'
@@ -250,31 +250,32 @@ class Admin_PersonControllerTest extends ControllerTestCase
 
     /**
      * TODO cannot detect present but empty parameters, something like ".../role/" or ".../role//filter/en"
+     *
+     * @return array
      */
     public function redirectProvider()
     {
         return [
-            'limit zero' => ['limit/0', '/admin/person'],
+            'limit zero'        => ['limit/0', '/admin/person'],
             'limit not integer' => ['limit/infinity', '/admin/person'],
             // 'limit empty' => ['limit/', '/admin/person'],
             'keep good parameters' => ['page/2/limit/-5', '/admin/person/index/page/2'],
             // 'role empty' => ['role/', '/admin/person'],
-            'role invalid' => ['role/unknown', '/admin/person'],
-            'page invalid' => ['page/here', '/admin/person'],
-            'page zero' => ['page/0', '/admin/person'],
-            'page negative' => ['page/-1', '/admin/person']
+            'role invalid'  => ['role/unknown', '/admin/person'],
+            'page invalid'  => ['page/here', '/admin/person'],
+            'page zero'     => ['page/0', '/admin/person'],
+            'page negative' => ['page/-1', '/admin/person'],
         ];
     }
 
     /**
-     * @param $dispatchUrl
-     * @param $redirectUrl
-     *
+     * @param string $dispatchUrl
+     * @param string $redirectUrl
      * @dataProvider redirectProvider
      */
-    public function testRedirectForBadParameters($urlParams, $redirectUrl)
+    public function testRedirectForBadParameters($dispatchUrl, $redirectUrl)
     {
-        $this->dispatch("/admin/person/index/$urlParams");
+        $this->dispatch("/admin/person/index/$dispatchUrl");
 
         $this->assertResponseCode(302);
         $this->assertRedirectTo($redirectUrl);
@@ -351,7 +352,9 @@ class Admin_PersonControllerTest extends ControllerTestCase
     public function testIndexRedirectPost()
     {
         $this->getRequest()->setPost([
-            'filter' => 'en', 'role' => 'author', 'limit' => '10',
+            'filter' => 'en',
+            'role'   => 'author',
+            'limit'  => '10',
         ])->setMethod('POST');
 
         $this->dispatch('/admin/person');
@@ -517,9 +520,9 @@ class Admin_PersonControllerTest extends ControllerTestCase
         $this->useEnglish();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'LastName' => 'Test',
+            'LastName'    => 'Test',
             'DateOfBirth' => '1970-01-01',
-            'Save' => 'Weiter'
+            'Save'        => 'Weiter',
         ]);
 
         $this->dispatch('/admin/person/edit/last_name/Author/first_name/One');

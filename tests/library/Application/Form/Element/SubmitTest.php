@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -38,12 +36,11 @@
  */
 class Application_Form_Element_SubmitTest extends FormElementTestCase
 {
-
-    public function setUp()
+    public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Submit';
-        $this->_expectedDecoratorCount = 3;
-        $this->_expectedDecorators = ['ViewHelper', 'ElementHtmlTag', 'dataWrapper'];
+        $this->formElementClass       = 'Application_Form_Element_Submit';
+        $this->expectedDecoratorCount = 3;
+        $this->expectedDecorators     = ['ViewHelper', 'ElementHtmlTag', 'dataWrapper'];
         parent::setUp();
     }
 }

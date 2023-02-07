@@ -22,15 +22,15 @@ $(document).ready(function () {
         minLength: 3,
         select: function (event, ui) {
             var container = $('#CollectionIdsSelected'); // TODO get element without hard coded name (ColectionIds)
-            var listId = 'CollectionList' + ui.item.RoleId;
-            var colList = $("#" + listId);
+            var listId    = 'CollectionList' + ui.item.RoleId;
+            var colList   = $("#" + listId);
 
             // Check if list for collection role exists
             if (! colList.length) {
                 var roleName = $('.collections').data('roles')[ui.item.RoleId];
 
                 var listWrapper = $("<fieldset>").attr('class', 'collectionRole').append($("<legend>").text(roleName));
-                colList = $("<ul>").attr('id', listId);
+                colList         = $("<ul>").attr('id', listId);
                 listWrapper.append(colList);
                 container.append(listWrapper);
             }
@@ -60,12 +60,12 @@ $(document).ready(function () {
             };
 
             $(this).data('ui-autocomplete')._renderMenu = function (ul, items) {
-                var that = this, currentRole = 0;
+                var that  = this, currentRole = 0;
                 var roles = $('.collections').data('roles');
                 $.each(items, function (index, item) {
                     var li;
                     if (item.RoleId != currentRole) {
-                        currentRole = item.RoleId;
+                        currentRole   = item.RoleId;
                         var roleLabel = roles[currentRole];
                         ul.append("<li class='ui-autocomplete-category'>" + roleLabel + "</li>");
                     }
@@ -86,7 +86,7 @@ $(document).ready(function () {
 $(document).on('click', ".remove-me", function (event) {
     event.preventDefault();
     var entry = $(this).parent();
-    var list = entry.parent();
+    var list  = entry.parent();
     entry.remove();
     if (! list.children('li').length) {
         list.parent().remove();

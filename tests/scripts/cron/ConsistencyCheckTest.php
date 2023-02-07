@@ -29,15 +29,18 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('CronTestCase.php');
+require_once 'CronTestCase.php';
 
 use Opus\Common\Job;
 
 class ConsistencyCheckTest extends CronTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /**
+     * @return int
+     */
     private function getPublishedDocumentCount()
     {
         $finder = $this->getDocumentFinder();

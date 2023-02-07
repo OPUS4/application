@@ -37,19 +37,21 @@ use Opus\Common\Log;
  *
  * Implementiert den Workflow ohne Einschränkungen durch Rollen.
  */
-class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract
 {
-
     /**
      * Basic workflow configuration.
+     *
      * @var Zend_Config_Ini
      */
-    private static $_workflowConfig;
+    private static $workflowConfig;
 
-    private $_acl;
+    /** @var Zend_Acl */
+    private $acl;
 
     /**
      * Gets called when helper is used like method of the broker.
+     *
      * @param DocumentInterface $document
      * @return array of strings - Allowed target states for document
      */
@@ -60,8 +62,9 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Returns true if a requested state is valid.
+     *
      * @param string $state
-     * @return boolean TRUE - only if the state string exists
+     * @return bool TRUE - only if the state string exists
      */
     public function isValidState($state)
     {
@@ -72,9 +75,10 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Returns true if a transition is allowed for a document.
+     *
      * @param DocumentInterface $document
-     * @param string $targetState
-     * @return boolean - True only if transition is allowed
+     * @param string            $targetState
+     * @return bool - True only if transition is allowed
      */
     public function isTransitionAllowed($document, $targetState)
     {
@@ -85,6 +89,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Returns all allowed target states for a document.
+     *
      * @param DocumentInterface $document
      * @return array of strings - Possible target states for document
      */
@@ -98,17 +103,19 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
         $acl = $this->getAcl();
 
-        if (! is_null($acl)) {
+        if ($acl !== null) {
             $logger->debug("ACL: got instance");
 
             $allowedTargetStates = [];
 
             foreach ($targetStates as $targetState) {
                 $resource = 'workflow_' . $currentState . '_' . $targetState;
-                if (! $acl->has(new \Zend_Acl_Resource($resource)) || $acl->isAllowed(
-                    Application_Security_AclProvider::ACTIVE_ROLE,
-                    $resource
-                )) {
+                if (
+                    ! $acl->has(new Zend_Acl_Resource($resource)) || $acl->isAllowed(
+                        Application_Security_AclProvider::ACTIVE_ROLE,
+                        $resource
+                    )
+                ) {
                     $allowedTargetStates[] = $targetState;
                 } else {
                     $logger->debug("ACL: $resource not allowed");
@@ -123,6 +130,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Returns all allowed target states for a current state.
+     *
      * @param string $currentState All lowercase name of current state
      * @return array of strings - Possible target states for document
      */
@@ -146,8 +154,9 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Performs state change on document.
+     *
      * @param DocumentInterface $document
-     * @param string $targetState
+     * @param string            $targetState
      *
      * TODO enforcing permissions and throwing exceptions (OPUSVIER-1959)
      */
@@ -166,6 +175,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Returns all defined states of workflow model.
+     *
      * @return array of string Names of defined states
      */
     public static function getAllStates()
@@ -177,6 +187,7 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Returns an array with resource names for all possible transitions.
+     *
      * @return array of strings
      */
     public static function getWorkflowResources()
@@ -198,33 +209,38 @@ class Application_Controller_Action_Helper_Workflow extends \Zend_Controller_Act
 
     /**
      * Returns configuration for basic workflow model.
+     *
      * @return Zend_Config_Ini
      */
     public static function getWorkflowConfig()
     {
-        if (empty(Application_Controller_Action_Helper_Workflow::$_workflowConfig)) {
-            Application_Controller_Action_Helper_Workflow::$_workflowConfig = new \Zend_Config_Ini(
+        if (empty(self::$workflowConfig)) {
+            self::$workflowConfig = new Zend_Config_Ini(
                 APPLICATION_PATH . '/modules/admin/models/workflow.ini'
             );
         }
 
-        return Application_Controller_Action_Helper_Workflow::$_workflowConfig;
+        return self::$workflowConfig;
     }
 
     /**
      * Returns the Zend_Acl object or null.
+     *
      * @return Zend_Acl
      */
     public function getAcl()
     {
-        if ($this->_acl === null) {
-            $this->_acl = Application_Security_AclProvider::getAcl();
+        if ($this->acl === null) {
+            $this->acl = Application_Security_AclProvider::getAcl();
         }
-        return $this->_acl;
+        return $this->acl;
     }
 
+    /**
+     * @param Zend_Acl $acl
+     */
     public function setAcl($acl)
     {
-        $this->_acl = $acl;
+        $this->acl = $acl;
     }
 }

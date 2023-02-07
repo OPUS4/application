@@ -36,13 +36,13 @@ use Opus\Common\EnrichmentKey;
  */
 class Application_Update_CreateSourceEnrichmentKey extends Application_Update_PluginAbstract
 {
-    const ENRICHMENT_KEY_NAME = 'opus.source';
+    public const ENRICHMENT_KEY_NAME = 'opus.source';
 
     public function run()
     {
         $enrichmentKey = EnrichmentKey::fetchByName(self::ENRICHMENT_KEY_NAME);
 
-        if (is_null($enrichmentKey)) {
+        if ($enrichmentKey === null) {
             $this->log("Creating enrichment key '" . self::ENRICHMENT_KEY_NAME . "' …");
             $enrichmentKey = EnrichmentKey::new();
             $enrichmentKey->setName(self::ENRICHMENT_KEY_NAME);

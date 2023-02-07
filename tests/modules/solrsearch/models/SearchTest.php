@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,19 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Class Solrsearch_Model_SearchTest
- */
 class Solrsearch_Model_SearchTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
     public function testCreateSimpleSearchUrlParams()
@@ -45,11 +40,11 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
 
         $request->setParams([
             'searchtype' => 'all',
-            'start' => '30',
-            'rows' => '15',
-            'query' => 'test',
-            'sortfield' => 'year',
-            'sortorder' => 'asc'
+            'start'      => '30',
+            'rows'       => '15',
+            'query'      => 'test',
+            'sortfield'  => 'year',
+            'sortorder'  => 'asc',
         ]);
 
         $model = new Solrsearch_Model_Search();
@@ -125,7 +120,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
         $request = $this->getRequest();
 
         $this->adjustConfiguration([
-            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '25']]
+            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '25']],
         ]);
 
         $model = new Solrsearch_Model_Search();
@@ -141,21 +136,21 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
         $request = $this->getRequest();
 
         $request->setParams([
-            'searchtype' => 'all',
-            'start' => '30',
-            'rows' => '15',
-            'sortfield' => 'year',
-            'sortorder' => 'asc',
-            'author' => 'TestAuthor',
+            'searchtype'     => 'all',
+            'start'          => '30',
+            'rows'           => '15',
+            'sortfield'      => 'year',
+            'sortorder'      => 'asc',
+            'author'         => 'TestAuthor',
             'authormodifier' => 'contains_all',
-            'title' => 'TestTitle',
+            'title'          => 'TestTitle',
 //            'persons' => 'TestPerson',
-            'referee' => 'TestReferee',
-            'refereemodifier' => 'contains_any',
-            'abstract' => 'TestAbstract',
-            'fulltext' => 'TestWord',
+            'referee'          => 'TestReferee',
+            'refereemodifier'  => 'contains_any',
+            'abstract'         => 'TestAbstract',
+            'fulltext'         => 'TestWord',
             'fulltextmodifier' => 'contains_none',
-            'year' => '2008'
+            'year'             => '2008',
         ]);
 
         $model = new Solrsearch_Model_Search();
@@ -254,13 +249,13 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
         $this->assertTrue($model->isAdvancedSearchRequestValid($request));
 
         $request->setParams([
-            'author' => 'TestAuthor',
-            'title' => 'TestTitle',
-            'persons' => '    ',
-            'referee' => '',
+            'author'   => 'TestAuthor',
+            'title'    => 'TestTitle',
+            'persons'  => '    ',
+            'referee'  => '',
             'abstract' => 'TestAbstract',
             'fulltext' => 'TestWord',
-            'year' => '2008'
+            'year'     => '2008',
         ]);
 
         $this->assertTrue($model->isAdvancedSearchRequestValid($request));
@@ -293,8 +288,8 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase
 
         $this->assertCount(2, $params);
         $this->assertEquals([
-            'institutefq' => 'ZIB',
-            'has_fulltextfq' => 'true'
+            'institutefq'    => 'ZIB',
+            'has_fulltextfq' => 'true',
         ], $params);
     }
 }

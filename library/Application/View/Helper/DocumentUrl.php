@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,11 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,14 +33,20 @@
  * This helper class defines only one method baseUrl() to retrieve the
  * application base url for absolute urls in views.
  */
-class Application_View_Helper_DocumentUrl extends \Zend_View_Helper_Abstract
+class Application_View_Helper_DocumentUrl extends Zend_View_Helper_Abstract
 {
-
+    /**
+     * @return $this
+     */
     public function documentUrl()
     {
         return $this;
     }
 
+    /**
+     * @param int $docId
+     * @return string
+     */
     public function frontdoor($docId)
     {
         $url = [
@@ -55,6 +58,10 @@ class Application_View_Helper_DocumentUrl extends \Zend_View_Helper_Abstract
         return $this->view->url($url, 'default', true);
     }
 
+    /**
+     * @param int $docId
+     * @return string
+     */
     public function adminShow($docId)
     {
         $url = [
@@ -66,6 +73,10 @@ class Application_View_Helper_DocumentUrl extends \Zend_View_Helper_Abstract
         return $this->view->url($url, 'default', true);
     }
 
+    /**
+     * @param int $docId
+     * @return string
+     */
     public function adminFileManager($docId)
     {
         $url = [
@@ -77,6 +88,10 @@ class Application_View_Helper_DocumentUrl extends \Zend_View_Helper_Abstract
         return $this->view->url($url, 'default', true);
     }
 
+    /**
+     * @param int $docId
+     * @return string
+     */
     public function adminAccessManager($docId)
     {
         $url = [
@@ -88,25 +103,34 @@ class Application_View_Helper_DocumentUrl extends \Zend_View_Helper_Abstract
         return $this->view->url($url, 'default', true);
     }
 
+    /**
+     * @param int $docId
+     * @return string
+     */
     public function adminEdit($docId)
     {
         $url = [
             'module'     => 'admin',
             'controller' => 'document',
             'action'     => 'edit',
-            'id'      => $docId,
+            'id'         => $docId,
         ];
         return $this->view->url($url, 'default', true);
     }
 
+    /**
+     * @param int    $docId
+     * @param string $targetState
+     * @return string
+     */
     public function adminChangeState($docId, $targetState)
     {
         $url = [
-            'module'     => 'admin',
-            'controller' => 'workflow',
-            'action'     => 'changestate',
-            'docId'      => $docId,
-            'targetState' => $targetState
+            'module'      => 'admin',
+            'controller'  => 'workflow',
+            'action'      => 'changestate',
+            'docId'       => $docId,
+            'targetState' => $targetState,
         ];
         return $this->view->url($url, 'default', true);
     }

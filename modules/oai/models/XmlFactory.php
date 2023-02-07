@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,30 +25,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * TODO this is just a start to get code out of the controller (design needs to be reconsidered)
  */
 
+use Opus\Common\DocumentInterface;
+
+/**
+ * TODO this is just a start to get code out of the controller (design needs to be reconsidered)
+ */
 class Oai_Model_XmlFactory extends Application_Model_Abstract
 {
+    public const CLOSED_ACCESS = 'info:eu-repo/semantics/closedAccess';
 
-    const CLOSED_ACCESS = 'info:eu-repo/semantics/closedAccess';
+    public const OPEN_ACCESS = 'info:eu-repo/semantics/openAccess';
 
-    const OPEN_ACCESS = 'info:eu-repo/semantics/openAccess';
+    public const EMBARGOED_ACCESS = 'info:eu-repo/semantics/embargoedAccess';
 
-    const EMBARGOED_ACCESS = 'info:eu-repo/semantics/embargoedAccess';
-
-    const RESTRICTED_ACCESS = 'info:eu-repo/semantics/restrictedAccess';
+    public const RESTRICTED_ACCESS = 'info:eu-repo/semantics/restrictedAccess';
 
     /**
      * Determines access string for 'rights' element.
      *
-     * @param $document
+     * @param DocumentInterface $document
      * @return string
      *
      * TODO open access decision here independent from open access flag/collection (consolidate)

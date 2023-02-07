@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,11 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Sword
- * @author      Sascha Szott
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,18 +34,25 @@ use Opus\Common\Log;
 
 class Sword_Model_ErrorDocument
 {
-
+    /** @var Zend_Controller_Request_Http */
     private $request;
 
+    /** @var Zend_Controller_Response_Http */
     private $response;
 
+    /** @var Zend_Log */
     private $logger;
 
+    /**
+     * @param Zend_Controller_Request_Http  $request
+     * @param Zend_Controller_Response_Http $response
+     * @throws Zend_Exception
+     */
     public function __construct($request, $response)
     {
-        $this->request = $request;
+        $this->request  = $request;
         $this->response = $response;
-        $this->logger = Log::get();
+        $this->logger   = Log::get();
     }
 
     /**
@@ -73,6 +77,9 @@ class Sword_Model_ErrorDocument
     /**
      * Checksum sent does not match the calculated checksum.
      * The server MUST also return a status code of 412 Precondition Failed.
+     *
+     * @param string $checksumHeader
+     * @param string $checksumPayload
      */
     public function setErrorChecksumMismatch($checksumHeader, $checksumPayload)
     {
@@ -127,6 +134,11 @@ class Sword_Model_ErrorDocument
         $this->setResponse(400, 'http://www.opus-repository.org/sword/error/InternalFrameworkError');
     }
 
+    /**
+     * @param int    $statusCode
+     * @param string $errorCond
+     * @throws Zend_Controller_Response_Exception
+     */
     private function setResponse($statusCode, $errorCond)
     {
         $this->response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
@@ -134,13 +146,18 @@ class Sword_Model_ErrorDocument
         $this->response->setBody($this->getDocument($errorCond));
     }
 
+    /**
+     * @param string $errorCond
+     * @return string
+     * @throws Zend_Controller_Request_Exception
+     */
     private function getDocument($errorCond)
     {
-        $root = new \SimpleXMLElement('<sword:error xmlns="http://www.w3.org/2005/Atom" xmlns:sword="http://purl.org/net/sword/"></sword:error>');
+        $root = new SimpleXMLElement('<sword:error xmlns="http://www.w3.org/2005/Atom" xmlns:sword="http://purl.org/net/sword/"></sword:error>');
         $root->addAttribute('href', $errorCond);
         $root->addChild('title', 'ERROR');
 
-        $config = Config::get();
+        $config    = Config::get();
         $generator = $config->sword->generator;
         $root->addChild('generator', $generator);
 
@@ -148,7 +165,7 @@ class Sword_Model_ErrorDocument
 
         // should we sanitize the value of $userAgent before setting HTTP response header?
         $userAgent = $this->request->getHeader('User-Agent');
-        if (is_null($userAgent) || $userAgent === false) {
+        if ($userAgent === null || $userAgent === false) {
             $userAgent = 'n/a';
         }
         $root->addChild('sword:userAgent', $userAgent, 'http://purl.org/net/sword/');

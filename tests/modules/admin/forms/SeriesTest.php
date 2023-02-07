@@ -33,7 +33,7 @@ use Opus\Common\Series;
 
 class Admin_Form_SeriesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testConstructForm()

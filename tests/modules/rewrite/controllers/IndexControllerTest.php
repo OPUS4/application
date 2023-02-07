@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,21 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Rewrite
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Rewrite_IndexControllerTest.
- *
  * @covers Rewrite_IndexController
  */
 class Rewrite_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function testIdActionWithMissingArgs()
@@ -119,10 +115,14 @@ class Rewrite_IndexControllerTest extends ControllerTestCase
         $this->assertRedirect('/92/test.xhtml', 301);
     }
 
+    /**
+     * @param string $path
+     * @param int    $httpCode
+     */
     public function assertRedirect($path = '/home', $httpCode = 302)
     {
         $response = $this->getResponse();
-        $headers = $response->getHeaders();
+        $headers  = $response->getHeaders();
 
         $this->assertEquals('Location', $headers[0]['name']);
         $this->assertStringEndsWith($path, $headers[0]['value']);

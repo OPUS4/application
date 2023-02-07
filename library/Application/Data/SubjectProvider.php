@@ -34,14 +34,13 @@ use Opus\Common\Subject;
 
 class Application_Data_SubjectProvider
 {
-
     /**
      * Returns matching values as suggestions for autocomplete.
      *
      * value
      * extkey
      *
-     * @param $term
+     * @param string $term
      * @return array
      */
     public function getValues($term)

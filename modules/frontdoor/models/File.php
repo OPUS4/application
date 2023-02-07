@@ -29,43 +29,36 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\File;
+use Opus\Common\FileInterface;
+use Opus\Common\Model\NotFoundException;
 use Opus\Common\Security\RealmInterface;
 
 class Frontdoor_Model_File
 {
+    public const SERVER_STATE_DELETED         = 'deleted';
+    public const SERVER_STATE_PUBLISHED       = 'published';
+    public const ILLEGAL_DOCID_MESSAGE_KEY    = 'illegal_argument_docid';
+    public const ILLEGAL_FILENAME_MESSAGE_KEY = 'illegal_argument_filename';
 
-    const SERVER_STATE_DELETED = 'deleted';
-    const SERVER_STATE_PUBLISHED = 'published';
-    const ILLEGAL_DOCID_MESSAGE_KEY = 'illegal_argument_docid';
-    const ILLEGAL_FILENAME_MESSAGE_KEY = 'illegal_argument_filename';
+    /** @var DocumentInterface */
+    private $doc;
 
-    /**
-     * @var DocumentInterface
-     */
-    private $_doc;
+    /** @var string */
+    private $filename;
 
-    /**
-     * @var string
-     */
-    private $_filename;
+    /** @var Application_Security_AccessControlInterface */
+    private $accessControl;
 
     /**
-     * @var
-     */
-    private $_accessControl;
-
-    /**
-     * Frontdoor_Model_File constructor.
      * @param int    $docId OPUS document id number
      * @param string $filename Name of file
      */
     public function __construct($docId, $filename)
     {
-        if (mb_strlen($docId) < 1 || preg_match('/^[\d]+$/', $docId) === 0 || $docId == null) {
+        if ($docId === null || mb_strlen($docId) < 1 || preg_match('/^[\d]+$/', $docId) === 0) {
             throw new Frontdoor_Model_FrontdoorDeliveryException(self::ILLEGAL_DOCID_MESSAGE_KEY, 400);
         }
 
@@ -74,27 +67,39 @@ class Frontdoor_Model_File
         }
 
         try {
-            $this->_doc = Document::get($docId);
+            $this->doc = Document::get($docId);
         } catch (NotFoundException $e) {
             throw new Frontdoor_Model_DocumentNotFoundException();
         }
 
-        $this->_filename = $filename;
+        $this->filename = $filename;
     }
 
+    /**
+     * @param RealmInterface $realm
+     * @return FileInterface
+     * @throws Frontdoor_Model_DocumentAccessNotAllowedException
+     * @throws Frontdoor_Model_DocumentDeletedException
+     * @throws Frontdoor_Model_FileAccessNotAllowedException
+     * @throws Frontdoor_Model_FileNotFoundException
+     */
     public function getFileObject($realm)
     {
         $this->checkDocumentApplicableForFileDownload($realm);
         return $this->fetchFile($realm);
     }
 
+    /**
+     * @param RealmInterface $realm
+     * @throws Frontdoor_Model_DocumentAccessNotAllowedException
+     * @throws Frontdoor_Model_DocumentDeletedException
+     */
     public function checkDocumentApplicableForFileDownload($realm)
     {
-        if (! $this->isDocumentAccessAllowed($this->_doc->getId(), $realm)) {
-            switch ($this->_doc->getServerState()) {
+        if (! $this->isDocumentAccessAllowed($this->doc->getId(), $realm)) {
+            switch ($this->doc->getServerState()) {
                 case self::SERVER_STATE_DELETED:
                     throw new Frontdoor_Model_DocumentDeletedException();
-                    break;
                 case self::SERVER_STATE_PUBLISHED:
                     // do nothing if in published state - access is granted!
                     break;
@@ -105,11 +110,17 @@ class Frontdoor_Model_File
         }
     }
 
+    /**
+     * @param RealmInterface $realm
+     * @return FileInterface
+     * @throws Frontdoor_Model_FileAccessNotAllowedException
+     * @throws Frontdoor_Model_FileNotFoundException
+     */
     private function fetchFile($realm)
     {
-        $targetFile = File::fetchByDocIdPathName($this->_doc->getId(), $this->_filename);
+        $targetFile = File::fetchByDocIdPathName($this->doc->getId(), $this->filename);
 
-        if (is_null($targetFile)) {
+        if ($targetFile === null) {
             throw new Frontdoor_Model_FileNotFoundException();
         }
 
@@ -120,39 +131,56 @@ class Frontdoor_Model_File
         return $targetFile;
     }
 
+    /**
+     * @param int            $docId
+     * @param RealmInterface $realm
+     * @return bool
+     */
     private function isDocumentAccessAllowed($docId, $realm)
     {
-        if (! ($realm instanceof RealmInterface)) {
+        if (! $realm instanceof RealmInterface) {
             return false;
         }
         return $realm->checkDocument($docId) || $this->getAclHelper()->accessAllowed('documents');
     }
 
+    /**
+     * @param FileInterface  $file
+     * @param RealmInterface $realm
+     * @return bool
+     */
     private function isFileAccessAllowed($file, $realm)
     {
-        if (is_null($file) or ! ($realm instanceof RealmInterface)) {
+        if ($file === null || ! $realm instanceof RealmInterface) {
             return false;
         }
 
         return ($realm->checkFile($file->getId())
             && $file->getVisibleInFrontdoor()
-            && $this->_doc->hasEmbargoPassed())
+            && $this->doc->hasEmbargoPassed())
             || $this->getAclHelper()->accessAllowed('documents');
     }
 
+    /**
+     * @return Application_Security_AccessControlInterface
+     */
     public function getAclHelper()
     {
-        if (is_null($this->_accessControl)) {
-            $this->_accessControl = \Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        if ($this->accessControl === null) {
+            $this->accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
         }
 
-        return $this->_accessControl;
+        return $this->accessControl;
     }
 
+    /**
+     * @param Application_Security_AccessControlInterface|null $helper
+     * @throws Application_Exception
+     */
     public function setAclHelper($helper)
     {
-        if ($helper instanceof Application_Security_AccessControl || is_null($helper)) {
-            $this->_accessControl = $helper;
+        if ($helper instanceof Application_Security_AccessControlInterface || $helper === null) {
+            $this->accessControl = $helper;
         } else {
             throw new Application_Exception(
                 '#1 argument must be of type Application_Security_AccessControl (not \''

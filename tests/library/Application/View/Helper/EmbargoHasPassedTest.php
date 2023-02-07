@@ -33,7 +33,7 @@ use Opus\Common\Date;
 
 class Application_View_Helper_EmbargoHasPassedTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function testEmbargoHasPassedForDocumentObject()
@@ -55,7 +55,7 @@ class Application_View_Helper_EmbargoHasPassedTest extends ControllerTestCase
         $helper = new Application_View_Helper_EmbargoHasPassed();
 
         $document = $this->createTestDocument();
-        $docId = $document->store();
+        $docId    = $document->store();
 
         $this->assertTrue($helper->embargoHasPassed($docId));
 

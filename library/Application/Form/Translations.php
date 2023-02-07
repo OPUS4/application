@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -40,14 +38,13 @@
  */
 class Application_Form_Translations extends Application_Form_Abstract
 {
+    public const ELEMENT_SAVE = 'Save';
 
-    const ELEMENT_SAVE = 'Save';
+    public const ELEMENT_CANCEL = 'Cancel';
 
-    const ELEMENT_CANCEL = 'Cancel';
+    public const RESULT_SAVE = 'save';
 
-    const RESULT_SAVE = 'save';
-
-    const RESULT_CANCEL = 'cancel';
+    public const RESULT_CANCEL = 'cancel';
 
     public function init()
     {
@@ -55,33 +52,41 @@ class Application_Form_Translations extends Application_Form_Abstract
 
         $this->setDecorators([
             'FormElements',
-            'Form'
+            'Form',
         ]);
 
-        $this->addElement('submit', self::ELEMENT_SAVE, ['decorators' => [
-            'ViewHelper',
-            [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']]
-        ]]);
+        $this->addElement('submit', self::ELEMENT_SAVE, [
+            'decorators' => [
+                'ViewHelper',
+                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']],
+            ],
+        ]);
 
-        $this->addElement('submit', self::ELEMENT_CANCEL, ['decorators' => [
-            'ViewHelper',
-            [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']]
-        ]]);
+        $this->addElement('submit', self::ELEMENT_CANCEL, [
+            'decorators' => [
+                'ViewHelper',
+                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']],
+            ],
+        ]);
 
         $this->addDisplayGroup(
             [self::ELEMENT_SAVE, self::ELEMENT_CANCEL],
             'actions',
-            ['order' => 1000, 'decorators' => [
-                'FormElements',
-                [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
-                [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']]
-            ]]
+            [
+                'order'      => 1000,
+                'decorators' => [
+                    'FormElements',
+                    [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
+                    [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']],
+                ],
+            ]
         );
     }
 
     /**
-     * @param $key
-     * @param bool $textarea
+     * @param string     $key
+     * @param bool       $textarea
+     * @param array|null $customOptions
      * @throws Zend_Form_Exception
      *
      * TODO support label parameter (and other parameters?)
@@ -100,7 +105,7 @@ class Application_Form_Translations extends Application_Form_Abstract
             $options = array_merge($options, ['size' => $width]);
         }
 
-        if (! is_null($customOptions)) {
+        if ($customOptions !== null) {
             $options = array_merge($options, $customOptions);
         }
 
@@ -115,7 +120,7 @@ class Application_Form_Translations extends Application_Form_Abstract
      * Keys are used as identifier for form elements. However a dash is a special character for Zend when processing
      * the POST data. Therefore the identifiers cannot contain dashes.
      *
-     * @param $key
+     * @param string $key
      * @return string|string[]|null
      *
      * TODO verify and document why it works! Zend normalizes the name anyway - however we now store the real key in the
@@ -123,13 +128,15 @@ class Application_Form_Translations extends Application_Form_Abstract
      *      understand the connections might break it.
      * TODO there could be a collision with two translations where one is identical except for dashes between words,
      *      e.g. 'admin-error' and 'adminerror'. These two keys would get the same form element name.
-     *
      */
     public function normalizeKey($key)
     {
         return $key; // preg_replace('/-/', '-', $key);
     }
 
+    /**
+     * @return array
+     */
     public function getTranslationElements()
     {
         $elements = $this->getElements();
@@ -147,7 +154,7 @@ class Application_Form_Translations extends Application_Form_Abstract
 
         foreach ($elements as $name => $element) {
             // TODO handle no translation
-            $key = $element->getKey();
+            $key          = $element->getKey();
             $translations = $translate->getTranslations($key);
             $element->setValue($translations);
         }
@@ -164,7 +171,7 @@ class Application_Form_Translations extends Application_Form_Abstract
 
         $translate = Application_Translate::getInstance();
         $translate->clearCache();
-        \Zend_Translate::clearCache();
+        Zend_Translate::clearCache();
     }
 
     /**
@@ -172,7 +179,7 @@ class Application_Form_Translations extends Application_Form_Abstract
      *
      * @param array $post POST Daten fuer dieses Formular
      * @param array $context POST Daten fuer gesamten Request
-     * @return mixed Ergebnis der POST Verarbeitung
+     * @return string Ergebnis der POST Verarbeitung
      */
     public function processPost($post, $context)
     {

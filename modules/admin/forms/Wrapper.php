@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -43,15 +41,20 @@
  * Verarbeitung des POST wird die erste Ebene übersprungen ($post['Document']) und nur mit dem obersten Unterformular
  * weitergearbeitet.
  */
-class Admin_Form_Wrapper extends \Zend_Form
+class Admin_Form_Wrapper extends Zend_Form
 {
+    /** @var string */
+    private $subFormName;
 
-    private $_subFormName;
-
+    /**
+     * @param parent     $subform
+     * @param string     $name
+     * @param array|null $options
+     */
     public function __construct($subform, $name = 'Document', $options = null)
     {
         parent::__construct($options);
-        $this->_subFormName = $name;
+        $this->subFormName = $name;
         $this->addSubForm($subform, $name);
     }
 
@@ -61,15 +64,18 @@ class Admin_Form_Wrapper extends \Zend_Form
 
         $this->setDecorators(
             [
-            'FormElements',
-            'Form',
-            ['HtmlTag', ['tag' => 'div', 'class' => 'metadata-form']]
+                'FormElements',
+                'Form',
+                ['HtmlTag', ['tag' => 'div', 'class' => 'metadata-form']],
             ]
         );
     }
 
+    /**
+     * @return parent|null
+     */
     public function getWrappedForm()
     {
-        return $this->getSubForm($this->_subFormName);
+        return $this->getSubForm($this->subFormName);
     }
 }

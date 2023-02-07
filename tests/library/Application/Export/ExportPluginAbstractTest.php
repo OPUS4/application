@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,27 +25,25 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Application_Export
- * @author      Sascha Szott <opus-development@saschaszott.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
     public function testIsAccessRestrictedDefaultDisabled()
     {
         $stub = $this->getMockForAbstractClass('Application_Export_ExportPluginAbstract');
-        $stub->setConfig(new \Zend_Config([]));
+        $stub->setConfig(new Zend_Config([]));
         $this->assertFalse($stub->isAccessRestricted());
     }
 
     /**
      * @dataProvider enabledOptions
+     * @param bool|int $optionValue
      */
     public function testIsAccessRestrictedEnabled($optionValue)
     {
@@ -59,6 +58,7 @@ class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
 
     /**
      * @dataProvider disabledOptions
+     * @param bool|int $optionValue
      */
     public function testIsAccessRestrictedDisabled($optionValue)
     {
@@ -71,16 +71,25 @@ class Application_Export_ExportPluginAbstractTest extends ControllerTestCase
         $this->assertFalse($stub->isAccessRestricted());
     }
 
+    /**
+     * @return array
+     */
     public function enabledOptions()
     {
         return [[true], [1]];
     }
 
+    /**
+     * @return array
+     */
     public function disabledOptions()
     {
         return [[false], [0]];
     }
 
+    /**
+     * @param bool|int $optionValue
+     */
     private function setAdminOnly($optionValue)
     {
         $this->adjustConfiguration(['adminOnly' => $optionValue]);

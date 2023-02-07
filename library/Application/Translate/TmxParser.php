@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,28 +25,31 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Translate_TmxParser
 {
-
+    /** @var resource */
     private $parser;
 
+    /** @var array */
     private $translations;
 
+    /** @var string */
     private $currentKey;
 
+    /** @var string */
     private $currentModule;
 
+    /** @var string */
     private $currentLang;
 
+    /** @var bool */
     private $inSeg = false;
 
+    /** @var string */
     private $currentValue;
 
     public function __construct()
@@ -64,6 +68,10 @@ class Application_Translate_TmxParser
         unset($this->parser);
     }
 
+    /**
+     * @param string $data
+     * @return array
+     */
     public function parse($data)
     {
         $this->translations = [];
@@ -71,15 +79,20 @@ class Application_Translate_TmxParser
         return $this->translations;
     }
 
+    /**
+     * @param resource $parser
+     * @param string   $tag
+     * @param array    $attributes
+     */
     protected function tagOpen($parser, $tag, $attributes)
     {
         switch ($tag) {
             case 'TU':
-                $this->currentKey = $attributes['TUID'];
-                $this->translations[$this->currentKey] = [];
+                $this->currentKey                                = $attributes['TUID'];
+                $this->translations[$this->currentKey]           = [];
                 $this->translations[$this->currentKey]['values'] = [];
                 if (isset($attributes['CREATIONTOOL'])) {
-                    $this->currentModule = $attributes['CREATIONTOOL'];
+                    $this->currentModule                             = $attributes['CREATIONTOOL'];
                     $this->translations[$this->currentKey]['module'] = $this->currentModule;
                 } else {
                     $this->currentModule = 'null';
@@ -107,12 +120,16 @@ class Application_Translate_TmxParser
         }
     }
 
+    /**
+     * @param resource $parser
+     * @param string   $tag
+     */
     protected function tagClose($parser, $tag)
     {
         $tag = strtoupper($tag);
         switch ($tag) {
             case 'TU':
-                $this->currentKey = null;
+                $this->currentKey    = null;
                 $this->currentModule = null;
                 break;
 
@@ -132,9 +149,9 @@ class Application_Translate_TmxParser
      * The tags inside of SEG-elements need to be rendered back
      * into the text.
      *
-     * @param $parser
-     * @param $tag
-     * @param $attributes
+     * @param resource $parser
+     * @param string   $tag
+     * @param array    $attributes
      */
     protected function tagOpenSeg($parser, $tag, $attributes)
     {
@@ -149,6 +166,10 @@ class Application_Translate_TmxParser
         $this->currentValue .= $value;
     }
 
+    /**
+     * @param resource $parser
+     * @param string   $tag
+     */
     protected function tagCloseSeg($parser, $tag)
     {
         switch (strtoupper($tag)) {
@@ -156,7 +177,7 @@ class Application_Translate_TmxParser
                 xml_set_element_handler($this->parser, 'tagOpen', 'tagClose');
                 xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, 1);
                 $this->translations[$this->currentKey]['values'][$this->currentLang] = $this->currentValue;
-                $this->currentValue = null;
+                $this->currentValue                                                  = null;
                 $this->inSeg = false;
                 break;
 
@@ -166,6 +187,10 @@ class Application_Translate_TmxParser
         }
     }
 
+    /**
+     * @param resource $parser
+     * @param string   $cdata
+     */
     protected function cdata($parser, $cdata)
     {
         if ($this->inSeg) {
@@ -176,8 +201,8 @@ class Application_Translate_TmxParser
     /**
      * Catches entities within values;
      *
-     * @param $parser
-     * @param $data
+     * @param resource $parser
+     * @param string   $data
      */
     protected function handleDefault($parser, $data)
     {

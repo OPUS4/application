@@ -32,12 +32,11 @@
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Model\ModelException;
-use Opus\Doi\DataCiteXmlGenerator;
 use Opus\Doi\DataCiteXmlGenerationException;
+use Opus\Doi\DataCiteXmlGenerator;
 
 class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstract
 {
-
     /**
      * TODO add to interface or make optional
      */
@@ -49,12 +48,12 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
      * Generates DataCite-XML for document.
      *
      * @return bool wurde (valides oder invalides) XML erzeugt, so gibt die Methode den Rückgabewert true zurück
-     * @throws Application_Exception wenn kein Dokument mit der übergebenen ID gefunden werden konnte
+     * @throws Application_Exception Wenn kein Dokument mit der uebergebenen ID gefunden werden konnte.
      */
     public function execute()
     {
         $docId = $this->getRequest()->getParam('docId');
-        if (is_null($docId)) {
+        if ($docId === null) {
             throw new Application_Exception('missing request parameter docId');
         }
 
@@ -64,16 +63,16 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
             throw new Application_Exception('could not retrieve document with given ID from OPUS database');
         }
 
-        if ($document->getServerState() != 'published' && ! $this->isAllowExportOfUnpublishedDocs()) {
+        if ($document->getServerState() !== 'published' && ! $this->isAllowExportOfUnpublishedDocs()) {
             throw new Application_Export_Exception('export of unpublished documents is not allowed');
         }
 
         // wenn URL-Parameter validate auf no gesetzt, dann erfolgt keine Validierung des generierten XML
-        $validate = $this->getRequest()->getParam('validate');
-        $skipValidation = (! is_null($validate) && $validate === 'no');
+        $validate       = $this->getRequest()->getParam('validate');
+        $skipValidation = $validate !== null && $validate === 'no';
 
         $requiredFieldsStatus = [];
-        $generator = new DataCiteXmlGenerator();
+        $generator            = new DataCiteXmlGenerator();
         if (! $skipValidation) {
             // prüfe, ob das Dokument $document alle erforderlichen Pflichtfelder besitzt
             $requiredFieldsStatus = $generator->checkRequiredFields($document, false);
@@ -88,7 +87,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
             $errors = $e->getXmlErrors();
         }
 
-        if (empty($errors) && ! is_null($output)) {
+        if (empty($errors) && $output !== null) {
             // erzeugtes DataCite-XML zurückgeben (kann valide oder nicht valide sein)
             $response = $this->getResponse();
             $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
@@ -113,17 +112,17 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
      * Setzt die View-Objekte für die Generierung der HTML-Statusseite mit den Fehlermeldungen der XML-Generierung.
      *
      * @param DocumentInterface $document das aktuell verarbeitete Dokument
-     * @param array $requiredFieldsStatus der Status (Existenz bzw. Nichtexistenz) der einzelnen Pflichtfelder
-     * @param array $errors die bei der DataCite-XML Generierung gefundenen Fehler
+     * @param array             $requiredFieldsStatus der Status (Existenz bzw. Nichtexistenz) der einzelnen Pflichtfelder
+     * @param array             $errors die bei der DataCite-XML Generierung gefundenen Fehler
      */
     private function prepareView($document, $requiredFieldsStatus, $errors)
     {
-        $view = $this->getView();
+        $view                       = $this->getView();
         $view->requiredFieldsStatus = $requiredFieldsStatus;
-        $view->errors = $errors;
-        $view->docId = $document->getId();
-        $view->docServerState = $document->getServerState();
-        $view->validUnpublishedDoc = $this->isUnpublishedDocValid($requiredFieldsStatus);
+        $view->errors               = $errors;
+        $view->docId                = $document->getId();
+        $view->docServerState       = $document->getServerState();
+        $view->validUnpublishedDoc  = $this->isUnpublishedDocValid($requiredFieldsStatus);
     }
 
     /**
@@ -136,12 +135,13 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
      * gesondert hingewiesen werden.
      *
      * @param array $requiredFieldsStatus
+     * @return bool
      */
     private function isUnpublishedDocValid($requiredFieldsStatus)
     {
         $result = false;
         foreach ($requiredFieldsStatus as $fieldName => $status) {
-            if (is_string($status) && $status == 'publication_date_missing_non_published') {
+            if (is_string($status) && $status === 'publication_date_missing_non_published') {
                 $result = true;
             } else {
                 if ($status !== true) {

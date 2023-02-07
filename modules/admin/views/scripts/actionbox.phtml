@@ -44,17 +44,17 @@ use Opus\Common\Log;
 ?>
 
 <?PHP
-    $document = $this->element->getDocument();
+    $document     = $this->element->getDocument();
     $currentState = $document->getServerState();
-    $stateLinks = $this->element->getStateLinks();
-    $actionLinks = $this->element->getViewActionLinks();
+    $stateLinks   = $this->element->getStateLinks();
+    $actionLinks  = $this->element->getViewActionLinks();
 ?>
 
-<?PHP if (! is_null($document)) : ?>
+<?PHP if ($document !== null) : ?>
 <div id="actionboxContainer" class="fixedMenubar">
   <div class="wrapper">
       <div class="col col-1">
-        <?PHP if (! $this->element->isViewModeEnabled() || count($stateLinks) == 0) : ?>
+        <?PHP if (! $this->element->isViewModeEnabled() || count($stateLinks) === 0) : ?>
         <dl id="Document-ServerState">
           <dt id="Document-ServerState-label"><?= htmlspecialchars($this->translate('ServerState_short')) . ':'?></dt>
           <dd id="Document-ServerState-value"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_'
@@ -104,22 +104,22 @@ use Opus\Common\Log;
           </ul>
             <?PHP else : ?>
           <ul class="form-action">
-            <?PHP foreach ($actionLinks as $action => $params) : ?>
+                <?PHP foreach ($actionLinks as $action => $params) : ?>
             <li class="<?= $action ?>"><a href="<?= $this->url($params, null, true) ?>"
-              ><?= htmlspecialchars($this->translate('admin_document_' .$action)) ?></a></li>
-            <?PHP endforeach; ?>
+              ><?= htmlspecialchars($this->translate('admin_document_' . $action)) ?></a></li>
+                <?PHP endforeach; ?>
             </ul>
             <?PHP endif; ?>
       </div>
   </div>
     <?PHP $message = $this->element->getMessage() ?>
-    <?PHP if (! is_null($message)) : ?>
+    <?PHP if ($message !== null) : ?>
   <div class="messagesContainer">
     <div class="messages"><?= $this->escape($message) ?></div>
   </div>
     <?PHP endif; ?>
 </div>
 <?PHP else : ?>
-<?PHP Log::get()->err('Use of partial \'actionbox.phtml\' without document.'); ?>
+    <?PHP Log::get()->err('Use of partial \'actionbox.phtml\' without document.'); ?>
 <?PHP endif; ?>
 

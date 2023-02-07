@@ -33,24 +33,27 @@ use Opus\Common\Licence;
 
 /**
  * Unit Tests fuer abstrakte Parent-Klasse fuer Metadaten Unterformulare.
- *
  */
 class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var Admin_Form_AbstractDocumentSubForm */
     private $form;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->form = $this->getForm();
     }
 
+    /**
+     * @return Admin_Form_AbstractDocumentSubForm
+     */
     private function getForm()
     {
-        return $this->getMockForAbstractClass('Admin_Form_AbstractDocumentSubForm');
+        return $this->getMockForAbstractClass(Admin_Form_AbstractDocumentSubForm::class);
     }
 
     public function testInit()
@@ -101,8 +104,8 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
         $this->markTestIncomplete('Mocking funktioniert noch nicht.');
         $post = [
             'subform1' => [
-                'Button' => 'Value'
-            ]
+                'Button' => 'Value',
+            ],
         ];
 
         $subform1 = $this->getMockForAbstractClass('Application_Form_Model_Abstract');

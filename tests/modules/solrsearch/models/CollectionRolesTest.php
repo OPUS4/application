@@ -33,13 +33,13 @@ use Opus\Common\CollectionRole;
 
 class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testGetAllVisible()
     {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
-        $visibleRoles = $collectionRoles->getAllVisible();
+        $visibleRoles    = $collectionRoles->getAllVisible();
         $this->assertEquals(14, count($visibleRoles));
     }
 
@@ -47,7 +47,7 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase
     {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
 
-        $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
+        $class  = new ReflectionClass('Solrsearch_Model_CollectionRoles');
         $method = $class->getMethod('hasVisibleChildren');
         $method->setAccessible(true);
         $hasChildren = $method->invokeArgs($collectionRoles, [CollectionRole::get(17)]);
@@ -59,7 +59,7 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase
     {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
 
-        $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
+        $class  = new ReflectionClass('Solrsearch_Model_CollectionRoles');
         $method = $class->getMethod('hasVisibleChildren');
         $method->setAccessible(true);
         $hasChildren = $method->invokeArgs($collectionRoles, [CollectionRole::get(7)]);
@@ -71,7 +71,7 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase
     {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
 
-        $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
+        $class  = new ReflectionClass('Solrsearch_Model_CollectionRoles');
         $method = $class->getMethod('hasPublishedDocs');
         $method->setAccessible(true);
         $hasChildren = $method->invokeArgs($collectionRoles, [CollectionRole::get(17)]);
@@ -83,7 +83,7 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase
     {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
 
-        $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
+        $class  = new ReflectionClass('Solrsearch_Model_CollectionRoles');
         $method = $class->getMethod('hasPublishedDocs');
         $method->setAccessible(true);
         $hasChildren = $method->invokeArgs($collectionRoles, [CollectionRole::get(7)]);
@@ -95,7 +95,7 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase
     {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
 
-        $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
+        $class  = new ReflectionClass('Solrsearch_Model_CollectionRoles');
         $method = $class->getMethod('hasPublishedDocs');
         $method->setAccessible(true);
         $hasChildren = $method->invokeArgs($collectionRoles, [CollectionRole::get(5)]);

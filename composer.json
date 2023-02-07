@@ -3,10 +3,9 @@
   "description": "Application Environment for Opus 4",
   "license": "GPL-2.0+",
   "require": {
-    "php": ">=7.0 <7.2",
+    "php": ">=7.1",
     "ext-intl": "*",
     "ext-gd": "*",
-    "ext-mcrypt": "*",
     "ext-mbstring": "*",
     "ext-pdo": "*",
     "ext-pdo_mysql": "*",
@@ -20,36 +19,29 @@
     "ext-simplexml": "*",
     "ext-fileinfo": "*",
     "ext-readline": "*",
-    "zendframework/zendframework1": "1.12.*",
+    "ext-sockets": "*",
+    "opus4/zf1-future": "1.21.*",
     "jpgraph/jpgraph": "dev-master",
-    "solarium/solarium": "3.8.*",
-    "opus4-repo/opus4-common": "4.7.2.x-dev",
-    "opus4-repo/framework": "4.7.2.x-dev",
-    "opus4-repo/search": "4.7.2.x-dev",
-    "opus4-repo/opus4-bibtex": "4.7.2.x-dev",
-    "opus4-repo/opus4-import": "4.7.2.x-dev",
-    "opus4-repo/opus4-pdf": "4.7.2.x-dev",
+    "opus4-repo/opus4-common": "4.7.2.*",
+    "opus4-repo/framework": "4.7.2.*",
+    "opus4-repo/search": ">4.7.1",
+    "opus4-repo/opus4-bibtex": "4.7.2.*",
+    "opus4-repo/opus4-import": "4.7.2.*",
+    "opus4-repo/opus4-pdf": "4.7.2.*",
     "opus4-repo/opus4-job": "dev-main",
     "opus4-repo/opus4-security": "dev-main",
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
     "oomphinc/composer-installers-extender": "^2.0",
-    "symfony/console": "*"
+    "symfony/console": "*",
+    "pear/log": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "4.8.*",
-    "phpunit/php-timer": "1.0.9",
-    "phpunit/dbunit": "~1.3",
-    "phpunit/phpunit-story": "~1.0",
-    "phpunit/phpunit-selenium": "~1.4",
-    "phpunit/php-invoker": "1.1.*",
+    "phpunit/phpunit": "<9",
     "phploc/phploc": "*",
-    "phpmd/phpmd" : "2.*",
+    "phpmd/phpmd" : "*",
     "sebastian/phpcpd": "*",
-    "mayflower/php-codebrowser": "~1.1",
-    "squizlabs/php_codesniffer": "2.*",
-    "opus4-repo/codesniffer": "dev-master",
-    "zendframework/zend-coding-standard": "~1.0.0",
+    "opus4-repo/codesniffer": "dev-laminas",
     "phpmetrics/phpmetrics": "2.7.4"
   },
   "minimum-stability": "dev",
@@ -63,7 +55,8 @@
   "config": {
     "allow-plugins": {
       "composer/installers": true,
-      "oomphinc/composer-installers-extender": true
+      "oomphinc/composer-installers-extender": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   },
   "scripts": {
@@ -83,8 +76,14 @@
       "Composer\\Config::disableProcessTimeout",
       "phpunit --log-junit build/phpunit.xml --colors=always --configuration tests/phpunit.xml"
     ],
-    "cs-check": "phpcs -n --extensions=php,phtml,css,js,inc",
-    "cs-fix": "phpcbf --extensions=php,phtml,css,js,inc",
+    "cs-check": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpcs -np --extensions=php,phtml,css,js,inc"
+    ],
+    "cs-fix": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpcbf --extensions=php,phtml,css,js,inc"
+    ],
     "cs-analysis": "phpcs -n --report=checkstyle --report-file=build/checkstyle.xml",
     "phpmd": "phpmd library xml cleancode,unusedcode,design,naming --reportfile build/phpmd.xml --ignore-violations-on-exit",
     "phploc": "phploc --log-csv build/phploc.csv src",

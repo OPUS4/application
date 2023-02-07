@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_View_Helper_FormHtml extends \Zend_View_Helper_FormElement
+class Application_View_Helper_FormHtml extends Zend_View_Helper_FormElement
 {
-
-    public function formHtml($name, $value = null, array $attribs = null)
+    /**
+     * @param string      $name
+     * @param string|null $value
+     * @param array|null  $attribs
+     * @return string
+     */
+    public function formHtml($name, $value = null, $attribs = null)
     {
         if (isset($attribs['content'])) {
             $content = $attribs['content'];
@@ -57,7 +60,7 @@ class Application_View_Helper_FormHtml extends \Zend_View_Helper_FormElement
         $translator = $this->getTranslator();
 
         $output = "<$tag";
-        if (! is_null($cssClass)) {
+        if ($cssClass !== null) {
             $output .= " class=\"$cssClass\"";
         }
         $output .= '>';

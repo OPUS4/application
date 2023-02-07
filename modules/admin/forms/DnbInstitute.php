@@ -30,18 +30,18 @@
  */
 
 use Opus\Common\DnbInstitute;
+use Opus\Common\DnbInstituteInterface;
 
 class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract
 {
-
-    const ELEMENT_NAME = 'Name';
-    const ELEMENT_DEPARTMENT = 'Department';
-    const ELEMENT_ADDRESS = 'Address';
-    const ELEMENT_CITY = 'City';
-    const ELEMENT_PHONE = 'Phone';
-    const ELEMENT_DNB_CONTACT_ID = 'DnbContactId';
-    const ELEMENT_IS_GRANTOR = 'IsGrantor';
-    const ELEMENT_IS_PUBLISHER = 'IsPublisher';
+    public const ELEMENT_NAME           = 'Name';
+    public const ELEMENT_DEPARTMENT     = 'Department';
+    public const ELEMENT_ADDRESS        = 'Address';
+    public const ELEMENT_CITY           = 'City';
+    public const ELEMENT_PHONE          = 'Phone';
+    public const ELEMENT_DNB_CONTACT_ID = 'DnbContactId';
+    public const ELEMENT_IS_GRANTOR     = 'IsGrantor';
+    public const ELEMENT_IS_PUBLISHER   = 'IsPublisher';
 
     public function init()
     {
@@ -52,14 +52,17 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract
         $this->setUseNameAsLabel(true);
         $this->setModelClass(DnbInstitute::class);
 
-        $fieldName = DnbInstitute::describeField(DnbInstitute::FIELD_NAME);
+        $fieldName       = DnbInstitute::describeField(DnbInstitute::FIELD_NAME);
         $fieldDepartment = DnbInstitute::describeField(DnbInstitute::FIELD_DEPARTMENT);
 
         $this->addElement('text', self::ELEMENT_NAME, [
-            'required' => true, 'size' => 70, 'maxlength' => $fieldName->getMaxSize()
+            'required'  => true,
+            'size'      => 70,
+            'maxlength' => $fieldName->getMaxSize(),
         ]);
         $this->addElement('text', self::ELEMENT_DEPARTMENT, [
-            'size' => 70, 'maxlength' => $fieldDepartment->getMaxSize()
+            'size'      => 70,
+            'maxlength' => $fieldDepartment->getMaxSize(),
         ]);
         $this->addElement('textarea', self::ELEMENT_ADDRESS);
         $this->addElement('text', self::ELEMENT_CITY, ['required' => true, 'size' => 50]);
@@ -69,6 +72,9 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract
         $this->addElement('checkbox', self::ELEMENT_IS_PUBLISHER);
     }
 
+    /**
+     * @param DnbInstituteInterface $institute
+     */
     public function populateFromModel($institute)
     {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($institute->getId());
@@ -82,6 +88,9 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract
         $this->getElement(self::ELEMENT_IS_PUBLISHER)->setValue($institute->getIsPublisher());
     }
 
+    /**
+     * @param DnbInstituteInterface $institute
+     */
     public function updateModel($institute)
     {
         $institute->setName($this->getElementValue(self::ELEMENT_NAME));

@@ -25,10 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2021-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Bibtex\Import\Config\BibtexConfigException;
 use Opus\Bibtex\Import\Config\BibtexService;
 
 /**
@@ -36,18 +37,17 @@ use Opus\Bibtex\Import\Config\BibtexService;
  */
 class Admin_Form_Import extends Application_Form_Abstract
 {
+    public const ELEMENT_FILE = 'File';
 
-    const ELEMENT_FILE = 'File';
+    public const ELEMENT_VERBOSE = 'Verbose';
 
-    const ELEMENT_VERBOSE = 'Verbose';
+    public const ELEMENT_COLLECTION_IDS = 'Collections';
 
-    const ELEMENT_COLLECTION_IDS = 'Collections';
+    public const ELEMENT_DRY_MODE = 'DryMode';
 
-    const ELEMENT_DRY_MODE = 'DryMode';
+    public const ELEMENT_IMPORT = 'Import';
 
-    const ELEMENT_IMPORT = 'Import';
-
-    const ELEMENT_MAPPING = 'Mapping';
+    public const ELEMENT_MAPPING = 'Mapping';
 
     public function init()
     {
@@ -57,8 +57,8 @@ class Admin_Form_Import extends Application_Form_Abstract
             'file',
             self::ELEMENT_FILE,
             [
-                'label' => 'admin_import_file',
-                'required' => true
+                'label'    => 'admin_import_file',
+                'required' => true,
             ]
         );
 
@@ -69,7 +69,7 @@ class Admin_Form_Import extends Application_Form_Abstract
             'checkbox',
             self::ELEMENT_VERBOSE,
             [
-                'label' => 'admin_import_verbose'
+                'label' => 'admin_import_verbose',
             ]
         );
 
@@ -77,7 +77,7 @@ class Admin_Form_Import extends Application_Form_Abstract
             'checkbox',
             self::ELEMENT_DRY_MODE,
             [
-                'label' => 'admin_import_dry_mode'
+                'label' => 'admin_import_dry_mode',
             ]
         );
 
@@ -85,11 +85,11 @@ class Admin_Form_Import extends Application_Form_Abstract
             'submit',
             self::ELEMENT_IMPORT,
             [
-                'label' => 'admin_import_start',
+                'label'      => 'admin_import_start',
                 'decorators' => [
                     'ViewHelper',
-                    [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']]
-                ]
+                    [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']],
+                ],
             ]
         );
 
@@ -97,31 +97,38 @@ class Admin_Form_Import extends Application_Form_Abstract
             'collectionAutoComplete',
             'CollectionIds', // TODO different name for input to avoid conflicts with 'Collections' - fix
             [
-                'label' => 'admin_import_collections',
-                'description' => 'admin_import_collection_ids_hint' // TODO not used right now -> see view helper
+                'label'       => 'admin_import_collections',
+                'description' => 'admin_import_collection_ids_hint', // TODO not used right now -> see view helper
             ]
         );
 
         $this->addDisplayGroup(
             [self::ELEMENT_IMPORT],
             'actions',
-            ['order' => 1000, 'decorators' => [
-                'FormElements',
-                [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
-                [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']]
-            ]]
+            [
+                'order'      => 1000,
+                'decorators' => [
+                    'FormElements',
+                    [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
+                    [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']],
+                ],
+            ]
         );
 
         $this->setDecorators([
             'FormElements',
-            'Form'
+            'Form',
         ]);
     }
 
+    /**
+     * @return Zend_Form_Element
+     * @throws BibtexConfigException
+     */
     protected function getBibtexMappingSelect()
     {
         $mappingElement = $this->createElement('select', self::ELEMENT_MAPPING, [
-            'label' => 'admin_import_mapping_name'
+            'label' => 'admin_import_mapping_name',
         ]);
 
         $bibtex = BibtexService::getInstance();
@@ -133,7 +140,7 @@ class Admin_Form_Import extends Application_Form_Abstract
         foreach ($mappingNames as $name) {
             $mapping = $bibtex->getFieldMapping($name);
 
-            $translator = $this->getTranslator();
+            $translator     = $this->getTranslator();
             $translationKey = "bibtex_mapping_description_$name";
 
             if ($translator->isTranslated($translationKey)) {

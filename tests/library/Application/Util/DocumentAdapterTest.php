@@ -40,7 +40,7 @@ use Opus\Common\Title;
  */
 class Application_Util_DocumentAdapterTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'translation'];
 
     public function testHasFilesTrue()
@@ -145,7 +145,7 @@ class Application_Util_DocumentAdapterTest extends ControllerTestCase
 
         $view = $this->getView();
 
-        $doc = $this->createTestDocument();
+        $doc   = $this->createTestDocument();
         $docId = $doc->store();
 
         $docAdapter = new Application_Util_DocumentAdapter($view, $doc);

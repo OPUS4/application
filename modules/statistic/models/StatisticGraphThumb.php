@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,52 +25,63 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Statistic
- * @author      Birgit Dressler (b.dressler@sulb.uni-saarland.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Statistic_Model_StatisticGraphThumb
 {
+    /** @var array */
+    protected $data;
 
-    protected $_data = null;
-    protected $_width = 35;
-    protected $_height = 27;
-    protected $_bgImg ;
+    /** @var int */
+    protected $width = 35;
 
+    /** @var int */
+    protected $height = 27;
+
+    /** @var string|null */
+    protected $bgImg;
+
+    /**
+     * @param array       $data
+     * @param null|string $backgroundImage
+     */
     public function __construct($data, $backgroundImage = null)
     {
-        $this->_bgImg = $backgroundImage;
+        $this->bgImg = $backgroundImage;
 
-        $this->_data = $data;
+        $this->data = $data;
     }
 
+    /**
+     * @param int $width
+     * @param int $height
+     */
     public function setSize($width, $height)
     {
-        $this->_width = $width;
-        $this->_height = $height;
+        $this->width  = $width;
+        $this->height = $height;
     }
 
     public function drawGraph()
     {
         // generate graphic
-        $graph = new \Graph($this->_width, $this->_height, "auto");
+        $graph = new Graph($this->width, $this->height, "auto");
         $graph->SetScale("textlin");
 
         $graph->img->SetMargin(0, 0, 1, 0);
         //$graph->SetFrame(true);
         // generate bars
-        $bplot = new \BarPlot($this->_data);
+        $bplot = new BarPlot($this->data);
         $graph->Add($bplot);
-
 
         // format bars
         $bplot->SetFillColor('gray');
 
         //show background image if file exists
-        if (false === empty($this->_bgImg) && is_readable($this->_bgImg)) {
-            $graph->SetBackgroundImage($this->_bgImg, BGIMG_FILLFRAME);
+        if (false === empty($this->bgImg) && is_readable($this->bgImg)) {
+            $graph->SetBackgroundImage($this->bgImg, BGIMG_FILLFRAME);
         }
         $bplot->SetFillGradient("gray", "darkgray", GRAD_HOR);
         $graph->yaxis->HideTicks(true, true);

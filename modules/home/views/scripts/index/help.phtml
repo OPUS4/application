@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,18 +26,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category   Application
- * @package    Module_Home
- * @author     Oliver Marahrens (o.marahrens@tu-harburg.de)
- * @author     Sascha Szott <szott@zib.de>
- * @author     Jens Schwidder <schwidder@zib.de>
- * @copyright  Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright  Copyright (c) 2008, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * TODO pull out translation key generation (move to Home_Model_HelpFiles)
  * TODO refactor $helpFilesAvailable
  * TODO breadcrumbs ? at least the look ?
  */
+
 ?>
 
 <?PHP $this->title = 'help_index_pagetitle' ?>
@@ -59,30 +58,25 @@
         <?php foreach ($helpEntries as $section => $entries) : ?>
             <h3><?= $this->translate($section) ?> <?= $this->faqSectionEditLink($section) ?></h3>
             <ul class="nav help">
-                <?php foreach ($entries as $entry) : ?>
-                    <li>
-                        <?php if (! $this->help->getSeparateViewEnabled()) : ?>
-                            <?php if ($this->help->isContentAvailable($entry)) : ?>
-                            <a href="#<?= $entry; ?>">
-                                <?= $this->translate('help_title_' . $entry) ?>
-                            </a>
-                            <?php else : ?>
-                            <?= $this->translate('help_title_' . $entry) ?> <?= $this->faqEditLink($entry) ?>
-                            <?php endif ?>
-                        <?php else : ?>
-                            <?php if ($this->help->isContentAvailable($entry)) : ?>
-                            <a href="<?= $this->url([
-                                    'module' => 'home', 'controller' => 'index', 'action' => 'help',
-                                    'content' => $entry
-                                ], null, true) ?>">
-                                <?= $this->translate('help_title_' . $entry) ?>
-                            </a>
-                            <?php else : ?>
-                            <?= $this->translate('help_title_' . $entry) ?> <?= $this->faqEditLink($entry) ?>
-                            <?php endif ?>
-                        <?php endif ?>
-                    </li>
-                <?php endforeach; ?>
+            <?php foreach ($entries as $entry) : ?>
+                <li>
+                <?php if (! $this->help->getSeparateViewEnabled()) : ?>
+                    <?php if ($this->help->isContentAvailable($entry)) : ?>
+                    <a href="#<?= $entry; ?>"><?= $this->translate('help_title_' . $entry) ?></a>
+                    <?php else : ?>
+                        <?= $this->translate('help_title_' . $entry) ?> <?= $this->faqEditLink($entry) ?>
+                    <?php endif ?>
+                <?php else : ?>
+                    <?php if ($this->help->isContentAvailable($entry)) : ?>
+                    <a href="<?= $this->url(['module' => 'home', 'controller' => 'index', 'action' => 'help', 'content' => $entry], null, true) ?>">
+                        <?= $this->translate('help_title_' . $entry) ?>
+                    </a>
+                    <?php else : ?>
+                        <?= $this->translate('help_title_' . $entry) ?> <?= $this->faqEditLink($entry) ?>
+                    <?php endif ?>
+                <?php endif ?>
+                </li>
+            <?php endforeach; ?>
             </ul>
         <?php endforeach; ?>
         </div>

@@ -36,7 +36,6 @@ use Opus\Common\Repository;
  * Removes all documents
  *
  * TODO convert to command (with confirmation check)
- *
  */
 
 $repository = Repository::getInstance();

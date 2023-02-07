@@ -30,11 +30,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\UserRoleInterface;
+
 class Admin_RoleController extends Application_Controller_ActionCRUD
 {
-
-    // TODO duplicated in Admin_Form_Role (centralize)
-    private static $_protectedRoles = ['guest', 'administrator'];
+    /**
+     * TODO duplicated in Admin_Form_Role (centralize)
+     *
+     * @var string[]
+     */
+    private static $protectedRoles = ['guest', 'administrator'];
 
     public function init()
     {
@@ -42,6 +47,9 @@ class Admin_RoleController extends Application_Controller_ActionCRUD
         parent::init();
     }
 
+    /**
+     * @return Application_Form_Model_Table
+     */
     public function getIndexForm()
     {
         $form = parent::getIndexForm();
@@ -49,8 +57,12 @@ class Admin_RoleController extends Application_Controller_ActionCRUD
         return $form;
     }
 
+    /**
+     * @param UserRoleInterface $model
+     * @return bool
+     */
     public function isModifiable($model)
     {
-        return ! in_array($model->getName(), self::$_protectedRoles);
+        return ! in_array($model->getName(), self::$protectedRoles);
     }
 }

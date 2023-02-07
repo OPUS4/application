@@ -36,9 +36,13 @@ use Opus\Common\Security\Realm;
  */
 class Application_Export_Exporter
 {
+    /** @var array */
+    private $formats = [];
 
-    private $_formats = [];
-
+    /**
+     * @param array $options
+     * @throws Zend_Navigation_Exception
+     */
     public function addFormats($options)
     {
         if (! is_array($options)) {
@@ -47,23 +51,29 @@ class Application_Export_Exporter
 
         foreach ($options as $key => $option) {
             // TODO use addFormat function, get key from 'name' or use hash?
-            $format = new \Zend_Navigation_Page_Mvc($option);
+            $format = new Zend_Navigation_Page_Mvc($option);
 
             // TODO check if key is string
-            $this->_formats[$key] = $format;
+            $this->formats[$key] = $format;
         }
     }
 
+    /**
+     * @return array
+     */
     public function getFormats()
     {
-        return $this->_formats;
+        return $this->formats;
     }
 
     public function removeAll()
     {
-        $this->_formats = [];
+        $this->formats = [];
     }
 
+    /**
+     * @return array
+     */
     public function getAllowedFormats()
     {
         $formats = $this->getFormats();

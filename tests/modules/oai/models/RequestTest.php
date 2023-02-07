@@ -31,15 +31,15 @@
 
 class Oai_Model_RequestTest extends ControllerTestCase
 {
+    /** @var Oai_Model_Request */
+    private $requestObj;
 
-    private $request;
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->request = new Oai_Model_Request();
-        $this->request->setPathToMetadataPrefixFiles(APPLICATION_PATH . '/modules/oai/views/scripts/index/prefixes');
+        $this->requestObj = new Oai_Model_Request();
+        $this->requestObj->setPathToMetadataPrefixFiles(APPLICATION_PATH . '/modules/oai/views/scripts/index/prefixes');
     }
 
     /**
@@ -61,9 +61,9 @@ class Oai_Model_RequestTest extends ControllerTestCase
     }
 
     /**
-     * @param string  $from
-     * @param string  $until
-     * @param boolean $result
+     * @param string $from
+     * @param string $until
+     * @param bool   $result
      * @dataProvider dataFromUntilRange
      */
     public function testValidateFromUntilRange($from, $until, $result)
@@ -91,8 +91,8 @@ class Oai_Model_RequestTest extends ControllerTestCase
     }
 
     /**
-     * @param string  $datestr
-     * @param boolean $result
+     * @param string $datestr
+     * @param bool   $result
      * @dataProvider dataCheckDate
      */
     public function testCheckDate($datestr, $result)
@@ -104,47 +104,47 @@ class Oai_Model_RequestTest extends ControllerTestCase
 
     public function testValidate()
     {
-        $request = $this->request;
+        $request = $this->requestObj;
 
         $this->assertFalse($request->validate([]));
 
         $this->assertTrue($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
-            'verb' => 'ListRecords',
+            'verb'           => 'ListRecords',
         ]));
     }
 
     public function testValidateFrom()
     {
-        $request = $this->request;
+        $request = $this->requestObj;
 
         $this->assertTrue($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
-            'verb' => 'ListRecords',
-            'from' => '2020-09-21'
+            'verb'           => 'ListRecords',
+            'from'           => '2020-09-21',
         ]));
 
         $this->assertFalse($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
-            'verb' => 'ListRecords',
-            'from' => '2020/09/21'
+            'verb'           => 'ListRecords',
+            'from'           => '2020/09/21',
         ]));
     }
 
     public function testValidateUntil()
     {
-        $request = $this->request;
+        $request = $this->requestObj;
 
         $this->assertTrue($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
-            'verb' => 'ListRecords',
-            'until' => '2020-09-21'
+            'verb'           => 'ListRecords',
+            'until'          => '2020-09-21',
         ]));
 
         $this->assertFalse($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
-            'verb' => 'ListRecords',
-            'until' => '2020/09/21'
+            'verb'           => 'ListRecords',
+            'until'          => '2020/09/21',
         ]));
     }
 }

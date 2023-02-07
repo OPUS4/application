@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Setup_Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,13 +34,12 @@
  *
  * Format: character, letters and underline, starting with a character
  */
-class Setup_Form_Validate_TranslationKeyFormat extends \Zend_Validate_Regex
+class Setup_Form_Validate_TranslationKeyFormat extends Zend_Validate_Regex
 {
-
     /**
      * /^[A-Za-z0-9@._-]+$/
      */
-    const PATTERN = '/^[A-Za-z][A-Za-z0-9_]*$/';
+    public const PATTERN = '/^[A-Za-z][A-Za-z0-9_]*$/';
 
     public function __construct()
     {

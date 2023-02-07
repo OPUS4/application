@@ -23,10 +23,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -34,28 +31,28 @@
  * Array with messages for the client-sided validation.
  * @type {Array}
  */
-var opus4Messages = [];
+var opus4Messages                            = [];
 opus4Messages["uploadedFileHasErrorMessage"] = "The file '%name%' has the following errors:";
-opus4Messages["fileExtensionFalse"] = "The extension of file is not allowed.";
-opus4Messages["fileUploadErrorSize"] = "The size of file is not allowed. Choose a file with less then \'%size%\' byte.";
-opus4Messages["filenameLengthError"] = "The length of your filename is too long. Your filename should have less then \'%size%\' characters.";
-opus4Messages["filenameFormatError"] = "Your filename has not allowed characters or a wrong form.";
-opus4Messages["chooseAnotherFile"] = "Please choose another file.";
+opus4Messages["fileExtensionFalse"]          = "The extension of file is not allowed.";
+opus4Messages["fileUploadErrorSize"]         = "The size of file is not allowed. Choose a file with less then \'%size%\' byte.";
+opus4Messages["filenameLengthError"]         = "The length of your filename is too long. Your filename should have less then \'%size%\' characters.";
+opus4Messages["filenameFormatError"]         = "Your filename has not allowed characters or a wrong form.";
+opus4Messages["chooseAnotherFile"]           = "Please choose another file.";
 
 $(function () {
-    var fileElem = $("input:file")[0];
+    var fileElem    = $("input:file")[0];
     var maxFileSize = $("input[name=MAX_FILE_SIZE]").val();
 
     if (typeof fileElem !== "undefined") {
         fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
 
         fileElem.onchange = function () {
-            var filepath = this.value.split("\\");
-            var filename = filepath[filepath.length - 1];
-            var fileSize = this.files[0].size;
-            var pattern = new RegExp($("input[name=filenameFormat]").val());
+            var filepath        = this.value.split("\\");
+            var filename        = filepath[filepath.length - 1];
+            var fileSize        = this.files[0].size;
+            var pattern         = new RegExp($("input[name=filenameFormat]").val());
             var maxFileNameSize = $("input[name=filenameMaxLength]").val();
-            var errors = [];
+            var errors          = [];
 
             var ext = filename.match(/\.([^\.]+)$/);
             if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) === -1)) {

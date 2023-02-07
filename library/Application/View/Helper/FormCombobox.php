@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -34,19 +32,29 @@
 /**
  * View helper for rendering a combobox (text input + select).
  */
-class Application_View_Helper_FormCombobox extends \Zend_View_Helper_FormElement
+class Application_View_Helper_FormCombobox extends Zend_View_Helper_FormElement
 {
-
+    /**
+     * @param string     $name
+     * @param mixed|null $value
+     * @param array|null $attribs
+     * @param array|null $options
+     * @param string     $listsep
+     * @return string
+     */
     public function formCombobox($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
     {
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
+
+        // @phpcs:disable
         extract($info);
+        // @phpcs:enable
 
         $xhtml = "<div class=\"ui-widget\">\n    ";
 
         $xhtml .= "<select name=\"$name\" class=\"combobox\">\n";
 
-        if (! is_null($value) && strlen(trim($value)) > 0 && ! in_array($value, $options)) {
+        if ($value !== null && strlen(trim($value)) > 0 && ! in_array($value, $options)) {
             $xhtml .= "<option value=\"$value\">$value</option>\n";
         }
 

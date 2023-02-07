@@ -36,9 +36,12 @@ use Opus\Common\DocumentInterface;
  */
 class Admin_Form_Files extends Admin_Form_Document_MultiSubForm
 {
+    public const ELEMENT_IMPORT = 'Import';
 
-    const ELEMENT_IMPORT = 'Import';
-
+    /**
+     * @param array|null $options
+     * @throws Application_Exception
+     */
     public function __construct($options = null)
     {
         parent::__construct('Admin_Form_File', 'File', $options);
@@ -59,24 +62,33 @@ class Admin_Form_Files extends Admin_Form_Document_MultiSubForm
         $this->addElement(
             'submit',
             self::ELEMENT_IMPORT,
-            ['order' => 1002, 'label' => 'button_file_import',
-            'decorators' => [], 'disableLoadDefaultDecorators' => true]
+            [
+                'order'                        => 1002,
+                'label'                        => 'button_file_import',
+                'decorators'                   => [],
+                'disableLoadDefaultDecorators' => true,
+            ]
         );
     }
 
+    /**
+     * @param array $post
+     * @param array $context
+     * @return array|string|null
+     */
     public function processPost($post, $context)
     {
         $result = parent::processPost($post, $context);
 
-        if (is_null($result)) {
+        if ($result === null) {
             if (array_key_exists(self::ELEMENT_IMPORT, $post)) {
                 $result = [
                     'result' => Admin_Form_Document::RESULT_SWITCH_TO,
                     'target' => [
-                        'module' => 'admin',
+                        'module'     => 'admin',
                         'controller' => 'filebrowser',
-                        'action' => 'index'
-                    ]
+                        'action'     => 'index',
+                    ],
                 ];
             }
         }
@@ -84,6 +96,11 @@ class Admin_Form_Files extends Admin_Form_Document_MultiSubForm
         return $result;
     }
 
+    /**
+     * @param string $subFormName
+     * @param array  $subdata
+     * @return array|string
+     */
     protected function processPostRemove($subFormName, $subdata)
     {
         if (isset($subdata[Admin_Form_File::ELEMENT_ID])) {
@@ -98,38 +115,45 @@ class Admin_Form_Files extends Admin_Form_Document_MultiSubForm
         return [
             'result' => Admin_Form_Document::RESULT_SWITCH_TO,
             'target' => [
-                'module' => 'admin',
+                'module'     => 'admin',
                 'controller' => 'filemanager',
-                'action' => 'delete',
-                'fileId' => $fileId
-            ]
+                'action'     => 'delete',
+                'fileId'     => $fileId,
+            ],
         ];
     }
 
+    /**
+     * @return array
+     */
     protected function processPostAdd()
     {
         // Hinzufuegen wurde ausgewaehlt
         return [
             'result' => Admin_Form_Document::RESULT_SWITCH_TO,
             'target' => [
-                'module' => 'admin',
+                'module'     => 'admin',
                 'controller' => 'filemanager',
-                'action' => 'upload'
-            ]
+                'action'     => 'upload',
+            ],
         ];
     }
 
+    /**
+     * @param Zend_Controller_Request_Http $request
+     * @param array|null                   $post
+     */
     public function continueEdit($request, $post = null)
     {
-        $removedFileId = $request->getParam('fileId'); // TODO make robuster
+        $removedFileId = (int) $request->getParam('fileId'); // TODO make robuster
 
         if (is_array($post)) {
             foreach ($post as $file) {
                 if (isset($file['Id'])) {
-                    $fileId = $file['Id'];
+                    $fileId  = (int) $file['Id'];
                     $subform = $this->getSubFormForId($fileId);
-                    if (! is_null($subform)) {
-                        if ($fileId != $removedFileId) {
+                    if ($subform !== null) {
+                        if ($fileId !== $removedFileId) {
                             $subform->populate($file);
                         } else {
                             $this->removeSubForm($subform->getName());
@@ -140,16 +164,21 @@ class Admin_Form_Files extends Admin_Form_Document_MultiSubForm
         } else {
             $subform = $this->getSubFormForId($removedFileId);
 
-            if (! is_null($subform)) {
+            if ($subform !== null) {
                 $this->removeSubForm($subform->getName());
             }
         }
     }
 
+    /**
+     * @param int $fileId
+     * @return Admin_Form_File|null
+     */
     public function getSubFormForId($fileId)
     {
         foreach ($this->getSubForms() as $subform) {
-            if ($subform->getElementValue(Admin_Form_File::ELEMENT_ID) == $fileId) {
+            if ($subform->getElementValue(Admin_Form_File::ELEMENT_ID) === $fileId) {
+                // TODO TYPE string === int ?
                 return $subform;
             }
         }
@@ -158,6 +187,7 @@ class Admin_Form_Files extends Admin_Form_Document_MultiSubForm
 
     /**
      * Liefert File objects for document through getFile function to get proper order of files.
+     *
      * @param DocumentInterface $document
      * @return array Array of File objects
      */

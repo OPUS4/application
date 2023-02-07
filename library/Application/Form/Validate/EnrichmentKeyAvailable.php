@@ -36,31 +36,35 @@ use Opus\Common\EnrichmentKey;
  *
  * Enrichment key names are not case-sensitive.
  */
-class Application_Form_Validate_EnrichmentKeyAvailable extends \Zend_Validate_Abstract
+class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abstract
 {
-
     /**
      * Constants for enrichment key not available anymore.
      */
-    const NOT_AVAILABLE = 'isAvailable';
+    public const NOT_AVAILABLE = 'isAvailable';
 
     /**
      * Error messages.
+     * @phpcs:disable
      */
     protected $_messageTemplates = [
         self::NOT_AVAILABLE => 'admin_enrichmentkey_error_name_exists',
     ];
+    // @phpcs:enable
 
     /**
      * Checks if an enrichmentkey already exists.
+     *
+     * @param string     $value
+     * @param array|null $context
+     * @return bool
      */
     public function isValid($value, $context = null)
     {
-
         $value = (string) $value;
         $this->_setValue($value);
 
-        $name = null;
+        $name = '';
 
         if (is_array($context)) {
             if (isset($context['Id'])) {
@@ -70,11 +74,13 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends \Zend_Validate_Ab
             $name = $context;
         }
 
-        if (strtolower($name) === strtolower($value)) {
+        $value = $value ?? '';
+
+        if ($name === $value || strtolower($name) === strtolower($value)) {
             return true;
         }
 
-        if ($this->_isEnrichmentKeyUsed($value)) {
+        if ($this->isEnrichmentKeyUsed($value)) {
             $this->_error(self::NOT_AVAILABLE);
             return false;
         }
@@ -84,13 +90,14 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends \Zend_Validate_Ab
 
     /**
      * Checks if a enrichmentkey already used.
-     * @param string $login
-     * @return boolean
+     *
+     * @param string $name
+     * @return bool
      */
-    protected function _isEnrichmentKeyUsed($name)
+    protected function isEnrichmentKeyUsed($name)
     {
         $enrichmentkey = EnrichmentKey::fetchByName($name);
 
-        return ! is_null($enrichmentkey);
+        return $enrichmentkey !== null;
     }
 }

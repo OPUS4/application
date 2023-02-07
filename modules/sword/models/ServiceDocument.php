@@ -25,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Sword
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,28 +34,36 @@ use Opus\Import\Sword\ImportCollection;
 
 class Sword_Model_ServiceDocument
 {
+    public const SWORD_VERSION = '1.3';
 
+    public const SWORD_LEVEL = '1';
+
+    public const SWORD_SUPPORT_VERBOSE_MODE = 'false';
+
+    public const SWORD_SUPPORT_NOOP_MODE = 'false';
+
+    /** @var DOMDocument */
     private $document;
 
+    /** @var Zend_Config */
     private $config;
 
+    /** @var string */
     private $fullUrl;
 
-    const SWORD_VERSION = '1.3';
-
-    const SWORD_LEVEL = '1';
-
-    const SWORD_SUPPORT_VERBOSE_MODE = 'false';
-
-    const SWORD_SUPPORT_NOOP_MODE = 'false';
-
+    /**
+     * @param string $fullUrl
+     */
     public function __construct($fullUrl)
     {
-        $this->config = Config::get();
+        $this->config  = Config::get();
         $this->fullUrl = $fullUrl;
         $this->initServiceDocument();
     }
 
+    /**
+     * @return DOMDocument
+     */
     public function getDocument()
     {
         return $this->document;
@@ -67,7 +72,7 @@ class Sword_Model_ServiceDocument
     private function initServiceDocument()
     {
         $this->document = new DOMDocument();
-        $rootElement = $this->document->createElementNS('http://www.w3.org/2007/app', 'service');
+        $rootElement    = $this->document->createElementNS('http://www.w3.org/2007/app', 'service');
         $rootElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'http://www.w3.org/2007/app');
         $rootElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:atom', 'http://www.w3.org/2005/Atom');
         $rootElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:sword', 'http://purl.org/net/sword/');
@@ -85,7 +90,7 @@ class Sword_Model_ServiceDocument
         $rootElement->appendChild($workspaceNode);
 
         $applicationName = $this->config->name;
-        $node = $this->document->createElementNS('http://www.w3.org/2005/Atom', 'atom:title', $applicationName);
+        $node            = $this->document->createElementNS('http://www.w3.org/2005/Atom', 'atom:title', $applicationName);
 
         $workspaceNode->appendChild($node);
 
@@ -102,34 +107,44 @@ class Sword_Model_ServiceDocument
         $collectionNode->appendChild($node);
 
         $collectionPolicy = $this->config->sword->collection->default->collectionPolicy;
-        $node = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:collectionPolicy', $collectionPolicy);
+        $node             = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:collectionPolicy', $collectionPolicy);
         $collectionNode->appendChild($node);
 
         $node = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:mediation', 'false');
         $collectionNode->appendChild($node);
 
         $treatment = $this->config->sword->collection->default->treatment;
-        $node = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:treatment', $treatment);
+        $node      = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:treatment', $treatment);
         $collectionNode->appendChild($node);
 
         $acceptPackaging = $this->config->sword->collection->default->acceptPackaging;
-        $node = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:acceptPackaging', $acceptPackaging);
+        $node            = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:acceptPackaging', $acceptPackaging);
         $node->setAttribute('q', '1.0');
         $collectionNode->appendChild($node);
 
         $abstract = $this->config->sword->collection->default->abstract;
-        $node = $this->document->createElementNS('http://purl.org/dc/terms/', 'dcterms:abstract', $abstract);
+        $node     = $this->document->createElementNS('http://purl.org/dc/terms/', 'dcterms:abstract', $abstract);
         $collectionNode->appendChild($node);
 
         $this->document->appendChild($rootElement);
     }
 
+    /**
+     * @param string     $name
+     * @param string     $value
+     * @param DOMElement $rootElement
+     * @throws DOMException
+     */
     private function addSwordElement($name, $value, $rootElement)
     {
         $node = $this->document->createElementNS('http://purl.org/net/sword/', 'sword:' . $name, $value);
         $rootElement->appendChild($node);
     }
 
+    /**
+     * @param DOMElement $collectionNode
+     * @throws DOMException
+     */
     private function setImportCollection($collectionNode)
     {
         $importCollection = new ImportCollection();

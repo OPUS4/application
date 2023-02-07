@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,32 +24,32 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Unit Tests fuer abstrakte Basisklasse für Formulare, die als View angezeigt werden können.
- *
- * @category    Application Unit Test
- * @package     Application_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Form_AbstractViewableTest extends TestCase
 {
-
+    /** @var Application_Form_AbstractViewable */
     private $form;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->form = $this->getForm();
     }
 
+    /**
+     * @return Application_Form_AbstractViewable
+     */
     private function getForm()
     {
-        return $this->getMockForAbstractClass('Application_Form_AbstractViewable');
+        return $this->getMockForAbstractClass(Application_Form_AbstractViewable::class);
     }
 
     public function testPrepareRenderingAsView()
@@ -56,24 +57,24 @@ class Application_Form_AbstractViewableTest extends TestCase
         $form = $this->form;
 
         // Elemente hinzufügen, ein leeres, ein nicht leeres
-        $form->addElement(new \Zend_Form_Element_Text('textempty'));
-        $element = new \Zend_Form_Element_Textarea('textareaempty');
+        $form->addElement(new Zend_Form_Element_Text('textempty'));
+        $element = new Zend_Form_Element_Textarea('textareaempty');
         $element->setValue('     '); // leerer String
         $form->addElement($element);
 
-        $element = new \Zend_Form_Element_Text('textfull');
+        $element = new Zend_Form_Element_Text('textfull');
         $element->setValue('Mit Text');
         $form->addElement($element);
 
-        $form->addElement(new \Zend_Form_Element_Checkbox('checkboxfalse')); // wird entfernt
-        $element = new \Zend_Form_Element_Checkbox('checkboxtrue'); // wird nicht entfernt
+        $form->addElement(new Zend_Form_Element_Checkbox('checkboxfalse')); // wird entfernt
+        $element = new Zend_Form_Element_Checkbox('checkboxtrue'); // wird nicht entfernt
         $element->setChecked(true);
         $form->addElement($element);
 
-        $form->addElement(new \Zend_Form_Element_Submit('save')); // wird entfernt
-        $form->addElement(new \Zend_Form_Element_Button('cancel')); // wird entfernt
+        $form->addElement(new Zend_Form_Element_Submit('save')); // wird entfernt
+        $form->addElement(new Zend_Form_Element_Button('cancel')); // wird entfernt
 
-        $element = new \Zend_Form_Element_Select('select');
+        $element = new Zend_Form_Element_Select('select');
         $element->addMultiOption('option1');
         $element->setValue('option1');
         $form->addElement($element); // wird nicht entfernt
@@ -83,7 +84,7 @@ class Application_Form_AbstractViewableTest extends TestCase
         $form->addSubForm($subform, 'subformempty');
 
         $subform2 = $this->getForm(); // Nicht leeres Unterformular
-        $element = new \Zend_Form_Element_Text('subformtextfull');
+        $element  = new Zend_Form_Element_Text('subformtextfull');
         $element->setValue('Im SubForm mit Text');
         $subform2->addElement($element);
 
@@ -132,11 +133,11 @@ class Application_Form_AbstractViewableTest extends TestCase
     {
         $form = $this->getForm();
 
-        $form->addElement(new \Zend_Form_Element_Text('text'));
+        $form->addElement(new Zend_Form_Element_Text('text'));
 
         $this->assertFalse($form->isEmpty()); // Element
 
-        $form->addSubForm(new \Zend_Form_SubForm(), 'subform');
+        $form->addSubForm(new Zend_Form_SubForm(), 'subform');
 
         $this->assertFalse($form->isEmpty()); // Element und Unterformular
 

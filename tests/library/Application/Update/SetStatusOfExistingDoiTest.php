@@ -32,12 +32,13 @@
 use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\Common\Identifier;
-use Opus\Db\TableGateway;
 use Opus\Common\Model\ModelException;
+use Opus\Db\Documents;
+use Opus\Db\TableGateway;
 
 class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     /**
@@ -66,7 +67,7 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 
         $debug = "$modified (before)" . PHP_EOL;
 
-        $doc = Document::get($docId);
+        $doc       = Document::get($docId);
         $modified2 = $doc->getServerDateModified();
 
         $debug .= "$modified2 (before - from new object)" . PHP_EOL;
@@ -94,9 +95,13 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         $this->assertEquals('registered', $doc->getIdentifierDoi(0)->getStatus());
     }
 
+    /**
+     * @param int $docId
+     * @return string
+     */
     protected function getServerDateModifiedFromDatabase($docId)
     {
-        $table = TableGateway::getInstance('Opus\Db\Documents');
+        $table  = TableGateway::getInstance(Documents::class);
         $select = $table->select()
             ->from($table, ['server_date_modified'])
             ->where("id = $docId");

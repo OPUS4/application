@@ -30,14 +30,17 @@
  */
 
 use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 
 class Application_Form_Validate_CollectionRoleOaiNameUnique extends Application_Form_Validate_CollectionRoleNameUnique
 {
-
     /**
      * Verwende OaiName um CollectionRole zu finden.
+     *
+     * @param string $identifier
+     * @return CollectionRoleInterface
      */
-    protected function _getModel($identifier)
+    protected function getModel($identifier)
     {
         return CollectionRole::fetchByOaiName($identifier);
     }

@@ -37,12 +37,13 @@ use Opus\Common\UserRole;
  */
 class Admin_Form_UserRoles extends Application_Form_Model_Abstract
 {
+    public const ELEMENT_ROLES = 'roles';
 
-    const ELEMENT_ROLES = 'roles';
+    /** @var string */
+    protected $roleGroupLegendKey = 'admin_form_group_roles';
 
-    protected $_roleGroupLegendKey = 'admin_form_group_roles';
-
-    protected $_alwaysCheckAndDisableGuest = true;
+    /** @var bool */
+    protected $alwaysCheckAndDisableGuest = true;
 
     public function init()
     {
@@ -50,7 +51,7 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
 
         $this->setDecorators([
             'FormElements',
-            'fieldset'
+            'fieldset',
         ]);
 
         $this->removeElement(self::ELEMENT_MODEL_ID);
@@ -60,7 +61,7 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
 
         $this->addRoleElements();
 
-        $this->setLegend($this->_roleGroupLegendKey);
+        $this->setLegend($this->roleGroupLegendKey);
     }
 
     /**
@@ -71,7 +72,7 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
         $roles = UserRole::getAll();
 
         foreach ($roles as $role) {
-            $roleName = $role->getDisplayName();
+            $roleName     = $role->getDisplayName();
             $roleCheckbox = $this->createElement(
                 'checkbox',
                 $roleName
@@ -81,7 +82,7 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
         }
 
         // TODO special code to handle role 'guest': Is that good?
-        if ($this->_alwaysCheckAndDisableGuest) {
+        if ($this->alwaysCheckAndDisableGuest) {
             $guest = $this->getElement('guest');
             $guest->setValue(1);
             $guest->setAttrib('disabled', true);
@@ -90,6 +91,7 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
+     *
      * @param AccountInterface $model
      */
     public function populateFromModel($model)
@@ -121,13 +123,14 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
             $element->setValue(0);
         }
 
-        if ($this->_alwaysCheckAndDisableGuest) {
+        if ($this->alwaysCheckAndDisableGuest) {
             $this->getElement('guest')->setValue(1);
         }
     }
 
     /**
      * Returns names of selected user roles.
+     *
      * @return array
      */
     public function getSelectedRoles()
@@ -135,7 +138,7 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
         $selected = [];
 
         foreach ($this->getElements() as $element) {
-            if ($element->getValue() == 1) {
+            if ($element instanceof Zend_Form_Element_Checkbox && $element->isChecked()) {
                 $selected[] = $element->getName();
             }
         }
@@ -145,6 +148,7 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
 
     /**
      * Aktualsiert Model-Instanz mit Werten im Formular.
+     *
      * @param AccountInterface $account
      */
     public function updateModel($account)
@@ -153,14 +157,14 @@ class Admin_Form_UserRoles extends Application_Form_Model_Abstract
             throw new Exception('Model must be of type Opus_Account');
         }
 
-        $currentUser = \Zend_Auth::getInstance()->getIdentity();
+        $currentUser = Zend_Auth::getInstance()->getIdentity();
 
         $selected = $this->getSelectedRoles();
 
         $roles = [];
 
         foreach ($selected as $name) {
-            $role = UserRole::fetchByName($name);
+            $role    = UserRole::fetchByName($name);
             $roles[] = $role;
         }
 

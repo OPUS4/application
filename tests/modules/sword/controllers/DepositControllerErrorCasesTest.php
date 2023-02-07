@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Common\EnrichmentKey;
 use Opus\Import\AdditionalEnrichments;
 
@@ -38,12 +39,13 @@ use Opus\Import\AdditionalEnrichments;
  */
 class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var DepositTestHelper */
     private $testHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->testHelper = new DepositTestHelper();
@@ -104,8 +106,8 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         $this->testHelper->setValidAuthorizationHeader($this->getRequest(), DepositTestHelper::USER_AGENT);
 
         $maxUploadSize = new Application_Configuration_MaxUploadSize();
-        $numOfBytes = 1 + $maxUploadSize->getMaxUploadSizeInByte();
-        $payload = '';
+        $numOfBytes    = 1 + $maxUploadSize->getMaxUploadSizeInByte();
+        $payload       = '';
         for ($i = 0; $i < $numOfBytes; $i++) {
             $payload .= chr(rand(0, 255));
         }
@@ -138,68 +140,133 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
 
     public function testZipArchiveWithInvalidXml()
     {
-        $this->depositError('invalid-xml.zip', DepositTestHelper::CONTENT_TYPE_ZIP, 400, 'http://www.opus-repository.org/sword/error/InvalidXml');
+        $this->depositError(
+            'invalid-xml.zip',
+            DepositTestHelper::CONTENT_TYPE_ZIP,
+            400,
+            'http://www.opus-repository.org/sword/error/InvalidXml'
+        );
     }
 
     public function testTarArchiveWithInvalidXml()
     {
-        $this->depositError('invalid-xml.tar', DepositTestHelper::CONTENT_TYPE_TAR, 400, 'http://www.opus-repository.org/sword/error/InvalidXml');
+        $this->depositError(
+            'invalid-xml.tar',
+            DepositTestHelper::CONTENT_TYPE_TAR,
+            400,
+            'http://www.opus-repository.org/sword/error/InvalidXml'
+        );
     }
 
     public function testZipArchiveWithBadlyFormedXml()
     {
-        $this->depositError('badlyformed-xml.zip', DepositTestHelper::CONTENT_TYPE_ZIP, 400, 'http://www.opus-repository.org/sword/error/InvalidXml');
+        $this->depositError(
+            'badlyformed-xml.zip',
+            DepositTestHelper::CONTENT_TYPE_ZIP,
+            400,
+            'http://www.opus-repository.org/sword/error/InvalidXml'
+        );
     }
 
     public function testTarArchiveWithBadlyFormedXml()
     {
-        $this->depositError('badlyformed-xml.tar', DepositTestHelper::CONTENT_TYPE_TAR, 400, 'http://www.opus-repository.org/sword/error/InvalidXml');
+        $this->depositError(
+            'badlyformed-xml.tar',
+            DepositTestHelper::CONTENT_TYPE_TAR,
+            400,
+            'http://www.opus-repository.org/sword/error/InvalidXml'
+        );
     }
 
     public function testZipArchiveWithMissingXml()
     {
-        $this->depositError('missing-xml.zip', DepositTestHelper::CONTENT_TYPE_ZIP, 400, 'http://www.opus-repository.org/sword/error/MissingXml');
+        $this->depositError(
+            'missing-xml.zip',
+            DepositTestHelper::CONTENT_TYPE_ZIP,
+            400,
+            'http://www.opus-repository.org/sword/error/MissingXml'
+        );
     }
 
     public function testTarArchiveWithMissingXml()
     {
-        $this->depositError('missing-xml.tar', DepositTestHelper::CONTENT_TYPE_TAR, 400, 'http://www.opus-repository.org/sword/error/MissingXml');
+        $this->depositError(
+            'missing-xml.tar',
+            DepositTestHelper::CONTENT_TYPE_TAR,
+            400,
+            'http://www.opus-repository.org/sword/error/MissingXml'
+        );
     }
 
     public function testZipArchiveWithEmptyXml()
     {
-        $this->depositError('empty-xml.zip', DepositTestHelper::CONTENT_TYPE_ZIP, 400, 'http://www.opus-repository.org/sword/error/MissingXml');
+        $this->depositError(
+            'empty-xml.zip',
+            DepositTestHelper::CONTENT_TYPE_ZIP,
+            400,
+            'http://www.opus-repository.org/sword/error/MissingXml'
+        );
     }
 
     public function testTarArchiveWithEmptyXml()
     {
-        $this->depositError('empty-xml.tar', DepositTestHelper::CONTENT_TYPE_TAR, 400, 'http://www.opus-repository.org/sword/error/MissingXml');
+        $this->depositError(
+            'empty-xml.tar',
+            DepositTestHelper::CONTENT_TYPE_TAR,
+            400,
+            'http://www.opus-repository.org/sword/error/MissingXml'
+        );
     }
 
     public function testZipArchiveInvalidChecksum()
     {
-        $this->depositError('minimal-record.zip', DepositTestHelper::CONTENT_TYPE_ZIP, 412, 'http://purl.org/net/sword/error/ErrorChecksumMismatch', '01234567890123456789012345678901');
+        $this->depositError(
+            'minimal-record.zip',
+            DepositTestHelper::CONTENT_TYPE_ZIP,
+            412,
+            'http://purl.org/net/sword/error/ErrorChecksumMismatch',
+            '01234567890123456789012345678901'
+        );
     }
 
     public function testTarArchiveInvalidChecksum()
     {
-        $this->depositError('minimal-record.tar', DepositTestHelper::CONTENT_TYPE_TAR, 412, 'http://purl.org/net/sword/error/ErrorChecksumMismatch', '01234567890123456789012345678901');
+        $this->depositError(
+            'minimal-record.tar',
+            DepositTestHelper::CONTENT_TYPE_TAR,
+            412,
+            'http://purl.org/net/sword/error/ErrorChecksumMismatch',
+            '01234567890123456789012345678901'
+        );
     }
 
     public function testZipArchiveProvokeUrnCollision()
     {
         $doc = $this->addDocWithUrn();
-        $this->depositError('one-doc-with-urn.zip', DepositTestHelper::CONTENT_TYPE_ZIP, 400, 'http://www.opus-repository.org/sword/error/InternalFrameworkError');
+        $this->depositError(
+            'one-doc-with-urn.zip',
+            DepositTestHelper::CONTENT_TYPE_ZIP,
+            400,
+            'http://www.opus-repository.org/sword/error/InternalFrameworkError'
+        );
         $doc->delete();
     }
 
     public function testTarArchiveProvokeUrnCollision()
     {
         $doc = $this->addDocWithUrn();
-        $this->depositError('one-doc-with-urn.tar', DepositTestHelper::CONTENT_TYPE_TAR, 400, 'http://www.opus-repository.org/sword/error/InternalFrameworkError');
+        $this->depositError(
+            'one-doc-with-urn.tar',
+            DepositTestHelper::CONTENT_TYPE_TAR,
+            400,
+            'http://www.opus-repository.org/sword/error/InternalFrameworkError'
+        );
         $doc->delete();
     }
 
+    /**
+     * @return DocumentInterface
+     */
     private function addDocWithUrn()
     {
         $doc = Document::new();
@@ -243,6 +310,15 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         $this->assertResponseCode(500);
     }
 
+    /**
+     * @param string      $fileName
+     * @param string      $contentType
+     * @param int         $responseCode
+     * @param string      $responseBody
+     * @param string|null $invalidChecksum
+     * @throws Zend_Controller_Exception
+     * @throws Zend_Exception
+     */
     private function depositError($fileName, $contentType, $responseCode, $responseBody, $invalidChecksum = null)
     {
         $this->testHelper->assertEmptyTmpDir();
@@ -258,6 +334,10 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         $this->checkErrorDocument($responseCode, $responseBody);
     }
 
+    /**
+     * @param int    $responseCode
+     * @param string $hrefValue
+     */
     private function checkErrorDocument($responseCode, $hrefValue)
     {
         $this->assertResponseCode($responseCode);

@@ -36,78 +36,79 @@ use Opus\Common\Date;
  */
 class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
-    private $__datesHelper;
+    /** @var Application_Controller_Action_Helper_Dates */
+    private $datesHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->__datesHelper = new Application_Controller_Action_Helper_Dates();
+        $this->datesHelper = new Application_Controller_Action_Helper_Dates();
     }
 
     public function testIsValidGermanTrue()
     {
         $this->useGerman();
-        $this->assertTrue($this->__datesHelper->isValid('20.3.2005'));
+        $this->assertTrue($this->datesHelper->isValid('20.3.2005'));
     }
 
     public function testIsValidGermanFalse()
     {
         $this->useGerman();
-        $this->assertFalse($this->__datesHelper->isValid('2005'));
+        $this->assertFalse($this->datesHelper->isValid('2005'));
     }
 
     public function testIsValidEnglishTrue()
     {
         $this->useEnglish();
-        $this->assertTrue($this->__datesHelper->isValid('2005/03/20'));
+        $this->assertTrue($this->datesHelper->isValid('2005/03/20'));
     }
 
     public function testIsValidEnglishFalse()
     {
         $this->useEnglish();
-        $this->assertFalse($this->__datesHelper->isValid('2005'));
+        $this->assertFalse($this->datesHelper->isValid('2005'));
     }
 
     public function testGetOpusDateGerman()
     {
         $this->useGerman();
-        $date = $this->__datesHelper->getOpusDate('25.3.2005');
+        $date = $this->datesHelper->getOpusDate('25.3.2005');
         $this->assertNotNull($date);
-        $this->assertEquals('25.03.2005', $this->__datesHelper->getDateString($date));
+        $this->assertEquals('25.03.2005', $this->datesHelper->getDateString($date));
     }
 
     public function testGetOpusDateEnglish()
     {
         $this->useEnglish();
-        $date = $this->__datesHelper->getOpusDate('2005/03/25');
+        $date = $this->datesHelper->getOpusDate('2005/03/25');
         $this->assertNotNull($date);
         // Check read back in German (just for fun)
         $this->useGerman();
-        $this->assertEquals('25.03.2005', $this->__datesHelper->getDateString($date));
+        $this->assertEquals('25.03.2005', $this->datesHelper->getDateString($date));
     }
 
     public function testGetOpusDateInvalidGerman()
     {
         $this->useGerman();
-        $date = $this->__datesHelper->getOpusDate('2005');
+        $date = $this->datesHelper->getOpusDate('2005');
         $this->assertNull($date);
     }
 
     public function testGetOpusDateInvalidEnglish()
     {
         $this->useEnglish();
-        $date = $this->__datesHelper->getOpusDate('2005');
+        $date = $this->datesHelper->getOpusDate('2005');
         $this->assertNull($date);
     }
 
     public function testGetOpusDateIsDateOnly()
     {
         $this->useEnglish();
-        $date = $this->__datesHelper->getOpusDate('2010/01/14');
+        $date = $this->datesHelper->getOpusDate('2010/01/14');
         $this->assertTrue($date->isDateOnly());
         $this->assertEquals('2010-01-14', $date->__toString());
     }
@@ -116,14 +117,14 @@ class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
     {
         $this->useGerman();
         $date = new Date('2005-03-25');
-        $this->assertEquals('25.03.2005', $this->__datesHelper->getDateString($date));
+        $this->assertEquals('25.03.2005', $this->datesHelper->getDateString($date));
     }
 
     public function testGetDateStringEnglish()
     {
         $this->useEnglish();
         $date = new Date('2005-03-25');
-        $this->assertEquals('2005/03/25', $this->__datesHelper->getDateString($date));
+        $this->assertEquals('2005/03/25', $this->datesHelper->getDateString($date));
     }
 
     public function testGetDateStringForInvalidDate()
@@ -131,7 +132,7 @@ class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
         $this->useGerman();
         $date = new Date('2005');
         $this->assertFalse($date->isValid());
-        $this->assertEquals(null, $this->__datesHelper->getDateString($date));
+        $this->assertEquals(null, $this->datesHelper->getDateString($date));
     }
 
     /**
@@ -155,6 +156,7 @@ class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
 
     /**
      * @dataProvider dateValuesProvider
+     * @param string $datestr
      */
     public function testDatesAreNotChangedByTimestampFormat($datestr)
     {
@@ -163,9 +165,9 @@ class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase
         $date = new Date($datestr);
 
         $dateParts = mb_split('-', (mb_split('T', $datestr))[0]);
-        $dateOnly = sprintf('%04d/%02d/%02d', $dateParts[0], $dateParts[1], $dateParts[2]);
+        $dateOnly  = sprintf('%04d/%02d/%02d', $dateParts[0], $dateParts[1], $dateParts[2]);
 
-        $output = $this->__datesHelper->getDateString($date);
+        $output = $this->datesHelper->getDateString($date);
 
         $this->assertEquals($dateOnly, $output);
     }

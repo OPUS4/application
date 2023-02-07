@@ -43,21 +43,20 @@ use Opus\Common\Licence;
  */
 class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
 {
-
     /**
      * Name für Formularelement für ID der Lizenz.
      */
-    const ELEMENT_NAME_PREFIX = 'licence';
+    public const ELEMENT_NAME_PREFIX = 'licence';
 
     /**
      * CSS Klasse für aktive Lizenzen.
      */
-    const ACTIVE_CSS_CLASS = 'active';
+    public const ACTIVE_CSS_CLASS = 'active';
 
     /**
      * CSS Klasse für inaktive Lizenzen.
      */
-    const INACTIVE_CSS_CLASS = 'disabled';
+    public const INACTIVE_CSS_CLASS = 'disabled';
 
     /**
      * Erzeugt Checkbox Formularelemente für alle Lizenzen.
@@ -72,7 +71,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
             $element = new Application_Form_Element_Checkbox(self::ELEMENT_NAME_PREFIX . $licence->getId());
             $element->setDisableTranslator(true); // Lizenzen werden nicht übersetzt
             $element->setLabel($licence->getNameLong());
-            $cssClass = ($licence->getActive()) ? self::ACTIVE_CSS_CLASS : self::INACTIVE_CSS_CLASS;
+            $cssClass       = $licence->getActive() ? self::ACTIVE_CSS_CLASS : self::INACTIVE_CSS_CLASS;
             $labelDecorator = $element->getDecorator('Label');
             $labelDecorator->setOption('class', $cssClass);
             $element->setCheckedValue($licence->getId());
@@ -84,6 +83,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Setzt die dem Dokument zugewiesenen Lizenzen als ausgewählt im Formular.
+     *
      * @param DocumentInterface $document
      */
     public function populateFromModel($document)
@@ -91,8 +91,8 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
         $licences = $this->getElements();
 
         foreach ($licences as $element) {
-            if ($element instanceof \Zend_Form_Element_Checkbox) {
-                $licenceId = $element->getCheckedValue();
+            if ($element instanceof Zend_Form_Element_Checkbox) {
+                $licenceId = (int) $element->getCheckedValue();
                 $element->setChecked($this->hasLicence($document, $licenceId));
             }
         }
@@ -100,6 +100,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Aktualisiert die Liste der Lizenzen fuer ein Dokument.
+     *
      * @param DocumentInterface $document
      */
     public function updateModel($document)
@@ -109,7 +110,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
         $docLicences = [];
 
         foreach ($licences as $element) {
-            if ($element instanceof \Zend_Form_Element_Checkbox) {
+            if ($element instanceof Zend_Form_Element_Checkbox) {
                 $licenceId = $element->getCheckedValue();
                 if ($element->getValue() !== '0') {
                     $docLicences[] = Licence::get($licenceId);
@@ -124,15 +125,15 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
      * Prueft, ob eine Lizenz einem Dokument zugewiesen ist.
      *
      * @param DocumentInterface $document
-     * @param Licence $licence
-     * @return boolean true - Lizenz zugewiesen; false - Lizenz nicht zugewiesen
+     * @param int               $licenceId
+     * @return bool true - Lizenz zugewiesen; false - Lizenz nicht zugewiesen
      */
     public function hasLicence($document, $licenceId)
     {
         $licences = $document->getLicence();
 
         foreach ($licences as $docLicence) {
-            if ($docLicence->getModel()->getId() == $licenceId) {
+            if ($docLicence->getModel()->getId() === $licenceId) {
                 return true;
             }
         }
@@ -146,7 +147,7 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm
      * Die Funktion wird für die Ausgabe des Metadaten-Formulars als Metadaten-Übersicht verwendet, um zu entscheiden,
      * ob das Unterformular für Lizenzen angezeigt werden soll oder nicht.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEmpty()
     {

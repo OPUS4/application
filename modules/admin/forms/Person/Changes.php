@@ -32,18 +32,17 @@
 use Opus\Common\Date;
 
 /**
- * Class Admin_Form_Person_Changes
- *
  * TODO merge old values and changes array (only set/getChanges with all values)?
  * TODO make generic to be usable with any model (incl. excluded fields)
  * TODO work with model objects like Date for fields that use them
  */
 class Admin_Form_Person_Changes extends Application_Form_Abstract
 {
+    /** @var array */
+    private $changes;
 
-    private $_changes;
-
-    private $_oldValues;
+    /** @var array */
+    private $oldValues;
 
     public function init()
     {
@@ -51,34 +50,49 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
 
         $this->setDecorators([
             'PrepareElements',
-            ['ViewScript', ['viewScript' => 'changes.phtml']]
+            ['ViewScript', ['viewScript' => 'changes.phtml']],
         ]);
     }
 
+    /**
+     * @param array $changes
+     */
     public function setChanges($changes)
     {
-        $this->_changes = $changes;
+        $this->changes = $changes;
     }
 
+    /**
+     * @return array
+     */
     public function getChanges()
     {
-        return $this->_changes;
+        return $this->changes;
     }
 
+    /**
+     * @param array $values
+     */
     public function setOldValues($values)
     {
-        $this->_oldValues = $values;
+        $this->oldValues = $values;
     }
 
+    /**
+     * @return array
+     */
     public function getOldValues()
     {
-        return $this->_oldValues;
+        return $this->oldValues;
     }
 
+    /**
+     * @return array
+     */
     public function getPreparedChanges()
     {
         $oldValues = $this->getOldValues();
-        $changes = $this->getChanges();
+        $changes   = $this->getChanges();
 
         if (! is_array($oldValues)) {
             // TODO do some logging
@@ -112,7 +126,7 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
                     $preparedChanges[$field]['new'] = $this->forceArray($changes[$field]);
                 }
 
-                if (is_null($values)) {
+                if ($values === null) {
                     $action = 'added';
                 } else {
                     if (is_array($values)) {
@@ -121,7 +135,7 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
                         $action = 'modified';
                     }
 
-                    if (is_null($changes[$field])) {
+                    if ($changes[$field] === null) {
                         $action .= ' removed';
                     }
                 }
@@ -137,12 +151,13 @@ class Admin_Form_Person_Changes extends Application_Form_Abstract
 
     /**
      * Wraps value in array if necessary.
-     * @param $values
+     *
+     * @param array|string $values
      * @return array
      */
     public function forceArray($values)
     {
-        if (is_null($values)) {
+        if ($values === null) {
             return [];
         }
         if (is_array($values)) {

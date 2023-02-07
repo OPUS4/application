@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,9 +26,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Henning Gerhardt <henning.gerhardt@slub-dresden.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -37,41 +35,24 @@
  */
 class Oai_Model_Resumptiontokens
 {
+    /** @var string Holds resumption path without trailing slash. */
+    private $resumptionPath;
 
-    /**
-     * Holds resumption path without trailing slash.
-     *
-     * @var string
-     */
-    private $_resumptionPath = null;
+    /** @var string Holds resumption id */
+    private $resumptionId;
 
-    /**
-     * Holds resumption id
-     *
-     * @var string
-     */
-    private $_resumptionId = null;
+    /** @var string Holds file prefix */
+    protected $filePrefix = 'rs_';
 
-    /**
-     * Holds file prefix
-     *
-     * @var string
-     */
-    protected $_filePrefix = 'rs_';
-
-    /**
-     * Holds file extension without starting dot
-     *
-     * @var string
-     */
-    protected $_fileExtension = 'txt';
+    /** @var string Holds file extension without starting dot */
+    protected $fileExtension = 'txt';
 
     /**
      * Generate a unique file name and resumption id for storing resumption token.
      * Double action because file name 8without prefix and file extension)
      * and resumption id should be equal.
      *
-     * @return filename Generated filename including path and file extension.
+     * @return string filename Generated filename including path and file extension.
      */
     protected function generateResumptionName()
     {
@@ -81,17 +62,17 @@ class Oai_Model_Resumptiontokens
         // return value of time() should be enough
         $uniqueId = time();
 
-        $fileExtension = $this->_fileExtension;
+        $fileExtension = $this->fileExtension;
         if (false === empty($fileExtension)) {
             $fileExtension = '.' . $fileExtension;
         }
 
         do {
             $uniqueName = sprintf('%s%05d', $uniqueId, $fc++);
-            $file = $this->_resumptionPath . DIRECTORY_SEPARATOR . $this->_filePrefix . $uniqueName . $fileExtension;
+            $file       = $this->resumptionPath . DIRECTORY_SEPARATOR . $this->filePrefix . $uniqueName . $fileExtension;
         } while (true === is_readable($file));
 
-        $this->_resumptionId = $uniqueName;
+        $this->resumptionId = $uniqueName;
 
         return $file;
     }
@@ -99,8 +80,7 @@ class Oai_Model_Resumptiontokens
     /**
      * Constructor of class
      *
-     * @param $resPath (Optional) Initialise resumption path on create.
-     *
+     * @param string|null $resPath (Optional) Initialise resumption path on create.
      */
     public function __construct($resPath = null)
     {
@@ -117,7 +97,7 @@ class Oai_Model_Resumptiontokens
      */
     public function getResumptionId()
     {
-        return $this->_resumptionId;
+        return $this->resumptionId;
     }
 
     /**
@@ -127,22 +107,22 @@ class Oai_Model_Resumptiontokens
      */
     public function getResumptionPath()
     {
-        return $this->_resumptionPath;
+        return $this->resumptionPath;
     }
 
     /**
      * Returns a resumption token of a specific resumption id
      *
+     * @param string $resId
      * @return Oai_Model_Resumptiontoken|null Oai_Model_Resumptiontoken on success else null;
      */
     public function getResumptionToken($resId)
     {
-
         $token = null;
 
-        $fileName = $this->_resumptionPath . DIRECTORY_SEPARATOR . $this->_filePrefix . $resId;
-        if (false === empty($this->_fileExtension)) {
-            $fileName .= '.' . $this->_fileExtension;
+        $fileName = $this->resumptionPath . DIRECTORY_SEPARATOR . $this->filePrefix . $resId;
+        if (false === empty($this->fileExtension)) {
+            $fileName .= '.' . $this->fileExtension;
         }
 
         if (true === is_readable($fileName)) {
@@ -150,7 +130,7 @@ class Oai_Model_Resumptiontokens
             // if data is not unserializueabke an E_NOTICE will be triggerd and false returned
             // avoid this E_NOTICE
             $token = @unserialize($fileContents);
-            if (false === ($token instanceof Oai_Model_Resumptiontoken)) {
+            if (false === $token instanceof Oai_Model_Resumptiontoken) {
                 $token = null;
             }
         }
@@ -161,15 +141,15 @@ class Oai_Model_Resumptiontokens
     /**
      * Set resumption path where the resumption token files are stored.
      *
+     * @param string $resPath
      * @throws Oai_Model_ResumptionTokenException Thrown if directory operations failed.
-     * @return void
      */
     public function setResumptionPath($resPath)
     {
         // expanding all symbolic links and resolving references
         $realPath = realpath($resPath);
 
-        if (empty($realPath) or false === is_dir($realPath)) {
+        if (empty($realPath) || false === is_dir($realPath)) {
             throw new Oai_Model_ResumptionTokenException(
                 'Given resumption path "' . $resPath . '" (real path: "' . $realPath . '") is not a directory.'
             );
@@ -181,7 +161,7 @@ class Oai_Model_Resumptiontokens
             );
         }
 
-        $this->_resumptionPath = $realPath;
+        $this->resumptionPath = $realPath;
     }
 
     /**
@@ -189,11 +169,9 @@ class Oai_Model_Resumptiontokens
      *
      * @param Oai_Model_Resumptiontoken $token Token to store.
      * @throws Oai_Model_ResumptionTokenException Thrown on file operation error.
-     * @return void
      */
     public function storeResumptionToken(Oai_Model_Resumptiontoken $token)
     {
-
         $fileName = $this->generateResumptionName();
 
         $file = fopen($fileName, 'w+');
@@ -211,25 +189,17 @@ class Oai_Model_Resumptiontokens
             throw new Oai_Model_ResumptionTokenException('Could not close file "' . $fileName . '"!');
         }
 
-        $token->setResumptionId($this->_resumptionId);
+        $token->setResumptionId($this->resumptionId);
     }
 
     /**
-     * Validate a resumption id on an exisiting resumption token.
+     * Validate a resumption id on an existing resumption token.
      *
-     * @param $resId
-     * @return boolean
+     * @param string $resId
+     * @return bool
      */
     public function validateResumptionToken($resId)
     {
-        $result = false;
-
-        $token = $this->getResumptionToken($resId);
-
-        if (false === is_null($token)) {
-            $result = true;
-        }
-
-        return $result;
+        return $this->getResumptionToken($resId) !== null;
     }
 }

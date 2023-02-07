@@ -30,21 +30,25 @@
  */
 
 use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 use Opus\Common\Document;
+use Opus\Translate\Dao;
 
 /**
  * @covers Admin_CollectionrolesController
  */
 class Admin_CollectionrolesControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    private $emptyCollectionRole = null;
+    /** @var CollectionRoleInterface */
+    private $emptyCollectionRole;
 
-    private $nonEmptyCollectionRole = null;
+    /** @var CollectionRoleInterface */
+    private $nonEmptyCollectionRole;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -68,15 +72,15 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $rootCollection->store();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
 
-        if (! is_null($this->nonEmptyCollectionRole) && ! is_null($this->nonEmptyCollectionRole->getId())) {
+        if ($this->nonEmptyCollectionRole !== null && $this->nonEmptyCollectionRole->getId() !== null) {
             $this->nonEmptyCollectionRole->delete();
         }
-        if (! is_null($this->emptyCollectionRole) && ! is_null($this->emptyCollectionRole->getId())) {
+        if ($this->emptyCollectionRole !== null && $this->emptyCollectionRole->getId() !== null) {
             $this->emptyCollectionRole->delete();
         }
         parent::tearDown();
@@ -192,7 +196,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $this->assertController('collectionroles');
         $this->assertAction('edit');
 
-        $containsGermanTitle = strpos($this->getResponse()->getBody(), '<title>OPUS 4 | Sammlungseinstellungen</title>');
+        $containsGermanTitle  = strpos($this->getResponse()->getBody(), '<title>OPUS 4 | Sammlungseinstellungen</title>');
         $containsEnglishTitle = strpos($this->getResponse()->getBody(), '<title>OPUS 4 | Collection Properties</title>');
         $this->assertTrue($containsGermanTitle || $containsEnglishTitle);
     }
@@ -273,7 +277,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $dao = new \Opus\Translate\Dao();
+        $dao = new Dao();
 
         $dao->remove('default_collection_role_CreateTestColName');
 
@@ -288,21 +292,21 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         }
 
         $post = [
-            'Name' => 'CreateTestColName',
-            'DisplayName' => [
+            'Name'                 => 'CreateTestColName',
+            'DisplayName'          => [
                 'en' => 'English Name',
-                'de' => 'Deutscher Name'
+                'de' => 'Deutscher Name',
             ],
-            'OaiName' => 'CreateTestColOaiName',
-            'DisplayBrowsing' => 'Name',
-            'DisplayFrontdoor' => 'Number',
-            'Visible' => '1',
+            'OaiName'              => 'CreateTestColOaiName',
+            'DisplayBrowsing'      => 'Name',
+            'DisplayFrontdoor'     => 'Number',
+            'Visible'              => '1',
             'VisibleBrowsingStart' => '1',
-            'VisibleFrontdoor' => '0',
-            'VisibleOai' => '0',
-            'Position' => '20',
+            'VisibleFrontdoor'     => '0',
+            'VisibleOai'           => '0',
+            'Position'             => '20',
             'HideEmptyCollections' => '1',
-            'Save' => 'Speichern'
+            'Save'                 => 'Speichern',
         ];
 
         $this->getRequest()->setMethod('POST')->setPost($post);
@@ -345,7 +349,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'English Name',
-            'de' => 'Deutscher Name'
+            'de' => 'Deutscher Name',
         ], $translations);
     }
 
@@ -353,7 +357,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $dao = new \Opus\Translate\Dao();
+        $dao = new Dao();
         $dao->remove('default_collection_role_ModifiedName');
 
         $roles = CollectionRole::fetchAll();
@@ -373,22 +377,22 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $roleId = $role->store();
 
         $post = [
-            'oid' => $roleId,
-            'Name' => 'ModifiedName',
-            'DisplayName' => [
+            'oid'                  => $roleId,
+            'Name'                 => 'ModifiedName',
+            'DisplayName'          => [
                 'en' => 'English Name',
-                'de' => 'Deutscher Name'
+                'de' => 'Deutscher Name',
             ],
-            'OaiName' => 'ModifiedOaiName',
-            'DisplayBrowsing' => 'Number,Name',
-            'DisplayFrontdoor' => 'Name,Number',
-            'Visible' => '0',
+            'OaiName'              => 'ModifiedOaiName',
+            'DisplayBrowsing'      => 'Number,Name',
+            'DisplayFrontdoor'     => 'Name,Number',
+            'Visible'              => '0',
             'VisibleBrowsingStart' => '0',
-            'VisibleFrontdoor' => '1',
-            'VisibleOai' => '1',
-            'Position' => '19',
+            'VisibleFrontdoor'     => '1',
+            'VisibleOai'           => '1',
+            'Position'             => '19',
             'HideEmptyCollections' => '0',
-            'Save' => 'Speichern'
+            'Save'                 => 'Speichern',
         ];
 
         $this->getRequest()->setMethod('POST')->setPost($post);
@@ -423,7 +427,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'English Name',
-            'de' => 'Deutscher Name'
+            'de' => 'Deutscher Name',
         ], $translations);
     }
 
@@ -433,7 +437,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
 
         $this->useEnglish();
 
-        $dao = new \Opus\Translate\Dao();
+        $dao = new Dao();
         $dao->remove('default_collection_role_ModifiedName');
 
         $roles = CollectionRole::fetchAll();
@@ -453,22 +457,22 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $roleId = $role->store();
 
         $post = [
-            'oid' => $roleId,
-            'Name' => 'ModifiedName',
-            'DisplayName' => [
+            'oid'                  => $roleId,
+            'Name'                 => 'ModifiedName',
+            'DisplayName'          => [
                 'en' => 'English Name',
-                'de' => 'Deutscher Name'
+                'de' => 'Deutscher Name',
             ],
-            'OaiName' => 'ModifiedOaiName',
-            'DisplayBrowsing' => 'Number,Name',
-            'DisplayFrontdoor' => 'Name,Number',
-            'Visible' => '0',
+            'OaiName'              => 'ModifiedOaiName',
+            'DisplayBrowsing'      => 'Number,Name',
+            'DisplayFrontdoor'     => 'Name,Number',
+            'Visible'              => '0',
             'VisibleBrowsingStart' => '0',
-            'VisibleFrontdoor' => '1',
-            'VisibleOai' => '1',
-            'Position' => '19',
+            'VisibleFrontdoor'     => '1',
+            'VisibleOai'           => '1',
+            'Position'             => '19',
             'HideEmptyCollections' => '0',
-            'Cancel' => 'Cancel'
+            'Cancel'               => 'Cancel',
         ];
 
         $this->getRequest()->setMethod('POST')->setPost($post);
@@ -517,28 +521,28 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $manager = new Application_Translate_TranslationManager();
         $manager->setTranslation("default_collection_role_$oldName", [
             'en' => 'Just for testing',
-            'de' => 'Nur zum Testen'
+            'de' => 'Nur zum Testen',
         ], 'default');
 
         $request = $this->getRequest();
         $request->setMethod('POST');
         $request->setPost([
-            'Id' => $roleId,
-            'Name' => $newName,
-            'DisplayName' => [
+            'Id'                   => $roleId,
+            'Name'                 => $newName,
+            'DisplayName'          => [
                 'en' => 'Just for testing',
-                'de' => 'Nur zum Testen'
+                'de' => 'Nur zum Testen',
             ],
-            'OaiName' => 'oaiTestRole',
-            'DisplayBrowsing' => 'Name',
-            'DisplayFrontdoor' => 'Number',
-            'Visible' => '1',
+            'OaiName'              => 'oaiTestRole',
+            'DisplayBrowsing'      => 'Name',
+            'DisplayFrontdoor'     => 'Number',
+            'Visible'              => '1',
             'VisibleBrowsingStart' => '1',
-            'VisibleFrontdoor' => '0',
-            'VisibleOai' => '0',
-            'Position' => '20',
+            'VisibleFrontdoor'     => '0',
+            'VisibleOai'           => '0',
+            'Position'             => '20',
             'HideEmptyCollections' => '1',
-            'Save' => 'Speichern'
+            'Save'                 => 'Speichern',
         ]);
 
         $this->dispatch("/admin/collectionroles/create/roleid/$roleId/oid/$roleId");
@@ -551,7 +555,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase
         $translation = $manager->getTranslation($newKey);
         $this->assertEquals([
             'en' => 'Just for testing',
-            'de' => 'Nur zum Testen'
+            'de' => 'Nur zum Testen',
         ], $translation['translations']);
     }
 }

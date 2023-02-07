@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,34 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Interface fuer OPUS Form Element Klassen.
+ * Interface für Formulare, die als View angezeigt werden können.
+ *
+ * Das Metadaten-Formular (Admin_Form_Document) wird zum einen als Formular verwendet. Es wird aber auch für die
+ * Anzeige der Metadaten-Übersicht verwendet. Das selbe wird mit den Formularen für Application_Controller_Action_CRUD
+ * gemacht.
  */
-interface Application_Form_IElement
+interface Application_Form_ViewableInterface
 {
-
     /**
-     * Liefert Hinweis zum Element-Value, z.B. das eine ISBN ungültig ist.
-     *
-     * Hinweise sind wie Validierungsfehler, die aber das Abspeichern nicht verhindern und schon beim Aufruf des
-     * Formulars für existierende Werte berechnet werden.
-     *
-     * @return string
-     */
-    public function getHint();
-
-    /**
-     * Ändert die Ausgabe (Dekoratoren) des Elements so, daß es als statischer View statt Formularelement ausgegeben
-     * wird.
-     *
-     * Statt eines Input-Tags könnte zum Beispiel nur der Wert als einfacher Text ausgegeben werden.
+     * Bereites die Ausgabe des Formulares als View vor.
      */
     public function prepareRenderingAsView();
+
+    /**
+     * Prüft, ob das Formular leer ist und daher nicht mit angezeigt werden soll.
+     *
+     * @return bool
+     */
+    public function isEmpty();
 }

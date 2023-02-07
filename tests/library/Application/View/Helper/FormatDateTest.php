@@ -33,7 +33,7 @@ use Opus\Common\Date;
 
 class Application_View_Helper_FormatDateTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['translation'];
 
     public function testFormatDate()

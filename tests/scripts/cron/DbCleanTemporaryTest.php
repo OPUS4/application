@@ -31,16 +31,19 @@
 
 use Opus\Common\Date;
 use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Model\ModelException;
 use Opus\Common\Model\NotFoundException;
 
 class DbCleanTemporaryTest extends CronTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var DocumentInterface */
     private $doc;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->doc = Document::new();
@@ -73,6 +76,10 @@ class DbCleanTemporaryTest extends CronTestCase
         }
     }
 
+    /**
+     * @param int $numDaysBeforeNow
+     * @throws ModelException
+     */
     private function changeDocumentDateModified($numDaysBeforeNow)
     {
         $date = new DateTime();

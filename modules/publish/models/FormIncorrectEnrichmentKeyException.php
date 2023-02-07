@@ -25,22 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Publish_Model_FormIncorrectEnrichmentKeyException extends Publish_Model_FormException
 {
-
+    /** @var string */
     public $enrichmentKey;
 
+    /**
+     * @param string $enrichment
+     */
     public function __construct($enrichment)
     {
-        $this->_translateKey = 'publish_incorrect_enrichment_name';
-        $this->code = 404;
+        $this->translateKey  = 'publish_incorrect_enrichment_name';
+        $this->code          = 404;
         $this->enrichmentKey = $enrichment;
     }
 }

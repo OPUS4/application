@@ -90,8 +90,8 @@
 .services,
 .facet{
     /*background-color: #f3f6f8;
-	border: solid #e2e6e9;
-	border-width: 0 0 1px;*/
+    border: solid #e2e6e9;
+    border-width: 0 0 1px;*/
     background: url(../img/theme/bg_facets.jpg) repeat-x 0 0;
     padding: 5px 10px 10px;
 }
@@ -193,7 +193,7 @@ table.result-data {
     width: 28%;
 }
 .result-data .data-marker{
-/*     	white-space: nowrap;    */
+/*      white-space: nowrap;    */
     font-style: normal;
 }
 .frontdoor div#abstract ul {
@@ -327,11 +327,11 @@ fieldset .add-delete-wrapper{
 }
 /*.publish fieldset .form-textfield,
 .publish fieldset .form-textarea{
-	max-width: 65%;
+    max-width: 65%;
 }
 .publish .top-labels .form-textfield,
 .publish .top-labels .form-textarea{
-	max-width: none;
+    max-width: none;
 }*/
 .form-multiple.even {
     padding: 0.5em 5px;

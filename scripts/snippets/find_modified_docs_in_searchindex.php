@@ -33,7 +33,6 @@ use Opus\Common\Document;
 use Opus\Common\Repository;
 
 /**
- *
  * Dieses Skript findet alle Dokumente mit ServerState=published, deren ServerDateModified im Solr-Index kleiner ist
  * als das Datum in der Datenbank. Ist ein Dokument nicht im Index vorhanden, wird eine entsprechende
  * Fehlermeldung pro Dokument ausgegeben.
@@ -43,7 +42,7 @@ use Opus\Common\Repository;
  * TODO convert to command for index analysis
  */
 $numOfModified = 0;
-$numOfErrors = 0;
+$numOfErrors   = 0;
 
 $finder = Repository::getInstance()->getDocumentFinder();
 $finder->setServerState('published');
@@ -53,15 +52,15 @@ foreach ($finder->getIds() as $docId) {
     $search = Opus\Search\Service::selectSearchingService();
     $query  = Opus\Search\QueryFactory::selectDocumentById($search, $docId);
 
-    if ($search->customSearch($query)->getAllMatchesCount() != 1) {
+    if ($search->customSearch($query)->getAllMatchesCount() !== 1) {
         echo "ERROR: document # $docId is not stored in search index\n";
         $numOfErrors++;
     } else {
-        $result = $search->getResults();
+        $result               = $search->getResults();
         $solrModificationDate = $result[0]->getServerDateModified();
-        $document = Document::get($docId);
-        $docModificationDate = $document->getServerDateModified()->getUnixTimestamp();
-        if ($solrModificationDate != $docModificationDate) {
+        $document             = Document::get($docId);
+        $docModificationDate  = $document->getServerDateModified()->getUnixTimestamp();
+        if ($solrModificationDate !== $docModificationDate) {
             $numOfModified++;
             echo "document # $docId is modified\n";
         }

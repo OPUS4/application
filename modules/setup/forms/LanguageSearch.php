@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,11 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -42,36 +39,35 @@
  */
 class Setup_Form_LanguageSearch extends Application_Form_Abstract
 {
-
     /**
      * Input field for search string for translations.
      */
-    const ELEMENT_FILTER = 'search';
+    public const ELEMENT_FILTER = 'search';
 
     /**
      * Select for modules included in search.
      */
-    const ELEMENT_MODULES = 'modules';
+    public const ELEMENT_MODULES = 'modules';
 
     /**
      * Select for state of translations (All, Edited, Added).
      */
-    const ELEMENT_STATE = 'state';
+    public const ELEMENT_STATE = 'state';
 
     /**
      * Select for scope of search (keys, translations)
      */
-    const ELEMENT_SCOPE = 'scope';
+    public const ELEMENT_SCOPE = 'scope';
 
     /**
      * Button for starting search.
      */
-    const ELEMENT_SUBMIT = 'show';
+    public const ELEMENT_SUBMIT = 'show';
 
     /**
      * TODO not supported yet (keys are always included) - make keys optional
      */
-    const ELEMENT_INCLUDE_KEYS = 'SearchKeys';
+    public const ELEMENT_INCLUDE_KEYS = 'SearchKeys';
 
     public function init()
     {
@@ -80,12 +76,12 @@ class Setup_Form_LanguageSearch extends Application_Form_Abstract
         $this->setElementDecorators(['ViewHelper']);
 
         $element = $this->createElement('text', self::ELEMENT_FILTER, [
-            'size' => '40'
+            'size' => '40',
         ]);
         $this->addElement($element);
 
         $element = $this->createElement('submit', self::ELEMENT_SUBMIT, [
-            'label' => 'setup_translation_search_button'
+            'label' => 'setup_translation_search_button',
         ]);
         $this->addElement($element);
 
@@ -100,20 +96,31 @@ class Setup_Form_LanguageSearch extends Application_Form_Abstract
 
         $this->setDecorators([
             ['ViewScript', ['viewScript' => 'languagesearch.phtml']],
-            'Form'
+            'Form',
         ]);
     }
 
     /**
-     * @param $request
+     * @param Zend_Controller_Request_Http $request
      *
-     * TODO should this code go somewhere else (add responsiblity to class)
+     * TODO should this code go somewhere else (add responsibility to class)
      */
     public function populateFromRequest($request)
     {
-        $module = strtolower($request->getParam('modules', null));
-        $scope = strtolower($request->getParam('scope', null));
-        $state = strtolower($request->getParam('state', null));
+        $module = $request->getParam('modules', null);
+        if ($module !== null) {
+            $module = strtolower($module);
+        }
+
+        $scope = $request->getParam('scope', null);
+        if ($scope !== null) {
+            $scope = strtolower($scope);
+        }
+
+        $state = $request->getParam('state', null);
+        if ($state !== null) {
+            $state = strtolower($state);
+        }
 
         $this->getElement(self::ELEMENT_MODULES)->setValue($module);
         $this->getElement(self::ELEMENT_SCOPE)->setValue($scope);

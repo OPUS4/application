@@ -29,31 +29,28 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('CronTestCase.php');
+require_once 'CronTestCase.php';
 
-use Opus\Common\Repository;
 use Opus\Common\Licence;
+use Opus\Common\Repository;
 
-/**
- *
- */
 class UpdateDocumentCacheTest extends CronTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function testUpdateOnLicenceChange()
     {
         $document = $this->createTestDocument();
-        $docId = $document->store();
+        $docId    = $document->store();
 
         $documentCache = Repository::getInstance()->getDocumentXmlCache();
 
         $docXmlCache = $documentCache->getData($docId, '1');
-        $domDoc = new DomDocument();
+        $domDoc      = new DOMDocument();
         $domDoc->loadXML($docXmlCache);
         $licences = $domDoc->getElementsByTagName('Licence');
-        $this->assertTrue($licences->length == 0, 'Expected no Licence element in dom.');
+        $this->assertTrue($licences->length === 0, 'Expected no Licence element in dom.');
 
         $licence = Licence::new();
         $licence->setNameLong('TestLicence');
@@ -71,10 +68,10 @@ class UpdateDocumentCacheTest extends CronTestCase
 
         $this->executeScript('cron-update-document-cache.php');
         $docXmlCacheAfter = $documentCache->getData($docId, '1');
-        $domDocAfter = new DomDocument();
+        $domDocAfter      = new DOMDocument();
         $domDocAfter->loadXML($docXmlCacheAfter);
         $licencesAfter = $domDocAfter->getElementsByTagName('Licence');
-        $this->assertTrue($licencesAfter->length == 1, 'Expected one Licence element in dom.');
+        $this->assertTrue($licencesAfter->length === 1, 'Expected one Licence element in dom.');
         $licences = $document->getLicence();
         $licences[0]->delete();
     }

@@ -35,9 +35,9 @@ define('APPLICATION_ENV', 'development');
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Common\Log;
 use Opus\Job\Runner;
 use Opus\Search\Task\IndexOpusDocument;
-use Opus\Common\Log;
 
 $jobrunner = new Runner();
 $jobrunner->setLogger(Log::get());

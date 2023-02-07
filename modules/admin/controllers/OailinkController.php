@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,27 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Main entry point for this module.
- *
- * @category    Application
- * @package     Admin
  */
 class Admin_OailinkController extends Application_Controller_Action
 {
-
     /**
      * Shows link to oai module.
-     *
-     * @return void
      */
     public function indexAction()
     {
@@ -56,8 +47,8 @@ class Admin_OailinkController extends Application_Controller_Action
         $view->baseLink = $view->serverUrl($view->baseUrl('/oai'));
 
         // set repIdentifier for OAI request examples
-        $config = $this->getConfig();
-        $repIdentifier = $config->oai->repository->identifier;
+        $config              = $this->getConfig();
+        $repIdentifier       = $config->oai->repository->identifier;
         $view->repIdentifier = $repIdentifier;
     }
 }

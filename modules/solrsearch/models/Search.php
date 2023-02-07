@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Solrsearch_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,13 +34,11 @@
  */
 class Solrsearch_Model_Search extends Application_Model_Abstract
 {
-
-
-
     /**
      * Factory function for search plugin.
-     * @param $searchType
-     * @return mixed
+     *
+     * @param string $searchType
+     * @return Solrsearch_Model_Search_Abstract
      *
      * TODO eliminate switch and use configuration array instead
      */
@@ -51,14 +47,22 @@ class Solrsearch_Model_Search extends Application_Model_Abstract
         return Application_Util_Searchtypes::getSearchPlugin($searchType);
     }
 
+    /**
+     * @param Zend_Controller_Request_Http $request
+     * @return array
+     */
     public function createSimpleSearchUrlParams($request)
     {
-        $params = $this->createBasicSearchParams($request);
+        $params               = $this->createBasicSearchParams($request);
         $params['searchtype'] = $request->getParam('searchtype', Application_Util_Searchtypes::SIMPLE_SEARCH);
-        $params['query'] = $request->getParam('query', '*:*');
+        $params['query']      = $request->getParam('query', '*:*');
         return array_merge($params, $this->getFilterParams($request));
     }
 
+    /**
+     * @param Zend_Controller_Request_Http $request
+     * @return array
+     */
     public function getFilterParams($request)
     {
         $params = $request->getParams();
@@ -70,15 +74,19 @@ class Solrsearch_Model_Search extends Application_Model_Abstract
         return $params;
     }
 
+    /**
+     * @param Zend_Controller_Request_Http $request
+     * @return array
+     */
     public function createAdvancedSearchUrlParams($request)
     {
-        $params = $this->createBasicSearchParams($request);
+        $params               = $this->createBasicSearchParams($request);
         $params['searchtype'] = $request->getParam('searchtype', Application_Util_Searchtypes::ADVANCED_SEARCH);
 
         foreach (['author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year'] as $fieldname) {
             $fieldvalue = $request->getParam($fieldname, '');
             if ($fieldvalue !== '') {
-                $params[$fieldname] = $fieldvalue;
+                $params[$fieldname]              = $fieldvalue;
                 $params[$fieldname . 'modifier'] = $request->getParam(
                     $fieldname . 'modifier',
                     Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL
@@ -88,27 +96,39 @@ class Solrsearch_Model_Search extends Application_Model_Abstract
         return array_merge($params, $this->getFilterParams($request));
     }
 
+    /**
+     * @param Zend_Controller_Request_Http $request
+     * @return array
+     */
     public function createBasicSearchParams($request)
     {
         return [
-            'start' => $request->getParam('start', '0'),
-            'rows' => $request->getParam('rows', Opus\Search\Util\Query::getDefaultRows()),
+            'start'     => $request->getParam('start', '0'),
+            'rows'      => $request->getParam('rows', Opus\Search\Util\Query::getDefaultRows()),
             'sortfield' => $request->getParam('sortfield', 'score'),
-            'sortorder' => $request->getParam('sortorder', 'desc')
+            'sortorder' => $request->getParam('sortorder', 'desc'),
         ];
     }
 
+    /**
+     * @param Zend_Controller_Request_Http $request
+     * @return bool
+     */
     public function isSimpleSearchRequestValid($request)
     {
         $query = $request->getParam('query');
-        return ! is_null($query) && trim($query) != '';
+        return $query !== null && trim($query) !== '';
     }
 
+    /**
+     * @param Zend_Controller_Request_Http $request
+     * @return bool
+     */
     public function isAdvancedSearchRequestValid($request)
     {
-        foreach (['author', 'title', 'persons', 'referee', 'abstract', 'fulltext',  'year'] as $fieldname) {
+        foreach (['author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year'] as $fieldname) {
             $fieldvalue = $request->getParam($fieldname);
-            if (! is_null($fieldvalue) && trim($fieldvalue) != '') {
+            if ($fieldvalue !== null && trim($fieldvalue) !== '') {
                 return true;
             }
         }
@@ -118,23 +138,28 @@ class Solrsearch_Model_Search extends Application_Model_Abstract
     /**
      * Creates an URL to execute a search. The URL will be mapped to:
      * module=solrsearch, controller=index, action=search
+     *
+     * @param array $params
+     * @param bool  $rss
+     * @return string
      */
     public static function createSearchUrlArray($params = [], $rss = false)
     {
         $url = [
-            'module' => $rss ? 'rss' : 'solrsearch',
+            'module'     => $rss ? 'rss' : 'solrsearch',
             'controller' => 'index',
-            'action' => $rss ? 'index' : 'search'];
+            'action'     => $rss ? 'index' : 'search',
+        ];
         foreach ($params as $key => $value) {
             $url[$key] = $value;
         }
         if ($rss) {
             // some ignores some search related parameters
-            $url['rows'] = null;
-            $url['start'] = null;
+            $url['rows']      = null;
+            $url['start']     = null;
             $url['sortfield'] = null;
             $url['sortorder'] = null;
-            $url['browsing'] = null;
+            $url['browsing']  = null;
         }
         return $url;
     }

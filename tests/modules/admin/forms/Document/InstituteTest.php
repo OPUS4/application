@@ -37,7 +37,7 @@ use Opus\Model\Dependent\Link\DocumentDnbInstitute;
  */
 class Admin_Form_Document_InstituteTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testCreateForm()
@@ -51,7 +51,8 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
 
     public function testCreateFormBadRole()
     {
-        $this->setExpectedException(Application_Exception::class, 'Unknown role \'unknown_role\'.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Unknown role \'unknown_role\'.');
         $form = new Admin_Form_Document_Institute('unknown_role');
     }
 
@@ -59,9 +60,9 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
-        $doc = Document::get(146);
+        $doc        = Document::get(146);
         $publishers = $doc->getThesisPublisher();
-        $publisher = $publishers[0];
+        $publisher  = $publishers[0];
 
         $form->populateFromModel($publisher);
 
@@ -86,15 +87,15 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
-        $doc = Document::get(146);
-        $publishers = $doc->getThesisPublisher();
-        $publisher = $publishers[0];
+        $doc         = Document::get(146);
+        $publishers  = $doc->getThesisPublisher();
+        $publisher   = $publishers[0];
         $publisherId = $publisher->getModel()->getId();
 
         $form->getElement('Id')->setValue($doc->getId());
         $form->getElement('Institute')->setValue($publisherId);
 
-        $model = $form->getModel();
+        $model   = $form->getModel();
         $modelId = $model->getId();
 
         $this->assertNotNull($model);
@@ -128,7 +129,7 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
         $this->assertContains('isEmpty', $form->getErrors('Institute'));
 
         $post = [
-            'Institute' => 'a'
+            'Institute' => 'a',
         ];
 
         $this->assertFalse($form->isValid($post));

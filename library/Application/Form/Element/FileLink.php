@@ -29,9 +29,9 @@
  * @license   http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\File;
 use Opus\Common\FileInterface;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * Formularelement für die Anzeige eines Download Links für ein File Objekt.
@@ -40,7 +40,6 @@ use Opus\Common\FileInterface;
  */
 class Application_Form_Element_FileLink extends Application_Form_Element_Text
 {
-
     public function loadDefaultDecorators()
     {
         parent::loadDefaultDecorators();
@@ -52,14 +51,22 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
         }
     }
 
+    /**
+     * @return string
+     */
     public function getStaticViewHelper()
     {
         return 'fileLink';
     }
 
+    /**
+     * @param string|FileInterface $file
+     * @return $this
+     * @throws Application_Exception
+     */
     public function setValue($file)
     {
-        if (is_null($file)) {
+        if ($file === null) {
             throw new Application_Exception(__METHOD__ . " Value must not be null.");
         }
 
@@ -71,10 +78,13 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
             }
         }
 
+        parent::setValue($file);
+
         if (! $file->exists()) {
             $this->addError('admin_filemanager_file_does_not_exist');
         }
-        parent::setValue($file);
+
+        return $this;
     }
 
     /**
@@ -82,10 +92,11 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
      *
      * Wenn die ID nicht existiert wird in setValue eine Application_Exception geworfen.
      *
-     * @param mixed $value
+     * @param mixed      $value
+     * @param null|array $context
      * @return bool
      */
-    public function isValid($value)
+    public function isValid($value, $context = null)
     {
         $this->setValue($value);
         $file = $this->getValue();

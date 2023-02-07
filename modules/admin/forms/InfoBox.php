@@ -39,12 +39,12 @@ use Opus\Common\DocumentInterface;
  */
 class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
 {
-
     /**
      * Dokument das angezeigt wird.
+     *
      * @var DocumentInterface
      */
-    private $_document;
+    private $document;
 
     /**
      * Initialisiert das Formular.
@@ -59,36 +59,38 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
 
         $this->setDecorators(
             [
-            ['ViewScript', ['viewScript' => 'infobox.phtml']]
+                ['ViewScript', ['viewScript' => 'infobox.phtml']],
             ]
         );
     }
 
     /**
      * Initialisiert Formular mit Dokument.
+     *
      * @param DocumentInterface $document
      */
     public function populateFromModel($document)
     {
         if ($document instanceof DocumentInterface) {
-            $this->_document = $document;
+            $this->document = $document;
         } else {
-            $objclass = ($document !== null) ? get_class($document) : 'null';
+            $objclass = $document !== null ? get_class($document) : 'null';
             $this->getLogger()->err(__METHOD__ . " Called with instance of '$objclass'.");
         }
     }
 
     /**
      * Initialisiert Formular nach POST.
-     * @param array $post
-     * @param DocumentInterface $document
+     *
+     * @param array                  $post
+     * @param null|DocumentInterface $document
      */
     public function constructFromPost($post, $document = null)
     {
         if ($document instanceof DocumentInterface) {
-            $this->_document = $document;
+            $this->document = $document;
         } else {
-            $objclass = ($document !== null) ? get_class($document) : 'null';
+            $objclass = $document !== null ? get_class($document) : 'null';
             $this->getLogger()->err(__METHOD__ . " Called with instance of '$objclass'.");
         }
     }
@@ -97,11 +99,12 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
      * Liefert Dokument zurück.
      *
      * Wird vom ViewScript verwendet, um das Dokument zu holen.
+     *
      * @return DocumentInterface
      */
     public function getDocument()
     {
-        return $this->_document;
+        return $this->document;
     }
 
     /**
@@ -109,7 +112,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
      *
      * Dieses Formular soll immer angezeigt werden, daher liefert diese Funktion immer FALSE zurück.
      *
-     * @return boolean FALSE immer
+     * @return false FALSE immer
      */
     public function isEmpty()
     {

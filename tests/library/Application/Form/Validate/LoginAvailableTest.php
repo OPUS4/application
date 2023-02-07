@@ -30,20 +30,20 @@
  */
 
 use Opus\Common\Account;
+use Opus\Common\AccountInterface;
 
-/**
- *
- */
 class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Application_Form_Validate_LoginAvailable */
     private $validator;
 
+    /** @var AccountInterface */
     private $account;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->validator = new Application_Form_Validate_LoginAvailable();
@@ -56,9 +56,9 @@ class Application_Form_Validate_LoginAvailableTest extends ControllerTestCase
         $this->account = $user;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        if (! is_null($this->account)) {
+        if ($this->account !== null) {
             $this->account->delete();
         }
 

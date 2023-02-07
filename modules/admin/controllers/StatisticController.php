@@ -33,24 +33,24 @@ use Opus\Common\Date;
 
 class Admin_StatisticController extends Application_Controller_Action
 {
-
-    private $_statisticsModel = null;
+    /** @var Admin_Model_Statistics */
+    private $statisticsModel;
 
     public function init()
     {
         parent::init();
-        $this->_statisticsModel = new Admin_Model_Statistics();
+        $this->statisticsModel = new Admin_Model_Statistics();
     }
 
     public function indexAction()
     {
         $this->view->title = 'admin_title_statistic';
 
-        $years = $this->_statisticsModel->getYears();
+        $years = $this->statisticsModel->getYears();
 
         $highest = max($years);
 
-        $selectYear = new \Zend_Form_Element_Select(
+        $selectYear = new Zend_Form_Element_Select(
             'selectedYear',
             ["multiOptions" => $years, "value" => $highest]
         );
@@ -58,10 +58,10 @@ class Admin_StatisticController extends Application_Controller_Action
         $selectYear->setRequired(true)
             ->setLabel($this->view->translate('Select_Year_Label'));
 
-        $submit = new \Zend_Form_Element_Submit('submit');
+        $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel($this->view->translate('Submit_Button_Label'));
 
-        $form = new \Zend_Form();
+        $form = new Zend_Form();
         $form->setAction($this->view->url(["controller" => "statistic", "action" => "show"]));
         $form->addElements([$selectYear, $submit]);
 
@@ -72,8 +72,9 @@ class Admin_StatisticController extends Application_Controller_Action
     {
         $selectedYear = $this->getRequest()->getParam('selectedYear', null);
 
-        if (is_null($selectedYear) || ! in_array($selectedYear, $this->_statisticsModel->getYears())) {
-            return $this->_helper->Redirector->redirectToAndExit('index');
+        if ($selectedYear === null || ! in_array($selectedYear, $this->statisticsModel->getYears())) {
+            $this->_helper->Redirector->redirectToAndExit('index');
+            return;
         }
 
         $this->view->languageSelectorDisabled = true;
@@ -83,17 +84,17 @@ class Admin_StatisticController extends Application_Controller_Action
         $this->view->dateThreshold = $this->getHelper('Dates')->getDateString($date);
 
         $this->view->selectedYear = $selectedYear;
-        $this->view->sumDocsUntil = $this->_statisticsModel->getNumDocsUntil($selectedYear);
+        $this->view->sumDocsUntil = $this->statisticsModel->getNumDocsUntil($selectedYear);
 
-        $monthStat = $this->_statisticsModel->getMonthStatistics($selectedYear);
+        $monthStat = $this->statisticsModel->getMonthStatistics($selectedYear);
 
         $this->view->totalNumber = array_sum($monthStat);
-        $this->view->title = $this->view->translate('Statistic_Controller') . ' ' . $selectedYear;
-        $this->view->monthStat = $monthStat;
+        $this->view->title       = $this->view->translate('Statistic_Controller') . ' ' . $selectedYear;
+        $this->view->monthStat   = $monthStat;
 
-        $this->view->typeStat = $this->_statisticsModel->getTypeStatistics($selectedYear);
-        $this->view->instStat = $this->_statisticsModel->getInstituteStatistics($selectedYear);
+        $this->view->typeStat = $this->statisticsModel->getTypeStatistics($selectedYear);
+        $this->view->instStat = $this->statisticsModel->getInstituteStatistics($selectedYear);
 
-        $this->_breadcrumbs->setLabelFor('admin_statistic_show', $selectedYear);
+        $this->breadcrumbs->setLabelFor('admin_statistic_show', $selectedYear);
     }
 }
