@@ -120,7 +120,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testSearchdispatchAction()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'searchtype' => 'simple',
@@ -128,7 +128,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
                 ]);
         $this->dispatch('/solrsearch/index/searchdispatch');
         $this->assertRedirect();
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'searchtype' => 'advanced',
@@ -292,7 +292,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testEmptySimpleQuery()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'searchtype' => 'simple',
@@ -305,7 +305,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
 
     public function testEmptyAdvancedQuery()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'searchtype' => 'advanced',

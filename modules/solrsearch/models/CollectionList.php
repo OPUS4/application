@@ -62,7 +62,7 @@ class Solrsearch_Model_CollectionList
 
         // check if an invisible collection exists along the path to the root collection
         foreach ($collection->getParents() as $parent) {
-            if (! $parent->isRoot() && $parent->getVisible() !== '1') {
+            if (! $parent->isRoot() && ! $parent->getVisible()) {
                 throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.", 404);
             }
         }
@@ -76,7 +76,7 @@ class Solrsearch_Model_CollectionList
             );
         }
 
-        if (! ($collectionRole->getVisible() === '1' && $collectionRole->getVisibleBrowsingStart() === '1')) {
+        if (! ($collectionRole->getVisible() && $collectionRole->getVisibleBrowsingStart())) {
             throw new Solrsearch_Model_Exception(
                 "Collection role with id '" . $collectionRole->getId() . "' is not visible."
             );

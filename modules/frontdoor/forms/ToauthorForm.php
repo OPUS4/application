@@ -58,7 +58,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
                 if (count($this->authorsInfo) === 1) {
                     $options['disabled'] = true;
                 }
-                $authCheck = new Zend_Form_Element_Checkbox($author['id'], $options);
+                $authCheck = new Zend_Form_Element_Checkbox(strval($author['id']), $options);
                 $atLeastOne->addField($authCheck);
                 $authCheck->setLabel($author['name']);
                 $authorSub->addElement($authCheck);

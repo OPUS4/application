@@ -62,7 +62,9 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
 
             $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
 
-            $fieldset .= " value='" . htmlspecialchars($field['value'], ENT_QUOTES) . "' />\n";
+            $value     = $field['value'];
+            $value     = $value !== null ? htmlspecialchars($value, ENT_QUOTES) : '';
+            $fieldset .= " value='{$value}' />\n";
             if (isset($field['desc'])) {
                 $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
             }
@@ -90,9 +92,9 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
         }
 
         $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
-        $fieldset .= " id='" . $field['id'] . "'>" . htmlspecialchars($field['value'], ENT_QUOTES) . "</textarea>";
-
-        return $fieldset;
+        $value     = $field['value'];
+        $value     = $value !== null ? htmlspecialchars($value, ENT_QUOTES) : '';
+        return $fieldset . " id='" . $field['id'] . "'>{$value}</textarea>";
     }
 
     /**

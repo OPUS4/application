@@ -116,7 +116,7 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
 
         $this->assertGreaterThan(0, count($rootCollection->getChildren()));
         foreach ($rootCollection->getChildren() as $childCollection) {
-            if ($childCollection->getVisible() === '1') {
+            if ($childCollection->getVisible()) {
                 $collectionList = new Solrsearch_Model_CollectionList($childCollection->getId());
                 $this->assertFalse($collectionList->isRootCollection());
             }
@@ -137,7 +137,7 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
         $childCollections = $rootCollection->getChildren();
 
         foreach ($childCollections as $childCollection) {
-            if ($childCollection->getVisible() === '1') {
+            if ($childCollection->getVisible()) {
                 $collectionList = new Solrsearch_Model_CollectionList($childCollection->getId());
                 $parents        = $collectionList->getParents();
                 $this->assertEquals(1, count($parents));
@@ -153,10 +153,10 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
         $childCollections = $rootCollection->getChildren();
 
         foreach ($childCollections as $childCollection) {
-            if ($childCollection->getVisible() === '1') {
+            if ($childCollection->getVisible()) {
                 $grandchildCollections = $childCollection->getChildren();
                 foreach ($grandchildCollections as $grandchildCollection) {
-                    if ($grandchildCollection->getVisible() === '1') {
+                    if ($grandchildCollection->getVisible()) {
                         $collectionList = new Solrsearch_Model_CollectionList($grandchildCollection->getId());
                         $parents        = $collectionList->getParents();
                         $this->assertEquals(2, count($parents));
@@ -179,7 +179,7 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
 
         $childrenPointer = 0;
         foreach ($rootCollection->getChildren() as $childCollection) {
-            if ($childCollection->getVisible() === '1') {
+            if ($childCollection->getVisible()) {
                 $this->assertEquals($children[$childrenPointer], $childCollection);
                 $childrenPointer++;
             }
@@ -197,7 +197,7 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
     {
         $rootCollection = $this->getRootCollection(1);
         foreach ($rootCollection->getChildren() as $childCollection) {
-            if ($childCollection->getVisible() === '1') {
+            if ($childCollection->getVisible()) {
                 $collectionList = new Solrsearch_Model_CollectionList($childCollection->getId());
                 $collectionList->getTitle();
                 return;

@@ -103,13 +103,24 @@ class Setup_Form_LanguageSearch extends Application_Form_Abstract
     /**
      * @param Zend_Controller_Request_Http $request
      *
-     * TODO should this code go somewhere else (add responsiblity to class)
+     * TODO should this code go somewhere else (add responsibility to class)
      */
     public function populateFromRequest($request)
     {
-        $module = strtolower($request->getParam('modules', null));
-        $scope  = strtolower($request->getParam('scope', null));
-        $state  = strtolower($request->getParam('state', null));
+        $module = $request->getParam('modules', null);
+        if ($module !== null) {
+            $module = strtolower($module);
+        }
+
+        $scope = $request->getParam('scope', null);
+        if ($scope !== null) {
+            $scope = strtolower($scope);
+        }
+
+        $state = $request->getParam('state', null);
+        if ($state !== null) {
+            $state = strtolower($state);
+        }
 
         $this->getElement(self::ELEMENT_MODULES)->setValue($module);
         $this->getElement(self::ELEMENT_SCOPE)->setValue($scope);

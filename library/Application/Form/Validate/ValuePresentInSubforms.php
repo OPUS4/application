@@ -80,7 +80,7 @@ class Application_Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abs
         $value = (string) $value;
         $this->_setValue($value);
 
-        if ($context !== null && strlen(trim($this->elementName)) !== 0) {
+        if ($context !== null && $this->elementName !== null && strlen(trim($this->elementName)) !== 0) {
             foreach ($context as $index => $entry) {
                 if (isset($entry[$this->elementName]) && $entry[$this->elementName] === $value) {
                     return true;

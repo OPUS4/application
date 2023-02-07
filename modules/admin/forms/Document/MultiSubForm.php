@@ -568,7 +568,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      * das neue letzte Formular.
      *
      * @param int $removedPosition
-     * @return Zend_Form
+     * @return self|null|Zend_Form
      */
     public function determineSubFormForAnchor($removedPosition)
     {

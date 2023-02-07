@@ -422,7 +422,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     private function assertParentTitle($tags, $publicationType)
     {
         $this->assertContains(['DC.relation.ispartof', 'titleparent-eng'], $tags);
-        $this->assertContains(["citation_${publicationType}_title", 'titleparent-eng'], $tags);
+        $this->assertContains(["citation_{$publicationType}_title", 'titleparent-eng'], $tags);
     }
 
     /**

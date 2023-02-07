@@ -178,15 +178,17 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testIsConfirmedNoInvalidForm()
     {
-        $form = new Application_Form_Confirmation(Language::class);
+        $subform = new Application_Form_Confirmation(Language::class);
+        $form    = new Zend_Form();
+        $form->addSubForm($subform, 'confirmation');
 
         $post = [
             'Id'         => '',
             'ConfirmYes' => 'Ja',
         ];
 
-        $this->assertFalse($form->isConfirmed($post));
-        $this->assertEquals(1, count($form->getErrors()));
+        $this->assertFalse($subform->isConfirmed($post));
+        $this->assertEquals(1, count($subform->getErrors()));
     }
 
     public function testProcessPostYes()

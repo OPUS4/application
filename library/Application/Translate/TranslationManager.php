@@ -113,25 +113,13 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     /** @var string[] Modules to include. */
     private $modules;
 
-    /**
-     * Filter translations by state (all, edited, added).
-     *
-     * @var int
-     */
+    /** @var int Filter translations by state (all, edited, added). */
     private $state;
 
-    /**
-     * Filter translations by scope (keys and/or values).
-     *
-     * @var int
-     */
+    /** @var int Filter translations by scope (keys and/or values). */
     private $scope;
 
-    /**
-     * Names of folders containing TMX files.
-     *
-     * @var array
-     */
+    /** @var array Names of folders containing TMX files. */
     private $folders = ['language'];
 
     /** @var array Reference for sorting languages */

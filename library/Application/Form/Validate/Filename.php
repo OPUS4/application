@@ -161,6 +161,9 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
         if ($file !== null) {
             $data['filename'] = $file['name'];
         } else {
+            if ($value === null) {
+                return $this->isValidationDeactivated();
+            }
             $data = pathinfo($value);
             if (! array_key_exists('filename', $data)) {
                 return false;
@@ -180,5 +183,13 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
         }
 
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidationDeactivated()
+    {
+        return $this->filenameMaxLength === 0 && ($this->filenameFormat === null || strlen(trim($this->filenameFormat)) === 0);
     }
 }

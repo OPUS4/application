@@ -101,8 +101,8 @@ class Application_Form_Validate_LoginAvailable extends Zend_Validate_Abstract
         }
 
         if ($this->ignoreCase) {
-            $value    = strtolower($value);
-            $oldLogin = strtolower($oldLogin);
+            $value    = $value !== null ? strtolower($value) : null;
+            $oldLogin = $oldLogin !== null ? strtolower($oldLogin) : null;
         }
 
         if ($this->isLoginUsed($value) && $oldLogin !== $value) {

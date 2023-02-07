@@ -304,7 +304,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
         if ($modelId === null || is_numeric($modelId) || ! $this->getVerifyModelIdIsNumeric()) {
             $modelClass = $this->getModelClass();
 
-            if (strlen(trim($modelId)) !== 0) {
+            if ($modelId !== null && strlen(trim($modelId)) !== 0) {
                 try {
                     return $modelClass::get($modelId);
                 } catch (NotFoundException $omnfe) {

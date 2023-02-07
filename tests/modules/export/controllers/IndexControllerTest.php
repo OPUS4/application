@@ -142,11 +142,11 @@ class Export_IndexControllerTest extends ControllerTestCase
     public function testIndexActionSeriesSearch()
     {
         $this->dispatch('/export/index/index/searchtype/series/id/1/export/xml/stylesheet/example');
-        $this->assertResponseCode(200, $this->getResponse()->getBody());
-        $response = $this->getResponse();
-        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
-        $this->assertContains('<export-example>', $response->getBody());
-        $this->assertTrue(substr_count($response->getBody(), '<doc>') === 6);
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $body);
+        $this->assertContains('<export-example>', $body);
+        $this->assertTrue(substr_count($body, '<doc>') === 6);
     }
 
     public function testIndexActionInvalidSeriesSearchMissingIdParam()
@@ -217,7 +217,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/index/searchtype/all/export/xml/stylesheet/example');
         $body = $this->getResponse()->getBody();
 
-        $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
+        $this->assertNotContains("http://{$host}:{$port}/solr/corethatdoesnotexist", $body);
         $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $body);
         $this->assertResponseCode(503);
     }

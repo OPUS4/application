@@ -72,7 +72,7 @@ class Setup_Form_TranslationValues extends Zend_Form_SubForm
 
         foreach ($elements as $name => $element) {
             $value               = $element->getValue();
-            $translations[$name] = trim($value);
+            $translations[$name] = trim($value ?? '');
         }
 
         return $translations;

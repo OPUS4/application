@@ -122,7 +122,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     {
         $this->markTestSkipped('Replace - War für altes Metadaten-Formular.');
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'Opus_Document[CompletedDate]'       => '2000/01/01',

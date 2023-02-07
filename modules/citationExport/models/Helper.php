@@ -84,7 +84,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
         try {
             $document = Document::get($docId);
         } catch (NotFoundException $e) {
-            throw new CitationExport_Model_Exception('invalid_docid', null, $e);
+            throw new CitationExport_Model_Exception('invalid_docid', 0, $e);
         }
 
         // check if document access is allowed
@@ -201,7 +201,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
         // Set up XSLT-Processor
         try {
             $proc = new XSLTProcessor();
-            $proc->setParameter('', 'enrichment_note', $enrichmentNote);
+            $proc->setParameter('', 'enrichment_note', $enrichmentNote ?? '');
             $proc->setParameter('', 'url_prefix', $this->baseUrl);
             $proc->setParameter('', 'urnResolverUrl', $config->urn->resolverUrl);
             $proc->registerPHPFunctions();

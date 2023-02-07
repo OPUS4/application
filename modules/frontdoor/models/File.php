@@ -58,7 +58,7 @@ class Frontdoor_Model_File
      */
     public function __construct($docId, $filename)
     {
-        if (mb_strlen($docId) < 1 || preg_match('/^[\d]+$/', $docId) === 0 || $docId === null) {
+        if ($docId === null || mb_strlen($docId) < 1 || preg_match('/^[\d]+$/', $docId) === 0) {
             throw new Frontdoor_Model_FrontdoorDeliveryException(self::ILLEGAL_DOCID_MESSAGE_KEY, 400);
         }
 

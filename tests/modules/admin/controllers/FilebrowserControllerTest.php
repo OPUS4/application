@@ -107,7 +107,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
     public function testImportActionWithMissingParam()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([]);
         $this->dispatch('/admin/filebrowser/import');
@@ -117,7 +117,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
     public function testImportActionWithInvalidDocId()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost(['id' => 'invaliddocid']);
         $this->dispatch('/admin/filebrowser/import');
@@ -126,7 +126,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
     public function testImportActionWithEmptySelection()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost(['id' => $this->documentId]);
         $this->dispatch('/admin/filebrowser/import');
@@ -135,7 +135,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
     public function testImportActionWithInvalidParamType()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'id'   => $this->documentId,
@@ -149,7 +149,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
     public function testImportAction()
     {
         $this->markTestIncomplete('TODO');
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'docId' => $this->documentId,

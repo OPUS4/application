@@ -170,7 +170,7 @@ class Application_Util_DocumentAdapter
     public function getDocType()
     {
         try {
-            return htmlspecialchars($this->document->getType());
+            return htmlspecialchars($this->document->getType() ?? '');
         } catch (Exception $e) {
             return 'undefined';
         }
@@ -202,7 +202,7 @@ class Application_Util_DocumentAdapter
                     $date = $datesHelper->getDateString($date);
                 }
             }
-            return htmlspecialchars($date);
+            return htmlspecialchars($date ?? '');
         } catch (Exception $e) {
             return 'unknown';
         }
@@ -231,7 +231,7 @@ class Application_Util_DocumentAdapter
                 }
             }
 
-            return htmlspecialchars($date);
+            return htmlspecialchars($date ?? '');
         } catch (Exception $e) {
             return 'unknown';
         }

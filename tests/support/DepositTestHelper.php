@@ -37,8 +37,9 @@ use Opus\Common\DocumentInterface;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\TitleInterface;
 use Opus\Import\AdditionalEnrichments;
+use PHPUnit\Framework\Assert;
 
-class DepositTestHelper extends PHPUnit_Framework_Assert
+class DepositTestHelper extends Assert
 {
     public const USER_AGENT = 'PHPUnit';
 
@@ -92,9 +93,11 @@ class DepositTestHelper extends PHPUnit_Framework_Assert
 
     public function disableExceptionConversion()
     {
-        PHPUnit_Framework_Error_Warning::$enabled    = false;
-        PHPUnit_Framework_Error_Notice::$enabled     = false;
-        PHPUnit_Framework_Error_Deprecated::$enabled = false;
+        /* TODO BUG this does not work with PHPUnit 8.5 anymore
+        Warning::$enabled    = false;
+        Notice::$enabled     = false;
+        Deprecated::$enabled = false;
+        */
     }
 
     /**

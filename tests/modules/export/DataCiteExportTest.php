@@ -206,7 +206,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         Application_Security_AclProvider::init();
 
-        $this->dispatch("/export/index/datacite/docId/${docId}");
+        $this->dispatch("/export/index/datacite/docId/{$docId}");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -241,13 +241,13 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->loginUser('admin', 'adminadmin');
 
-        $this->dispatch("/export/index/datacite/docId/${docId}");
+        $this->dispatch("/export/index/datacite/docId/{$docId}");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
 
         $this->assertResponseCode(200);
-        $this->assertContains("DataCite XML of document ${docId} is not valid", $this->getResponse()->getBody());
+        $this->assertContains("DataCite XML of document {$docId} is not valid", $this->getResponse()->getBody());
     }
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithPermission()
@@ -273,7 +273,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->loginUser('security8', 'security8pwd');
 
-        $this->dispatch("/export/index/datacite/docId/${docId}");
+        $this->dispatch("/export/index/datacite/docId/{$docId}");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -283,7 +283,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(200);
-        $this->assertContains("DataCite XML of document ${docId} is not valid", $this->getResponse()->getBody());
+        $this->assertContains("DataCite XML of document {$docId} is not valid", $this->getResponse()->getBody());
     }
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithoutPermission()
@@ -309,7 +309,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->loginUser('security9', 'security9pwd');
 
-        $this->dispatch("/export/index/datacite/docId/${docId}");
+        $this->dispatch("/export/index/datacite/docId/{$docId}");
 
         // revert configuration changes
         $this->restoreSecuritySetting();

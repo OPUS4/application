@@ -58,7 +58,7 @@
                                         <td><?= $this->translate('no'); ?></td>
                                     <?php endif ?>
                                 <?php else : ?>
-                                    <td><?= htmlspecialchars($element->getValue(), ENT_DISALLOWED) ?></td>
+                                    <td><?= $element->getValue() !== null ? htmlspecialchars($element->getValue(), ENT_DISALLOWED) : '' ?></td>
                                 <?php endif ?> <!--checkbox-->
                             <?php endif ?> <!--select-->
                             </tr>
@@ -83,7 +83,7 @@
                                     <td><?= $this->translate('no'); ?></td>
                                 <?php endif ?>
                             <?php else : ?>
-                                <td><?= htmlspecialchars($elem->getValue(), ENT_DISALLOWED) ?></td>
+                                <td><?= htmlspecialchars($elem->getValue() ?? '', ENT_DISALLOWED) ?></td>
                             <?php endif ?>
                         <?php endif ?>
                     </tr>

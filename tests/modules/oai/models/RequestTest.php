@@ -32,14 +32,14 @@
 class Oai_Model_RequestTest extends ControllerTestCase
 {
     /** @var Oai_Model_Request */
-    private $request;
+    private $requestObj;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->request = new Oai_Model_Request();
-        $this->request->setPathToMetadataPrefixFiles(APPLICATION_PATH . '/modules/oai/views/scripts/index/prefixes');
+        $this->requestObj = new Oai_Model_Request();
+        $this->requestObj->setPathToMetadataPrefixFiles(APPLICATION_PATH . '/modules/oai/views/scripts/index/prefixes');
     }
 
     /**
@@ -104,7 +104,7 @@ class Oai_Model_RequestTest extends ControllerTestCase
 
     public function testValidate()
     {
-        $request = $this->request;
+        $request = $this->requestObj;
 
         $this->assertFalse($request->validate([]));
 
@@ -116,7 +116,7 @@ class Oai_Model_RequestTest extends ControllerTestCase
 
     public function testValidateFrom()
     {
-        $request = $this->request;
+        $request = $this->requestObj;
 
         $this->assertTrue($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',
@@ -133,7 +133,7 @@ class Oai_Model_RequestTest extends ControllerTestCase
 
     public function testValidateUntil()
     {
-        $request = $this->request;
+        $request = $this->requestObj;
 
         $this->assertTrue($request->validate([
             'metadataPrefix' => 'xMetaDissPlus',

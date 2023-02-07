@@ -67,7 +67,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     private $docIds = []; // TODO BUG written, but never read
 
     /** @var string[] */
-    private $xpathNamespaces = [
+    protected $xpathNamespaces = [
         'oai'       => "http://www.openarchives.org/OAI/2.0/",
         'oai_dc'    => "http://www.openarchives.org/OAI/2.0/oai_dc/",
         'cc'        => "http://www.d-nb.de/standards/cc/",
@@ -1242,7 +1242,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertContains(
             '<error code="cannotDisseminateFormat">The metadataPrefix \'copy_xml\' is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
-            'do not prevent usage of metadataPrefix copy_xml and verb GetRecords'
+            'Usage of metadataPrefix copy_xml and verb GetRecords is not denied'
         );
     }
 
@@ -1256,7 +1256,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertContains(
             '<error code="cannotDisseminateFormat">The metadataPrefix \'copy_xml\' is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
-            'do not prevent usage of metadataPrefix copy_xml and verb ListRecords'
+            'Usage of metadataPrefix copy_xml and verb ListRecords is not denied'
         );
     }
 
@@ -1270,7 +1270,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertContains(
             '<error code="cannotDisseminateFormat">The metadataPrefix \'copy_xml\' is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
-            'do not prevent usage of metadataPrefix copy_xml and verb ListIdentifiers'
+            'Usage of metadataPrefix copy_xml and verb ListIdentifiers is not denied'
         );
     }
 

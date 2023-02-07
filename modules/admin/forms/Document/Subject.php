@@ -155,7 +155,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
     {
         $subjectId = $this->getElement(self::ELEMENT_ID)->getValue();
 
-        if (strlen(trim($subjectId)) === 0 || ! is_numeric($subjectId)) {
+        if ($subjectId === null || strlen(trim($subjectId)) === 0 || ! is_numeric($subjectId)) {
             $subjectId = null;
         }
 

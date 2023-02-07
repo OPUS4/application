@@ -55,7 +55,7 @@ class Solrsearch_Model_Series
             throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.", 404);
         }
 
-        if ($s->getVisible() !== '1') {
+        if (! $s->getVisible()) {
             throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' is not visible.", 404);
         }
 

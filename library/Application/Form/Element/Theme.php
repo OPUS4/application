@@ -57,11 +57,7 @@ class Application_Form_Element_Theme extends Application_Form_Element_SelectWith
         }
     }
 
-    /**
-     * Available themes from directory for themes.
-     *
-     * @var array
-     */
+    /** @var array Available themes from directory for themes. */
     private static $themes;
 
     /**

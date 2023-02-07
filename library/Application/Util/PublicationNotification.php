@@ -85,10 +85,13 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
             $submitter = $document->getPersonSubmitter();
             if (! empty($submitter)) {
                 $name  = trim($submitter[0]->getLastName() . ", " . $submitter[0]->getFirstName());
-                $email = trim($submitter[0]->getEmail());
-                if (! empty($email)) {
-                    array_push($addresses, ["name" => $name, "address" => $email]);
-                    $logger->debug("send publication notification mail to submitter $email ($name)");
+                $email = $submitter[0]->getEmail();
+                if ($email !== null) {
+                    $email = trim($email);
+                    if (strlen($email) > 0) {
+                        array_push($addresses, ["name" => $name, "address" => $email]);
+                        $logger->debug("send publication notification mail to submitter $email ($name)");
+                    }
                 }
             }
         }

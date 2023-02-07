@@ -117,7 +117,7 @@ class Application_Search_FacetManager
 
         $facetsList = $config->searchengine->solr->facets;
 
-        $facets = preg_split('/[\s,]+/', trim($facetsList), null, PREG_SPLIT_NO_EMPTY);
+        $facets = preg_split('/[\s,]+/', trim($facetsList), 0, PREG_SPLIT_NO_EMPTY);
 
         // TODO how to define list of always active facets, like 'server_state'?
         // TODO does this make any sense here ('server_state' will already be there)

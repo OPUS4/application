@@ -72,7 +72,7 @@ class Application_Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract
                 . $view->translate('frontdoor_current')
                 . ':</span>';
 
-            if (strlen(trim($hashIst)) !== 0) {
+            if ($hashIst !== null && strlen(trim($hashIst)) !== 0) {
                 $markup .= htmlspecialchars($hashIst) . '</div>';
                 $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Ist]', $hashIst);
             } else {

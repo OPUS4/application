@@ -469,7 +469,7 @@ class Admin_CollectionController extends Application_Controller_Action
             return;
         }
 
-        if ($this->getRequest()->isPost() === true) {
+        if ($this->getRequest()->isPost()) {
             // Zuordnung des Dokuments zur Collection ist erfolgt
             $storeNow = $this->getRequest()->getParam('oldform', false);
 

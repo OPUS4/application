@@ -57,13 +57,12 @@ class Oai_Model_DocumentList
     /**
      * Retrieve all document ids for a valid oai request.
      *
-     * @param array $oaiRequest
      * @return array
      *
      * TODO function contains metadataPrefix specific criteria for generating document list (refactor!)
      * TODO simplify function
      */
-    public function query($oaiRequest)
+    public function query(array $oaiRequest)
     {
         $today = date('Y-m-d', time());
 

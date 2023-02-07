@@ -48,6 +48,9 @@ class Application_Form_Filter_ReplaceNewlines implements Zend_Filter_Interface
      */
     public function filter($value)
     {
+        if ($value === null) {
+            return ''; // TODO DESIGN this preserves old behaviour, but does it make sense?
+        }
         $newValue = str_replace(["\r\n"], ' ', $value);
         return str_replace(["\r", "\n"], ' ', $newValue);
     }

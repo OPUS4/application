@@ -63,8 +63,8 @@
     </tr>
     </thead>
     <?PHP
-    $highlightTranslation = strcasecmp($this->searchScope, 'key') !== 0;
-    $highlightKey         = strcasecmp($this->searchScope, 'text') !== 0;
+    $highlightTranslation = strcasecmp($this->searchScope ?? '', 'key') !== 0;
+    $highlightKey         = strcasecmp($this->searchScope ?? '', 'text') !== 0;
     foreach ($this->translations as $row) :
         $key       = array_shift($row);
         $langCount = count($row['translations']);

@@ -69,12 +69,13 @@ class Application_Form_Element_Grantor extends Application_Form_Element_Select
     {
         try {
             $institute = DnbInstitute::get($value);
-            $this->addMultiOption($institute->getId(), $institute->getDisplayName());
-            parent::setValue($value);
         } catch (NotFoundException $omne) {
             parent::setValue($value); // could be blocked, but keeping compatibility just in case
+            return $this;
         }
 
+        $this->addMultiOption($institute->getId(), $institute->getDisplayName());
+        parent::setValue($value);
         return $this;
     }
 }

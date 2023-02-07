@@ -42,7 +42,7 @@ class Application_View_Helper_TranslateWithDefaultTest extends ControllerTestCas
 
         $this->assertEquals('Default', $helper->translateWithDefault('notakey', 'Default'));
         $this->assertEquals('', $helper->translateWithDefault('notakey'));
-        $this->assertNotNull('', $helper->translateWithDefault('notakey', null));
+        $this->assertNotNull($helper->translateWithDefault('notakey', null));
         $this->assertEquals('', $helper->translateWithDefault('notakey', null));
 
         $this->assertEquals('Yes', $helper->translateWithDefault('answer_yes', 'Ja'));

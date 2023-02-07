@@ -62,7 +62,7 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testUploadActionWithEmptyPost()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([]);
 
@@ -77,7 +77,7 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testUploadActionWithInvalidDummyPost()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'foo' => 'bar',
@@ -120,7 +120,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
@@ -155,7 +155,7 @@ class Publish_FormControllerTest extends ControllerTestCase
      */
     public function testCheckActionWithAbortInPost()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'abort' => '',
@@ -180,7 +180,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
@@ -212,7 +212,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
@@ -271,7 +271,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterFirstName_1' => 'John',
@@ -302,7 +302,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterFirstName_1' => 'John',
@@ -333,7 +333,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterFirstName_1' => 'John',
@@ -365,7 +365,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterFirstName_1' => 'John',
@@ -390,7 +390,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $config                             = $this->getConfig();
         $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'documentType'  => 'demo',
@@ -483,7 +483,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterFirstName_1' => 'John',
@@ -511,7 +511,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'addMoreTitleMain' => 'Add one more title main',
@@ -572,7 +572,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'addMoreTitleMain' => 'Einen+weiteren+Titel+hinzufügen',
         ];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost($data);
         $this->dispatch('/publish/form/check');
@@ -627,7 +627,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'deleteMoreTitleMain' => 'Den+letzten+Titel+löschen',
         ];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost($data);
         $this->dispatch('/publish/form/check');
@@ -682,7 +682,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'browseDownInstitute' => 'runter',
         ];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost($data);
         $this->dispatch('/publish/form/check');
@@ -741,7 +741,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             'browseUpInstitute' => 'hoch',
         ];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost($data);
         $this->dispatch('/publish/form/check');
@@ -801,7 +801,7 @@ class Publish_FormControllerTest extends ControllerTestCase
             // kein Button wurde gedrueckt
         ];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost($data);
         $this->dispatch('/publish/form/check');
@@ -833,7 +833,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
@@ -866,7 +866,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
@@ -900,7 +900,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
@@ -930,7 +930,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
@@ -960,7 +960,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'PersonSubmitterLastName_1' => 'Doe',
@@ -989,8 +989,8 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = [];
 
-        $this->request->setMethod('POST');
-        $this->request->setPost(['browseUpInstitute' => 'ignore']);
+        $this->getRequest()->setMethod('POST');
+        $this->getRequest()->setPost(['browseUpInstitute' => 'ignore']);
 
         $this->dispatch('/publish/form/check');
 
@@ -1008,7 +1008,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = ['browseUpInstitute' => 'hoch'];
 
-        $this->request->setMethod('POST');
+        $this->getRequest()->setMethod('POST');
 
         $this->dispatch('/publish/form/check');
 
@@ -1026,7 +1026,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $session->fulltext         = '0';
         $session->additionalFields = ['browseUpInstitute' => 'hoch'];
 
-        $this->request->setMethod('POST');
+        $this->getRequest()->setMethod('POST');
 
         $this->dispatch('/publish/form/check');
 

@@ -143,8 +143,9 @@ class Frontdoor_Model_HtmlMetaTags
             if ($lastname !== '') {
                 $name = $lastname;
 
-                $firstname = trim($author->getFirstName());
-                if ($firstname !== '') {
+                $firstname = $author->getFirstName();
+                $firstname = $firstname !== null ? trim($firstname) : null;
+                if ($firstname !== null && $firstname !== '') {
                     $name .= ", " . $firstname;
                 }
 
@@ -367,7 +368,7 @@ class Frontdoor_Model_HtmlMetaTags
             foreach ($document->getFile() as $file) {
                 if (
                     (! $file->exists())
-                    || ($file->getVisibleInFrontdoor() !== '1')
+                    || (! $file->getVisibleInFrontdoor())
                     || (! Application_Xslt::fileAccessAllowed($file->getId()))
                 ) {
                     continue;
@@ -422,7 +423,7 @@ class Frontdoor_Model_HtmlMetaTags
      */
     private function handleSimpleAttribute($value, $keys, &$metas)
     {
-        $value = trim($value);
+        $value = $value !== null ? trim($value) : '';
         if ($value !== '') {
             foreach ($keys as $key) {
                 $metas[] = [$key, $value];
@@ -451,12 +452,12 @@ class Frontdoor_Model_HtmlMetaTags
      */
     private function handleInstitution($document, &$metas)
     {
-        $metaValue = trim($document->getCreatingCorporation());
+        $metaValue = trim($document->getCreatingCorporation() ?? '');
         if ($metaValue === '') {
-            $metaValue = trim($document->getContributingCorporation());
+            $metaValue = trim($document->getContributingCorporation() ?? '');
         }
         if ($metaValue === '') {
-            $metaValue = trim($document->getPublisherName());
+            $metaValue = trim($document->getPublisherName() ?? '');
         }
         if ($metaValue !== '') {
             $metas[] = ['DC.publisher', $metaValue];

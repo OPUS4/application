@@ -492,7 +492,7 @@ class Publish_Model_Validation
         $licences = [];
         if (empty($this->licences)) {
             foreach ($dbLicences = Licence::getAll() as $lic) {
-                if ($lic->getActive() === '1') {
+                if ($lic->getActive()) {
                     $name          = $lic->getDisplayName();
                     $id            = $lic->getId();
                     $licences[$id] = $name;

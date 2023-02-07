@@ -360,7 +360,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             case Application_Util_Searchtypes::SIMPLE_SEARCH:
             case Application_Util_Searchtypes::ALL_SEARCH:
                 $queryString = $query->getCatchAll();
-                if (trim($queryString) !== '*:*') {
+                if ($queryString !== null && trim($queryString) !== '*:*') {
                     $view->q = $queryString;
                 } else {
                     $view->q = '';

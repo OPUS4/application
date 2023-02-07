@@ -157,7 +157,7 @@ class Admin_ReportControllerTest extends ControllerTestCase
         $this->createTestDocs();
         $docId = $this->docIds[1];
 
-        $this->request->setMethod('POST')
+        $this->getRequest()->setMethod('POST')
             ->setPost([
                 'op'    => 'register',
                 'docId' => $docId,
@@ -174,7 +174,8 @@ class Admin_ReportControllerTest extends ControllerTestCase
         $this->createTestDocs();
         $docId = $this->docIds[2];
 
-        $this->request->setMethod('POST')
+        $this->getRequest()
+            ->setMethod('POST')
             ->setPost([
                 'op'    => 'verify',
                 'docId' => $docId,
@@ -191,7 +192,8 @@ class Admin_ReportControllerTest extends ControllerTestCase
         $this->createTestDocs();
         $docId = $this->docIds[3];
 
-        $this->request->setMethod('POST')
+        $this->getRequest()
+            ->setMethod('POST')
             ->setPost([
                 'op'    => 'verify',
                 'docId' => $docId,
@@ -207,7 +209,8 @@ class Admin_ReportControllerTest extends ControllerTestCase
     {
         $this->createTestDocs();
 
-        $this->request->setMethod('POST')
+        $this->getRequest()
+            ->setMethod('POST')
             ->setPost([
                 'op' => 'register',
             ]);
@@ -222,7 +225,8 @@ class Admin_ReportControllerTest extends ControllerTestCase
     {
         $this->createTestDocs();
 
-        $this->request->setMethod('POST')
+        $this->getRequest()
+            ->setMethod('POST')
             ->setPost([
                 'op' => 'verify',
             ]);

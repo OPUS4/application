@@ -34,6 +34,8 @@ use Opus\Common\Model\PersistableInterface;
 
 /**
  * Formular für Bestätigungsabfragen an den Nutzer, z.B. beim Löschen von Modellen.
+ *
+ * TODO this "form" is actually a Zend_Form_SubForm, it should be a Zend_Form - Fix!
  */
 class Application_Form_Confirmation extends Application_Form_Abstract
 {

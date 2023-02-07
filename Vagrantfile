@@ -2,10 +2,10 @@
 # vi: set ft=ruby :
 
 $software = <<SCRIPT
-# Downgrade to PHP 7.4
+# Downgrade to PHP 8.1
 apt-add-repository -y ppa:ondrej/php
 apt-get -yq update
-apt-get -yq install php7.4
+apt-get -yq install php8.1
 
 # Install MYSQL
 debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
@@ -13,14 +13,14 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 apt-get -yq install mysql-server
 
 # Install required PHP packages
-apt-get -yq install php7.4-dom
-apt-get -yq install php7.4-mbstring
-apt-get -yq install php7.4-intl
-apt-get -yq install php7.4-gd
-apt-get -yq install php7.4-mcrypt
-apt-get -yq install php7.4-curl
-apt-get -yq install php7.4-zip
-apt-get -yq install php7.4-mysql
+apt-get -yq install php8.1-dom
+apt-get -yq install php8.1-mbstring
+apt-get -yq install php8.1-intl
+apt-get -yq install php8.1-gd
+apt-get -yq install php8.1-mcrypt
+apt-get -yq install php8.1-curl
+apt-get -yq install php8.1-zip
+apt-get -yq install php8.1-mysql
 
 # Install Java
 apt-get -yq install openjdk-11-jdk

@@ -111,6 +111,8 @@ class ControllerTestCase extends TestCase
     public function setUp(): void
     {
         $this->setUpWithEnv(APPLICATION_ENV);
+
+        $this->getRequest()->setRequestUri(''); // prevents PHP warnings because request URI is null
     }
 
     /**
@@ -128,6 +130,8 @@ class ControllerTestCase extends TestCase
         $this->cleanupTestFolders();
 
         $this->additionalChecks();
+
+        $this->setLogger(null);
 
         DoiManager::setInstance(null);
         Application_Configuration::clearInstance(); // reset Application_Configuration
@@ -452,7 +456,6 @@ class ControllerTestCase extends TestCase
      * Prüft, ob das XHTML valide ist.
      *
      * @param string|null $body
-     *
      *
      * TODO die DTD von W3C zu holen ist sehr langsam; sollte aus lokaler Datei geladen werden
      */

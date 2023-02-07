@@ -130,6 +130,6 @@ class Application_View_Helper_JavascriptMessagesTest extends ControllerTestCase
             . '            opus4Messages["chooseAnotherFile"] = "Please choose another File.";' . "\n"
             . '        </script>' . "\n";
 
-        $this->assertEquals($expectation, $this->helper->javascriptMessages());
+        $this->assertEquals($expectation, $this->helper->javascriptMessages()->toString());
     }
 }

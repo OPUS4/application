@@ -517,13 +517,16 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      *
      * @param int|string $modelId
      * @return ModelInterface|null
+     *
+     * TODO cleanup parameter handling
      */
     public function getModel($modelId)
     {
         if ($modelId === null || is_numeric($modelId) || ! $this->getVerifyModelIdIsNumeric()) {
             $modelClass = $this->getModelClass();
 
-            if (strlen(trim($modelId)) !== 0) {
+            // TODO LAMINAS is the following check necessary?
+            if (is_int($modelId) || ($modelId !== null && strlen(trim($modelId)) !== 0)) {
                 try {
                     return $modelClass::get($modelId);
                 } catch (NotFoundException $omnfe) {

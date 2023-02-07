@@ -48,6 +48,6 @@ class Application_View_Helper_TranslateWithDefault extends Zend_View_Helper_Abst
             return $translator->translate($messageId);
         }
 
-        return $default;
+        return $default ?? ''; // return empty string instead of NULL
     }
 }

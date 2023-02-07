@@ -95,7 +95,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm
                 $element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea
                 || $element instanceof Zend_Form_Element_Hidden
             ) {
-                return trim($value) === '' ? null : $value;
+                return $value === null || trim($value) === '' ? null : $value;
             } else {
                 return $value;
             }

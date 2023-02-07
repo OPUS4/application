@@ -65,7 +65,7 @@ class Crawlers_SitelinksController extends Application_Controller_Action
     {
         $this->indexAction();
 
-        $year = trim($this->_getParam('year'));
+        $year = trim($this->_getParam('year') ?? '');
 
         if (preg_match('/^\d{4}$/', $year) > 0) {
             $finder = Repository::getInstance()->getDocumentFinder();

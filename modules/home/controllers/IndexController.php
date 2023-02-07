@@ -50,7 +50,6 @@ class Home_IndexController extends Application_Controller_Action
      * @param  string $action     The name of the action that was called.
      * @param  array  $parameters The parameters passed to the action.
      *
-     *
      * TODO does it make sense? are we using this in the future? now?
      */
     public function __call($action, $parameters)

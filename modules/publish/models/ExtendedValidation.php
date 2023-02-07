@@ -690,7 +690,8 @@ class Publish_Model_ExtendedValidation
             }
 
             $matches = [];
-            if (preg_match('/^(\d+)$/', $element->getValue(), $matches) === 0) {
+            $value   = $element->getValue();
+            if ($value === null || preg_match('/^(\d+)$/', $value, $matches) === 0) {
                 continue;
             }
 
