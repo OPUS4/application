@@ -154,8 +154,8 @@ class Oai_Model_Server extends Application_Model_Abstract
     /**
      * Handles an OAI request.
      *
-     * @param Oai_Model_Request $oaiRequest Contains full request information
-     * @param string            $requestUri
+     * @param Oai_Model_Request|array $oaiRequest Contains full request information TODO BUG check parameter type
+     * @param string                  $requestUri
      * @throws Oai_Model_Exception Thrown if the request could not be handled.
      * @return string Generated XML
      */
@@ -421,10 +421,8 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      * Implements response for OAI-PMH verb 'ListRecords'.
-     *
-     * @param  array $oaiRequest Contains full request information
      */
-    protected function handleListRecords(&$oaiRequest)
+    protected function handleListRecords(array &$oaiRequest)
     {
         $maxRecords = $this->configuration->getMaxListRecords();
         $this->handlingOfLists($oaiRequest, $maxRecords);

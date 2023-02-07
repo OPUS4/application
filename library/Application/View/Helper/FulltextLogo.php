@@ -48,7 +48,7 @@ class Application_View_Helper_FulltextLogo extends Application_View_Helper_Docum
         }
 
         if (! $doc instanceof DocumentInterface) {
-            // TODO log
+            // TODO log OR throw exception?
             return '';
         }
 
