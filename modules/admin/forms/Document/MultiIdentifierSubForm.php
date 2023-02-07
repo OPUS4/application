@@ -385,7 +385,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Mul
     /**
      * @param Zend_Form $subform
      * @param int       $docId
-     * @return string|null
+     * @return string
      * @throws Exception
      */
     protected function processPostGenerate($subform, $docId)
