@@ -29,8 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Person;
 use Opus\Model\ModelException;
+use Opus\Person;
 
 /**
  * @covers Oai_IndexController
@@ -80,6 +80,9 @@ class Oai_Format_XMetaDissPlusTest extends ControllerTestCase
         }
     }
 
+    /**
+     * @return array[]
+     */
     public function personDataProvider()
     {
         return [
@@ -93,7 +96,7 @@ class Oai_Format_XMetaDissPlusTest extends ControllerTestCase
     /**
      * @param string $role
      * @param string $elementName
-     * @throws \Opus\Model\ModelException
+     * @throws ModelException
      * @dataProvider personDataProvider
      */
     public function testPersonOrcidPresentInXmetaDissPlus($role, $elementName)
@@ -125,7 +128,7 @@ class Oai_Format_XMetaDissPlusTest extends ControllerTestCase
     /**
      * @param string $role
      * @param string $elementName
-     * @throws \Opus\Model\ModelException
+     * @throws ModelException
      * @dataProvider personDataProvider
      */
     public function testAuthorGndPresentInXmetaDissPlus($role, $elementName)

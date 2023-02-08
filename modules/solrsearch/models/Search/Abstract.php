@@ -122,7 +122,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             if (is_string($rowsParam)) {
                 // for invalid values $maxNumber should be used
                 if (ctype_digit($rowsParam)) {
-                    $rows       = intval($rowsParam);
+                    $rows = intval($rowsParam);
                 } else {
                     $rows = $maxNumber;
                 }
