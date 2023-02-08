@@ -118,18 +118,36 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             $startParam = $request->getParam('start', 0);
             $rowsParam  = $request->getParam('rows', $maxNumber);
             $start      = intval($startParam);
-            $rows       = intval($rowsParam);
 
-            $input['start'] = $start > 0 ? $start : 0;
-
-            $input['rows'] = $rows > 0 || ($rows === 0 && $rowsParam === '0') ? $rows : $maxNumber;
-
-            if ($input['start'] > $maxNumber) {
-                $input['start'] = $maxNumber;
+            if (is_string($rowsParam)) {
+                // for invalid values $maxNumber should be used
+                if (ctype_digit($rowsParam)) {
+                    $rows       = intval($rowsParam);
+                } else {
+                    $rows = $maxNumber;
+                }
+            } else {
+                $rows = $rowsParam;
             }
-            if ($input['rows'] + $input['start'] > $maxNumber) {
-                $input['rows'] = $maxNumber - $input['start'];
+
+            // rows = 0 should be support to allow just getting the number of possible results (TODO Is it used?)
+            $rows = $rows > $maxNumber || $rows < 0 ? $maxNumber : $rows;
+
+            // IMPORTANT: 'start' + 'row' must not exceed 2147483647 (java,lang.Integer.MAX_VALUE)
+            if ($start > Query::MAX_ROWS) {
+                $start = Query::MAX_ROWS;
+                $rows  = 0;
+                // TODO throwing exception would be better because this query does not make sense
+                //      need to change tests for changed behaviour
             }
+            $start = $start > 0 ? $start : 0;
+
+            if ($start + $rows > Query::MAX_ROWS) {
+                $rows = Query::MAX_ROWS - $start;
+            }
+
+            $input['rows']  = $rows;
+            $input['start'] = $start;
         }
 
         foreach ($this->searchFields as $searchField) {

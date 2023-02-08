@@ -29,6 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Person;
+use Opus\Model\ModelException;
+
 /**
  * @covers Oai_IndexController
  */
@@ -75,5 +78,76 @@ class Oai_Format_XMetaDissPlusTest extends ControllerTestCase
         } else {
             $this->fail('element \'xMetaDiss:xMetaDiss\' not found');
         }
+    }
+
+    public function personDataProvider()
+    {
+        return [
+            ['author', 'dc:creator'],
+            ['advisor', 'dc:contributor'],
+            ['referee', 'dc:contributor'],
+            ['editor', 'dc:contributor'],
+        ];
+    }
+
+    /**
+     * @param string $role
+     * @param string $elementName
+     * @throws \Opus\Model\ModelException
+     * @dataProvider personDataProvider
+     */
+    public function testPersonOrcidPresentInXmetaDissPlus($role, $elementName)
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+
+        $person = new Person();
+        $person->setLastName('author1');
+        $person->setIdentifierOrcid('1111-2222-3333-4444');
+        $documentPerson = $doc->addPerson($person);
+        $documentPerson->setRole($role);
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpath('//xMetaDiss:xMetaDiss');
+        $this->assertXpath("//xMetaDiss:xMetaDiss/$elementName/pc:person/ddb:ORCID");
+        $this->assertXpathContentContains(
+            "//xMetaDiss:xMetaDiss/$elementName/pc:person/ddb:ORCID",
+            '1111-2222-3333-4444'
+        );
+    }
+
+    /**
+     * @param string $role
+     * @param string $elementName
+     * @throws \Opus\Model\ModelException
+     * @dataProvider personDataProvider
+     */
+    public function testAuthorGndPresentInXmetaDissPlus($role, $elementName)
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+
+        $person = new Person();
+        $person->setLastName('author1');
+        $person->setIdentifierGnd('GndAuthor1');
+        $documentPerson = $doc->addPerson($person);
+        $documentPerson->setRole($role);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpath('//xMetaDiss:xMetaDiss');
+        $this->assertXpath("//xMetaDiss:xMetaDiss/$elementName/pc:person[@ddb:GND-Nr=\"GndAuthor1\"]");
     }
 }
