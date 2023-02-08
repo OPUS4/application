@@ -69,7 +69,7 @@ class ApiController extends Application_Controller_Action
         $doctypes = array_keys($this->getHelper('documentTypes')->getDocumentTypes());
 
         $response = [
-            'doctypes' => $doctypes
+            'doctypes' => $doctypes,
         ];
 
         echo json_encode($response);
@@ -146,7 +146,7 @@ class ApiController extends Application_Controller_Action
             $crossrefUrl .= "?mailto=$mailTo";
         }
 
-        $client = new Zend_Http_Client($crossrefUrl);
+        $client   = new Zend_Http_Client($crossrefUrl);
         $response = $client->request(Zend_Http_Client::GET);
 
         // TODO error handling?

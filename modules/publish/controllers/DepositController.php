@@ -132,9 +132,8 @@ class Publish_DepositController extends Application_Controller_Action
         $document = $depositData->getDocument();
         $document->setServerState('unpublished');
 
-
         $enrichments = $document->getEnrichment();
-        if ($this->checkOpusSourceIsDoi($enrichments) == true) {
+        if ($this->checkOpusSourceIsDoi($enrichments)) {
             $this->addSourceDoi($document);
         } else {
             $this->addSourceEnrichment($document);
@@ -229,22 +228,25 @@ class Publish_DepositController extends Application_Controller_Action
      * @param Document $document
      * @throws ModelException
      */
-
     private function addSourceDoi($document)
     {
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('opus.source');
         $enrichment->setValue('doi-import');
         $document->addEnrichment($enrichment);
     }
 
+    /**
+     * @param array $enrichments
+     * @return bool
+     */
     private function checkOpusSourceIsDoi($enrichments)
     {
         foreach ($enrichments as $enrichment) {
                 $value = $enrichment->getValue();
                 //$this->getLogger()->warn("KeyName: " . $enrichment->getKeyName());
                 //$this->getLogger()->warn("Value: " . $enrichment->getValue());
-            if ($value == 'crossref') {
+            if ($value === 'crossref') {
                 return true;
             }
         }

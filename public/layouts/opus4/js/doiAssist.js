@@ -40,7 +40,7 @@ function getSubject(json)
     if (json.message.subject != undefined) {
         var _z, subject;
         var subjects = [];
-        var _laenge = json.message.subject.length;
+        var _laenge  = json.message.subject.length;
         if (_laenge > 0) {
             for (_z = 0; _z < _laenge; _z++) {
                 subject = json.message.subject[_z];
@@ -234,12 +234,12 @@ function getEditor(json)
         var _laenge = json.message.editor.length;
         if (_laenge > 0) {
             for (_z = 0; _z < _laenge; _z++) {
-                vorname = json.message.editor[_z].given;
+                vorname  = json.message.editor[_z].given;
                 nachname = json.message.editor[_z].family;
                 if (json.message.editor[_z].ORCID != null) {
                     if (json.message.editor[_z].ORCID.includes("/")) {
                         var orcid_raw = json.message.editor[_z].ORCID;
-                        let re = orcid_raw.match(/([\d\-]+)/g);
+                        let re        = orcid_raw.match(/([\d\-]+)/g);
                         if (re != null) {
                             orcid = re[0];} else {
                             orcid = ''}
@@ -261,11 +261,11 @@ function getTranslator(json)
     if (json.message.translator) {
         var vorname, nachname, _z, complete_name;
         var translators = [];
-        var _laenge = json.message.translator.length;
+        var _laenge     = json.message.translator.length;
         if (_laenge > 0) {
             for (_z = 0; _z < _laenge; _z++) {
-                vorname = json.message.translator[_z].given;
-                nachname = json.message.translator[_z].family;
+                vorname       = json.message.translator[_z].given;
+                nachname      = json.message.translator[_z].family;
                 complete_name = nachname + ',' + vorname;
                 translators.push(complete_name);
             }
@@ -286,12 +286,12 @@ function getAuthor(json)
         if (_laenge > 0) {
             for (_z = 0; _z < _laenge; _z++) {
                 if (json.message.author[_z].given != null || json.message.author[_z].family != null) {
-                    vorname = json.message.author[_z].given;
+                    vorname  = json.message.author[_z].given;
                     nachname = json.message.author[_z].family;
                     if (json.message.author[_z].ORCID != null) {
                         if (json.message.author[_z].ORCID.includes("/")) {
                             var orcid_raw = json.message.author[_z].ORCID;
-                            let re = orcid_raw.match(/([\d\-]+)/g);
+                            let re        = orcid_raw.match(/([\d\-]+)/g);
                             if (re != null) {
                                 orcid = re[0];} else {
                                 orcid = ''}
@@ -374,9 +374,9 @@ function getAbstract(json)
     var raw = json.message.abstract;
     if (raw != undefined) {
         finalize("TitleAbstract_1");
-        var str = raw.toString();
+        var str     = raw.toString();
         var result0 = str.replace(/[\t ]+/g, " ");
-        var result = result0.replace(/<[^>]*(>|$)|jats:sec|jats:title|jats:p|&laquo;|&gt;/g, '');
+        var result  = result0.replace(/<[^>]*(>|$)|jats:sec|jats:title|jats:p|&laquo;|&gt;/g, '');
     }
     return result ? result : ''}
 exports.getAbstract = getAbstract;

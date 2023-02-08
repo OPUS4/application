@@ -5,14 +5,18 @@ function startePruefung()
 {
     var doi = document.getElementById("IdentifierDoi").value.trim();
     if (doi.trim() == '') {
-        alert("Bitte zuerst eine DOI eingeben...")} // Feld "IdentifierDoi" ist leer
-    else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value != "true") {
-        leseDoi(doi)} // OK, starte Import
-    else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true") { // Import wurde bereits durchgeführt -> Bestätigung
-    //
+        // Feld "IdentifierDoi" ist leer
+        alert("Bitte zuerst eine DOI eingeben...")
+    } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value != "true") {
+        // OK, starte Import
+        leseDoi(doi)
+    } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true") {
+        // Import wurde bereits durchgeführt -> Bestätigung
         if (confirm("Achtung, alle Felder des Formulars werden gelöscht und ein neuer Import gestartet! Fortfahren?")) {
-            aufraeumen(doi)} else {
-            return}
+            aufraeumen(doi)
+        } else {
+            return
+        }
     }
 }
 
@@ -20,8 +24,8 @@ function aufraeumen(doi)
 {
     let fields = document.getElementById("Enrichmentlocal_doiImportPopulated").value;
     document.getElementById("Alles").reset(); // Alle Felder leeren
-    document.getElementById("PersonAuthorLastName_1").value = ""; // Explizites reset(), weil die Felder sonst stehen bleiben
-    document.getElementById("PersonAuthorFirstName_1").value = "";
+    document.getElementById("PersonAuthorLastName_1").value        = ""; // Explizites reset(), weil die Felder sonst stehen bleiben
+    document.getElementById("PersonAuthorFirstName_1").value       = "";
     document.getElementById("PersonAuthorIdentifierOrcid_1").value = "";
 
     const usedFields = fields.split(',');
@@ -49,7 +53,7 @@ function leseDoi(doi)
                     colorOrange("IdentifierDoi")} else {
                     // document.getElementById("Enrichmentlocal_doiJson").value = jsonraw;
                     document.getElementById("Enrichmentopus_import_data").value = jsonraw;
-                    document.getElementById("Enrichmentopus_doi_flag").value = "false";
+                    document.getElementById("Enrichmentopus_doi_flag").value    = "false";
                     parseJson(jsonraw);
                     }
             }
@@ -72,26 +76,26 @@ function parseJson(jsonraw)
     getDoctypes(data);
     document.getElementById("Enrichmentconference_title").value = getConferenceTitle(data);
     document.getElementById("Enrichmentconference_place").value = getConferencePlace(data);
-    document.getElementById("ContributingCorporation").value = getContributingCorporation(data);    //json.author.name;
-    document.getElementById("PublisherName").value = getPublisherName(data);    //json.message.publisher;
-    document.getElementById("PublisherPlace").value = getPublisherPlace(data);  //json.message.publisher-location;
-    document.getElementById("TitleMain_1").value = getTitleMain(data);//json.message.title[0];
-    document.getElementById("TitleSub_1").value = getTitleSub(data);    //json.message.title[1];
-    var language = getLanguage(data); expandLanguage(language);
+    document.getElementById("ContributingCorporation").value    = getContributingCorporation(data);    //json.author.name;
+    document.getElementById("PublisherName").value              = getPublisherName(data);    //json.message.publisher;
+    document.getElementById("PublisherPlace").value             = getPublisherPlace(data);  //json.message.publisher-location;
+    document.getElementById("TitleMain_1").value                = getTitleMain(data);//json.message.title[0];
+    document.getElementById("TitleSub_1").value                 = getTitleSub(data);    //json.message.title[1];
+    var language                                                = getLanguage(data); expandLanguage(language);
     document.getElementById("TitleAbstract_1").value = getAbstract(data);
-    document.getElementById("TitleParent_1").value = getTitleParent(data);  //json.message.container-title[0];
-    var pages = getPages(data); expandPages(pages); //json.message.page;
+    document.getElementById("TitleParent_1").value   = getTitleParent(data);  //json.message.container-title[0];
+    var pages                                        = getPages(data); expandPages(pages); //json.message.page;
     document.getElementById("ArticleNumber").value = getArticleNumber(data);
-    var thesisAccepted = getThesisAccepted(data); expandThesisAccepted(thesisAccepted); //json.message.approved.date-parts[0][0] (bzw. ...[0][1] und [0][2] für Tag/Monat)
-    document.getElementById("Issue").value = getIssue(data);    //json.message.issue or json.message.journal-issue.issue;
-    document.getElementById("Volume").value = getVolume(data);  //json.message.volume;
+    var thesisAccepted                             = getThesisAccepted(data); expandThesisAccepted(thesisAccepted); //json.message.approved.date-parts[0][0] (bzw. ...[0][1] und [0][2] für Tag/Monat)
+    document.getElementById("Issue").value   = getIssue(data);    //json.message.issue or json.message.journal-issue.issue;
+    document.getElementById("Volume").value  = getVolume(data);  //json.message.volume;
     document.getElementById("Edition").value = getEdition(data);    //json.message.edition-number;
-    var dates = getCompletedDate(data); expandCompletedDate(dates);
+    var dates                                = getCompletedDate(data); expandCompletedDate(dates);
     document.getElementById("IdentifierIsbn").value = getIsbn(data);    //json.message.isbn-type[0].value;
     document.getElementById("IdentifierIssn").value = getIssn(data);    //json.message.issn-type[0].value;
-//document.getElementById("IdentifierUrl").value = getUrl(data);	//json.message.link[0].url -> Soll laut aw raus
-    document.getElementById("Enrichmentlocal_crossrefLicence").value = getLicence(data);
-    document.getElementById("Enrichmentlocal_import_origin").value = "crossref";
+//document.getElementById("IdentifierUrl").value = getUrl(data);    //json.message.link[0].url -> Soll laut aw raus
+    document.getElementById("Enrichmentlocal_crossrefLicence").value    = getLicence(data);
+    document.getElementById("Enrichmentlocal_import_origin").value      = "crossref";
     document.getElementById("Enrichmentlocal_doiImportPopulated").value = populatedFields;
 }
 
@@ -105,7 +109,7 @@ function expandLanguage(language)
     }
 
     let sprachen = [];
-    var len = document.getElementById("Language").length - 1;  // Anzahl der auswählbaren Sprachen
+    var len      = document.getElementById("Language").length - 1;  // Anzahl der auswählbaren Sprachen
     for (let i = 1; i <= len; i++) {
          sprachen[i] = document.getElementById("Language").options[i].value; // Array der auswählbaren Sprachen (Index 1 bis x)
     }
@@ -150,8 +154,8 @@ function expandCompletedDate(dates)
 function expandSubject(subject)
 {
     if (subject[0] != undefined) {
-        var _laenge = subject.length;
-        var schlagwort = subject[0] + '';
+        var _laenge                                            = subject.length;
+        var schlagwort                                         = subject[0] + '';
         document.getElementById("SubjectUncontrolled_1").value = schlagwort;
         finalize("SubjectUncontrolled_1");
 
@@ -160,7 +164,7 @@ function expandSubject(subject)
                 button.click();} else {
                 var _z;
             for (_z = 1; _z < _laenge; _z++) {
-                var feld = _z + 1;
+                var feld       = _z + 1;
                 var schlagwort = subject[_z] + '';
                 document.getElementById("SubjectUncontrolled_" + feld).value = schlagwort;
                 finalize("SubjectUncontrolled_" + feld);
@@ -195,9 +199,9 @@ function expandThesisAccepted(dates)
 function expandPages(page)
 {
     if (page.includes('-')) {
-        const pages = page.split("-");
-        var pageFirst = pages[0];
-        var pageLast = pages[1];
+        const pages    = page.split("-");
+        var pageFirst  = pages[0];
+        var pageLast   = pages[1];
         var pageNumber = pageLast - pageFirst + 1;
         if (pageNumber != undefined && /^\d+$/.test(pageNumber)) {
             document.getElementById("PageNumber").value = pageNumber;
@@ -218,14 +222,14 @@ function expandPages(page)
 function expandAuthor(author)
 {
     if (author[0] != undefined) {
-        var _laenge = author.length;
+        var _laenge      = author.length;
         var completeName = author[0] + '';
 
-        var vorname = completeName.split(',')[1].trim();  // [1] = Vorname
+        var vorname                                              = completeName.split(',')[1].trim();  // [1] = Vorname
         document.getElementById("PersonAuthorFirstName_1").value = vorname;
         finalize("PersonAuthorFirstName_1");
 
-        var nachname = completeName.split(',')[0].trim();  // [0] = Nachname
+        var nachname                                            = completeName.split(',')[0].trim();  // [0] = Nachname
         document.getElementById("PersonAuthorLastName_1").value = nachname;
         finalize("PersonAuthorLastName_1");
 
@@ -240,12 +244,12 @@ function expandAuthor(author)
                 button.click();} else {
                 var _z;
             for (_z = 1; _z < _laenge; _z++) {
-                var feld = _z + 1;
+                var feld         = _z + 1;
                 var completeName = author[_z] + '';
-                var vorname = completeName.split(',')[1].trim();  // [1] = Vorname
+                var vorname      = completeName.split(',')[1].trim();  // [1] = Vorname
                 document.getElementById("PersonAuthorFirstName_" + feld).value = vorname;
                 finalize("PersonAuthorFirstName_" + feld);
-                var nachname = completeName.split(',')[0].trim();  // [0] = Nachname
+                var nachname                                                  = completeName.split(',')[0].trim();  // [0] = Nachname
                 document.getElementById("PersonAuthorLastName_" + feld).value = nachname;
                 finalize("PersonAuthorLastName_" + feld);
                 if (completeName.split(',')[2].trim() != '') {
@@ -263,12 +267,12 @@ function expandAuthor(author)
 function expandEditor(editor)
 {
     if (editor[0] != undefined) {
-        var _laenge = editor.length;
-        var completeName = editor[0] + '';
-        var vorname = completeName.split(',')[1].trim();  // [1] = Vorname
+        var _laenge                                              = editor.length;
+        var completeName                                         = editor[0] + '';
+        var vorname                                              = completeName.split(',')[1].trim();  // [1] = Vorname
         document.getElementById("PersonEditorFirstName_1").value = vorname;
         finalize("PersonEditorFirstName_1");
-        var nachname = completeName.split(',')[0].trim();  // [0] = Nachname
+        var nachname                                            = completeName.split(',')[0].trim();  // [0] = Nachname
         document.getElementById("PersonEditorLastName_1").value = nachname;
         finalize("PersonEditorLastName_1");
         if (completeName.split(',')[2].trim() != '') {
@@ -282,12 +286,12 @@ function expandEditor(editor)
                 button.click();} else {
                 var _z;
             for (_z = 1; _z < _laenge; _z++) {
-                var feld = _z + 1;
+                var feld         = _z + 1;
                 var completeName = editor[_z] + '';
-                var vorname = completeName.split(',')[1].trim();  // [1] = Vorname
+                var vorname      = completeName.split(',')[1].trim();  // [1] = Vorname
                 document.getElementById("PersonEditorFirstName_" + feld).value = vorname;
                 finalize("PersonEditorFirstName_" + feld);
-                var nachname = completeName.split(',')[0].trim();  // [0] = Nachname
+                var nachname                                                  = completeName.split(',')[0].trim();  // [0] = Nachname
                 document.getElementById("PersonEditorLastName_" + feld).value = nachname;
                 finalize("PersonEditorLastName_" + feld);
                 if (completeName.split(',')[2].trim() != '') {
@@ -303,12 +307,12 @@ function expandEditor(editor)
 function expandTranslator(translator)
 {
     if (translator[0] != undefined) {
-        var _laenge = translator.length;
-        var completeName = translator[0] + '';
-        var vorname = completeName.split(',')[1].trim();  // [1] = Vorname
+        var _laenge                                                  = translator.length;
+        var completeName                                             = translator[0] + '';
+        var vorname                                                  = completeName.split(',')[1].trim();  // [1] = Vorname
         document.getElementById("PersonTranslatorFirstName_1").value = vorname;
         finalize("PersonTranslatorFirstName_1");
-        var nachname = completeName.split(',')[0].trim();  // [0] = Nachname
+        var nachname                                                = completeName.split(',')[0].trim();  // [0] = Nachname
         document.getElementById("PersonTranslatorLastName_1").value = nachname;
         finalize("PersonTranslatorLastName_1");
 
@@ -317,9 +321,9 @@ function expandTranslator(translator)
                 button.click();} else {
                 var _z;
             for (_z = 1; _z < _laenge; _z++) {
-                var feld = _z + 1;
+                var feld         = _z + 1;
                 var completeName = author[_z] + '';
-                var vorname = completeName.split(',')[1].trim();  // [1] = Vorname
+                var vorname      = completeName.split(',')[1].trim();  // [1] = Vorname
                 document.getElementById("PersonTranslatorFirstName_" + feld).value = vorname;
                 finalize("PersonTranslatorFirstName_" + feld);
                 var nachname = completeName.split(',')[0].trim();  // [0] = Nachname
@@ -350,12 +354,12 @@ function get(url, callback)
 
         async function getDoctypes(data)
         {
-            const response = await fetch('../../getDoctypes.php');
-            const text = await response.text();
-            const split = text.split(",");
-            const existingDoctypes = split.map(element => { return element.trim(); });
+            const response                                        = await fetch('../../getDoctypes.php');
+            const text                                            = await response.text();
+            const split                                           = text.split(",");
+            const existingDoctypes                                = split.map(element => { return element.trim(); });
             document.getElementById("CrossrefDocumentType").value = getType(data);
-            var crossrefType = document.getElementById("CrossrefDocumentType").value;
+            var crossrefType                                      = document.getElementById("CrossrefDocumentType").value;
             document.getElementById("Enrichmentlocal_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "local_crossrefDocumentType"
     if (crossrefType == 'journal-article') {
         if (existingDoctypes.includes("article")) {
@@ -475,9 +479,9 @@ function get(url, callback)
     }
 
     if (crossrefType.includes("dissertation/")) { // Wenn crossrefType "dissertation" mit Slash: mit Degree
-        const degree = crossrefType.split('/')[1];
-        const keys_master = ["master", "mestrado", "m.phil.", "m.a.", "m.sc.", "ll. m.", "m. ed.", "m. eng.", "m. f. a.", "m. mus.", "ll.m.", "m.ed.", "m.eng.", "m.f.a.", "m.mus.", "m.s."];
-        const keys_bachelor = ["bachelor", "bacharel", "b.a.", "b.sc.", "ll. b.", "b. ed.", "b. eng.", "b. f. a.", "b. mus.", "b. m. a", "ll.b.", "b.ed.", "b.eng.", "b.f.a.", "b.mus.", "b.m.a"];
+        const degree            = crossrefType.split('/')[1];
+        const keys_master       = ["master", "mestrado", "m.phil.", "m.a.", "m.sc.", "ll. m.", "m. ed.", "m. eng.", "m. f. a.", "m. mus.", "ll.m.", "m.ed.", "m.eng.", "m.f.a.", "m.mus.", "m.s."];
+        const keys_bachelor     = ["bachelor", "bacharel", "b.a.", "b.sc.", "ll. b.", "b. ed.", "b. eng.", "b. f. a.", "b. mus.", "b. m. a", "ll.b.", "b.ed.", "b.eng.", "b.f.a.", "b.mus.", "b.m.a"];
         const keys_habilitation = ["habil"];
         if (keys_master.some(el => degree.includes(el))) {
             if (existingDoctypes.includes("masterthesis")) {
