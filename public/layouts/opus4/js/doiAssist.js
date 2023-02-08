@@ -30,8 +30,11 @@ function getLicence(json)
     if (json['message']['license'] != undefined) {
         var result = json['message']['license'][0]['URL'];
         if (result != undefined) {
-            finalize("Enrichmentlocal_crossrefLicence")}}
-    return result ? result : ''}
+            finalize("Enrichmentlocal_crossrefLicence")
+        }
+    }
+    return result ? result : ''
+}
 exports.getLicence = getLicence;
 
 
@@ -47,8 +50,10 @@ function getSubject(json)
                 subjects.push(subject);
             }
         }
-        return subjects} else {
-        return ''}
+        return subjects
+    } else {
+        return ''
+    }
 }
 exports.getSubject = getSubject;
 
@@ -58,8 +63,11 @@ function getConferenceTitle(json)
     if (json['message']['event'] != undefined) {
         var result = json['message']['event']['name'];
         if (result != undefined) {
-            finalize("EnrichmentConferenceTitle")}}
-    return result ? result : ''}
+            finalize("EnrichmentConferenceTitle")
+        }
+    }
+    return result ? result : ''
+}
 exports.getConferenceTitle = getConferenceTitle;
 
 function getConferencePlace(json)
@@ -67,8 +75,11 @@ function getConferencePlace(json)
     if (json['message']['event'] != undefined) {
         var result = json['message']['event']['location'];
         if (result != undefined) {
-            finalize("EnrichmentConferencePlace")}}
-    return result ? result : ''}
+            finalize("EnrichmentConferencePlace")
+        }
+    }
+    return result ? result : ''
+}
 exports.getConferencePlace = getConferencePlace;
 
 function getUrl(json)
@@ -76,8 +87,11 @@ function getUrl(json)
     if (json['message']['link'] != undefined && json['message']['link'][0]['URL'] != undefined) {
         var result = json['message']['link'][0]['URL'];
         if (result != undefined) {
-            finalize("IdentifierUrl")}}
-    return result ? result : ''}
+            finalize("IdentifierUrl")
+        }
+    }
+    return result ? result : ''
+}
 exports.getUrl = getUrl;
 
 function getIssn(json)
@@ -85,8 +99,11 @@ function getIssn(json)
     if (json['message']['issn-type'] != undefined) {
         var result = json['message']['issn-type'][0]['value'];
         if (result != undefined) {
-            finalize("IdentifierIssn")}}
-    return result ? result : ''}
+            finalize("IdentifierIssn")
+        }
+    }
+    return result ? result : ''
+}
 exports.getIssn = getIssn;
 
 function getIsbn(json)
@@ -94,8 +111,11 @@ function getIsbn(json)
     if (json['message']['isbn-type'] != undefined) {
         var result = json['message']['isbn-type'][0]['value'];
         if (result != undefined) {
-            finalize("IdentifierIsbn")}}
-    return result ? result : ''}
+            finalize("IdentifierIsbn")
+        }
+    }
+    return result ? result : ''
+}
 exports.getIsbn = getIsbn;
 
 function getCompletedDate(json)
@@ -107,22 +127,27 @@ function getCompletedDate(json)
             var resultYear = json['message']['issued']['date-parts'][0][0];
             dates.push(resultYear);
         } else {
-            dates.push('-')};
+            dates.push('-')
+        }
 
         if (json['message']['issued']['date-parts'][0][1]) {
             var resultMonth = json['message']['issued']['date-parts'][0][1];
             dates.push(resultMonth);
         } else {
-            dates.push('-')};
+            dates.push('-')
+        }
 
         if (json['message']['issued']['date-parts'][0][2]) {
             var resultDay = json['message']['issued']['date-parts'][0][2];
             dates.push(resultDay);
         } else {
-            dates.push('-')};
+            dates.push('-')
+        }
 
-        return dates;} else {
-        return ''; }
+        return dates;
+    } else {
+        return '';
+    }
 }
 exports.getCompletedDate = getCompletedDate;
 
@@ -135,22 +160,27 @@ function getThesisAccepted(json)
             var resultYear = json['message']['approved']['date-parts'][0][0];
             dates.push(resultYear);
         } else {
-            dates.push('-')};
+            dates.push('-')
+        }
 
         if (json['message']['approved']['date-parts'][0][1]) {
             var resultMonth = json['message']['approved']['date-parts'][0][1];
             dates.push(resultMonth);
         } else {
-            dates.push('-')};
+            dates.push('-')
+        }
 
         if (json['message']['approved']['date-parts'][0][2]) {
             var resultDay = json['message']['approved']['date-parts'][0][2];
             dates.push(resultDay);
         } else {
-            dates.push('-')};
+            dates.push('-')
+        }
 
-        return dates;} else {
-        return ''; }
+        return dates;
+    } else {
+        return '';
+    }
 }
 exports.getThesisAccepted = getThesisAccepted;
 
@@ -159,8 +189,10 @@ function getVolume(json)
 {
     var result = json.message.volume;
     if (result != undefined) {
-        finalize("Volume")}
-    return result ? result : ''}
+        finalize("Volume")
+    }
+    return result ? result : ''
+}
 exports.getVolume = getVolume;
 
 
@@ -169,8 +201,10 @@ function getIssue(json)
     if (json['message']['issue'] != undefined) {
         var result = json['message']['issue'];
         finalize("Issue");
-        return result} else {
-        return ''}
+        return result
+    } else {
+        return ''
+    }
 }
 exports.getIssue = getIssue;
 
@@ -179,8 +213,10 @@ function getEdition(json)
     if (json['message']['edition-number'] != undefined && json['message']['edition-number'] != '0') {
         var result = json['message']['edition-number'];
         finalize("Edition");
-        return result} else {
-        return ''}
+        return result
+    } else {
+        return ''
+    }
 }
 exports.getEdition = getEdition;
 
@@ -189,8 +225,10 @@ function getPages(json)
 {
     if (json['message']['page'] != undefined) {
         var result = json.message.page;
-        return result} else {
-        return ''}
+        return result
+    } else {
+        return ''
+    }
 }
 exports.getPages = getPages;
 
@@ -205,7 +243,8 @@ function getArticleNumber(json)
         finalize("ArticleNumber");
         return articlenumber;
     } else {
-        return ''}
+        return ''
+    }
 }
 exports.getArticleNumber = getArticleNumber;
 
@@ -222,7 +261,8 @@ function getType(json)
         }
 
         return result;
-    }}
+    }
+}
 exports.getType = getType;
 
 
@@ -244,14 +284,18 @@ function getEditor(json)
                             orcid = re[0];} else {
                             orcid = ''}
                     } else {
-                        orcid = json.message.editor[_z].ORCID;}} else {
-                    orcid = ''}
-                        complete_name = nachname + ',' + vorname + ',' + orcid;
-                        editors.push(complete_name);
+                        orcid = json.message.editor[_z].ORCID;}
+                } else {
+                    orcid = ''
+                }
+                complete_name = nachname + ',' + vorname + ',' + orcid;
+                editors.push(complete_name);
             }
         }
-        return editors} else {
-        return ''}
+        return editors
+    } else {
+        return ''
+    }
 }
 exports.getEditor = getEditor;
 
@@ -270,8 +314,10 @@ function getTranslator(json)
                 translators.push(complete_name);
             }
         }
-        return translators} else {
-        return ''}
+        return translators
+    } else {
+        return ''
+    }
 }
 exports.getTranslator = getTranslator;
 
@@ -293,18 +339,25 @@ function getAuthor(json)
                             var orcid_raw = json.message.author[_z].ORCID;
                             let re        = orcid_raw.match(/([\d\-]+)/g);
                             if (re != null) {
-                                orcid = re[0];} else {
-                                orcid = ''}
+                                orcid = re[0];
+                            } else {
+                                orcid = ''
+                            }
                         } else {
-                            orcid = json.message.author[_z].ORCID;}} else {
-                        orcid = ''}
-                            complete_name = nachname + ',' + vorname + ',' + orcid;
-                            authors.push(complete_name);
+                            orcid = json.message.author[_z].ORCID;
+                        }
+                    } else {
+                        orcid = ''
+                    }
+                    complete_name = nachname + ',' + vorname + ',' + orcid;
+                    authors.push(complete_name);
                 }
             }
         }
-        return authors} else {
-        return ''}
+        return authors
+    } else {
+        return ''
+    }
 }
 exports.getAuthor = getAuthor;
 
@@ -313,8 +366,10 @@ function getTitleMain(json)
 {
     var result = json.message.title[0];
     if (result != undefined) {
-        finalize("TitleMain_1")}
-    return result ? result : ''}
+        finalize("TitleMain_1")
+    }
+    return result ? result : ''
+}
 exports.getTitleMain = getTitleMain;
 
 function getContributingCorporation(json)
@@ -329,10 +384,14 @@ function getContributingCorporation(json)
                     finalize("ContributingCorporation")
                     return name;
                 } else {
-                    return ''}
+                    return ''
+                }
             }
-        }} else {
-        return ''}}
+        }
+    } else {
+        return ''
+    }
+}
 exports.ContributingCorporation = getContributingCorporation;
 
 
@@ -349,11 +408,14 @@ function getTitleParent(json)
     if (json['message']['container-title']['0']) {
         var result = json['message']['container-title']['0'];
         if (result.includes("&amp;")) {
-            result = result.replace("&amp;", "&")};
+            result = result.replace("&amp;", "&")
+        }
         if (result != undefined) {
             finalize("TitleParent_1")
-        }}
-    return result ? result : ''}
+        }
+    }
+    return result ? result : ''
+}
 exports.getTitleParent = getTitleParent;
 
 
@@ -361,10 +423,13 @@ function getLanguage(json)
 {
     var result = json.message.language;
     if (result != undefined) {
-        finalize("Language")} else {
-        colorPink("Language")}
-        if (result != null) {
-            return result;}
+        finalize("Language")
+    } else {
+        colorPink("Language")
+    }
+    if (result != null) {
+        return result;
+    }
 }
 exports.getLanguage = getLanguage;
 
@@ -378,7 +443,8 @@ function getAbstract(json)
         var result0 = str.replace(/[\t ]+/g, " ");
         var result  = result0.replace(/<[^>]*(>|$)|jats:sec|jats:title|jats:p|&laquo;|&gt;/g, '');
     }
-    return result ? result : ''}
+    return result ? result : ''
+}
 exports.getAbstract = getAbstract;
 
 
@@ -398,9 +464,8 @@ function getPublisherPlace(json)
 {
     var result = json['message']['publisher-location'];
     if (result != undefined) {
-        finalize("PublisherPlace")}
+        finalize("PublisherPlace")
+    }
     return result ? result : '';
 }
 exports.getPublisherPlace = getPublisherPlace;
-
-
