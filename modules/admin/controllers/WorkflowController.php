@@ -41,20 +41,22 @@ use Opus\Common\DocumentInterface;
  */
 class Admin_WorkflowController extends Application_Controller_Action
 {
-
     /**
      * Helper for verifying document IDs.
+     *
      * @var Application_Controller_Action_Helper_Documents
      */
-    private $_documentsHelper;
+    private $documentsHelper;
 
     /**
      * Helper for workflow functionality.
+     *
      * @var Application_Controller_Action_Helper_Workflow
      */
-    private $_workflowHelper;
+    private $workflowHelper;
 
-    private $_confirmChanges = true;
+    /** @var bool */
+    private $confirmChanges = true;
 
     /**
      * Initializes controller.
@@ -63,15 +65,15 @@ class Admin_WorkflowController extends Application_Controller_Action
     {
         parent::init();
 
-        $this->_documentsHelper = $this->_helper->getHelper('Documents');
-        $this->_workflowHelper = $this->_helper->getHelper('Workflow');
+        $this->documentsHelper = $this->_helper->getHelper('Documents');
+        $this->workflowHelper  = $this->_helper->getHelper('Workflow');
 
         $config = $this->getConfig();
 
         if (isset($config->confirmation->document->statechange->enabled)) {
-            $this->_confirmChanges = filter_var($config->confirmation->document->statechange->enabled, FILTER_VALIDATE_BOOLEAN);
+            $this->confirmChanges = filter_var($config->confirmation->document->statechange->enabled, FILTER_VALIDATE_BOOLEAN);
         } else {
-            $this->_confirmChanges = true;
+            $this->confirmChanges = true;
         }
     }
 
@@ -80,48 +82,57 @@ class Admin_WorkflowController extends Application_Controller_Action
      */
     public function changestateAction()
     {
-        $docId = $this->getRequest()->getParam('docId');
+        $docId       = $this->getRequest()->getParam('docId');
         $targetState = $this->getRequest()->getParam('targetState');
 
-        $document = $this->_documentsHelper->getDocumentForId($docId);
+        $document = $this->documentsHelper->getDocumentForId($docId);
 
         // Check if document identifier is valid
         if (! isset($document)) {
-            return $this->_helper->Redirector->redirectTo(
+            $this->_helper->Redirector->redirectTo(
                 'index',
-                ['failure' => $this->view->translate(
-                    'admin_document_error_novalidid'
-                )],
+                [
+                    'failure' => $this->view->translate(
+                        'admin_document_error_novalidid'
+                    ),
+                ],
                 'documents',
                 'admin'
             );
+            return;
         }
 
         // Check if valid target state
-        if (! $this->_workflowHelper->isValidState($targetState)) {
-            return $this->_helper->Redirector->redirectTo(
+        if (! $this->workflowHelper->isValidState($targetState)) {
+            $this->_helper->Redirector->redirectTo(
                 'index',
-                ['failure' => $this->view->translate(
-                    'admin_workflow_error_invalidstate'
-                )],
+                [
+                    'failure' => $this->view->translate(
+                        'admin_workflow_error_invalidstate'
+                    ),
+                ],
                 'document',
                 'admin',
                 ['id' => $docId]
             );
+            return;
         }
 
         // Check if allowed target state
-        if (! $this->_workflowHelper->isTransitionAllowed($document, $targetState)) {
-            return $this->_helper->Redirector->redirectTo(
+        if (! $this->workflowHelper->isTransitionAllowed($document, $targetState)) {
+            $this->_helper->Redirector->redirectTo(
                 'index',
-                ['failure' => $this->view->translate(
-                    'admin_workflow_error_illegal_transition',
-                    $targetState
-                )],
+                [
+                    'failure' => $this->view->translate(
+                        'admin_workflow_error_illegal_transition',
+                        $targetState
+                    ),
+                ],
                 'document',
                 'admin',
                 ['id' => $docId]
             );
+            return;
         }
 
         // Check if document is already in target state
@@ -131,56 +142,65 @@ class Admin_WorkflowController extends Application_Controller_Action
             if (! $this->view->translate()->getTranslator()->isTranslated($key)) {
                 $key = 'admin_workflow_error_alreadyinstate';
             }
-            return $this->_helper->Redirector->redirectTo(
+            $this->_helper->Redirector->redirectTo(
                 'index',
                 ['failure' => $this->view->translate($key, $targetState)],
                 'document',
                 'admin',
                 ['id' => $docId]
             );
+            return;
         }
 
-        if ($this->_confirmChanges) {
+        if ($this->confirmChanges) {
             if ($this->getRequest()->isPost()) {
-                $form = $this->_getConfirmationForm($document, $targetState);
+                $form    = $this->getConfirmationForm($document, $targetState);
                 $sureyes = $this->getRequest()->getPost('sureyes');
                 if ($form->isValid($this->getRequest()->getPost()) && isset($sureyes) === true) {
-                    return $this->_changeState($document, $targetState, $form);
+                    $this->changeState($document, $targetState, $form);
+                    return;
                 }
-                return $this->_helper->Redirector->redirectTo(
+                $this->_helper->Redirector->redirectTo(
                     'index',
                     null,
                     'document',
                     'admin',
                     ['id' => $docId]
                 );
+                return;
             }
 
             // show confirmation page
             $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
-            $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
-            $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', [$docId]);
-            $this->view->form = $this->_getConfirmationForm($document, $targetState);
+            $this->view->title           = $this->view->translate('admin_workflow_' . $targetState);
+            $this->view->text            = $this->view->translate('admin_workflow_' . $targetState . '_sure', [$docId]);
+            $this->view->form            = $this->getConfirmationForm($document, $targetState);
         } else {
-            return $this->_changeState($document, $targetState);
+            $this->changeState($document, $targetState);
         }
     }
 
-    private function _changeState($document, $targetState, $form = null)
+    /**
+     * @param DocumentInterface $document
+     * @param string            $targetState
+     * @param Zend_Form|null    $form
+     */
+    private function changeState($document, $targetState, $form = null)
     {
         try {
-            $this->_workflowHelper->changeState($document, $targetState);
+            $this->workflowHelper->changeState($document, $targetState);
 
-            if ($targetState == 'published') {
-                $this->_sendNotification($document, $form);
+            if ($targetState === 'published') {
+                $this->sendNotification($document, $form);
             }
         } catch (Exception $e) {
-            return $this->_helper->Redirector->redirectTo(
+            $this->_helper->Redirector->redirectTo(
                 'index',
                 ['failure' => $e->getMessage()],
                 'documents',
                 'admin'
             );
+            return;
         }
 
         $key = 'admin_workflow_' . $targetState . '_success';
@@ -190,9 +210,11 @@ class Admin_WorkflowController extends Application_Controller_Action
         $message = $this->view->translate($key, $document->getId(), $targetState);
 
         if ($targetState === 'removed') {
-            return $this->_helper->Redirector->redirectTo('index', $message, 'documents', 'admin');
+            $this->_helper->Redirector->redirectTo('index', $message, 'documents', 'admin');
+            return;
         }
-        return $this->_helper->Redirector->redirectTo(
+
+        $this->_helper->Redirector->redirectTo(
             'index',
             $message,
             'document',
@@ -202,22 +224,22 @@ class Admin_WorkflowController extends Application_Controller_Action
     }
 
     /**
-     * @param $document
-     * @param null $form
+     * @param DocumentInterface $document
+     * @param Zend_Form|null    $form
      *
      * TODO get recipients from form
      * TODO dryrun mode for notifications for testing
      */
-    private function _sendNotification($document, $form = null)
+    private function sendNotification($document, $form = null)
     {
         $notification = new Application_Util_PublicationNotification();
 
         $url = $this->view->url(
             [
-                "module" => "frontdoor",
+                "module"     => "frontdoor",
                 "controller" => "index",
-                "action" => "index",
-                "docId" => $document->getId()
+                "action"     => "index",
+                "docId"      => $document->getId(),
             ],
             null,
             true
@@ -238,17 +260,19 @@ class Admin_WorkflowController extends Application_Controller_Action
      * Returns form for asking yes/no question like 'Delete file?'.
      *
      * @param DocumentInterface $document
-     * @param string            $action Target action that needs to be confirmed
+     * @param string            $targetState Target action that needs to be confirmed
      * @return Admin_Form_YesNoForm
      */
-    private function _getConfirmationForm($document, $targetState)
+    private function getConfirmationForm($document, $targetState)
     {
         $form = new Admin_Form_WorkflowNotification($targetState);
 
         $form->populateFromModel($document);
 
         $form->setAction($this->view->url([
-            'controller' => 'workflow', 'action' => 'changestate', 'targetState' => $targetState
+            'controller'  => 'workflow',
+            'action'      => 'changestate',
+            'targetState' => $targetState,
         ]));
         $form->setMethod('post');
 

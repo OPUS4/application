@@ -29,29 +29,35 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Model\NotFoundException;
 use Opus\Common\Series;
+use Opus\Common\SeriesInterface;
 
 /**
- * Class Admin_SeriesControllerTest.
- *
  * @covers Admin_SeriesController
  */
 class Admin_SeriesControllerTest extends CrudControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->setController('series');
         parent::setUp();
     }
 
+    /**
+     * @return SeriesInterface[]
+     */
     public function getModels()
     {
         return Series::getAllSortedBySortKey();
     }
 
+    /**
+     * @return int
+     */
     public function createNewModel()
     {
         $series = Series::new();
@@ -64,6 +70,11 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         return $series->store();
     }
 
+    /**
+     * @param int $identifier
+     * @return SeriesInterface
+     * @throws NotFoundException
+     */
     public function getModel($identifier)
     {
         return Series::get($identifier);
@@ -94,7 +105,7 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         $sortOrder = Series::getMaxSortKey() + 1;
 
         $this->assertXPath('//input[@type = "checkbox" and @checked = "checked"]');
-        $this->assertXPath('//input[@name = "SortOrder" and @value = "' . $sortOrder .  '"]');
+        $this->assertXPath('//input[@name = "SortOrder" and @value = "' . $sortOrder . '"]');
     }
 
     public function testNewActionSave()
@@ -102,11 +113,11 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         $this->createsModels = true;
 
         $post = [
-            'Title' => 'NewSeriesTitle',
-            'Infobox' => 'NewSeriesInfobox',
-            'Visible' => '0',
+            'Title'     => 'NewSeriesTitle',
+            'Infobox'   => 'NewSeriesInfobox',
+            'Visible'   => '0',
             'SortOrder' => '33',
-            'Save' => 'Speichern'
+            'Save'      => 'Speichern',
         ];
 
         $this->getRequest()->setMethod('POST')->setPost($post);
@@ -138,11 +149,11 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         $modelCount = count($this->getModels());
 
         $post = [
-            'Title' => 'NewSeries',
-            'Infobox' => 'NewSeriesInfobox',
-            'Visible' => '1',
+            'Title'     => 'NewSeries',
+            'Infobox'   => 'NewSeriesInfobox',
+            'Visible'   => '1',
             'SortOrder' => '20',
-            'Cancel' => 'Abbrechen'
+            'Cancel'    => 'Abbrechen',
         ];
 
         $this->getRequest()->setMethod('POST')->setPost($post);
@@ -178,12 +189,12 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         $seriesId = $this->createNewModel();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $seriesId,
-            'Title' => 'ModifiedTitle',
-            'Infobox' => 'ModifiedInfo',
-            'Visible' => '0',
+            'Id'        => $seriesId,
+            'Title'     => 'ModifiedTitle',
+            'Infobox'   => 'ModifiedInfo',
+            'Visible'   => '0',
             'SortOrder' => '12',
-            'Save' => 'Abspeichern'
+            'Save'      => 'Abspeichern',
         ]);
 
         $this->dispatch('/admin/series/edit');
@@ -205,12 +216,12 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         $seriesId = $this->createNewModel();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $seriesId,
-            'Title' => 'ModifiedTitle',
-            'Infobox' => 'ModifiedInfo',
-            'Visible' => '0',
+            'Id'        => $seriesId,
+            'Title'     => 'ModifiedTitle',
+            'Infobox'   => 'ModifiedInfo',
+            'Visible'   => '0',
             'SortOrder' => '12',
-            'Cancel' => 'Cancel'
+            'Cancel'    => 'Cancel',
         ]);
 
         $this->dispatch('/admin/series/edit');

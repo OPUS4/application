@@ -37,31 +37,36 @@ use Opus\Job\MailNotification;
 
 class Application_Util_NotificationTest extends ControllerTestCase
 {
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Application_Util_Notification */
     protected $notification;
 
+    /** @var Zend_Log */
     protected $logger;
 
+    /** @var Zend_Config */
     protected $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->notification = new Application_Util_Notification();
-        $this->logger = Log::get();
+        $this->logger       = Log::get();
         // add required config keys
-        $this->config = $this->getConfig();
-        $this->config->notification->document->submitted->enabled = self::CONFIG_VALUE_TRUE;
-        $this->config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
-        $this->config->notification->document->submitted->subject = 'Dokument #%1$s eingestellt: %2$s : %3$s';
-        $this->config->notification->document->published->subject = 'Dokument #%1$s veröffentlicht: %2$s : %3$s';
+        $this->config                                              = $this->getConfig();
+        $this->config->notification->document->submitted->enabled  = self::CONFIG_VALUE_TRUE;
+        $this->config->notification->document->published->enabled  = self::CONFIG_VALUE_TRUE;
+        $this->config->notification->document->submitted->subject  = 'Dokument #%1$s eingestellt: %2$s : %3$s';
+        $this->config->notification->document->published->subject  = 'Dokument #%1$s veröffentlicht: %2$s : %3$s';
         $this->config->notification->document->submitted->template = 'submitted.phtml';
         $this->config->notification->document->published->template = 'published.phtml';
-        $this->config->notification->document->submitted->email = "submitted@localhost";
-        $this->config->notification->document->published->email = "published@localhost";
+        $this->config->notification->document->submitted->email    = "submitted@localhost";
+        $this->config->notification->document->published->email    = "published@localhost";
     }
 
     /**
@@ -85,9 +90,9 @@ class Application_Util_NotificationTest extends ControllerTestCase
     public function testGetSubmissionMailSubjectWithEmptyAuthorsAndEmptyTitle()
     {
         $document = $this->createTestDocument();
-        $docId = $document->store();
+        $docId    = $document->store();
 
-        $method = $this->getMethod('getMailSubject');
+        $method  = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs($this->notification, [$document, []]);
         $this->assertEquals("Dokument #$docId eingestellt: n/a : n/a", $subject);
     }
@@ -95,12 +100,12 @@ class Application_Util_NotificationTest extends ControllerTestCase
     public function testGetSubmissionMailSubjectWithOneAuthor()
     {
         $document = $this->createTestDocument();
-        $title = $document->addTitleMain();
+        $title    = $document->addTitleMain();
         $title->setLanguage('deu');
         $title->setValue('Test Document');
         $docId = $document->store();
 
-        $method = $this->getMethod('getMailSubject');
+        $method  = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
             [$document, ["Doe, John"]]
@@ -111,12 +116,12 @@ class Application_Util_NotificationTest extends ControllerTestCase
     public function testGetSubmissionMailSubjectWithTwoAuthors()
     {
         $document = $this->createTestDocument();
-        $title = $document->addTitleMain();
+        $title    = $document->addTitleMain();
         $title->setLanguage('deu');
         $title->setValue('Test Document');
         $docId = $document->store();
 
-        $method = $this->getMethod('getMailSubject');
+        $method  = $this->getMethod('getMailSubject');
         $subject = $method->invokeArgs(
             $this->notification,
             [$document, ["Doe, John", "Doe, Jane"]]
@@ -127,7 +132,7 @@ class Application_Util_NotificationTest extends ControllerTestCase
     public function testGetSubmissionMailBodyWithEmptyAuthorsAndEmptyTitle()
     {
         $method = $this->getMethod('getMailBody');
-        $body = $method->invokeArgs(
+        $body   = $method->invokeArgs(
             $this->notification,
             ["123", [], "", "http://localhost/foo/1"]
         );
@@ -141,7 +146,7 @@ class Application_Util_NotificationTest extends ControllerTestCase
     public function testGetSubmissionMailBodyWithTwoAuthorsAndNonEmptyTitle()
     {
         $method = $this->getMethod('getMailBody');
-        $body = $method->invokeArgs(
+        $body   = $method->invokeArgs(
             $this->notification,
             ["123", ["Doe, John", "Doe, Jane"], "Test Title", "http://localhost/foo/1"]
         );
@@ -156,7 +161,7 @@ class Application_Util_NotificationTest extends ControllerTestCase
     {
         $this->config->notification->document->submitted->template = 'does-not-exist.phtml';
         $method = $this->getMethod('getMailBody');
-        $body = $method->invokeArgs(
+        $body   = $method->invokeArgs(
             $this->notification,
             ["123", [], "Test Document", "http://localhost/foo/1"]
         );
@@ -165,7 +170,7 @@ class Application_Util_NotificationTest extends ControllerTestCase
 
     public function testGetRecipientsForSubmissionContext()
     {
-        $method = $this->getMethod('getRecipients');
+        $method     = $this->getMethod('getRecipients');
         $recipients = $method->invoke($this->notification);
         $this->assertEquals(1, count($recipients));
         $this->assertEquals($recipients[0]['name'], "submitted@localhost");
@@ -175,16 +180,16 @@ class Application_Util_NotificationTest extends ControllerTestCase
     public function testGetRecipientsForSubmissionContextWithoutSubmittedMailConfig()
     {
         $this->config->notification->document->submitted->email = "";
-        $method = $this->getMethod('getRecipients');
-        $recipients = $method->invoke($this->notification);
+        $method                                                 = $this->getMethod('getRecipients');
+        $recipients                                             = $method->invoke($this->notification);
         $this->assertEquals(0, count($recipients));
     }
 
     public function testGetRecipientsForSubmissionContextAndMultipleAddresses()
     {
         $this->config->notification->document->submitted->email = "submitted@localhost,sub@host.tld";
-        $method = $this->getMethod('getRecipients');
-        $recipients = $method->invoke($this->notification);
+        $method                                                 = $this->getMethod('getRecipients');
+        $recipients                                             = $method->invoke($this->notification);
         $this->assertEquals(2, count($recipients));
         $this->assertEquals($recipients[0]['name'], "submitted@localhost");
         $this->assertEquals($recipients[0]['address'], "submitted@localhost");
@@ -244,7 +249,7 @@ class Application_Util_NotificationTest extends ControllerTestCase
             }
         }
 
-        $this->config->merge(new \Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]));
+        $this->config->merge(new Zend_Config(['runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]));
         $this->assertEquals(0, Job::getCount(), 'test data changed.');
 
         $doc = $this->createTestDocument();
@@ -271,9 +276,14 @@ class Application_Util_NotificationTest extends ControllerTestCase
         }
     }
 
+    /**
+     * @param string $methodName
+     * @return ReflectionMethod
+     * @throws ReflectionException
+     */
     protected function getMethod($methodName)
     {
-        $class = new ReflectionClass('Application_Util_Notification');
+        $class  = new ReflectionClass('Application_Util_Notification');
         $method = $class->getMethod($methodName);
         $method->setAccessible(true);
         return $method;

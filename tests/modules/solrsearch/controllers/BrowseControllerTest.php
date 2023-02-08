@@ -29,19 +29,18 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Model\ModelException;
 use Opus\Common\Series;
 
 /**
- * Class Solrsearch_BrowseControllerTest.
- *
  * @covers Solrsearch_BrowseController
  */
 class Solrsearch_BrowseControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->requireSolrConfig();
@@ -129,13 +128,20 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
 
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());
         foreach (Series::getAll() as $series) {
-            if ($series->getId() != 7) {
-                $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/' . $series->getId(), $this->getResponse()->getBody());
+            if ($series->getId() !== 7) {
+                $this->assertNotContains(
+                    '/solrsearch/index/search/searchtype/series/id/' . $series->getId(),
+                    $this->getResponse()->getBody()
+                );
             }
         }
         $this->assertResponseCode(200);
     }
 
+    /**
+     * @return array
+     * @throws ModelException
+     */
     private function setAllSeriesToUnvisible()
     {
         $visibilities = [];
@@ -147,6 +153,10 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         return $visibilities;
     }
 
+    /**
+     * @param array $visibilities
+     * @throws ModelException
+     */
     private function restoreSeriesVisibility($visibilities)
     {
         foreach (Series::getAll() as $seriesItem) {
@@ -160,7 +170,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = ['1', '4', '2', '5', '6'];
+        $seriesIds    = ['1', '4', '2', '5', '6'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -181,7 +191,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = ['6', '5', '2', '4', '1'];
+        $seriesIds    = ['6', '5', '2', '4', '1'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -206,7 +216,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = ['1', '6', '4', '2', '5'];
+        $seriesIds    = ['1', '6', '4', '2', '5'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -216,6 +226,9 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->setSortOrders($sortOrders);
     }
 
+    /**
+     * @return array
+     */
     private function getSortOrders()
     {
         $sortOrders = [];
@@ -225,6 +238,10 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         return $sortOrders;
     }
 
+    /**
+     * @param array $sortOrders
+     * @throws ModelException
+     */
     private function setSortOrders($sortOrders)
     {
         foreach (Series::getAll() as $seriesItem) {

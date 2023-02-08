@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,81 +25,110 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Solrsearch_Model_PaginationUtil
 {
-
     // prequisites
-    private $_rows;
-    private $_numHits;
-    private $_query;
-    private $_searchType;
-    private $_startIndex;
+
+    /** @var int */
+    private $rows;
+
+    /** @var int */
+    private $numHits;
+
+    /** @var string */
+    private $query;
+
+    /** @var string */
+    private $searchType;
+
+    /** @var int */
+    private $startIndex;
 
     // results
-    private $_lastPageStartIndex;
-    private $_prevPageStartIndex;
-    private $_nextPageStartIndex;
+
+    /** @var int */
+    private $lastPageStartIndex;
+
+    /** @var int */
+    private $prevPageStartIndex;
+
+    /** @var int */
+    private $nextPageStartIndex;
 
     /**
-     *
-     * @param int $rows number of hits per page
-     * @param int $numHits total number of hits
-     * @param int $startIndex start index
+     * @param int    $rows number of hits per page
+     * @param int    $numHits total number of hits
+     * @param int    $startIndex start index
      * @param string $query search query
      * @param string $searchType search type
      */
     public function __construct($rows, $numHits, $startIndex, $query, $searchType)
     {
-        $this->_rows = $rows;
-        $this->_numHits = $numHits;
-        $this->_query = $query;
-        $this->_searchType = $searchType;
-        $this->_startIndex = $startIndex;
+        $this->rows       = $rows;
+        $this->numHits    = $numHits;
+        $this->query      = $query;
+        $this->searchType = $searchType;
+        $this->startIndex = $startIndex;
         $this->compute();
     }
 
     private function compute()
     {
-        $this->_lastPageStartIndex = 0;
-        $this->_lastPageStartIndex = (int) (($this->_numHits - 1) / $this->_rows) * $this->_rows;
-        $this->_prevPageStartIndex = $this->_startIndex - $this->_rows;
-        $this->_nextPageStartIndex = $this->_startIndex + $this->_rows;
+        $this->lastPageStartIndex = 0;
+        $this->lastPageStartIndex = (int) (($this->numHits - 1) / $this->rows) * $this->rows;
+        $this->prevPageStartIndex = $this->startIndex - $this->rows;
+        $this->nextPageStartIndex = $this->startIndex + $this->rows;
     }
 
+    /**
+     * @return array
+     */
     public function getFirstPageUrlArray()
     {
         return $this->constructUrlArrayWithStartIndex('0');
     }
 
+    /**
+     * @return array
+     */
     public function getNextPageUrlArray()
     {
-        return $this->constructUrlArrayWithStartIndex($this->_nextPageStartIndex);
+        return $this->constructUrlArrayWithStartIndex($this->nextPageStartIndex);
     }
 
+    /**
+     * @return array
+     */
     public function getPreviousPageUrlArray()
     {
-        return $this->constructUrlArrayWithStartIndex($this->_prevPageStartIndex);
+        return $this->constructUrlArrayWithStartIndex($this->prevPageStartIndex);
     }
 
+    /**
+     * @return array
+     */
     public function getLastPageUrlArray()
     {
-        return $this->constructUrlArrayWithStartIndex($this->_lastPageStartIndex);
+        return $this->constructUrlArrayWithStartIndex($this->lastPageStartIndex);
     }
 
+    /**
+     * @param int $pageStartIndex
+     * @return array
+     */
     private function constructUrlArrayWithStartIndex($pageStartIndex)
     {
         $array = [
-            'searchtype' => $this->_searchType,
-            'start' => $pageStartIndex,
-            'rows' => $this->_rows];
-        if ($this->_query != null) {
-            $array['query'] = $this->_query;
+            'searchtype' => $this->searchType,
+            'start'      => $pageStartIndex,
+            'rows'       => $this->rows,
+        ];
+        if ($this->query !== null) {
+            $array['query'] = $this->query;
         }
         return $array;
     }

@@ -33,7 +33,7 @@ use Opus\Common\Licence;
 
 class Application_Form_Model_TableTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function testConstructForm()
@@ -78,7 +78,8 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $models = Licence::getAll();
 
-        $this->setExpectedException(Application_Exception::class, 'Parameter must be array.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Parameter must be array.');
         $form->setModels('notanarray');
     }
 
@@ -171,11 +172,11 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     public function testIsRenderShowActionLinkLog()
     {
         $logger = new MockLogger();
-        $form = new Application_Form_Model_Table();
+        $form   = new Application_Form_Model_Table();
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getControllerMock();
         $form->setController($mock);
         $this->assertTrue($form->isRenderShowActionLink());
 
@@ -185,11 +186,11 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     public function testIsModifiableLog()
     {
         $logger = new MockLogger();
-        $form = new Application_Form_Model_Table();
+        $form   = new Application_Form_Model_Table();
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getControllerMock();
         $form->setController($mock);
         $this->assertTrue($form->isModifiable(null));
 
@@ -199,11 +200,11 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     public function testIsDeletableLog()
     {
         $logger = new MockLogger();
-        $form = new Application_Form_Model_Table();
+        $form   = new Application_Form_Model_Table();
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getControllerMock();
         $form->setController($mock);
         $this->assertTrue($form->isDeletable(null));
 
@@ -213,11 +214,11 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     public function testIsUsedLog()
     {
         $logger = new MockLogger();
-        $form = new Application_Form_Model_Table();
+        $form   = new Application_Form_Model_Table();
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getControllerMock();
         $form->setController($mock);
         $this->assertFalse($form->isUsed(null));
 
@@ -227,11 +228,11 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     public function testIsProtectedLog()
     {
         $logger = new MockLogger();
-        $form = new Application_Form_Model_Table();
+        $form   = new Application_Form_Model_Table();
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getControllerMock();
         $form->setController($mock);
         $this->assertFalse($form->isProtected(null));
 
@@ -241,11 +242,11 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     public function testGetRowCssClassLog()
     {
         $logger = new MockLogger();
-        $form = new Application_Form_Model_Table();
+        $form   = new Application_Form_Model_Table();
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getControllerMock();
         $form->setController($mock);
         $this->assertNull($form->getRowCssClass(null));
 
@@ -255,14 +256,42 @@ class Application_Form_Model_TableTest extends ControllerTestCase
     public function testGetRowTooltipLog()
     {
         $logger = new MockLogger();
-        $form = new Application_Form_Model_Table();
+        $form   = new Application_Form_Model_Table();
 
         $form->setLogger($logger);
 
-        $mock = $this->getMockBuilder(\Zend_Controller_Action_Interface::class)->getMock();
+        $mock = $this->getControllerMock();
         $form->setController($mock);
         $this->assertNull($form->getRowTooltip(null));
 
         $this->assertEquals('The used controller does not have the method getRowTooltip.', $logger->getMessages()[0]);
+    }
+
+    /**
+     * @return Zend_Controller_Action_Interface
+     */
+    protected function getControllerMock()
+    {
+        // TODO PHPUNIT $this->getMockBuilder(Zend_Controller_Action_Interface::class)->getMock();
+        //      Aufgrund von Problemen mit PHPUnit 5 ist folgendes notwendig - mit PHPUnit 8 sollte das nicht mehr
+        //      notwendig sein.
+        $request  = new Zend_Controller_Request_Http();
+        $response = new Zend_Controller_Response_Http();
+        return new class ($request, $response, []) implements Zend_Controller_Action_Interface
+        {
+            public function __construct(
+                Zend_Controller_Request_Abstract $request,
+                Zend_Controller_Response_Abstract $response,
+                array $invokeArgs = []
+            ) {
+            }
+
+            /**
+             * @param string $action
+             */
+            public function dispatch($action)
+            {
+            }
+        };
     }
 }

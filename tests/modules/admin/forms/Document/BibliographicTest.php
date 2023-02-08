@@ -36,7 +36,7 @@ use Opus\Common\Document;
  */
 class Admin_Form_Document_BibliographicTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['translation'];
 
     public function testCreateForm()
@@ -58,7 +58,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
             'Volume',
             'ThesisDateAccepted',
             'ThesisYearAccepted',
-            'BelongsToBibliography'
+            'BelongsToBibliography',
         ];
 
         $this->assertEquals(count($elements), count($form->getElements()));
@@ -99,7 +99,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $this->assertEquals($doc->getVolume(), $form->getElement('Volume')->getValue());
 
         $datesHelper = new Application_Controller_Action_Helper_Dates();
-        $date = $datesHelper->getDateString($doc->getThesisDateAccepted());
+        $date        = $datesHelper->getDateString($doc->getThesisDateAccepted());
         $this->assertEquals($date, $form->getElement('ThesisDateAccepted')->getValue());
 
         $this->assertEquals($doc->getThesisYearAccepted(), $form->getElement('ThesisYearAccepted')->getValue());
@@ -235,7 +235,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
 
         $post = [
             'ThesisDateAccepted' => '2010/02/31', // muss korrektes Datum sein
-            'ThesisYearAccepted' => 'Jahr' // muss Zahl sein
+            'ThesisYearAccepted' => 'Jahr', // muss Zahl sein
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -249,7 +249,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
 
         $post = [
             'ThesisDateAccepted' => '20. Feb 2010',
-            'ThesisYearAccepted' => '-1'
+            'ThesisYearAccepted' => '-1',
         ];
 
         $this->assertFalse($form->isValid($post)); // keine Pflichteingaben
@@ -262,10 +262,10 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $form = new Admin_Form_Document_Bibliographic();
 
         $post = [
-            'PageFirst' => 'XI',
-            'PageLast' => '12',
-            'PageCount' => 'iiv',
-            'ArticleNumber' => '42'
+            'PageFirst'     => 'XI',
+            'PageLast'      => '12',
+            'PageCount'     => 'iiv',
+            'ArticleNumber' => '42',
         ];
 
         $this->assertTrue($form->isValid($post));

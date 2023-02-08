@@ -44,4 +44,5 @@ opus4-solr-jetty.conf
 out
 *.iml
 nbproject
+/tests/.phpunit.result.cache
 /testresult-term.txt

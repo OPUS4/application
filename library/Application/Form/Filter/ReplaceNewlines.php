@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Filter
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -37,9 +35,8 @@
  * This filter is used for document titles that are entered using a textarea,
  * since the titles can be rather long.
  */
-class Application_Form_Filter_ReplaceNewlines implements \Zend_Filter_Interface
+class Application_Form_Filter_ReplaceNewlines implements Zend_Filter_Interface
 {
-
     /**
      * Returns value with newline characters replaced by whitespaces.
      *
@@ -51,6 +48,9 @@ class Application_Form_Filter_ReplaceNewlines implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
+        if ($value === null) {
+            return ''; // TODO DESIGN this preserves old behaviour, but does it make sense?
+        }
         $newValue = str_replace(["\r\n"], ' ', $value);
         return str_replace(["\r", "\n"], ' ', $newValue);
     }

@@ -30,17 +30,14 @@
  */
 
 use Opus\Common\EnrichmentKey;
-use Opus\Common\Model\ModelException;
+use Opus\Translate\Dao;
 
 /**
  * Unit Tests for Admin_Form_Enrichmentkey.
- *
- * @category Application Unit Test
- * @package Admin_Form
  */
 class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function testConstructForm()
@@ -313,7 +310,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
      * Hat ein existierender Enrichment Key bereits einen zugeordneten Enrichment Type,
      * so kann dieser nicht mehr gelöscht, sondern nur auf einen anderen Typ geändert werden.
      *
-     * @throws \Zend_Form_Exception
+     * @throws Zend_Form_Exception
      */
     public function testTypeIsRequiredForExistingTypedKey()
     {
@@ -335,7 +332,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
      * Hat ein existierender Enrichment Key keinen zugeordneten Enrichment Type,
      * so muss dieser beim erneuten Speichern des Enrichment Keys auch nicht gesetzt werden.
      *
-     * @throws \Zend_Form_Exception
+     * @throws Zend_Form_Exception
      */
     public function testTypeIsRequiredForExistingUntypedKey()
     {
@@ -352,13 +349,19 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $this->assertTrue($form->isValid($this->createArray('TestKey', '')));
     }
 
+    /**
+     * @param string      $name
+     * @param string|null $type
+     * @param array|null  $options
+     * @return array
+     */
     private function createArray($name, $type = null, $options = null)
     {
         $result = [Admin_Form_EnrichmentKey::ELEMENT_NAME => $name];
-        if (! is_null($type)) {
+        if ($type !== null) {
             $result[Admin_Form_EnrichmentKey::ELEMENT_TYPE] = $type;
         }
-        if (! is_null($options)) {
+        if ($options !== null) {
             $result[Admin_Form_EnrichmentKey::ELEMENT_OPTIONS] = $options;
         }
         return $result;
@@ -376,7 +379,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals([
             'de' => 'Land der Veranstaltung',
-            'en' => 'Country of event'
+            'en' => 'Country of event',
         ], $translation);
     }
 
@@ -390,10 +393,10 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->addModelToCleanup($enrichmentKey);
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->setTranslation("Enrichment$key", [
             'en' => 'Old',
-            'de' => 'Alt'
+            'de' => 'Alt',
         ], 'default');
 
         $form = new Admin_Form_EnrichmentKey();
@@ -401,7 +404,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $form->getElement($form::ELEMENT_DISPLAYNAME)->setValue([
             'de' => 'Neu',
-            'en' => 'New'
+            'en' => 'New',
         ]);
 
         $form->updateModel($enrichmentKey);
@@ -410,7 +413,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals([
             'de' => 'Neu',
-            'en' => 'New'
+            'en' => 'New',
         ], $translation);
     }
 
@@ -418,11 +421,11 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $oldKey = 'EnrichmentTestKey';
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
         $database->setTranslation($oldKey, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], 'default');
 
         $enrichmentKey = EnrichmentKey::new();
@@ -435,7 +438,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], $form->getElementValue($form::ELEMENT_DISPLAYNAME));
 
         $form->getElement($form::ELEMENT_NAME)->setValue('NewTestKey');
@@ -448,7 +451,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $translation = $database->getTranslation('EnrichmentNewTestKey');
         $this->assertEquals([
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], $translation);
     }
 
@@ -456,11 +459,11 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $key = 'EnrichmentTestKey';
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
         $database->setTranslation($key, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], 'default');
 
         $enrichmentKey = EnrichmentKey::new();
@@ -473,7 +476,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], $form->getElementValue($form::ELEMENT_DISPLAYNAME));
 
         $form->getElement($form::ELEMENT_DISPLAYNAME)->setValue(null);

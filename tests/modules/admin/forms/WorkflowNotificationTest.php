@@ -30,13 +30,15 @@
  */
 
 use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 use Opus\Common\Person;
 
 class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var DocumentInterface */
     private $doc;
 
     protected function setUpTestDocument()
@@ -97,21 +99,21 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
             'john@example.org' => [
                 'name' => [
                     'Tester, John',
-                    'Other, Anton'
+                    'Other, Anton',
                 ],
-                'role' => 'author'
+                'role' => 'author',
             ],
             'jane@example.org' => [
                 'name' => 'Doe, Jane',
                 'role' => [
                     'author',
-                    'submitter'
-                ]
+                    'submitter',
+                ],
             ],
-            'bob@example.org' => [
+            'bob@example.org'  => [
                 'name' => 'Writer, Bob',
-                'role' => 'submitter'
-            ]
+                'role' => 'submitter',
+            ],
         ], $recipients);
     }
 
@@ -122,12 +124,12 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
         $form = new Admin_Form_WorkflowNotification('published');
 
         $post = [
-            'sureyes' => 'Yes',
-            'id' => 150,
+            'sureyes'   => 'Yes',
+            'id'        => 150,
             'submitter' => '1',
-            'author_0' => '1',
-            'author_1' => '1',
-            'author_2' => '1'
+            'author_0'  => '1',
+            'author_1'  => '1',
+            'author_2'  => '1',
         ];
 
         $recipients = $form->getSelectedRecipients($this->doc, $post);
@@ -160,11 +162,11 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
         /**
         $submitters = $document->getPersonSubmitter();
 
-        if (!is_null($submitters) && count($submitters) > 0) {
+        if ($submitters !== null && count($submitters) > 0) {
         $label = $translator->translate('admin_workflow_notification_submitter') . ' '
         . trim($submitters[0]->getLastName()) . ", " . trim($submitters[0]->getFirstName());
         $element = null;
-        if (trim($submitters[0]->getEmail()) == '') {
+        if (trim($submitters[0]->getEmail()) === '') {
         // email notification is not possible since no email address is specified for submitter
         $label .= ' (' . $translator->translate('admin_workflow_notification_noemail') . ')';
         $element = new Zend_Form_Element_Checkbox(
@@ -184,14 +186,14 @@ class Admin_Form_WorkflowNotificationTest extends ControllerTestCase
 
         $authors = $document->getPersonAuthor();
 
-        if (!is_null($authors)) {
+        if ($authors !== null) {
         $index = 1;
         foreach ($authors as $author) {
         $id = 'author_' . $index;
         $label = $index . '. ' . $translator->translate('admin_workflow_notification_author') . ' '
         . trim($author->getLastName()) . ", " . trim($author->getFirstName());
         $element = null;
-        if (trim($author->getEmail()) == '') {
+        if (trim($author->getEmail()) === '') {
         // email notification is not possible since no email address is specified for author
         $label .= ' (' . $translator->translate('admin_workflow_notification_noemail') . ')';
         $element = new Zend_Form_Element_Checkbox(

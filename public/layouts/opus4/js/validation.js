@@ -23,9 +23,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Maximilian Salomon <salomon@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -34,9 +31,9 @@
  * Array with messages for the client-sided validation.
  * @type {Array}
  */
-var opus4Messages = [];
+var opus4Messages                            = [];
 opus4Messages["identifierInvalidCheckdigit"] = "The check digit of \'%value%\' is not valid";
-opus4Messages["identifierInvalidFormat"] = "\'%value%\' is malformed";
+opus4Messages["identifierInvalidFormat"]     = "\'%value%\' is malformed";
 
 /**
  * Class for ISBN validation.
@@ -108,7 +105,7 @@ IsbnValidation.prototype.validateISBN10 = function (value) {
  * This function is used, to split the ISBN in its digits.
  */
 IsbnValidation.prototype.splitIsbn = function (value) {
-    var isbn = value.split(/(-|\s)/);
+    var isbn   = value.split(/(-|\s)/);
     var digits = [];
     isbn.forEach(function (isbn) {
         if (isbn.match((/(-|\s)/))) {
@@ -132,7 +129,7 @@ IsbnValidation.prototype.calculateCheckDigitISBN10 = function (value) {
     if (z[9] === "X") {
         z[9] = 10;
     }
-    z = z.map(Number);
+    z         = z.map(Number);
     var check = 10 * z[0] + 9 * z[1] + 8 * z[2] + 7 * z[3] + 6 * z[4] + 5 * z[5] + 4 * z[6] + 3 * z[7] + 2 * z[8] + 1 * z[9];
 
     return (check % 11 === 0);
@@ -182,9 +179,9 @@ IssnValidation.prototype.validateISSN = function (value) {
  * This function calculates the checkdigit for a ISSN.
  */
 IssnValidation.prototype.calculateCheckDigitISSN = function (value) {
-    var z = value;
+    var z          = value;
     var checkdigit = 0;
-    var check = (8 * z[0] + 7 * z[1] + 6 * z[2] + 5 * z[3] + 4 * z[5] + 3 * z[6] + 2 * z[7]);
+    var check      = (8 * z[0] + 7 * z[1] + 6 * z[2] + 5 * z[3] + 4 * z[5] + 3 * z[6] + 2 * z[7]);
     if (11 - (check % 11) === 10) {
         checkdigit = "X";
     } else {
@@ -203,8 +200,8 @@ IssnValidation.prototype.getMessage = function ($key, value) {
  */
 
 $(document).ready(function () {
-    var identifier = $("#fieldset-Identifiers tbody tr td.Value-data");
-    var identifierText = $("#fieldset-Identifiers tbody tr :text");
+    var identifier         = $("#fieldset-Identifiers tbody tr td.Value-data");
+    var identifierText     = $("#fieldset-Identifiers tbody tr :text");
     var identifierSelector = $("#fieldset-Identifiers tbody tr select");
 
     /**
@@ -227,7 +224,7 @@ $(document).ready(function () {
      */
     $.each(identifierSelector, function (index, value) {
         value.identifierValue = identifierText[index];
-        value.onchange = function () {
+        value.onchange        = function () {
             this.identifierValue.onkeyup(); // TODO is this a good idea
         };
     });
@@ -237,8 +234,8 @@ $(document).ready(function () {
      */
     $.each(identifierText, function (index, value) {
         value.identifierTypeSelect = identifierSelector[index];
-        value.messageElement = $(identifier[index]).find("p");
-        value.onkeyup = function () {
+        value.messageElement       = $(identifier[index]).find("p");
+        value.onkeyup              = function () {
             var result;
 
             var type = this.identifierTypeSelect.value;
@@ -246,11 +243,11 @@ $(document).ready(function () {
             switch (type) {
                 case "isbn":
                     var isbnValidator = new IsbnValidation();
-                    result = isbnValidator.validateISBN(value.value);
+                    result            = isbnValidator.validateISBN(value.value);
                     break;
                 case "issn":
                     var issnValidator = new IssnValidation();
-                    result = issnValidator.validateISSN(value.value);
+                    result            = issnValidator.validateISSN(value.value);
                     break;
                 default:
                     result = true;
@@ -276,7 +273,7 @@ $(document).ready(function () {
      * zurückgesetzt, so soll der Hinweistext wieder eingeblendet werden (ohne Interaktion mit dem Server).
      */
     $("input[data-opusValidationError='true'], select[data-opusValidationError='true']").on('input', function (event) {
-        var element = $(this);
+        var element      = $(this);
         var errorMessage = element.next(".datahint");
         if (errorMessage) {
             var oldValue = errorMessage.data('errorValue');

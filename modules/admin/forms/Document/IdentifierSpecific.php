@@ -29,30 +29,31 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Identifier;
+use Opus\Common\IdentifierInterface;
+use Opus\Common\Model\NotFoundException;
 
 class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSubForm
 {
-
     /**
      * Name für Formularelement Input-Field Identifier-Wert
      */
-    const ELEMENT_VALUE = 'Value';
+    public const ELEMENT_VALUE = 'Value';
 
     /**
      * Name für Formularelement Input-Field Identifier-Id
      */
-    const ELEMENT_ID = 'IdentifierId';
+    public const ELEMENT_ID = 'IdentifierId';
 
     /**
-     * Name für Formelement, das Dokument-ID enthält (wird für die Überprüfung der Eindeutigkeit von Identifier-Werten benötigt)
+     * Name für Formelement, das Dokument-ID enthält (wird für die Überprüfung
+     * der Eindeutigkeit von Identifier-Werten benötigt).
+     *
+     * TODO BUG this is a hidden dependency on a different form class - Use central constant?
      */
-    const ELEMENT_DOC_ID = 'DocId';
+    public const ELEMENT_DOC_ID = 'DocId';
 
-    /**
-     * @var string Type of identifier
-     */
+    /** @var string Type of identifier TODO BUG never written */
     private $type;
 
     /**
@@ -67,7 +68,7 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
             self::ELEMENT_VALUE,
             [
                 'label' => $this->type,
-                'size' => '80'
+                'size'  => '80',
             ]
         );
         $this->addElement('hidden', self::ELEMENT_ID);
@@ -86,6 +87,9 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
         $this->getElement(self::ELEMENT_DOC_ID)->setValue($identifier->getParentId());
     }
 
+    /**
+     * @param string $value
+     */
     public function setValue($value)
     {
         $this->getElement(self::ELEMENT_VALUE)->setValue($value);
@@ -94,7 +98,7 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
     /**
      * Aktualisiert Identifier Instanz aus Formularelementen.
      *
-     * @param Identifier $identifier
+     * @param IdentifierInterface $identifier
      */
     public function updateModel($identifier)
     {
@@ -102,6 +106,10 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
         $identifier->setValue($value);
     }
 
+    /**
+     * @return IdentifierInterface
+     * @throws Zend_Exception
+     */
     public function getModel()
     {
         $modelId = $this->getElement(self::ELEMENT_ID)->getValue();
@@ -116,7 +124,7 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
             }
         }
 
-        if (is_null($identifier)) {
+        if ($identifier === null) {
             $identifier = Identifier::new();
             $identifier->setType($this->type);
         }
@@ -126,6 +134,9 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
         return $identifier;
     }
 
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;

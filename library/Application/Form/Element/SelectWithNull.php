@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,34 +34,47 @@
  */
 class Application_Form_Element_SelectWithNull extends Application_Form_Element_Select
 {
-
+    /** @var string */
     private $nullValue = 'Null';
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setValue($value)
     {
-        if (is_null($value)) {
-            parent::setValue($this->nullValue);
+        if ($value === null) {
+            return parent::setValue($this->nullValue);
         } else {
-            parent::setValue($value);
+            return parent::setValue($value);
         }
     }
 
+    /**
+     * @return string|null
+     */
     public function getValue()
     {
         $value = parent::getValue();
 
-        if ($value == $this->nullValue) {
+        if ($value === $this->nullValue) {
             return null;
         } else {
             return $value;
         }
     }
 
+    /**
+     * @param string $nullValue
+     */
     public function setNullValue($nullValue)
     {
         $this->nullValue = $nullValue;
     }
 
+    /**
+     * @return string
+     */
     public function getNullValue()
     {
         return $this->nullValue;

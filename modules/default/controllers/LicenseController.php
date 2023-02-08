@@ -29,12 +29,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Licence;
+use Opus\Common\Model\NotFoundException;
 
 class LicenseController extends Application_Controller_Action
 {
-
     /**
      * Always allow access to this controller; Override check in parent method.
      */
@@ -44,8 +43,6 @@ class LicenseController extends Application_Controller_Action
 
     /**
      * Display the metadata of a document.
-     *
-     * @return void
      */
     public function indexAction()
     {

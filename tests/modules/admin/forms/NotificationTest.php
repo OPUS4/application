@@ -33,7 +33,7 @@ use Opus\Common\Document;
 
 class Admin_Form_NotificationTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
     public function testGetRows()

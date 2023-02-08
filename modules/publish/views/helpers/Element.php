@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,42 +25,44 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset
 {
-
     /**
      * method to render specific elements of a form
-     * @param <type> $value value of element or Zend_Form_Element
-     * @param <type> $options TODO
-     * @param <type> $type element type that has to rendered
-     * @param <type> $name name of possible hidden element
      *
-     * @return element to render in view
+     * @param array       $value value of element or Zend_Form_Element
+     * @param string|null $options TODO
+     * @param string|null $type element type that has to rendered
+     * @param string|null $name name of possible hidden element
+     * @return string Element to render in view
      */
     public function element($value, $options = null, $type = null, $name = null)
     {
         $this->view->count++;
-        if ($name == null && $value == null) {
+        if ($name === null && $value === null) {
             $errorMessage = $this->view->translate('template_error_unknown_field');
             // TODO move to CSS
             return "<br/><div style='width: 400px; color:red;'>" . $errorMessage . "</div><br/><br/>";
         }
-        $method = "_render" . $type;
+        $method = "render" . $type;
         if (method_exists($this, $method) === true) {
             return $this->$method($value, $options, $name);
         }
-        return $this->_renderElement($value, $options, $name);
+        return $this->renderElement($value, $options, $name);
     }
 
-    protected function _renderElement($field, $options = null, $name = null)
+    /**
+     * @param array       $field
+     * @param string|null $options
+     * @param string|null $name
+     * @return string
+     */
+    protected function renderElement($field, $options = null, $name = null)
     {
-        $fieldset = "<fieldset class='left-labels'>";
+        $fieldset  = "<fieldset class='left-labels'>";
         $fieldset .= $this->getLegendFor($field['header']);
         $fieldset .= $this->getFieldsetHint($field['id']);
         $fieldset .= "<div class='form-item'>";

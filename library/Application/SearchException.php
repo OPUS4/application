@@ -33,11 +33,9 @@ use Opus\Search\SearchException;
 
 class Application_SearchException extends Application_Exception
 {
-
     /**
-     *
      * @param SearchException $exception
-     * @param boolean         $usePlainMessage set to true if exception message should not be translated
+     * @param bool            $usePlainMessage set to true if exception message should not be translated
      */
     public function __construct($exception, $usePlainMessage = false)
     {

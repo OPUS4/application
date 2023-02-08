@@ -30,43 +30,47 @@
  */
 
 use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 
 class Solrsearch_Model_CollectionRoles
 {
-
-    private $_collectionRoles = null;
+    /** @var CollectionRoleInterface[] */
+    private $collectionRoles;
 
     /**
      * Returns visible collection roles.
+     *
      * @return array of CollectionRole objects
      */
     public function getAllVisible()
     {
-        if (is_null($this->_collectionRoles)) {
-            $this->_collectionRoles = [];
+        if ($this->collectionRoles === null) {
+            $this->collectionRoles = [];
             foreach (CollectionRole::fetchAll() as $collectionRole) {
-                if ($this->isVisible($collectionRole)
+                if (
+                    $this->isVisible($collectionRole)
                     && ($this->hasVisibleChildren($collectionRole)
-                    || $this->hasPublishedDocs($collectionRole))) {
-                    array_push($this->_collectionRoles, $collectionRole);
+                    || $this->hasPublishedDocs($collectionRole))
+                ) {
+                    array_push($this->collectionRoles, $collectionRole);
                 }
             }
         }
 
-        return $this->_collectionRoles;
+        return $this->collectionRoles;
     }
 
     /**
      * Return true if the given collection role has at least one
      * first-level collection that is visible.
      *
-     * @param CollectionRole $collectionRole
+     * @param CollectionRoleInterface $collectionRole
      * @return bool
      */
     private function hasVisibleChildren($collectionRole)
     {
         $rootCollection = $collectionRole->getRootCollection();
-        if (is_null($rootCollection)) {
+        if ($rootCollection === null) {
             return false;
         }
         return $rootCollection->hasVisibleChildren();
@@ -76,26 +80,27 @@ class Solrsearch_Model_CollectionRoles
      * Returns true if the given collection role has at least one associated document
      * in server_state published.
      *
-     * @param CollectionRole $collectionRole
+     * @param CollectionRoleInterface $collectionRole
      * @return bool
      */
     private function hasPublishedDocs($collectionRole)
     {
         $rootCollection = $collectionRole->getRootCollection();
-        if (is_null($rootCollection)) {
+        if ($rootCollection === null) {
             return false;
         }
-        $publishedDocIDs = $rootCollection->getPublishedDocumentIds();
-        return is_array($publishedDocIDs) && ! empty($publishedDocIDs);
+        $publishedDocIds = $rootCollection->getPublishedDocumentIds();
+        return is_array($publishedDocIds) && ! empty($publishedDocIds);
     }
 
     /**
      * Returns true if collection role is visible in browsing.
-     * @param $collectionRole CollectionRole
+     *
+     * @param CollectionRoleInterface $collectionRole
      * @return bool
      */
     private function isVisible($collectionRole)
     {
-        return $collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1';
+        return $collectionRole->getVisible() && $collectionRole->getVisibleBrowsingStart();
     }
 }

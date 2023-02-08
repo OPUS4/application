@@ -30,14 +30,14 @@
  */
 
 use Opus\Common\Series;
+use Opus\Common\SeriesInterface;
 
 class Admin_Form_Series extends Application_Form_Model_Abstract
 {
-
-    const ELEMENT_TITLE = 'Title';
-    const ELEMENT_INFOBOX = 'Infobox';
-    const ELEMENT_VISIBLE = 'Visible';
-    const ELEMENT_SORT_ORDER = 'SortOrder';
+    public const ELEMENT_TITLE      = 'Title';
+    public const ELEMENT_INFOBOX    = 'Infobox';
+    public const ELEMENT_VISIBLE    = 'Visible';
+    public const ELEMENT_SORT_ORDER = 'SortOrder';
 
     public function init()
     {
@@ -53,6 +53,9 @@ class Admin_Form_Series extends Application_Form_Model_Abstract
         $this->addElement('text', self::ELEMENT_SORT_ORDER, ['required' => true]); // TODO improve?
     }
 
+    /**
+     * @param SeriesInterface $series
+     */
     public function populateFromModel($series)
     {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($series->getId());
@@ -62,6 +65,9 @@ class Admin_Form_Series extends Application_Form_Model_Abstract
         $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($series->getSortOrder());
     }
 
+    /**
+     * @param SeriesInterface $series
+     */
     public function updateModel($series)
     {
         $series->setTitle($this->getElementValue(self::ELEMENT_TITLE));

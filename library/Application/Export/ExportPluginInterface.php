@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,33 +24,67 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Interface für Formulare, die als View angezeigt werden können.
+ * Interface for export plugins.
  *
- * Das Metadaten-Formular (Admin_Form_Document) wird zum einen als Formular verwendet. Es wird aber auch für die
- * Anzeige der Metadaten-Übersicht verwendet. Das selbe wird mit den Formularen für Application_Controller_Action_CRUD
- * gemacht.
+ * The plugins are dynamically registered as actions in the export controller.
  *
- * @category    Application
- * @package     Application_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * TODO The export mechanism should/could be separated from the request/response handling.
  */
-interface Application_Form_IViewable
+interface Application_Export_ExportPluginInterface
 {
-
     /**
-     * Bereites die Ausgabe des Formulares als View vor.
-     */
-    public function prepareRenderingAsView();
-
-    /**
-     * Prüft, ob das Formular leer ist und daher nicht mit angezeigt werden soll.
+     * Returns name of plugin.
      *
-     * @return bool
+     * @return mixed
      */
-    public function isEmpty();
+    public function getName();
+
+    /**
+     * Sets the plugin configuration.
+     *
+     * @param null|Zend_Config $config
+     */
+    public function setConfig($config = null);
+
+    /**
+     * Sets the HTTP request being processed.
+     *
+     * @param Zend_Controller_Request_Abstract $request
+     */
+    public function setRequest($request);
+
+    /**
+     * Sets the HTTP response.
+     *
+     * @param Zend_Controller_Response_Abstract $response
+     */
+    public function setResponse($response);
+
+    /**
+     * Sets the view objekt for rendering the response.
+     *
+     * @param Zend_View_Interface $view
+     */
+    public function setView($view);
+
+    /**
+     * Main function performing export.
+     */
+    public function execute();
+
+    /**
+     * @return bool returns true if plugin access is restricted to administrators
+     */
+    public function isAccessRestricted();
+
+    /**
+     * @return bool returns true if export of unpublished documents is allowed
+     */
+    public function isAllowExportOfUnpublishedDocs();
 }

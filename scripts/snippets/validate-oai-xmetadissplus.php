@@ -25,12 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)\n";
     exit;
@@ -45,10 +43,9 @@ if (! isset($options['source']) || empty($options['schema-cache'])) {
     exit;
 }
 
-
 libxml_use_internal_errors(true);
 
-$sourceXml = file_get_contents($options['source']);
+$sourceXml      = file_get_contents($options['source']);
 $sourceDocument = new DOMDocument();
 $sourceDocument->loadXML($sourceXml);
 
@@ -66,15 +63,13 @@ $xpath->registerNamespace('thesis', "http://www.ndltd.org/standards/metadata/etd
 
 $xMetaDissNodes = $xpath->query('//xMetaDiss:xMetaDiss');
 
-
-
-if (! ($xMetaDissNodes instanceof DOMNodeList) || $xMetaDissNodes->length == 0) {
+if (! $xMetaDissNodes instanceof DOMNodeList || $xMetaDissNodes->length === 0) {
     echo "No Document found.";
 }
 $xMetaDissNode = $xMetaDissNodes->item(0);
 //foreach ($xMetaDissNodes as $xMetaDissNode) {
 $metadataDocument = new DOMDocument();
-$importedNode = $metadataDocument->importNode($xMetaDissNode, true);
+$importedNode     = $metadataDocument->importNode($xMetaDissNode, true);
 $metadataDocument->appendChild($importedNode);
 
 $schemaFile = realpath($options['schema-cache'] . '/xmetadissplus.xsd');
@@ -84,8 +79,9 @@ if (! is_file($schemaFile)) {
 $metadataDocument->schemaValidate($options['schema-cache'] . '/xmetadissplus.xsd');
 printXmlErrors($sourceXml);
 
-//}
-
+/**
+ * @param string $xml
+ */
 function printXmlErrors($xml)
 {
     $errors = libxml_get_errors();
@@ -96,7 +92,7 @@ function printXmlErrors($xml)
         }
 
         $lines = explode("\n", $xml);
-        $line = $lines[abs(($error->line) - 1)];
+        $line  = $lines[abs(($error->line) - 1)];
         echo "\n\nERROR(" . $error->level . "): \n";
         echo "\t" . trim($error->message) . ' at line ' . $error->line . ":\n";
         for ($i = $error->line - 20; $i < $error->line; $i++) {

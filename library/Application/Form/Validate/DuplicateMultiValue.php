@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,34 +25,43 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Form_Validate_DuplicateMultiValue extends Application_Form_Validate_DuplicateValue
 {
+    /** @var array */
+    private $otherElements;
 
-    private $_otherElements;
-
+    /**
+     * @param array        $values
+     * @param int          $position
+     * @param string       $message
+     * @param array|string $otherElements
+     */
     public function __construct($values, $position, $message, $otherElements)
     {
         if (! is_array($otherElements)) {
-            $this->_otherElements = [$otherElements];
+            $this->otherElements = [$otherElements];
         } else {
-            $this->_otherElements = $otherElements;
+            $this->otherElements = $otherElements;
         }
 
         parent::__construct($values, $position, $message);
     }
 
+    /**
+     * @param string $value
+     * @param array  $context
+     * @param array  $other
+     * @return bool
+     */
     protected function isEqual($value, $context, $other)
     {
         $multiValue = [];
 
-        foreach ($this->_otherElements as $element) {
+        foreach ($this->otherElements as $element) {
             if (isset($context[$element])) {
                 $multiValue[] = $context[$element];
             }
@@ -60,6 +70,6 @@ class Application_Form_Validate_DuplicateMultiValue extends Application_Form_Val
         $multiValue[] = $value;
 
         // Return true wenn keine Unterschiede gefunden wurden
-        return count(array_diff($multiValue, $other)) == 0;
+        return count(array_diff($multiValue, $other)) === 0;
     }
 }

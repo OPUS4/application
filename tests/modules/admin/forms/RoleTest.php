@@ -33,7 +33,7 @@ use Opus\Common\UserRole;
 
 class Admin_Form_RoleTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testCreateForm()
@@ -58,19 +58,21 @@ class Admin_Form_RoleTest extends ControllerTestCase
         $this->assertEquals('administrator', $form->getElementValue(Admin_Form_Role::ELEMENT_NAME));
     }
 
+    /**
+     * @return array[]
+     */
     public function validRoleNameDataProvider()
     {
         return [
             ['abc'],
             ['abcd'],
             ['t17'],
-            ['ABc']
+            ['ABc'],
         ];
     }
 
     /**
      * @param string $validName Role name
-     *
      * @dataProvider validRoleNameDataProvider
      */
     public function testValidRoleName($validName)
@@ -79,6 +81,9 @@ class Admin_Form_RoleTest extends ControllerTestCase
         $this->assertTrue($form->isValid([Admin_Form_Role::ELEMENT_NAME => $validName]), $validName);
     }
 
+    /**
+     * @return array[]
+     */
     public function invalidRoleNameDataProvider()
     {
         return [
@@ -89,7 +94,7 @@ class Admin_Form_RoleTest extends ControllerTestCase
             ['1234'],
             ['guest'], // already exists
             ['1ab'],
-            ['a-b']
+            ['a-b'],
         ];
     }
 

@@ -33,28 +33,23 @@ use Opus\Common\DocumentInterface;
 
 /**
  * Unterformular fuer weitere Metadaten eines Dokuments.
- *
- * @category    Application
- * @package     Module_Admin
- * @subpackage  Form_Document
  */
 class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
 {
-
-    const ELEMENT_CONTRIBUTING_CORPORATION = 'ContributingCorporation';
-    const ELEMENT_CREATING_CORPORATION = 'CreatingCorporation';
-    const ELEMENT_EDITION = 'Edition';
-    const ELEMENT_ISSUE = 'Issue';
-    const ELEMENT_ARTICLE_NUMBER = 'ArticleNumber';
-    const ELEMENT_PAGE_FIRST = 'PageFirst';
-    const ELEMENT_PAGE_LAST = 'PageLast';
-    const ELEMENT_PAGE_COUNT = 'PageCount';
-    const ELEMENT_PUBLISHER_NAME = 'PublisherName';
-    const ELEMENT_PUBLISHER_PLACE = 'PublisherPlace';
-    const ELEMENT_VOLUME = 'Volume';
-    const ELEMENT_THESIS_DATE_ACCEPTED = 'ThesisDateAccepted';
-    const ELEMENT_THESIS_YEAR_ACCEPTED = 'ThesisYearAccepted';
-    const ELEMENT_BELONGS_TO_BIBLIOGRAPHY = 'BelongsToBibliography';
+    public const ELEMENT_CONTRIBUTING_CORPORATION = 'ContributingCorporation';
+    public const ELEMENT_CREATING_CORPORATION     = 'CreatingCorporation';
+    public const ELEMENT_EDITION                  = 'Edition';
+    public const ELEMENT_ISSUE                    = 'Issue';
+    public const ELEMENT_ARTICLE_NUMBER           = 'ArticleNumber';
+    public const ELEMENT_PAGE_FIRST               = 'PageFirst';
+    public const ELEMENT_PAGE_LAST                = 'PageLast';
+    public const ELEMENT_PAGE_COUNT               = 'PageCount';
+    public const ELEMENT_PUBLISHER_NAME           = 'PublisherName';
+    public const ELEMENT_PUBLISHER_PLACE          = 'PublisherPlace';
+    public const ELEMENT_VOLUME                   = 'Volume';
+    public const ELEMENT_THESIS_DATE_ACCEPTED     = 'ThesisDateAccepted';
+    public const ELEMENT_THESIS_YEAR_ACCEPTED     = 'ThesisYearAccepted';
+    public const ELEMENT_BELONGS_TO_BIBLIOGRAPHY  = 'BelongsToBibliography';
 
     public function init()
     {
@@ -118,7 +113,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
     {
         parent::populateFromModel($document);
 
-        $datesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
 
         $this->getElement(self::ELEMENT_CONTRIBUTING_CORPORATION)->setValue($document->getContributingCorporation());
         $this->getElement(self::ELEMENT_CREATING_CORPORATION)->setValue($document->getCreatingCorporation());
@@ -145,7 +140,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
     {
         parent::updateModel($document);
 
-        $datesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
 
         $document->setContributingCorporation($this->getElementValue(self::ELEMENT_CONTRIBUTING_CORPORATION));
         $document->setCreatingCorporation($this->getElementValue(self::ELEMENT_CREATING_CORPORATION));
@@ -160,7 +155,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
         $document->setVolume($this->getElementValue(self::ELEMENT_VOLUME));
 
         $value = $this->getElementValue(self::ELEMENT_THESIS_DATE_ACCEPTED);
-        $date = (is_null($value)) ? null : $datesHelper->getOpusDate($value);
+        $date  = $value === null ? null : $datesHelper->getOpusDate($value);
         $document->setThesisDateAccepted($date);
 
         $document->setThesisYearAccepted($this->getElementValue(self::ELEMENT_THESIS_YEAR_ACCEPTED));

@@ -34,31 +34,32 @@ use Opus\Common\LoggingTrait;
 /**
  * Basisklasse fuer OPUS 4 Controller Action Helper.
  */
-abstract class Application_Controller_Action_Helper_Abstract extends \Zend_Controller_Action_Helper_Abstract
+abstract class Application_Controller_Action_Helper_Abstract extends Zend_Controller_Action_Helper_Abstract
 {
-
     use LoggingTrait;
 
-    private $_view = null;
+    /** @var Zend_View_Interface */
+    private $view;
 
-    private $_config = null;
+    /** @var Zend_Config */
+    private $config;
 
     /**
      * Returns view if it has been set or tries to retrieve view from action controller.
      *
      * NOTE: This helps with unit tests.
      *
-     * @return null|\Zend_View_Interface
+     * @return null|Zend_View_Interface
      */
     public function getView()
     {
-        if ($this->_view === null) {
+        if ($this->view === null) {
             $controller = $this->getActionController();
             if ($controller !== null) {
-                $this->_view = $controller->view;
+                $this->view = $controller->view;
             }
         }
-        return $this->_view;
+        return $this->view;
     }
 
     /**
@@ -66,22 +67,24 @@ abstract class Application_Controller_Action_Helper_Abstract extends \Zend_Contr
      *
      * NOTE: This helps with unit tests.
      *
-     * @param $view
+     * @param Zend_View_Interface $view
      */
     public function setView($view)
     {
-        $this->_view = $view;
+        $this->view = $view;
     }
 
     /**
      * Returns application configuration.
+     *
+     * @return Zend_Config
      */
     public function getConfig()
     {
-        if ($this->_config === null) {
-            $this->_config = Application_Configuration::getInstance()->getConfig();
+        if ($this->config === null) {
+            $this->config = Application_Configuration::getInstance()->getConfig();
         }
 
-        return $this->_config;
+        return $this->config;
     }
 }

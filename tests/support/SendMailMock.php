@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,59 +25,78 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class SendMailMock
 {
-
+    /** @var string */
     private $from;
+
+    /** @var string */
     private $fromName;
+
+    /** @var string */
     private $subject;
+
+    /** @var string */
     private $bodyText;
+
+    /** @var array */
     private $address;
 
     /**
-     *
      * @param string $from
      * @param string $fromName
      * @param string $subject
      * @param string $bodyText
      * @param array  $address Recipients (array [#] => array ('name' => '...', 'address' => '...'))
      */
-    public function sendMail(string $from, string $fromName, string $subject, string $bodyText, array $address)
+    public function sendMail($from, $fromName, $subject, $bodyText, $address)
     {
-        $this->from = $from;
+        $this->from     = $from;
         $this->fromName = $fromName;
-        $this->subject = $subject;
+        $this->subject  = $subject;
         $this->bodyText = $bodyText;
-        $this->address = $address;
+        $this->address  = $address;
     }
 
+    /**
+     * @return string
+     */
     public function getFrom()
     {
         return $this->from;
     }
 
+    /**
+     * @return string
+     */
     public function getFromName()
     {
         return $this->fromName;
     }
 
+    /**
+     * @return string
+     */
     public function getSubject()
     {
         return $this->subject;
     }
 
+    /**
+     * @return string
+     */
     public function getBodyText()
     {
         return $this->bodyText;
     }
 
+    /**
+     * @return array
+     */
     public function getAddress()
     {
         return $this->address;

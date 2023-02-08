@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_UpdateTest extends ControllerTestCase
 {
-
     public function testGetUpdateScripts()
     {
         $update = new Application_Update();
@@ -128,20 +125,22 @@ class Application_UpdateTest extends ControllerTestCase
         $this->assertEquals(999, $newVersion);
     }
 
+    /**
+     * @return array
+     */
     public function updateScriptProvider()
     {
-        $update = new Application_Update();
+        $update  = new Application_Update();
         $scripts = $update->getUpdateScripts();
 
-        $data = array_map(function ($script) {
+        return array_map(function ($script) {
             return [$script];
         }, $scripts);
-
-        return $data;
     }
 
     /**
      * @dataProvider updateScriptProvider
+     * @param string $script
      */
     public function testUpdateScriptsExecutable($script)
     {
@@ -166,7 +165,7 @@ class Application_UpdateTest extends ControllerTestCase
 
         if ($lastScript !== null) {
             $filename = basename($lastScript);
-            $number = substr($filename, 0, 3);
+            $number   = substr($filename, 0, 3);
             $this->assertEquals($version, $number, 'Last update script needs to match internal opus version.');
         }
     }

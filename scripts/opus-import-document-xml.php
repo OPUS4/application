@@ -45,7 +45,7 @@ foreach ($argv as $filename) {
     error_log("loading filename $filename...");
     $content = file_get_contents($filename);
 
-    $doc = Document::fromXml($content);
+    $doc   = Document::fromXml($content);
     $docId = $doc->store();
     error_log("loading filename $filename... done.  Document $docId.");
 }

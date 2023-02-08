@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Config;
+use Opus\Doi\DoiException;
+use Opus\Doi\DoiManager;
 
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)\n";
@@ -44,18 +45,15 @@ if ($argc < 3) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Doi\DoiManager;
-use Opus\Doi\DoiException;
+$doiValue       = $argv[1];
+$landingPageUrl = $argv[2];
 
-$doiValue = $argv[1];
-$landingPageURL = $argv[2];
-
-echo 'Change URL of landing page of DOI ' . $doiValue . ' to ' . $landingPageURL . "\n";
+echo 'Change URL of landing page of DOI ' . $doiValue . ' to ' . $landingPageUrl . "\n";
 
 $config = Config::get();
 try {
     $doiManager = new DoiManager();
-    $doiManager->updateLandingPageUrlOfDoi($doiValue, $landingPageURL);
+    $doiManager->updateLandingPageUrlOfDoi($doiValue, $landingPageUrl);
     echo "Operation completed successfully\n";
 } catch (DoiException $e) {
     echo 'Could not successfully change landing page URL of DOI ' . $doiValue . ' : ' . $e->getMessage() . "\n";

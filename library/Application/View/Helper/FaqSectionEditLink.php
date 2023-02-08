@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,22 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * View helper for linking to edit form for translation.
- *
  */
 class Application_View_Helper_FaqSectionEditLink extends Application_View_Helper_Abstract
 {
-
     /**
-     *
+     * @param string $key
+     * @return string
      */
     public function faqSectionEditLink($key)
     {
@@ -60,33 +57,40 @@ class Application_View_Helper_FaqSectionEditLink extends Application_View_Helper
      */
     public function isEditingEnabled()
     {
-        $accessControl = \Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
 
-        if (is_null($accessControl)) {
+        if ($accessControl === null) {
             return false; // just in case - deny editing if access control mechanism isn't available
         }
 
-        $manager = $this->getTranslationManager();
-        $modules = $manager->getAllowedModules();
+        $manager        = $this->getTranslationManager();
+        $modules        = $manager->getAllowedModules();
         $editingAllowed = false;
-        if (is_null($modules) || in_array('help', $modules)) {
+        if ($modules === null || in_array('help', $modules)) {
             $editingAllowed = true;
         }
 
         return $accessControl->accessAllowed('helppages') && $editingAllowed;
     }
 
+    /**
+     * @param string $key
+     * @return string
+     */
     protected function getTargetUrl($key)
     {
         return $this->view->url([
-            'module' => 'setup',
+            'module'     => 'setup',
             'controller' => 'helppage',
-            'action' => 'section',
-            'key' => $key,
-            'back' => 'help'
+            'action'     => 'section',
+            'key'        => $key,
+            'back'       => 'help',
         ]);
     }
 
+    /**
+     * @return Application_Translate_TranslationManager
+     */
     protected function getTranslationManager()
     {
         return new Application_Translate_TranslationManager();

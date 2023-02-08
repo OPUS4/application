@@ -25,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Configuration
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2018
+ * @copyright   Copyright (c) 2017, OPUS4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * Class for handling file type configuration.
@@ -42,9 +39,7 @@ use Opus\Common\Config\FileTypes;
 
 class Application_Controller_Action_Helper_FileTypes extends Application_Controller_Action_Helper_Abstract
 {
-    /**
-     * @var FileTypes
-     */
+    /** @var FileTypes */
     private $fileTypes;
 
     /**
@@ -60,7 +55,7 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
      *
      * TODO not used by "publish"-module yet
      *
-     * @return mixed
+     * @return array
      */
     public function getValidMimeTypes()
     {
@@ -70,7 +65,8 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
     /**
      * Checks if a MIME-type is allowed for OPUS 4 files.
      *
-     * @param $mimeType
+     * @param string      $mimeType
+     * @param string|null $extension
      * @return bool
      *
      * TODO more efficient method to check?
@@ -83,6 +79,9 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
 
     /**
      * Returns content disposition for MIME-type used for downloads.
+     *
+     * @param string|null $mimeType
+     * @return string
      */
     public function getContentDisposition($mimeType = null)
     {

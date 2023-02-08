@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,8 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Maximilian Salomon <salomon@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -35,27 +34,26 @@
  *
  * This validator is used in the document metadate form.
  */
-class Application_Form_Validate_Identifier extends \Zend_Validate_Abstract
+class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
 {
-
     /**
      * Form element for the type of identifier.
-     * @var \Zend_Form_Element
+     *
+     * @var Zend_Form_Element
      */
-    private $_element;
+    private $element;
 
     /**
-     * Application_Form_Validate_Identifier constructor.
-     * @param \Zend_Form_Element $element
+     * @param Zend_Form_Element $element
      */
     public function __construct($element)
     {
         if ($element === null) {
-            throw new \InvalidArgumentException('Argument must not be NULL');
-        } elseif ($element instanceof \Zend_Form_Element) {
-            $this->_element = $element;
+            throw new InvalidArgumentException('Argument must not be NULL');
+        } elseif ($element instanceof Zend_Form_Element) {
+            $this->element = $element;
         } else {
-            throw new \InvalidArgumentException('Object must be Zend_Form_Element');
+            throw new InvalidArgumentException('Object must be Zend_Form_Element');
         }
     }
 
@@ -71,16 +69,16 @@ class Application_Form_Validate_Identifier extends \Zend_Validate_Abstract
      */
     public function isValid($value)
     {
-        $value = (string)$value;
+        $value = (string) $value;
         $this->_setValue($value);
 
-        $type = strtolower($this->_element->getValue());
+        $type   = strtolower($this->element->getValue());
         $config = Application_Configuration::getInstance()->getConfig();
 
         if (isset($config->identifier->validation->$type->class)) {
             $validatorClass = $config->identifier->validation->$type->class;
-            $validator = new $validatorClass;
-            $result = $validator->isValid($value);
+            $validator      = new $validatorClass();
+            $result         = $validator->isValid($value);
             if ($result === false) {
                 if (isset($config->identifier->validation->$type->messageTemplates)) {
                     $this->_messageTemplates = array_merge($validator->getMessageTemplates(), $config->identifier

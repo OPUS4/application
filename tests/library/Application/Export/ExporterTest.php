@@ -33,27 +33,28 @@ use Opus\Common\UserRole;
 
 class Application_Export_ExporterTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    private $_guestExportEnabled;
+    /** @var bool */
+    private $guestExportEnabled;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $guest = UserRole::fetchByName('guest');
+        $guest   = UserRole::fetchByName('guest');
         $modules = $guest->listAccessModules();
 
-        $this->_guestExportEnabled = in_array('export', $modules);
+        $this->guestExportEnabled = in_array('export', $modules);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         // restore guest access to export module
         $guest = UserRole::fetchByName('guest');
 
-        if ($this->_guestExportEnabled) {
+        if ($this->guestExportEnabled) {
             $guest->appendAccessModule('export');
         } else {
             $guest->removeAccessModule('export');
@@ -73,15 +74,15 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $exporter->addFormats([
             'bibtex' => [
-                'name' => 'BibTeX',
+                'name'        => 'BibTeX',
                 'description' => 'Export BibTeX',
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'download',
-                'params' => [
-                    'output' => 'bibtex'
-                ]
-            ]
+                'module'      => 'citationExport',
+                'controller'  => 'index',
+                'action'      => 'download',
+                'params'      => [
+                    'output' => 'bibtex',
+                ],
+            ],
         ]);
 
         $formats = $exporter->getFormats();
@@ -114,17 +115,17 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $exporter->addFormats([
             'bibtex' => [
-                'name' => 'BibTeX',
+                'name'        => 'BibTeX',
                 'description' => 'Export BibTeX',
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'download',
-                'frontdoor' => true,
-                'search' => false,
-                'params' => [
-                    'output' => 'bibtex'
-                ]
-            ]
+                'module'      => 'citationExport',
+                'controller'  => 'index',
+                'action'      => 'download',
+                'frontdoor'   => true,
+                'search'      => false,
+                'params'      => [
+                    'output' => 'bibtex',
+                ],
+            ],
         ]);
 
         $formats = $exporter->getFormats();
@@ -148,7 +149,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
         // Restricted format are only setup during request processing (OPUS4/application#516)
         $this->dispatch('/home');
 
-        $exporter = \Zend_Registry::get('Opus_Exporter');
+        $exporter = Zend_Registry::get('Opus_Exporter');
 
         $formats = $exporter->getAllowedFormats();
 
@@ -167,7 +168,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
     public function testGetAllowedFormatsSorted()
     {
-        $exporter = \Zend_Registry::get('Opus_Exporter');
+        $exporter = Zend_Registry::get('Opus_Exporter');
 
         $formats = $exporter->getAllowedFormats();
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,29 +25,42 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * The code here was written using the cod of Zend_View_Helper_FormRadio as
  * template, adapting it to the specific needs of displaying multiple input
  * elements label for the supported languages.
  */
-class Application_View_Helper_FormTranslation extends \Zend_View_Helper_FormRadio
+class Application_View_Helper_FormTranslation extends Zend_View_Helper_FormRadio
 {
-
+    /**
+     * @var string
+     * @phpcs:disable
+     */
     protected $_inputType = 'text';
+    // @phpcs:enable
 
+    /**
+     * @param string     $name
+     * @param mixed|null $value
+     * @param array|null $attribs
+     * @param array|null $options
+     * @param string     $listsep
+     * @return string
+     * @throws Zend_Filter_Exception
+     */
     public function formTranslation($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n")
     {
         $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
-
+        // @phpcs:disable
         extract($info);
+        // @phpcs:enable
 
         // retrieve attributes for labels (prefixed with 'label_' or 'label')
-        if (is_null($attribs)) {
+        if ($attribs === null) {
             $attribs = [];
         }
 
@@ -54,21 +68,21 @@ class Application_View_Helper_FormTranslation extends \Zend_View_Helper_FormRadi
         foreach ($attribs as $key => $val) {
             $tmp    = false;
             $keyLen = strlen($key);
-            if ((6 < $keyLen) && (substr($key, 0, 6) == 'label_')) {
+            if ((6 < $keyLen) && (substr($key, 0, 6) === 'label_')) {
                 $tmp = substr($key, 6);
-            } elseif ((5 < $keyLen) && (substr($key, 0, 5) == 'label')) {
+            } elseif ((5 < $keyLen) && (substr($key, 0, 5) === 'label')) {
                 $tmp = substr($key, 5);
             }
 
             if ($tmp) {
                 // make sure first char is lowercase
-                $tmp[0] = strtolower($tmp[0]);
+                $tmp[0]             = strtolower($tmp[0]);
                 $labelAttribs[$tmp] = $val;
                 unset($attribs[$key]);
             }
         }
 
-        if (isset($attribs['textarea']) and $attribs['textarea']) {
+        if (isset($attribs['textarea']) && $attribs['textarea']) {
             $this->_inputType = 'textarea';
         }
         unset($attribs['textarea']);
@@ -79,13 +93,13 @@ class Application_View_Helper_FormTranslation extends \Zend_View_Helper_FormRadi
             ? '/[^\p{L}\p{N}\-\_]/u'    // Unicode
             : '/[^a-zA-Z0-9\-\_]/';     // No Unicode
 
-        $filter = new \Zend_Filter_PregReplace($pattern, '');
+        $filter = new Zend_Filter_PregReplace($pattern, '');
 
         $translate = Application_Translate::getInstance();
 
         $name = $this->view->escape($name);
 
-        if (is_null($options)) {
+        if ($options === null) {
             $options = [];
         }
 
@@ -132,8 +146,6 @@ class Application_View_Helper_FormTranslation extends \Zend_View_Helper_FormRadi
             $list[] = $item;
         }
 
-        $output = implode($listsep, $list);
-
-        return $output;
+        return implode($listsep, $list);
     }
 }

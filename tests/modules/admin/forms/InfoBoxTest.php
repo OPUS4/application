@@ -34,7 +34,7 @@ use Opus\Common\Person;
 
 class Admin_Form_InfoBoxTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testConstructForm()

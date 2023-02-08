@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,43 +24,41 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Unit tests for view helper for rendering export links.
- *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_View_Helper_ExportLinksEnabledTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all'; // TODO exporter is tricky
 
-    private $_helper;
+    /** @var Application_View_Helper_ExportLinksEnabled */
+    private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_ExportLinksEnabled();
+        $this->helper = new Application_View_Helper_ExportLinksEnabled();
     }
 
     public function testExportLinksEnabled()
     {
-        $this->assertTrue($this->_helper->exportLinksEnabled());
+        $this->assertTrue($this->helper->exportLinksEnabled());
 
-        \Zend_Registry::get('Opus_Exporter')->removeAll();
+        Zend_Registry::get('Opus_Exporter')->removeAll();
 
-        $this->assertFalse($this->_helper->exportLinksEnabled());
+        $this->assertFalse($this->helper->exportLinksEnabled());
     }
 
     public function testExportLinksEnabledForContext()
     {
-        $this->assertTrue($this->_helper->exportLinksEnabled('search'));
-        $this->assertTrue($this->_helper->exportLinksEnabled('unknown'));
+        $this->assertTrue($this->helper->exportLinksEnabled('search'));
+        $this->assertTrue($this->helper->exportLinksEnabled('unknown'));
     }
 }

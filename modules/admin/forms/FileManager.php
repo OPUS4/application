@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,21 +25,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\DocumentInterface;
+
 class Admin_Form_FileManager extends Application_Form_Model_Abstract
 {
+    public const SUBFORM_UPLOAD = 'Upload';
+    public const SUBFORM_FILES  = 'Files';
+    public const SUBFORM_INFO   = 'Info';
+    public const SUBFORM_ACTION = 'Action';
 
-    const SUBFORM_UPLOAD = 'Upload';
-    const SUBFORM_FILES = 'Files';
-    const SUBFORM_INFO = 'Info';
-    const SUBFORM_ACTION = 'Action';
-
-    private $_message;
+    /** @var string */
+    private $message;
 
     public function init()
     {
@@ -56,9 +57,9 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract
 
         $this->setDecorators(
             [
-            'FormElements',
-            ['HtmlTag', ['class' => 'wrapper', 'closeOnly' => true]],
-            'Form'
+                'FormElements',
+                ['HtmlTag', ['class' => 'wrapper', 'closeOnly' => true]],
+                'Form',
             ]
         );
 
@@ -67,7 +68,8 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
-     * @param $model
+     *
+     * @param DocumentInterface $document
      */
     public function populateFromModel($document)
     {
@@ -78,22 +80,28 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract
 
     /**
      * Aktualsiert Model-Instanz mit Werten im Formular.
-     * @param $model
+     *
+     * @param DocumentInterface $document
      */
     public function updateModel($document)
     {
         $this->getSubForm(self::SUBFORM_FILES)->updateModel($document);
     }
 
+    /**
+     * @param array $post
+     * @param array $context
+     * @return null|string
+     */
     public function processPost($post, $context)
     {
         $result = parent::processPost($post, $context);
 
-        if (is_null($result)) {
+        if ($result === null) {
             foreach ($this->getSubForms() as $name => $subform) {
                 if (array_key_exists($name, $post)) {
                     $result = $subform->processPost($post[$name], $context);
-                    if (! is_null($result)) {
+                    if ($result !== null) {
                         break;
                     }
                 }
@@ -103,6 +111,10 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract
         return $result;
     }
 
+    /**
+     * @param array                  $post
+     * @param DocumentInterface|null $document
+     */
     public function constructFromPost($post, $document = null)
     {
         $this->getSubForm(self::SUBFORM_ACTION)->populateFromModel($document); // TODO needed here?
@@ -112,11 +124,20 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract
         }
     }
 
+    /**
+     * @param Zend_Controller_Request_Http $request
+     * @param array                        $post
+     */
     public function continueEdit($request, $post)
     {
         $this->getSubForm(self::SUBFORM_FILES)->continueEdit($request, $post[self::SUBFORM_FILES]);
     }
 
+    /**
+     * @param array             $post
+     * @param DocumentInterface $document
+     * @return self
+     */
     public static function getInstanceFromPost($post, $document)
     {
         $form = new Admin_Form_FileManager();
@@ -124,13 +145,19 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract
         return $form;
     }
 
+    /**
+     * @param string|null $message
+     */
     public function setMessage($message)
     {
-        $this->_message = $message;
+        $this->message = $message;
     }
 
+    /**
+     * @return string
+     */
     public function getMessage()
     {
-        return $this->_message;
+        return $this->message;
     }
 }

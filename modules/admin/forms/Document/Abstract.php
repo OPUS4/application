@@ -29,23 +29,22 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\TitleAbstract;
 use Opus\Common\Model\NotFoundException;
+use Opus\Common\TitleAbstract;
+use Opus\Common\TitleAbstractInterface;
 
 /**
  * Unterformular zum Editieren einer Zusammenfassung (abstract).
  *
- * @category    Application
- * @package     Module_Admin
+ * TODO LAMINAS rename class - cannot be 'Abstract' with PHP namespaces
  */
 class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm
 {
+    public const ELEMENT_ID = 'Id';
 
-    const ELEMENT_ID = 'Id';
+    public const ELEMENT_LANGUAGE = 'Language';
 
-    const ELEMENT_LANGUAGE = 'Language';
-
-    const ELEMENT_VALUE = 'Value';
+    public const ELEMENT_VALUE = 'Value';
 
     public function init()
     {
@@ -54,18 +53,21 @@ class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm
         $this->addElement('Hidden', self::ELEMENT_ID);
         $this->addElement('Language', self::ELEMENT_LANGUAGE);
         $this->addElement('Textarea', self::ELEMENT_VALUE, [
-            'required' => true,
-            'rows' => 12,
+            'required'   => true,
+            'rows'       => 12,
             'decorators' => [
                 'ViewHelper',
                 'Errors',
                 'Description',
                 'ElementHtmlTag',
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
-            ]
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
+            ],
         ]);
     }
 
+    /**
+     * @param TitleAbstractInterface $abstract
+     */
     public function populateFromModel($abstract)
     {
         $this->getElement(self::ELEMENT_ID)->setValue($abstract->getId());
@@ -73,12 +75,19 @@ class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm
         $this->getElement(self::ELEMENT_VALUE)->setValue($abstract->getValue());
     }
 
+    /**
+     * @param TitleAbstractInterface $abstract
+     */
     public function updateModel($abstract)
     {
         $abstract->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
         $abstract->setValue($this->getElementValue(self::ELEMENT_VALUE));
     }
 
+    /**
+     * @return TitleAbstractInterface
+     * @throws Zend_Exception
+     */
     public function getModel()
     {
         $abstractId = $this->getElement(self::ELEMENT_ID)->getValue();

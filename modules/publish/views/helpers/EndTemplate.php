@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,42 +25,38 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Doreen Thiede <thiede@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Class checks if template has eben build properly. It counts the expected elements by the template and checks it with
  * the number of elements in the real form.
- *
- * @author Susanne Gottwald
  */
-class Publish_View_Helper_EndTemplate extends \Zend_View_Helper_Abstract
+class Publish_View_Helper_EndTemplate extends Zend_View_Helper_Abstract
 {
-
+    /**
+     * @param int $elementCounter
+     * @return string
+     */
     public function endTemplate(Publish_Form_PublishingSecond $form, $elementCounter)
     {
-        $formCount = 0;
-        $elements = $form->getElements();
+        $elements         = $form->getElements();
         $numberOfElements = count($elements);
 
-        $groups = $form->getDisplayGroups();
-        $formCount = count($groups);
+        $groups     = $form->getDisplayGroups();
+        $formCount  = count($groups);
         $groupCount = 0;
 
         foreach ($groups as $group) {
             $groupElements = $group->getElements();
-            $groupCount = $groupCount + count($groupElements);
+            $groupCount   += count($groupElements);
         }
 
         $formCount = $formCount + $numberOfElements - $groupCount;
 
         if ($formCount === $elementCounter) {
-            return "";
+            return '';
         }
 
         if ($formCount > $elementCounter) {
@@ -69,5 +66,7 @@ class Publish_View_Helper_EndTemplate extends \Zend_View_Helper_Abstract
         if ($formCount < $elementCounter) {
             return $this->view->translate('publish_controller_form_template2');
         }
+
+        return '';
     }
 }

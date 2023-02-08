@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 ?>
 <p><?php echo $this->translate('admin_oailink_general');?></p>
 
@@ -40,11 +38,11 @@
 
 <p><?php echo $this->translate('admin_oailink_examples'); ?></p>
 <ul>
-    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:' . $this->repIdentifier . ':78'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (oai_dc)';?></a></li>
-    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=oai_pp&identifier=oai:' . $this->repIdentifier . ':78'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (oai_pp)';?></a></li>
-    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=epicur&identifier=oai:' . $this->repIdentifier . ':78'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (EPICUR)';?></a></li>
-    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:' . $this->repIdentifier . ':41'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (XMetaDissPlus)';?></a></li>
-    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=marc21&identifier=oai:' . $this->repIdentifier . ':41'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (MARC21)';?></a></li>
+    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:' . $this->repIdentifier . ':78'?>"><?php echo $this->translate('admin_oailink_example_getrecord') . ' (oai_dc)';?></a></li>
+    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=oai_pp&identifier=oai:' . $this->repIdentifier . ':78'?>"><?php echo $this->translate('admin_oailink_example_getrecord') . ' (oai_pp)';?></a></li>
+    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=epicur&identifier=oai:' . $this->repIdentifier . ':78'?>"><?php echo $this->translate('admin_oailink_example_getrecord') . ' (EPICUR)';?></a></li>
+    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:' . $this->repIdentifier . ':41'?>"><?php echo $this->translate('admin_oailink_example_getrecord') . ' (XMetaDissPlus)';?></a></li>
+    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=marc21&identifier=oai:' . $this->repIdentifier . ':41'?>"><?php echo $this->translate('admin_oailink_example_getrecord') . ' (MARC21)';?></a></li>
     <li><a href="<?php echo $this->baseLink . '?verb=Identify'?>"><?php echo $this->translate('admin_oailink_example_identify');?></a></li>
     <li><a href="<?php echo $this->baseLink . '?verb=ListIdentifiers&metadataPrefix=oai_dc'?>"><?php echo $this->translate('admin_oailink_example_listidentifiers');?></a></li>
     <li><a href="<?php echo $this->baseLink . '?verb=ListMetadataFormats'?>"><?php echo $this->translate('admin_oailink_example_listmetadataformats');?></a></li>

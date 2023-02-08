@@ -37,7 +37,7 @@ use Opus\Model\Dependent\Link\DocumentSeries;
  */
 class Admin_Form_Document_SeriesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testCreateForm()
@@ -58,7 +58,7 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
         $doc = Document::get(146);
 
         $series = $doc->getSeries();
-        $model = $series[0];
+        $model  = $series[0];
 
         $form->populateFromModel($model);
 
@@ -89,7 +89,7 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Series();
 
-        $doc = Document::get(146);
+        $doc    = Document::get(146);
         $series = $doc->getSeries();
 
         $form->getElement('Id')->setValue($doc->getId());
@@ -97,7 +97,7 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
         $form->getElement('Number')->setValue('b');
         $form->getElement('SortOrder')->setValue(7);
 
-        $model = $form->getModel();
+        $model   = $form->getModel();
         $modelId = $model->getId();
 
         $this->assertEquals(146, $modelId[0]);
@@ -142,8 +142,8 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
         $form = new Admin_Form_Document_Series();
 
         $post = [
-            'Number' => ' ',
-            'SeriesId' => ' '
+            'Number'   => ' ',
+            'SeriesId' => ' ',
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -157,7 +157,7 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
         $form = new Admin_Form_Document_Series();
 
         $post = [
-            'SortOrder' => '1st'
+            'SortOrder' => '1st',
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -165,9 +165,9 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
         $this->assertContains('notInt', $form->getErrors('SortOrder'));
 
         $post = [
-            'SeriesId' => '2', // required
-            'Number' => '800', // required
-            'SortOrder' => '-1'
+            'SeriesId'  => '2', // required
+            'Number'    => '800', // required
+            'SortOrder' => '-1',
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -193,9 +193,9 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
         $form = new Admin_Form_Document_Series();
 
         $post = [
-            'Id' => '250',
+            'Id'       => '250',
             'SeriesId' => '1',
-            'Number' => '5/5' // used by document ID = 146
+            'Number'   => '5/5', // used by document ID = 146
         ];
 
         $this->assertTrue($form->isValid($post));
@@ -208,9 +208,9 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
         $form = new Admin_Form_Document_Series();
 
         $post = [
-            'Id' => '146',
+            'Id'       => '146',
             'SeriesId' => '1',
-            'Number' => '5/5' // used by document ID = 146
+            'Number'   => '5/5', // used by document ID = 146
         ];
 
         $this->assertTrue($form->isValid($post));

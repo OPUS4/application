@@ -31,32 +31,27 @@
  */
 
 use Opus\Common\UserRole;
+use Opus\Common\UserRoleInterface;
 
 /**
  * Controller for managing permissions for roles including module access.
- *
- *
  */
 class Admin_AccessController extends Application_Controller_Action
 {
-
-    /**
-     *
-     */
     public function listroleAction()
     {
-        $id = $this->getRequest()->getParam('docid');
-        $roles = UserRole::getAll();
-        $this->view->docId = $id;
-        $this->view->roles = $roles;
+        $id                       = $this->getRequest()->getParam('docid');
+        $roles                    = UserRole::getAll();
+        $this->view->docId        = $id;
+        $this->view->roles        = $roles;
         $this->view->checkedRoles = $this->getCheckedRoles($id, $roles);
     }
 
     /**
      * Returns list of selected roles.
      *
-     * @param type $id
-     * @param type $roles
+     * @param int                 $id
+     * @param UserRoleInterface[] $roles
      * @return array
      */
     private function getCheckedRoles($id, $roles)
@@ -83,15 +78,15 @@ class Admin_AccessController extends Application_Controller_Action
 
         $id = $this->getRequest()->getParam('roleid');
 
-        if ($id == null) {
+        if ($id === null) {
             throw new Exception('Role ID missing');
         }
 
-        $role = UserRole::get($id);
+        $role        = UserRole::get($id);
         $roleModules = $role->listAccessModules();
 
         if ($role->getName() !== 'guest') {
-            $guest = UserRole::fetchByName('guest');
+            $guest        = UserRole::fetchByName('guest');
             $guestModules = $guest->listAccessModules();
             // Role 'guest' has always access to 'default' module
             if (! in_array('default', $guestModules)) {
@@ -109,16 +104,16 @@ class Admin_AccessController extends Application_Controller_Action
 
         $this->view->loginNames = $role->getAllAccountNames();
 
-        $this->view->roleId = $role->getId();
+        $this->view->roleId   = $role->getId();
         $this->view->roleName = $role->getName();
-        $this->view->modules = $roleModules;
+        $this->view->modules  = $roleModules;
 
         $modules = array_keys(Application_Modules::getInstance()->getModules());
         unset($modules['default']);
 
-        $this->view->allModules = $modules;
+        $this->view->allModules   = $modules;
         $this->view->allResources = $security->getAllResources();
-        $this->view->allWorkflow = $transitions;
+        $this->view->allWorkflow  = $transitions;
     }
 
     /**
@@ -126,8 +121,8 @@ class Admin_AccessController extends Application_Controller_Action
      */
     public function storeAction()
     {
-        $save = $this->getRequest()->getParam('save_button');
-        $id = $this->getRequest()->getParam('roleid');
+        $save  = $this->getRequest()->getParam('save_button');
+        $id    = $this->getRequest()->getParam('roleid');
         $docId = $this->getRequest()->getParam('docid');
 
         if (! empty($id)) {
@@ -135,18 +130,18 @@ class Admin_AccessController extends Application_Controller_Action
 
             $this->storeModules($this->getRequest());
 
-            $this->view->redirect = ['module' => 'admin','controller' => 'role','action' => 'index'];
+            $this->view->redirect = ['module' => 'admin', 'controller' => 'role', 'action' => 'index'];
         } elseif (! empty($docId)) {
             $this->storeRoles($this->getRequest());
 
-            $this->view->redirect = ['module' => 'admin','controller' => 'document','action' => 'index','id' => $docId];
+            $this->view->redirect = ['module' => 'admin', 'controller' => 'document', 'action' => 'index', 'id' => $docId];
         }
 
-        if ($save != null) {
-            $this->view->submit = 'access_submit_save';
+        if ($save !== null) {
+            $this->view->submit  = 'access_submit_save';
             $this->view->message = 'access_save_message';
         } else {
-            $this->view->submit = 'access_submit_cancel';
+            $this->view->submit  = 'access_submit_cancel';
             $this->view->message = 'access_cancel_message';
         }
     }
@@ -154,7 +149,7 @@ class Admin_AccessController extends Application_Controller_Action
     /**
      * Stores selected permissions in database.
      *
-     * @param type $request
+     * @param Zend_Controller_Request_Http $request
      *
      * TODO secure against missing parameters
      */
@@ -162,11 +157,11 @@ class Admin_AccessController extends Application_Controller_Action
     {
         $id = $request->getParam('roleid');
 
-        $role = UserRole::get($id);
+        $role        = UserRole::get($id);
         $roleModules = $role->listAccessModules();
 
         foreach ($roleModules as $module) {
-            if ($request->getParam('set_'.$module, 'NULL') === 'NULL') {
+            if ($request->getParam('set_' . $module, 'NULL') === 'NULL') {
                 $role->removeAccessModule($module);
             }
         }
@@ -188,7 +183,7 @@ class Admin_AccessController extends Application_Controller_Action
     /**
      * Stores roles for document.
      *
-     * @param <type> $request
+     * @param Zend_Controller_Request_Http $request
      *
      * TODO Is it a problem if document is append twice?
      */
@@ -200,7 +195,7 @@ class Admin_AccessController extends Application_Controller_Action
 
         foreach ($roles as $role) {
             $roleName = $role->getName();
-            $checked = $request->getParam($roleName);
+            $checked  = $request->getParam($roleName);
             if ($checked) {
                 $role->appendAccessDocument($docId);
                 $role->store();

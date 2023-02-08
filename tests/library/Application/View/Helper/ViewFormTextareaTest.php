@@ -25,22 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_View_Helper_ViewFormTextareaTest extends ControllerTestCase
 {
-
     public function testViewFormTextarea()
     {
         $helper = new Application_View_Helper_ViewFormTextarea();
-        $helper->setView(new \Zend_View());
+        $helper->setView(new Zend_View());
 
         $this->assertContains('class="field textarea"', $helper->viewFormTextarea('testName', 'testValue', [
-            'id' => '10'
+            'id' => '10',
         ]));
     }
 

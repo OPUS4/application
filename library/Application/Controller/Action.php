@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,65 +25,56 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * @category    Application
- * @package     Controller
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2020, OPUS 4 development team
+ *
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Controller_Action extends Application_Controller_ModuleAccess
 {
-
     /**
      * Holds the Redirector Helper.
      *
-     * @var \Zend_Controller_Action_Helper_Redirector
+     * @var Zend_Controller_Action_Helper_Redirector
      */
-    private $_redirector = null;
+    private $redirector;
 
     /**
      * Holds the FlashMessenger Helper.
      *
-     * @var \Zend_Controller_Action_Helper_FlashMessenger
+     * @var Zend_Controller_Action_Helper_FlashMessenger
      */
-    private $_flashMessenger = null;
+    private $flashMessenger;
 
     /**
      * Helper fuer Breadcrumbs.
-     * @var null
+     *
+     * @var Application_View_Helper_Breadcrumbs|null
      */
-    protected $_breadcrumbs = null;
+    protected $breadcrumbs;
 
     /**
      * Do some initialization on startup of every action
-     *
-     * @return void
      */
     public function init()
     {
         parent::init();
-        $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_'
-            . $this->_request->getParam('action');
-        $this->_redirector = $this->_helper->getHelper('redirector');
-        $this->_flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $this->view->flashMessenger = $this->_flashMessenger;
-        $this->_breadcrumbs = $this->_helper->getHelper('breadcrumbs');
+        $this->view->title          = $this->_request->getModuleName() . '_'
+            . $this->_request->getParam('controller') . '_' . $this->_request->getParam('action');
+        $this->redirector           = $this->_helper->getHelper('redirector');
+        $this->flashMessenger       = $this->_helper->getHelper('FlashMessenger');
+        $this->view->flashMessenger = $this->flashMessenger;
+        $this->breadcrumbs          = $this->_helper->getHelper('breadcrumbs');
     }
 
     /**
      * Forward request to a different action.
      *
      * Sets the 'action' parameter so title key is correct.
-     * @return void
+     *
+     * @param string $action
      */
-    protected function _forwardToAction($action)
+    protected function forwardToAction($action)
     {
         $this->_request->setParam('action', $action);
         $this->_forward($action);
@@ -94,7 +86,7 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess
     public function moduleAccessDeniedAction()
     {
         // we are not allowed to access this module -- but why?
-        $identity = \Zend_Auth::getInstance()->getIdentity();
+        $identity = Zend_Auth::getInstance()->getIdentity();
 
         $errorcode = 'no_identity_error';
         if (! empty($identity)) {
@@ -102,11 +94,11 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess
         }
 
         // Forward to module auth
-        $this->_flashMessenger->addMessage(['level' => 'failure', 'message' => $errorcode]);
+        $this->flashMessenger->addMessage(['level' => 'failure', 'message' => $errorcode]);
 
         $returnParams = $this->_helper->returnParams();
 
-        $this->_redirector->gotoSimple('index', 'auth', 'default', $returnParams);
+        $this->redirector->gotoSimple('index', 'auth', 'default', $returnParams);
     }
 
     /**
@@ -117,7 +109,7 @@ class Application_Controller_Action extends Application_Controller_ModuleAccess
      * Script für die Action existiert, dann wird das Formular in der View Variable 'form' gespeichert und kann
      * im View Script verwendet werden.
      *
-     * @param $form
+     * @param Zend_Form $form
      *
      * TODO remove and use action helper directly
      */

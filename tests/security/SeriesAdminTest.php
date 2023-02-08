@@ -34,15 +34,19 @@ use Opus\Common\UserRole;
 
 class SeriesAdminTest extends ControllerTestCase
 {
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation', 'view', 'navigation', 'mainMenu'];
 
+    /** @var string */
     private $userName = 'seriesadminuser';
 
+    /** @var string */
     private $roleName = 'test-seriesadmin';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->enableSecurity();
@@ -62,7 +66,7 @@ class SeriesAdminTest extends ControllerTestCase
         $this->loginUser($this->userName, 'seriesadminpwd');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->logoutUser();
         $this->restoreSecuritySetting();

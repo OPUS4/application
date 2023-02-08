@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,24 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Form_Decorator
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * If there is no label defined nothing is rendered in order to avoid empty LABEL-tags.
  */
-class Application_Form_Decorator_LabelNotEmpty extends \Zend_Form_Decorator_Label
+class Application_Form_Decorator_LabelNotEmpty extends Zend_Form_Decorator_Label
 {
-
+    /**
+     * @param string $content
+     * @return string
+     */
     public function render($content)
     {
         $label = $this->getElement()->getLabel();
 
-        if (! is_null($label) && trim($label) !== 0) {
+        if ($label !== null && strlen(trim($label)) !== 0) {
             return parent::render($content);
         } else {
             return $content;

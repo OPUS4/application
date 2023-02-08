@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Security
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,9 +34,8 @@
  *
  * This class is needed because the passwords in the database are hashed.
  */
-class Application_Security_HttpAuthAdapter extends \Zend_Auth_Adapter_Http
+class Application_Security_HttpAuthAdapter extends Zend_Auth_Adapter_Http
 {
-
     /**
      * Compares two string hashing the second string.
      *
@@ -48,9 +45,11 @@ class Application_Security_HttpAuthAdapter extends \Zend_Auth_Adapter_Http
      * @param string $a Password from database
      * @param string $b Password from request
      * @return bool true - if strings are identical
+     * @phpcs:disable PSR2.Methods.MethodDeclaration
      */
     protected function _secureStringCompare($a, $b)
     {
+        // @phpcs:enable
         return parent::_secureStringCompare($a, sha1($b));
     }
 }

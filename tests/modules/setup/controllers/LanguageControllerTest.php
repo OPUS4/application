@@ -25,11 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -41,12 +37,13 @@ use Opus\Translate\Dao;
  */
 class Setup_LanguageControllerTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'all';
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $database = $this->getTranslationManager();
         $database->removeAll();
@@ -82,14 +79,14 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $translations = [
             'de' => 'Gehe zu (Edited)',
-            'en' => 'Jump to (Edited)'
+            'en' => 'Jump to (Edited)',
         ];
 
         $key = 'admin-actionbox-goto-section';
 
         $post = [
             'adminactionboxgotosection' => $translations,
-            'Save' => 'Save'
+            'Save'                      => 'Save',
         ];
 
         $request = $this->getRequest();
@@ -122,9 +119,9 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $request->setMethod('POST');
         $request->setPost([
             'modules' => 'all',
-            'scope' => 'all',
-            'state' => 'all',
-            'show' => 'Anzeigen'
+            'scope'   => 'all',
+            'state'   => 'all',
+            'show'    => 'Anzeigen',
         ]);
 
         $this->dispatch('/setup/language');
@@ -149,8 +146,8 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $request->setMethod('POST');
         $request->setPost([
             'modules' => 'all',
-            'scope' => 'all',
-            'state' => 'all'
+            'scope'   => 'all',
+            'state'   => 'all',
         ]);
 
         $this->dispatch('/setup/language/index');
@@ -166,8 +163,8 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $request->setMethod('POST');
         $request->setPost([
             'modules' => 'account',
-            'scope' => 'keys',
-            'state' => 'edited'
+            'scope'   => 'keys',
+            'state'   => 'edited',
         ]);
 
         $this->dispatch('/setup/language');
@@ -182,7 +179,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $manager->setTranslation('default_add', [
             'en' => 'AddTest',
-            'de' => 'NeuTest'
+            'de' => 'NeuTest',
         ]);
 
         $this->dispatch('/setup/language/index/state/edited');
@@ -196,7 +193,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $manager->setTranslation('custom_test_key', [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ]);
 
         $this->dispatch('/setup/language/index/state/added');
@@ -213,12 +210,12 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $dao->setTranslation($key1, [
             'en' => 'Test key',
-            'de' => 'Testschluessel'
+            'de' => 'Testschluessel',
         ]);
 
         $dao->setTranslation($key2, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ]);
 
         $this->dispatch('/setup/language/index/scope/key/search/key/state/added');
@@ -237,12 +234,12 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $dao->setTranslation($key1, [
             'en' => 'Test key',
-            'de' => 'Testschluessel'
+            'de' => 'Testschluessel',
         ]);
 
         $dao->setTranslation($key2, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ]);
 
         $this->dispatch('/setup/language/index/scope/text/search/key/state/added');
@@ -260,7 +257,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $manager->setTranslation('default_add', [
             'en' => 'AddEdited',
-            'de' => 'AnlegenEdited'
+            'de' => 'AnlegenEdited',
         ]);
 
         $this->dispatch('/setup/language/index/modules/default');
@@ -282,7 +279,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $manager->setTranslation('customtestkey', [
             'en' => 'CustomKey',
-            'de' => 'Testschluessel'
+            'de' => 'Testschluessel',
         ], 'home');
 
         $this->dispatch('/setup/language/index/modules/home');
@@ -314,13 +311,13 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $request->setMethod('POST');
         $request->setPost([
-            'Key' => 'customkey',
-            'KeyModule' => 'home',
+            'Key'         => 'customkey',
+            'KeyModule'   => 'home',
             'Translation' => [
                 'en' => 'English',
-                'de' => 'Deutsch'
+                'de' => 'Deutsch',
             ],
-            'Save' => 'Speichern'
+            'Save'        => 'Speichern',
         ]);
 
         $this->dispatch('/setup/language/add');
@@ -332,13 +329,13 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $translation = $manager->getTranslation('customkey');
 
         $this->assertEquals([
-            'key' => 'customkey',
-            'module' => 'home',
+            'key'          => 'customkey',
+            'module'       => 'home',
             'translations' => [
                 'en' => 'English',
-                'de' => 'Deutsch'
+                'de' => 'Deutsch',
             ],
-            'state' => 'added'
+            'state'        => 'added',
         ], $translation);
     }
 
@@ -348,13 +345,13 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $request->setMethod('POST');
         $request->setPost([
-            'Key' => 'customkey',
-            'KeyModule' => 'account',
+            'Key'         => 'customkey',
+            'KeyModule'   => 'account',
             'Translation' => [
                 'en' => 'English',
-                'de' => 'Deutsch'
+                'de' => 'Deutsch',
             ],
-            'Cancel' => 'Abbrechen'
+            'Cancel'      => 'Abbrechen',
         ]);
 
         $this->dispatch('/setup/language/add');
@@ -380,7 +377,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $database->setTranslation('default_add', [
             'en' => 'AddEdited',
-            'de' => 'HinzufuegenEdited'
+            'de' => 'HinzufuegenEdited',
         ]);
 
         $this->dispatch('/setup/language/delete/key/default_add');
@@ -402,15 +399,15 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $database->setTranslation('default_add', [
             'en' => 'AddTest',
-            'de' => 'AnlegenTest'
+            'de' => 'AnlegenTest',
         ]);
 
         $request = $this->getRequest();
 
         $request->setMethod('POST');
         $request->setPost([
-            'Id' => 'default_add',
-            'ConfirmNo' => 'No'
+            'Id'        => 'default_add',
+            'ConfirmNo' => 'No',
         ]);
 
         $this->dispatch('/setup/language/delete');
@@ -421,7 +418,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'AddTest',
-            'de' => 'AnlegenTest'
+            'de' => 'AnlegenTest',
         ], $translation);
     }
 
@@ -431,15 +428,15 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $database->setTranslation('default_add', [
             'en' => 'AddTest',
-            'de' => 'AnlegenTest'
+            'de' => 'AnlegenTest',
         ]);
 
         $request = $this->getRequest();
 
         $request->setMethod('POST');
         $request->setPost([
-            'Id' => 'default_add',
-            'ConfirmYes' => 'Yes'
+            'Id'         => 'default_add',
+            'ConfirmYes' => 'Yes',
         ]);
 
         $this->assertNotNull($database->getTranslation('default_add'));
@@ -463,7 +460,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $manager->setTranslation($key, [
             'en' => 'test key',
-            'de' => 'Testschluessel'
+            'de' => 'Testschluessel',
         ]);
 
         $this->dispatch("/setup/language/delete/key/$key");
@@ -483,15 +480,15 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $dao->setTranslation($key, [
             'en' => 'test key',
-            'de' => 'Testschluessel'
+            'de' => 'Testschluessel',
         ]);
 
         $request = $this->getRequest();
 
         $request->setMethod('POST');
         $request->setPost([
-            'Id' => $key,
-            'ConfirmYes' => 'Ja'
+            'Id'         => $key,
+            'ConfirmYes' => 'Ja',
         ]);
 
         $this->dispatch('/setup/language/delete');
@@ -509,15 +506,15 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $dao->setTranslation($key, [
             'en' => 'test key',
-            'de' => 'Testschluessel'
+            'de' => 'Testschluessel',
         ]);
 
         $request = $this->getRequest();
 
         $request->setMethod('POST');
         $request->setPost([
-            'Id' => $key,
-            'ConfirmNo' => 'Nein'
+            'Id'        => $key,
+            'ConfirmNo' => 'Nein',
         ]);
 
         $this->dispatch('/setup/language/delete');
@@ -526,7 +523,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'test key',
-            'de' => 'Testschluessel'
+            'de' => 'Testschluessel',
         ], $dao->getTranslation($key));
     }
 
@@ -548,12 +545,12 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $database->setTranslation('default_add', [
             'en' => 'CreateTest',
-            'de' => 'AnlegenTest'
+            'de' => 'AnlegenTest',
         ]);
 
         $database->setTranslation('home_menu_label', [
             'en' => 'HomeTest',
-            'de' => 'StartseiteTest'
+            'de' => 'StartseiteTest',
         ]);
 
         $this->assertNotNull($database->getTranslation('default_add'));
@@ -563,8 +560,8 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $request->setMethod('POST');
         $request->setPost([
-            'DeleteAll' => 'all',
-            'ConfirmYes' => 'Yes'
+            'DeleteAll'  => 'all',
+            'ConfirmYes' => 'Yes',
         ]);
 
         $this->dispatch('/setup/language/deleteall');
@@ -580,12 +577,12 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $database->setTranslation('default_add', [
             'en' => 'CreateTest',
-            'de' => 'AnlegenTest'
+            'de' => 'AnlegenTest',
         ]);
 
         $database->setTranslation('home_menu_label', [
             'en' => 'HomeTest',
-            'de' => 'StartseiteTest'
+            'de' => 'StartseiteTest',
         ]);
 
         $this->assertNotNull($database->getTranslation('default_add'));
@@ -595,8 +592,8 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $request->setMethod('POST');
         $request->setPost([
-            'DeleteAll' => 'filter',
-            'ConfirmYes' => 'Yes'
+            'DeleteAll'  => 'filter',
+            'ConfirmYes' => 'Yes',
         ]);
 
         $this->dispatch('/setup/language/deleteall/search/add');
@@ -613,7 +610,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $dao->setTranslation($key, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ]);
 
         $request = $this->getRequest();
@@ -621,7 +618,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $request->setMethod('POST');
         $request->setPost([
             'DeleteAll' => 'all',
-            'ConfirmNo' => 'No'
+            'ConfirmNo' => 'No',
         ]);
 
         $this->dispatch('/setup/language/deleteall');
@@ -639,12 +636,12 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $request->setMethod('POST');
         $request->setPost([
-            'Id' => $key,
+            'Id'          => $key,
             'Translation' => [
                 'en' => 'SitelinksEdited',
-                'de' => 'SitelinksEdited'
+                'de' => 'SitelinksEdited',
             ],
-            'Save' => 'Speichern'
+            'Save'        => 'Speichern',
         ]);
 
         $this->dispatch('/setup/language/edit');
@@ -658,7 +655,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'SitelinksEdited',
-            'de' => 'SitelinksEdited'
+            'de' => 'SitelinksEdited',
         ], $translation);
     }
 
@@ -670,12 +667,12 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $request->setMethod('POST');
         $request->setPost([
-            'Id' => $key,
+            'Id'          => $key,
             'Translation' => [
                 'en' => 'CRIS-LinkEdited',
-                'de' => 'CRIS-LinkEdited'
+                'de' => 'CRIS-LinkEdited',
             ],
-            'Save' => 'Speichern'
+            'Save'        => 'Speichern',
         ]);
 
         $this->dispatch('/setup/language/edit');
@@ -689,7 +686,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'CRIS-LinkEdited',
-            'de' => 'CRIS-LinkEdited'
+            'de' => 'CRIS-LinkEdited',
         ], $translation);
     }
 
@@ -702,20 +699,20 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $database->setTranslation($oldKey, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], 'crawlers');
 
         $request = $this->getRequest();
         $request->setMethod('POST');
         $request->setPost([
-            'Id' => $oldKey,
-            'Key' => $newKey,
-            'KeyModule' => 'crawlers',
+            'Id'          => $oldKey,
+            'Key'         => $newKey,
+            'KeyModule'   => 'crawlers',
             'Translation' => [
                 'en' => 'English',
-                'de' => 'Deutsch'
+                'de' => 'Deutsch',
             ],
-            'Save' => 'Speichern'
+            'Save'        => 'Speichern',
         ]);
 
         $this->dispatch('/setup/language/edit');
@@ -725,7 +722,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $this->assertNull($database->getTranslation($oldKey));
         $this->assertEquals([
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], $database->getTranslation($newKey));
     }
 
@@ -737,7 +734,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $dao->setTranslation($key, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], 'home');
 
         $manager = new Application_Translate_TranslationManager();
@@ -753,14 +750,14 @@ class Setup_LanguageControllerTest extends ControllerTestCase
         $request = $this->getRequest();
         $request->setMethod('POST');
         $request->setPost([
-            'Id' => $key,
-            'Key' => $key,
-            'KeyModule' => 'admin',
+            'Id'          => $key,
+            'Key'         => $key,
+            'KeyModule'   => 'admin',
             'Translation' => [
                 'en' => 'English',
-                'de' => 'Deutsch'
+                'de' => 'Deutsch',
             ],
-            'Save' => 'Speichern'
+            'Save'        => 'Speichern',
         ]);
 
         $this->dispatch('/setup/language/edit');
@@ -798,7 +795,7 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $dao->setTranslation('customtestkey', [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], 'crawlers');
 
         $this->dispatch('/setup/language/export/filename/opus.tmx/modules/crawlers');
@@ -830,12 +827,12 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $dao->setTranslation('testkey1', [
             'en' => 'Test key 1',
-            'de' => 'Testschluessel 1'
+            'de' => 'Testschluessel 1',
         ]);
 
         $dao->setTranslation('testkey2', [
             'en' => 'Test key 2',
-            'de' => 'Testschluessel 2'
+            'de' => 'Testschluessel 2',
         ], 'crawlers');
 
         $this->dispatch('/setup/language/export/filename/opus.tmx');
@@ -857,12 +854,12 @@ class Setup_LanguageControllerTest extends ControllerTestCase
 
         $dao->setTranslation('testkey1', [
             'en' => 'Test key 1',
-            'de' => 'Testschluessel 1'
+            'de' => 'Testschluessel 1',
         ]);
 
         $dao->setTranslation('testkey2', [
             'en' => 'Test key 2',
-            'de' => 'Testschluessel 2'
+            'de' => 'Testschluessel 2',
         ], 'crawlers');
 
         $this->dispatch('/setup/language/export/filename/opus.tmx/unmodified/true');

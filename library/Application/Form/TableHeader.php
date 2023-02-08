@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,29 +24,31 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Formular fuer das Rendern eines Tabellenkopfes.
- *
- * @category    Application
- * @package     Application_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Form_TableHeader extends Application_Form_Abstract
 {
+    /** @var array */
+    private $columns;
 
-    private $_columns = null;
-
+    /**
+     * @param array      $columns
+     * @param array|null $options
+     * @throws Application_Exception
+     */
     public function __construct($columns, $options = null)
     {
         if (! is_array($columns)) {
             throw new Application_Exception(__METHOD__ . ' Parameter \'columns\' must be array.');
         }
 
-        $this->_columns = $columns;
+        $this->columns = $columns;
 
         parent::__construct($options);
     }
@@ -56,36 +59,50 @@ class Application_Form_TableHeader extends Application_Form_Abstract
 
         $this->setDecorators(
             [
-            ['ViewScript', ['viewScript' => 'tableheader.phtml']]
+                ['ViewScript', ['viewScript' => 'tableheader.phtml']],
             ]
         );
     }
 
+    /**
+     * @param int $index
+     * @return string|null
+     */
     public function getColumnLabel($index)
     {
-        if (isset($this->_columns[$index]) && isset($this->_columns[$index]['label'])) {
-            return $this->_columns[$index]['label'];
+        if (isset($this->columns[$index]) && isset($this->columns[$index]['label'])) {
+            return $this->columns[$index]['label'];
         } else {
             return null;
         }
     }
 
+    /**
+     * @param int $index
+     * @return string
+     */
     public function getColumnClass($index)
     {
-        if (isset($this->_columns[$index]) && isset($this->_columns[$index]['class'])) {
-            return $this->_columns[$index]['class'];
+        if (isset($this->columns[$index]) && isset($this->columns[$index]['class'])) {
+            return $this->columns[$index]['class'];
         } else {
             return '';
         }
     }
 
+    /**
+     * @return int
+     */
     public function getColumnCount()
     {
-        return count($this->_columns);
+        return count($this->columns);
     }
 
+    /**
+     * @return array
+     */
     public function getColumns()
     {
-        return $this->_columns;
+        return $this->columns;
     }
 }

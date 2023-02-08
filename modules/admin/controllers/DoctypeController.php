@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,56 +24,54 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Dieser Controller zeigt alle Dokumenttypen an und deren Validierungsstatus (einschließlich möglicher
  * Fehlermeldungen).
- *
- * @category    Application
- * @package     Module_Admin
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Admin_DoctypeController extends Application_Controller_Action
 {
-
-    private $_documentTypesHelper;
+    /** @var Application_Controller_Action_Helper_DocumentTypes */
+    private $documentTypesHelper;
 
     public function init()
     {
         parent::init();
-        $this->_documentTypesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $this->documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
     }
 
     public function indexAction()
     {
-        $validationArray = $this->_documentTypesHelper->validateAll();
+        $validationArray = $this->documentTypesHelper->validateAll();
         ksort($validationArray);
-        $this->view->content = $validationArray;
-        $this->view->activeDoctypes = $this->_documentTypesHelper->getDocumentTypes();
-        $this->view->title = $this->view->translate('admin_doctype_index');
-        $this->view->numDocs = sizeof($validationArray);
-        $this->view->numActiveDocs = sizeof($this->view->activeDoctypes);
+        $this->view->content        = $validationArray;
+        $this->view->activeDoctypes = $this->documentTypesHelper->getDocumentTypes();
+        $this->view->title          = $this->view->translate('admin_doctype_index');
+        $this->view->numDocs        = count($validationArray);
+        $this->view->numActiveDocs  = count($this->view->activeDoctypes);
     }
 
     public function showAction()
     {
         $doctype = $this->getRequest()->getParam('doctype');
-        if (! $this->_documentTypesHelper->isValid($doctype)) {
-            return $this->_helper->Redirector->redirectTo(
+        if (! $this->documentTypesHelper->isValid($doctype)) {
+            $this->_helper->Redirector->redirectTo(
                 'index',
                 ['failure' => 'admin_doctype_invalid'],
                 'doctype',
                 'admin'
             );
+            return;
         }
         $this->view->doctypeName = $doctype . ':';
-        $this->_documentTypesHelper->validate($doctype);
-        $errors = $this->_documentTypesHelper->getErrors();
+        $this->documentTypesHelper->validate($doctype);
+        $errors                 = $this->documentTypesHelper->getErrors();
         $this->view->errorArray = $errors[$doctype];
-        $this->view->title = $doctype;
-        $this->_breadcrumbs->setLabelFor('admin_doctype_show', $doctype);
+        $this->view->title      = $doctype;
+        $this->breadcrumbs->setLabelFor('admin_doctype_show', $doctype);
     }
 }

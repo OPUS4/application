@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,8 +26,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -41,16 +40,15 @@ use Opus\Common\Log;
  *
  * TODO implement as Controller Helper (nicht soviel static)
  */
-class Application_Controller_Action_Helper_Files extends \Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_Files extends Zend_Controller_Action_Helper_Abstract
 {
-
     /**
      * Lists files in import folder. If $ignoreAllowedFiletypes is set to true
      * all files will be returned. Otherwise only files of allowed types will
      * be considered.
      *
-     * @param directory $folder
-     * @param boolean $ignoreAllowedTypes
+     * @param string $folder
+     * @param bool   $ignoreAllowedTypes
      * @return array
      */
     public function listFiles($folder, $ignoreAllowedTypes = false)
@@ -65,8 +63,8 @@ class Application_Controller_Action_Helper_Files extends \Zend_Controller_Action
                 array_push(
                     $result,
                     [
-                    'name' => $file->getFilename(),
-                    'size' => number_format($file->getSize() / 1024.0, 2, '.', ''),
+                        'name' => $file->getFilename(),
+                        'size' => number_format($file->getSize() / 1024.0, 2, '.', ''),
                     ]
                 );
             }
@@ -74,6 +72,9 @@ class Application_Controller_Action_Helper_Files extends \Zend_Controller_Action
         return $result;
     }
 
+    /**
+     * @return false|string[]|null
+     */
     private function getAllowedFileTypes()
     {
         $config = Config::get();
@@ -87,14 +88,20 @@ class Application_Controller_Action_Helper_Files extends \Zend_Controller_Action
         return $allowed;
     }
 
+    /**
+     * @param DirectoryIterator $file
+     * @param bool              $ignoreAllowedTypes
+     * @return bool
+     * @throws Zend_Exception
+     */
     private function checkFile($file, $ignoreAllowedTypes)
     {
-        $log = Log::get();
+        $log        = Log::get();
         $logMessage = 'check for file: ' . $file->getPathname();
 
         if (! $ignoreAllowedTypes) {
-            $allowedFileTypes = Application_Controller_Action_Helper_Files::getAllowedFileTypes();
-            if (is_null($allowedFileTypes) || empty($allowedFileTypes)) {
+            $allowedFileTypes = self::getAllowedFileTypes();
+            if ($allowedFileTypes === null || empty($allowedFileTypes)) {
                 $log->debug('no filetypes are allowed');
                 return false;
             }

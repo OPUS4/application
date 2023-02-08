@@ -34,38 +34,92 @@ use Opus\Common\Log;
 
 class Publish_Model_FormElement
 {
-
+    /** @var Zend_Session_Namespace */
     public $session;
+
+    /** @var Zend_Session_Namespace */
     public $sessionOpus;
+
+    /** @var Zend_Form */
     public $form;
+
+    /** @var Log */
     public $log;
+
+    /** @var array */
     public $additionalFields = [];
+
+    /** @var array */
     public $postValues = [];
+
+    /** @var bool */
     public $isSubField = false;
+
+    /** @var array */
     public $listOptions = [];
+
     //private member variables
-    private $_elementName;
-    private $_label;
-    private $_required;                      //Bool
-    private $_formElement;
-    private $_datatype;
-    private $_collectionRole;
-    private $_collectionId;
-    private $_multiplicity;
-    private $_value;
-    private $_default = [];
-    private $_validationObject;              //Publish_Model_Validation
-    private $_validation = [];
-    private $_group;                         //Publish_Model_Group
-    private $_subFormElements = [];     //array of Zend_Form_Element
+
+    /** @var string|null */
+    private $elementName;
+
+    /** @var string|null  */
+    private $label;
+
+    /** @var bool */
+    private $required;
+
+    /** @var string */
+    private $formElement;
+
+    /** @var mixed|null */
+    private $datatype;
+
+    /** @var string */
+    private $collectionRole;
+
+    /** @var int */
+    private $collectionId;
+
+    /** @var int */
+    private $multiplicity;
+
+    /** @var string */
+    private $value;
+
+    /** @var array */
+    private $default = [];
+
+    /** @var Publish_Model_Validation */
+    private $validationObject;
+
+    /** @var array */
+    private $validation = [];
+
+    /** @var Publish_Model_DisplayGroup */
+    private $group;
+
+    /** @var Zend_Form_Element[] */
+    private $subFormElements = [];
 
     //Constants
-    const FIRST = "FirstName";
-    const LAST = "LastName";
-    const VALUE = "Value";
-    const LANG = "Language";
-    const NR = "Number";
+    public const FIRST = "FirstName";
+    public const LAST  = "LastName";
+    public const VALUE = "Value";
+    public const LANG  = "Language";
+    public const NR    = "Number";
 
+    /**
+     * @param Publish_Form_PublishingSecond $form
+     * @param string|null                   $name
+     * @param bool|null                     $required
+     * @param bool|null                     $formElement
+     * @param string|null                   $datatype
+     * @param int|null                      $multiplicity
+     * @throws Zend_Exception
+     *
+     * // TODO BUG parameter definition like int|null
+     */
     public function __construct(
         $form,
         $name = null,
@@ -74,51 +128,55 @@ class Publish_Model_FormElement
         $datatype = null,
         $multiplicity = null
     ) {
-        $this->session = new \Zend_Session_Namespace('Publish');
-        $this->sessionOpus = new \Zend_Session_Namespace();
-        $this->log = Log::get();
-        $this->form = $form;
+        $this->session     = new Zend_Session_Namespace('Publish');
+        $this->sessionOpus = new Zend_Session_Namespace();
+        $this->log         = Log::get();
+        $this->form        = $form;
 
-        $this->_elementName = $name;
-        $this->_label = $name;
+        $this->elementName = $name;
+        $this->label       = $name;
 
-        $this->_required = $required;
+        $this->required = $required;
 
-        $this->_formElement = strtolower($formElement);
-        $this->_datatype = $datatype;
-        $this->_multiplicity = $multiplicity;
-        if (isset($this->_datatype)) {
+        $this->formElement  = $formElement !== null ? strtolower($formElement) : ''; // TODO PHP8
+        $this->datatype     = $datatype;
+        $this->multiplicity = $multiplicity;
+        if (isset($this->datatype)) {
             $this->initValidation();
         }
     }
 
     public function initValidation()
     {
-        $this->_validationObject = new Publish_Model_Validation(
-            $this->_datatype,
+        $this->validationObject = new Publish_Model_Validation(
+            $this->datatype,
             $this->sessionOpus,
-            $this->_collectionRole,
+            $this->collectionRole,
             $this->listOptions,
             $this->form->view
         );
-        $this->_validationObject->validate();
-        $this->_validation = $this->_validationObject->validator;
+        $this->validationObject->validate();
+        $this->validation = $this->validationObject->validator;
     }
 
+    /**
+     * @return Zend_Form
+     * @throws Zend_Form_Exception
+     */
     public function initGroup()
     {
         if ($this->isGroup()) {
             if ($this->isSubField === false) {
-                $this->_group = new Publish_Model_DisplayGroup(
-                    $this->_elementName,
+                $this->group = new Publish_Model_DisplayGroup(
+                    $this->elementName,
                     $this->form,
-                    $this->_multiplicity,
+                    $this->multiplicity,
                     $this->log,
                     $this->session
                 );
-                if (isset($this->_collectionRole)) {
-                    $this->_group->datatype = $this->_datatype;
-                    $this->_group->collectionIds[] = $this->_collectionId;
+                if (isset($this->collectionRole)) {
+                    $this->group->datatype        = $this->datatype;
+                    $this->group->collectionIds[] = $this->collectionId;
                 }
 
                 if ($this->isPersonElement()) {
@@ -137,40 +195,48 @@ class Publish_Model_FormElement
                     $this->addSubFormElement($this->transform());
                 }
 
-                $this->_group->setAdditionalFields($this->additionalFields);
-                $this->_group->setSubFields($this->_subFormElements);
-                if (isset($this->_collectionRole)) {
-                    $this->_group->makeBrowseGroup();
+                $this->group->setAdditionalFields($this->additionalFields);
+                $this->group->setSubFields($this->subFormElements);
+                if (isset($this->collectionRole)) {
+                    $this->group->makeBrowseGroup();
                 } else {
-                    $this->_group->makeDisplayGroup();
+                    $this->group->makeDisplayGroup();
                 }
             }
-            $displayGroup = $this->form->addDisplayGroup($this->_group->elements, $this->_group->label);
+            $displayGroup = $this->form->addDisplayGroup($this->group->elements, $this->group->label);
             $displayGroup->setDisableTranslator(true);
             return $displayGroup;
         }
     }
 
+    /**
+     * @return bool
+     */
     private function isGroup()
     {
         return $this->isTitleElement() ||
                 $this->isPersonElement() ||
                 $this->isSeriesElement() ||
                 $this->isSubjectUElement() ||
-                $this->_datatype == 'Collection' ||
-                $this->_multiplicity !== '1';
+                $this->datatype === 'Collection' ||
+                $this->multiplicity !== '1';
     }
 
+    /**
+     * @param string $workflow
+     * @return array|null
+     * @throws Zend_Exception
+     */
     private function implicitFields($workflow)
     {
         switch ($workflow) {
             case 'Person':
                 $fields = [];
-                $name = $this->_elementName . self::FIRST;
+                $name   = $this->elementName . self::FIRST;
 
                 //creates two subfields for first and last name
                 if (! $this->isElementPresent($name)) {
-                    $first = new Publish_Model_FormElement(
+                    $first             = new Publish_Model_FormElement(
                         $this->form,
                         $name,
                         false,
@@ -178,55 +244,53 @@ class Publish_Model_FormElement
                         'Person'
                     );
                     $first->isSubField = true;
-                    $first->setDefaultValue($this->_default, self::FIRST);
+                    $first->setDefaultValue($this->default, self::FIRST);
                     $elementFirst = $first->transform();
-                    $fields[] = $elementFirst;
+                    $fields[]     = $elementFirst;
                 }
 
-                $name = $this->_elementName . self::LAST;
+                $name = $this->elementName . self::LAST;
                 if (! $this->isElementPresent($name)) {
-                    $last = new Publish_Model_FormElement(
+                    $last             = new Publish_Model_FormElement(
                         $this->form,
                         $name,
-                        $this->_required,
+                        $this->required,
                         'text',
                         'Person'
                     );
                     $last->isSubField = false;
-                    $last->setDefaultValue($this->_default, self::LAST);
+                    $last->setDefaultValue($this->default, self::LAST);
                     $elementLast = $last->transform();
-                    $fields[] = $elementLast;
+                    $fields[]    = $elementLast;
                 }
 
                 return $fields;
-                break;
 
             case 'Series':
                 //creates a additional field for a number
-                $number = new Publish_Model_FormElement(
+                $number             = new Publish_Model_FormElement(
                     $this->form,
-                    $this->_elementName . self::NR,
-                    $this->_required,
+                    $this->elementName . self::NR,
+                    $this->required,
                     'text',
                     'SeriesNumber'
                 );
                 $number->isSubField = false;
-                $number->setDefaultValue($this->_default, self::NR);
+                $number->setDefaultValue($this->default, self::NR);
                 $elementNumber = $number->transform();
 
-                $select = new Publish_Model_FormElement(
+                $select             = new Publish_Model_FormElement(
                     $this->form,
-                    $this->_elementName,
-                    $this->_required,
+                    $this->elementName,
+                    $this->required,
                     'select',
                     'Series'
                 );
                 $select->isSubField = true;
-                $select->setDefaultValue($this->_default);
+                $select->setDefaultValue($this->default);
                 $element = $select->transform();
 
                 return [$elementNumber, $element];
-                break;
 
             case 'Subject':
             case 'Title':
@@ -235,16 +299,16 @@ class Publish_Model_FormElement
                     if ($this->isTextareaElement()) {
                         $value = new Publish_Model_FormElement(
                             $this->form,
-                            $this->_elementName,
-                            $this->_required,
+                            $this->elementName,
+                            $this->required,
                             'textarea',
                             'Title'
                         );
                     } else {
                         $value = new Publish_Model_FormElement(
                             $this->form,
-                            $this->_elementName,
-                            $this->_required,
+                            $this->elementName,
+                            $this->required,
                             'text',
                             'Title'
                         );
@@ -252,122 +316,148 @@ class Publish_Model_FormElement
                 } else {
                     $value = new Publish_Model_FormElement(
                         $this->form,
-                        $this->_elementName,
-                        $this->_required,
+                        $this->elementName,
+                        $this->required,
                         'text',
                         'Subject'
                     );
                 }
                 $value->isSubField = false;
-                $value->setDefaultValue($this->_default, self::VALUE);
+                $value->setDefaultValue($this->default, self::VALUE);
                 $elementValue = $value->transform();
 
                 // die Sprache ist nicht verpflichtend: da als Default-Option immer die Dokumentsprache angenommen wird
-                $lang = new Publish_Model_FormElement(
+                $lang             = new Publish_Model_FormElement(
                     $this->form,
-                    $this->_elementName . self::LANG,
+                    $this->elementName . self::LANG,
                     false,
                     'select',
                     'Language'
                 );
                 $lang->isSubField = true;
 
-                $lang->setDefaultValue($this->_default, self::LANG);
+                $lang->setDefaultValue($this->default, self::LANG);
                 $elementLang = $lang->transform();
 
                 return [$elementValue, $elementLang];
-                break;
         }
+
+        return null;
     }
 
+    /**
+     * @return bool
+     */
     private function isTitleElement()
     {
-        return $this->_datatype === 'Title';
+        return $this->datatype === 'Title';
     }
 
+    /**
+     * @return bool
+     */
     private function isSeriesElement()
     {
-        return $this->_datatype === 'Series';
+        return $this->datatype === 'Series';
     }
 
     /**
      * Subject field must have datatype "Subject"
-     * @return boolean
+     *
+     * @return bool
      */
     private function isSubjectElement()
     {
-        return $this->_datatype === 'Subject';
+        return $this->datatype === 'Subject';
     }
 
     /**
      * Subject field must have datatype "Subject" and can be a SWD or uncontrolled field (with or without languague)
-     * @return boolean
+     *
+     * @return bool
      */
     private function isSubjectUElement()
     {
-        return $this->_datatype === 'Subject' && ! (strstr($this->_elementName, 'Swd'));
+        return $this->datatype === 'Subject' && ! strstr($this->elementName, 'Swd');
     }
 
     /**
      * A Person field must have datatype "Person" or is one of the possible subfields of Person.
-     * @return type
+     *
+     * @return bool
      */
     private function isPersonElement()
     {
-        return $this->_datatype === 'Person'
-                || strstr($this->_elementName, 'Email')
-                || strstr($this->_elementName, 'Birth')
-                || strstr($this->_elementName, 'AcademicTitle');
+        return $this->datatype === 'Person'
+                || strstr($this->elementName, 'Email')
+                || strstr($this->elementName, 'Birth')
+                || strstr($this->elementName, 'AcademicTitle');
     }
 
+    /**
+     * @return bool
+     */
     private function isSelectElement()
     {
-        return $this->_formElement === 'select';
+        return $this->formElement === 'select';
     }
 
+    /**
+     * @return bool
+     */
     private function isTextareaElement()
     {
-        return $this->_formElement === 'textarea';
+        return $this->formElement === 'textarea';
     }
 
+    /**
+     * @param array $postValues
+     */
     public function setPostValues($postValues)
     {
         $this->postValues = $postValues;
     }
 
+    /**
+     * @param array $additionalFields
+     */
     public function setAdditionalFields($additionalFields)
     {
         $this->additionalFields = $additionalFields;
     }
 
+    /**
+     * @return Zend_Form_Element|null
+     * @throws Zend_Form_Exception
+     */
     public function transform()
     {
         if (isset($this->form)) {
             if (false === $this->isSelectElement()) {
-                $element = $this->form->createElement($this->_formElement, $this->_elementName);
+                $element = $this->form->createElement($this->formElement, $this->elementName);
                 $element->setDisableTranslator(true);
             } else {
                 $options = null;
-                if (is_null($this->listOptions) || empty($this->listOptions)) {
-                    $options = $this->_validationObject->selectOptions($this->_datatype);
+                if ($this->listOptions === null || empty($this->listOptions)) {
+                    $options = $this->validationObject->selectOptions($this->datatype);
                 } else {
                     $options = $this->listOptions;
                 }
 
-                if (is_null($options)) {
+                if ($options === null) {
                     //no options found in database / session / cache
-                    $element = $this->form->createElement('text', $this->_elementName);
+                    $element = $this->form->createElement('text', $this->elementName);
                     $element->setDisableTranslator(true);
-                    $element->setDescription('hint_no_selection_' . $this->_elementName);
+                    $element->setDescription('hint_no_selection_' . $this->elementName);
                     $element->setAttrib('disabled', true);
-                    $this->_required = false;
+                    $this->required = false;
                 } else {
                     $element = $this->showSelectField($options);
                 }
             }
 
-            $element->setRequired($this->_required);
-            if ($this->_required) {
+            $element->setRequired($this->required);
+            if ($this->required) {
                 $element->addValidator(
                     'NotEmpty',
                     true,
@@ -375,43 +465,48 @@ class Publish_Model_FormElement
                 );
             }
 
-            if (isset($this->_default[0]['value']) && ! empty($this->_default[0]['value'])) {
-                $element->setValue($this->_default[0]['value']);
+            if (isset($this->default[0]['value']) && ! empty($this->default[0]['value'])) {
+                $element->setValue($this->default[0]['value']);
                 $this->log->debug(
-                    "Value set to default for " . $this->_elementName . " => "
-                    . $this->_default[0]['value']
+                    'Value set to default for ' . $this->elementName . ' => '
+                    . $this->default[0]['value']
                 );
             }
 
-            if (isset($this->_default[0]['edit']) && $this->_default[0]['edit'] === 'no') {
+            if (isset($this->default[0]['edit']) && $this->default[0]['edit'] === 'no') {
                 $element->setAttrib('disabled', true);
                 $element->setRequired(false);
             }
-            $element->setLabel($this->_label);
-            if (! is_null($this->_validation)) {
-                if (is_array($this->_validation)) {
-                    $element->addValidators($this->_validation);
+            $element->setLabel($this->label);
+            if ($this->validation !== null) {
+                if (is_array($this->validation)) {
+                    $element->addValidators($this->validation);
                 } else {
-                    $element->addValidator($this->_validation);
+                    $element->addValidator($this->validation);
                 }
             }
 
             $element->setAttrib('datatype', $this->realDatatype($element));
 
-            if ($this->isSubField == true) {
+            if ($this->isSubField) {
                 $element->setAttrib('subfield', true);
             } else {
                 $element->setAttrib('subfield', false);
             }
 
-            if ($this->_datatype == 'CollectionLeaf') {
+            if ($this->datatype === 'CollectionLeaf') {
                 $element->setAttrib('collectionLeaf', true);
             }
 
             return $element;
         }
+
+        return null;
     }
 
+    /**
+     * @return string|null
+     */
     private function realDatatype()
     {
         if ($this->isPersonElement()) {
@@ -430,15 +525,22 @@ class Publish_Model_FormElement
             return 'Subject';
         }
 
-        return $this->_datatype;
+        return $this->datatype;
     }
 
+    /**
+     * @param array       $options
+     * @param string|null $datatype
+     * @param string|null $elementName
+     * @return Zend_Form_Element
+     * @throws Zend_Form_Exception
+     */
     private function showSelectField($options, $datatype = null, $elementName = null)
     {
         if (isset($elementName)) {
             $name = $elementName;
         } else {
-            $name = $this->_elementName;
+            $name = $this->elementName;
         }
         $element = $this->form->createElement('select', $name);
         $element->setDisableTranslator(true);
@@ -446,15 +548,16 @@ class Publish_Model_FormElement
         if (isset($datatype)) {
             $switchVar = $datatype;
         } else {
-            $switchVar = $this->_datatype;
+            $switchVar = $this->datatype;
         }
 
         // reorganize $options since Zend multiOptions does not accept integers as keys
         $reorgOptions = [];
         foreach ($options as $key => $value) {
             $reorgOptions[] = [
-                'key' => is_string($key) ? $key : strval($key),
-                'value' => $value];
+                'key'   => is_string($key) ? $key : strval($key),
+                'value' => $value,
+            ];
         }
 
         switch ($switchVar) {
@@ -462,7 +565,7 @@ class Publish_Model_FormElement
             case 'CollectionLeaf':
                 $element->setMultiOptions(
                     array_merge(
-                        ['' => $this->form->view->translate('choose_valid_'.$this->_collectionRole)],
+                        ['' => $this->form->view->translate('choose_valid_' . $this->collectionRole)],
                         $reorgOptions
                     )
                 );
@@ -478,7 +581,7 @@ class Publish_Model_FormElement
                 break;
 
             case 'Language':
-                if ($this->_elementName === 'Language') {
+                if ($this->elementName === 'Language') {
                     $element->setMultiOptions(
                         array_merge(
                             ['' => $this->form->view->translate('choose_valid_language')],
@@ -542,77 +645,108 @@ class Publish_Model_FormElement
         $this->form = $form;
     }
 
+    /**
+     * @return string|null
+     */
     public function getElementName()
     {
-        return $this->_elementName;
+        return $this->elementName;
     }
 
+    /**
+     * @param string $elementName
+     */
     public function setElementName($elementName)
     {
-        $this->_elementName = $elementName;
-        $this->_label = $elementName;
+        $this->elementName = $elementName;
+        $this->label       = $elementName;
     }
 
+    /**
+     * @return string
+     */
     public function getValue()
     {
-        return $this->_elementName;
+        return $this->elementName;
     }
 
+    /**
+     * @param string $value
+     */
     public function setValue($value)
     {
-        $this->_value = $value;
+        $this->value = $value;
     }
 
+    /**
+     * @return array
+     */
     public function getDefault()
     {
-        return $this->_default;
+        return $this->default;
     }
 
+    /**
+     * @param string $root
+     */
     public function setCollectionRole($root)
     {
-        $this->_collectionRole = $root;
+        $this->collectionRole = $root;
     }
 
+    /**
+     * @return string
+     */
     public function getCollectionRole()
     {
-        return $this->_collectionRole;
+        return $this->collectionRole;
     }
 
+    /**
+     * @param bool $setRoot
+     */
     public function setCurrentCollectionId($setRoot = false)
     {
         if (! $setRoot) {
-            $collectionRole = CollectionRole::fetchByName($this->_collectionRole);
-            if (! is_null($collectionRole)) {
+            $collectionRole = CollectionRole::fetchByName($this->collectionRole);
+            if ($collectionRole !== null) {
                 $rootCollection = $collectionRole->getRootCollection();
-                if (! is_null($rootCollection)) {
+                if ($rootCollection !== null) {
                     $collectionId = $rootCollection->getId();
                     $this->log->debug(
-                        "CollectionRoot: " . $this->_collectionRole . " * CollectionId: "
+                        "CollectionRoot: " . $this->collectionRole . " * CollectionId: "
                         . $collectionId
                     );
-                    $this->_collectionId = $collectionId;
+                    $this->collectionId = $collectionId;
                 }
             }
         }
     }
 
+    /**
+     * @return int
+     */
     public function getCurrentCollectionId()
     {
-        return $this->_collectionId;
+        return $this->collectionId;
     }
 
+    /**
+     * @param array       $defaultValue
+     * @param string|null $forValue
+     */
     public function setDefaultValue($defaultValue, $forValue = null)
     {
         if (isset($forValue)) {
             foreach ($defaultValue as $default) {
-                if ($default['for'] == $forValue) {
-                    $this->_default[] = $default;
+                if ($default['for'] === $forValue) {
+                    $this->default[] = $default;
                 }
             }
             return;
         }
 
-        if (! isset($this->_value) || is_null($this->_value)) {
+        if (! isset($this->value) || $this->value === null) {
             if (isset($defaultValue['value'])) {
                 //Date Field has be set to current date
                 if ($defaultValue['value'] === 'today') {
@@ -622,114 +756,169 @@ class Publish_Model_FormElement
                         $defaultValue['value'] = date('Y/m/d');
                     }
                 }
-                $this->_default[] = $defaultValue;
+                $this->default[] = $defaultValue;
             }
         }
     }
 
+    /**
+     * @return string|null
+     */
     public function getLabel()
     {
-        return $this->_label;
+        return $this->label;
     }
 
+    /**
+     * @param string $label
+     */
     public function setLabel($label)
     {
-        $this->_label = $label;
+        $this->label = $label;
     }
 
+    /**
+     * @param array $options
+     */
     public function setListOptions($options)
     {
         $this->listOptions = $options;
         $this->initValidation();
     }
 
+    /**
+     * @return int|null
+     */
     public function getMultiplicity()
     {
-        return $this->_multiplicity;
+        return $this->multiplicity;
     }
 
+    /**
+     * @param int $multiplicity
+     */
     public function setMultiplicity($multiplicity)
     {
-        $this->_multiplicity = $multiplicity;
+        $this->multiplicity = $multiplicity;
     }
 
+    /**
+     * @return string
+     */
     public function getFormElement()
     {
-        return $this->_formElement;
+        return $this->formElement;
     }
 
+    /**
+     * @param string $formElement
+     */
     public function setFormElement($formElement)
     {
-        $this->_formElement = strtolower($formElement);
+        $this->formElement = strtolower($formElement);
     }
 
+    /**
+     * @return string|null
+     */
     public function getDatatype()
     {
-        return $this->_datatype;
+        return $this->datatype;
     }
 
+    /**
+     * @param string $datatype
+     */
     public function setDatatype($datatype)
     {
-        $this->_datatype = $datatype;
-        if ($this->_datatype !== 'List') {
+        $this->datatype = $datatype;
+        if ($this->datatype !== 'List') {
             $this->initValidation();
         }
     }
 
+    /**
+     * @return bool|null
+     */
     public function getRequired()
     {
-        return $this->_required;
+        return $this->required;
     }
 
+    /**
+     * @param bool $required
+     */
     public function setRequired($required)
     {
-        $this->_required = $required;
+        $this->required = $required;
     }
 
+    /**
+     * @return array
+     */
     public function getValidator()
     {
-        return $this->_validation;
+        return $this->validation;
     }
 
+    /**
+     * @param array $validator
+     */
     public function setValidator($validator)
     {
-        $this->_validation = $validator;
+        $this->validation = $validator;
     }
 
+    /**
+     * @return Publish_Model_DisplayGroup
+     */
     public function getGroup()
     {
-        return $this->_group;
+        return $this->group;
     }
 
+    /**
+     * @param Publish_Model_DisplayGroup $group
+     */
     public function setGroup($group)
     {
-        $this->_group = $group;
+        $this->group = $group;
     }
 
+    /**
+     * @return Zend_Form_Element[]
+     */
     public function getSubFormElements()
     {
-        return $this->_subFormElements;
+        return $this->subFormElements;
     }
 
     /**
      * If elements are already present do not add again.
      *
-     * @param $subFormElements
+     * @param array $subFormElements
      */
     public function addSubFormElements($subFormElements)
     {
-        $this->_subFormElements = array_merge($subFormElements, $this->_subFormElements);
+        $this->subFormElements = array_merge($subFormElements, $this->subFormElements);
     }
 
+    /**
+     * @param Zend_Form_Element $subField
+     */
     public function addSubFormElement($subField)
     {
-        $this->_subFormElements[] = $subField;
+        $this->subFormElements[] = $subField;
     }
 
+    /**
+     * @param string $name
+     * @return bool
+     */
     protected function isElementPresent($name)
     {
-        if (is_array($this->_subFormElements)) {
-            foreach ($this->_subFormElements as $element) {
+        if (is_array($this->subFormElements)) {
+            foreach ($this->subFormElements as $element) {
                 if ($element->getLabel() === $name) {
                     return true;
                 }

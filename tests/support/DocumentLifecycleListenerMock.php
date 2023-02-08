@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DocumentInterface;
 use Opus\Common\Model\DocumentLifecycleListener;
 
 /**
@@ -37,10 +38,10 @@ use Opus\Common\Model\DocumentLifecycleListener;
  */
 class DocumentLifecycleListenerMock extends DocumentLifecycleListener
 {
-
     /**
      * Circumvents setting of ServerDateModified and ServerDatePublished for testing.
-     * @param $document
+     *
+     * @param DocumentInterface $document
      */
     public function preStore($document)
     {

@@ -6,37 +6,33 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          stopOnFailure="false"
-         processIsolation="false"
-         syntaxCheck="true">
+         processIsolation="false">
 
-    <testsuite name="scripts">
-        <directory>./scripts</directory>
-    </testsuite>
+    <testsuites>
+        <testsuite name="scripts">
+            <directory>./scripts</directory>
+        </testsuite>
 
-    <testsuite name="library">
-        <directory>./library</directory>
-    </testsuite>
+        <testsuite name="library">
+            <directory>./library</directory>
+        </testsuite>
 
-    <testsuite name="modules">
-        <directory>./modules</directory>
-        <exclude>./modules/admin</exclude>
-    </testsuite>
+        <testsuite name="modules">
+            <directory>./modules</directory>
+            <exclude>./modules/admin</exclude>
+        </testsuite>
 
-    <testsuite name="admin">
-        <directory>./modules/admin</directory>
-    </testsuite>
+        <testsuite name="admin">
+            <directory>./modules/admin</directory>
+        </testsuite>
 
-    <testsuite name="security">
-        <directory>./security</directory>
-    </testsuite>
+        <testsuite name="security">
+            <directory>./security</directory>
+        </testsuite>
+    </testsuites>
 
     <!-- Define directories/files filter for code coverage. -->
     <filter>
-        <!-- Per default, skip all files. -->
-        <blacklist>
-            <directory suffix=".php">..</directory>
-        </blacklist>
-
         <!-- Define directories to include. -->
         <whitelist>
             <directory suffix=".php">../modules</directory>

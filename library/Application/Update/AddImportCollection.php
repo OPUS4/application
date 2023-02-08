@@ -38,11 +38,6 @@ use Opus\Common\EnrichmentKey;
  */
 class Application_Update_AddImportCollection extends Application_Update_PluginAbstract
 {
-
-    /**
-     *
-     * @return mixed
-     */
     public function run()
     {
         // add enrichment keys for imports
@@ -57,11 +52,14 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
         $this->addCollection();
     }
 
+    /**
+     * @param string $name
+     */
     public function addEnrichmentKey($name)
     {
         $enrichmentKey = EnrichmentKey::fetchByName($name);
 
-        if (is_null($enrichmentKey)) {
+        if ($enrichmentKey === null) {
             $this->log("Creating enrichment key '$name' ... ");
             $enrichmentKey = EnrichmentKey::new();
             $enrichmentKey->setName($name);
@@ -73,7 +71,7 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
     {
         $collectionRole = CollectionRole::fetchByName('Import');
 
-        if (is_null($collectionRole)) {
+        if ($collectionRole === null) {
             $this->log("Creating collection role 'Import' ... ");
 
             $collectionRole = CollectionRole::new();
@@ -96,7 +94,7 @@ class Application_Update_AddImportCollection extends Application_Update_PluginAb
 
         $collection = $collectionRole->getCollectionByOaiSubset('import');
 
-        if (is_null($collection)) {
+        if ($collection === null) {
             $this->log("Creating collection 'import' ... ");
 
             $collection = Collection::new();

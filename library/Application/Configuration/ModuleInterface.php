@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Configuration
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,7 +34,6 @@
  */
 interface Application_Configuration_ModuleInterface
 {
-
     /**
      * Name of the module.
      *
@@ -58,14 +55,14 @@ interface Application_Configuration_ModuleInterface
     /**
      * Returns true if the module has been registered with a custom descriptor.
      *
-     * @return boolean
+     * @return bool
      */
     public function isRegistered();
 
     /**
      * Returns true if 'guest' has access to the module.
      *
-     * @return boolean
+     * @return bool
      */
     public function isPublic();
 
@@ -79,7 +76,7 @@ interface Application_Configuration_ModuleInterface
     /**
      * Returns true if the module can be configured.
      *
-     * @return boolean
+     * @return bool
      */
     public function isConfigurable();
 }

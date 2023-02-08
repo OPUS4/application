@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -30,15 +30,17 @@
  */
 
 use Opus\Common\Account;
+use Opus\Common\AccountInterface;
 
 class Admin_Form_AccountTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
+    /** @var AccountInterface */
     private $account;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -50,9 +52,9 @@ class Admin_Form_AccountTest extends ControllerTestCase
         $this->account = $user;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        if (! is_null($this->account)) {
+        if ($this->account !== null) {
             $this->account->delete();
         }
 
@@ -114,10 +116,10 @@ class Admin_Form_AccountTest extends ControllerTestCase
         $this->assertNotNull($form);
 
         $postData = [
-            'username' => 'admin',
-            'roleguest' => '1',
-            'password' => 'notchanged',
-            'confirmPassword' => 'notchanged'
+            'username'        => 'admin',
+            'roleguest'       => '1',
+            'password'        => 'notchanged',
+            'confirmPassword' => 'notchanged',
         ];
 
         $this->assertFalse($form->isValid($postData));
@@ -132,10 +134,10 @@ class Admin_Form_AccountTest extends ControllerTestCase
         $this->assertNotNull($form);
 
         $postData = [
-            'username' => 'newuser',
-            'roleguest' => '1',
-            'password' => 'notchanged',
-            'confirmPassword' => 'notchanged'
+            'username'        => 'newuser',
+            'roleguest'       => '1',
+            'password'        => 'notchanged',
+            'confirmPassword' => 'notchanged',
         ];
 
         $this->assertTrue($form->isValid($postData));
@@ -151,11 +153,11 @@ class Admin_Form_AccountTest extends ControllerTestCase
         $this->assertEquals('user', $form->getElement('username')->getValue());
 
         $postData = [
-            'username' => 'user',
-            'oldLogin' => 'user', // added by AccountController based on ID
-            'roleguest' => '1',
-            'password' => 'notchanged',
-            'confirmPassword' => 'notchanged'
+            'username'        => 'user',
+            'oldLogin'        => 'user', // added by AccountController based on ID
+            'roleguest'       => '1',
+            'password'        => 'notchanged',
+            'confirmPassword' => 'notchanged',
         ];
 
         $this->assertTrue($form->isValid($postData));
@@ -166,10 +168,10 @@ class Admin_Form_AccountTest extends ControllerTestCase
         $form = new Admin_Form_Account();
 
         $postData = [
-            'username' => 'newaccount',
-            'roleguest' => '1',
-            'password' => 'password',
-            'confirmPassword' => 'different'
+            'username'        => 'newaccount',
+            'roleguest'       => '1',
+            'password'        => 'password',
+            'confirmPassword' => 'different',
         ];
 
         $this->assertFalse($form->isValid($postData));
@@ -182,11 +184,11 @@ class Admin_Form_AccountTest extends ControllerTestCase
         $form = new Admin_Form_Account();
 
         $postData = [
-            'username' => 'newaccount',
-            'roleguest' => '1',
-            'email' => 'notAnEmail',
-            'password' => 'password',
-            'confirmPassword' => 'password'
+            'username'        => 'newaccount',
+            'roleguest'       => '1',
+            'email'           => 'notAnEmail',
+            'password'        => 'password',
+            'confirmPassword' => 'password',
         ];
 
         $this->assertFalse($form->isValid($postData));
@@ -200,11 +202,11 @@ class Admin_Form_AccountTest extends ControllerTestCase
 
         $form->populate([
             'username' => 'test',
-            'roles' => [
+            'roles'    => [
                 'administrator' => '1',
-                'docsadmin' => '0',
-                'jobaccess' => '1'
-            ]
+                'docsadmin'     => '0',
+                'jobaccess'     => '1',
+            ],
         ]);
 
         $this->assertEquals('test', $form->getElementValue('username'));
@@ -224,7 +226,7 @@ class Admin_Form_AccountTest extends ControllerTestCase
         $form = new Admin_Form_Account();
 
         $postData = [
-            'username' => 'newaccount'
+            'username' => 'newaccount',
         ];
 
         $this->assertFalse($form->isValid($postData));

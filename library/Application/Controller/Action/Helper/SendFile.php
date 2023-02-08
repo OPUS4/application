@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,48 +25,48 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2011-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Controller_Action_Helper_SendFile extends Application_Controller_Action_Helper_Abstract
 {
+    public const FPASSTHRU = 'fpassthru';
 
-    const FPASSTHRU = 'fpassthru';
-
-    const XSENDFILE = 'xsendfile';
+    public const XSENDFILE = 'xsendfile';
 
     /**
      * This method to call when we use   $this->_helper->SendFile(...)   and
      * forwards to method Application_Controller_Action_Helper_SendFile::sendFile
      *
      * @see Application_Controller_Action_Helper_SendFile::sendFile
+     *
+     * @param string $file
+     * @param string $method
+     * @param bool   $mustResend
      */
     public function direct($file, $method = self::FPASSTHRU, $mustResend = false)
     {
-        return $this->sendFile($file, $method, $mustResend);
+        $this->sendFile($file, $method, $mustResend);
     }
 
     /**
      * This method to call when we use   $this->_helper->SendFile(...)
      *
-     * @param string  $file        Absoulte filename of file to send.
-     * @param string  $method      defaults to self::FPASSTHRU, use self::XSENDFILE for X-Sendfile
-     * @param boolean $mustResend Ignore "if-modified-since" header, defaults to false.
-     * @return void
+     * @param string $file        Absoulte filename of file to send.
+     * @param string $method      defaults to self::FPASSTHRU, use self::XSENDFILE for X-Sendfile
+     * @param bool   $mustResend Ignore "if-modified-since" header, defaults to false.
      */
     public function sendFile($file, $method = self::FPASSTHRU, $mustResend = false)
     {
         $response = $this->getResponse();
         if (! $response->canSendHeaders()) {
-            throw new \Exception("Cannot send headers");
+            throw new Exception("Cannot send headers");
         }
 
         $file = realpath($file);
         if (! is_readable($file)) {
-            throw new \Exception("File is not readable");
+            throw new Exception("File is not readable");
         }
 
         $modified = filemtime($file);
@@ -87,7 +87,7 @@ class Application_Controller_Action_Helper_SendFile extends Application_Controll
      * modified.  Return false otherwise.
      *
      * @param  string $modified  Timestamp string
-     * @return boolean
+     * @return bool
      */
     public function notModifiedSince($modified)
     {
@@ -118,7 +118,6 @@ class Application_Controller_Action_Helper_SendFile extends Application_Controll
      * Delivers the file via function "fpassthru()".
      *
      * @param string $file
-     *
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
     private function sendFileViaFpassthru($file)
@@ -128,7 +127,7 @@ class Application_Controller_Action_Helper_SendFile extends Application_Controll
 
         $logger = $this->getLogger();
 
-        if (! is_null($logger)) {
+        if ($logger !== null) {
             $content = ob_get_contents();
             if (! empty($content)) {
                 $logger->err($content);

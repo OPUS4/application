@@ -38,13 +38,9 @@ use Opus\Common\DocumentInterface;
  * das Feld "Subject" im Dokument zu aktualisieren.
  *
  * TODO Umgang mit alten Schlagwörtern mit unbekanntem Typ (siehe auch OPUSVIER-2604)
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
 {
-
     /**
      * Initialisiert Formular und fuegt Unterformulare fuer Schlagworttypen hinzu.
      */
@@ -55,8 +51,13 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
         $this->addSubForm(
             new Admin_Form_Document_SubjectType(
                 'swd',
-                ['columns' => [
-                [], ['label' => 'Opus_Subject_Value'], ['label' => 'ExternalKey']]]
+                [
+                    'columns' => [
+                        [],
+                        ['label' => 'Opus_Subject_Value'],
+                        ['label' => 'ExternalKey'],
+                    ],
+                ]
             ),
             'Swd'
         );
@@ -64,8 +65,13 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
         $this->addSubForm(
             new Admin_Form_Document_SubjectType(
                 'psyndex',
-                ['columns' => [
-                [], ['label' => 'Opus_Subject_Value'], ['label' => 'ExternalKey']]]
+                [
+                    'columns' => [
+                        [],
+                        ['label' => 'Opus_Subject_Value'],
+                        ['label' => 'ExternalKey'],
+                    ],
+                ]
             ),
             'Psyndex'
         );
@@ -73,8 +79,13 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
         $this->addSubForm(
             new Admin_Form_Document_SubjectType(
                 'uncontrolled',
-                ['columns' => [
-                [], ['label' => 'Opus_Subject_Value'], ['label' => 'ExternalKey']]]
+                [
+                    'columns' => [
+                        [],
+                        ['label' => 'Opus_Subject_Value'],
+                        ['label' => 'ExternalKey'],
+                    ],
+                ]
             ),
             'Uncontrolled'
         );
@@ -86,6 +97,7 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
 
     /**
      * Sammelt Schlagwoerter von Unterformularen ein und aktualisiert Dokument.
+     *
      * @param DocumentInterface $document
      */
     public function updateModel($document)
@@ -96,7 +108,7 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
 
         foreach ($subforms as $subform) {
             $subjectsWithType = $subform->getSubFormModels();
-            $subjects = array_merge($subjects, $subjectsWithType);
+            $subjects         = array_merge($subjects, $subjectsWithType);
         }
 
         $document->setSubject($subjects);

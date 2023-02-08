@@ -26,7 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -34,23 +34,29 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 require_once 'Log.php';
 
 use Opus\Import\Xml\MetadataImport;
+use Opus\Import\Xml\MetadataImportSkippedDocumentsException;
 
 class MetadataImporter
 {
+    /** @var object */
+    private $console;
 
-    private $_console;
+    /** @var object */
+    private $logfile;
 
-    private $_logfile;
-
+    /**
+     * @param array $options
+     * @throws MetadataImportSkippedDocumentsException
+     */
     public function run($options)
     {
         $consoleConf = ['lineFormat' => '[%1$s] %4$s'];
         $logfileConf = ['append' => false, 'lineFormat' => '%4$s'];
 
-        $this->_console = \Log::factory('console', '', '', $consoleConf, PEAR_LOG_INFO);
+        $this->console = Log::factory('console', '', '', $consoleConf, PEAR_LOG_INFO);
 
         if (count($options) < 2) {
-            $this->_console->log('Missing parameter: no file to import.');
+            $this->console->log('Missing parameter: no file to import.');
             return;
         }
 
@@ -59,11 +65,11 @@ class MetadataImporter
             // logfile path is given
             $logfilePath = $options[2];
         }
-        $this->_logfile = \Log::factory('file', $logfilePath, '', $logfileConf, PEAR_LOG_INFO);
+        $this->logfile = Log::factory('file', $logfilePath, '', $logfileConf, PEAR_LOG_INFO);
 
         $xmlFile = $options[1];
 
-        $importer = new MetadataImport($xmlFile, true, $this->_console, $this->_logfile);
+        $importer = new MetadataImport($xmlFile, true, $this->console, $this->logfile);
         $importer->run();
     }
 }

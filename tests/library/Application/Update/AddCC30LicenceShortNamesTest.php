@@ -35,24 +35,28 @@ use Opus\Common\Repository;
 
 class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
-    private $_update = null;
+    /** @var Application_Update_AddCC30LicenceShortNames */
+    private $update;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_update = new Application_Update_AddCC30LicenceShortNames();
-        $this->_update->setLogger(new MockLogger());
-        $this->_update->setQuietMode(true);
+        $this->update = new Application_Update_AddCC30LicenceShortNames();
+        $this->update->setLogger(new MockLogger());
+        $this->update->setQuietMode(true);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
+    /**
+     * @return string[][]
+     */
     public function licenceMatchProvider()
     {
         return [
@@ -67,16 +71,18 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
             ['CC BY-NC 3.0', 'Creative Commons - Namensnennung - Nicht kommerziell'],
             ['CC BY-ND 3.0', 'Creative Commons - Namensnennung - Keine Bearbeitung'],
             ['CC BY-ND 3.0', 'Creative Commons - Namensnennung - KeineBearbeitung'],
-            ['CC BY-SA 3.0', 'Creative Commons - Namensnennung - Weitergabe unter gleichen Bedingungen']
+            ['CC BY-SA 3.0', 'Creative Commons - Namensnennung - Weitergabe unter gleichen Bedingungen'],
         ];
     }
 
     /**
      * @dataProvider licenceMatchProvider
+     * @param string $expected
+     * @param string $longName
      */
     public function testGetShortName($expected, $longName)
     {
-        $this->assertEquals($expected, $this->_update->getShortName($longName), $longName);
+        $this->assertEquals($expected, $this->update->getShortName($longName), $longName);
     }
 
     /**
@@ -93,7 +99,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $licence = Licence::get($licenceId);
         $this->assertNull($licence->getName());
 
-        $this->_update->run();
+        $this->update->run();
 
         $licence = Licence::get($licenceId);
         $licence->delete();
@@ -112,7 +118,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $licence = Licence::get($licenceId);
         $this->assertNull($licence->getName());
 
-        $this->_update->run();
+        $this->update->run();
 
         $licence = Licence::get($licenceId);
         $licence->delete();
@@ -131,7 +137,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $licence = Licence::get($licenceId);
         $this->assertNull($licence->getName());
 
-        $this->_update->run();
+        $this->update->run();
 
         $licence = Licence::get($licenceId);
         $licence->delete();
@@ -148,7 +154,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
         $licenceId = $licence->store();
 
-        $this->_update->run();
+        $this->update->run();
 
         $licence = Licence::get($licenceId);
         $licence->delete();
@@ -158,13 +164,13 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function testRemoveLicence()
     {
-        $name = $this->_update->getShortName('Creative Commons - Namensnennung');
+        $name = $this->update->getShortName('Creative Commons - Namensnennung');
 
         $this->assertEquals('CC BY 3.0', $name);
 
-        $this->_update->removeLicence($name);
+        $this->update->removeLicence($name);
 
-        $name = $this->_update->getShortName('Creative Commons - Namensnennung');
+        $name = $this->update->getShortName('Creative Commons - Namensnennung');
 
         $this->assertNull($name);
     }
@@ -195,7 +201,7 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
         $licence = Licence::get($licenceId);
         $this->assertNull($licence->getName());
 
-        $this->_update->run();
+        $this->update->run();
 
         $doc = Document::get($docId);
 

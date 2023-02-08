@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,34 +25,33 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Admin_Model_OptionTest extends ControllerTestCase
 {
+    /** @var Admin_Model_Option */
+    private $model;
 
-    private $_model;
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_model = new Admin_Model_Option('test', [
-            'key' => 'supportedLanguages',
-            'type' => 'number',
+        $this->model = new Admin_Model_Option('test', [
+            'key'     => 'supportedLanguages',
+            'type'    => 'number',
             'section' => 'search',
             'options' => [
                 'min' => 11,
-                'max' => 19
-            ]
+                'max' => 19,
+            ],
         ]);
     }
 
     public function testGetOptions()
     {
-        $this->assertEquals(['min' => 11, 'max' => 19], $this->_model->getOptions());
+        $this->assertEquals(['min' => 11, 'max' => 19], $this->model->getOptions());
     }
 
     public function testGetEmptyOptions()
@@ -64,7 +63,7 @@ class Admin_Model_OptionTest extends ControllerTestCase
 
     public function testGetSection()
     {
-        $this->assertEquals('search', $this->_model->getSection());
+        $this->assertEquals('search', $this->model->getSection());
     }
 
     public function testGetDefaultSection()
@@ -76,7 +75,7 @@ class Admin_Model_OptionTest extends ControllerTestCase
 
     public function testGetElementType()
     {
-        $this->assertEquals('number', $this->_model->getElementType());
+        $this->assertEquals('number', $this->model->getElementType());
     }
 
     public function testGetDefaultElementType()
@@ -87,24 +86,24 @@ class Admin_Model_OptionTest extends ControllerTestCase
 
     public function testGetLabel()
     {
-        $this->assertEquals(Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'test', $this->_model->getLabel());
+        $this->assertEquals(Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'test', $this->model->getLabel());
     }
 
     public function testGetDescription()
     {
         $this->assertEquals(
             Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'test_description',
-            $this->_model->getDescription()
+            $this->model->getDescription()
         );
     }
 
     public function testGetName()
     {
-        $this->assertEquals('test', $this->_model->getName());
+        $this->assertEquals('test', $this->model->getName());
     }
 
     public function testGetKey()
     {
-        $this->assertEquals('supportedLanguages', $this->_model->getKey());
+        $this->assertEquals('supportedLanguages', $this->model->getKey());
     }
 }

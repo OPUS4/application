@@ -36,15 +36,16 @@ use Opus\Common\Series;
 
 class Publish_Model_ValidationTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['translation'];
 
+    /** @var Zend_Session_Namespace */
     private $session;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->session = new \Zend_Session_Namespace();
+        $this->session = new Zend_Session_Namespace();
     }
 
     public function testValidationWithInvalidDatatype()
@@ -59,9 +60,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
     {
         $val = new Publish_Model_Validation('Collection', $this->session);
         $val->validate();
-        $validator = $val->validator[0];
-
-        $this->assertNull($validator);
+        $this->assertNull($val->validator);
     }
 
     public function testValidationWithDateDatatype()
@@ -89,8 +88,6 @@ class Publish_Model_ValidationTest extends ControllerTestCase
     {
         $val = new Publish_Model_Validation('Enrichment', $this->session);
         $val->validate();
-        $validator = $val->validator[0];
-
         $this->assertNull($val->validator);
     }
 
@@ -123,7 +120,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
     public function testValidationWithListDatatype()
     {
-        $options = [];
+        $options         = [];
         $options['eins'] = 'eins';
         $options['zwei'] = 'zwei';
 
@@ -179,7 +176,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
     public function testSelectOptionsForInvalidDatatype()
     {
-        $val = new Publish_Model_Validation('Irgendwas', $this->session);
+        $val      = new Publish_Model_Validation('Irgendwas', $this->session);
         $children = $val->selectOptions();
 
         $this->assertInternalType('array', $val->validator);
@@ -187,7 +184,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
     public function testSelectOptionsForCollection()
     {
-        $val = new Publish_Model_Validation('Collection', $this->session, 'jel');
+        $val      = new Publish_Model_Validation('Collection', $this->session, 'jel');
         $children = $val->selectOptions('Collection');
 
         $this->assertArrayHasKey('6720', $children);
@@ -195,7 +192,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
     public function testSelectOptionsForLanguage()
     {
-        $val = new Publish_Model_Validation('Language', $this->session);
+        $val      = new Publish_Model_Validation('Language', $this->session);
         $children = $val->selectOptions();
 
         $this->assertArrayHasKey('deu', $children);
@@ -203,7 +200,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
     public function testSelectOptionsForLicence()
     {
-        $val = new Publish_Model_Validation('Licence', $this->session);
+        $val      = new Publish_Model_Validation('Licence', $this->session);
         $children = $val->selectOptions();
 
         $this->assertArrayHasKey('4', $children);
@@ -220,12 +217,12 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $activeLicences = [];
 
         foreach ($licences as $licence) {
-            if ($licence->getActive() == '1') {
+            if ($licence->getActive()) {
                 $activeLicences[] = $licence->getDisplayName();
             }
         }
 
-        $val = new Publish_Model_Validation('Licence', $this->session);
+        $val    = new Publish_Model_Validation('Licence', $this->session);
         $values = $val->selectOptions();
 
         $this->assertEquals(count($values), count($activeLicences));
@@ -240,11 +237,11 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
     public function testSelectOptionsForList()
     {
-        $options = [];
+        $options         = [];
         $options['eins'] = 'eins';
         $options['zwei'] = 'zwei';
 
-        $val = new Publish_Model_Validation('List', $this->session, '', $options);
+        $val      = new Publish_Model_Validation('List', $this->session, '', $options);
         $children = $val->selectOptions();
 
         $this->assertArrayHasKey('eins', $children);
@@ -252,7 +249,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
     public function testSelectOptionsForThesisGrantor()
     {
-        $val = new Publish_Model_Validation('ThesisGrantor', $this->session);
+        $val      = new Publish_Model_Validation('ThesisGrantor', $this->session);
         $children = $val->selectOptions();
 
         $this->assertArrayHasKey('1', $children);
@@ -260,7 +257,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
     public function testSelectOptionsForThesisPublisher()
     {
-        $val = new Publish_Model_Validation('ThesisPublisher', $this->session);
+        $val      = new Publish_Model_Validation('ThesisPublisher', $this->session);
         $children = $val->selectOptions();
 
         $this->assertArrayHasKey('2', $children);
@@ -271,7 +268,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Collection', $this->session, 'ddc');
 
         $collectionRole = CollectionRole::fetchByName($val->collectionRole);
-        $visibleFlag = $collectionRole->getVisible();
+        $visibleFlag    = $collectionRole->getVisible();
         $collectionRole->setVisible(0);
         $collectionRole->store();
 
@@ -287,7 +284,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Collection', $this->session, 'ddc');
 
         $collectionRole = CollectionRole::fetchByName($val->collectionRole);
-        $visibleFlag = $collectionRole->getVisible();
+        $visibleFlag    = $collectionRole->getVisible();
         $collectionRole->setVisible(1);
         $collectionRole->store();
 
@@ -305,7 +302,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
     public function testNonExistingCollectionRole()
     {
         $collRole = 'irgendwas';
-        $val = new Publish_Model_Validation('Collection', $this->session, $collRole);
+        $val      = new Publish_Model_Validation('Collection', $this->session, $collRole);
 
         $this->assertNull($val->selectOptions());
     }
@@ -332,7 +329,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
 
     public function testSortOrderOfSeries()
     {
-        $val = new Publish_Model_Validation('Series', $this->session);
+        $val    = new Publish_Model_Validation('Series', $this->session);
         $values = $val->selectOptions();
 
         $series = Series::getAllSortedBySortKey();
@@ -340,7 +337,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $visibleSeries = [];
 
         foreach ($series as $serie) {
-            if ($serie->getVisible() == '1') {
+            if ($serie->getVisible()) {
                 $visibleSeries[] = $serie->getTitle();
             }
         }
@@ -395,7 +392,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $rootCollection->addLastChild($mixedVisibilityCollection);
         $mixedVisibilityCollection->store();
 
-        $val = new Publish_Model_Validation('Collection', $this->session, 'test');
+        $val      = new Publish_Model_Validation('Collection', $this->session, 'test');
         $children = $val->selectOptions('Collection');
 
         // clean-up
@@ -450,12 +447,12 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $invisibleCollection->addFirstChild($childCollection);
         $childCollection->store();
 
-        $val = new Publish_Model_Validation('Collection', $this->session, 'test');
+        $val      = new Publish_Model_Validation('Collection', $this->session, 'test');
         $children = $val->selectOptions('Collection');
 
         // clean-up
         $collectionRole->delete();
 
-        $this->assertEquals(0, count($children), "root collection should be invisible in publish");
+        $this->assertNull($children, "root collection should be invisible in publish");
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,33 +24,31 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Abstrakte Basisklasse für Formulare, die als View angezeigt werden können.
- *
- * @category    Application
- * @package     Application_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_AbstractViewable extends Application_Form_Abstract implements Application_Form_IViewable
+class Application_Form_AbstractViewable extends Application_Form_Abstract implements Application_Form_ViewableInterface
 {
-
     /**
      * Wird TRUE gesetzt wenn das Formular für die Anzeige als View vorbereitet wird.
+     *
      * @var bool
      */
-    private $_viewMode = false;
+    private $viewMode = false;
 
     /**
      * Option für das Entfernen von Elementen mit leerem Wert für das View Rendering.
      *
      * Manchmal will man sehen welche Felder nicht gesetzt wurden.
+     *
      * @var bool
      */
-    private $_removeEmptyElements = true;
+    private $removeEmptyElements = true;
 
     /**
      * Option für das Entfernen von Checkboxen die nicht ausgewählt sind für das View Rendering.
@@ -58,23 +57,27 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      *
      * @var bool
      */
-    private $_removeEmptyCheckbox = true;
+    private $removeEmptyCheckbox = true;
 
     /**
      * Meldet, ob Anzeige als View vorbereitet wurde.
+     *
      * @return bool
      */
     public function isViewModeEnabled()
     {
-        return $this->_viewMode;
+        return $this->viewMode;
     }
 
     /**
      * Aktiviert den View Mode für die Anzeige.
+     *
+     * @return $this
      */
     protected function setViewModeEnabled()
     {
-        $this->_viewMode = true;
+        $this->viewMode = true;
+        return $this;
     }
 
     /**
@@ -83,8 +86,8 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
     public function prepareRenderingAsView()
     {
         $this->setViewModeEnabled();
-        $this->_removeElements();
-        $this->_prepareRenderingOfElements();
+        $this->removeElements();
+        $this->prepareRenderingOfElements();
 
         $subforms = $this->getSubForms();
 
@@ -101,24 +104,26 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      *
      * TODO rename function
      */
-    protected function _removeElements()
+    protected function removeElements()
     {
         $elements = $this->getElements();
 
         foreach ($elements as $element) {
             $value = $element->getValue();
 
-            if ($element instanceof \Zend_Form_Element_Button
-                || $element instanceof \Zend_Form_Element_Submit) {
+            if (
+                $element instanceof Zend_Form_Element_Button
+                || $element instanceof Zend_Form_Element_Submit
+            ) {
                 $this->removeElement($element->getName());
             } elseif (is_array($value)) {
                 if (count($value) === 0 && $this->isRemoveEmptyElements()) {
                     $this->removeElement($element->getName());
                 }
-            } elseif (trim($value) === '' && $this->isRemoveEmptyElements()) {
+            } elseif (($value === null || trim($value) === '') && $this->isRemoveEmptyElements()) {
                 $this->removeElement($element->getName());
-            } elseif ($element instanceof \Zend_Form_Element_Checkbox) {
-                if (($element->getValue() == 0) && $this->isRemoveEmptyCheckbox() && $this->isRemoveEmptyElements()) {
+            } elseif ($element instanceof Zend_Form_Element_Checkbox) {
+                if (! $element->isChecked() && $this->isRemoveEmptyCheckbox() && $this->isRemoveEmptyElements()) {
                     $this->removeElement($element->getName());
                 }
             }
@@ -129,14 +134,13 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      * Bereitet Formularelement für die Ausgabe als View vor.
      *
      * Es wird Application_Form_Decorator_ViewHelper verwendet, um Elemente als "View" ausgeben zu können.
-     *
      */
-    protected function _prepareRenderingOfElements()
+    protected function prepareRenderingOfElements()
     {
         $elements = $this->getElements();
 
         foreach ($elements as $element) {
-            if ($element instanceof Application_Form_IElement) {
+            if ($element instanceof Application_Form_FormElementInterface) {
                 $element->prepareRenderingAsView();
             } else {
                 $decorator = $element->getDecorator('ViewHelper');
@@ -157,42 +161,48 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      */
     public function isEmpty()
     {
-        return (count($this->getElements()) == 0 && count($this->getSubforms()) == 0);
+        return count($this->getElements()) === 0 && count($this->getSubforms()) === 0;
     }
 
     /**
      * Setzt Option für das Entfernen von leeren Elementen.
-     * @param $removeEmptyElements
+     *
+     * @param bool $removeEmptyElements
      */
     public function setRemoveEmptyElements($removeEmptyElements)
     {
-        $this->_removeEmptyElements = $removeEmptyElements;
+        $this->removeEmptyElements = $removeEmptyElements;
     }
 
     /**
      * Meldet, ob Option für das Entfernen von leeren Element gesetzt ist.
+     *
      * @return bool
      */
     public function isRemoveEmptyElements()
     {
-        return $this->_removeEmptyElements;
+        return $this->removeEmptyElements;
     }
 
     /**
      * Setzt Option für das Entfernen von leeren Checkboxen.
-     * @param $removeEmptyCheckbox
+     *
+     * @param bool $removeEmptyCheckbox
+     * @return $this
      */
     public function setRemoveEmptyCheckbox($removeEmptyCheckbox)
     {
-        $this->_removeEmptyCheckbox = $removeEmptyCheckbox;
+        $this->removeEmptyCheckbox = $removeEmptyCheckbox;
+        return $this;
     }
 
     /**
      * Meldet, ob Option für das Entfernen von leeren Checkboxen gesetzt ist.
+     *
      * @return bool
      */
     public function isRemoveEmptyCheckbox()
     {
-        return $this->_removeEmptyCheckbox;
+        return $this->removeEmptyCheckbox;
     }
 }

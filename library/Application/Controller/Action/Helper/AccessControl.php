@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Controller_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -38,11 +36,15 @@
  *
  * TODO weiter ausbauen und mit Opus\Security\IRealm konsolidieren (Framework vs. Application Security)
  */
-class Application_Controller_Action_Helper_AccessControl extends \Zend_Controller_Action_Helper_Abstract implements Application_Security_AccessControl
+class Application_Controller_Action_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract implements Application_Security_AccessControlInterface
 {
+    /** @var Zend_Acl */
+    private $acl;
 
-    private $_acl;
-
+    /**
+     * @param string $resource
+     * @return bool
+     */
     public function direct($resource)
     {
         return $this->accessAllowed($resource);
@@ -56,18 +58,18 @@ class Application_Controller_Action_Helper_AccessControl extends \Zend_Controlle
      *
      * Wenn die übergebene Ressource NULL ist
      *
-     * @param $resource
+     * @param string $resource
      * @return bool
      */
     public function accessAllowed($resource)
     {
         $acl = $this->getAcl();
 
-        if (strlen(trim($resource)) == 0) {
+        if ($resource === null || strlen(trim($resource)) === 0) {
             throw new Application_Exception('#1 argument must not be empty|null');
         }
 
-        if (! is_null($acl)) {
+        if ($acl !== null) {
             return $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
         } else {
             return true; // Security disabled
@@ -76,18 +78,22 @@ class Application_Controller_Action_Helper_AccessControl extends \Zend_Controlle
 
     /**
      * Returns the Zend_Acl object or null.
+     *
      * @return Zend_Acl
      */
     protected function getAcl()
     {
-        if (is_null($this->_acl)) {
-            $this->_acl = Application_Security_AclProvider::getAcl();
+        if ($this->acl === null) {
+            $this->acl = Application_Security_AclProvider::getAcl();
         }
-        return $this->_acl;
+        return $this->acl;
     }
 
+    /**
+     * @param Zend_Acl $acl
+     */
     public function setAcl($acl)
     {
-        $this->_acl = $acl;
+        $this->acl = $acl;
     }
 }

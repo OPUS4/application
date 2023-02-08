@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,11 +34,8 @@
  */
 class Application_Xslt
 {
-
-    /**
-     * @var Application_Xslt
-     */
-    private static $_singleton = null;
+    /** @var self */
+    private static $singleton;
 
     /**
      * Prevent external construction of this class.
@@ -51,51 +46,54 @@ class Application_Xslt
 
     /**
      * Returns singleton instance of this class.
-     * @return Application_Xslt
+     *
+     * @return self
      */
     public static function getInstance()
     {
-        if (is_null(self::$_singleton)) {
-            self::$_singleton = new Application_Xslt();
+        if (self::$singleton === null) {
+            self::$singleton = new Application_Xslt();
         }
 
-        return self::$_singleton;
+        return self::$singleton;
     }
 
     /**
      * Catches calls to static functions and redirects them to view helpers.
-     * @param $method Name of function
-     * @param $arguments Arguments of function
+     *
+     * @param string $method Name of function
+     * @param array  $arguments Arguments of function
      * @return mixed Result of the function
      */
     public static function __callStatic($method, $arguments)
     {
         $helper = self::getInstance()->findHelper($method);
 
-        if (! is_null($helper)) {
+        if ($helper !== null) {
             return call_user_func_array([$helper, $method], $arguments);
         }
 
-        return parent::__call($method, $arguments);
+        return self::__call($method, $arguments);
     }
 
     /**
      * Finds helpers in the set of available view helpers.
-     * @param $method Name of helper
+     *
+     * @param string $method Name of helper
      * @return mixed Zend_View_Helper
      * @throws Zend_Exception
      */
     public function findHelper($method)
     {
-        $helper = \Zend_Registry::get('Opus_View')->getHelper($method);
-
-        return $helper;
+        return Zend_Registry::get('Opus_View')->getHelper($method);
     }
 
     /**
      * Returns the names of the functions that are supported.
-     * @param $processor XSLTProcessor
-     * @return array Names of supported functions
+     *
+     * @param XSLTProcessor $processor
+     * @param array         $allowedFunctions
+     * @return array Names of supported functions TODO necessary?
      */
     public static function registerViewHelper($processor, $allowedFunctions)
     {
@@ -107,5 +105,7 @@ class Application_Xslt
         );
 
         $processor->registerPHPFunctions($functions);
+
+        return $functions;
     }
 }

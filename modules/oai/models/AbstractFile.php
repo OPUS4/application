@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,42 +25,54 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 abstract class Oai_Model_AbstractFile extends Application_Model_Abstract
 {
+    /** @var string */
+    protected $path;
 
-    protected $_path;
+    /** @var string */
+    protected $mimeType;
 
-    protected $_mimeType;
+    /** @var string */
+    protected $extension;
 
-    protected $_extension;
-
+    /**
+     * @return string
+     */
     public function getPath()
     {
-        return $this->_path;
+        return $this->path;
     }
 
+    /**
+     * @return string
+     */
     public function getMimeType()
     {
-        return $this->_mimeType;
+        return $this->mimeType;
     }
 
+    /**
+     * @return string
+     */
     public function getExtension()
     {
-        return $this->_extension;
+        return $this->extension;
     }
 
     public function delete()
     {
-        unlink($this->_path);
+        unlink($this->path);
     }
 
+    /**
+     * @param string $message
+     * @throws Zend_Exception
+     */
     protected function logErrorMessage($message)
     {
         $this->getLogger()->err(__CLASS__ . ': ' . $message);

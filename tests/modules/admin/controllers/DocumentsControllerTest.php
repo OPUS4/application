@@ -39,6 +39,7 @@ use Opus\Common\Person;
  */
 class Admin_DocumentsControllerTest extends ControllerTestCase
 {
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
     /**
@@ -84,7 +85,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testShowAllDocsForDDCCollection()
     {
-        $role = CollectionRole::get(2);
+        $role            = CollectionRole::get(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -101,7 +102,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testShowAllDocsForBklCollection()
     {
-        $role = CollectionRole::get(7);
+        $role            = CollectionRole::get(7);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -163,7 +164,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testConfigureDefaultHitsPerPage()
     {
-        $config = $this->getConfig();
+        $config                                   = $this->getConfig();
         $config->admin->documents->maxDocsDefault = '7';
 
         $this->dispatch('/admin/documents');
@@ -172,7 +173,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
 
     public function testConfigureHitsPerPageOptions()
     {
-        $config = $this->getConfig();
+        $config                                   = $this->getConfig();
         $config->admin->documents->maxDocsOptions = "20,60,all";
 
         $this->dispatch('/admin/documents');
@@ -214,8 +215,8 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
         $person->store();
 
         $this->dispatch(
-            '/admin/documents/index/state/all/role/author/last_name/Test/first_name/Justa' .
-            '/identifier_orcid/0000-0000-0000-0001/identifier_gnd/123456789/identifier_misc/ID1234'
+            '/admin/documents/index/state/all/role/author/last_name/Test/first_name/Justa'
+            . '/identifier_orcid/0000-0000-0000-0001/identifier_gnd/123456789/identifier_misc/ID1234'
         );
 
         $this->assertQueryContentContains('li.identifier_orcid', '0000-0000-0000-0001');

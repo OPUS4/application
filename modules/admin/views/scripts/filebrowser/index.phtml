@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <?= $this->partial('docinfo.phtml', ['document' => $this->documentAdapter]) ?>
@@ -42,9 +41,7 @@
 
     <div id="filelisting">
         <?php if (count($this->files) > 0) : ?>
-            <form action="<?= $this->url([
-                    'module' => 'admin', 'controller' => 'filebrowser', 'action' => 'import'
-            ], null, true); ?>" method="POST">
+            <form action="<?= $this->url(['module' => 'admin', 'controller' => 'filebrowser', 'action' => 'import'], null, true); ?>" method="POST">
                 <div>
                     <table>
                         <tr>
@@ -53,7 +50,7 @@
                             <th><?= $this->translate('admin_filebrowser_filesize') ?></th>
                         </tr>
                         <?php foreach ($this->files as $index => $file) : ?>
-                            <?php $cssClass = ($index % 2) ? 'even' : 'odd' ?>
+                            <?php $cssClass = $index % 2 ? 'even' : 'odd' ?>
                             <tr class="<?= $cssClass ?>">
                                 <td><input type="checkbox" name="file[<?= $index ?>]" value="<?= $file['name'] ?>"/>
                                 </td>
@@ -69,10 +66,8 @@
                        value="<?= $this->translate('admin_filebrowser_cancel') ?>"/>
             </form>
         <?php else : ?>
-            <form action="<?= $this->url([
-                    'module' => 'admin', 'controller' => 'filebrowser', 'action' => 'import'
-            ], null, true); ?>" method="POST">
-                            <?= $this->translate('admin_filebrowser_noFilesToSelect') ?>
+            <form action="<?= $this->url(['module' => 'admin', 'controller' => 'filebrowser', 'action' => 'import'], null, true); ?>" method="POST">
+            <?= $this->translate('admin_filebrowser_noFilesToSelect') ?>
                 <div>
                     <input type="hidden" name="id" value="<?= $this->document->getId() ?>"/>
                     <input type="submit" name="Cancel" id="Cancel"

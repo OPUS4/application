@@ -37,7 +37,7 @@ use Opus\Common\Licence;
  */
 class Admin_Form_Document_LicencesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testCreateForm()
@@ -73,7 +73,7 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase
             $element = $form->getElement('licence' . $licence->getId());
 
             // Nur Lizenz mit ID = 4 ist gesetzt fuer Dokument 146
-            if ($licence->getId() == 4) {
+            if ($licence->getId() === 4) {
                 $this->assertEquals(4, $element->getValue(), 'Lizenz ' . $licence->getId() . ' nicht gesetzt.');
             } else {
                 $this->assertEquals(0, $element->getValue(), 'Lizenz ' . $licence->getId() . ' gesetzt.');
@@ -127,7 +127,7 @@ class Admin_Form_Document_LicencesTest extends ControllerTestCase
         $form = new Admin_Form_Document_Licences();
 
         $document = Document::get(146);
-        $licence = Licence::get(2);
+        $licence  = Licence::get(2);
 
         $this->assertFalse($form->hasLicence($document, $licence));
     }

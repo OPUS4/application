@@ -36,7 +36,6 @@ use Opus\Common\Series;
  */
 class Application_Form_Element_Series extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();
@@ -44,7 +43,7 @@ class Application_Form_Element_Series extends Application_Form_Element_Select
         $this->setRequired(true);
         $this->setDisableTranslator(true); // Schriftenreihen werden nicht übersetzt
 
-        $validator = new \Zend_Validate_Int();
+        $validator = new Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 

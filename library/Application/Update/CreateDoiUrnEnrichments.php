@@ -36,19 +36,18 @@ use Opus\Common\EnrichmentKey;
  */
 class Application_Update_CreateDoiUrnEnrichments extends Application_Update_PluginAbstract
 {
-
+    /** @var string[] */
     private $keyNames = [
         'opus.doi.autoCreate',
-        'opus.urn.autoCreate'
+        'opus.urn.autoCreate',
     ];
-
 
     public function run()
     {
         foreach ($this->keyNames as $name) {
             $enrichmentKey = EnrichmentKey::fetchByName($name);
 
-            if (is_null($enrichmentKey)) {
+            if ($enrichmentKey === null) {
                 $this->log("Creating enrichment key '$name' ...");
                 $enrichmentKey = EnrichmentKey::new();
                 $enrichmentKey->setName($name);

@@ -27,27 +27,28 @@
  *
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * Controller for handling file downloads in the frontdoor.
  */
 
 use Opus\Common\Config;
 use Opus\Common\Document;
-use Opus\Common\File;
+use Opus\Common\FileInterface;
+use Opus\Common\Security\Realm;
 use Opus\Pdf\Cover\CoverGeneratorFactory;
 use Opus\Pdf\Cover\CoverGeneratorInterface;
-use Opus\Common\Security\Realm;
 
 class Frontdoor_DeliverController extends Application_Controller_Action
 {
-
     /**
      * Handles file downloads.
      */
     public function indexAction()
     {
         $docId = $this->_getParam('docId', null);
-        $path = $this->_getParam('file', null);
+        $path  = $this->_getParam('file', null);
 
         $realm = Realm::getInstance();
 
@@ -75,8 +76,8 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         }
 
         $originalFilePath = $fileObject->getPath();
-        $baseFilename = basename($originalFilePath);
-        $baseFilename = self::quoteFileName($baseFilename);
+        $baseFilename     = basename($originalFilePath);
+        $baseFilename     = self::quoteFileName($baseFilename);
 
         try {
             $filePath = $this->prepareFile($fileObject);
@@ -87,7 +88,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
 
         $this->disableViewRendering();
 
-        $mimeType = $fileObject->getMimeType();
+        $mimeType           = $fileObject->getMimeType();
         $contentDisposition = $this->_helper->fileTypes->getContentDisposition($mimeType);
 
         $this->getResponse()
@@ -107,8 +108,6 @@ class Frontdoor_DeliverController extends Application_Controller_Action
             $response->clearBody();
             $response->setHttpResponseCode(500);
         }
-
-        return;
     }
 
     /**
@@ -125,16 +124,24 @@ class Frontdoor_DeliverController extends Application_Controller_Action
     public static function quoteFileName($filename)
     {
         if (preg_match('/[^A-Za-z0-9_., -]/', $filename)) {
-            return '=?UTF-8?B?'.base64_encode($filename).'?=';
+            return '=?UTF-8?B?' . base64_encode($filename) . '?=';
         }
         return $filename;
     }
 
+    /**
+     * @param Exception $exception
+     * @throws Zend_Exception
+     */
     private function logError($exception)
     {
         $this->getLogger()->err($exception);
     }
 
+    /**
+     * @param Exception $exception
+     * @throws Zend_Controller_Response_Exception
+     */
     private function handleDeliveryError($exception)
     {
         $this->getResponse()->setHttpResponseCode($exception->getCode());
@@ -149,7 +156,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
      * may include a PDF cover that was generated based on a template and using the document's
      * metadata.
      *
-     * @param File $file
+     * @param FileInterface $file
      * @return string the file's path
      */
     private function prepareFile($file)
@@ -168,7 +175,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         }
 
         // get the file's parent document
-        $doc = null;
+        $doc   = null;
         $docId = $file->getParentId();
         if ($docId !== null) {
             $doc = Document::get($docId);
@@ -180,9 +187,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
 
         // if a PDF cover should be served for this file, create a file copy that includes an
         // appropriate cover page and return its path (instead of the original file's path)
-        $filePath = $coverGenerator->processFile($doc, $file);
-
-        return $filePath;
+        return $coverGenerator->processFile($doc, $file);
     }
 
     /**
@@ -196,8 +201,8 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $config = Config::get();
 
         // check if a PDF cover should be generated
-        $generatePdfCover = (isset($config->pdf->covers->generate)
-            && filter_var($config->pdf->covers->generate, FILTER_VALIDATE_BOOLEAN));
+        $generatePdfCover = isset($config->pdf->covers->generate)
+            && filter_var($config->pdf->covers->generate, FILTER_VALIDATE_BOOLEAN);
 
         if (! $generatePdfCover) {
             return null;

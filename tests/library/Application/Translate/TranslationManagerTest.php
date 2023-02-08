@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Translate\UnknownTranslationKeyException;
 use Opus\Common\Translate\TranslateException;
+use Opus\Common\Translate\UnknownTranslationKeyException;
 use Opus\Translate\Dao;
 
 /**
@@ -41,27 +38,26 @@ use Opus\Translate\Dao;
  */
 class Application_Translate_TranslationManagerTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
+    /** @var bool */
     protected $configModifiable = true;
 
-    /**
-     * @var Application_Translate_TranslationManager
-     */
+    /** @var Application_Translate_TranslationManager */
     protected $object;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->object = new Application_Translate_TranslationManager();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $translationDb = $this->getStorageInterface();
         $translationDb->removeAll();
@@ -72,7 +68,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     public function testGetFiles()
     {
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]]
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]],
         ]);
 
         $files = $this->object->getFiles();
@@ -92,7 +88,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
             Application_Translate_TranslationManager::SORT_DIRECTORY,
             Application_Translate_TranslationManager::SORT_FILENAME,
             Application_Translate_TranslationManager::SORT_MODULE,
-            Application_Translate_TranslationManager::SORT_UNIT
+            Application_Translate_TranslationManager::SORT_UNIT,
         ];
 
         $this->object->setModules(['default']);
@@ -108,9 +104,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
                 $sortedValues = $actualValues;
 
-                if ($sortOrder == SORT_ASC) {
+                if ($sortOrder === SORT_ASC) {
                     sort($sortedValues, SORT_STRING);
-                } elseif ($sortOrder == SORT_DESC) {
+                } elseif ($sortOrder === SORT_DESC) {
                     rsort($sortedValues, SORT_STRING);
                 }
 
@@ -132,9 +128,6 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertGreaterThan(0, count($translations));
     }
 
-    /**
-     *
-     */
     public function testSetModules()
     {
         $this->object->setModules(['default']);
@@ -146,9 +139,6 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertEquals(['default', 'home'], array_keys($files));
     }
 
-    /**
-     *
-     */
     public function testSetFilter()
     {
         $filter = 'error_';
@@ -178,7 +168,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $manager = $this->object;
 
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => null]]]
+            'setup' => ['translation' => ['modules' => ['allowed' => null]]],
         ]);
 
         $duplicateKeys = $manager->getDuplicateKeys();
@@ -186,7 +176,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $message = 'Duplicate translation keys found:' . PHP_EOL;
 
         foreach ($duplicateKeys as $key => $entries) {
-            $modules = implode(',', array_map(function ($value) {
+            $modules  = implode(',', array_map(function ($value) {
                 return $value['module'];
             }, $entries));
             $message .= "  $key ($modules)" . PHP_EOL;
@@ -206,7 +196,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $translations = $this->object;
 
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => null]]]
+            'setup' => ['translation' => ['modules' => ['allowed' => null]]],
         ]);
 
         $translations->setModules(null);
@@ -354,7 +344,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $dao->setTranslation($testKey, [
             'en' => 'YesTest',
-            'de' => 'JaTest'
+            'de' => 'JaTest',
         ]);
 
         $translation = $manager->getTranslation($testKey);
@@ -369,7 +359,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertArrayNotHasKey('state', $translation);
         $this->assertEquals([
             'en' => 'Yes',
-            'de' => 'Ja'
+            'de' => 'Ja',
         ], $translation['translations']);
     }
 
@@ -388,7 +378,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $dao->setTranslation($key, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ]);
 
         $this->assertNotNull($dao->getTranslation($key));
@@ -406,7 +396,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $database->setTranslation('translationKey', [
             'en' => 'Translation',
-            'de' => 'Übersetzung'
+            'de' => 'Übersetzung',
         ], 'home');
 
         $tmxFile = $manager->getExportTmxFile();
@@ -435,7 +425,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $database->setTranslation('customtestkey', [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ]);
 
         $tmxFile = $manager->getExportTmxFile();
@@ -443,7 +433,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertNotNull($tmxFile);
         $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
 
-        $dom = $tmxFile->getDomDocument();
+        $dom    = $tmxFile->getDomDocument();
         $output = $dom->saveXML();
         $this->getResponse()->setBody($output);
 
@@ -462,12 +452,12 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $database->setTranslation('defaultCustomKey', [
             'en' => 'Default Test Key',
-            'de' => 'Default-Testschluessel'
+            'de' => 'Default-Testschluessel',
         ]);
 
         $database->setTranslation('homeCustomKey', [
             'en' => 'Home Test Key',
-            'de' => 'Home-Testschluessel'
+            'de' => 'Home-Testschluessel',
         ], 'home');
 
         $manager->setModules('home');
@@ -476,7 +466,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertNotNull($tmxFile);
         $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
 
-        $dom = $tmxFile->getDomDocument();
+        $dom    = $tmxFile->getDomDocument();
         $output = $dom->saveXML();
         $this->getResponse()->setBody($output);
 
@@ -495,9 +485,8 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $database->setTranslation('customtestkey', [
             'en' => 'test key',
-            'de' => 'Testschluessel'
+            'de' => 'Testschluessel',
         ], 'crawlers');
-
 
         $manager->setModules('crawlers');
         $tmxFile = $manager->getExportTmxFile(true);
@@ -505,7 +494,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertNotNull($tmxFile);
         $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
 
-        $dom = $tmxFile->getDomDocument();
+        $dom    = $tmxFile->getDomDocument();
         $output = $dom->saveXML();
         $this->getResponse()->setBody($output);
 
@@ -534,23 +523,23 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
                 'module' => 'home',
                 'values' => [
                     'en' => 'ContactEdited',
-                    'de' => 'KontaktEdited'
-                ]
+                    'de' => 'KontaktEdited',
+                ],
             ],
-            'browsing_menu_label' => [
+            'browsing_menu_label'          => [
                 'module' => 'default',
                 'values' => [
                     'en' => 'BrowseEdited',
-                    'de' => 'BrowsenEdited'
-                ]
+                    'de' => 'BrowsenEdited',
+                ],
             ],
-            'publish_controller_index' => [
+            'publish_controller_index'     => [
                 'module' => 'publish',
                 'values' => [
                     'en' => 'PublishEdited',
-                    'de' => 'VeröffentlichenEdited'
-                ]
-            ]
+                    'de' => 'VeröffentlichenEdited',
+                ],
+            ],
         ], $translations);
     }
 
@@ -572,9 +561,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
                 'module' => 'crawlers',
                 'values' => [
                     'en' => 'Test key',
-                    'de' => 'Testschlüssel'
-                ]
-            ]
+                    'de' => 'Testschlüssel',
+                ],
+            ],
         ], $translations);
     }
 
@@ -596,9 +585,9 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
                 'module' => 'home',
                 'values' => [
                     'en' => 'ContactEdited',
-                    'de' => 'KontaktEdited'
-                ]
-            ]
+                    'de' => 'KontaktEdited',
+                ],
+            ],
         ], $translations);
     }
 
@@ -620,30 +609,30 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
                 'module' => 'home',
                 'values' => [
                     'en' => 'ContactEdited',
-                    'de' => 'KontaktEdited'
-                ]
+                    'de' => 'KontaktEdited',
+                ],
             ],
-            'browsing_menu_label' => [
+            'browsing_menu_label'          => [
                 'module' => 'default',
                 'values' => [
                     'en' => 'BrowseEdited',
-                    'de' => 'BrowsenEdited'
-                ]
+                    'de' => 'BrowsenEdited',
+                ],
             ],
-            'publish_controller_index' => [
+            'publish_controller_index'     => [
                 'module' => 'publish',
                 'values' => [
                     'en' => 'PublishEdited',
-                    'de' => 'VeröffentlichenEdited'
-                ]
+                    'de' => 'VeröffentlichenEdited',
+                ],
             ],
-            'customtestkey' => [
+            'customtestkey'                => [
                 'module' => '',
                 'values' => [
                     'en' => 'Test key',
-                    'de' => 'Testschlüssel'
-                ]
-            ]
+                    'de' => 'Testschlüssel',
+                ],
+            ],
         ], $translations);
     }
 
@@ -665,12 +654,12 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $database->setTranslation('testkey', [
             'en' => 'Testvalue',
-            'de' => 'Testwert'
+            'de' => 'Testwert',
         ]);
 
         $database->setTranslation('home_menu_label', [
             'en' => 'Label',
-            'de' => 'Titel'
+            'de' => 'Titel',
         ]);
 
         $manager->setModules('default');
@@ -691,7 +680,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $database->setTranslation('testkey', [
             'en' => 'Testvalue',
-            'de' => 'Testwert'
+            'de' => 'Testwert',
         ]);
 
         $manager->setModules('default');
@@ -712,12 +701,12 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $database->setTranslation('dummykey', [
             'en' => 'EN text',
-            'de' => 'DE Text'
+            'de' => 'DE Text',
         ]);
 
         $database->setTranslation('key2', [
             'en' => 'dummy key',
-            'de' => 'Dummy'
+            'de' => 'Dummy',
         ]);
 
         $manager->setModules('default');
@@ -750,21 +739,21 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $manager = $this->object;
 
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]]
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish']]],
         ]);
 
         $modules = $manager->getModules();
 
         $this->assertEquals([
             'default',
-            'publish'
+            'publish',
         ], $modules);
     }
 
     public function testGetModulesNoRestrictions()
     {
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => null]]]
+            'setup' => ['translation' => ['modules' => ['allowed' => null]]],
         ]);
 
         $manager = $this->object;
@@ -781,14 +770,14 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $manager = $this->object;
 
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,unknown1']]]
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,publish,unknown1']]],
         ]);
 
         $modules = $manager->getModules();
 
         $this->assertEquals([
             'default',
-            'publish'
+            'publish',
         ], $modules);
     }
 
@@ -797,7 +786,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $manager = $this->object;
 
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => 'default,home,publish']]]
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,home,publish']]],
         ]);
 
         $modules = $manager->getAllowedModules();
@@ -805,7 +794,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertEquals([
             'default',
             'home',
-            'publish'
+            'publish',
         ], $modules);
     }
 
@@ -814,7 +803,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $manager = $this->object;
 
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => 'default, home , publish ']]]
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default, home , publish ']]],
         ]);
 
         $modules = $manager->getAllowedModules();
@@ -822,7 +811,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $this->assertEquals([
             'default',
             'home',
-            'publish'
+            'publish',
         ], $modules);
     }
 
@@ -831,7 +820,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $manager = $this->object;
 
         $this->adjustConfiguration([
-            'setup' => ['translation' => ['modules' => ['allowed' => 'default,unknown1']]]
+            'setup' => ['translation' => ['modules' => ['allowed' => 'default,unknown1']]],
         ]);
 
         $logger = new MockLogger();
@@ -841,7 +830,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $modules = $manager->getAllowedModules();
 
         $this->assertEquals([
-            'default'
+            'default',
         ], $modules);
 
         $messages = $logger->getMessages();
@@ -861,38 +850,38 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $database->setTranslation($oldKey, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], 'publish');
 
         $translation = $manager->getTranslation($oldKey);
 
         $this->assertEquals([
-            'key' => $oldKey,
-            'module' => 'publish',
+            'key'          => $oldKey,
+            'module'       => 'publish',
             'translations' => [
                 'en' => 'English',
-                'de' => 'Deutsch'
+                'de' => 'Deutsch',
             ],
-            'state' => 'added'
+            'state'        => 'added',
         ], $translation);
 
         $newKey = 'newkey';
 
         $manager->updateTranslation($newKey, [
             'en' => 'EnglishEdited',
-            'de' => 'DeutschEditiert'
+            'de' => 'DeutschEditiert',
         ], 'admin', $oldKey);
 
         $translation = $manager->getTranslation($newKey);
 
         $this->assertEquals([
-            'key' => $newKey,
-            'module' => 'admin',
+            'key'          => $newKey,
+            'module'       => 'admin',
             'translations' => [
                 'en' => 'EnglishEdited',
-                'de' => 'DeutschEditiert'
+                'de' => 'DeutschEditiert',
             ],
-            'state' => 'added'
+            'state'        => 'added',
         ], $translation);
 
         $failed = true;
@@ -912,7 +901,8 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $this->setExpectedException(TranslateException::class, 'default_add');
+        $this->expectException(TranslateException::class);
+        $this->expectExceptionMessage('default_add');
 
         $manager->updateTranslation('default_add_new', [], 'default', 'default_add');
     }
@@ -921,7 +911,8 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $this->setExpectedException(TranslateException::class, 'Module of key \'default_add\' cannot be changed.');
+        $this->expectException(TranslateException::class);
+        $this->expectExceptionMessage('Module of key \'default_add\' cannot be changed.');
 
         $manager->updateTranslation('default_add', null, 'publish');
     }
@@ -936,19 +927,19 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $database->setTranslation($oldKey, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], 'publish');
 
         $translation = $manager->getTranslation($oldKey);
 
         $this->assertEquals([
-            'key' => $oldKey,
-            'module' => 'publish',
+            'key'          => $oldKey,
+            'module'       => 'publish',
             'translations' => [
                 'en' => 'English',
-                'de' => 'Deutsch'
+                'de' => 'Deutsch',
             ],
-            'state' => 'added'
+            'state'        => 'added',
         ], $translation);
 
         $newKey = 'newkey';
@@ -958,13 +949,13 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $translation = $manager->getTranslation($newKey);
 
         $this->assertEquals([
-            'key' => $newKey,
-            'module' => 'publish',
+            'key'          => $newKey,
+            'module'       => 'publish',
             'translations' => [
                 'en' => 'English',
-                'de' => 'Deutsch'
+                'de' => 'Deutsch',
             ],
-            'state' => 'added'
+            'state'        => 'added',
         ], $translation);
 
         $failed = true;
@@ -986,7 +977,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $values = [
             'en' => 'Contact information',
-            'de' => 'Kontaktinformationen'
+            'de' => 'Kontaktinformationen',
         ];
 
         // key is part of home module
@@ -1007,7 +998,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $dao->setTranslation($key, [
             'en' => 'AddEdited',
-            'de' => 'AnlegenEdited'
+            'de' => 'AnlegenEdited',
         ]);
 
         $this->assertTrue($manager->isEdited($key));
@@ -1030,7 +1021,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $dao->setTranslation($key, [
             'en' => 'test key',
-            'de' => 'Testschluessel'
+            'de' => 'Testschluessel',
         ]);
 
         $this->assertFalse($manager->isEdited($key));
@@ -1042,17 +1033,17 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $dao = $this->getStorageInterface();
 
-        $addedKey = 'customtestkey';
+        $addedKey  = 'customtestkey';
         $editedKey = 'default_add';
 
         $dao->setTranslation($addedKey, [
             'en' => 'Added key',
-            'de' => 'Angelegter Schluessel'
+            'de' => 'Angelegter Schluessel',
         ]);
 
         $dao->setTranslation($editedKey, [
             'en' => 'Edited key',
-            'de' => 'Angepasster Schluessel'
+            'de' => 'Angepasster Schluessel',
         ]);
 
         $this->assertNotNull($dao->getTranslation($addedKey));
@@ -1070,17 +1061,17 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $dao = $this->getStorageInterface();
 
-        $addedKey = 'customtestkey';
+        $addedKey  = 'customtestkey';
         $editedKey = 'default_add';
 
         $dao->setTranslation($addedKey, [
             'en' => 'Added key',
-            'de' => 'Angelegter Schluessel'
+            'de' => 'Angelegter Schluessel',
         ]);
 
         $dao->setTranslation($editedKey, [
             'en' => 'Edited key',
-            'de' => 'Angepasster Schluessel'
+            'de' => 'Angepasster Schluessel',
         ]);
 
         $this->assertNotNull($dao->getTranslation($addedKey));
@@ -1099,17 +1090,17 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $dao = $this->getStorageInterface();
 
-        $addedKey = 'customtestkey';
+        $addedKey  = 'customtestkey';
         $editedKey = 'default_add';
 
         $dao->setTranslation($addedKey, [
             'en' => 'Added key',
-            'de' => 'Angelegter Schluessel'
+            'de' => 'Angelegter Schluessel',
         ]);
 
         $dao->setTranslation($editedKey, [
             'en' => 'Edited key',
-            'de' => 'Angepasster Schluessel'
+            'de' => 'Angepasster Schluessel',
         ], 'home');
 
         $this->assertNotNull($dao->getTranslation($addedKey));
@@ -1128,17 +1119,17 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $dao = $this->getStorageInterface();
 
-        $addedKey = 'customtestkey';
+        $addedKey  = 'customtestkey';
         $editedKey = 'default_add';
 
         $dao->setTranslation($addedKey, [
             'en' => 'Added key',
-            'de' => 'Angelegter Schluessel'
+            'de' => 'Angelegter Schluessel',
         ]);
 
         $dao->setTranslation($editedKey, [
             'en' => 'Edited key',
-            'de' => 'Angepasster Schluessel'
+            'de' => 'Angepasster Schluessel',
         ], 'home');
 
         $this->assertNotNull($dao->getTranslation($addedKey));
@@ -1157,17 +1148,17 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $dao = $this->getStorageInterface();
 
-        $addedKey = 'customtestkey';
+        $addedKey  = 'customtestkey';
         $editedKey = 'default_add';
 
         $dao->setTranslation($addedKey, [
             'en' => 'Added key',
-            'de' => 'Angelegter Schluessel'
+            'de' => 'Angelegter Schluessel',
         ]);
 
         $dao->setTranslation($editedKey, [
             'en' => 'Edited key',
-            'de' => 'Angepasster Schluessel'
+            'de' => 'Angepasster Schluessel',
         ]);
 
         $this->assertNotNull($dao->getTranslation($addedKey));
@@ -1187,10 +1178,10 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $manager = $this->object;
 
-        $key = 'customttestkey';
+        $key    = 'customttestkey';
         $values = [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ];
 
         $manager->setTranslation($key, $values, 'home');
@@ -1206,7 +1197,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $values = [
             'en' => 'AddEdited',
-            'de' => 'AnlegenEdited'
+            'de' => 'AnlegenEdited',
         ];
 
         $manager->setTranslation('default_add', $values);
@@ -1222,7 +1213,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     {
         $manager = $this->object;
 
-        $class = new ReflectionClass(get_class($manager));
+        $class  = new ReflectionClass(get_class($manager));
         $method = $class->getMethod('getLanguageOrderRef');
         $method->setAccessible(true);
 
@@ -1230,7 +1221,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $this->assertEquals([
             'de' => 0,
-            'en' => 1
+            'en' => 1,
         ], $order);
     }
 
@@ -1247,28 +1238,31 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
     public function testSortLanguages()
     {
         $this->adjustConfiguration([
-            'supportedLanguages' => 'de,en,fr'
+            'supportedLanguages' => 'de,en,fr',
         ]);
 
         $manager = $this->object;
 
-        $class = new ReflectionClass(get_class($manager));
+        $class  = new ReflectionClass(get_class($manager));
         $method = $class->getMethod('sortLanguages');
         $method->setAccessible(true);
 
         $sorted = $method->invoke($manager, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ]);
 
         $this->assertEquals([
             'de' => 'Deutsch',
-            'en' => 'English'
+            'en' => 'English',
         ], $sorted);
 
         $this->assertTrue(array_values($sorted)[0] === 'Deutsch');
     }
 
+    /**
+     * @return Dao
+     */
     protected function getStorageInterface()
     {
         return new Dao();

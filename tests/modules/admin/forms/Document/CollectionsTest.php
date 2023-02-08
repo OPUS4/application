@@ -34,7 +34,7 @@ use Opus\Common\Document;
 
 class Admin_Form_Document_CollectionsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view'];
 
     public function testConstructForm()
@@ -56,7 +56,7 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Collections();
 
-        $subform = new \Zend_Form_SubForm();
+        $subform = new Zend_Form_SubForm();
 
         $form->addSubForm($subform, 'ddc-2');
 
@@ -72,8 +72,8 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
         $form->constructFromPost([
             'ddc2' => [
                 'collection0' => ['Id' => 40],
-                'collection1' => ['Id' => 68]
-            ]
+                'collection1' => ['Id' => 68],
+            ],
         ]);
 
         $subforms = $form->getSubForms();
@@ -95,7 +95,7 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
      */
     public function testFormNameRendering()
     {
-        $form = new \Zend_Form();
+        $form = new Zend_Form();
         $form->setName('ddc-2');
 
         $html = $form->render();

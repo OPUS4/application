@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,34 +25,38 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Oai_Model_SingleFile extends Oai_Model_AbstractFile
 {
-
+    /**
+     * @param int           $docId
+     * @param array         $fileToInclude
+     * @param string        $filesPath
+     * @param string        $tempPath
+     * @param Zend_Log|null $logger
+     * @throws Oai_Model_Exception
+     */
     public function __construct($docId, $fileToInclude, $filesPath, $tempPath, $logger = null)
     {
         $this->setLogger($logger);
         $numberOfFiles = count($fileToInclude);
-        if ($numberOfFiles != 1) {
+        if ($numberOfFiles !== 1) {
             $this->logErrorMessage("unexpected number of files to process: $numberOfFiles");
             throw new Oai_Model_Exception('unexpected number of files to include: only one file was expected');
         }
-        $file = $fileToInclude[0];
-        $filePath = $filesPath . $docId . DIRECTORY_SEPARATOR . $file->getPathName();
-        $extension = '.' . pathinfo($filePath, PATHINFO_EXTENSION);
+        $file       = $fileToInclude[0];
+        $filePath   = $filesPath . $docId . DIRECTORY_SEPARATOR . $file->getPathName();
+        $extension  = '.' . pathinfo($filePath, PATHINFO_EXTENSION);
         $outputFile = $tempPath . uniqid($docId, true) . $extension;
         if (! copy($filePath, $outputFile)) {
             $this->logErrorMessage("error while performing copy operation from '$filePath' to '$outputFile'");
             throw new Oai_Model_Exception('error while copying file');
         }
-        $this->_path = $outputFile;
-        $this->_mimeType = $file->getMimeType();
-        $this->_extension = $extension;
+        $this->path      = $outputFile;
+        $this->mimeType  = $file->getMimeType();
+        $this->extension = $extension;
     }
 }

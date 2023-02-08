@@ -33,42 +33,43 @@ use Opus\Common\Series;
 
 class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
-    private $_helper = null;
+    /** @var Application_View_Helper_SeriesNumber */
+    private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_SeriesNumber();
+        $this->helper = new Application_View_Helper_SeriesNumber();
     }
 
     public function testSeriesNumberForLinkedDocument()
     {
         $document = $this->getDocument(146);
-        $series = Series::get(1);
+        $series   = Series::get(1);
 
-        $this->assertEquals('5/5', $this->_helper->seriesNumber($document, $series));
+        $this->assertEquals('5/5', $this->helper->seriesNumber($document, $series));
     }
 
     public function testSeriesNumberForNotLinkedDocument()
     {
         $document = $this->getDocument(146);
-        $series = Series::get(2);
+        $series   = Series::get(2);
 
-        $this->assertEquals('', $this->_helper->seriesNumber($document, $series));
+        $this->assertEquals('', $this->helper->seriesNumber($document, $series));
     }
 
     public function testSeriesNumberEscaped()
     {
         $document = $this->createTestDocument();
-        $series = Series::get(5);
+        $series   = Series::get(5);
 
         $document->addSeries($series)->setNumber('<h>XIII</h>');
         $document->store();
 
-        $this->assertEquals('&lt;h&gt;XIII&lt;/h&gt;', $this->_helper->seriesNumber($document, $series));
+        $this->assertEquals('&lt;h&gt;XIII&lt;/h&gt;', $this->helper->seriesNumber($document, $series));
     }
 }

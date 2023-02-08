@@ -34,13 +34,16 @@ use Opus\Common\UserRole;
 
 class Application_Security_AclProviderTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var int */
     private $roleId;
+
+    /** @var int */
     private $userId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -60,7 +63,7 @@ class Application_Security_AclProviderTest extends ControllerTestCase
         $this->loginUser('role_tester', 'role_tester');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $testRole = UserRole::get($this->roleId);
         $testRole->delete();
@@ -72,8 +75,8 @@ class Application_Security_AclProviderTest extends ControllerTestCase
     public function testGetAcls()
     {
         $aclProvider = new Application_Security_AclProvider();
-        $acl = $aclProvider->getAcls();
-        $this->assertTrue($acl instanceof \Zend_Acl, 'Expected instance of Zend_Acl');
+        $acl         = $aclProvider->getAcls();
+        $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
         $this->assertTrue(
             $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'documents'),
             "expected user has access to resource 'documents'"
@@ -91,12 +94,12 @@ class Application_Security_AclProviderTest extends ControllerTestCase
             ->setPassword('role_tester');
         $userAccount->setRole(UserRole::get($this->roleId));
         $userId = $userAccount->store();
-        \Zend_Auth::getInstance()->getStorage()->write('_test');
+        Zend_Auth::getInstance()->getStorage()->write('_test');
 
         $aclProvider = new Application_Security_AclProvider();
-        $acl = $aclProvider->getAcls();
+        $acl         = $aclProvider->getAcls();
         $userAccount->delete();
-        $this->assertTrue($acl instanceof \Zend_Acl, 'Excpected instance of Zend_Acl');
+        $this->assertTrue($acl instanceof Zend_Acl, 'Excpected instance of Zend_Acl');
         $this->assertTrue(
             $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'documents'),
             "expected user has access to resource 'documents'"

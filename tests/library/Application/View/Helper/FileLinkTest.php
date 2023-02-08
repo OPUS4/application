@@ -36,7 +36,7 @@ use Opus\Common\File;
  */
 class Application_View_Helper_FileLinkTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view'];
 
     /**
@@ -46,12 +46,12 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FileLink();
 
-        $helper->setView(new \Zend_View());
+        $helper->setView(new Zend_View());
 
         $file = File::get(126);
 
         $this->assertEquals('<a href="http:///files/146/test.pdf" class="filelink">foo-pdf</a>'
-            . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(
+            . '<input type="hidden" name="" value="126" />', $helper->fileLink(
                 null,
                 $file,
                 ['useFileLabel' => true]
@@ -62,13 +62,13 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FileLink();
 
-        $helper->setView(new \Zend_View());
+        $helper->setView(new Zend_View());
 
         $file = File::get(130);
 
         $this->assertEquals(
             '<a href="http:///files/147/special-chars-%25-%22-%23-%26.pdf" class="filelink">Dateiname-mit-Sonderzeichen.pdf</a>'
-            . '<input type="hidden" name="" value="130" id="" />',
+            . '<input type="hidden" name="" value="130" />',
             $helper->fileLink(null, $file, ['useFileLabel' => true])
         );
     }
@@ -83,7 +83,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
 
         $this->assertEquals(
             '<a href="http:///files/147/%27many%27++-++spaces++and++quotes.pdf" class="filelink">'
-            . 'Dateiname-mit-vielen-Spaces-und-Quotes.pdf</a>' . '<input type="hidden" name="" value="131" id="" />',
+            . 'Dateiname-mit-vielen-Spaces-und-Quotes.pdf</a><input type="hidden" name="" value="131" />',
             $helper->fileLink(null, $file, ['useFileLabel' => true])
         );
     }
@@ -99,7 +99,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
 
         $this->assertEquals(
             '<a href="http:///files/146/test.pdf" class="filelink">test.pdf</a>'
-            . '<input type="hidden" name="" value="126" id="" />',
+            . '<input type="hidden" name="" value="126" />',
             $helper->fileLink(null, $file, ['useFileLabel' => true])
         );
     }
@@ -111,7 +111,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
     {
         $helper = new Application_View_Helper_FileLink();
 
-        $view = new \Zend_View();
+        $view = new Zend_View();
 
         $view->getHelper('BaseUrl')->setBaseUrl('/testbase');
 
@@ -120,7 +120,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
         $file = File::get(126);
 
         $this->assertEquals('<a href="http:///testbase/files/146/test.pdf" class="filelink">foo-pdf</a>'
-            . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(
+            . '<input type="hidden" name="" value="126" />', $helper->fileLink(
                 null,
                 $file,
                 ['useFileLabel' => true]

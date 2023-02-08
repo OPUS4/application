@@ -38,9 +38,8 @@ use Opus\Common\UserRole;
  */
 class Admin_RoleControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
-
 
     /**
      * Test showing index page.
@@ -110,13 +109,13 @@ class Admin_RoleControllerTest extends ControllerTestCase
 
     public function testCreateAction()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
-                    'Name' => 'testrole',
+                    'Name'                  => 'testrole',
                     'privilegeadministrate' => '1',
-                    'metadatadeleted' => '1',
-                    'Save' => 'Save'
+                    'metadatadeleted'       => '1',
+                    'Save'                  => 'Save',
                 ]);
 
         $this->dispatch('/admin/role/new');
@@ -129,13 +128,13 @@ class Admin_RoleControllerTest extends ControllerTestCase
 
     public function testCreateActionCancel()
     {
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
-                    'name' => 'testrole',
+                    'name'                  => 'testrole',
                     'privilegeadministrate' => '1',
-                    'metadatadeleted' => '1',
-                    'Cancel' => 'Cancel'
+                    'metadatadeleted'       => '1',
+                    'Cancel'                => 'Cancel',
                 ]);
 
         $this->dispatch('/admin/role/new');
@@ -147,12 +146,12 @@ class Admin_RoleControllerTest extends ControllerTestCase
 
     public function testCreateActionMissingInput()
     {
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
                     'privilegeadministrate' => '1',
-                    'metadatadeleted' => '1',
-                    'Save' => 'Save'
+                    'metadatadeleted'       => '1',
+                    'Save'                  => 'Save',
                 ]);
 
         $this->dispatch('/admin/role/new');
@@ -169,14 +168,14 @@ class Admin_RoleControllerTest extends ControllerTestCase
     {
         $role = UserRole::fetchByName('testrole');
 
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
-                    'Name' => 'testrole2',
+                    'Name'               => 'testrole2',
                     'privilegeclearance' => '1',
-                    'metadatapublished' => '1',
-                    'metadatadeleted' => '1',
-                    'Save' => 'Save'
+                    'metadatapublished'  => '1',
+                    'metadatadeleted'    => '1',
+                    'Save'               => 'Save',
                 ]);
 
         $this->dispatch('/admin/role/edit/id/' . $role->getId());
@@ -197,14 +196,14 @@ class Admin_RoleControllerTest extends ControllerTestCase
     {
         $role = UserRole::fetchByName('testrole2');
 
-         $this->request
+         $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
-                    'Name' => '',
+                    'Name'               => '',
                     'privilegeclearance' => '1',
-                    'metadatapublished' => '1',
-                    'metadatadeleted' => '1',
-                    'Save' => 'Save'
+                    'metadatapublished'  => '1',
+                    'metadatadeleted'    => '1',
+                    'Save'               => 'Save',
                 ]);
 
         $this->dispatch('/admin/role/edit/id/' . $role->getId());
@@ -223,8 +222,8 @@ class Admin_RoleControllerTest extends ControllerTestCase
         $this->assertNotNull($role);
         $this->getRequest()->setMethod('POST')
             ->setPost([
-                'Id' => $role->getId(),
-                'ConfirmYes' => 'Yes'
+                'Id'         => $role->getId(),
+                'ConfirmYes' => 'Yes',
             ]);
 
         $this->dispatch('/admin/role/delete/id/' . $role->getId());

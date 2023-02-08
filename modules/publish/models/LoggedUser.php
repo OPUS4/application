@@ -30,22 +30,29 @@
  */
 
 use Opus\Common\Account;
+use Opus\Common\AccountInterface;
 use Opus\Common\Log;
 use Opus\Common\Person;
+use Opus\Common\PersonInterface;
 use Opus\Common\Security\SecurityException;
 
 class Publish_Model_LoggedUser
 {
-    private $_log     = null;
-    private $_login   = null;
-    private $_account = null;
+    /** @var Zend_Log */
+    private $log;
+
+    /** @var string */
+    private $login;
+
+    /** @var AccountInterface */
+    private $account;
 
     public function __construct()
     {
-        $this->_log = Log::get();
+        $this->log = Log::get();
 
-        $login = \Zend_Auth::getInstance()->getIdentity();
-        if (is_null($login) or trim($login) == '') {
+        $login = Zend_Auth::getInstance()->getIdentity();
+        if ($login === null || trim($login) === '') {
             return;
         }
 
@@ -56,43 +63,52 @@ class Publish_Model_LoggedUser
         }
 
         if ($account === null || $account->isNewRecord()) {
-            $this->_log->err("Error checking logged user: Invalid account returned for user '$login'!");
+            $this->log->err("Error checking logged user: Invalid account returned for user '$login'!");
             return;
         }
 
-        $this->_login   = $login;
-        $this->_account = $account;
+        $this->login   = $login;
+        $this->account = $account;
     }
 
     /**
      * Get ID of Account object.  Return null if no account has been found.
      *
-     * @return Person
+     * @return int
      */
     public function getUserId()
     {
-        return isset($this->_account) ? $this->_account->getId() : null;
+        return isset($this->account) ? $this->account->getId() : null;
     }
 
     /**
      * Create Person object for currently logged user.  If no account
      * has been found, return NULL.
      *
-     * @return Person
+     * @return PersonInterface|null
      */
     public function createPerson()
     {
-        if (is_null($this->_account)) {
-            return;
+        if ($this->account === null) {
+            return null;
         }
 
         $person = Person::new();
-        $person->setFirstName(trim($this->_account->getFirstName()));
-        $person->setLastName(trim($this->_account->getLastName()));
-        $person->setEmail(trim($this->_account->getEmail()));
+
+        $firstName = $this->account->getFirstName();
+        if ($firstName !== null) {
+            $person->setFirstName(trim($firstName)); // TODO trimming for values is/should be centralized
+        }
+
+        $person->setLastName(trim($this->account->getLastName() ?? ''));
+
+        $email = $this->account->getEmail();
+        if ($email !== null) {
+            $person->setEmail(trim($email));
+        }
 
         if (! $person->isValid()) {
-            $this->_log->err("Created Opus_Person object for user '" . $this->_login . "' is NOT VALID. ");
+            $this->log->err('Created Opus_Person object for user \'' . $this->login . '\' is NOT VALID. ');
         }
 
         return $person;

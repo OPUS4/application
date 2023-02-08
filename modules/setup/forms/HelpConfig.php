@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Setup_Form
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -39,20 +37,19 @@
  */
 class Setup_Form_HelpConfig extends Application_Form_Abstract
 {
+    public const ELEMENT_HTML_TITLE = 'Title';
 
-    const ELEMENT_HTML_TITLE = 'Title';
+    public const ELEMENT_HTML_DESCRIPTION = 'Description';
 
-    const ELEMENT_HTML_DESCRIPTION = 'Description';
+    public const ELEMENT_STRUCTURE = 'Structure';
 
-    const ELEMENT_STRUCTURE = 'Structure';
+    public const ELEMENT_SAVE = 'Save';
 
-    const ELEMENT_SAVE = 'Save';
+    public const ELEMENT_CANCEL = 'Cancel';
 
-    const ELEMENT_CANCEL = 'Cancel';
+    public const RESULT_SAVE = 'Save';
 
-    const RESULT_SAVE = 'Save';
-
-    const RESULT_CANCEL = 'Cancel';
+    public const RESULT_CANCEL = 'Cancel';
 
     public function init()
     {
@@ -60,43 +57,57 @@ class Setup_Form_HelpConfig extends Application_Form_Abstract
 
         $this->setDecorators([
             'FormElements',
-            'Form'
+            'Form',
         ]);
 
         // TODO add translation key
         // TODO add wrapping HTML like H1 or <p> or <div class="">
         $this->addElement('html', self::ELEMENT_HTML_TITLE, [
-            'content' => 'setup_helppage_structure_title', 'tag' => 'h1'
+            'content' => 'setup_helppage_structure_title',
+            'tag'     => 'h1',
         ]);
         $this->addElement('html', self::ELEMENT_HTML_DESCRIPTION, [
-            'content' => 'setup_helppage_structure_description', 'cssClass' => 'description'
+            'content'  => 'setup_helppage_structure_description',
+            'cssClass' => 'description',
         ]);
 
         $this->addElement('textarea', self::ELEMENT_STRUCTURE, [
-            'cols' => 80, 'rows' => 20
+            'cols' => 80,
+            'rows' => 20,
         ]);
 
-        $this->addElement('submit', self::ELEMENT_SAVE, ['decorators' => [
-            'ViewHelper',
-            [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']]
-        ]]);
+        $this->addElement('submit', self::ELEMENT_SAVE, [
+            'decorators' => [
+                'ViewHelper',
+                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']],
+            ],
+        ]);
 
-        $this->addElement('submit', self::ELEMENT_CANCEL, ['decorators' => [
-            'ViewHelper',
-            [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']]
-        ]]);
+        $this->addElement('submit', self::ELEMENT_CANCEL, [
+            'decorators' => [
+                'ViewHelper',
+                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']],
+            ],
+        ]);
 
         $this->addDisplayGroup(
             [self::ELEMENT_SAVE, self::ELEMENT_CANCEL],
             'actions',
-            ['order' => 1000, 'decorators' => [
-                'FormElements',
-                [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
-                [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']]
-            ]]
+            [
+                'order'      => 1000,
+                'decorators' => [
+                    'FormElements',
+                    [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
+                    [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']],
+                ],
+            ]
         );
     }
 
+    /**
+     * @param array $post
+     * @return string|null
+     */
     public function processPost($post)
     {
         if (isset($post[self::ELEMENT_SAVE])) {

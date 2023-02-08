@@ -32,12 +32,12 @@
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 
-class Application_View_Helper_EmbargoHasPassed extends \Zend_View_Helper_Abstract
+class Application_View_Helper_EmbargoHasPassed extends Zend_View_Helper_Abstract
 {
-
     /**
      * Checks if a document is still in embargo.
      *
+     * @param DocumentInterface $doc
      * @return bool true - if embargo date has passed; false - if not
      *
      * TODO another document instantiation (find more efficient way)

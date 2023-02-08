@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Sword
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016-2019
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,14 +34,16 @@
  */
 class Sword_ServicedocumentControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var DepositTestHelper */
     private $testHelper;
 
-    private $_credentials = 'sworduser:sworduserpwd';
+    /** @var string */
+    private $credentials = 'sworduser:sworduserpwd';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->testHelper = new DepositTestHelper();
@@ -84,7 +84,7 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
     public function testIndexActionWithValidPassword()
     {
         $this->testHelper->addImportCollection();
-        $authString = base64_encode($this->_credentials);
+        $authString = base64_encode($this->credentials);
         $this->getRequest()->setHeader('Authorization', 'Basic ' . $authString);
         $this->getRequest()->setMethod('GET');
         $this->dispatch('/sword/servicedocument/index');
@@ -95,7 +95,7 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
     public function testGetActionWithValidPassword()
     {
         $this->testHelper->addImportCollection();
-        $authString = base64_encode($this->_credentials);
+        $authString = base64_encode($this->credentials);
         $this->getRequest()->setHeader('Authorization', 'Basic ' . $authString);
         $this->getRequest()->setMethod('GET');
         $this->dispatch('/sword/servicedocument');
@@ -148,6 +148,9 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
         $this->checkServiceSubtree($root);
     }
 
+    /**
+     * @param DOMNodeList $root
+     */
     private function checkServiceSubtree($root)
     {
         $this->assertEquals(1, $root->length);
@@ -174,6 +177,9 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
         $this->checkWorkspaceSubtree($workspaceNode->childNodes);
     }
 
+    /**
+     * @param DOMNodeList $root
+     */
     private function checkWorkspaceSubtree($root)
     {
         $this->assertEquals(2, $root->length);
@@ -192,6 +198,9 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
         $this->checkCollectionSubtree($collectionNode->childNodes);
     }
 
+    /**
+     * @param DOMNodeList $root
+     */
     private function checkCollectionSubtree($root)
     {
         $this->assertEquals(8, $root->length);
@@ -212,6 +221,9 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
         $this->testHelper->assertNodeProperties(7, $root, 'dcterms:abstract', 'sword.collection.default.abstract');
     }
 
+    /**
+     * @param DOMNode $domNode
+     */
     private function checkAcceptPackagingNode($domNode)
     {
         $this->assertEquals('sword:acceptPackaging', $domNode->nodeName);

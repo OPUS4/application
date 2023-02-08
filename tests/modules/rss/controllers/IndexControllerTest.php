@@ -32,15 +32,13 @@
 use Opus\Common\Title;
 
 /**
- * Class Rss_IndexControllerTest
- *
  * TODO fix Solr configuration
  *
  * @covers Rss_IndexController
  */
 class Rss_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function testIndexAction()
@@ -62,9 +60,9 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $this->requireSolrConfig();
 
         // manipulate solr configuration
-        $config = $this->getConfig();
-        $host = $config->searchengine->index->host;
-        $port = $config->searchengine->index->port;
+        $config                           = $this->getConfig();
+        $host                             = $config->searchengine->index->host;
+        $port                             = $config->searchengine->index->port;
         $config->searchengine->index->app = 'solr/corethatdoesnotexist';
 
         $this->dispatch('/rss/index/index/searchtype/all');
@@ -98,8 +96,8 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $doc1->unregisterPlugin('Opus_Document_Plugin_Index');
         $doc1->store();
 
-        $docId1 = $doc1->getId();
-        $date = new DateTime($doc1->getServerDatePublished());
+        $docId1     = $doc1->getId();
+        $date       = new DateTime($doc1->getServerDatePublished());
         $dateValue1 = $date->format(DateTime::RFC2822);
 
         $indexer = Opus\Search\Service::selectIndexingService(null, 'solr');
@@ -120,8 +118,8 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $doc2->setTitleMain($title);
         $doc2->store();
 
-        $docId2 = $doc2->getId();
-        $date = new DateTime($doc2->getServerDatePublished());
+        $docId2     = $doc2->getId();
+        $date       = new DateTime($doc2->getServerDatePublished());
         $dateValue2 = $date->format(DateTime::RFC2822);
 
         $this->dispatch('/rss/index/index/searchtype/all');
@@ -185,7 +183,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
      */
     public function testRssLink()
     {
-        \Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
+        Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
         $this->dispatch('/rss/index/index');
         $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/147');
         $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/150');

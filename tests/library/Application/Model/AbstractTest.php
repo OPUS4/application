@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,70 +24,70 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Config;
 
 /**
  * Unit Tests fuer abstrakte Basisklasse fuer Modelle.
- *
- * @category    Application Unit Test
- * @package     Application_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Model_AbstractTest extends ControllerTestCase
 {
+    /** @var Application_Model_Abstract */
+    private $model;
 
-    private $_model;
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->_model = $this->getModel();
+        $this->model = $this->getModel();
     }
 
+    /**
+     * @return Application_Model_Abstract
+     */
     private function getModel()
     {
-        return $this->getMockForAbstractClass('Application_Model_Abstract');
+        return $this->getMockForAbstractClass(Application_Model_Abstract::class);
     }
 
     public function testGetLogger()
     {
-        $logger = $this->_model->getLogger();
+        $logger = $this->model->getLogger();
 
         $this->assertNotNull($logger);
-        $this->assertInstanceOf(\Zend_Log::class, $logger);
+        $this->assertInstanceOf(Zend_Log::class, $logger);
     }
 
     public function testSetLogger()
     {
         $logger = new MockLogger();
 
-        $this->_model->setLogger($logger);
+        $this->model->setLogger($logger);
 
-        $this->assertNotNull($this->_model->getLogger());
-        $this->assertInstanceOf('MockLogger', $this->_model->getLogger());
+        $this->assertNotNull($this->model->getLogger());
+        $this->assertInstanceOf('MockLogger', $this->model->getLogger());
     }
 
     public function testGetConfig()
     {
-        $config = $this->_model->getConfig();
+        $config = $this->model->getConfig();
 
-        $this->assertInstanceOf(\Zend_Config::class, $config);
+        $this->assertInstanceOf(Zend_Config::class, $config);
         $this->assertEquals(Config::get(), $config);
     }
 
     public function testSetConfig()
     {
-        $config = new \Zend_Config([]);
+        $config = new Zend_Config([]);
 
-        $this->_model->setConfig($config);
+        $this->model->setConfig($config);
 
-        $returnedConfig = $this->_model->getConfig();
+        $returnedConfig = $this->model->getConfig();
 
-        $this->assertInstanceOf(\Zend_Config::class, $returnedConfig);
+        $this->assertInstanceOf(Zend_Config::class, $returnedConfig);
         $this->assertEquals($config, $returnedConfig);
     }
 }

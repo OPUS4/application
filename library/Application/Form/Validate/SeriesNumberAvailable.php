@@ -38,20 +38,23 @@ use Opus\Common\Series;
  *
  * TODO Basisklasse mit setLogger verwenden
  */
-class Application_Form_Validate_SeriesNumberAvailable extends \Zend_Validate_Abstract
+class Application_Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abstract
 {
-
     /**
      * Constant for number is not available anymore message.
      */
-    const NOT_AVAILABLE = 'notAvailable';
+    public const NOT_AVAILABLE = 'notAvailable';
 
     /**
      * Error messages.
+     *
+     * @var array
+     * @phpcs:disable
      */
     protected $_messageTemplates = [
-        self::NOT_AVAILABLE => 'admin_series_error_number_exists'
+        self::NOT_AVAILABLE => 'admin_series_error_number_exists',
     ];
+    // @phpcs:enable
 
     /**
      * Prüft, ob eine Nummer für eine Schriftenreihe bereits vergeben ist.
@@ -62,6 +65,10 @@ class Application_Form_Validate_SeriesNumberAvailable extends \Zend_Validate_Abs
      * Wenn die Series nicht gefunden werden kann soll die Validierung einfach ignoriert werden, da nicht festgestellt
      * werden kann, ob es eine Kollision gibt. Eine fehlende Series-ID im Formular muss woanders geprüft und gemeldet
      * werden.
+     *
+     * @param string     $value
+     * @param array|null $context
+     * @return bool
      */
     public function isValid($value, $context = null)
     {
@@ -74,8 +81,9 @@ class Application_Form_Validate_SeriesNumberAvailable extends \Zend_Validate_Abs
             $seriesId = null;
         }
 
-        if (strlen(trim($seriesId)) == 0 && is_numeric($seriesId)) {
-             Log::get()->err(__METHOD__ . ' Context without \'SeriesId\'.');
+        // TODO BUG this if statement does not make sense, does it?
+        if (strlen(trim($seriesId ?? '')) === 0 && is_numeric($seriesId)) {
+            Log::get()->err(__METHOD__ . ' Context without \'SeriesId\'.');
             return true; // should be captured somewhere else
         }
 
@@ -89,9 +97,9 @@ class Application_Form_Validate_SeriesNumberAvailable extends \Zend_Validate_Abs
         if (! $series->isNumberAvailable($value)) {
             if (array_key_exists(Admin_Form_Document_Series::ELEMENT_DOC_ID, $context)) {
                 $currentDocId = $context[Admin_Form_Document_Series::ELEMENT_DOC_ID];
-                $otherDocId = $series->getDocumentIdForNumber($value);
+                $otherDocId   = $series->getDocumentIdForNumber($value);
 
-                if ($currentDocId == $otherDocId) {
+                if ($currentDocId === $otherDocId) {
                     return true;
                 }
             }

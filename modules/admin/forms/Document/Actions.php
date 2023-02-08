@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,12 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\DocumentInterface;
 
 /**
  * Unterformular fuer die Aktions im Metadaten-Formular.
@@ -38,25 +38,24 @@
  */
 class Admin_Form_Document_Actions extends Admin_Form_AbstractDocumentSubForm
 {
+    public const ELEMENT_ID = 'Id';
 
-    const ELEMENT_ID = 'Id';
-
-    const ELEMENT_HASH = 'OpusHash';
+    public const ELEMENT_HASH = 'OpusHash';
 
     /**
      * Name für Button zum Speichern.
      */
-    const ELEMENT_SAVE = 'Save';
+    public const ELEMENT_SAVE = 'Save';
 
     /**
      * Name für Button zum Speichern und im Metadaten-Formular bleiben.
      */
-    const ELEMENT_SAVE_AND_CONTINUE = 'SaveAndContinue';
+    public const ELEMENT_SAVE_AND_CONTINUE = 'SaveAndContinue';
 
     /**
      * Name für Button um das Editieren abzubrechen.
      */
-    const ELEMENT_CANCEL = 'Cancel';
+    public const ELEMENT_CANCEL = 'Cancel';
 
     public function init()
     {
@@ -79,18 +78,27 @@ class Admin_Form_Document_Actions extends Admin_Form_AbstractDocumentSubForm
             [
                 ['divWrapper' => 'HtmlTag'],
                 [
-                    'tag' => 'div', 'class' => 'subform',
-                    'id' => 'subform-Actions'
-                ]
-            ]
+                    'tag'   => 'div',
+                    'class' => 'subform',
+                    'id'    => 'subform-Actions',
+                ],
+            ],
         ]);
     }
 
+    /**
+     * @param DocumentInterface $document
+     */
     public function populateFromModel($document)
     {
         $this->getElement(self::ELEMENT_ID)->setValue($document->getId());
     }
 
+    /**
+     * @param array $post
+     * @param array $context
+     * @return string|null
+     */
     public function processPost($post, $context)
     {
         // Prüfen, ob "Speichern" geklickt wurde
@@ -105,6 +113,9 @@ class Admin_Form_Document_Actions extends Admin_Form_AbstractDocumentSubForm
         return null;
     }
 
+    /**
+     * @return true
+     */
     public function isEmpty()
     {
         return true;

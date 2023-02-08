@@ -31,22 +31,29 @@
 
 use Opus\Common\Identifier;
 
-class Application_Form_Validate_URN extends \Zend_Validate_Abstract
+class Application_Form_Validate_URN extends Zend_Validate_Abstract
 {
+    public const NOT_UNIQUE = 'notUnique';
 
-    const NOT_UNIQUE = 'notUnique';
-
-    const NOT_VALID = 'notValid';
+    public const NOT_VALID = 'notValid';
 
     /**
      * Translation keys for validation messages.
+     *
      * @var array
+     * @phpcs:disable
      */
     protected $_messageTemplates = [
         self::NOT_UNIQUE => 'admin_validation_error_localurn_not_unique',
-        self::NOT_VALID => 'admin_validation_error_localurn_invalid',
+        self::NOT_VALID  => 'admin_validation_error_localurn_invalid',
     ];
+    // @phpcs:enable
 
+    /**
+     * @param string     $value
+     * @param array|null $context
+     * @return bool
+     */
     public function isValid($value, $context = null)
     {
         $currentDocId = $context[Admin_Form_Document_IdentifierSpecific::ELEMENT_DOC_ID];
@@ -54,7 +61,7 @@ class Application_Form_Validate_URN extends \Zend_Validate_Abstract
         $urn = Identifier::new();
         $urn->setValue($value);
 
-        if (! ($urn->isUrnUnique($currentDocId))) {
+        if (! $urn->isUrnUnique($currentDocId)) {
             $this->_error(self::NOT_UNIQUE);
             return false; // Formular kann nicht gespeichert werden (URN wurde bereits verwendet)
         }

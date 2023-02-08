@@ -29,26 +29,27 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\File;
+use Opus\Common\FileInterface;
 
 /**
  * View Helper fuer Link zu Datei.
  *
  * Wird in der Dateientabelle in der Metadaten-Übersicht verwendet.
  */
-class Application_View_Helper_FileLink extends \Zend_View_Helper_Abstract
+class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract
 {
-
     /**
      * Rendert Link fuer Datei.
      *
-     * @param $file File
+     * @param string        $name
+     * @param FileInterface $file
+     * @param array|null    $options
      * @return string HTML output
      */
     public function fileLink($name, $file, $options = null)
     {
-        if (is_null($file)) {
-            throw new Application_Exception(__METHOD__ . 'Parameter $file must not be null (for ' . $name  . ').');
+        if ($file === null) {
+            throw new Application_Exception(__METHOD__ . 'Parameter $file must not be null (for ' . $name . ').');
         }
 
         $fileName = $file->getPathName();
@@ -57,11 +58,11 @@ class Application_View_Helper_FileLink extends \Zend_View_Helper_Abstract
             $fileName = $file->getLabel();
         }
 
-        $fileName = (strlen(trim($fileName)) == 0) ? $file->getPathName() : $fileName;
-        $fileUrl = $this->view->serverUrl() . $this->view->baseUrl() . "/files/" . $file->getParentId() .
-                "/" . urlencode($file->getPathName());
+        $fileName = $fileName === null || strlen(trim($fileName)) === 0 ? $file->getPathName() : $fileName;
+        $fileUrl  = $this->view->serverUrl() . $this->view->baseUrl() . "/files/" . $file->getParentId()
+                . "/" . urlencode($file->getPathName());
 
-        return '<a href="' . $fileUrl . '" class="filelink">' .htmlspecialchars($fileName) . '</a>'
+        return '<a href="' . $fileUrl . '" class="filelink">' . htmlspecialchars($fileName) . '</a>'
             . $this->view->formHidden($name, $file->getId(), null);
     }
 }

@@ -33,17 +33,20 @@ use Opus\Common\DocumentInterface;
 
 class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Document_MultiSubForm
 {
-
     public function init()
     {
         parent::init();
         $this->setLegend('admin_document_section_identifier_other');
     }
 
+    /**
+     * @param DocumentInterface $document
+     * @return array
+     */
     public function getFieldValues($document)
     {
         $value = parent::getFieldValues($document);
-        if (! is_null($value)) {
+        if ($value !== null) {
             $value = $this->filterIdentifier($value);
         }
         return $value;
@@ -53,14 +56,14 @@ class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Documen
      * Identifier vom Typ DOI und URN werden separat behandelt und müssen daher bei der allgemeinen
      * Behandlung der Identifier ausgeschlossen werden, da sie sonst doppelt angezeigt werden
      *
-     * @param $identifiers
+     * @param array $identifiers
      * @return array
      */
     private function filterIdentifier($identifiers)
     {
         $result = [];
         foreach ($identifiers as $identifier) {
-            if ($identifier->getType() == 'doi' || $identifier->getType() == 'urn') {
+            if ($identifier->getType() === 'doi' || $identifier->getType() === 'urn') {
                 continue;
             }
             $result[] = $identifier;
@@ -77,13 +80,13 @@ class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Documen
      */
     public function updateModel($document)
     {
-        $values = $this->getSubFormModels($document);
+        $values      = $this->getSubFormModels($document);
         $identifiers = $document->getIdentifier();
 
         $result = [];
         foreach ($identifiers as $identifier) {
             $identifierType = $identifier->getType();
-            if ($identifierType == 'doi' || $identifierType == 'urn') {
+            if ($identifierType === 'doi' || $identifierType === 'urn') {
                 $result[] = $identifier;
             }
         }

@@ -33,6 +33,7 @@ use Opus\Common\Date;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
+use Opus\Common\FileInterface;
 use Opus\Common\Identifier;
 use Opus\Common\Licence;
 use Opus\Common\Model\ModelException;
@@ -43,20 +44,16 @@ use Opus\Common\TitleAbstract;
 
 class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view'];
 
-    /**
-     * @var Frontdoor_Model_HtmlMetaTags
-     */
+    /** @var Frontdoor_Model_HtmlMetaTags */
     private $htmlMetaTags;
 
-    /**
-     * @var Date
-     */
+    /** @var Date */
     private $currDate;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->htmlMetaTags = new Frontdoor_Model_HtmlMetaTags(
@@ -335,7 +332,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     public function testCreateTagsForOther()
     {
-        $doc = $this->createOther();
+        $doc   = $this->createOther();
         $docId = $doc->getId();
 
         $result = $this->htmlMetaTags->createTags($doc);
@@ -347,7 +344,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
-     * @param int $docId
+     * @param int   $docId
      */
     private function assertCommonMetaTags($tags, $docId)
     {
@@ -404,7 +401,6 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $this->assertContains(['citation_title', 'titlemain-deu', ['lang' => 'de']], $tags);
         $this->assertContains(['title', 'titlemain-deu', ['lang' => 'de']], $tags);
 
-
         $this->assertContains(['DC.title', 'titlemain-eng : titlesub-eng', ['lang' => 'en']], $tags);
         $this->assertContains(['citation_title', 'titlemain-eng : titlesub-eng', ['lang' => 'en']], $tags);
         $this->assertContains(['title', 'titlemain-eng : titlesub-eng', ['lang' => 'en']], $tags);
@@ -420,13 +416,13 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param array $tags
+     * @param array  $tags
      * @param string $publicationType
      */
     private function assertParentTitle($tags, $publicationType)
     {
         $this->assertContains(['DC.relation.ispartof', 'titleparent-eng'], $tags);
-        $this->assertContains(["citation_${publicationType}_title", 'titleparent-eng'], $tags);
+        $this->assertContains(["citation_{$publicationType}_title", 'titleparent-eng'], $tags);
     }
 
     /**
@@ -455,7 +451,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
-     * @param int $docId
+     * @param int   $docId
      */
     private function assertCommonIdentifiers($tags, $docId)
     {
@@ -468,7 +464,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
-     * @param int $docId
+     * @param int   $docId
      */
     private function assertFrontdoorUrl($tags, $docId)
     {
@@ -487,7 +483,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
-     * @param int $docId
+     * @param int   $docId
      */
     private function assertUrn($tags, $docId)
     {
@@ -540,7 +536,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param array $tags
-     * @param int $docId
+     * @param int   $docId
      */
     private function assertFile($tags, $docId)
     {
@@ -559,18 +555,18 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param DocumentInterface $doc
-     * @param array $tags
+     * @param array             $tags
      */
     private function assertThesisPublisher($doc, $tags)
     {
         $thesisPublisher = $doc->getThesisPublisher();
-        $publisherName = $thesisPublisher[0]->getModel()->getName();
+        $publisherName   = $thesisPublisher[0]->getModel()->getName();
         $this->assertContains(['DC.publisher', $publisherName], $tags);
         $this->assertContains(['citation_dissertation_institution', $publisherName], $tags);
     }
 
     /**
-     * @param array $tags
+     * @param array  $tags
      * @param string $docType
      */
     private function assertDocumentType($tags, $docType)
@@ -579,7 +575,8 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     }
 
     /**
-     * @param array $tags
+     * @param array  $tags
+     * @param string $value
      */
     private function assertInstitution($tags, $value)
     {
@@ -595,31 +592,55 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         return $this->createTestDoc('article');
     }
 
+    /**
+     * @return DocumentInterface
+     * @throws ModelException
+     */
     private function createConferencePaper()
     {
         return $this->createTestDoc('conferenceobject');
     }
 
+    /**
+     * @return DocumentInterface
+     * @throws ModelException
+     */
     private function createThesis()
     {
         return $this->createTestDoc('bachelorthesis');
     }
 
+    /**
+     * @return DocumentInterface
+     * @throws ModelException
+     */
     private function createWorkingPaper()
     {
         return $this->createTestDoc('workingpaper');
     }
 
+    /**
+     * @return DocumentInterface
+     * @throws ModelException
+     */
     private function createBook()
     {
         return $this->createTestDoc('book');
     }
 
+    /**
+     * @return DocumentInterface
+     * @throws ModelException
+     */
     private function createBookPart()
     {
         return $this->createTestDoc('bookpart');
     }
 
+    /**
+     * @return DocumentInterface
+     * @throws ModelException
+     */
     private function createOther()
     {
         return $this->createTestDoc('unknowndoctype');
@@ -663,7 +684,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
     /**
      * @param DocumentInterface $doc
-     * @param int $num
+     * @param int               $num
      */
     private function addAuthors($doc, $num)
     {
@@ -671,7 +692,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         for ($i = 0; $i < $num; $i++) {
             $author = Person::new();
             $author->setLastName('lastName-' . $i);
-            if ($i % 2 == 0) {
+            if ($i % 2 === 0) {
                 // nur jeder zweite Autor bekommt einen Vornamen
                 $author->setFirstName('firstName-' . $i);
             }
@@ -686,7 +707,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     private function addTitles($doc)
     {
         $titles = [];
-        $title = Title::new();
+        $title  = Title::new();
         $title->setType('main');
         $title->setLanguage('deu');
         $title->setValue('titlemain-deu');
@@ -700,9 +721,8 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
         $doc->setTitleMain($titles);
 
-
         $titles = [];
-        $title = Title::new();
+        $title  = Title::new();
         $title->setType('sub');
         $title->setLanguage('eng');
         $title->setValue('titlesub-eng');
@@ -710,9 +730,8 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
         $doc->setTitleSub($titles);
 
-
         $titles = [];
-        $title = Title::new();
+        $title  = Title::new();
         $title->setType('parent');
         $title->setLanguage('deu');
         $title->setValue('titleparent-eng');
@@ -810,7 +829,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     private function addFile($doc)
     {
         $config = $this->getConfig();
-        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
+        $path   = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
         mkdir($path, 0777, true);
 
         $doc->addFile($this->createFile($path, 'HtmlMetaTagsTest.pdf', "%PDF-1.1\ntest"));
@@ -822,15 +841,22 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $doc->addFile($file);
     }
 
+    /**
+     * @param string $path
+     * @param string $fileName
+     * @param string $header
+     * @return FileInterface
+     * @throws ModelException
+     * @throws Zend_Exception
+     */
     private function createFile($path, $fileName, $header)
     {
         $filepath = $path . DIRECTORY_SEPARATOR . $fileName;
-        $fp = fopen($filepath, "wb");
+        $fp       = fopen($filepath, "wb");
         fwrite($fp, $header);
         fclose($fp);
 
-        $file = $this->createOpusTestFile($fileName, $filepath);
-        return $file;
+        return $this->createOpusTestFile($fileName, $filepath);
     }
 
     /**
@@ -847,7 +873,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
         $metaTags = $this->htmlMetaTags;
 
         $document = Document::get(146);
-        $book = $this->createBook();
+        $book     = $this->createBook();
 
         $metaTags->getMetatagsType($document);
 
@@ -872,7 +898,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     public function testGetMappingConfigCustomDocumentType()
     {
         $this->htmlMetaTags->setConfig($this->adjustConfiguration([
-            'metatags' => ['mapping' => ['book' => ['mybooktype']]]
+            'metatags' => ['mapping' => ['book' => ['mybooktype']]],
         ]));
 
         $metaTags = $this->htmlMetaTags;
@@ -886,7 +912,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
     public function testGetMappingConfigDefaultOverride()
     {
         $this->htmlMetaTags->setConfig($this->adjustConfiguration([
-            'metatags' => ['mapping' => ['book' => ['article']]]
+            'metatags' => ['mapping' => ['book' => ['article']]],
         ]));
 
         $metaTags = $this->htmlMetaTags;

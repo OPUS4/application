@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,21 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Crawlers
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Crawlers_SitelinksControllerTest.
- *
  * @covers Crawlers_SitelinksController
  */
 class Crawlers_SitelinksControllerTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'mainMenu', 'translation'];
 
     public function testRoute()
@@ -97,7 +93,7 @@ class Crawlers_SitelinksControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
 
         $this->assertQuery('#years');
-        $this->assertNotQueryContentContains('#years', 1000);
+        $this->assertNotQueryContentContains('#years', '1000');
         $this->assertNotQuery('#documents');
         $this->assertQueryContentContains('//title', 'Sitelinks');
     }

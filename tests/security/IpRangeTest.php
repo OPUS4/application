@@ -33,18 +33,19 @@ use Opus\Common\Security\Realm;
 
 class IpRangeTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'navigation', 'mainMenu', 'translation'];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->enableSecurity();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->restoreSecuritySetting();
         parent::tearDown();
@@ -52,7 +53,7 @@ class IpRangeTest extends ControllerTestCase
 
     public function testClientIpSetDuringRouting()
     {
-        $_SERVER['REMOTE_ADDR'] = '127.0.0.2';
+        $_SERVER['REMOTE_ADDR']          = '127.0.0.2';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '127.0.0.3';
 
         $this->dispatch('/home');

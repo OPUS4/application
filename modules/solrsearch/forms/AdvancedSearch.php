@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -42,46 +40,45 @@
  */
 class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
 {
-
     /**
      * Name of display group for the search fields.
      */
-    const GROUP_SEARCHFIELDS = 'searchfields';
+    public const GROUP_SEARCHFIELDS = 'searchfields';
 
     /**
      * Name of element for selecting maximum number of search results per page.
      */
-    const ELEMENT_HITS_PER_PAGE = 'rows';
+    public const ELEMENT_HITS_PER_PAGE = 'rows';
 
     /**
      * Name of search button.
      */
-    const ELEMENT_SEARCH = 'Search';
+    public const ELEMENT_SEARCH = 'Search';
 
     /**
      * Name of reset button.
      */
-    const ELEMENT_RESET = 'Reset';
+    public const ELEMENT_RESET = 'Reset';
 
     /**
      * Name of hidden field for search type.
      */
-    const ELEMENT_SEARCHTYPE = 'searchtype';
+    public const ELEMENT_SEARCHTYPE = 'searchtype';
 
     /**
      * Name of hidden field for index of first entry on page.
      */
-    const ELEMENT_START = 'start';
+    public const ELEMENT_START = 'start';
 
     /**
      * Name of hidden field for column/field used for sorting of results.
      */
-    const ELEMENT_SORTFIELD = 'sortfield';
+    public const ELEMENT_SORTFIELD = 'sortfield';
 
     /**
      * Name of hidden field for direction of sorting.
      */
-    const ELEMENT_SORTORDER = 'sortorder';
+    public const ELEMENT_SORTORDER = 'sortorder';
 
     /**
      * Display mode of form for different use cases.
@@ -97,8 +94,9 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
 
     /**
      * Constructs form.
-     * @param string $mode Selects between variations of the form.
-     * @param null $options Zend_Form options
+     *
+     * @param string     $mode Selects between variations of the form.
+     * @param array|null $options Zend_Form options
      */
     public function __construct($mode = 'advanced', $options = null)
     {
@@ -108,6 +106,7 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
 
     /**
      * Initializes the form and its elements.
+     *
      * @throws Zend_Form_Exception
      */
     public function init()
@@ -118,14 +117,19 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
             [
                 'FormElements',
                 'Form',
-                ['HtmlTag', ['tag' => 'div', 'class' => 'form-wrapper']]
+                ['HtmlTag', ['tag' => 'div', 'class' => 'form-wrapper']],
             ]
         );
 
         $this->setAttrib('class', 'opus_form'); // TODO with underline, change?
 
         $searchFields = [
-            'author', 'title', 'persons', 'referee', 'abstract', 'fulltext'
+            'author',
+            'title',
+            'persons',
+            'referee',
+            'abstract',
+            'fulltext',
         ];
 
         if ($this->searchMode !== 'authorsearch') {
@@ -145,7 +149,8 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
 
     /**
      * Adds multiple search fields in a display group to the form.
-     * @param $searchFields Array with names of search fields
+     *
+     * @param array $searchFields Array with names of search fields
      * @throws Zend_Form_Exception
      */
     public function addSearchFields($searchFields)
@@ -170,7 +175,7 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
 
         $fieldGroup->setDecorators([
             'FormElements',
-            ['HtmlTag', ['tag' => 'table', 'class' => 'search-form-table']]
+            ['HtmlTag', ['tag' => 'table', 'class' => 'search-form-table']],
         ]);
     }
 
@@ -179,7 +184,7 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
      *
      * The search fields are rendern in a table. Each field with two elements in a single table row.
      *
-     * @param $name Name of the search field
+     * @param string $name Name of the search field
      * @throws Zend_Form_Exception
      */
     public function addSearchField($name)
@@ -194,7 +199,7 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
             [['labelClose' => 'HtmlTag'], ['tag' => 'td', 'closeOnly' => true]],
             'Label',
             [['labelOpen' => 'HtmlTag'], ['tag' => 'td', 'openOnly' => true]],
-            [['rowOpen' => 'HtmlTag'], ['tag' => 'row', 'openOnly' => true]]
+            [['rowOpen' => 'HtmlTag'], ['tag' => 'row', 'openOnly' => true]],
         ]);
 
         if ($name === 'fulltext') {
@@ -209,28 +214,35 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
             'Errors',
             'Description',
             [['cellWrapper' => 'HtmlTag'], ['tag' => 'td']],
-            [['rowClose' => 'HtmlTag'], ['tag' => 'tr', 'closeOnly' => true]]
+            [['rowClose' => 'HtmlTag'], ['tag' => 'tr', 'closeOnly' => true]],
         ]);
         $this->addElement($value);
     }
 
     /**
      * Creates the search button with the necessary decorators.
-     * @return void|Zend_Form
+     *
+     * @return Zend_Form_Element
      */
     public function createSearchButton()
     {
         $submit = $this->createElement('submit', self::ELEMENT_SEARCH, [
-            'id' => 'edit-submit-advanced-search', 'class' => 'form-submit',
-            'label' => 'advanced_search_form_search_action'
+            'id'    => 'edit-submit-advanced-search',
+            'class' => 'form-submit',
+            'label' => 'advanced_search_form_search_action',
         ]);
 
         $submit->setDecorators([
             'ViewHelper',
             [['submit-wrapper' => 'HtmlTag'], ['tag' => 'span', 'class' => 'form-submit-wrapper']],
-            [['form-item' => 'HtmlTag'], [
-                'tag' => 'div', 'id' => 'edit-submit-advanced-search-wrapper', 'class' => 'form-item'
-            ]]
+            [
+                ['form-item' => 'HtmlTag'],
+                [
+                    'tag'   => 'div',
+                    'id'    => 'edit-submit-advanced-search-wrapper',
+                    'class' => 'form-item',
+                ],
+            ],
         ]);
 
         return $submit;
@@ -242,13 +254,14 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
      * The button uses Javascript to clear the form without submitting a request, if jQuery is present.
      * The necessary decorators are set for the button.
      *
-     * @return void|Zend_Form
+     * @return Zend_Form_Element
      */
     public function createResetButton()
     {
         $button = $this->createElement('submit', self::ELEMENT_RESET, [
-            'id' => 'edit-reset-advanced-search', 'class' => 'form-submit',
-            'label' => 'advanced_search_form_reset_action'
+            'id'    => 'edit-reset-advanced-search',
+            'class' => 'form-submit',
+            'label' => 'advanced_search_form_reset_action',
         ]);
 
         $helper = new Application_View_Helper_JQueryEnabled();
@@ -260,9 +273,14 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract
         $button->setDecorators([
             'ViewHelper',
             [['submit-wrapper' => 'HtmlTag'], ['tag' => 'span', 'class' => 'form-submit-wrapper']],
-            [['form-item' => 'HtmlTag'], [
-                'tag' => 'div', 'id' => 'edit-reset-advanced-search-wrapper', 'class' => 'form-item'
-            ]]
+            [
+                ['form-item' => 'HtmlTag'],
+                [
+                    'tag'   => 'div',
+                    'id'    => 'edit-reset-advanced-search-wrapper',
+                    'class' => 'form-item',
+                ],
+            ],
         ]);
 
         return $button;

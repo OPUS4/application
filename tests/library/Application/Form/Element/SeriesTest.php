@@ -33,16 +33,23 @@ use Opus\Common\Series;
 
 class Application_Form_Element_SeriesTest extends FormElementTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_Series';
-        $this->_expectedDecorators = ['ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper', 'ElementHint'];
-        $this->_expectedDecoratorCount = count($this->_expectedDecorators);
-        $this->_staticViewHelper = 'viewFormSelect';
+        $this->formElementClass       = 'Application_Form_Element_Series';
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+            'ElementHint',
+        ];
+        $this->expectedDecoratorCount = count($this->expectedDecorators);
+        $this->staticViewHelper       = 'viewFormSelect';
         parent::setUp();
     }
 

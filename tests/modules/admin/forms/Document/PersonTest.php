@@ -36,7 +36,7 @@ use Opus\Common\Document;
  */
 class Admin_Form_Document_PersonTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testCreateForm()
@@ -67,7 +67,7 @@ class Admin_Form_Document_PersonTest extends ControllerTestCase
         $form->getElement('PersonId')->setValue('1234');
 
         $post = [
-            'Edit' => 'Editieren'
+            'Edit' => 'Editieren',
         ];
 
         $result = $form->processPost($post, null);

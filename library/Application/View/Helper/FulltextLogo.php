@@ -36,35 +36,38 @@ use Opus\Common\DocumentInterface;
  */
 class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
 {
-
+    /**
+     * @param null|DocumentInterface $doc
+     * @return string
+     * @throws Exception
+     */
     public function fulltextLogo($doc = null)
     {
-        if (is_null($doc)) {
+        if ($doc === null) {
             $doc = $this->getDocument();
         }
 
         if (! $doc instanceof DocumentInterface) {
-            // TODO log
-            return;
+            // TODO log OR throw exception?
+            return '';
         }
 
         $cssClass = "fulltext-logo";
-        $tooltip = null;
-
+        $tooltip  = null;
 
         if ($doc->hasFulltext()) {
             $cssClass .= ' fulltext';
-            $tooltip = 'fulltext_icon_tooltip';
+            $tooltip   = 'fulltext_icon_tooltip';
         }
 
         if ($doc->isOpenAccess()) {
             $cssClass .= ' openaccess';
-            $tooltip = 'fulltext_icon_oa_tooltip';
+            $tooltip   = 'fulltext_icon_oa_tooltip';
         }
 
         $output = "<div class=\"$cssClass\"";
 
-        if (! is_null($tooltip)) {
+        if ($tooltip !== null) {
             $tooltip = $this->view->translate([$tooltip]);
             $output .= " title=\"$tooltip\"";
         }

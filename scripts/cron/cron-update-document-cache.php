@@ -42,14 +42,14 @@ define('APPLICATION_ENV', 'development');
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 use Opus\Common\Document;
+use Opus\Common\Repository;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
-use Opus\Common\Repository;
 
 $repository = Repository::getInstance();
 
 $finder = $repository->getDocumentFinder();
-$cache = $repository->getDocumentXmlCache();
+$cache  = $repository->getDocumentXmlCache();
 
 $docIds = $finder->setNotInXmlCache()->getIds();
 

@@ -34,7 +34,7 @@ use Opus\Common\UserRole;
 
 class Admin_Form_UserRolesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testConstruct()
@@ -138,8 +138,8 @@ class Admin_Form_UserRolesTest extends ControllerTestCase
 
         $form->populate([
             'administrator' => 1,
-            'sworduser' => 1,
-            'docsadmin' => 0
+            'sworduser'     => 1,
+            'docsadmin'     => 0,
         ]);
 
         $selected = $form->getSelectedRoles();

@@ -33,32 +33,35 @@ use Opus\Common\Document;
 
 class Admin_Model_FileImportTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var Admin_Model_FileImport */
     private $model;
 
+    /** @var int */
     private $documentId;
 
+    /** @var string */
     private $importFolder;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->model = new Admin_Model_FileImport();
 
         $this->importFolder = APPLICATION_PATH . '/tests/workspace/incoming';
-        $this->_clearImportFolder();
+        $this->clearImportFolder();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        $this->_clearImportFolder();
+        $this->clearImportFolder();
         parent::tearDown();
     }
 
-    private function _clearImportFolder()
+    private function clearImportFolder()
     {
         foreach (new DirectoryIterator($this->importFolder) as $fileInfo) {
             if (! $fileInfo->isDot() && $fileInfo->isFile()) {
@@ -120,13 +123,15 @@ class Admin_Model_FileImportTest extends ControllerTestCase
 
     public function testAddFilesToDocumentNoFiles()
     {
-        $this->setExpectedException(Application_Exception::class, 'no files for import');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('no files for import');
         $this->model->addFilesToDocument(200, null);
     }
 
     public function testAddFilesToDocumentUnknownDocument()
     {
-        $this->setExpectedException(Application_Exception::class, 'no document found for id 500');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('no document found for id 500');
         $this->model->addFilesToDocument(500, ['testfile']);
     }
 
@@ -176,7 +181,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
     {
         $this->model->setImportFolder($this->importFolder);
 
-        $document = $this->createTestDocument();
+        $document         = $this->createTestDocument();
         $this->documentId = $document->store();
 
         $filePath1 = $this->importFolder . '/test1.txt';

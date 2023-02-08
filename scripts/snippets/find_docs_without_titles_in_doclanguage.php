@@ -28,6 +28,7 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 /**
  * Dieses Skript gibt alle IDs der Dokumente zurück, die keinen Titel
  * in der Sprache des Dokuments besitzen.
@@ -41,13 +42,13 @@ use Opus\Common\Document;
 use Opus\Common\Repository;
 
 $updateRequired = 0;
-$docfinder = Repository::getInstance()->getDocumentFinder();
+$docfinder      = Repository::getInstance()->getDocumentFinder();
 foreach ($docfinder->getIds() as $docId) {
     $doc = Document::get($docId);
 
     foreach ($doc->getTitleMain() as $title) {
         $titleLanguage = $title->getLanguage();
-        $docLanguage = $doc->getLanguage();
+        $docLanguage   = $doc->getLanguage();
     }
 
     $lang = strpbrk($docLanguage, $titleLanguage);
@@ -57,7 +58,7 @@ foreach ($docfinder->getIds() as $docId) {
     }
 }
 
-if ($updateRequired == 0) {
+if ($updateRequired === 0) {
     echo "Alle Dokumente wurden überprüft -- alles ok!\n";
 } else {
     echo "Alle Dokumente wurden überprüft -- Anzahl der Dokumente, die  keinen Titel in der Sprache des Dokuments"

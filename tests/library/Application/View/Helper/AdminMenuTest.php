@@ -25,38 +25,43 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_AdminMenuTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'navigation', 'translation'];
 
-    private $_helper;
+    /** @var Application_View_Helper_AdminMenu */
+    private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
-        $this->_helper = new Application_View_Helper_AdminMenu();
-        $this->_helper->setView($this->getView());
+        $this->helper = new Application_View_Helper_AdminMenu();
+        $this->helper->setView($this->getView());
     }
 
+    /**
+     * @param string $label
+     * @return Zend_Navigation_Page
+     */
     private function getPageByLabel($label)
     {
-        return $this->_helper->view->navigation()->findByLabel($label);
+        return $this->helper->view->navigation()->findByLabel($label);
     }
 
     public function testAdminMenu()
     {
-        $this->assertSame($this->_helper, $this->_helper->adminMenu());
+        $this->assertSame($this->helper, $this->helper->adminMenu());
     }
 
     public function testGetAcl()
     {
-        $this->assertSame(Application_Security_AclProvider::getAcl(), $this->_helper->getAcl());
+        $this->assertSame(Application_Security_AclProvider::getAcl(), $this->helper->getAcl());
     }
 
     public function testHasAllowedChildren()
@@ -64,34 +69,34 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase
         $this->loginUser('security8', 'security8pwd');
 
         $page = $this->getPageByLabel('admin_title_info');
-        $this->assertTrue($this->_helper->hasAllowedChildren($page));
+        $this->assertTrue($this->helper->hasAllowedChildren($page));
 
         $page = $this->getPageByLabel('admin_title_documents');
-        $this->assertTrue($this->_helper->hasAllowedChildren($page));
+        $this->assertTrue($this->helper->hasAllowedChildren($page));
 
         $page = $this->getPageByLabel('admin_title_collections');
-        $this->assertTrue($this->_helper->hasAllowedChildren($page));
+        $this->assertTrue($this->helper->hasAllowedChildren($page));
 
         $page = $this->getPageByLabel('admin_title_setup');
-        $this->assertFalse($this->_helper->hasAllowedChildren($page));
+        $this->assertFalse($this->helper->hasAllowedChildren($page));
 
         // activate sub entry below 'admin_title_setup'
         $acl = Application_Security_AclProvider::getAcl();
         $acl->allow(Application_Security_AclProvider::ACTIVE_ROLE, 'options');
 
         $page = $this->getPageByLabel('admin_title_config');
-        $this->assertTrue($this->_helper->hasAllowedChildren($page));
+        $this->assertTrue($this->helper->hasAllowedChildren($page));
     }
 
     public function testIsRenderDescription()
     {
         // show description if attribute is set and translation exists
         $page = $this->getPageByLabel('admin_title_documents');
-        $this->assertTrue($this->_helper->isRenderDescription($page));
+        $this->assertTrue($this->helper->isRenderDescription($page));
 
         // only show description if translation exits,even if description is set
         $page = $this->getPageByLabel('admin_title_setup');
-        $this->assertFalse($this->_helper->isRenderDescription($page));
+        $this->assertFalse($this->helper->isRenderDescription($page));
         $this->assertNotNull($page->description);
     }
 
@@ -100,7 +105,7 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase
         $this->loginUser('security19', 'security19pwd');
 
         $page = $this->getPageByLabel('admin_title_oailink');
-        $this->assertTrue($this->_helper->hasAllowedChildren($page));
-        $this->assertTrue($this->_helper->isRenderActive($page));
+        $this->assertTrue($this->helper->hasAllowedChildren($page));
+        $this->assertTrue($this->helper->isRenderActive($page));
     }
 }

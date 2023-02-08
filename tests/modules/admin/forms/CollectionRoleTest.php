@@ -33,7 +33,7 @@ use Opus\Common\CollectionRole;
 
 class Admin_Form_CollectionRoleTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function testConstructForm()
@@ -113,7 +113,7 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
         // default translations for 'ddc' collection role
         $this->assertEquals([
             'en' => 'Dewey Decimal Classification',
-            'de' => 'DDC-Klassifikation'
+            'de' => 'DDC-Klassifikation',
         ], $form->getElement('DisplayName')->getValue());
     }
 
@@ -171,10 +171,10 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
         $form = new Admin_Form_CollectionRole();
 
         $this->assertTrue($form->isValid([
-            'Name' => 'TestName',
-            'OaiName' => 'TestOaiName',
-            'DisplayBrowsing' => 'Name',
-            'DisplayFrontdoor' => 'Name,Number'
+            'Name'             => 'TestName',
+            'OaiName'          => 'TestOaiName',
+            'DisplayBrowsing'  => 'Name',
+            'DisplayFrontdoor' => 'Name,Number',
         ]));
     }
 
@@ -183,10 +183,10 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
         $form = new Admin_Form_CollectionRole();
 
         $this->assertFalse($form->isValid([
-            'Name' => 'institutes',
-            'OaiName' => 'institutes',
-            'DisplayBrowsing' => 'Name',
-            'DisplayFrontdoor' => 'Name,Number'
+            'Name'             => 'institutes',
+            'OaiName'          => 'institutes',
+            'DisplayBrowsing'  => 'Name',
+            'DisplayFrontdoor' => 'Name,Number',
         ]));
 
         $this->assertContains('notUnique', $form->getErrors('Name'));
@@ -198,11 +198,11 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
         $form = new Admin_Form_CollectionRole();
 
         $this->assertTrue($form->isValid([
-            'Id' => '1', // ID for 'institutes' CollectionRole
-            'Name' => 'institutes',
-            'OaiName' => 'institutes',
-            'DisplayBrowsing' => 'Name',
-            'DisplayFrontdoor' => 'Name,Number'
+            'Id'               => '1', // ID for 'institutes' CollectionRole
+            'Name'             => 'institutes',
+            'OaiName'          => 'institutes',
+            'DisplayBrowsing'  => 'Name',
+            'DisplayFrontdoor' => 'Name,Number',
         ]));
     }
 
@@ -211,10 +211,10 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
         $form = new Admin_Form_CollectionRole();
 
         $this->assertTrue($form->isValid([
-            'Name' => 'foobar',
-            'OaiName' => 'foobar',
-            'DisplayBrowsing' => 'Name',
-            'DisplayFrontdoor' => 'Name,Number'
+            'Name'             => 'foobar',
+            'OaiName'          => 'foobar',
+            'DisplayBrowsing'  => 'Name',
+            'DisplayFrontdoor' => 'Name,Number',
         ]));
 
         $this->assertNotContains('containsInvalidChar', $form->getErrors('Name'));
@@ -226,10 +226,10 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
         $form = new Admin_Form_CollectionRole();
 
         $this->assertFalse($form->isValid([
-            'Name' => 'foo bar',
-            'OaiName' => 'foo bar',
-            'DisplayBrowsing' => 'Name',
-            'DisplayFrontdoor' => 'Name,Number'
+            'Name'             => 'foo bar',
+            'OaiName'          => 'foo bar',
+            'DisplayBrowsing'  => 'Name',
+            'DisplayFrontdoor' => 'Name,Number',
         ]));
 
         $this->assertContains('containsInvalidChar', $form->getErrors('Name'));
@@ -241,19 +241,19 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase
         $form = new Admin_Form_CollectionRole();
 
         $form->populate([
-            'Name' => 'testName',
+            'Name'        => 'testName',
             'DisplayName' => [
                 'en' => 'English',
-                'de' => 'Deutsch'
+                'de' => 'Deutsch',
             ],
-            'OaiName' => 'testOaiName'
+            'OaiName'     => 'testOaiName',
         ]);
 
         $this->assertEquals('testName', $form->getElementValue(Admin_Form_CollectionRole::ELEMENT_NAME));
         $this->assertEquals('testOaiName', $form->getElementValue(Admin_Form_CollectionRole::ELEMENT_OAI_NAME));
         $this->assertEquals([
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], $form->getElementValue(Admin_Form_CollectionRole::ELEMENT_DISPLAYNAME));
     }
 }

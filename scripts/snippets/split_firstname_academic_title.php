@@ -32,7 +32,6 @@
 use Opus\Common\Person;
 
 /**
- *
  * Durchsucht die Vornamen aller in der Datenbank abgespeicherten Personen.
  * Ist in einem Vornamen auch der akademische Titel angegebenen (in Klammern),
  * dann wird dieser entfernt und in dem dafür vorgesehenen OPUS4-Feld
@@ -42,22 +41,21 @@ use Opus\Common\Person;
  * separates Feld für das Ablegen des akademischen Titels einer Person gab.
  *
  * TODO fixing tool - where should it go?
- *
  */
 
 foreach (Person::getModelRepository()->getAll() as $person) {
-    $firstname = $person->getFirstName();
+    $firstname               = $person->getFirstName();
     $numOfOpeningParenthesis = substr_count($firstname, '(');
     $numOfClosingParenthesis = substr_count($firstname, ')');
 
-    if ($numOfOpeningParenthesis != $numOfClosingParenthesis) {
+    if ($numOfOpeningParenthesis !== $numOfClosingParenthesis) {
         // conflict found
         echo '[WARN] Opus_Person #' . $person->getId() . " with conflict in firstname '$firstname' : "
             . "mismatch between opening and closing parentheses -- skip person\n";
         continue;
     }
 
-    if ($numOfOpeningParenthesis == 0) {
+    if ($numOfOpeningParenthesis === 0) {
         // nothing to do
         echo '[INFO] Opus_Person #' . $person->getId()
             . " without parenthesis in firstname '$firstname' -- skip person\n";
@@ -65,7 +63,7 @@ foreach (Person::getModelRepository()->getAll() as $person) {
     }
 
     // check if firstname ends with '('
-    if (preg_match('/^.*\)\s*$/', $firstname) == 0) {
+    if (preg_match('/^.*\)\s*$/', $firstname) === 0) {
         echo '[WARN] Opus_Person #' . $person->getId()
             . " without trailing closing parenthesis in firstname '$firstname' -- skip person\n";
         continue;

@@ -30,10 +30,11 @@
  */
 
 use Opus\Common\Log;
+
 ?>
 
-<?PHP if (! is_null($this->document)) : ?>
-<?PHP $authors = $this->document->getAuthors(); ?>
+<?PHP if ($this->document !== null) : ?>
+    <?PHP $authors = $this->document->getAuthors(); ?>
 <div id="docinfo">
     <h2><span class="docid"><?=$this->document->getDocId()?></span> - <?= $this->escape($this->document->getMainTitle()) ?></h2>
     <?PHP if (! empty($authors)) : ?>
@@ -41,6 +42,6 @@ use Opus\Common\Log;
     <?PHP endif; ?>
 </div>
 <?PHP else : ?>
-<?PHP Log::get()->err('Use of partial \'docinfo.phtml\' without document = null.'); ?>
+    <?PHP Log::get()->err('Use of partial \'docinfo.phtml\' without document = null.'); ?>
 <?PHP endif; ?>
 

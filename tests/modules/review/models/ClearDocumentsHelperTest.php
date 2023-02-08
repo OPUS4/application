@@ -30,19 +30,23 @@
  */
 
 use Opus\Common\Date;
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
 use Opus\Common\Person;
+use Opus\Common\PersonInterface;
 
 class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
-    private $documentId = null;
-    private $person = null;
+    /** @var int */
+    private $documentId;
 
-    public function setUp()
+    /** @var PersonInterface */
+    private $person;
+
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -121,7 +125,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     {
         $helper = new Review_Model_ClearDocumentsHelper();
 
-        $this->setExpectedException(NotFoundException::class);
+        $this->expectException(NotFoundException::class);
         $helper->clear([$this->documentId + 100000], 23);
     }
 
@@ -129,7 +133,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     {
         $helper = new Review_Model_ClearDocumentsHelper();
 
-        $this->setExpectedException(NotFoundException::class);
+        $this->expectException(NotFoundException::class);
         $helper->reject([$this->documentId + 100000], 23);
     }
 
@@ -177,18 +181,18 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 
         $this->assertNotNull($publishedDate);
 
-        $today = new DateTime('today');
+        $today             = new DateTime('today');
         $publishedDateTime = $publishedDate->getDateTime($today->getTimezone()->getName());
         $publishedDateTime->setTime(0, 0, 0);
 
-        $this->assertEquals(0, (integer)$today->diff($publishedDateTime)->format('%R%a'));
+        $this->assertEquals(0, (int) $today->diff($publishedDateTime)->format('%R%a'));
     }
 
     public function testPublishedDateIsNotOverwritten()
     {
         // set PublishedDate to yesterday
-        $document = Document::get($this->documentId);
-        $yesterday = new DateTime('yesterday');
+        $document     = Document::get($this->documentId);
+        $yesterday    = new DateTime('yesterday');
         $expectedDate = new Date($yesterday);
         $document->setPublishedDate($expectedDate);
         $document->store();

@@ -40,17 +40,15 @@ use Opus\Common\UserRole;
  */
 class Review_Model_ClearDocumentsHelper
 {
-
     /**
      * Publishes documents and adds the given Person as referee.
      *
-     * @param array $docIds
-     * @param mixed $userId
-     * @param Person $person
+     * @param null|mixed  $userId
+     * @param null|Person $person
      *
      * FIXME capture success or failure for display afterwards
      */
-    public function clear(array $docIds = null, $userId = null, $person = null)
+    public function clear(?array $docIds = null, $userId = null, $person = null)
     {
         $logger = Log::get();
 
@@ -86,20 +84,17 @@ class Review_Model_ClearDocumentsHelper
             $document->store();
             $guestRole->store();
         }
-
-        return;
     }
 
     /**
      * Rejects documents and adds the given Person as referee.
      *
-     * @param array $docIds
-     * @param mixed $userId
-     * @param Person $person
+     * @param null|mixed  $userId
+     * @param null|Person $person
      *
      * FIXME capture success or failure for display afterwards
      */
-    public function reject(array $docIds = null, $userId = null, $person = null)
+    public function reject(?array $docIds = null, $userId = null, $person = null)
     {
         $logger = Log::get();
 
@@ -118,7 +113,5 @@ class Review_Model_ClearDocumentsHelper
             $document->setServerState(Document::STATE_DELETED);
             $document->store();
         }
-
-        return;
     }
 }

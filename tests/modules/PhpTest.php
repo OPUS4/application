@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -37,18 +35,17 @@
  */
 class PhpTest extends ControllerTestCase
 {
-
     /**
      * Test strange behavior of 'in_array' function.
      */
     public function testInArray()
     {
         $array = [
-            'egg' => true,
-            'cheese' => false,
-            'hair' => 765,
+            'egg'     => true,
+            'cheese'  => false,
+            'hair'    => 765,
             'goblins' => null,
-            'ogres' => 'no ogres allowed in this array',
+            'ogres'   => 'no ogres allowed in this array',
         ];
 
         // correct

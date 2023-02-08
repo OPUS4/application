@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,56 +25,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Class Application_Form_Validate_AtLeastOneNotEmpty validates that at least one of multiple fields has a value.
- *
- * @category    Application
- * @package     Form_Validate
  */
-class Application_Form_Validate_AtLeastOneNotEmpty extends \Zend_Validate_Abstract
+class Application_Form_Validate_AtLeastOneNotEmpty extends Zend_Validate_Abstract
 {
+    public const ALL_EMPTY = 'allElementsEmpty';
 
-    const ALL_EMPTY = 'allElementsEmpty';
+    /** @var array List of form elements that need to contain at least one value in the group. */
+    private $elements;
 
     /**
-     * @var array List of form elements that need to contain at least one value in the group.
+     * @var string[]
+     * @phpcs:disable
      */
-    private $_elements;
-
     protected $_messageTemplates = [
-        self::ALL_EMPTY => 'admin_collection_error_name_or_number_required'
+        self::ALL_EMPTY => 'admin_collection_error_name_or_number_required',
     ];
+    // @phpcs:enable
 
     /**
      * Constructs validator.
-     * @param null $elements
+     *
+     * @param array|null $elements
      */
     public function __construct($elements = null)
     {
-        $this->_elements = $elements;
+        $this->elements = $elements;
     }
 
     /**
      * Returns true if and only if $value meets the validation requirements
      *
-     *
-     *
-     * @param  mixed $value
-     * @return boolean
-     * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @param mixed      $value
+     * @param array|null $context
+     * @return bool
+     * @throws Zend_Validate_Exception If validation of $value is impossible.
      */
     public function isValid($value, $context = null)
     {
-        if (is_array($this->_elements)) {
-            $notEmpty = new \Zend_Validate_NotEmpty();
-            foreach ($this->_elements as $name) {
+        if (is_array($this->elements)) {
+            $notEmpty = new Zend_Validate_NotEmpty();
+            foreach ($this->elements as $name) {
                 if (isset($context[$name]) && $notEmpty->isValid($context[$name])) {
                     return true;
                 }
@@ -85,15 +82,16 @@ class Application_Form_Validate_AtLeastOneNotEmpty extends \Zend_Validate_Abstra
 
     /**
      * Adds a form element to group for validation.
-     * @param $element \Zend_Form_Element
+     *
+     * @param string $element
      */
     public function addElement($element)
     {
-        if (! is_array($this->_elements)) {
-            $this->_elements = [];
+        if (! is_array($this->elements)) {
+            $this->elements = [];
         }
-        if (! in_array($element, $this->_elements)) {
-            $this->_elements[] = $element;
+        if (! in_array($element, $this->elements)) {
+            $this->elements[] = $element;
         }
     }
 }

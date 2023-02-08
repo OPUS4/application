@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Solrsearch_Model_Search
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\Util\Query;
+
 class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
 {
-
     /**
      * Create form for advanced search.
      *
-     * @param $request
+     * @param Zend_Controller_Request_Http $request
      * @return Solrsearch_Form_AdvancedSearch
      */
     public function createForm($request)
@@ -51,17 +50,24 @@ class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
         $view = $this->getView();
 
         $form->setAction($view->url([
-            'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
+            'module'     => 'solrsearch',
+            'controller' => 'dispatch',
+            'action'     => 'index',
         ], null, true));
 
         return $form;
     }
 
+    /**
+     * @param array $input
+     * @return Query
+     * @throws Zend_Exception
+     */
     public function createSearchQuery($input)
     {
         $this->getLogger()->debug("Constructing query for advanced search.");
 
-        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::ADVANCED);
+        $query = new Query(Query::ADVANCED);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         $query->setSortField($input['sortField']);
@@ -74,7 +80,7 @@ class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
                 $indexField = $fieldname;
                 if ($fieldname === 'year') {
                     $facet = $facetManager->getFacet($fieldname);
-                    if (! is_null($facet)) {
+                    if ($facet !== null) {
                         $indexField = $facet->getIndexField();
                         // do not use inverted field TODO this is a hack - better solution?
                         $indexField = preg_replace('/_inverted/', '', $indexField);
@@ -87,8 +93,8 @@ class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
         $this->addFiltersToQuery($query, $input);
 
         //im Falle einer Autorensuche werden Kommas und Semikolons aus dem Suchstring entfernt
-        if (! is_null($query->getField('author'))) {
-            $author = $query->getField('author');
+        if ($query->getField('author') !== null) {
+            $author         = $query->getField('author');
             $authormodifier = $query->getModifier('author');
             $query->setField('author', str_replace([',', ';'], '', $author), $authormodifier);
         }
@@ -98,6 +104,7 @@ class Solrsearch_Model_Search_Advanced extends Solrsearch_Model_Search_Basic
         }
 
         $this->getLogger()->debug("Query $query complete");
+
         return $query;
     }
 }

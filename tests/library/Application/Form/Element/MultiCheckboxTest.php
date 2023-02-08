@@ -25,28 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Application_Form_Element_MultiCheckboxTest extends FormElementTestCase
 {
-
-    public function setUp()
+    public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_MultiCheckbox';
-        $this->_expectedDecoratorCount = 4;
-        $this->_expectedDecorators = ['ViewHelper', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
-        $this->_staticViewHelper = 'viewFormMultiCheckbox';
+        $this->formElementClass       = 'Application_Form_Element_MultiCheckbox';
+        $this->expectedDecoratorCount = 4;
+        $this->expectedDecorators     = ['ViewHelper', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
+        $this->staticViewHelper       = 'viewFormMultiCheckbox';
         parent::setUp();
     }
 
     public function testDecoratorPath()
     {
-        $element = new $this->_formElementClass('name');
-        $paths = $element->getPluginLoader(\Zend_Form::DECORATOR)->getPaths();
+        $element = new $this->formElementClass('name');
+        $paths   = $element->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
         $this->assertArrayHasKey('Application_Form_Decorator_', $paths);
         $this->assertContains('Application/Form/Decorator/', $paths['Application_Form_Decorator_']);
     }

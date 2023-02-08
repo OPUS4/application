@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -38,17 +36,21 @@
  *
  * TODO make tag more configurable
  */
-class Application_Form_Decorator_FormHelp extends \Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_FormHelp extends Zend_Form_Decorator_Abstract
 {
-
+    /**
+     * @var string
+     * @phpcs:disable
+     */
     protected $_placement = 'PREPEND';
+    // @phpcs:enable
 
-    protected $_cssClass = 'form-help';
+    /** @var string */
+    protected $cssClass = 'form-help';
 
     /**
      * @param string $content
      * @return string
-     *
      */
     public function render($content)
     {
@@ -63,20 +65,23 @@ class Application_Form_Decorator_FormHelp extends \Zend_Form_Decorator_Abstract
         return $xhtml;
     }
 
+    /**
+     * @return string
+     */
     public function renderMessage()
     {
         $message = $this->getOption('message');
 
         $xhtml = '';
 
-        if (! is_null($message)) {
+        if ($message !== null) {
             $translator = $this->getElement()->getTranslator();
 
             $cssClass = $this->getClass();
 
             $xhtml = "<div class=\"$cssClass\">";
 
-            if (! is_null($translator)) {
+            if ($translator !== null) {
                 $xhtml .= $translator->translate($message);
             } else {
                 $xhtml .= $message;
@@ -88,16 +93,20 @@ class Application_Form_Decorator_FormHelp extends \Zend_Form_Decorator_Abstract
         return $xhtml;
     }
 
+    /**
+     * @return string
+     */
     public function getClass()
     {
-        $cssClass = $this->_cssClass;
+        $cssClass = $this->cssClass;
 
-        if (! is_null($classOption = $this->getOption('class'))) {
+        $classOption = $this->getOption('class');
+        if ($classOption !== null) {
             $cssClass = $classOption;
             $this->removeOption('class');
         }
 
-        $this->_cssClass = $cssClass;
+        $this->cssClass = $cssClass;
 
         return $cssClass;
     }

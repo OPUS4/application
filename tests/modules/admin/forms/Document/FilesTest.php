@@ -33,7 +33,7 @@ use Opus\Common\Document;
 
 class Admin_Form_Document_FilesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function testConstructForm()
@@ -78,7 +78,7 @@ class Admin_Form_Document_FilesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Files();
 
-        $property = new ReflectionProperty('Admin_Form_Document_Files', '_header');
+        $property = new ReflectionProperty('Admin_Form_Document_Files', 'header');
         $property->setAccessible(true);
 
         $header = $property->getValue($form);
@@ -86,7 +86,7 @@ class Admin_Form_Document_FilesTest extends ControllerTestCase
         $translate = Application_Translate::getInstance();
 
         foreach ($header as $column) {
-            if (isset($column['label']) && ! is_null($column['label'])) {
+            if (isset($column['label']) && $column['label'] !== null) {
                 $label = $column['label'];
                 $this->assertTrue($translate->isTranslated($label), "Label '$label' is not translated.");
             }

@@ -31,24 +31,22 @@
 
 use Opus\Common\UserRole;
 
-/**
- *
- */
 class Application_Security_RoleConfigTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var UserRole */
     private $guestRole;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->guestRole = UserRole::get(2);
         $this->guestRole->appendAccessModule('documents');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->guestRole->removeAccessModule('documents');
@@ -56,11 +54,14 @@ class Application_Security_RoleConfigTest extends ControllerTestCase
 
     public function testApplyPermissions()
     {
-        $acl = new \Zend_Acl();
-        $this->setExpectedException('Zend_Acl_Role_Registry_Exception');
+        $acl = new Zend_Acl();
+        $this->expectException(Zend_Acl_Role_Registry_Exception::class);
         $acl->isAllowed($this->guestRole, 'documents');
         $roleConfig = new Application_Security_RoleConfig('guest');
         $roleConfig->applyPermissions($acl);
-        $this->assertTrue($acl->isAllowed($this->guestRole, 'documents'), "Expected role 'guest' can access resource 'documents'");
+        $this->assertTrue(
+            $acl->isAllowed($this->guestRole, 'documents'),
+            "Expected role 'guest' can access resource 'documents'"
+        );
     }
 }

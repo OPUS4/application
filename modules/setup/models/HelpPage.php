@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- *
- */
 class Setup_Model_HelpPage
 {
-
+    /**
+     * @return false|string|null
+     */
     public function loadConfig()
     {
         $help = new Home_Model_HelpFiles();
@@ -55,7 +51,7 @@ class Setup_Model_HelpPage
     }
 
     /**
-     * @param $config
+     * @param string $config
      * @throws Setup_Model_Exception
      */
     public function saveConfig($config)
@@ -67,7 +63,7 @@ class Setup_Model_HelpPage
 
         $filePath = $path . 'help.ini';
 
-        if (is_writeable($filePath)) {
+        if (is_writable($filePath)) {
             file_put_contents($filePath, $config);
         } else {
             throw new Setup_Model_Exception('Cannot write help.ini file.');

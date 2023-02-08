@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,20 +34,20 @@
  *
  * Die Klasse dient dazu die Decoratorkonfiguration für einzelne Elemente zu vereinfachen.
  */
-class Application_Form_Decorator_ElementHtmlTag extends \Zend_Form_Decorator_HtmlTag
+class Application_Form_Decorator_ElementHtmlTag extends Zend_Form_Decorator_HtmlTag
 {
-
     /**
      * Tag Attribute vorbereiten.
      *
      * Das 'class' Attribute wird auf 'field' gesetzt und die 'id' auf die Element-ID plus '-element'.
      *
-     * @param array $attribs
-     * @return array
+     * @return string
+     * @phpcs:disable PSR2.Methods.MethodDeclaration
      */
     protected function _htmlAttribs(array $attribs)
     {
-        if (is_null($attribs)) {
+        // @phpcs:enable
+        if ($attribs === null) {
             $attribs = [];
         }
 
@@ -59,7 +57,7 @@ class Application_Form_Decorator_ElementHtmlTag extends \Zend_Form_Decorator_Htm
 
         $element = $this->getElement();
 
-        if (! is_null($element)) {
+        if ($element !== null) {
             $attribs['id'] = $element->getId() . '-element';
         }
 

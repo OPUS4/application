@@ -41,7 +41,6 @@ use Opus\Common\Translate\UnknownTranslationKeyException;
  */
 class Application_Update_ConvertCollectionRoleTranslations extends Application_Update_PluginAbstract
 {
-
     public function run()
     {
         $this->log('Validation of collection role names starting ...');
@@ -64,7 +63,7 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
 
                 // create translation values using invalid collection role name
                 $supportedLanguages = Application_Configuration::getInstance()->getSupportedLanguages();
-                $translations = [];
+                $translations       = [];
                 foreach ($supportedLanguages as $lang) {
                     $translations[$lang] = $name;
                 }
@@ -87,7 +86,7 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
                 try {
                     $translation = $manager->getTranslation($translationKey);
 
-                    if (! is_null($translation)) {
+                    if ($translation !== null) {
                         $this->log($colors->red("  Translation key '{$colors->blue($translationKey)}' exists"));
                         $translations = $translation['translations'];
                         $this->log("  Keeping translations");

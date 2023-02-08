@@ -25,22 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * @covers Admin_FilebrowserController
  */
 class Admin_FilebrowserControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var int */
     private $documentId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -107,7 +107,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
     public function testImportActionWithMissingParam()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([]);
         $this->dispatch('/admin/filebrowser/import');
@@ -117,7 +117,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
     public function testImportActionWithInvalidDocId()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost(['id' => 'invaliddocid']);
         $this->dispatch('/admin/filebrowser/import');
@@ -126,7 +126,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
     public function testImportActionWithEmptySelection()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost(['id' => $this->documentId]);
         $this->dispatch('/admin/filebrowser/import');
@@ -135,11 +135,12 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
     public function testImportActionWithInvalidParamType()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'id' => $this->documentId,
-                'file' => 'invalid']);
+                'id'   => $this->documentId,
+                'file' => 'invalid',
+            ]);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);
         $this->assertContains('invalid POST parameter', $this->getResponse()->getBody());
@@ -148,11 +149,12 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
     public function testImportAction()
     {
         $this->markTestIncomplete('TODO');
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'docId' => $this->documentId,
-                'file' => 'test.txt']);
+                'file'  => 'test.txt',
+            ]);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/filemanager/index/docId/' . $this->documentId);
     }

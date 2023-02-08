@@ -35,17 +35,28 @@ use Opus\Common\Title;
 
 class Frontdoor_Model_AuthorsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var int */
     private $documentId;
+
+    /** @var int */
     private $author1Id;
+
+    /** @var int */
     private $author2Id;
+
+    /** @var int */
     private $author3Id;
+
+    /** @var int */
     private $author4Id;
+
+    /** @var int */
     private $unpublishedDocumentId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $document = $this->createTestDocument();
@@ -64,24 +75,24 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $author1->setEmail('doe@example.org');
         $this->author1Id = $author1->store();
 
-        $link_person1 = $document->addPersonAuthor($author1);
-        $link_person1->setAllowEmailContact('1');
+        $linkPerson1 = $document->addPersonAuthor($author1);
+        $linkPerson1->setAllowEmailContact('1');
 
         $author2 = Person::new();
         $author2->setFirstName('Jane');
         $author2->setLastName('Doe');
         $this->author2Id = $author2->store();
 
-        $link_person2 = $document->addPersonAuthor($author2);
-        $link_person2->setAllowEmailContact('0');
+        $linkPerson2 = $document->addPersonAuthor($author2);
+        $linkPerson2->setAllowEmailContact('0');
 
         $author3 = Person::new();
         $author3->setFirstName('Jimmy');
         $author3->setLastName('Doe');
         $this->author3Id = $author3->store();
 
-        $link_person3 = $document->addPersonAuthor($author3);
-        $link_person3->setAllowEmailContact('1');
+        $linkPerson3 = $document->addPersonAuthor($author3);
+        $linkPerson3->setAllowEmailContact('1');
 
         $author4 = Person::new();
         $author4->setFirstName('Foo');
@@ -89,8 +100,8 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $author4->setEmail('foo@bar.de');
         $this->author4Id = $author4->store();
 
-        $link_person4 = $document->addPersonAuthor($author4);
-        $link_person4->setAllowEmailContact('1');
+        $linkPerson4 = $document->addPersonAuthor($author4);
+        $linkPerson4->setAllowEmailContact('1');
 
         $this->documentId = $document->store();
         $this->assertNotNull($this->documentId);
@@ -168,8 +179,9 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
             [
                 $this->author1Id => '1',
                 $this->author2Id => '1',
-                $this->author3Id => '1',
-            $this->author4Id => '1']
+                $this->author3Id => 1,
+                $this->author4Id => 1,
+            ]
         );
         $addresses = $mailProvider->getAddress();
         $this->assertTrue(is_array($addresses));
@@ -188,19 +200,21 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
     public function testUnpublishedDocumentID()
     {
         $this->markTestIncomplete('TODO: ensure that this method is called with guest privileges');
-        $this->setExpectedException('Frontdoor_Model_Exception', 'access to requested document is forbidden');
+        $this->expectException(Frontdoor_Model_Exception::class);
+        $this->expectExceptionMessage('access to requested document is forbidden');
         new Frontdoor_Model_Authors($this->unpublishedDocumentId);
     }
 
     public function testUnknownDocumentID()
     {
-        $this->setExpectedException('Frontdoor_Model_Exception', 'invalid value for parameter docId given');
+        $this->expectException(Frontdoor_Model_Exception::class);
+        $this->expectExceptionMessage('invalid value for parameter docId given');
         new Frontdoor_Model_Authors('foo');
     }
 
     public function testPublishedDocument()
     {
-        $doc = Document::get($this->documentId);
+        $doc   = Document::get($this->documentId);
         $model = new Frontdoor_Model_Authors($doc);
         $this->assertNotNull($model);
     }
@@ -209,7 +223,8 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
     {
         $this->markTestIncomplete('TODO: ensure that this method is called with guest privileges');
         $doc = Document::get($this->unpublishedDocumentId);
-        $this->setExpectedException('Frontdoor_Model_Exception', 'access to requested document is forbidden');
+        $this->expectException(Frontdoor_Model_Exception::class);
+        $this->expectExceptionMessage('access to requested document is forbidden');
         new Frontdoor_Model_Authors($doc);
     }
 }

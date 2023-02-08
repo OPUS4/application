@@ -40,14 +40,26 @@ use Opus\Common\Licence;
 use Opus\Common\Person;
 
 $counter = 1;
+
+/**
+ * @param int $counter
+ * @return string
+ */
 function randString($counter)
 {
     $template = '<i><script language="javascript" type="text/javascript">alert(\'alert STRING\');</script>';
     return str_replace('STRING', $counter, $template);
 }
 
-
-// error handler function
+/**
+ * Error handler function.
+ *
+ * @param int    $errno
+ * @param string $errstr
+ * @param string $errfile
+ * @param string $errline
+ * @return true
+ */
 function myErrorHandler($errno, $errstr, $errfile, $errline)
 {
     echo "WARNING: myErrorHandler($errno, '$errstr', '$errfile', $errline)\n";
@@ -56,16 +68,12 @@ function myErrorHandler($errno, $errstr, $errfile, $errline)
 // set to the user defined error handler
 $oldErrorHandler = set_error_handler("myErrorHandler");
 
-
-
-//
 // Creating document, filling static fields.
-//
 $doc = Document::new();
 $doc->setType(randString($counter++));
 $doc->setServerState('published');
 $doc->setServerDatePublished('01.01.1900');
-$doc->setLanguage('deu'.randString($counter++));
+$doc->setLanguage('deu' . randString($counter++));
 $doc->setThesisDateAccepted('01.02.2003');
 $doc->setPublishedYear('2010');
 $doc->setPublishedDate('28.09.2010');
@@ -82,11 +90,7 @@ $doc->setIssue(randString($counter++));
 $doc->setCreatingCorporation(randString($counter++));
 $doc->setContributingCorporation(randString($counter++));
 
-
-
-//
 // Persons
-//
 $submitter = Person::new();
 $submitter->getField('Email')->setValidator(null);
 $submitter->setFirstName(randString($counter++))
@@ -108,38 +112,36 @@ $author->setFirstName(randString($counter++))
 $doc->addPersonAuthor($author);
 
 $referee = Person::new();
-$referee->setFirstName('Gyro'.randString($counter++));
-$referee->setLastName('Gearloose'.randString($counter++));
-$referee->setAcademicTitle('Prof. Dr.'.randString($counter++));
+$referee->setFirstName('Gyro' . randString($counter++));
+$referee->setLastName('Gearloose' . randString($counter++));
+$referee->setAcademicTitle('Prof. Dr.' . randString($counter++));
 $doc->addPersonReferee($referee);
 
 $editor = Person::new();
-$editor->setFirstName('Bob'.randString($counter++));
-$editor->setLastName('Foster'.randString($counter++));
+$editor->setFirstName('Bob' . randString($counter++));
+$editor->setLastName('Foster' . randString($counter++));
 $doc->addPersonEditor($editor);
 
 $advisor = Person::new();
-$advisor->setFirstName('Fred'.randString($counter++));
-$advisor->setLastName('Clever'.randString($counter++));
+$advisor->setFirstName('Fred' . randString($counter++));
+$advisor->setLastName('Clever' . randString($counter++));
 $doc->addPersonAdvisor($advisor);
 
 $translator = Person::new();
-$translator->setFirstName('Erika'.randString($counter++));
-$translator->setLastName('Fuchs'.randString($counter++));
+$translator->setFirstName('Erika' . randString($counter++));
+$translator->setLastName('Fuchs' . randString($counter++));
 $doc->addPersonTranslator($translator);
 
 $contributor = Person::new();
-$contributor->setFirstName('Jeff'.randString($counter++));
-$contributor->setLastName('Smart'.randString($counter++));
+$contributor->setFirstName('Jeff' . randString($counter++));
+$contributor->setLastName('Smart' . randString($counter++));
 $contributor->store();
 $doc->addPersonContributor($contributor);
 
-
-//
 // Titles
-//
-foreach (['addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', 'addTitleAdditional'] as
-         $titleMethod) {
+foreach (
+    ['addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', 'addTitleAdditional'] as $titleMethod
+) {
     $doc->$titleMethod()
       ->setValue(randString($counter++))
       ->setLanguage(randString($counter++));
@@ -151,14 +153,10 @@ foreach (['addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', '
       ->setLanguage('eng');
 }
 
-
-
-//
 // Collections
-//
 $institutesRole = CollectionRole::new();
-$institutesRole->setName('institutes'.randString($counter++).rand())
-                   ->setOaiName('institutes'.randString($counter++).rand())
+$institutesRole->setName('institutes' . randString($counter++) . rand())
+                   ->setOaiName('institutes' . randString($counter++) . rand())
                    ->setPosition(1)
                    ->setVisible(1)
                    ->setVisibleBrowsingStart(1)
@@ -168,13 +166,13 @@ $institutesRole->setName('institutes'.randString($counter++).rand())
                    ->setVisibleOai('Name')
                    ->store();
 
-$instituteName = 'Institut für empirische Forschung ' . randString($counter++);
+$instituteName        = 'Institut für empirische Forschung ' . randString($counter++);
 $instituteCollections = Collection::fetchCollectionsByRoleName($institutesRole->getId(), $instituteName);
 if (count($instituteCollections) >= 1) {
     $instituteCollection = $instituteCollections[0];
 } else {
     $rootCollection = $institutesRole->getRootCollection();
-    if (is_null($rootCollection) === true) {
+    if ($rootCollection === null) {
         $rootCollection = $institutesRole->addRootCollection();
         $rootCollection->setVisible(1)->store();
         $institutesRole->store();
@@ -186,17 +184,13 @@ if (count($instituteCollections) >= 1) {
 }
 $doc->addCollection($instituteCollection);
 
-
-
-//
 // Identifiers
-//
 $oldOpusId = $doc->addIdentifierOpus3();
 $oldOpusId->setValue(randString($counter++));
 
 // empty URN will be automaticaly replace by new URN.
 $urn = $doc->addIdentifierUrn();
-$urn->setValue('urn:nbn:de:kobv:nn-opus-173:'.randString($counter++));
+$urn->setValue('urn:nbn:de:kobv:nn-opus-173:' . randString($counter++));
 
 $isbn = $doc->addIdentifierIsbn();
 $isbn->setValue('978-3-86680-192-9');
@@ -206,13 +200,9 @@ $issn->setValue('1234-5678');
 
 $doc->addIdentifierOpac()->setValue(randString($counter++));
 
-
-
-//
 // DnbInstitutes
-//
 $dnbInstitute = DnbInstitute::new();
-$dnbInstitute->setName(randString($counter++).rand())
+$dnbInstitute->setName(randString($counter++) . rand())
           ->setAddress(randString($counter++))
           ->setCity(randString($counter++))
           ->setPhone(randString($counter++))
@@ -223,11 +213,7 @@ $dnbInstitute->setName(randString($counter++).rand())
 $doc->setThesisGrantor($dnbInstitute);
 $doc->setThesisPublisher($dnbInstitute);
 
-
-
-//
 // Subjects
-//
 $doc->addSubject()->setType('swd')
    ->setValue(randString($counter++));
 
@@ -237,7 +223,7 @@ foreach (['uncontrolled', 'msc', 'ddc'] as $type) {
     ->setValue(randString($counter++))
     ->setExternalKey(randString($counter++));
     $doc->addSubject()->setType($type)
-    ->setLanguage("eng\0".randString($counter++))
+    ->setLanguage("eng\0" . randString($counter++))
     ->setValue(randString($counter++))
     ->setExternalKey(randString($counter++));
     $doc->addSubject()->setType($type)
@@ -250,11 +236,7 @@ foreach (['uncontrolled', 'msc', 'ddc'] as $type) {
     ->setExternalKey(randString($counter++));
 }
 
-
-
-//
 // Notes
-//
 $doc->addNote()
    ->setVisibility('public')
    ->setMessage(randString($counter++));
@@ -262,23 +244,15 @@ $doc->addNote()
    ->setVisibility('private')
    ->setMessage(randString($counter++));
 
-
-
-//
 // Licenses
-//
 $lic = Licence::new();
 $lic->setActive(1);
-$lic->setLanguage('deu'.randString($counter++));
+$lic->setLanguage('deu' . randString($counter++));
 $lic->setLinkLicence(randString($counter++));
 $lic->setNameLong(randString($counter++));
 $lic->store();
 $doc->setLicence($lic);
 
-
-
-//
 // Storing...
-//
 $doc->store();
-print("Document stored. ID: " . $doc->getId() . "\n");
+print "Document stored. ID: " . $doc->getId() . "\n";

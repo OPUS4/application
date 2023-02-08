@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,45 +24,45 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Management for modules.
  *
- * @category    Application
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
  * TODO is this the right package?
  */
 class Application_Modules
 {
-
     /**
      * Instance of modules manager.
-     * @var Application_Modules
+     *
+     * @var self
      */
-    static private $_moduleManager = null;
+    private static $moduleManager;
 
     /**
      * Path for modules.
+     *
      * @var string
      */
-    private $_modulesPath = null;
+    private $modulesPath;
 
     /**
      * Descriptors for all modules.
+     *
      * @var array
      */
-    private $_modules;
+    private $modules;
 
     /**
      * Descriptors for explicitly registered modules.
+     *
      * @var array
      */
-    private $_registeredModules = [];
+    private $registeredModules = [];
 
     /**
      * Prevent direct instantiation of class.
@@ -72,39 +73,46 @@ class Application_Modules
 
     /**
      * Return instance of module management class.
+     *
+     * @return self
      */
     public static function getInstance()
     {
-        if (is_null(self::$_moduleManager)) {
-            self::$_moduleManager = new Application_Modules();
+        if (self::$moduleManager === null) {
+            self::$moduleManager = new Application_Modules();
         }
 
-        return self::$_moduleManager;
+        return self::$moduleManager;
     }
 
+    /**
+     * @param self $modules
+     */
     public static function setInstance($modules)
     {
-        self::$_moduleManager = $modules;
+        self::$moduleManager = $modules;
     }
 
     /**
      * Register a module with the manager.
-     * @param $module
+     *
+     * @param Application_Configuration_Module $module
      */
     public static function registerModule($module)
     {
-        self::getInstance()->_addModule($module);
+        self::getInstance()->addModule($module);
     }
 
     /**
      * Check is a module has been registered.
-     * @param $name
+     *
+     * @param string $name
      * @return bool
      */
     public function isRegistered($name)
     {
-        if (is_array($this->_registeredModules)) {
-            return array_key_exists($name, $this->_registeredModules);
+        if (is_array($this->registeredModules)) {
+            return array_key_exists($name, $this->registeredModules);
         } else {
             return false;
         }
@@ -117,25 +125,27 @@ class Application_Modules
      */
     public function getModules()
     {
-        if (is_null($this->_modules)) {
-            $this->_modules = array_merge($this->findModules(), $this->_registeredModules);
+        if ($this->modules === null) {
+            $this->modules = array_merge($this->findModules(), $this->registeredModules);
         }
 
-        ksort($this->_modules);
+        ksort($this->modules);
 
-        return $this->_modules;
+        return $this->modules;
     }
 
     /**
      * Returns path to directory containing modules.
+     *
+     * @return string
      */
     public function getModulesPath()
     {
-        if (is_null($this->_modulesPath)) {
-            $this->_modulesPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules';
+        if ($this->modulesPath === null) {
+            $this->modulesPath = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules';
         }
 
-        return $this->_modulesPath;
+        return $this->modulesPath;
     }
 
     /**
@@ -178,14 +188,14 @@ class Application_Modules
     /**
      * Internal function for adding a module to registry.
      *
-     * @param $module
+     * @param Application_Configuration_Module $module
      */
-    protected function _addModule($module)
+    protected function addModule($module)
     {
-        if (is_null($this->_registeredModules)) {
-            $this->_registeredModules = [];
+        if ($this->registeredModules === null) {
+            $this->registeredModules = [];
         }
 
-        $this->_registeredModules[$module->getName()] = $module;
+        $this->registeredModules[$module->getName()] = $module;
     }
 }

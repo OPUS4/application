@@ -1,6 +1,6 @@
 <?php
+
 /**
- *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,24 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Simone Finkbeiner-Franke <simone.finkbeiner@ub.uni-stuttgart.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- *
- *  This view displays a mailform to recommend a document
  */
+
 ?>
 <h1><?= $this->translate('frontdoor_sendmailtitle')?></h1><br/>
 <?PHP
 echo $this->translate('frontdoor_sendmailtext') . ': <br>';
-echo '<br><b>'. $this->title . '</b> (' . $this->translate($this->docType) . ').</br>';
-echo '<br><br><b>'. $this->translate('frontdoor_recipientmail') . ': </b></br></br>';
+echo '<br><b>' . $this->title . '</b> (' . $this->translate($this->docType) . ').</br>';
+echo '<br><br><b>' . $this->translate('frontdoor_recipientmail') . ': </b></br></br>';
 echo $this->recipientMail;
-if ($this->message != '') {
-    echo '<br><br><b>'. $this->translate('frontdoor_message') . ': </b></br></br>';
+if ($this->message !== null && $this->message !== '') {
+    echo '<br><br><b>' . $this->translate('frontdoor_message') . ': </b></br></br>';
     echo $this->message;
 }
 ?>
@@ -50,7 +45,7 @@ if ($this->message != '') {
 <br />
 <br /><p><a href="<?= $this->value =
    $this->url([
-   'module' => 'frontdoor',
-   'controller' => 'index',
-   'docId' => $this->docId,
+       'module'     => 'frontdoor',
+       'controller' => 'index',
+       'docId'      => $this->docId,
    ], null, true);?>"><?= $this->translate('frontdoor_back')?></a></p><br />

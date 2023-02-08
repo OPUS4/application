@@ -30,8 +30,8 @@
  */
 
 use Opus\Common\Model\NotFoundException;
-use Opus\Model\Dependent\Link\DocumentSeries;
 use Opus\Common\Series;
+use Opus\Model\Dependent\Link\DocumentSeries;
 
 /**
  * Unterformular fuer das Editieren eines Serieneintrags.
@@ -40,26 +40,25 @@ use Opus\Common\Series;
  */
 class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
 {
-
     /**
      * Name von Formelement für Dokument-ID (Teil des Schlüssels für Link DocumentSeries).
      */
-    const ELEMENT_DOC_ID = 'Id';
+    public const ELEMENT_DOC_ID = 'Id';
 
     /**
      * Name von Formelement für Series-ID.
      */
-    const ELEMENT_SERIES_ID = 'SeriesId';
+    public const ELEMENT_SERIES_ID = 'SeriesId';
 
     /**
      * Name von Formelement für Label/Nummer des Dokuments in Schriftenreihe.
      */
-    const ELEMENT_NUMBER = 'Number';
+    public const ELEMENT_NUMBER = 'Number';
 
     /**
      * Name von Formelement für die Sortierposition in Schriftenreihe.
      */
-    const ELEMENT_SORT_ORDER = 'SortOrder';
+    public const ELEMENT_SORT_ORDER = 'SortOrder';
 
     /**
      * Erzeugt die Formulareelemente.
@@ -95,12 +94,13 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
 
     /**
      * Aktualisiert das Modell mit den Werten im Formular.
+     *
      * @param type $seriesLink
      */
     public function updateModel($seriesLink)
     {
         $seriesId = $this->getElementValue(self::ELEMENT_SERIES_ID);
-        $series = Series::get($seriesId);
+        $series   = Series::get($seriesId);
         $seriesLink->setModel($series);
         $seriesLink->setNumber($this->getElementValue(self::ELEMENT_NUMBER));
         $seriesLink->setDocSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
@@ -108,6 +108,7 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
 
     /**
      * Liefert das angezeigte Modell oder ein neues für hinzugefügte Verknüpfungen.
+     *
      * @return DocumentSeries
      */
     public function getModel()
@@ -118,7 +119,7 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm
             $linkId = null;
         } else {
             $seriesId = $this->getElement(self::ELEMENT_SERIES_ID)->getValue();
-            $linkId = [$docId, $seriesId];
+            $linkId   = [$docId, $seriesId];
         }
 
         try {
