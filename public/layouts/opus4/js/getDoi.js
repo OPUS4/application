@@ -1,6 +1,8 @@
 
 let populatedFields = [];
 
+// TODO Englische Funktionsnamen fuer Einheitlichkeit im Code bitte
+
 function startePruefung()
 {
     var doi = document.getElementById("IdentifierDoi").value.trim();
@@ -35,6 +37,7 @@ function aufraeumen(doi)
         }
     }
 
+    // TODO Funktion sollte nicht leseDoi aufrufen - das sollte in startePruefung separat passieren
     document.getElementById("IdentifierDoi").value = doi;
     leseDoi(doi)
 }
@@ -81,19 +84,31 @@ function parseJson(jsonraw)
     document.getElementById("PublisherPlace").value             = getPublisherPlace(data);  //json.message.publisher-location;
     document.getElementById("TitleMain_1").value                = getTitleMain(data);//json.message.title[0];
     document.getElementById("TitleSub_1").value                 = getTitleSub(data);    //json.message.title[1];
-    var language                                                = getLanguage(data); expandLanguage(language);
+
+    var language = getLanguage(data);
+    expandLanguage(language);
+
     document.getElementById("TitleAbstract_1").value = getAbstract(data);
     document.getElementById("TitleParent_1").value   = getTitleParent(data);  //json.message.container-title[0];
-    var pages                                        = getPages(data); expandPages(pages); //json.message.page;
+
+    var pages = getPages(data);
+    expandPages(pages); //json.message.page;
+
     document.getElementById("ArticleNumber").value = getArticleNumber(data);
-    var thesisAccepted                             = getThesisAccepted(data); expandThesisAccepted(thesisAccepted); //json.message.approved.date-parts[0][0] (bzw. ...[0][1] und [0][2] für Tag/Monat)
+
+    var thesisAccepted = getThesisAccepted(data);
+    expandThesisAccepted(thesisAccepted); //json.message.approved.date-parts[0][0] (bzw. ...[0][1] und [0][2] für Tag/Monat)
+
     document.getElementById("Issue").value   = getIssue(data);    //json.message.issue or json.message.journal-issue.issue;
     document.getElementById("Volume").value  = getVolume(data);  //json.message.volume;
     document.getElementById("Edition").value = getEdition(data);    //json.message.edition-number;
-    var dates                                = getCompletedDate(data); expandCompletedDate(dates);
+
+    var dates = getCompletedDate(data);
+    expandCompletedDate(dates);
+
     document.getElementById("IdentifierIsbn").value = getIsbn(data);    //json.message.isbn-type[0].value;
     document.getElementById("IdentifierIssn").value = getIssn(data);    //json.message.issn-type[0].value;
-//document.getElementById("IdentifierUrl").value = getUrl(data);    //json.message.link[0].url -> Soll laut aw raus
+    //document.getElementById("IdentifierUrl").value = getUrl(data);    //json.message.link[0].url -> Soll laut aw raus
     document.getElementById("Enrichmentlocal_crossrefLicence").value    = getLicence(data);
     document.getElementById("Enrichmentlocal_import_origin").value      = "crossref";
     document.getElementById("Enrichmentlocal_doiImportPopulated").value = populatedFields;
@@ -101,7 +116,6 @@ function parseJson(jsonraw)
 
 function expandLanguage(language)
 {
-
     switch (language) {   // Mapping der Sprachen, bei denen die Kürzel in Crossref von denen in Opus abweichen
         case "ger": language = "deu"; break;
         case "en": language = "eng"; break;
@@ -119,8 +133,6 @@ function expandLanguage(language)
         document.getElementById("Language").selectedIndex = 0;  // Falls die gelieferte Sprache nicht in Opus angelegt ist
         colorPink("Language");
     }
-
-
 }
 
 function expandCompletedDate(dates)
@@ -129,9 +141,9 @@ function expandCompletedDate(dates)
 
     if (dates != '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
 
-         date = dates.join();
+        date = dates.join();
 
-          //if (date.includes('-')){
+        //if (date.includes('-')){
         if ((date.split(',')[0].length) = 4) {
             document.getElementById("CompletedYear").value = date.split(',')[0];
             finalize("CompletedYear");
@@ -160,16 +172,17 @@ function expandSubject(subject)
         finalize("SubjectUncontrolled_1");
 
         if (document.getElementById('SubjectUncontrolled_' + _laenge) == null) {
-                var button = document.getElementById("addMoreSubjectUncontrolled");
-                button.click();} else {
-                var _z;
+            var button = document.getElementById("addMoreSubjectUncontrolled");
+            button.click();
+        } else {
+            var _z;
             for (_z = 1; _z < _laenge; _z++) {
                 var feld       = _z + 1;
                 var schlagwort = subject[_z] + '';
                 document.getElementById("SubjectUncontrolled_" + feld).value = schlagwort;
                 finalize("SubjectUncontrolled_" + feld);
             }
-                }
+        }
     }
 }
 
@@ -240,9 +253,10 @@ function expandAuthor(author)
         }
 
         if (document.getElementById('PersonAuthorLastName_' + _laenge) == null) {
-                var button = document.getElementById("addMorePersonAuthor");
-                button.click();} else {
-                var _z;
+            var button = document.getElementById("addMorePersonAuthor");
+            button.click();
+        } else {
+            var _z;
             for (_z = 1; _z < _laenge; _z++) {
                 var feld         = _z + 1;
                 var completeName = author[_z] + '';
@@ -258,10 +272,11 @@ function expandAuthor(author)
                     finalize("PersonAuthorIdentifierOrcid_" + feld);
                 }
             }
-                document.getElementById("Enrichmentopus_doi_flag").value = "true";  // Hier wird das Ende der Reloads erreicht! (alle Felder sind vorhanden)
-                }
+            document.getElementById("Enrichmentopus_doi_flag").value = "true";  // Hier wird das Ende der Reloads erreicht! (alle Felder sind vorhanden)
+        }
     } else {
-        colorPink("PersonAuthorLastName_1");}
+        colorPink("PersonAuthorLastName_1");
+    }
 }
 
 function expandEditor(editor)
@@ -282,9 +297,10 @@ function expandEditor(editor)
         }
 
         if (document.getElementById('PersonEditorLastName_' + _laenge) == null) {
-                var button = document.getElementById("addMorePersonEditor");
-                button.click();} else {
-                var _z;
+            var button = document.getElementById("addMorePersonEditor");
+            button.click();
+        } else {
+            var _z;
             for (_z = 1; _z < _laenge; _z++) {
                 var feld         = _z + 1;
                 var completeName = editor[_z] + '';
@@ -300,26 +316,29 @@ function expandEditor(editor)
                     finalize("PersonEditorIdentifierOrcid_" + feld);
                 }
             }
-                }
+        }
     }
 }
 
 function expandTranslator(translator)
 {
     if (translator[0] != undefined) {
-        var _laenge                                                  = translator.length;
-        var completeName                                             = translator[0] + '';
-        var vorname                                                  = completeName.split(',')[1].trim();  // [1] = Vorname
+        var _laenge      = translator.length;
+        var completeName = translator[0] + '';
+        var vorname      = completeName.split(',')[1].trim();  // [1] = Vorname
+
         document.getElementById("PersonTranslatorFirstName_1").value = vorname;
         finalize("PersonTranslatorFirstName_1");
-        var nachname                                                = completeName.split(',')[0].trim();  // [0] = Nachname
+        var nachname = completeName.split(',')[0].trim();  // [0] = Nachname
+
         document.getElementById("PersonTranslatorLastName_1").value = nachname;
         finalize("PersonTranslatorLastName_1");
 
         if (document.getElementById('PersonTranslatorLastName_' + _laenge) == null) {
-                var button = document.getElementById("addMorePersonTranslator");
-                button.click();} else {
-                var _z;
+            var button = document.getElementById("addMorePersonTranslator");
+            button.click();
+        } else {
+            var _z;
             for (_z = 1; _z < _laenge; _z++) {
                 var feld         = _z + 1;
                 var completeName = author[_z] + '';
@@ -330,7 +349,7 @@ function expandTranslator(translator)
                 document.getElementById("PersonTranslatorLastName_" + feld).value = nachname;
                 finalize("PersonTranslatorLastName_" + feld);
             }
-                }
+        }
     }
 }
 
@@ -348,159 +367,96 @@ function get(url, callback)
             }
         }
     };
-            xhr.send();
+    xhr.send();
 }
 
+// TODO get mapping from server REST API
+var crossrefTypeMapping = {
+    "journal-article": "article",
+    "book": "book",
+    "book-set": "book",
+    "edited-book": "book",
+    "reference-book": "book",
+    "monograph": "book",
+    "book-chapter": "bookpart",
+    "book-section": "bookpart",
+    "book-part": "bookpart",
+    "proceedings": "conferenceobject",
+    "proceedings-article": "conferenceobject",
+    "proceedings-series": "conferenceobject",
+    "journal": "periodical",
+    "journal-volume": "periodicalpart",
+    "journal-issue": "periodicalpart",
+    "posted-content/preprint": "preprint",
+    "report": "report",
+    "report-series": "report",
+    "posted-content/report": "report",
+    "peer-review": "review",
+    "book-track": "sound",
+    "posted-content/working_paper": "workingpaper",
+    "dissertation": "doctoralthesis"
+}
 
-        async function getDoctypes(data)
-        {
-            const response                                        = await fetch('../../getDoctypes.php');
-            const text                                            = await response.text();
-            const split                                           = text.split(",");
-            const existingDoctypes                                = split.map(element => { return element.trim(); });
-            document.getElementById("CrossrefDocumentType").value = getType(data);
-            var crossrefType                                      = document.getElementById("CrossrefDocumentType").value;
-            document.getElementById("Enrichmentlocal_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "local_crossrefDocumentType"
-    if (crossrefType == 'journal-article') {
-        if (existingDoctypes.includes("article")) {
-            document.getElementById("DocumentType").value = 'article'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'book') {
-        if (existingDoctypes.includes("book")) {
-            document.getElementById("DocumentType").value = 'book'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'book-set') {
-        if (existingDoctypes.includes("book")) {
-            document.getElementById("DocumentType").value = 'book'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'edited-book') {
-        if (existingDoctypes.includes("book")) {
-            document.getElementById("DocumentType").value = 'book'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'reference-book') {
-        if (existingDoctypes.includes("book")) {
-            document.getElementById("DocumentType").value = 'book'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'monograph') {
-        if (existingDoctypes.includes("book")) {
-            document.getElementById("DocumentType").value = 'book'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'book-chapter') {
-        if (existingDoctypes.includes("bookpart")) {
-            document.getElementById("DocumentType").value = 'bookpart'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'book-section') {
-        if (existingDoctypes.includes("bookpart")) {
-            document.getElementById("DocumentType").value = 'bookpart'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'book-part') {
-        if (existingDoctypes.includes("bookpart")) {
-            document.getElementById("DocumentType").value = 'bookpart'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'proceedings') {
-        if (existingDoctypes.includes("conferenceobject")) {
-            document.getElementById("DocumentType").value = 'conferenceobject'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'proceedings-article') {
-        if (existingDoctypes.includes("conferenceobject")) {
-            document.getElementById("DocumentType").value = 'conferenceobject'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'proceedings-series') {
-        if (existingDoctypes.includes("conferenceobject")) {
-            document.getElementById("DocumentType").value = 'conferenceobject'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'journal') {
-        if (existingDoctypes.includes("periodical")) {
-            document.getElementById("DocumentType").value = 'periodical'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'journal-volume') {
-        if (existingDoctypes.includes("periodicalpart")) {
-            document.getElementById("DocumentType").value = 'periodicalpart'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'journal-issue') {
-        if (existingDoctypes.includes("periodicalpart")) {
-            document.getElementById("DocumentType").value = 'periodicalpart'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'posted-content/preprint') {
-        if (existingDoctypes.includes("preprint")) {
-            document.getElementById("DocumentType").value = 'preprint'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'report') {
-        if (existingDoctypes.includes("report")) {
-            document.getElementById("DocumentType").value = 'report'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'report-series') {
-        if (existingDoctypes.includes("report")) {
-            document.getElementById("DocumentType").value = 'report'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'posted-content/report') {
-        if (existingDoctypes.includes("report")) {
-            document.getElementById("DocumentType").value = 'report'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'peer-review') {
-        if (existingDoctypes.includes("review")) {
-            document.getElementById("DocumentType").value = 'review'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'book-track') {
-        if (existingDoctypes.includes("sound")) {
-            document.getElementById("DocumentType").value = 'sound'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-    if (crossrefType == 'posted-content/working_paper') {
-        if (existingDoctypes.includes("workingpaper")) {
-            document.getElementById("DocumentType").value = 'workingpaper'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
-    }
-            //Wenn crossrefType nur "dissertation", ohne Slash mit Degree
-    if (crossrefType == 'dissertation') {
-        if (existingDoctypes.includes("doctoralthesis")) {
-            document.getElementById("DocumentType").value = 'doctoralthesis'; } else {
-            document.getElementById("DocumentType").value = 'other'; }
+/**
+ *
+ * @param data
+ * @returns {Promise<string>}
+ *
+ * TODO aehnlich wie frueher in den XSTL-Dateien sind hier die OPUS 4 Dokumenttypen fest verdrahtet. Das Javascript
+ *      muesste also unter Umständen lokal angepasst werden. Das sollte gefixt werden.
+ */
+async function getDoctypes(data)
+{
+    const response                                        = await fetch('../../getDoctypes.php');
+    const text                                            = await response.text();
+    const split                                           = text.split(",");
+    const existingDoctypes                                = split.map(element => { return element.trim(); });
+    document.getElementById("CrossrefDocumentType").value = getType(data);
+    var crossrefType                                      = document.getElementById("CrossrefDocumentType").value;
+    document.getElementById("Enrichmentlocal_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "local_crossrefDocumentType"
+
+    // Map Crossref document type to OPUS type
+    var opusType = crossrefTypeMapping[crossrefType];
+
+    if (! existingDoctypes.includes(opusType)) {
+        opusType = 'other';
     }
 
-    if (crossrefType.includes("dissertation/")) { // Wenn crossrefType "dissertation" mit Slash: mit Degree
+    document.getElementById('DocumentType').value = opusType;
+
+
+    if (crossrefType.includes("dissertation/")) {
+        // Wenn crossrefType "dissertation" mit Slash: mit Degree
         const degree            = crossrefType.split('/')[1];
         const keys_master       = ["master", "mestrado", "m.phil.", "m.a.", "m.sc.", "ll. m.", "m. ed.", "m. eng.", "m. f. a.", "m. mus.", "ll.m.", "m.ed.", "m.eng.", "m.f.a.", "m.mus.", "m.s."];
         const keys_bachelor     = ["bachelor", "bacharel", "b.a.", "b.sc.", "ll. b.", "b. ed.", "b. eng.", "b. f. a.", "b. mus.", "b. m. a", "ll.b.", "b.ed.", "b.eng.", "b.f.a.", "b.mus.", "b.m.a"];
         const keys_habilitation = ["habil"];
         if (keys_master.some(el => degree.includes(el))) {
             if (existingDoctypes.includes("masterthesis")) {
-                document.getElementById("DocumentType").value = 'masterthesis'; } else {
-                document.getElementById("DocumentType").value = 'doctoralthesis'; }
+                document.getElementById("DocumentType").value = 'masterthesis';
+            } else {
+                document.getElementById("DocumentType").value = 'doctoralthesis';
+            }
         } else if (keys_bachelor.some(el_1 => degree.includes(el_1)) || degree === "ba") {
             if (existingDoctypes.includes("bachelorthesis")) {
-                document.getElementById("DocumentType").value = 'bachelorthesis'; } else {
-                document.getElementById("DocumentType").value = 'doctoralthesis'; }
+                document.getElementById("DocumentType").value = 'bachelorthesis';
+            } else {
+                document.getElementById("DocumentType").value = 'doctoralthesis';
+            }
         } else if (keys_habilitation.some(el_2 => degree.includes(el_2))) {
             if (existingDoctypes.includes("habilitation")) {
-                document.getElementById("DocumentType").value = 'habilitation'; } else {
-                document.getElementById("DocumentType").value = 'doctoralthesis'; }
+                document.getElementById("DocumentType").value = 'habilitation';
+            } else {
+                document.getElementById("DocumentType").value = 'doctoralthesis';
+            }
         } else {
-            document.getElementById("DocumentType").value = 'doctoralthesis'; }
-    }
-            document.getElementById("OpusDocumentType").value = document.getElementById("DocumentType").value;
-            return text;
+            document.getElementById("DocumentType").value = 'doctoralthesis';
         }
+    }
+
+    document.getElementById("OpusDocumentType").value = document.getElementById("DocumentType").value;
+    return text;
+}
 
 
 
