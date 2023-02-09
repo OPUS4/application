@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,18 +24,44 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    Script
+ * @author      Kaustabh Barman <barman@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Define application environment (use 'production' by default)
-defined('APPLICATION_ENV')
-    || define(
-        'APPLICATION_ENV',
-        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production')
-    );
+use Opus\Date;
+use Opus\Document;
+use Opus\DocumentFinder;
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+/*
+ * This cron job must be used if embargo dates are used in repository.
+ *
+ * This script finds documents with expired embargo date that have to been
+ * updated after the expiration (ServerDateModified < EmbargoDate) and sets
+ * ServerDateModified to the current time.
+ *
+ * The expiration of an embargo date does not change the document. Until the
+ * date is expired access to the files of the document is blocked. After the
+ * expiration access to the files is possible. However the document will not
+ * be harvested again automatically. In order for the document to be included
+ * in the next harvesting ServerDateModified needs to be updated.
+ */
+class Application_Job_EmbargoUpdateJob implements Application_Job_JobInterface
+{
+    public function run()
+    {
+        $docfinder = new DocumentFinder();
 
-$job = new Application_Job_SendNotificationJob();
-$job->run();
+        $now = new Date();
+        $now->setNow();
+
+        // Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
+        $docfinder->setEmbargoDateBeforeNotModifiedAfter(date('Y-m-d', time()));
+
+        $foundIds = $docfinder->ids();
+
+        // Update ServerDateModified for all found documents
+        Document::setServerDateModifiedByIds($now, $foundIds);
+    }
+}

@@ -32,46 +32,8 @@
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Doi\DoiManager;
-
-/*
- * Dieses Script sucht nach Dokumenten, die lokale DOIs im Status 'registered'
- * besitzen und verifiziert diese DOIs. Die Verifikation ist erforderlich, weil
- * nach der Registrierung einer DOI bei DataCite bis zu 24-72 Stunden vergehen
- * können, bis die DOI tatsächlich auflösbar ist.
- *
- * Eine DOI im Zustand 'registered' wird erst dann in OPUS auf den Status 'verified'
- * gesetzt, wenn sie über das Handle-System tatsächlich auflösbar ist.
- *
- */
-
 // prüfe nur lokale DOIs, die vor mindestens 24h bei DataCite registriert wurden
 // setze den Wert von $delayInHours auf null, um alle registrierten DOIs unabhängig
 // vom Registrierungszeitpunkt zu prüfen
-$delayInHours = 24;
-
-// setze auf $printErrors auf true, um Fehlermeldungen auf der Konsole auszugeben
-$printErrors = false;
-
-$beforeDate = null;
-if ($delayInHours !== null) {
-    $dateTime   = new DateTime();
-    $beforeDate = date("Y-m-d H:i:s", strtotime("- $delayInHours hours"));
-}
-
-$doiManager = new DoiManager();
-$status     = $doiManager->verifyRegisteredBefore($beforeDate);
-
-if ($status->isNoDocsToProcess()) {
-    echo "could not find matching documents for DOI verification\n";
-} else {
-    echo count($status->getDocsWithDoiStatus()) . " documents have been processed\n";
-
-    if ($printErrors) {
-        foreach ($status->getDocsWithDoiStatus() as $docId => $docWithStatus) {
-            if ($docWithStatus['error']) {
-                echo "document $docId could not verified successfully: " . $docWithStatus['msg'] . "\n";
-            }
-        }
-    }
-}
+$job = new Application_Job_VerifyLocalDoisJob(24);
+$job->run();

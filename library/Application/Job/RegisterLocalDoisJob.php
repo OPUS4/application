@@ -25,18 +25,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    Script
+ * @author      Kaustabh Barman <barman@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Define application environment (use 'production' by default)
-defined('APPLICATION_ENV')
-    || define(
-        'APPLICATION_ENV',
-        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production')
-    );
+use Opus\Doi\DoiManager;
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+/*
+ * Dieses Script sucht nach Dokumenten im ServerState 'published',
+ * die lokale DOIs besitzen, die noch nicht bei DataCite registiert wurden.
+ * Nicht registrierte DOIs sind am Statuswert 'null' erkennbar.
+ *
+ * Für die ermittelten DOIs wird die Registrierung bei DataCite versucht.
+ *
+ */
+class Application_Job_RegisterLocalDoisJob implements Application_Job_JobInterface
+{
+    private $printErrors = false;
 
-$job = new Application_Job_SendNotificationJob();
-$job->run();
+    /**
+     * setze auf $printErrors auf true, um Fehlermeldungen auf der Konsole auszugeben
+     */
+    public function printErrors()
+    {
+        $this->printErrors = true;
+    }
+
+    public function run()
+    {
+        $doiManager = new DoiManager();
+        $status = $doiManager->registerPending();
+
+        if ($status->isNoDocsToProcess()) {
+            echo "could not find matching documents for DOI registration\n";
+        } else {
+            echo count($status->getDocsWithDoiStatus()) . " documents have been processed\n";
+
+            if ($this->printErrors) {
+                foreach ($status->getDocsWithDoiStatus() as $docId => $docWithStatus) {
+                    if ($docWithStatus['error']) {
+                        echo "document $docId could not registered successfully: " . $docWithStatus['msg'] . "\n";
+                    }
+                }
+            }
+        }
+    }
+}

@@ -25,18 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    Script
+ * @author      Kaustabh Barman <barman@zib.de>
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Define application environment (use 'production' by default)
-defined('APPLICATION_ENV')
-    || define(
-        'APPLICATION_ENV',
-        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production')
-    );
+use Opus\Job\Runner;
+use Opus\Job\Worker\MailNotification;
+use Opus\Log;
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+class Application_Job_SendReviewRequestJob implements Application_Job_JobInterface
+{
+    public function run()
+    {
+        $jobrunner = new Runner;
+        $jobrunner->setLogger(Log::get());
 
-$job = new Application_Job_SendNotificationJob();
-$job->run();
+        // no waiting between jobs
+        $jobrunner->setDelay(0);
+
+        // set a limit of 100 index jobs per run
+        $jobrunner->setLimit(100);
+
+        $mailWorker = new MailNotification();
+        $mailWorker->setLogger(Log::get());
+
+        $jobrunner->registerWorker($mailWorker);
+
+        $jobrunner->run();
+    }
+}

@@ -33,17 +33,5 @@ define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Common\Log;
-use Opus\Job\Runner;
-use Opus\Search\Task\ConsistencyCheck;
-
-$jobrunner = new Runner();
-$jobrunner->setLogger(Log::get());
-// no waiting between jobs
-$jobrunner->setDelay(0);
-// set a limit of 100 index jobs per run
-$jobrunner->setLimit(100);
-
-$worker = new ConsistencyCheck();
-$jobrunner->registerWorker($worker);
-$jobrunner->run();
+$job = new Application_Job_CheckConsistencyJob();
+$job->run();
