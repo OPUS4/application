@@ -31,11 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\DocumentFinder;
-use Opus\Db\DocumentXmlCache;
+use Opus\Common\Document;
+use Opus\Common\Repository;
 use Opus\Model\Xml;
-use Opus\Model\Xml\Cache;
 use Opus\Model\Xml\Version1;
 
 /**
@@ -48,48 +46,29 @@ class Application_Job_UpdateDocumentCacheJob implements Application_Job_JobInter
 {
     public function run()
     {
-        $docIds = $this->getDocIds();
+        $repository = Repository::getInstance();
 
-        echo "processing ".count($docIds)." documents\n";
+        $finder = $repository->getDocumentFinder();
+        $cache  = $repository->getDocumentXmlCache();
+
+        $docIds = $finder->setNotInXmlCache()->getIds();
+
+        echo 'Processing ' . count($docIds) . ' documents' . PHP_EOL;
 
         foreach ($docIds as $docId) {
-            $model = Document::get($docId);
-
-            $cache = new Cache();
+            $document = Document::get($docId);
 
             // xml version 1
             $omx = new Xml();
             $omx->setStrategy(new Version1())
                 ->excludeEmptyFields()
-                ->setModel($model)
+                ->setModel($document)
                 ->setXmlCache($cache);
-            $dom = $omx->getDomDocument();
-            echo "Cache refreshed for document#$docId\n";
+
+            // TODO cache is updated as a side effect (that is not ideal and might not always be true)
+            $omx->getDomDocument();
+
+            echo "Cache refreshed for document #$docId\n";
         }
-    }
-
-    /**
-     * Get doc Ids.
-     *
-     * Firstly selects all doc id in table, then that are missing.
-     *
-     * @return array
-     * @throws Zend_Db_Table_Exception
-     *
-     * TODO what about expired doc?
-     */
-    private function getDocIds()
-    {
-        $opusDocCacheTable = new DocumentXmlCache();
-        $db = \Zend_Db_Table::getDefaultAdapter();
-
-        //
-        $select = $db->select();
-        $select->from($opusDocCacheTable->info('name'), 'document_id');
-
-        $docFinder = new DocumentFinder();
-        $docFinder->setSubSelectNotExists($select);
-        $docIds = $docFinder->ids();
-        return $docIds;
     }
 }

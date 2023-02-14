@@ -56,7 +56,7 @@ class Application_Job_RegisterLocalDoisJob implements Application_Job_JobInterfa
     public function run()
     {
         $doiManager = new DoiManager();
-        $status = $doiManager->registerPending();
+        $status     = $doiManager->registerPending();
 
         if ($status->isNoDocsToProcess()) {
             echo "could not find matching documents for DOI registration\n";

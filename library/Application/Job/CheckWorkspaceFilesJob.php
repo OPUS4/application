@@ -31,9 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
-use Opus\Document;
-use Opus\Model\NotFoundException;
+use Opus\Common\Config;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * Class for checking workspace files
@@ -60,8 +60,8 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
 
         foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
             $this->file = $file;
-            if ($count > 0 and $count % 100 == 0) {
-                echo "INFO: checked $count entries with ".round($count / (microtime(true) - $this->startTime))." entries/seconds.\n";
+            if ($count > 0 && $count % 100 === 0) {
+                echo "INFO: checked $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.\n";
             }
             $count++;
 
@@ -77,12 +77,12 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
             }
 
             $id = $matches[1];
-            $d = $this->checkDocument($id);
+            $d  = $this->checkDocument($id);
         }
 
-        echo "INFO: Checked a total of $count entries with ".round($count / (microtime(true) - $this->startTime))." entries/seconds.\n";
+        echo "INFO: Checked a total of $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.\n";
 
-        if ($this->errors > 0) {
+        if ($this->errors !== 0) {
             throw new Exception("Found $this->errors ERRORs in workspace files directory '$filesPath'!\n");
         }
 
@@ -98,8 +98,7 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
     private function checkDocument($id)
     {
         try {
-            $doc = Document::get($id);
-            return $doc;
+            return Document::get($id);
         } catch (NotFoundException $e) {
             echo "ERROR: No document $id found for workspace path '$this->file'!\n";
             $this->errors++;
@@ -119,7 +118,7 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
             $config = Config::get();
             $this->filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
 
-            if ($this->filesPath == false or empty($this->filesPath)) {
+            if ($this->filesPath === false || empty($this->filesPath)) {
                 throw new Exception("Failed scanning workspace files path.\n");
             }
         }

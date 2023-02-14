@@ -30,9 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
-use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\Repository;
 
 /*
  * This cron job must be used if embargo dates are used in repository.
@@ -46,22 +46,28 @@ use Opus\DocumentFinder;
  * expiration access to the files is possible. However the document will not
  * be harvested again automatically. In order for the document to be included
  * in the next harvesting ServerDateModified needs to be updated.
+ *
+ * TODO document policies of EmbargoDate - is it '<' or '<=' ?
  */
 class Application_Job_EmbargoUpdateJob implements Application_Job_JobInterface
 {
     public function run()
     {
-        $docfinder = new DocumentFinder();
+        $finder = Repository::getInstance()->getDocumentFinder();
+
+        // Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
+        $finder->setEmbargoDateBefore(date('Y-m-d', time()));
+        $finder->setNotModifiedAfterEmbargoDate();
+
+        $foundIds = $finder->getIds();
+
+        // Update ServerDateModified for all found documents
 
         $now = new Date();
         $now->setNow();
 
-        // Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
-        $docfinder->setEmbargoDateBeforeNotModifiedAfter(date('Y-m-d', time()));
+        $documents = Repository::getInstance()->getModelRepository(Document::class);
 
-        $foundIds = $docfinder->ids();
-
-        // Update ServerDateModified for all found documents
-        Document::setServerDateModifiedByIds($now, $foundIds);
+        $documents->setServerDateModifiedForDocuments($now, $foundIds);
     }
 }

@@ -30,9 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Log;
+use Opus\Job\MailNotification;
 use Opus\Job\Runner;
-use Opus\Job\Worker\MailNotification;
-use Opus\Log;
 
 /**
  * Class for sending notification
@@ -41,7 +41,7 @@ class Application_Job_SendNotificationJob implements Application_Job_JobInterfac
 {
     public function run()
     {
-        $jobrunner = new Runner;
+        $jobrunner = new Runner();
         $jobrunner->setLogger(Log::get());
         // no waiting between jobs
         $jobrunner->setDelay(0);

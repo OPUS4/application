@@ -31,15 +31,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Log;
+use Opus\Job\MailNotification;
 use Opus\Job\Runner;
-use Opus\Job\Worker\MailNotification;
-use Opus\Log;
 
 class Application_Job_SendReviewRequestJob implements Application_Job_JobInterface
 {
     public function run()
     {
-        $jobrunner = new Runner;
+        $jobrunner = new Runner();
         $jobrunner->setLogger(Log::get());
 
         // no waiting between jobs

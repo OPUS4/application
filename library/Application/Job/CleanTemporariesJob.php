@@ -30,8 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\DocumentFinder;
+use Opus\Common\Document;
+use Opus\Common\Repository;
 
 /**
  * Class for cleaning temporary documents.
@@ -55,17 +55,17 @@ class Application_Job_CleanTemporariesJob implements Application_Job_JobInterfac
     public function run()
     {
         $dateString = $this->getPreviousDate();
-        $finder = new DocumentFinder();
+        $finder     = Repository::getInstance()->getDocumentFinder();
         $finder->setServerState('temporary')
             ->setServerDateModifiedBefore($dateString);
 
-        foreach ($finder->ids() as $id) {
+        foreach ($finder->getIds() as $id) {
             $doc = Document::get($id);
-            if ($doc->getServerState() == 'temporary') {
+            if ($doc->getServerState() === 'temporary') {
                 echo "deleting document: $id\n";
                 $doc->delete();
             } else {
-                echo "NOT deleting document: $id because it has server state ".$doc->getServerState();
+                echo "NOT deleting document: $id because it has server state " . $doc->getServerState();
             }
         }
     }
@@ -77,7 +77,7 @@ class Application_Job_CleanTemporariesJob implements Application_Job_JobInterfac
      */
     private function getPreviousDate()
     {
-        $date = new DateTime();
+        $date       = new DateTime();
         $dateString = $date->sub(new DateInterval($this->duration))->format('Y-m-d');
         return $dateString;
     }

@@ -30,9 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Log;
+use Opus\Import\Worker\MetadataImportWorker;
 use Opus\Job\Runner;
-use Opus\Job\Worker\MetadataImport;
-use Opus\Log;
 
 /**
  * Class ImportMetadataJob
@@ -43,14 +43,14 @@ class Application_Job_ImportMetadataJob implements Application_Job_JobInterface
 {
     public function run()
     {
-        $jobrunner = new Runner;
+        $jobrunner = new Runner();
         $jobrunner->setLogger(Log::get());
         // no waiting between jobs
         $jobrunner->setDelay(0);
         // set a limit of 100 index jobs per run
         $jobrunner->setLimit(100);
 
-        $importWorker = new MetadataImport(null);
+        $importWorker = new MetadataImportWorker(null);
         $importWorker->setLogger(Log::get());
 
         $jobrunner->registerWorker($importWorker);

@@ -68,13 +68,13 @@ class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
     public function run()
     {
         $beforeDate = null;
-        if (! is_null($this->delayInHours)) {
-            $dateTime = new \DateTime();
+        if ($this->delayInHours !== null) {
+            $dateTime   = new DateTime();
             $beforeDate = date("Y-m-d H:i:s", strtotime("- $this->delayInHours hours"));
         }
 
         $doiManager = new DoiManager();
-        $status = $doiManager->verifyRegisteredBefore($beforeDate);
+        $status     = $doiManager->verifyRegisteredBefore($beforeDate);
 
         if ($status->isNoDocsToProcess()) {
             echo "could not find matching documents for DOI verification\n";
