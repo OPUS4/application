@@ -40,7 +40,7 @@ class Application_Job_EmbargoUpdateJobTest extends ControllerTestCase
 
     private $job;
 
-    public function setup()
+    public function setup(): void
     {
         parent::setUp();
         $this->job = new Application_Job_EmbargoUpdateJob();

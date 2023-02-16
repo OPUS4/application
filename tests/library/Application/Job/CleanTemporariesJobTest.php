@@ -42,7 +42,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
     private $job;
     private $doc;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->job = new Application_Job_CleanTemporariesJob('P2D');

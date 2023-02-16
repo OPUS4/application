@@ -40,7 +40,7 @@ class Application_Job_UpdateDocumentCacheJobTest extends ControllerTestCase
 
     private $job;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->job = new Application_Job_UpdateDocumentCacheJob();
