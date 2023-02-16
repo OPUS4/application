@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
+use Opus\Common\Date;
 use Opus\Document;
 
 class Application_Job_EmbargoUpdateJobTest extends ControllerTestCase

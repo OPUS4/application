@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 
 class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
 {
@@ -87,7 +87,8 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
         $file = $this->createTestFile('TestFile.txt', 'This is a test File', $path);
 
         $expectedErrors = 1;
-        $this->setExpectedException(Exception::class, "Found $expectedErrors ERRORs in workspace files directory '$path'!\n");
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Found $expectedErrors ERRORs in workspace files directory '$path'!\n");
 
         $job->run();
     }

@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
+use Opus\Common\Date;
 use Opus\Document;
 use Opus\Model\NotFoundException;
 
@@ -56,7 +56,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
         $this->changeDocumentDateModified($this->doc, 3);
         $this->job->run();
 
-        $this->setExpectedException(NotFoundException::class);
+        $this->expectException(NotFoundException::class);
         $doc = Document::get($this->doc->getId());
     }
 
@@ -74,7 +74,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
         $this->job->run();
 
         foreach ($docArray as $document) {
-            $this->setExpectedException(NotFoundException::class);
+            $this->expectException(NotFoundException::class);
             $doc = Document::get($document->getId());
         }
     }
