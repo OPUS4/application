@@ -39,13 +39,13 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
 
     private $job;
 
-    public function setup()
+    public function setup(): void
     {
         parent::setUp();
         $this->job = new Application_Job_CheckWorkspaceFilesJob();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }
