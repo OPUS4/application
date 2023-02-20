@@ -455,7 +455,7 @@ class Publish_FormController extends Application_Controller_Action
             return;
         }
 
-        if (isset($data['bibliographie']) && $data['bibliographie'] === '1') {
+        if (isset($data['bibliographie']) && $data['bibliographie']) {
             $this->getLogger()->debug("Bibliographie is set -> store it!");
             //store the document internal field BelongsToBibliography
             $this->document->setBelongsToBibliography(1);

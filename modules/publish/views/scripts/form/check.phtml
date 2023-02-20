@@ -52,7 +52,7 @@
                                 <td><?= htmlspecialchars($element->getMultiOption($element->getValue())) ?></td>
                             <?php  else : ?>
                                 <?php if ($element->getType() === 'Zend_Form_Element_Checkbox') : ?>
-                                    <?php if ($element->getValue() === '1') : ?>
+                                    <?php if ($element->getValue()) : ?>
                                         <td><?= $this->translate('yes'); ?></td>
                                     <?php else : ?>
                                         <td><?= $this->translate('no'); ?></td>
@@ -77,7 +77,7 @@
                             <td><?= htmlspecialchars($elem->getMultiOption($elem->getValue())) ?></td>
                         <?php  else : ?>
                             <?php if ($elem->getType() === 'Zend_Form_Element_Checkbox') : ?>
-                                <?php if ($elem->getValue() === '1') : ?>
+                                <?php if ($elem->getValue()) : ?>
                                     <td><?= $this->translate('yes'); ?></td>
                                 <?php else : ?>
                                     <td><?= $this->translate('no'); ?></td>
