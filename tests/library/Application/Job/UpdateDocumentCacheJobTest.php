@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,23 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
  * @category    Application Unit Test
  * @package     Application
  * @author      Kaustabh Barman (barman@zib.de)
- * @copyright   Copyright (c) 2021, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Licence;
 use Opus\Db\DocumentXmlCache;
+use Opus\Licence;
 
 class Application_Job_UpdateDocumentCacheJobTest extends ControllerTestCase
 {
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Application_Job_UpdateDocumentCacheJob */
     private $job;
 
     public function setUp(): void
@@ -54,10 +58,10 @@ class Application_Job_UpdateDocumentCacheJobTest extends ControllerTestCase
         $documentCacheTable = new DocumentXmlCache();
 
         $docXmlCache = $documentCacheTable->find($document->getId(), '1')->current()->xml_data;
-        $domDoc = new DomDocument();
+        $domDoc      = new DOMDocument();
         $domDoc->loadXML($docXmlCache);
         $licences = $domDoc->getElementsByTagName('Licence');
-        $this->assertTrue($licences->length == 0, 'Expected no Licence element in dom.');
+        $this->assertTrue($licences->length === 0, 'Expected no Licence element in dom.');
 
         $licence = new Licence();
         $licence->setNameLong('TestLicence');
@@ -73,15 +77,15 @@ class Application_Job_UpdateDocumentCacheJobTest extends ControllerTestCase
 
         $docXmlCacheResult = $documentCacheTable->find($document->getId(), '1');
 
-        $this->assertTrue($docXmlCacheResult->count() == 0, 'Expected empty document xml cache');
+        $this->assertTrue($docXmlCacheResult->count() === 0, 'Expected empty document xml cache');
 
         $this->job->run();
 
         $docXmlCacheAfter = $documentCacheTable->find($docId, '1')->current()->xml_data;
-        $domDocAfter = new DomDocument();
+        $domDocAfter      = new DOMDocument();
         $domDocAfter->loadXML($docXmlCacheAfter);
         $licencesAfter = $domDocAfter->getElementsByTagName('Licence');
-        $this->assertTrue($licencesAfter->length == 1, 'Expected one Licence element in dom.');
+        $this->assertTrue($licencesAfter->length === 1, 'Expected one Licence element in dom.');
         $licences = $document->getLicence();
         $licences[0]->delete();
     }

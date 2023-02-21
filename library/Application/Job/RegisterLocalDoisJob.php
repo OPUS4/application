@@ -25,10 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Script
- * @author      Kaustabh Barman <barman@zib.de>
  * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * @category    Script
+ * @author      Kaustabh Barman <barman@zib.de>
  */
 
 use Opus\Doi\DoiManager;
@@ -43,6 +44,7 @@ use Opus\Doi\DoiManager;
  */
 class Application_Job_RegisterLocalDoisJob implements Application_Job_JobInterface
 {
+    /** @var bool */
     private $printErrors = false;
 
     /**
@@ -53,6 +55,9 @@ class Application_Job_RegisterLocalDoisJob implements Application_Job_JobInterfa
         $this->printErrors = true;
     }
 
+    /**
+     * @return void
+     */
     public function run()
     {
         $doiManager = new DoiManager();

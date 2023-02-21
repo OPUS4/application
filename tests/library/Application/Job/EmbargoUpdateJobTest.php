@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,11 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
  * @category    Application Unit Test
  * @package     Application
  * @author      Kaustabh Barman <barman@zib.de>
- * @copyright   Copyright (c) 2021, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Date;
@@ -37,8 +39,10 @@ use Opus\Document;
 
 class Application_Job_EmbargoUpdateJobTest extends ControllerTestCase
 {
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Application_Job_EmbargoUpdateJob */
     private $job;
 
     public function setup(): void
@@ -47,6 +51,7 @@ class Application_Job_EmbargoUpdateJobTest extends ControllerTestCase
         $this->job = new Application_Job_EmbargoUpdateJob();
     }
 
+    /** @return void */
     public function testRun()
     {
         $twoDaysAgo = new Date();
@@ -60,7 +65,7 @@ class Application_Job_EmbargoUpdateJobTest extends ControllerTestCase
         $doc->setEmbargoDate($yesterday);
         $expiredId = $doc->store();
 
-        $doc = Document::new();
+        $doc         = Document::new();
         $noEmbargoId = $doc->store();
 
         $doc = Document::new();
@@ -85,10 +90,15 @@ class Application_Job_EmbargoUpdateJobTest extends ControllerTestCase
         $this->assertTrue($this->sameDay($twoDaysAgo->getDateTime(), $doc->getServerDateModified()->getDateTime()));
     }
 
+    /**
+     * @param DateTime $firstDate
+     * @param DateTime $secondDate
+     * @return bool
+     */
     private function sameDay($firstDate, $secondDate)
     {
-        $first = $firstDate->format('Y-m-d');
+        $first  = $firstDate->format('Y-m-d');
         $second = $secondDate->format('Y-m-d');
-        return $first == $second;
+        return $first === $second;
     }
 }

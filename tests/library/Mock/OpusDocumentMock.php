@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,28 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
+ * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
  * @category    Cronjob
  * @package     Tests
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Date;
 use Opus\Document;
+use Opus\Model\DbConstrainViolationException;
+use Opus\Model\DbException;
+use Opus\Model\ModelException;
 
 /**
  * Mock used by DbCleanTemporary
  */
 class Mock_OpusDocumentMock extends Document
 {
-
     /**
-     * @param $date
+     * @param  Date $date
      * @return void
      * @throws Zend_Db_Exception
-     * @throws \Opus\Model\DbConstrainViolationException
-     * @throws \Opus\Model\DbException
-     * @throws \Opus\Model\ModelException
+     * @throws DbConstrainViolationException
+     * @throws DbException
+     * @throws ModelException
      */
     public function changeServerDateModified($date)
     {

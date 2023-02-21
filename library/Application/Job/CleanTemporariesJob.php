@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Script
- * @author      Kaustabh Barman <barman@zib.de>
  * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * @category    Script
+ * @author      Kaustabh Barman <barman@zib.de>
  */
 
 use Opus\Common\Document;
@@ -38,20 +40,20 @@ use Opus\Common\Repository;
  */
 class Application_Job_CleanTemporariesJob implements Application_Job_JobInterface
 {
-    /**
-     * @var string Duration of the temporary document
-     */
+    /** @var string Duration of the temporary document */
     private $duration;
 
     /**
-     * CleanTemporariesJob constructor.
-     * @param $duration string Duration e.g., P2D, P4M
+     * @param string $duration Duration e.g., P2D, P4M
      */
     public function __construct($duration)
     {
         $this->duration = $duration;
     }
 
+    /**
+     * @return void
+     */
     public function run()
     {
         $dateString = $this->getPreviousDate();
@@ -73,12 +75,11 @@ class Application_Job_CleanTemporariesJob implements Application_Job_JobInterfac
     /**
      * Returns the previous date of the mentioned duration in class contructor.
      *
-     * @returns string date
+     * @return string date
      */
     private function getPreviousDate()
     {
-        $date       = new DateTime();
-        $dateString = $date->sub(new DateInterval($this->duration))->format('Y-m-d');
-        return $dateString;
+        $date = new DateTime();
+        return $date->sub(new DateInterval($this->duration))->format('Y-m-d');
     }
 }

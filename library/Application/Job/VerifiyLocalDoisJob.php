@@ -25,10 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Script
- * @author      Kaustabh Barman <barman@zib.de>
  * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * @category    Script
+ * @author      Kaustabh Barman <barman@zib.de>
  */
 
 use Opus\Doi\DoiManager;
@@ -45,13 +46,16 @@ use Opus\Doi\DoiManager;
  */
 class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
 {
+    /** @var bool */
     private $printErrors = false;
 
     // prüfe nur lokale DOIs, die vor mindestens 24h bei DataCite registriert wurden
     // setze den Wert von $delayInHours auf null, um alle registrierten DOIs unabhängig
     // vom Registrierungszeitpunkt zu prüfen
-    private $delayInHours = null;
+    /** @var int */
+    private $delayInHours;
 
+    /** @param int $delayInHours */
     public function __construct($delayInHours)
     {
         $this->delayInHours = $delayInHours;
@@ -59,12 +63,17 @@ class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
 
     /**
      * setze auf $printErrors auf true, um Fehlermeldungen auf der Konsole auszugeben
+     *
+     * @return void
      */
     public function printErrors()
     {
         $this->printErrors = true;
     }
 
+    /**
+     * @return void
+     */
     public function run()
     {
         $beforeDate = null;

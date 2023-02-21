@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,19 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
  * @category    Application Unit Test
  * @package     Application
  * @author      Kaustabh Barman <barman@zib.de>
- * @copyright   Copyright (c) 2021, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Config;
 
 class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
 {
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Application_Job_CheckWorkspaceFilesJob */
     private $job;
 
     public function setup(): void
@@ -58,16 +62,16 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
         $job->setFilesPath($path);
 
         $expectedCount = count(glob($path . DIRECTORY_SEPARATOR . "*"));
-        $count = $job->run();
+        $count         = $job->run();
 
         $this->assertEquals($expectedCount, $count);
     }
 
     public function testGetFilePath()
     {
-        $job = $this->job;
-        $reflector = new \ReflectionClass($job);
-        $getPath = $reflector->getMethod('getFilesPath');
+        $job       = $this->job;
+        $reflector = new ReflectionClass($job);
+        $getPath   = $reflector->getMethod('getFilesPath');
         $getPath->setAccessible(true);
         $path = $getPath->invokeArgs($job, []);
 
@@ -78,14 +82,14 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
 
     public function testRunException()
     {
-        $job = $this->job;
-        $reflector = new \ReflectionClass($job);
-        $getPath = $reflector->getMethod('getFilesPath');
+        $job       = $this->job;
+        $reflector = new ReflectionClass($job);
+        $getPath   = $reflector->getMethod('getFilesPath');
         $getPath->setAccessible(true);
         $path = $getPath->invokeArgs($job, []);
 
         $file = $this->createTestFile('/0909', null, $path);
-        
+
         $expectedErrors = 1;
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Found $expectedErrors ERRORs in workspace files directory '$path'!\n");
@@ -100,8 +104,8 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
         $expectedPath = $this->createTestFolder();
         $job->setFilesPath($expectedPath);
 
-        $reflector = new \ReflectionClass($job);
-        $getPath = $reflector->getMethod('getFilesPath');
+        $reflector = new ReflectionClass($job);
+        $getPath   = $reflector->getMethod('getFilesPath');
         $getPath->setAccessible(true);
         $path = $getPath->invokeArgs($job, []);
 

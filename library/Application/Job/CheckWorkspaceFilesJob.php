@@ -25,10 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Script
- * @author      Kaustabh Barman <barman@zib.de>
  * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * @category    Script
+ * @author      Kaustabh Barman <barman@zib.de>
  */
 
 use Opus\Common\Config;
@@ -43,14 +44,21 @@ use Opus\Common\Model\NotFoundException;
  */
 class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInterface
 {
+    /** @var int */
     private $startTime;
 
+    /** @var int */
     private $errors = 0;
 
+    /** @var string */
     private $file;
 
+    /** @var string */
     private $filesPath;
 
+    /**
+     * @return int
+     */
     public function run()
     {
         $filesPath = $this->getFilesPath();
@@ -58,7 +66,7 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
         echo "INFO: Scanning directory '$filesPath'...\n";
 
         // Iterate over all files
-        $count = 0;
+        $count        = 0;
         $this->errors = 0;
 
         foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
@@ -95,7 +103,7 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
     /**
      * Check if document with specified id exists and can be fetched.
      *
-     * @param $id
+     * @param int $id
      * @return Document
      */
     private function checkDocument($id)
@@ -117,8 +125,8 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
     {
         $this->startTime = microtime(true);
 
-        if (is_null($this->filesPath)) {
-            $config = Config::get();
+        if ($this->filesPath === null) {
+            $config          = Config::get();
             $this->filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
 
             if ($this->filesPath === false || empty($this->filesPath)) {
@@ -128,6 +136,10 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
         return $this->filesPath;
     }
 
+    /**
+     * @param string $path
+     * @return void
+     */
     public function setFilesPath($path)
     {
         $this->filesPath = $path;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,22 +25,27 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
  * @category    Application Unit Test
  * @package     Application
  * @author      Kaustabh Barman <barman@zib.de>
- * @copyright   Copyright (c) 2021, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Date;
-use Opus\Document;
 use Opus\Common\Model\NotFoundException;
+use Opus\Document;
 
 class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
 {
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Application_Job_CleanTemporariesJob */
     private $job;
+
+    /** @var Mock_OpusDocumentMock */
     private $doc;
 
     public function setUp(): void
@@ -81,9 +87,9 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
 
     public function testGetPreviousDate()
     {
-        $job = $this->job;
-        $reflector = new \ReflectionClass($job);
-        $getDate = $reflector->getMethod('getPreviousDate');
+        $job       = $this->job;
+        $reflector = new ReflectionClass($job);
+        $getDate   = $reflector->getMethod('getPreviousDate');
         $getDate->setAccessible(true);
         $date = $getDate->invokeArgs($job, []);
 
@@ -93,6 +99,11 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
         $this->assertSame($expected, $date);
     }
 
+    /**
+     * @param Document $document
+     * @param int $numDaysBeforeNow
+     * @return void
+     */
     private function changeDocumentDateModified($document, $numDaysBeforeNow)
     {
         $date = new DateTime();

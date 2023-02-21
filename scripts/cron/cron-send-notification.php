@@ -33,7 +33,7 @@
 defined('APPLICATION_ENV')
     || define(
         'APPLICATION_ENV',
-        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production')
+        getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'
     );
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
