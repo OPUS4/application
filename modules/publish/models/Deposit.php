@@ -462,7 +462,7 @@ class Publish_Model_Deposit
     }
 
     /**
-     * @param string $title
+     * @param object $title
      * @param string $type
      * @param string $short
      * @param int    $counter
@@ -475,7 +475,7 @@ class Publish_Model_Deposit
             $index = $type . $short;
         }
         $entry = $this->documentData[$index]['value'];
-        if ($entry !== "") {
+        if ($entry !== '') {
             $this->log->debug("Value of title language: " . $entry);
             $title->setLanguage($entry);
         }

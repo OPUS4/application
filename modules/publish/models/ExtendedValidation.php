@@ -200,7 +200,7 @@ class Publish_Model_ExtendedValidation
 
         foreach ($emailNotifications as $key => $check) {
             $this->log->debug(__METHOD__ . ' : Email Notification: ' . $key . ' with value ' . $check);
-            if ($check === '1') {
+            if ($check) {
                 //if $check is set and not null, find the corresponding email and name
                 $emailKey  = str_replace('Allow', '', $key);
                 $emailKey  = str_replace('Contact', '', $emailKey);
@@ -459,7 +459,7 @@ class Publish_Model_ExtendedValidation
         $languages = [];
 
         foreach ($this->extendedData as $name => $entry) {
-            if ($entry['datatype'] === 'Title' && $entry['subfield'] === '1' && strstr($name, 'anguage')) {
+            if ($entry['datatype'] === 'Title' && $entry['subfield'] && strstr($name, 'anguage')) {
                 $languages[$name] = $entry['value'];
             }
         }
@@ -477,7 +477,7 @@ class Publish_Model_ExtendedValidation
         $titles = [];
 
         foreach ($this->extendedData as $name => $entry) {
-            if ($entry['datatype'] === 'Title' && $entry['subfield'] === '0') {
+            if ($entry['datatype'] === 'Title' && ! $entry['subfield']) {
                 $titles[$name] = $entry['value'];
             }
         }
@@ -614,7 +614,7 @@ class Publish_Model_ExtendedValidation
         $titles = [];
 
         foreach ($this->extendedData as $name => $entry) {
-            if ($entry['datatype'] === 'Subject' && $entry['subfield'] === '0' && strstr($name, 'ncontrolled')) {
+            if ($entry['datatype'] === 'Subject' && ! $entry['subfield'] && strstr($name, 'ncontrolled')) {
                 $titles[$name] = $entry['value'];
             }
         }
@@ -631,7 +631,7 @@ class Publish_Model_ExtendedValidation
         $checkBoxes      = $this->getRequiredCheckboxes();
 
         foreach ($checkBoxes as $box) {
-            if ($this->data[$box] === '0') {
+            if (! $this->data[$box]) {
                 $this->log->debug(__METHOD__ . " : error for element " . $box);
                 $element = $this->form->getElement($box);
                 $element->clearErrorMessages();
