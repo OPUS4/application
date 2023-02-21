@@ -55,9 +55,6 @@ class Application_Job_RegisterLocalDoisJob implements Application_Job_JobInterfa
         $this->printErrors = true;
     }
 
-    /**
-     * @return void
-     */
     public function run()
     {
         $doiManager = new DoiManager();

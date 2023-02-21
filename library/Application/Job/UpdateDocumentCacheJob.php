@@ -45,9 +45,6 @@ use Opus\Model\Xml\Version1;
  */
 class Application_Job_UpdateDocumentCacheJob implements Application_Job_JobInterface
 {
-    /**
-     * @return void
-     */
     public function run()
     {
         $repository = Repository::getInstance();

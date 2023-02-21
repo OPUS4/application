@@ -53,9 +53,6 @@ use Opus\Common\Repository;
  */
 class Application_Job_EmbargoUpdateJob implements Application_Job_JobInterface
 {
-    /**
-     * @return void
-     */
     public function run()
     {
         $finder = Repository::getInstance()->getDocumentFinder();

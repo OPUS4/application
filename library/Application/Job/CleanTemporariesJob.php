@@ -51,9 +51,6 @@ class Application_Job_CleanTemporariesJob implements Application_Job_JobInterfac
         $this->duration = $duration;
     }
 
-    /**
-     * @return void
-     */
     public function run()
     {
         $dateString = $this->getPreviousDate();

@@ -71,9 +71,6 @@ class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
         $this->printErrors = true;
     }
 
-    /**
-     * @return void
-     */
     public function run()
     {
         $beforeDate = null;

@@ -38,9 +38,6 @@ use Opus\Search\Task\IndexOpusDocument;
 
 class Application_Job_SolrUpdateJob implements Application_Job_JobInterface
 {
-    /**
-     * @return void
-     */
     public function run()
     {
         $jobrunner = new Runner();

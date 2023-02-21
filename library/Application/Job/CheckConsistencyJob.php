@@ -41,9 +41,6 @@ use Opus\Search\Task\ConsistencyCheck;
  */
 class Application_Job_CheckConsistencyJob implements Application_Job_JobInterface
 {
-    /**
-     * @return void
-     */
     public function run()
     {
         $jobrunner = new Runner();

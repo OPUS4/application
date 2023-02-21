@@ -41,7 +41,7 @@ interface Application_Job_JobInterface
     /**
      * Perform job.
      *
-     * @return void|int
+     * @return mixed
      */
     public function run();
 }
