@@ -33,7 +33,7 @@
 
 use Opus\Common\Date;
 use Opus\Document;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
 
 class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
 {
