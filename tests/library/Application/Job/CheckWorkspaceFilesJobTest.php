@@ -84,12 +84,27 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
         $getPath->setAccessible(true);
         $path = $getPath->invokeArgs($job, []);
 
-        $file = $this->createTestFile('TestFile.txt', 'This is a test File', $path);
-
+        $file = $this->createTestFile('/0909', null, $path);
+        
         $expectedErrors = 1;
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Found $expectedErrors ERRORs in workspace files directory '$path'!\n");
 
         $job->run();
+    }
+
+    public function testSetFilesPath()
+    {
+        $job = $this->job;
+
+        $expectedPath = $this->createTestFolder();
+        $job->setFilesPath($expectedPath);
+
+        $reflector = new \ReflectionClass($job);
+        $getPath = $reflector->getMethod('getFilesPath');
+        $getPath->setAccessible(true);
+        $path = $getPath->invokeArgs($job, []);
+
+        $this->assertSame($expectedPath, $path);
     }
 }
