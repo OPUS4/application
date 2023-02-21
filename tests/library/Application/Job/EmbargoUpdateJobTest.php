@@ -32,6 +32,7 @@
  */
 
 use Opus\Common\Date;
+use Opus\Common\Repository;
 use Opus\Document;
 
 class Application_Job_EmbargoUpdateJobTest extends ControllerTestCase
@@ -66,7 +67,8 @@ class Application_Job_EmbargoUpdateJobTest extends ControllerTestCase
         $doc->setEmbargoDate($today);
         $notExpiredId = $doc->store();
 
-        Document::setServerDateModifiedByIds($twoDaysAgo, [$expiredId, $noEmbargoId, $notExpiredId]);
+        $documents = Repository::getInstance()->getModelRepository(Document::class);
+        $documents->setServerDateModifiedForDocuments($twoDaysAgo, [$expiredId, $noEmbargoId, $notExpiredId]);
 
         $this->job->run();
 
