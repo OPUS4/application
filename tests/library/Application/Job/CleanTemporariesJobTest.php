@@ -101,8 +101,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
 
     /**
      * @param Document $document
-     * @param int $numDaysBeforeNow
-     * @return void
+     * @param int      $numDaysBeforeNow
      */
     private function changeDocumentDateModified($document, $numDaysBeforeNow)
     {

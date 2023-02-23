@@ -51,7 +51,6 @@ class Application_Job_EmbargoUpdateJobTest extends ControllerTestCase
         $this->job = new Application_Job_EmbargoUpdateJob();
     }
 
-    /** @return void */
     public function testRun()
     {
         $twoDaysAgo = new Date();

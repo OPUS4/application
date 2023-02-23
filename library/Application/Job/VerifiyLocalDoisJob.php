@@ -63,8 +63,6 @@ class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
 
     /**
      * setze auf $printErrors auf true, um Fehlermeldungen auf der Konsole auszugeben
-     *
-     * @return void
      */
     public function printErrors()
     {

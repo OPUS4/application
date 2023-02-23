@@ -138,7 +138,6 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
 
     /**
      * @param string $path
-     * @return void
      */
     public function setFilesPath($path)
     {

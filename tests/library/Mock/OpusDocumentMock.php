@@ -46,7 +46,6 @@ class Mock_OpusDocumentMock extends Document
 {
     /**
      * @param  Date $date
-     * @return void
      * @throws Zend_Db_Exception
      * @throws DbConstrainViolationException
      * @throws DbException
