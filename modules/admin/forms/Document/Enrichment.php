@@ -32,9 +32,9 @@
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentInterface;
 use Opus\Common\EnrichmentKey;
+use Opus\Common\Model\FieldType\SelectType;
+use Opus\Common\Model\FieldType\TextType;
 use Opus\Common\Model\ModelException;
-use Opus\Enrichment\SelectType;
-use Opus\Enrichment\TextType;
 
 /**
  * Unterformular für einzelne Enrichments im Metadaten-Formular.

@@ -31,8 +31,8 @@
 
 use Opus\Common\EnrichmentKey;
 use Opus\Common\EnrichmentKeyInterface;
-use Opus\Enrichment\AbstractType;
-use Opus\Enrichment\TypeInterface;
+use Opus\Common\Model\AbstractFieldType;
+use Opus\Common\Model\FieldTypeInterface;
 
 /**
  * Form for creating and editing an enrichment key.
@@ -117,7 +117,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         // alle verfügbaren EnrichmentTypes ermitteln und als Auswahlfeld anzeigen
         $availableTypes[''] = ''; // Standardauswahl des Select-Felds soll leer sein
-        $availableTypes     = array_merge($availableTypes, AbstractType::getAllEnrichmentTypes());
+        $availableTypes     = array_merge($availableTypes, AbstractFieldType::getAllEnrichmentTypes());
         $element->setMultiOptions($availableTypes);
         $this->addElement($element);
 
@@ -241,7 +241,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      * null, wenn der Typ-Name nicht aufgelöst werden kann.
      *
      * @param string $enrichmentTypeName Name des Enrichment-Typs
-     * @return TypeInterface|null
+     * @return FieldTypeInterface|null
      */
     private function initEnrichmentType($enrichmentTypeName)
     {
@@ -250,7 +250,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
         }
 
         // TODO better way? - allow registering namespaces/types like in Zend for form elements?
-        $enrichmentTypeName = 'Opus\\Enrichment\\' . $enrichmentTypeName;
+        $enrichmentTypeName = AbstractFieldType::TYPES_NAMESPACE . '\\' . $enrichmentTypeName;
         try {
             if (class_exists($enrichmentTypeName, false)) {
                 return new $enrichmentTypeName();

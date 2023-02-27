@@ -29,8 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Enrichment;
 use Opus\Document;
-use Opus\Enrichment;
 use Opus\Language;
 
 /**
