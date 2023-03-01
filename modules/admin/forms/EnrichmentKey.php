@@ -106,6 +106,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             'label'    => 'DisplayName',
         ]);
 
+        // TODO create form element class for 'FieldType'
         $element = $this->createElement(
             'select',
             self::ELEMENT_TYPE,
@@ -245,22 +246,11 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      */
     private function initEnrichmentType($enrichmentTypeName)
     {
-        if ($enrichmentTypeName === null || $enrichmentTypeName === '') {
+        if ($enrichmentTypeName === null || empty($enrichmentTypeName)) {
             return null;
         }
 
-        // TODO better way? - allow registering namespaces/types like in Zend for form elements?
-        $enrichmentTypeName = FieldTypes::TYPES_NAMESPACE . '\\' . $enrichmentTypeName; // TODO move to Common
-        try {
-            if (class_exists($enrichmentTypeName, false)) {
-                return new $enrichmentTypeName();
-            }
-            $this->getLogger()->err('could not find class ' . $enrichmentTypeName);
-        } catch (Throwable $ex) { // TODO Throwable only available in PHP 7+
-            $this->getLogger()->err('could not instantiate class ' . $enrichmentTypeName . ': ' . $ex->getMessage());
-        }
-
-        return null;
+        return FieldTypes::getType($enrichmentTypeName);
     }
 
     /**
