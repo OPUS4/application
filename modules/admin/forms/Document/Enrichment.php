@@ -112,11 +112,11 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * EnrichmentKey des Enrichments zugeordnet wurde). Ist kein EnrichmentType zugeordnet, so wird ein einfaches
      * Texteingabefeld verwendet.
      *
-     * @param string             $enrichmentValue Wert des anzuzeigenden Enrichments (in der Datenbank)
-     * @param EnrichmentKeyInterface|null $enrichmentKey EnrichmentKey des Enrichments, für das ein Eingabeformularelement
-     *                                               erzeugt werden soll
-     * @param string|null        $formValue aktueller Formularwert für das Enrichment (nur bei der Verarbeitung eines
-     *                                      POST-Requests gesetzt)
+     * @param string                      $enrichmentValue Wert des anzuzeigenden Enrichments (in der Datenbank)
+     * @param EnrichmentKeyInterface|null $enrichmentKey EnrichmentKey des Enrichments, für das ein
+     *                                                  Eingabeformularelement erzeugt werden soll
+     * @param string|null                 $formValue aktueller Formularwert für das Enrichment (nur bei der
+     *                                               Verarbeitung eines POST-Requests gesetzt)
      */
     private function createValueFormElement($enrichmentValue, $enrichmentKey = null, $formValue = null)
     {
