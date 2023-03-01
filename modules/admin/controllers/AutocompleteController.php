@@ -31,7 +31,7 @@
  */
 
 use Opus\Common\CollectionRole;
-use Opus\Common\Model\AbstractFieldType;
+use Opus\Common\Model\FieldTypes;
 
 /**
  * Controller for providing JSON formatted data used for autocomplete
@@ -102,8 +102,8 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
 
         $typeName = $this->getRequest()->getParam('typeName');
         if ($typeName !== null && $typeName !== '') {
-            $typeName = AbstractFieldType::TYPES_NAMESPACE . '\\' . $typeName;
-            $allTypes = AbstractFieldType::getAllEnrichmentTypes(true);
+            $typeName = FieldTypes::TYPES_NAMESPACE . '\\' . $typeName; // TODO move to Common
+            $allTypes = FieldTypes::getAll(true);
             if (in_array($typeName, $allTypes)) {
                 $typeObj         = new $typeName();
                 $typeDescription = $typeObj->getDescription();

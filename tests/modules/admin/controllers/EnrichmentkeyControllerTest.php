@@ -33,7 +33,7 @@ use Opus\Common\Document;
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentKey;
 use Opus\Common\EnrichmentKeyInterface;
-use Opus\Common\Model\AbstractFieldType;
+use Opus\Common\Model\FieldTypes;
 use Opus\Common\Model\NotFoundException;
 
 /**
@@ -813,7 +813,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->getRequest()->setMethod('GET');
         $this->dispatch($this->getControllerPath() . '/new');
 
-        $allEnrichmentTypes = AbstractFieldType::getAllEnrichmentTypes(false);
+        $allEnrichmentTypes = FieldTypes::getAll(false);
         $this->assertXpathCount('//select/option', 1 + count($allEnrichmentTypes)); // +1, weil Standardauswahl leer ist
 
         $this->assertXpathContentRegex('//select/option[1]', "//");
