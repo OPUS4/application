@@ -112,7 +112,7 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
 
             if ($typeObj !== null) {
                 $typeDescription = $typeObj->getDescription();
-                if ($typeDescription !== null && empty($typeDescription)) {
+                if ($typeDescription !== null && ! empty($typeDescription)) {
                     $description = $this->view->translate($typeDescription);
                 }
             }
