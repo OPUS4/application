@@ -74,7 +74,7 @@
     ],
     "test": [
       "Composer\\Config::disableProcessTimeout",
-      "phpunit --log-junit build/phpunit.xml --colors=always --configuration tests/phpunit.xml --debug"
+      "phpunit --log-junit build/phpunit.xml --colors=always --configuration tests/phpunit.xml"
     ],
     "cs-check": [
       "Composer\\Config::disableProcessTimeout",
