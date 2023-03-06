@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Application_Form_FormElementBuilder;
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentInterface;
 use Opus\Common\EnrichmentKey;
@@ -39,6 +40,8 @@ use Opus\Common\Model\ModelException;
 
 /**
  * Unterformular für einzelne Enrichments im Metadaten-Formular.
+ *
+ * TODO move code for creating form elements to FormElementBuilder
  */
 class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 {
@@ -685,5 +688,13 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             return $translator->translate($translationKey);
         }
         return $translationKey;
+    }
+
+    /**
+     * @return FormElementBuilder
+     */
+    private function getFormElementBuilder()
+    {
+        return new FormElementBuilder();
     }
 }
