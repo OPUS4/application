@@ -47,6 +47,6 @@ class PhpShortTagsTest extends TestCase
         // look for shorts tags with line break afterwards
         $output .= shell_exec("find $modulesDir -name '*phtml' -print0 |xargs -r0 grep -n '<?$'");
 
-        $this->assertTrue(strlen(trim($output)) === 0, $output);
+        $this->assertTrue(strlen(trim($output ?? '')) === 0, $output);
     }
 }

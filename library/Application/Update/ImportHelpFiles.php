@@ -201,7 +201,8 @@ class Application_Update_ImportHelpFiles extends Application_Update_PluginAbstra
                     $path     = $helpPath . $fileName;
                     if (is_readable($path)) {
                         $this->log("Default file '$fileName' found.");
-                        $content       = trim(file_get_contents($path));
+                        $content       = file_get_contents($path);
+                        $content       = trim($content ?: '');
                         $values[$lang] = $content;
                         $this->removeFile($path);
                     } else {

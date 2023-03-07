@@ -207,7 +207,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
     {
         $fileId = $this->getElementValue(self::ELEMENT_ID);
 
-        if (strlen(trim($fileId)) > 0 && is_numeric($fileId)) {
+        if ($fileId !== null && strlen(trim($fileId)) > 0 && is_numeric($fileId)) {
             try {
                 $file = File::get($fileId);
             } catch (NotFoundException $omnfe) {

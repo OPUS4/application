@@ -354,7 +354,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
      */
     public function getValueIfValid($value, $default)
     {
-        $value = trim($value);
+        $value = trim($value ?? '');
 
         if (ctype_digit($value) && $value > 0) {
             return $value;

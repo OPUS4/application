@@ -99,7 +99,7 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm
     protected function getDisplayNameForCollection($collection)
     {
         $displayName = $collection->getDisplayName();
-        if (strlen(trim($displayName)) === 0 && $collection->isRoot()) {
+        if (($displayName === null || strlen(trim($displayName)) === 0) && $collection->isRoot()) {
             $translator     = $this->getTranslator();
             $translationKey = 'default_collection_role_' . $collection->getRoleName();
             if ($translator->isTranslated($translationKey)) {
