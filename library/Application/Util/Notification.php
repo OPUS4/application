@@ -153,7 +153,7 @@ class Application_Util_Notification extends Application_Model_Abstract
         if (! empty($personAuthors)) {
             foreach ($personAuthors as $author) {
                 // TODO Komma nur wenn FirstName present
-                $name = trim($author->getLastName() . ", " . $author->getFirstName());
+                $name = trim($author->getLastName() . ', ' . $author->getFirstName());
                 array_push($authors, $name);
             }
         }
@@ -193,7 +193,7 @@ class Application_Util_Notification extends Application_Model_Abstract
 
         $subjectTemplate = $this->getSubjectTemplate();
 
-        if (strlen(trim($subjectTemplate)) > 0) {
+        if ($subjectTemplate !== null && strlen(trim($subjectTemplate)) > 0) {
             return sprintf($subjectTemplate, $document->getId(), $authorString, $title);
         } else {
             $logger->err("could not construct mail subject based on application configuration");
@@ -304,9 +304,9 @@ class Application_Util_Notification extends Application_Model_Abstract
     {
         $addresses = [];
 
-        if (strlen(trim($emails)) > 0) {
+        if ($emails !== null && strlen(trim($emails)) > 0) {
             foreach (explode(",", $emails) as $address) {
-                $address = trim($address);
+                $address = trim($address ?? '');
                 $this->getLogger()->debug("send notification mail to $address");
                 array_push($addresses, ["name" => $address, "address" => $address]);
             }

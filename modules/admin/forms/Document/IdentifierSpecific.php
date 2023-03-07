@@ -116,7 +116,7 @@ class Admin_Form_Document_IdentifierSpecific extends Admin_Form_AbstractModelSub
 
         $identifier = null;
 
-        if (strlen(trim($modelId)) > 0) {
+        if ($modelId !== null && strlen(trim($modelId)) > 0) {
             try {
                 $identifier = Identifier::get($modelId);
             } catch (NotFoundException $omnfe) {
