@@ -35,5 +35,6 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 // prüfe nur lokale DOIs, die vor mindestens 24h bei DataCite registriert wurden
 // setze den Wert von $delayInHours auf null, um alle registrierten DOIs unabhängig
 // vom Registrierungszeitpunkt zu prüfen
-$job = new Application_Job_VerifyLocalDoisJob(24);
+$job = new Application_Job_VerifyLocalDoisJob();
+$job->setDelayInHours(24);
 $job->run();

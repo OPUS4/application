@@ -33,5 +33,6 @@
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$job = new Application_Job_CleanTemporariesJob('P2D');
+$job = new Application_Job_CleanTemporariesJob();
+$job->setDuration('P2D');
 $job->run();

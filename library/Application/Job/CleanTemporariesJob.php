@@ -43,7 +43,7 @@ class Application_Job_CleanTemporariesJob implements Application_Job_JobInterfac
     /**
      * @param string $duration Duration e.g., P2D, P4M
      */
-    public function __construct($duration)
+    public function setDuration($duration)
     {
         $this->duration = $duration;
     }
@@ -67,13 +67,18 @@ class Application_Job_CleanTemporariesJob implements Application_Job_JobInterfac
     }
 
     /**
-     * Returns the previous date of the mentioned duration in class contructor.
+     * Returns the previous date of the duration set.
      *
      * @return string date
      */
     private function getPreviousDate()
     {
         $date = new DateTime();
-        return $date->sub(new DateInterval($this->duration))->format('Y-m-d');
+
+        if ($this->duration !== null) {
+            return $date->sub(new DateInterval($this->duration))->format('Y-m-d');
+        }
+
+        return $date->format('Y-m-d');
     }
 }

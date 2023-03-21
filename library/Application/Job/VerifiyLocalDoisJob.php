@@ -53,7 +53,7 @@ class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
     private $delayInHours;
 
     /** @param int $delayInHours */
-    public function __construct($delayInHours)
+    public function setDelayInHours($delayInHours)
     {
         $this->delayInHours = $delayInHours;
     }
@@ -70,7 +70,6 @@ class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
     {
         $beforeDate = null;
         if ($this->delayInHours !== null) {
-            $dateTime   = new DateTime();
             $beforeDate = date("Y-m-d H:i:s", strtotime("- $this->delayInHours hours"));
         }
 
