@@ -29,16 +29,18 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Log;
+use Opus\Common\LoggingTrait;
 use Opus\Job\Runner;
 use Opus\Search\Task\IndexOpusDocument;
 
 class Application_Job_SolrUpdateJob implements Application_Job_JobInterface
 {
+    use LoggingTrait;
+
     public function run()
     {
         $jobrunner = new Runner();
-        $jobrunner->setLogger(Log::get());
+        $jobrunner->setLogger($this->getLogger());
 
         // no waiting between jobs
         $jobrunner->setDelay(0);

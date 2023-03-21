@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Config;
+use Opus\Common\ConfigTrait;
 use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
 
@@ -41,6 +41,8 @@ use Opus\Common\Model\NotFoundException;
  */
 class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInterface
 {
+    use ConfigTrait;
+
     /** @var int */
     private $startTime;
 
@@ -123,7 +125,7 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
         $this->startTime = microtime(true);
 
         if ($this->filesPath === null) {
-            $config          = Config::get();
+            $config          = $this->getConfig();
             $this->filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
 
             if ($this->filesPath === false || empty($this->filesPath)) {

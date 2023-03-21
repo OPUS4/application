@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Log;
+use Opus\Common\LoggingTrait;
 use Opus\Job\Runner;
 use Opus\Search\Task\ConsistencyCheck;
 
@@ -38,10 +38,12 @@ use Opus\Search\Task\ConsistencyCheck;
  */
 class Application_Job_CheckConsistencyJob implements Application_Job_JobInterface
 {
+    use LoggingTrait;
+
     public function run()
     {
         $jobrunner = new Runner();
-        $jobrunner->setLogger(Log::get());
+        $jobrunner->setLogger($this->getLogger());
         // no waiting between jobs
         $jobrunner->setDelay(0);
         // set a limit of 100 index jobs per run
