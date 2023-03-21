@@ -47,7 +47,8 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->job = new Application_Job_CleanTemporariesJob('P2D');
+        $this->job = new Application_Job_CleanTemporariesJob();
+        $this->job->setDuration('P2D');
         $this->doc = new Mock_OpusDocumentMock();
         $this->doc->setServerState('temporary');
         $this->doc->store();
