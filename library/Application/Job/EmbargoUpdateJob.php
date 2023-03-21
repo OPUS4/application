@@ -27,9 +27,6 @@
  *
  * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * @category    Script
- * @author      Kaustabh Barman <barman@zib.de>
  */
 
 use Opus\Common\Date;

@@ -27,10 +27,6 @@
  *
  * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * @category    Application Unit Test
- * @package     Application
- * @author      Kaustabh Barman (barman@zib.de)
  */
 
 use Opus\Db\DocumentXmlCache;
