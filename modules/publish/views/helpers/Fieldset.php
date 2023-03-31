@@ -98,8 +98,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
     }
 
     /**
-     * @param array  $field
-     * @param string $options TODO wofür wird der Parameter $options benötigt?
+     * @param array $field
+     * @param array $options TODO wofür wird der Parameter $options benötigt?
      * @return string
      */
     public function renderHtmlSelect($field, $options)
@@ -122,7 +122,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
             $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="'
                 . htmlspecialchars($option, ENT_QUOTES) . '"';
 
-            if ($option === $field['value'] || $key === $field['value']) {
+            // $key can be int or string, $field['value'] is always a string
+            if ($option === $field['value'] || strval($key) === $field['value']) {
                 $fieldset .= ' selected="selected"';
             }
 

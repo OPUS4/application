@@ -7,7 +7,6 @@
         <exclude name="Squiz.Classes.ClassFileName" />
         <exclude name="Generic.Files.InlineHTML"/>
         <exclude name="WebimpressCodingStandard.NamingConventions.AbstractClass"/>
-
     </rule>
 
     <!--rule ref="Generic.Files.LineLength">

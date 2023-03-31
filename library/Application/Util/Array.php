@@ -53,6 +53,6 @@ class Application_Util_Array
      */
     public static function trimValue(&$value)
     {
-        $value = trim($value);
+        $value = $value !== null ? trim($value) : $value;
     }
 }

@@ -51,7 +51,7 @@ class Application_Form_Decorator_Button extends Zend_Form_Decorator_Abstract
         $buttonName     = $button->getName();
         $buttonValue    = $button->getLabel();
 
-        if (strlen(trim($buttonValue)) === 0) {
+        if ($buttonValue === null || strlen(trim($buttonValue)) === 0) {
             $buttonValue = $buttonName;
         }
 
