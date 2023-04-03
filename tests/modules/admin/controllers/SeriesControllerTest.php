@@ -298,9 +298,11 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
 
     public function testModelClassIsTranslated()
     {
+        $this->useGerman();
+
         $this->dispatch('/admin/series');
 
         $this->assertNotXpathContentContains('//thead/tr/th', Series::class);
-        $this->assertXpathContentContains('//thead/tr/th', 'Series');
+        $this->assertXpathContentContains('//thead/tr/th', 'Schriftenreihe');
     }
 }
