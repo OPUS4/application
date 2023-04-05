@@ -182,9 +182,23 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     {
         $form = new Application_Form_Model_Table();
         $form->setModels($this->getAllModels());
-        $form->setColumns([['label' => $this->getModelClass()]]);
+        $form->setColumns([['label' => $this->mapToOldModelClass($this->getModelClass())]]);
         $form->setController($this);
         return $form;
+    }
+
+    /**
+     * Maps new model class names to old names for translation.
+     *
+     * @param string $modelClass
+     * @return string
+     *
+     * TODO TRANSLATION The translation keys need to be class independent.
+     */
+    public function mapToOldModelClass($modelClass)
+    {
+        $pos = strrpos($modelClass, '\\');
+        return $pos ? substr($modelClass, $pos + 1) : $modelClass;
     }
 
     /**

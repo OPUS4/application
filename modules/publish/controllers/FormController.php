@@ -120,27 +120,29 @@ class Publish_FormController extends Application_Controller_Action
         // validate fileupload (if the current form contains a file upload field and file upload is enabled in
         // application config)
         if ($indexForm->enableUpload) {
-            if (
-                $indexForm->getElement('fileupload') !== null
-                && ! $indexForm->getElement('fileupload')->isValid($postData)
-            ) {
+            $fileUpload = $indexForm->getElement('fileupload');
+            if ($fileUpload !== null && ! $fileUpload->isValid($postData)) {
                 $indexForm->setViewValues();
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
             } else {
-                //file valid-> store file
-                $this->view->uploadSuccess = $this->storeUploadedFiles($postData);
-                if ($this->view->uploadSuccess) {
-                    $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
-                }
-                // TODO warum wird hier nochmal eine Form instanziiert und nicht das bereits erzeugte verwendet?
-                $indexForm = new Publish_Form_PublishingFirst($this->view);
-                $indexForm->populate($postData);
-                $indexForm->setViewValues();
+                $this->view->uploadSuccess = true; // TODO no file to upload also means success
 
-                if (array_key_exists('addAnotherFile', $postData)) {
-                    $postData['uploadComment'] = "";
-                    $this->renderScript('index/index.phtml');
-                    return;
+                if ($fileUpload->getValue() !== null && strlen(trim($fileUpload->getValue())) > 0) {
+                    // file valid-> store file
+                    $this->view->uploadSuccess = $this->storeUploadedFiles($postData);
+                    if ($this->view->uploadSuccess) {
+                        $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
+                    }
+                    // TODO warum wird hier nochmal eine Form instanziiert und nicht das bereits erzeugte verwendet?
+                    $indexForm = new Publish_Form_PublishingFirst($this->view);
+                    $indexForm->populate($postData);
+                    $indexForm->setViewValues();
+
+                    if (array_key_exists('addAnotherFile', $postData)) {
+                        $postData['uploadComment'] = "";
+                        $this->renderScript('index/index.phtml');
+                        return;
+                    }
                 }
             }
         }
@@ -455,7 +457,7 @@ class Publish_FormController extends Application_Controller_Action
             return;
         }
 
-        if (isset($data['bibliographie']) && $data['bibliographie'] === '1') {
+        if (isset($data['bibliographie']) && $data['bibliographie']) {
             $this->getLogger()->debug("Bibliographie is set -> store it!");
             //store the document internal field BelongsToBibliography
             $this->document->setBelongsToBibliography(1);

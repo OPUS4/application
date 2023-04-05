@@ -122,7 +122,7 @@ class FakeSMTP
                 $this->sendSMTPResponse($socket, $response);
                 do {
                     $input = socket_read($socket, 1024, 1);
-                    if (trim($input) !== '') {
+                    if ($input !== false && trim($input) !== '') {
                         echo "< $input\n";
                     }
                 } while ($socket && trim($input) !== ".");
@@ -158,7 +158,7 @@ class FakeSMTP
             $exit = false;
             // read client input
             if ($input = socket_read($client, 1024, 1)) {
-                if (trim($input) !== '') {
+                if ($input !== false && trim($input) !== '') {
                     echo "< $input\n";
                     $exit = ! $this->handleSMTPRequest($client, $input);
                 }

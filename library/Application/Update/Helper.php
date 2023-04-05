@@ -52,7 +52,9 @@ class Application_Update_Helper extends Application_Update_PluginAbstract
     {
         print $question;
 
-        $response = trim(readline());
+        $line = readline();
+
+        $response = trim($line ?: '');
 
         return $response === 'Y' || $response === 'y';
     }

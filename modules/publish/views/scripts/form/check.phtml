@@ -52,7 +52,7 @@
                                 <td><?= htmlspecialchars($element->getMultiOption($element->getValue())) ?></td>
                             <?php  else : ?>
                                 <?php if ($element->getType() === 'Zend_Form_Element_Checkbox') : ?>
-                                    <?php if ($element->getValue() === '1') : ?>
+                                    <?php if ($element->getValue()) : ?>
                                         <td><?= $this->translate('yes'); ?></td>
                                     <?php else : ?>
                                         <td><?= $this->translate('no'); ?></td>
@@ -71,13 +71,13 @@
             <!-- listing all single elements -->
             <tr><td class='group' colspan="2"><b><?= $this->translate('publish_controller_check_otherElements') ?></b></td></tr>
             <?php foreach ($this->form->getElements() as $elem) : ?>
-                <?php if ($elem->getValue() !== '') : ?>
+                <?php if ($elem->getValue() !== null && $elem->getValue() !== '') : ?>
                     <tr><td class='label'><?= $this->translate($elem->getLabel()) ?></td>
                         <?php if ($elem->getType() === 'Zend_Form_Element_Select') : ?>
                             <td><?= htmlspecialchars($elem->getMultiOption($elem->getValue())) ?></td>
                         <?php  else : ?>
                             <?php if ($elem->getType() === 'Zend_Form_Element_Checkbox') : ?>
-                                <?php if ($elem->getValue() === '1') : ?>
+                                <?php if ($elem->getValue()) : ?>
                                     <td><?= $this->translate('yes'); ?></td>
                                 <?php else : ?>
                                     <td><?= $this->translate('no'); ?></td>
