@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Console\AbstractBaseDocumentCommand;
+use Opus\Common\Console\AbstractDocumentCommand;
 use Opus\Common\Console\Helper\ProgressMatrix;
 use Opus\Common\Console\Helper\ProgressOutputInterface;
 use Opus\Common\Document;
@@ -42,7 +42,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 /**
  * TODO use switch instead of singleDocument and removeAll (?)
  */
-class Application_Console_Document_DeleteCommand extends AbstractBaseDocumentCommand
+class Application_Console_Document_DeleteCommand extends AbstractDocumentCommand
 {
     public const OPTION_PERMANENT = 'permanent';
 
