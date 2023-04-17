@@ -25,38 +25,59 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Bibtex\Import\Console\BibtexImportCommand;
-use Opus\Bibtex\Import\Console\BibtexListCommand;
-use Opus\Search\Console\ExtractCommand;
-use Opus\Search\Console\ExtractFileCommand;
-use Opus\Search\Console\IndexCommand;
-use Opus\Search\Console\RemoveCommand;
-use Symfony\Component\Console\Application;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command line application for OPUS 4 management tasks.
+ * Exports documents.
+ *
+ * TODO unit testing
  */
-class Application_Console_App extends Application
+class Application_Console_Debug_DocumentXmlCommand extends Command
 {
-    public function __construct()
+    public const ARGUMENT_DOC_ID = 'DocID';
+
+    protected function configure()
     {
-        parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
+        parent::configure();
 
-        $this->add(new IndexCommand());
-        $this->add(new RemoveCommand());
-        $this->add(new ExtractCommand());
-        $this->add(new ExtractFileCommand());
-        // $this->add(new Application_Console_Index_RepairCommand());
-        // $this->add(new Application_Console_Index_CheckCommand());
-        $this->add(new Application_Console_Document_DeleteCommand());
-        $this->add(new BibtexImportCommand());
-        $this->add(new BibtexListCommand());
-        $this->add(new Application_Console_Debug_DocumentXmlCommand());
+        $help = <<<EOT
+Currently only debug:xml is supported. It shows the raw XML for a document.
+EOT;
 
-        $this->setDefaultCommand('list');
+        $this->setName('debug:xml')
+            ->setDescription('Prints XML for document')
+            ->setHelp($help)
+            ->addArgument(
+                self::ARGUMENT_DOC_ID,
+                InputArgument::OPTIONAL,
+                'ID of document'
+            );
+    }
+
+    /**
+     * @return int
+     * @throws NotFoundException
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $docId = $input->getArgument(self::ARGUMENT_DOC_ID);
+        $document = Document::get($docId);
+
+        $xml = $document->toXml();
+        $xml->preserveWhiteSpace = false;
+        $xml->formatOutput = true;
+
+        $output->write($xml->saveXml());
+
+        return 0;
     }
 }
