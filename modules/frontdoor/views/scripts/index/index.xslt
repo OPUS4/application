@@ -232,7 +232,7 @@
                     </th>
 
                     <td>
-                        <em class="data-marker">
+                        <em class="data-marker subject">
                             <xsl:for-each select="Subject[@Type='uncontrolled'][generate-id(.)=generate-id(key('list', @Language))]/@Language">
                                 <xsl:sort/>
                                 <xsl:for-each select="key('list', .)">
