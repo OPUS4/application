@@ -1578,15 +1578,16 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->setServerState(Document::STATE_PUBLISHED);
         $docId = $doc->store();
 
-        $config = $this->getConfig();
+        $config     = $this->getConfig();
         $gndLinkUrl = $config->gnd->baseUrl . '4130303-9';
 
         $this->dispatch("/frontdoor/index/index/docId/${docId}");
 
         $this->assertXpath("//a[@href=\"${gndLinkUrl}\"]");
-        $this->assertXpathContentContains("//a[@href=\"${gndLinkUrl}\"]", 'Bauhaus');
+        $this->assertXpathContentContains('//em[contains(@class,"subject")]', 'Bauhaus');
+        $this->assertXpathContentContains("//a[@href=\"${gndLinkUrl}\"]", 'GND');
 
-        $this->assertXpathContentContains('//td', 'mytag');
+        $this->assertXpathContentContains('//em[contains(@class, "subject")]', 'mytag');
         $this->assertNotXpathContentContains('//a', 'mytag'); // no link for 'mytag'
     }
 }
