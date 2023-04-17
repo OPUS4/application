@@ -36,6 +36,7 @@ use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Note;
+use Opus\Common\Subject;
 use Opus\Common\Title;
 
 /**
@@ -1555,5 +1556,37 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->assertQueryContentContains('table.result-data.frontdoordata td', $pubmedUrl);
         $this->assertXpath("//table/tr/td/a[@href=\"$pubmedUrl\"]");
+    }
+
+    public function testRenderingGndSubjectLink()
+    {
+        $doc = $this->createTestDocument();
+
+        $subject = Subject::new();
+        $subject->setType('swd');
+        $subject->setValue('Bauhaus');
+        $subject->setExternalKey('4130303-9');
+        $doc->addSubject($subject);
+
+        $subject = Subject::new();
+        $subject->setLanguage('deu');
+        $subject->setType('uncontrolled');
+        $subject->setValue('mytag');
+        $subject->setExternalKey('mykey');
+        $doc->addSubject($subject);
+
+        $doc->setServerState(Document::STATE_PUBLISHED);
+        $docId = $doc->store();
+
+        $config = $this->getConfig();
+        $gndLinkUrl = $config->gnd->baseUrl . '4130303-9';
+
+        $this->dispatch("/frontdoor/index/index/docId/${docId}");
+
+        $this->assertXpath("//a[@href=\"${gndLinkUrl}\"]");
+        $this->assertXpathContentContains("//a[@href=\"${gndLinkUrl}\"]", 'Bauhaus');
+
+        $this->assertXpathContentContains('//td', 'mytag');
+        $this->assertNotXpathContentContains('//a', 'mytag'); // no link for 'mytag'
     }
 }

@@ -661,7 +661,23 @@
             <xsl:text disable-output-escaping="yes">&lt;/th&gt;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;td&gt;&lt;em class="data-marker"&gt;</xsl:text>
         </xsl:if>
-        <xsl:value-of select="@Value" />
+        <xsl:choose>
+            <xsl:when test="@Type='swd' and @ExternalKey">
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'gnd.baseUrl')"/>
+                        <xsl:value-of select="@ExternalKey" />
+                    </xsl:attribute>
+                    <xsl:attribute name="rel">
+                        <xsl:text>nofollow</xsl:text>
+                    </xsl:attribute>
+                    <xsl:value-of select="@Value" />
+                </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="@Value" />
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:if test="position() != last()">; </xsl:if>
         <xsl:if test="position() = last()">
             <xsl:text disable-output-escaping="yes">&lt;/em&gt;&lt;/td&gt;</xsl:text>
