@@ -70,11 +70,12 @@ EOT;
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $docId = $input->getArgument(self::ARGUMENT_DOC_ID);
-        $document = Document::get($docId);
 
-        $xml = $document->toXml();
+        $document = Document::get($docId);
+        $xml      = $document->toXml();
+
         $xml->preserveWhiteSpace = false;
-        $xml->formatOutput = true;
+        $xml->formatOutput       = true;
 
         $output->write($xml->saveXml());
 
