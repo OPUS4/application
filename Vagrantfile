@@ -70,8 +70,12 @@ cd /home/vagrant/solr-7.7.2
 mkdir -p server/solr/opus4/conf
 echo name=opus4 > server/solr/opus4/core.properties
 cd server/solr/opus4/conf/
-ln -s /vagrant/vendor/opus4-repo/search/conf/schema.xml schema.xml
-ln -s /vagrant/vendor/opus4-repo/search/conf/solrconfig.xml solrconfig.xml
+if test ! -f "schema.xml"; then
+  ln -s /vagrant/vendor/opus4-repo/search/conf/schema.xml schema.xml
+fi
+if test ! -f "solrconfig.xml"; then
+  ln -s /vagrant/vendor/opus4-repo/search/conf/solrconfig.xml solrconfig.xml
+fi
 # cd /home/vagrant/solr-7.7.2
 # ./bin/solr start
 SCRIPT
@@ -88,7 +92,9 @@ if test ! -f "apache.conf"; then
   BASEDIR="/vagrant"
   sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "apache24.conf.template" > "apache.conf"
 fi
-ln -s /vagrant/apacheconf/apache.conf /etc/apache2/sites-available/opus4.conf
+if test ! -f "/etc/apache2/sites-available/opus4.conf"; then
+  ln -s /vagrant/apacheconf/apache.conf /etc/apache2/sites-available/opus4.conf
+fi
 a2enmod rewrite
 a2ensite opus4
 service apache2 restart
