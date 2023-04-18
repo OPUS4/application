@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,24 +25,20 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Util_StringTest extends ControllerTestCase
 {
-
     public function testReplaceProperties()
     {
-        $content = "User @user@ and parameters. value1 value1";
-        $expected = 'User "admin" and "password". "value2" "value2"';
+        $content    = "User @user@ and parameters. value1 value1";
+        $expected   = 'User "admin" and "password". "value2" "value2"';
         $properties = [
-            '@user@' => 'admin',
+            '@user@'     => 'admin',
             'parameters' => 'password',
-            'value1' => 'value2'
+            'value1'     => 'value2',
         ];
 
         $this->assertEquals($expected, Application_Util_String::replaceProperties($content, $properties));

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -34,9 +32,14 @@
 /**
  * View helper that translates key if translation is found or returns provided default value.
  */
-class Application_View_Helper_TranslateWithDefault extends \Zend_View_Helper_Abstract
+class Application_View_Helper_TranslateWithDefault extends Zend_View_Helper_Abstract
 {
-
+    /**
+     * @param string $messageId
+     * @param string $default
+     * @return string
+     * @throws Zend_Exception
+     */
     public function translateWithDefault($messageId, $default = '')
     {
         $translator = Application_Configuration::getInstance()->getTranslate();
@@ -45,6 +48,6 @@ class Application_View_Helper_TranslateWithDefault extends \Zend_View_Helper_Abs
             return $translator->translate($messageId);
         }
 
-        return $default;
+        return $default ?? ''; // return empty string instead of NULL
     }
 }

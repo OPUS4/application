@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Formular fuer allgemeine Felder von Document.
@@ -41,41 +38,40 @@ use Opus\Document;
  */
 class Admin_Form_Document_General extends Admin_Form_AbstractDocumentSubForm
 {
-
     /**
      * Name des Formularelements fuer die Sprache des Dokuments.
      */
-    const ELEMENT_LANGUAGE = 'Language';
+    public const ELEMENT_LANGUAGE = 'Language';
 
     /**
      * Name des Formularelements fuer den Dokumententyp.
      */
-    const ELEMENT_TYPE = 'Type';
+    public const ELEMENT_TYPE = 'Type';
 
     /**
      * Name des Formularelements fuer das Feld PublishedDate.
      */
-    const ELEMENT_PUBLISHED_DATE = 'PublishedDate';
+    public const ELEMENT_PUBLISHED_DATE = 'PublishedDate';
 
     /**
      * Name des Formularelements fuer das Feld PublishedYear.
      */
-    const ELEMENT_PUBLISHED_YEAR = 'PublishedYear';
+    public const ELEMENT_PUBLISHED_YEAR = 'PublishedYear';
 
     /**
      * Name des Formularelements fuer das Feld CompletedDate.
      */
-    const ELEMENT_COMPLETED_DATE = 'CompletedDate';
+    public const ELEMENT_COMPLETED_DATE = 'CompletedDate';
 
     /**
      * Name des Formularelements fuer das Feld CompletedYear.
      */
-    const ELEMENT_COMPLETED_YEAR = 'CompletedYear';
+    public const ELEMENT_COMPLETED_YEAR = 'CompletedYear';
 
     /**
      * Name des Formularelements fuer das Feld EmbargoDate.
      */
-    const ELEMENT_EMBARGO_DATE = 'EmbargoDate';
+    public const ELEMENT_EMBARGO_DATE = 'EmbargoDate';
 
     /**
      * Erzeugt die Formularelemente.
@@ -100,7 +96,8 @@ class Admin_Form_Document_General extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Befuellt das Formular anhand der Metadaten eines Dokuments.
-     * @param Document $document
+     *
+     * @param DocumentInterface $document
      */
     public function populateFromModel($document)
     {
@@ -123,7 +120,8 @@ class Admin_Form_Document_General extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Aktualisiert ein Dokument mit den Werten im Formular.
-     * @param Document $document
+     *
+     * @param DocumentInterface $document
      */
     public function updateModel($document)
     {
@@ -139,7 +137,7 @@ class Admin_Form_Document_General extends Admin_Form_AbstractDocumentSubForm
 
         // CompletedDate
         $value = $this->getElementValue(self::ELEMENT_COMPLETED_DATE);
-        $date = $datesHelper->getOpusDate($value);
+        $date  = $datesHelper->getOpusDate($value);
         $document->setCompletedDate($date);
 
         // CompletedYear
@@ -148,7 +146,7 @@ class Admin_Form_Document_General extends Admin_Form_AbstractDocumentSubForm
 
         // PublishedDate
         $value = $this->getElementValue(self::ELEMENT_PUBLISHED_DATE);
-        $date = $datesHelper->getOpusDate($value);
+        $date  = $datesHelper->getOpusDate($value);
         $document->setPublishedDate($date);
 
         // PublishedYear
@@ -156,7 +154,7 @@ class Admin_Form_Document_General extends Admin_Form_AbstractDocumentSubForm
         $document->setPublishedYear($value);
 
         $value = $this->getElementValue(self::ELEMENT_EMBARGO_DATE);
-        $date = $datesHelper->getOpusDate($value);
+        $date  = $datesHelper->getOpusDate($value);
         $document->setEmbargoDate($date);
     }
 }

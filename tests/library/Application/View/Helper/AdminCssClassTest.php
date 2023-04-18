@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,18 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_AdminCssClassTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'view';
 
+    /**
+     * @return array
+     */
     public function modulesProvider()
     {
         $modules = Application_Modules::getInstance()->getModules();
@@ -55,6 +56,8 @@ class Application_View_Helper_AdminCssClassTest extends ControllerTestCase
 
     /**
      * @dataProvider modulesProvider
+     * @param string $module
+     * @param string $expected
      */
     public function testAdminCssClass($module, $expected)
     {

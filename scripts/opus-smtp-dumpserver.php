@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,9 +26,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Scripts
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -35,58 +33,51 @@
 /**
  * A dummy SMTP server that does not actually send mails.
  *
- * @category    Application
- * @package     Scripts
- *
  * TODO move this file to another location (it is used for testing)
  */
 class FakeSMTP
 {
-
     /**
      * The servers ip address.
      *
      * @var string  Defaults to '127.0.0.1'.
      */
-    protected $_host = '127.0.0.1';
+    protected $host = '127.0.0.1';
 
     /**
      * The tcp port to listen.
      *
      * @var int  Defaults to 25000.
      */
-    protected $_port = 25000;
+    protected $port = 25000;
 
     /**
      * Holds the network socket of the server.
      *
      * @var resource  Defaults to null.
      */
-    protected $_socket = null;
+    protected $socket;
 
     /**
      * Configures php environment, creates and binds network socket.
-     *
      */
     public function __construct()
     {
         set_time_limit(0);
         error_reporting(E_ERROR);
-        $this->_socket = socket_create(AF_INET, SOCK_STREAM, 0);
-        socket_bind($this->_socket, $this->_host, $this->_port);
+        $this->socket = socket_create(AF_INET, SOCK_STREAM, 0);
+        socket_bind($this->socket, $this->host, $this->port);
     }
 
     /**
      * Handles incoming connection requests.
-     *
-     * @return void
      */
     public function waitForConnections()
     {
-        socket_listen($this->_socket, 3);
+        socket_listen($this->socket, 3);
         do {
-            $client = socket_accept($this->_socket);
-            $this->_startSMTPSession($client);
+            $client = socket_accept($this->socket);
+            $this->startSmtpSession($client);
         } while (true);
     }
 
@@ -95,10 +86,8 @@ class FakeSMTP
      *
      * @param resource $socket   The receiving network socket.
      * @param string   $response The message to send.
-     *
-     * @return void
      */
-    protected function _sendSMTPResponse($socket, $response)
+    protected function sendSMTPResponse($socket, $response)
     {
         $response .= "\n";
         socket_write($socket, $response, strlen($response));
@@ -110,48 +99,48 @@ class FakeSMTP
      *
      * @param resource $socket  The client socket.
      * @param string   $request Incoming request.
-     * @return boolean $exit True if the request terminates a connection.
+     * @return bool True if the request terminates a connection.
      */
-    protected function _handleSMTPRequest($socket, $request)
+    protected function handleSMTPRequest($socket, $request)
     {
         $cont = true;
         switch (substr($request, 0, 4)) {
             case 'HELO':
                 $response = '250 OK';
-                $this->_sendSMTPResponse($socket, $response);
+                $this->sendSMTPResponse($socket, $response);
                 break;
             case 'MAIL':
                 $response = '250 Sender OK';
-                $this->_sendSMTPResponse($socket, $response);
+                $this->sendSMTPResponse($socket, $response);
                 break;
             case 'RCPT':
                 $response = '250 Recipient OK';
-                $this->_sendSMTPResponse($socket, $response);
+                $this->sendSMTPResponse($socket, $response);
                 break;
             case 'DATA':
                 $response = '354 End data with <CR><LF>.<CR><LF>';
-                $this->_sendSMTPResponse($socket, $response);
+                $this->sendSMTPResponse($socket, $response);
                 do {
                     $input = socket_read($socket, 1024, 1);
-                    if (trim($input) !== '') {
+                    if ($input !== false && trim($input) !== '') {
                         echo "< $input\n";
                     }
-                } while ($socket and trim($input) !== ".");
+                } while ($socket && trim($input) !== ".");
                 $response = '250 Message accepted for delivery';
-                $this->_sendSMTPResponse($socket, $response);
+                $this->sendSMTPResponse($socket, $response);
                 break;
             case 'QUIT':
                 $response = '221 Bye';
-                $this->_sendSMTPResponse($socket, $response);
+                $this->sendSMTPResponse($socket, $response);
                 $cont = false;
                 break;
             case 'RSET':
                 $response = '250 Ok';
-                $this->_sendSMTPResponse($socket, $response);
+                $this->sendSMTPResponse($socket, $response);
                 break;
             default:
                 $response = '500 Command not recognized: Syntax error.';
-                $this->_sendSMTPResponse($socket, $response);
+                $this->sendSMTPResponse($socket, $response);
                 break;
         }
         return $cont;
@@ -160,19 +149,18 @@ class FakeSMTP
     /**
      * Starts an SMTP session for a new client connection.
      *
-     * @param $client The client network socket.
-     * @return void
+     * @param resource $client The client network socket.
      */
-    protected function _startSMTPSession($client)
+    protected function startSmtpSession($client)
     {
-        $this->_sendSMTPResponse($client, "220 $host SMTP rabooF Mailserver"); // TODO bug $host
+        $this->sendSMTPResponse($client, "220 $host SMTP rabooF Mailserver"); // TODO bug $host
         do {
             $exit = false;
             // read client input
             if ($input = socket_read($client, 1024, 1)) {
-                if (trim($input) !== '') {
+                if ($input !== false && trim($input) !== '') {
                     echo "< $input\n";
-                    $exit = ! $this->_handleSMTPRequest($client, $input);
+                    $exit = ! $this->handleSMTPRequest($client, $input);
                 }
             } else {
                 $exit = true;
@@ -184,5 +172,5 @@ class FakeSMTP
 }
 
 // Start fake SMTP server
-$smtp = new FakeSMTP;
+$smtp = new FakeSMTP();
 $smtp->waitForConnections();

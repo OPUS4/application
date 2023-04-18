@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,19 +36,23 @@ use Opus\Common\Log;
  * Base class for application tests.
  *
  * TODO any effect vvv ?
+ *
  * @preserveGlobalState disabled
  */
-class TestCase extends \Zend_Test_PHPUnit_ControllerTestCase
+class TestCase extends Zend_Test_PHPUnit_ControllerTestCase
 {
-
+    /** @var Zend_Application */
     protected $application;
 
+    /** @var string */
     protected $applicationEnv = APPLICATION_ENV;
 
+    /** @var bool */
     protected $configModifiable = false;
 
     /**
      * Allows specifying additional resources that should be loaded during bootstrapping, e.g. 'database'.
+     *
      * @var string|array
      */
     protected $additionalResources;
@@ -57,15 +60,13 @@ class TestCase extends \Zend_Test_PHPUnit_ControllerTestCase
     /**
      * Overwrite standard setUp method, no database connection needed.  Will
      * create a file listing of class files instead.
-     *
-     * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->cleanupBefore();
 
         $this->application = $this->getApplication();
-        $this->bootstrap = [$this, 'appBootstrap'];
+        $this->bootstrap   = [$this, 'appBootstrap'];
 
         parent::setUp();
 
@@ -74,7 +75,7 @@ class TestCase extends \Zend_Test_PHPUnit_ControllerTestCase
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->application = null; // IMPORTANT: this helps reduce memory usage when running lots of tests
 
@@ -87,23 +88,27 @@ class TestCase extends \Zend_Test_PHPUnit_ControllerTestCase
     public function cleanupBefore()
     {
         // FIXME Does it help with the mystery bug?
-        \Zend_Registry::_unsetInstance();
+        Zend_Registry::_unsetInstance();
 
         $this->resetAutoloader();
     }
 
+    /**
+     * @return Zend_Application
+     * @throws Zend_Application_Exception
+     */
     public function getApplication()
     {
-        return new \Zend_Application(
+        return new Zend_Application(
             $this->applicationEnv,
-            ["config" => [
-                APPLICATION_PATH . '/tests/simple.ini'
-            ]]
+            [
+                "config" => [
+                    APPLICATION_PATH . '/tests/simple.ini',
+                ],
+            ]
         );
     }
 
-    /**
-     */
     public function appBootstrap()
     {
         $resources = ['configuration', 'logging', 'modules'];
@@ -128,8 +133,8 @@ class TestCase extends \Zend_Test_PHPUnit_ControllerTestCase
      */
     public function resetAutoloader()
     {
-        \Zend_Loader_Autoloader::resetInstance();
-        $autoloader = \Zend_Loader_Autoloader::getInstance();
+        Zend_Loader_Autoloader::resetInstance();
+        $autoloader = Zend_Loader_Autoloader::getInstance();
         $autoloader->suppressNotFoundWarnings(false);
         $autoloader->setFallbackAutoloader(true);
     }
@@ -153,10 +158,13 @@ class TestCase extends \Zend_Test_PHPUnit_ControllerTestCase
      */
     public function makeConfigurationModifiable()
     {
-        $config = new \Zend_Config([], true);
+        $config = new Zend_Config([], true);
         Config::set($config->merge(Config::get()));
     }
 
+    /**
+     * @return Zend_Config
+     */
     protected function getConfig()
     {
         return Config::get();

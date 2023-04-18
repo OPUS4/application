@@ -23,9 +23,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -34,10 +32,10 @@ $(function () {
 
     if (! typeof fileElem === "undefined") {
         fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
-        fileElem.invalidFileMessage = 'The extension of file \'%value%\' is not allowed.';
-        fileElem.onchange = function () {
+        fileElem.invalidFileMessage  = 'The extension of file \'%value%\' is not allowed.';
+        fileElem.onchange            = function () {
             var filename = this.value;
-            var ext = filename.match(/\.([^\.]+)$/);
+            var ext      = filename.match(/\.([^\.]+)$/);
             if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) == -1)) {
                 $message = fileElem.invalidFileMessage;
                 alert($message.replace('%value%', filename));

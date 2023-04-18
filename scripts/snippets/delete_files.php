@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Model\NotFoundException;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * Removes associated File objects for all HHAR test documents (id = 1..90)
@@ -41,7 +40,7 @@ use Opus\Model\NotFoundException;
  */
 
 $startId = 1;
-$endId = 90;
+$endId   = 90;
 
 for ($i = $startId; $i <= $endId; $i++) {
     $d = null;

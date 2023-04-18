@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,20 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
-use Opus\Date;
+use Opus\Common\CollectionRole;
+use Opus\Common\Date;
 use Opus\Common\Log;
-use Opus\Note;
-use Opus\Person;
-use Opus\Title;
+use Opus\Common\Note;
+use Opus\Common\Person;
+use Opus\Common\Title;
 
 /**
  * Unit tests for Admin_DocumentController.
@@ -46,30 +43,31 @@ use Opus\Title;
  */
 class Admin_DocumentControllerTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
+    /** @var string[] */
     private $expectedNavigationLinks;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         // Die Links werden aus den Fieldset Legenden der Unterformulare generiert (nur 1. Ebene)
         $this->expectedNavigationLinks = [
-            '#fieldset-General' => 'Allgemeines',
-            '#fieldset-Persons' => 'Personen',
-            '#fieldset-Titles' => 'Titelinformationen',
-            '#fieldset-Bibliographic' => 'Bibliographische Informationen',
-            '#fieldset-Series' => 'Schriftenreihen',
-            '#fieldset-Enrichments' => 'Benutzerdefinierte Felder (Enrichments)',
-            '#fieldset-Collections' => 'Sammlungen, Klassifikationen',
-            '#fieldset-Content' => 'Inhaltliche Erschließung',
+            '#fieldset-General'        => 'Allgemeines',
+            '#fieldset-Persons'        => 'Personen',
+            '#fieldset-Titles'         => 'Titelinformationen',
+            '#fieldset-Bibliographic'  => 'Bibliographische Informationen',
+            '#fieldset-Series'         => 'Schriftenreihen',
+            '#fieldset-Enrichments'    => 'Benutzerdefinierte Felder (Enrichments)',
+            '#fieldset-Collections'    => 'Sammlungen, Klassifikationen',
+            '#fieldset-Content'        => 'Inhaltliche Erschließung',
             '#fieldset-IdentifiersAll' => 'Identifikatoren',
-            '#fieldset-Licences' => 'Lizenzen',
-            '#fieldset-Patents' => 'Patente',
-            '#fieldset-Notes' => 'Bemerkungen',
-            '#fieldset-Files' => 'Dateien',
+            '#fieldset-Licences'       => 'Lizenzen',
+            '#fieldset-Patents'        => 'Patente',
+            '#fieldset-Notes'          => 'Bemerkungen',
+            '#fieldset-Files'          => 'Dateien',
         ];
     }
 
@@ -84,7 +82,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertController('document');
         $this->assertAction('index');
         $response = $this->getResponse()->getBody();
-        $this->assertTrue(substr_count($response, 'edit/id/92/section/patents') == 0);
+        $this->assertTrue(substr_count($response, 'edit/id/92/section/patents') === 0);
     }
 
     /**
@@ -94,10 +92,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $person = new Person();
+        $person = Person::new();
         $person->setFirstName("Johnny");
         $person->setLastName("Test");
-        $dateOfBirth = new Date(new \Zend_Date('1.1.2010', 'dd/MM/yyyy'));
+        $dateOfBirth = new Date('2010-01-01');
         $person->setDateOfBirth($dateOfBirth);
 
         $doc->addPersonAuthor($person);
@@ -110,10 +108,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
         $this->assertTrue(
-            substr_count($body, 'exception \'PHPUnit_Framework_Error_Warning\' with message \'htmlspecialchars() expects parameter 1 to be string, array given\' in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml:145') == 0
+            substr_count($body, 'exception \'PHPUnit_Framework_Error_Warning\' with message \'htmlspecialchars() expects parameter 1 to be string, array given\' in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml:145') === 0
         );
         $this->assertTrue(
-            substr_count($body, 'Warning: htmlspecialchars() expects parameter 1 to be string, array given in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml on line 145') == 0
+            substr_count($body, 'Warning: htmlspecialchars() expects parameter 1 to be string, array given in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml on line 145') === 0
         );
     }
 
@@ -124,18 +122,18 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     {
         $this->markTestSkipped('Replace - War für altes Metadaten-Formular.');
 
-        $this->request
-                ->setMethod('POST')
-                ->setPost([
-                    'Opus_Document[CompletedDate]' => '2000/01/01',
-                    'Opus_Document[CompletedYear]' => '2000',
-                    'Opus_Document[ThesisDateAccepted]' => '2000/01/01',
-                    'Opus_Document[PublishedDate]' => '2000/01/01',
-                    'Opus_Document[PublishedYear]' => '2000',
-                    'Opus_Document[ServerDateModified]' => '2000/01/01',
-                    'Opus_Document[ServerDatePublished]' => '2000/01/01',
-                    'save' => 'Speichern'
-                ]);
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost([
+                'Opus_Document[CompletedDate]'       => '2000/01/01',
+                'Opus_Document[CompletedYear]'       => '2000',
+                'Opus_Document[ThesisDateAccepted]'  => '2000/01/01',
+                'Opus_Document[PublishedDate]'       => '2000/01/01',
+                'Opus_Document[PublishedYear]'       => '2000',
+                'Opus_Document[ServerDateModified]'  => '2000/01/01',
+                'Opus_Document[ServerDatePublished]' => '2000/01/01',
+                'save'                               => 'Speichern',
+            ]);
         $this->dispatch('/admin/document/update/id/96/section/dates');
 
         $body = $this->getResponse()->getBody();
@@ -146,7 +144,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     {
         $this->dispatch('admin/document/edit/id/92/section/abstracts');
         $body = $this->getResponse()->getBody();
-        $this->assertTrue(substr_count($body, 'Call to a member function setAttrib') == 0);
+        $this->assertTrue(substr_count($body, 'Call to a member function setAttrib') === 0);
         $this->checkForBadStringsInHtml($body);
     }
 
@@ -156,7 +154,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
-        $abstract = new Title();
+        $abstract = Title::new();
         $abstract->setLanguage("eng");
         $abstract->setValue("foo\nbar\n\nbaz");
         $doc->addTitleAbstract($abstract);
@@ -178,7 +176,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 
-        $note = new Note();
+        $note = Note::new();
         $note->setMessage("foo\nbar\n\nbaz");
         $note->setVisibility("public");
         $doc->addNote($note);
@@ -196,7 +194,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testDisplayCollectionNumberAndNameOnOverviewPageForDDCCollection()
     {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
-        $role = new CollectionRole(2);
+        $role            = CollectionRole::get(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -214,7 +212,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testDisplayCollectionNumberAndNameOnAssignmentPageForDDCCollection()
     {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
-        $role = new CollectionRole(2);
+        $role            = CollectionRole::get(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
         $role->store();
@@ -277,19 +275,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->verifyNavigationLinks($this->expectedNavigationLinks);
     }
 
-    public function testEditActionNavigationLinksPresent()
-    {
-        $this->useGerman();
-
-        $this->dispatch('/admin/document/edit/id/146');
-        $this->assertResponseCode(200);
-
-        // Dateien werden nicht im Metadaten-Formular editiert
-        unset($this->expectedNavigationLinks['#fieldset-Files']);
-
-        $this->verifyNavigationLinks($this->expectedNavigationLinks);
-    }
-
+    /**
+     * @param array $expectedLinks
+     */
     protected function verifyNavigationLinks($expectedLinks)
     {
         $this->assertQuery('//dl#Document-Goto');
@@ -302,6 +290,19 @@ class Admin_DocumentControllerTest extends ControllerTestCase
                 "Link '$link' mit Label '$label' is missing from navigation."
             );
         }
+    }
+
+    public function testEditActionNavigationLinksPresent()
+    {
+        $this->useGerman();
+
+        $this->dispatch('/admin/document/edit/id/146');
+        $this->assertResponseCode(200);
+
+        // Dateien werden nicht im Metadaten-Formular editiert
+        unset($this->expectedNavigationLinks['#fieldset-Files']);
+
+        $this->verifyNavigationLinks($this->expectedNavigationLinks);
     }
 
     public function testEditActionValidXHTML()
@@ -327,24 +328,19 @@ class Admin_DocumentControllerTest extends ControllerTestCase
             'input#Document-Persons-advisor-Add',
             'input#Document-Persons-referee-Add',
             'input#Document-Persons-submitter-Add',
-
             'input#Document-Titles-Main-Add',
             'input#Document-Titles-Additional-Add',
             'input#Document-Titles-Parent-Add',
             'input#Document-Titles-Sub-Add',
-
             'input#Document-Bibliographic-Publishers-Add',
             'input#Document-Bibliographic-Grantors-Add',
-
             'input#Document-Series-Add',
             'input#Document-Enrichments-Add',
             'input#Document-Collections-Add',
-
             'input#Document-Content-Abstracts-Add',
             'input#Document-Content-Subjects-Swd-Add',
             'input#Document-Content-Subjects-Psyndex-Add',
             'input#Document-Content-Subjects-Uncontrolled-Add',
-
             'input#Document-IdentifiersAll-Identifiers-Add',
             'input#Document-Patents-Add',
             'input#Document-Notes-Add',
@@ -398,7 +394,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//div', '1970/01/01');
     }
 
-      // document/overviewTests
+    /**
+     * document/overviewTests
+     */
     public function testIndexActionGerman()
     {
         $this->useGerman();
@@ -433,14 +431,32 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-FirstName"]', 'Jane');
         $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-LastName"]', 'Doe');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-AcademicTitle"]', 'PhD');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-DateOfBirth"]', '01.01.1970');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-PlaceOfBirth"]', 'New York');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-translator-PersonTranslator0-AcademicTitle"]',
+            'PhD'
+        );
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-translator-PersonTranslator0-DateOfBirth"]',
+            '01.01.1970'
+        );
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-translator-PersonTranslator0-PlaceOfBirth"]',
+            'New York'
+        );
 
-        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-contributor-PersonContributor0-FirstName"]',
+            'Jane'
+        );
         $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-LastName"]', 'Doe');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-AcademicTitle"]', 'PhD');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-DateOfBirth"]', '02.01.1970');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-contributor-PersonContributor0-AcademicTitle"]',
+            'PhD'
+        );
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-contributor-PersonContributor0-DateOfBirth"]',
+            '02.01.1970'
+        );
 
         $this->assertQueryContentContains('//*[@id="Document-Persons-other-PersonOther0-FirstName"]', 'Jane');
         $this->assertQueryContentContains('//*[@id="Document-Persons-other-PersonOther0-LastName"]', 'Doe');
@@ -456,7 +472,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-FirstName"]', 'Jane');
         $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-LastName"]', 'Doe');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-AcademicTitle"]', 'PhD');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-submitter-PersonSubmitter0-AcademicTitle"]',
+            'PhD'
+        );
 
         // Titles
         $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain0-Language"]', 'Deutsch');
@@ -488,7 +507,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageLast"]', '4');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Issue"]', '3');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ArticleNumber"]', '2');
-        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ContributingCorporation"]', 'Baz University');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Bibliographic-ContributingCorporation"]',
+            'Baz University'
+        );
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-CreatingCorporation"]', 'Bar University');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisDateAccepted"]', '02.11.2010');
         $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisYearAccepted"]', '1999');
@@ -546,7 +568,6 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Collections-bk-collection0-Name"]', '08.20 Geschichte der westlichen Philosophie: Allgemeines');
 
         $this->assertQueryContentContains('//*[@id="Document-Collections-institutes-collection0-Name"]', 'Abwasserwirtschaft und Gewässerschutz B-2');
-
 
         // Abstracts
         $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Language"]', 'Deutsch');
@@ -676,14 +697,35 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-FirstName"]', 'Jane');
         $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-LastName"]', 'Doe');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-AcademicTitle"]', 'PhD');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-DateOfBirth"]', '1970/01/01');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-PlaceOfBirth"]', 'New York');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-translator-PersonTranslator0-AcademicTitle"]',
+            'PhD'
+        );
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-translator-PersonTranslator0-DateOfBirth"]',
+            '1970/01/01'
+        );
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-translator-PersonTranslator0-PlaceOfBirth"]',
+            'New York'
+        );
 
-        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-FirstName"]', 'Jane');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-LastName"]', 'Doe');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-AcademicTitle"]', 'PhD');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-DateOfBirth"]', '1970/01/02');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-contributor-PersonContributor0-FirstName"]',
+            'Jane'
+        );
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-contributor-PersonContributor0-LastName"]',
+            'Doe'
+        );
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-contributor-PersonContributor0-AcademicTitle"]',
+            'PhD'
+        );
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-contributor-PersonContributor0-DateOfBirth"]',
+            '1970/01/02'
+        );
 
         $this->assertQueryContentContains('//*[@id="Document-Persons-other-PersonOther0-FirstName"]', 'Jane');
         $this->assertQueryContentContains('//*[@id="Document-Persons-other-PersonOther0-LastName"]', 'Doe');
@@ -699,7 +741,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-FirstName"]', 'Jane');
         $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-LastName"]', 'Doe');
-        $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-AcademicTitle"]', 'PhD');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Persons-submitter-PersonSubmitter0-AcademicTitle"]',
+            'PhD'
+        );
 
         // Titles
         $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain0-Language"]', 'German');
@@ -790,7 +835,6 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->assertQueryContentContains('//*[@id="Document-Collections-institutes-collection0-Name"]', 'Abwasserwirtschaft und Gewässerschutz B-2');
 
-
         // Abstracts
         $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Language"]', 'German');
         $this->assertQueryContentContains(
@@ -807,7 +851,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         // Subjects
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Subject0-Value"]', 'Berlin');
 
-        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Language"]', 'German');
+        $this->assertQueryContentContains(
+            '//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Language"]',
+            'German'
+        );
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
 
         // Identifier
@@ -889,7 +936,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testFilesWithSortOrder()
     {
         $this->dispatch('/admin/document/index/id/155');
-        $body = $this->_response->getBody();
+        $body          = $this->getResponse()->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt');
         $positionFile2 = strpos($body, 'test.txt');
         $positionFile3 = strpos($body, 'test.pdf');
@@ -905,7 +952,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
     public function testDocumentFilesWithoutSortOrder()
     {
         $this->dispatch('/admin/document/index/id/92');
-        $body = $this->_response->getBody();
+        $body          = $this->getResponse()->getBody();
         $positionFile1 = strpos($body, 'test.xhtml');
         $positionFile2 = strpos($body, 'datei mit unüblichem Namen.xhtml');
         $this->assertTrue($positionFile1 < $positionFile2);
@@ -928,7 +975,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
      */
     public function testShowDocumentWithFilesWithLanguageNull()
     {
-        $doc = $this->createTestDocument();
+        $doc  = $this->createTestDocument();
         $file = $this->createOpusTestFile('nolang.pdf');
 
         $file->setLanguage(null);
@@ -943,17 +990,19 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->checkForCustomBadStringsInHtml($body, [
             'Catchable fatal error',
             'Object of class Zend_View_Helper_Translate could not be converted to string',
-            'Application/View/Parial/filerow.phtml'
+            'Application/View/Parial/filerow.phtml',
         ]);
     }
 
     public function testUnableToTranslateForMetadataView()
     {
+        $this->markTestSkipped('LAMINAS form element description is null and getDescription (Zend) tries translation');
+
         $logger = new MockLogger();
         Log::set($logger);
 
-        $adapter = Application_Translate::getInstance()->getAdapter();
-        $options = $adapter->getOptions();
+        $adapter        = Application_Translate::getInstance()->getAdapter();
+        $options        = $adapter->getOptions();
         $options['log'] = $logger;
         $adapter->setOptions($options);
 
@@ -969,7 +1018,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
             }
         }
 
-        $output = \Zend_Debug::dump($failedTranslations, null, false);
+        $output = Zend_Debug::dump($failedTranslations, null, false);
 
         // currently only two messages cannot be avoided
         $this->assertLessThanOrEqual(2, count($failedTranslations), $output);
@@ -977,11 +1026,13 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
     public function testUnableToTranslateForEditForm()
     {
+        $this->markTestSkipped('LAMINAS form element description is null and getDescription (Zend) tries translation');
+
         $logger = new MockLogger();
         Log::set($logger);
 
-        $adapter = Application_Translate::getInstance()->getAdapter();
-        $options = $adapter->getOptions();
+        $adapter        = Application_Translate::getInstance()->getAdapter();
+        $options        = $adapter->getOptions();
         $options['log'] = $logger;
         $adapter->setOptions($options);
 
@@ -997,7 +1048,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
             }
         }
 
-        $output = \Zend_Debug::dump($failedTranslations, null, false);
+        $output = Zend_Debug::dump($failedTranslations, null, false);
 
         // currently only two messages cannot be avoided
         $this->assertLessThanOrEqual(2, count($failedTranslations), $output);

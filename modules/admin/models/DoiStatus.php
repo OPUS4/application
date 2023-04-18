@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,51 +25,66 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\DocumentInterface;
+use Opus\Common\IdentifierInterface;
+
 class Admin_Model_DoiStatus
 {
-
+    /** @var int */
     private $docId;
 
+    /** @var string */
     private $doi;
 
+    /** @var bool */
     private $published;
 
+    /** @var string */
     private $doiStatus;
 
     /**
-     * Admin_Model_DoiStatus constructor.
-     *
-     * @param Document $doc
+     * @param DocumentInterface   $doc
+     * @param IdentifierInterface $doi
      */
     public function __construct($doc, $doi)
     {
-        $this->docId = $doc->getId();
-        $this->published = ($doc->getServerState() == 'published');
-        $this->doi = $doi->getValue();
+        $this->docId     = $doc->getId();
+        $this->published = $doc->getServerState() === 'published';
+        $this->doi       = $doi->getValue();
         $this->doiStatus = $doi->getStatus();
     }
 
+    /**
+     * @return int
+     */
     public function getDocId()
     {
         return $this->docId;
     }
 
+    /**
+     * @return string|null
+     */
     public function getDoi()
     {
         return $this->doi;
     }
 
+    /**
+     * @return bool
+     */
     public function isPublished()
     {
         return $this->published;
     }
 
+    /**
+     * @return string
+     */
     public function getDoiStatus()
     {
         return $this->doiStatus;

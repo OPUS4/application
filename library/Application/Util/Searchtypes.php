@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,28 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Util
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * TODO move to search package
  */
 
+/**
+ * TODO move to search package
+ */
 class Application_Util_Searchtypes
 {
+    public const SIMPLE_SEARCH     = 'simple';
+    public const ADVANCED_SEARCH   = 'advanced';
+    public const AUTHOR_SEARCH     = 'authorsearch';
+    public const COLLECTION_SEARCH = 'collection';
+    public const LATEST_SEARCH     = 'latest';
+    public const ALL_SEARCH        = 'all';
+    public const SERIES_SEARCH     = 'series';
+    public const ID_SEARCH         = 'id';
 
-    const SIMPLE_SEARCH = 'simple';
-    const ADVANCED_SEARCH = 'advanced';
-    const AUTHOR_SEARCH = 'authorsearch';
-    const COLLECTION_SEARCH = 'collection';
-    const LATEST_SEARCH = 'latest';
-    const ALL_SEARCH = 'all';
-    const SERIES_SEARCH = 'series';
-    const ID_SEARCH = 'id';
-
+    /**
+     * @param string $searchtype
+     * @return bool
+     */
     public static function isSupported($searchtype)
     {
         $supportedTypes = [
@@ -56,38 +57,38 @@ class Application_Util_Searchtypes
             self::LATEST_SEARCH,
             self::ALL_SEARCH,
             self::SERIES_SEARCH,
-            self::ID_SEARCH
+            self::ID_SEARCH,
         ];
         return in_array($searchtype, $supportedTypes);
     }
 
     /**
-     * @param $searchType
-     * @return mixed
+     * @param string $searchType
+     * @return Solrsearch_Model_Search_Abstract
      *
      * TODO eliminate switch and use configuration array instead
      */
     public static function getSearchPlugin($searchType)
     {
         switch ($searchType) {
-            case Application_Util_Searchtypes::SERIES_SEARCH:
-                $pluginClass = 'Solrsearch_Model_Search_Series';
+            case self::SERIES_SEARCH:
+                $pluginClass = Solrsearch_Model_Search_Series::class;
                 break;
-            case Application_Util_Searchtypes::COLLECTION_SEARCH:
-                $pluginClass = 'Solrsearch_Model_Search_Collection';
+            case self::COLLECTION_SEARCH:
+                $pluginClass = Solrsearch_Model_Search_Collection::class;
                 break;
-            case Application_Util_Searchtypes::LATEST_SEARCH:
-                $pluginClass = 'Solrsearch_Model_Search_Latest';
+            case self::LATEST_SEARCH:
+                $pluginClass = Solrsearch_Model_Search_Latest::class;
                 break;
-            case Application_Util_Searchtypes::ADVANCED_SEARCH:
-            case Application_Util_Searchtypes::AUTHOR_SEARCH:
-                $pluginClass = 'Solrsearch_Model_Search_Advanced';
+            case self::ADVANCED_SEARCH:
+            case self::AUTHOR_SEARCH:
+                $pluginClass = Solrsearch_Model_Search_Advanced::class;
                 break;
-            case Application_Util_Searchtypes::ALL_SEARCH:
-                $pluginClass = 'Solrsearch_Model_Search_All';
+            case self::ALL_SEARCH:
+                $pluginClass = Solrsearch_Model_Search_All::class;
                 break;
             default:
-                $pluginClass = 'Solrsearch_Model_Search_Basic';
+                $pluginClass = Solrsearch_Model_Search_Basic::class;
         }
 
         $plugin = new $pluginClass();

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Controller
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Log;
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 /**
  * Lädt die Konfigurationsdatei für eine Rolle.
@@ -44,29 +42,39 @@ use Opus\UserRole;
  */
 class Application_Security_RoleConfig
 {
+    /** @var string */
+    private $roleName;
 
-    private $_roleName;
-
+    /**
+     * @param string $roleName
+     */
     public function __construct($roleName)
     {
-        $this->_roleName = $roleName;
+        $this->roleName = $roleName;
     }
 
     /**
      * Fügt Rechte zu Zend_Acl Instanz hinzu.
+     *
      * @param Zend_Acl $acl
      */
     public function applyPermissions($acl)
     {
-        $this->getRolePermissions($acl, $this->_roleName);
+        $this->getRolePermissions($acl, $this->roleName);
     }
 
-
+    /**
+     * @param Zend_Acl $acl
+     * @param string   $roleName
+     * @throws Zend_Exception
+     *
+     * TODO BUG doesn't return anything
+     */
     public function getRolePermissions($acl, $roleName)
     {
         $role = UserRole::fetchByName($roleName);
 
-        if (is_null($role)) {
+        if ($role === null) {
              Log::get()->err("Attempt to load unknown role '$roleName'.");
             return;
         }
@@ -80,12 +88,12 @@ class Application_Security_RoleConfig
         foreach ($resources as $resource) {
             if (! strncmp('resource_', $resource, 9)) {
                 // resource (like languages);
-                $resource = new \Zend_Acl_Resource(substr($resource, 9));
+                $resource = new Zend_Acl_Resource(substr($resource, 9));
                 $acl->allow($roleName, $resource);
                 $resourcesConfigured = true;
             } elseif (! strncmp('workflow_', $resource, 9)) {
                 // workflow permission
-                $resource = new \Zend_Acl_Resource($resource);
+                $resource = new Zend_Acl_Resource($resource);
                 $acl->allow($roleName, $resource);
             } else {
                 // module access
@@ -95,7 +103,7 @@ class Application_Security_RoleConfig
 
         if (! $resourcesConfigured) {
             foreach ($accessibleModules as $module) {
-                if ($acl->has(new \Zend_Acl_Resource($module))) {
+                if ($acl->has(new Zend_Acl_Resource($module))) {
                     $acl->allow($roleName, $module);
                 }
             }
@@ -103,16 +111,13 @@ class Application_Security_RoleConfig
     }
 
     /**
-     *
-     * @param $role string
-     * @return \Zend_Config|null
-     *
-     * TODO not used yet
+     * @param string $role
+     * @return Zend_Config|null TODO not used yet
      */
     public function getRoleConfig($role)
     {
         $path = APPLICATION_PATH . '/application/configs/security/' . $role . '.ini';
 
-        return is_readable($path) ? new \Zend_Config_Ini($path) : null;
+        return is_readable($path) ? new Zend_Config_Ini($path) : null;
     }
 }

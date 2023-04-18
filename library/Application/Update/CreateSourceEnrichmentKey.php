@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,29 +25,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Scripts
- * @author      Sascha Szott <opus-development@saschaszott.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 
 /**
  * Update step that adds enrichment key opus.source if it does not exist.
  */
 class Application_Update_CreateSourceEnrichmentKey extends Application_Update_PluginAbstract
 {
-    const ENRICHMENT_KEY_NAME = 'opus.source';
+    public const ENRICHMENT_KEY_NAME = 'opus.source';
 
     public function run()
     {
         $enrichmentKey = EnrichmentKey::fetchByName(self::ENRICHMENT_KEY_NAME);
 
-        if (is_null($enrichmentKey)) {
+        if ($enrichmentKey === null) {
             $this->log("Creating enrichment key '" . self::ENRICHMENT_KEY_NAME . "' …");
-            $enrichmentKey = new EnrichmentKey();
+            $enrichmentKey = EnrichmentKey::new();
             $enrichmentKey->setName(self::ENRICHMENT_KEY_NAME);
             $enrichmentKey->store();
             $this->getLogger()->info("Enrichment key '" . self::ENRICHMENT_KEY_NAME . "' created successfully.");

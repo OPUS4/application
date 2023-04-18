@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,17 +34,20 @@
  *
  * TODO rename?
  */
-class Application_Form_Decorator_UpdateField extends \Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_UpdateField extends Zend_Form_Decorator_Abstract
 {
-
+    /**
+     * @param string $content
+     * @return string
+     */
     public function render($content)
     {
         $element = $this->getElement();
-        $active = $element->getAttrib('active');
-        $name = $element->getName() . 'UpdateEnabled';
-        $elemId = $name;
+        $active  = $element->getAttrib('active');
+        $name    = $element->getName() . 'UpdateEnabled';
+        $elemId  = $name;
 
-        $output = "<div class=\"update-field-wrapper\">";
+        $output  = "<div class=\"update-field-wrapper\">";
         $output .= "<input class=\"field-update-checkbox\" name=\"$name\" id=\"$elemId\" type=\"checkbox\"";
 
         if ($active) {
@@ -55,7 +56,7 @@ class Application_Form_Decorator_UpdateField extends \Zend_Form_Decorator_Abstra
 
         if ($element->hasTranslator()) {
             $translator = $element->getTranslator();
-            $text = $translator->translate('admin_form_update_field');
+            $text       = $translator->translate('admin_form_update_field');
         } else {
             $text = 'Update field';
         }

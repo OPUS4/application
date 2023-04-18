@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,22 +34,20 @@
  */
 class Admin_Form_Document_PersonAdd extends Admin_Form_Person
 {
-
     /**
      * Name für Button, um weitere Person einzugeben.
      */
-    const ELEMENT_NEXT = 'Next';
+    public const ELEMENT_NEXT = 'Next';
 
     /**
      * Name für Unterformlar mit Dokument-Link Feldern.
      */
-    const SUBFORM_DOCUMENT = 'Document';
-
+    public const SUBFORM_DOCUMENT = 'Document';
 
     /**
      * Konstante für Ergebnis nach Klicken auf 'Next' Button.
      */
-    const RESULT_NEXT = 'next';
+    public const RESULT_NEXT = 'next';
 
     /**
      * Erzeugt die Formularelemente.
@@ -74,24 +70,32 @@ class Admin_Form_Document_PersonAdd extends Admin_Form_Person
             'submit',
             self::ELEMENT_NEXT,
             [
-            'decorators' => [
-                'ViewHelper',
-                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']],
-            ]
+                'decorators' => [
+                    'ViewHelper',
+                    [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']],
+                ],
             ]
         );
 
         $this->getDisplayGroup('actions')->setElements(
             [
-            $this->getElement(self::ELEMENT_SAVE), $next, $this->getElement(self::ELEMENT_CANCEL)]
+                $this->getElement(self::ELEMENT_SAVE),
+                $next,
+                $this->getElement(self::ELEMENT_CANCEL),
+            ]
         );
     }
 
+    /**
+     * @param array $post
+     * @param array $context
+     * @return string|null
+     */
     public function processPost($post, $context)
     {
         $result = parent::processPost($post, $context);
 
-        if (is_null($result)) {
+        if ($result === null) {
             if (array_key_exists(self::ELEMENT_NEXT, $post)) {
                 $result = self::RESULT_NEXT;
             }
@@ -100,6 +104,9 @@ class Admin_Form_Document_PersonAdd extends Admin_Form_Person
         return $result;
     }
 
+    /**
+     * @return string|null
+     */
     public function getSelectedRole()
     {
         return $this->getSubForm(self::SUBFORM_DOCUMENT)->getElementValue(Admin_Form_PersonLink::ELEMENT_ROLE);
@@ -122,15 +129,19 @@ class Admin_Form_Document_PersonAdd extends Admin_Form_Person
         $this->getSubForm(self::SUBFORM_DOCUMENT)->getElement(Admin_Form_PersonLink::ELEMENT_ROLE)->setValue($role);
     }
 
+    /**
+     * @param array $personId
+     * @return array
+     */
     public function getPersonLinkProperties($personId)
     {
         $linkForm = $this->getSubForm(self::SUBFORM_DOCUMENT);
 
         return [
-            'person' => $personId,
-            'role' => $linkForm->getElementValue(Admin_Form_PersonLink::ELEMENT_ROLE),
+            'person'  => $personId,
+            'role'    => $linkForm->getElementValue(Admin_Form_PersonLink::ELEMENT_ROLE),
             'contact' => $linkForm->getElementValue(Admin_Form_PersonLink::ELEMENT_ALLOW_CONTACT),
-            'order' => $linkForm->getElementValue(Admin_Form_PersonLink::ELEMENT_SORT_ORDER)
+            'order'   => $linkForm->getElementValue(Admin_Form_PersonLink::ELEMENT_SORT_ORDER),
         ];
     }
 }

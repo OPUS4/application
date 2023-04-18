@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Default
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 ?>
 <div class="errorPage">
     <h2><?= $this->message ?></h2>
@@ -40,27 +36,27 @@
 
     <?PHP if ($this->showException) : ?>
         <div class="exceptionMessage">
-            <?= htmlspecialchars($this->errorMessage) ?>
+            <?= htmlspecialchars($this->errorMessage, ENT_NOQUOTES) ?>
         </div>
     <div class="stacktrace">
         <h3>Stacktrace</h3>
-<?PHP /* note: do not use indentation here */ ?>
+        <?PHP /* note: do not use indentation here */ ?>
 <pre>
-<?= htmlspecialchars($this->exception) ?>
+        <?= htmlspecialchars($this->exception, ENT_NOQUOTES) ?>
 </pre>
     </div>
     <?PHP else : ?>
     <div class="exceptionMessage">
-        <?= htmlspecialchars($this->errorMessage) ?>
+        <?= htmlspecialchars($this->errorMessage, ENT_NOQUOTES) ?>
     </div>
     <?PHP endif; ?>
 
     <?PHP if (isset($this->errorRequest)) : ?>
     <div class="request">
         <h3>Request</h3>
-<?PHP /* note: do not use indentation here */ ?>
+        <?PHP /* note: do not use indentation here */ ?>
 <pre>
-<?= htmlspecialchars(var_export($this->errorRequest, true)) ?>
+        <?= htmlspecialchars(var_export($this->errorRequest, true)) ?>
 </pre>
     </div>
     <?PHP endif; ?>

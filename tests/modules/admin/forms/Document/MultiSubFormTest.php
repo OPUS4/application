@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,21 +25,20 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Title;
+use Opus\Common\Document;
+use Opus\Common\Title;
+use Opus\Common\TitleInterface;
 
 /**
  * Unit Tests für MulitSubForm Formular das mehrere Unterformular des gleichen Typs verwalten kann.
  */
 class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testConstructForm()
@@ -70,10 +70,8 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
     public function testConstructFormWithBadValidator()
     {
-        $this->setExpectedException(
-            Application_Exception::class,
-            'Validator ist keine Instanz von Application_Form_Validate_IMultiSubForm.'
-        );
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Validator ist keine Instanz von Application_Form_Validate_IMultiSubForm.');
 
         $form = new Admin_Form_Document_MultiSubForm(
             'Admin_Form_Document_Title',
@@ -135,7 +133,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $values = $form->getFieldValues($document);
 
         $this->assertEquals(2, count($values));
-        $this->assertTrue($values[0] instanceof Title);
+        $this->assertTrue($values[0] instanceof TitleInterface);
         $this->assertEquals('sub', $values[0]->getType());
     }
 
@@ -150,16 +148,16 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $post = [
             'TitleParent0' => [
                 'Language' => 'deu',
-                'Value' => 'Titel 1'
+                'Value'    => 'Titel 1',
             ],
             'TitleParent1' => [
                 'Language' => 'eng',
-                'Value' => 'Titel 2'
+                'Value'    => 'Titel 2',
             ],
             'TitleParent2' => [
                 'Language' => 'fra',
-                'Value' => 'Titel 3'
-            ]
+                'Value'    => 'Titel 3',
+            ],
         ];
 
         $this->assertEquals(0, count($form->getSubForms()));
@@ -219,9 +217,9 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $post = [
             'TitleSub0' => [
-                'Remove' => 'Entfernen'
+                'Remove' => 'Entfernen',
             ],
-            'TitleSub1' => []
+            'TitleSub1' => [],
         ];
 
         $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, $post));
@@ -359,12 +357,12 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $post = [
             'TitleParent0' => [
                 'Language' => 'deu',
-                'Value' => 'Titel 1'
+                'Value'    => 'Titel 1',
             ],
             'TitleParent1' => [
                 'Language' => 'eng',
-                'Value' => 'Title 2'
-            ]
+                'Value'    => 'Title 2',
+            ],
         ];
 
         $this->assertTrue($form->isValid($post, $post));
@@ -385,13 +383,13 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
             'Parent' => [
                 'TitleParent0' => [
                     'Language' => 'deu',
-                    'Value' => 'Titel 1'
+                    'Value'    => 'Titel 1',
                 ],
                 'TitleParent1' => [
                     'Language' => 'deu',
-                    'Value' => 'Titel 2'
-                ]
-            ]
+                    'Value'    => 'Titel 2',
+                ],
+            ],
         ];
 
         $this->assertFalse($form->isValid($post, $post));
@@ -423,7 +421,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $columns = [
             [],
             ['label' => 'Number'],
-            ['label' => 'SortOrder']
+            ['label' => 'SortOrder'],
         ];
 
         $form = new Admin_Form_Document_MultiSubForm(
@@ -453,22 +451,24 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $columns = [
             [],
             ['label' => 'Number'],
-            ['label' => 'SortOrder']
+            ['label' => 'SortOrder'],
         ];
 
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, [
-            'columns' => $columns
+            'columns' => $columns,
         ]);
 
-        $subform = new \Zend_Form_SubForm();
-        $subform->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
+        $subform = new Zend_Form_SubForm();
+        $subform->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
 
         $subform->setDecorators([]);
-        $subform->addElement('text', 'test', ['decorators' => [
-            ['dataWrapper' => 'HtmlTag'],
-            ['LabelNotEmpty' => 'HtmlTag'],
-            ['ElementHtmlTag' => 'HtmlTag']
-        ]]);
+        $subform->addElement('text', 'test', [
+            'decorators' => [
+                ['dataWrapper' => 'HtmlTag'],
+                ['LabelNotEmpty' => 'HtmlTag'],
+                ['ElementHtmlTag' => 'HtmlTag'],
+            ],
+        ]);
         $subform->addElement('hidden', 'Id');
 
         $method->invoke($form, $subform);
@@ -489,13 +489,13 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
     public function testAddRemoveButtonForTableRendering()
     {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, [
-            'columns' => [[]]
+            'columns' => [[]],
         ]);
 
         $method = new ReflectionMethod('Admin_Form_Document_MultiSubForm', 'addRemoveButton');
         $method->setAccessible(true);
 
-        $subform = new \Zend_Form_SubForm();
+        $subform = new Zend_Form_SubForm();
         $subform->addElement('hidden', 'Id');
 
         $method->invoke($form, $subform);
@@ -510,7 +510,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
     public function testIsRenderAsTableEnabledTrue()
     {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, [
-            'columns' => [[]]
+            'columns' => [[]],
         ]);
 
         $this->assertTrue($form->isRenderAsTableEnabled());
@@ -529,17 +529,17 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel1');
         $title->setLanguage('deu');
         $document->addTitleParent($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel2');
         $title->setLanguage('eng');
         $document->addTitleParent($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel3');
         $title->setLanguage('rus');
         $document->addTitleParent($title);
@@ -567,17 +567,17 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel1');
         $title->setLanguage('deu');
         $document->addTitleParent($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel2');
         $title->setLanguage('eng');
         $document->addTitleParent($title);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Titel3');
         $title->setLanguage('rus');
         $document->addTitleParent($title);
@@ -586,8 +586,8 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $post = [
             'TitleParent1' => [
-                'Remove' => 'Entfernen'
-            ]
+                'Remove' => 'Entfernen',
+            ],
         ];
 
         $form->processPost($post, $post);
@@ -609,13 +609,13 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleParent');
 
         $post = [
-            'Add' => 'Hinzufügen',
+            'Add'          => 'Hinzufügen',
             'TitleParent0' => [
-                'Id' => 224,
-                'Type' => 'main',
+                'Id'       => 224,
+                'Type'     => 'main',
                 'Language' => 'eng',
-                'Value' => 'Test Title'
-            ]
+                'Value'    => 'Test Title',
+            ],
         ];
 
         $form->constructFromPost($post, null);
@@ -629,7 +629,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
     public function testCssClassForTableCellsSet()
     {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, [
-            'columns' => [[]]
+            'columns' => [[]],
         ]);
 
         $form->appendSubForm();

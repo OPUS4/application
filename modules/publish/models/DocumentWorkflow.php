@@ -25,46 +25,39 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2011-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 
 class Publish_Model_DocumentWorkflow
 {
+    public const DOCUMENT_STATE = 'temporary';
 
-    const DOCUMENT_STATE = 'temporary';
-
-    /**
-     * @var Document
-     */
-    private $_document;
+    /** @var DocumentInterface */
+    private $document;
 
     /**
      * Create and initialize document object.
      *
      * @param string $documentType
-     * @return Document
+     * @return DocumentInterface
      */
     public function createDocument($documentType)
     {
-        $this->_document = Document::new();
-        $this->_document->setServerState(self::DOCUMENT_STATE)
+        $this->document = Document::new();
+        $this->document->setServerState(self::DOCUMENT_STATE)
             ->setType($documentType);
 
         $this->initializeDocument();
 
-        return $this->_document;
+        return $this->document;
     }
 
     /**
      * Initialize custom document fields.
-     *
-     * @return void
      */
     protected function initializeDocument()
     {
@@ -74,25 +67,28 @@ class Publish_Model_DocumentWorkflow
      * Load initialized document object (and check document status).
      *
      * @param int $documentId
-     * @return Document
+     * @return DocumentInterface
      * @throws Publish_Model_Exception
      */
     public function loadDocument($documentId)
     {
-        if (! isset($documentId) or ! preg_match('/^\d+$/', $documentId)) {
+        if (! isset($documentId) || ! preg_match('/^\d+$/', $documentId)) {
             throw new Publish_Model_Exception('Invalid document ID given');
         }
 
-        $this->_document = Document::get($documentId);
-        if ($this->_document->getServerState() !== self::DOCUMENT_STATE) {
+        $this->document = Document::get($documentId);
+        if ($this->document->getServerState() !== self::DOCUMENT_STATE) {
             throw new Publish_Model_Exception('Document->ServerState mismatch!');
         }
 
-        return $this->_document;
+        return $this->document;
     }
 
+    /**
+     * @return DocumentInterface
+     */
     public function getDocument()
     {
-        return $this->_document;
+        return $this->document;
     }
 }

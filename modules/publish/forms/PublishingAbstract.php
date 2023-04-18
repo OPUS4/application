@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,48 +25,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Config;
 
-abstract class Publish_Form_PublishingAbstract extends \Zend_Form
+abstract class Publish_Form_PublishingAbstract extends Zend_Form
 {
+    /** @var Zend_Config */
+    protected $config;
 
-    protected $_config;
+    /** @var Zend_Session_Namespace */
+    protected $session;
 
-    protected $_session;
+    /** @var Zend_Controller_Action_Helper_Abstract */
+    protected $documentTypesHelper;
 
-    protected $_documentTypesHelper;
-
+    /** @var Zend_View_Interface|null */
     public $view;
 
     public function __construct()
     {
-        $this->_session = new \Zend_Session_Namespace('Publish');
-        $this->_config = Config::get();
-        $this->_documentTypesHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-        $this->view = $this->getView();
+        $this->session             = new Zend_Session_Namespace('Publish');
+        $this->config              = Config::get();
+        $this->documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $this->view                = $this->getView();
         parent::__construct();
     }
 
+    /**
+     * @param string $elementName
+     * @return array
+     */
     public function getElementAttributes($elementName)
     {
         $elementAttributes = [];
-        if (! is_null($this->getElement($elementName))) {
-            $element = $this->getElement($elementName);
-            $elementAttributes['value'] = $element->getValue();
-            $elementAttributes['label'] = $element->getLabel();
-            $elementAttributes['error'] = $element->getMessages();
-            $elementAttributes['id'] = $element->getId();
-            $elementAttributes['type'] = $element->getType();
-            $elementAttributes['desc'] = $element->getDescription();
-            $elementAttributes['hint'] = $this->getFieldHint($elementName);
-            $elementAttributes['header'] = 'header_' . $elementName;
+        if ($this->getElement($elementName) !== null) {
+            $element                       = $this->getElement($elementName);
+            $elementAttributes['value']    = $element->getValue();
+            $elementAttributes['label']    = $element->getLabel();
+            $elementAttributes['error']    = $element->getMessages();
+            $elementAttributes['id']       = $element->getId();
+            $elementAttributes['type']     = $element->getType();
+            $elementAttributes['desc']     = $element->getDescription();
+            $elementAttributes['hint']     = $this->getFieldHint($elementName);
+            $elementAttributes['header']   = 'header_' . $elementName;
             $elementAttributes['disabled'] = $element->getAttrib('disabled');
             $elementAttributes['datatype'] = $element->getAttrib('datatype');
 
@@ -108,12 +113,13 @@ abstract class Publish_Form_PublishingAbstract extends \Zend_Form
 
     /**
      * Method to build a display group by a number of arrays for fields, hidden fields and buttons.
-     * @param <Zend_Form_DisplayGroup> $displayGroup
-     * @return <Array> $group
+     *
+     * @param Zend_Form_DisplayGroup $displayGroup
+     * @return array
      */
     public function buildViewDisplayGroup($displayGroup)
     {
-        $groupFields = [];
+        $groupFields  = [];
         $groupHiddens = [];
         $groupButtons = [];
 
@@ -132,8 +138,8 @@ abstract class Publish_Form_PublishingAbstract extends \Zend_Form
             }
         }
 
-        $group = [];
-        $group['Fields'] = $groupFields;
+        $group            = [];
+        $group['Fields']  = $groupFields;
         $group['Hiddens'] = $groupHiddens;
         $group['Buttons'] = $groupButtons;
         return $group;
@@ -141,8 +147,10 @@ abstract class Publish_Form_PublishingAbstract extends \Zend_Form
 
     /**
      * Adds submit button to the form.
-     * @param type $name unique button name
-     * @param type $label visible button label
+     *
+     * @param string $label visible button label
+     * @param string $name unique button name
+     * @return Zend_Form_Element
      */
     public function addSubmitButton($label, $name)
     {
@@ -153,6 +161,10 @@ abstract class Publish_Form_PublishingAbstract extends \Zend_Form
         return $submit;
     }
 
+    /**
+     * @param string $elementName
+     * @return string
+     */
     private function getFieldHint($elementName)
     {
         if (strpos($elementName, 'collId') === 0) {

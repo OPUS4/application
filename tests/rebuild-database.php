@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,11 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Database;
 
 // Define path to application directory
 defined('APPLICATION_PATH')
@@ -36,7 +37,7 @@ defined('APPLICATION_PATH')
 
 // Define application environment
 defined('APPLICATION_ENV')
-|| define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+|| define('APPLICATION_ENV', getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production');
 
 // Configure include path.
 set_include_path(
@@ -58,7 +59,7 @@ require_once 'autoload.php';
 require_once APPLICATION_PATH . '/vendor/opus4-repo/framework/library/OpusDb/Mysqlutf8.php';
 
 // environment initializiation
-$application = new \Zend_Application(
+$application = new Zend_Application(
     APPLICATION_ENV,
     [
         "config" => [
@@ -66,12 +67,12 @@ $application = new \Zend_Application(
             APPLICATION_PATH . '/application/configs/config.ini',
             APPLICATION_PATH . '/application/configs/console.ini',
             APPLICATION_PATH . '/tests/config.ini',
-            APPLICATION_PATH . '/tests/tests.ini'
-        ]
+            APPLICATION_PATH . '/tests/tests.ini',
+        ],
     ]
 );
 
-$options = $application->getOptions();
+$options                                        = $application->getOptions();
 $options['opus']['disableDatabaseVersionCheck'] = true;
 $application->setOptions($options);
 
@@ -82,23 +83,23 @@ $application->bootstrap('Backend');
  * Prepare database.
  */
 
-$database = new \Opus\Database();
+$database = new Database();
 
 $dbName = $database->getName();
 
-echo("Dropping database '$dbName' ... ");
+echo "Dropping database '$dbName' ... ";
 $database->drop();
-echo('done' . PHP_EOL);
+echo 'done' . PHP_EOL;
 
-echo("Creating database '$dbName' ... ");
+echo "Creating database '$dbName' ... ";
 $database->create();
-echo('done' . PHP_EOL);
+echo 'done' . PHP_EOL;
 
-echo(PHP_EOL . "Importing database schema ... " . PHP_EOL);
+echo PHP_EOL . "Importing database schema ... " . PHP_EOL;
 $database->importSchema();
 
-echo(PHP_EOL . 'Import master data ... ' . PHP_EOL);
+echo PHP_EOL . 'Import master data ... ' . PHP_EOL;
 $database->import(APPLICATION_PATH . '/db/masterdata');
 
-echo(PHP_EOL . 'Import test data ... ' . PHP_EOL);
+echo PHP_EOL . 'Import test data ... ' . PHP_EOL;
 $database->import(APPLICATION_PATH . '/tests/sql');

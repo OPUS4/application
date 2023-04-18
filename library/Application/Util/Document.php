@@ -25,53 +25,48 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Repository;
+use Opus\Common\Security\Realm;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
-use Opus\Common\Repository;
-use Opus\Security\Realm;
 
 class Application_Util_Document
 {
+    /** @var DocumentInterface */
+    private $document;
 
     /**
-     *
-     * @var Document
-     */
-    private $_document;
-
-    /**
-     *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @throws Application_Exception
      */
     public function __construct($document)
     {
-        $this->_document = $document;
+        $this->document = $document;
         if (! $this->checkPermission()) {
-            throw new Application_Exception('document access for id ' . $this->_document->getId() . ' not allowed');
+            throw new Application_Exception('document access for id ' . $this->document->getId() . ' not allowed');
         }
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     private function checkPermission()
     {
-        if ($this->_document->getServerState() === 'published') {
+        if ($this->document->getServerState() === 'published') {
             return true;
         }
-        $accessControl = \Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
-        return Realm::getInstance()->checkDocument($this->_document->getId())
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        return Realm::getInstance()->checkDocument($this->document->getId())
                 || $accessControl->accessAllowed('documents');
     }
 
     /**
-     * @param boolean $useCache
+     * @param bool $useCache
      * @return DOMNode Document node
      */
     public function getNode($useCache = true)
@@ -79,9 +74,9 @@ class Application_Util_Document
         $cache = Repository::getInstance()->getDocumentXmlCache();
 
         $xmlModel = new Xml();
-        $xmlModel->setModel($this->_document);
+        $xmlModel->setModel($this->document);
         $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
-        $xmlModel->setStrategy(new Version1);
+        $xmlModel->setStrategy(new Version1());
         if ($useCache) {
               $xmlModel->setXmlCache($cache);
         }

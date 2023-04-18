@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,27 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\CollectionRole;
+use Opus\Common\Collection;
+use Opus\Common\CollectionRole;
 use Opus\Db\TableGateway;
 
 /**
  * script that imports collections from a text file
  * file format: each collection (name and number) on a separate line
  * collection name and number are separated by | character
- *
  */
 
 // file to import
 $inputFile = '../workspace/tmp/ddc_dnb.txt';
 // visibility status of imported collections
-$visible = true;
+$visible        = true;
 $fieldSeparator = '	';
 
 if (! file_exists($inputFile)) {
@@ -58,13 +56,13 @@ if (! is_readable($inputFile)) {
 }
 
 // find next valid position for collection role
-$table  = TableGateway::getInstance(CollectionRole::getTableGatewayClass());
-$select = $table->select()->from($table, ['MAX(position) AS max_position']);
-$row = $table->fetchRow($select);
-$position = $row->max_position + 1;
+$table    = TableGateway::getInstance(CollectionRole::getTableGatewayClass());
+$select   = $table->select()->from($table, ['MAX(position) AS max_position']);
+$row      = $table->fetchRow($select);
+$position = (int) $row->max_position + 1;
 
 // create root collection
-$collectionRole = new CollectionRole();
+$collectionRole = CollectionRole::new();
 $collectionRole->setPosition($position);
 $collectionRole->setName('ddc_dnb');
 $collectionRole->setOaiName('ddc_dnb');
@@ -76,14 +74,14 @@ $collectionRole->setVisibleFrontdoor(true);
 $collectionRole->setVisibleOai(true);
 $collectionRoleId = $collectionRole->store();
 
-$rootCollection = new Collection();
+$rootCollection = Collection::new();
 $rootCollection->setPositionKey('Root');
 $rootCollection->setVisible(true);
 $rootCollection->setRoleId($collectionRoleId);
 $rootCollection->store();
 
-if (! is_null($rootCollection)) {
-    $lineCount = 0;
+if ($rootCollection !== null) {
+    $lineCount     = 0;
     $linesImported = 0;
     foreach (file($inputFile) as $line) {
         $lineCount++;
@@ -100,7 +98,7 @@ if (! is_null($rootCollection)) {
             continue;
         }
 
-        $collection = new Collection();
+        $collection = Collection::new();
         $collection->setNumber(trim($parts[0]));
         $collection->setOaiSubset(trim($parts[0]));
         $collection->setName(trim($parts[1]));
@@ -112,6 +110,5 @@ if (! is_null($rootCollection)) {
 
     echo "$linesImported collections were successfully imported\n";
 }
-
 
 exit();

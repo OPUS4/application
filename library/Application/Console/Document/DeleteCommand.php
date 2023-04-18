@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,30 +25,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Console
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Console\AbstractDocumentCommand;
+use Opus\Common\Console\Helper\ProgressMatrix;
+use Opus\Common\Console\Helper\ProgressOutputInterface;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
+use Opus\Search\Console\Helper\DocumentHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Opus\Common\Console\AbstractBaseDocumentCommand;
-use Opus\Common\Console\Helper\ProgressMatrix;
-use Opus\Document;
-use Opus\Search\Console\Helper\DocumentHelper;
 
 /**
- * Class Application_Console_Document_Delete
- *
  * TODO use switch instead of singleDocument and removeAll (?)
  */
-class Application_Console_Document_DeleteCommand extends AbstractBaseDocumentCommand
+class Application_Console_Document_DeleteCommand extends AbstractDocumentCommand
 {
-
-    const OPTION_PERMANENT = 'permanent';
+    public const OPTION_PERMANENT = 'permanent';
 
     protected function configure()
     {
@@ -86,12 +83,16 @@ EOT;
             );
     }
 
+    /**
+     * @return int
+     * @throws NotFoundException
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->processArguments($input);
 
         $startId = $this->startId;
-        $endId = $this->endId;
+        $endId   = $this->endId;
 
         $permanent = $input->getOption(self::OPTION_PERMANENT);
 
@@ -135,8 +136,15 @@ EOT;
         } else {
             $output->writeln('Deletion cancelled');
         }
+
+        return 0;
     }
 
+    /**
+     * @param ProgressOutputInterface $progress
+     * @param int[]                   $docIds
+     * @param bool                    $permanent
+     */
     protected function deleteDocuments($progress, $docIds, $permanent = false)
     {
         $progress->start();
@@ -147,6 +155,11 @@ EOT;
         $progress->finish();
     }
 
+    /**
+     * @param int  $docId
+     * @param bool $permanent
+     * @throws NotFoundException
+     */
     protected function deleteDocument($docId, $permanent = false)
     {
         $doc = Document::get($docId);

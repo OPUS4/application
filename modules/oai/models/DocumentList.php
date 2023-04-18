@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,19 +26,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category   Application
- * @package    Module_Oai
- * @author     Thoralf Klein <thoralf.klein@zib.de>
  * @copyright  Copyright (c) 2012, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Common\Repository;
 
 class Oai_Model_DocumentList
 {
-
     /**
      * Holds information about which document state aka server_state
      * are delivered out
@@ -46,7 +43,7 @@ class Oai_Model_DocumentList
      *
      * TODO should be private
      */
-    public $deliveringDocumentStates = null;
+    public $deliveringDocumentStates;
 
     /**
      * Holds restriction types for xMetaDiss
@@ -55,12 +52,11 @@ class Oai_Model_DocumentList
      *
      * TODO should be private
      */
-    public $xMetaDissRestriction = null;
+    public $xMetaDissRestriction;
 
     /**
      * Retrieve all document ids for a valid oai request.
      *
-     * @param array &$oaiRequest
      * @return array
      *
      * TODO function contains metadataPrefix specific criteria for generating document list (refactor!)
@@ -77,8 +73,10 @@ class Oai_Model_DocumentList
 
         $metadataPrefix = strtolower($oaiRequest['metadataPrefix']);
 
-        if (strcmp('xmetadissplus', $metadataPrefix) === 0
-            || 'xmetadiss' === $metadataPrefix) {
+        if (
+            strcmp('xmetadissplus', $metadataPrefix) === 0
+            || 'xmetadiss' === $metadataPrefix
+        ) {
             $finder->setHasFilesVisibleInOai();
             $finder->setNotEmbargoedOn($today);
         }
@@ -96,14 +94,14 @@ class Oai_Model_DocumentList
                 return [];
             }
 
-            if ($setarray[0] == 'doc-type') {
-                if (count($setarray) === 2 and ! empty($setarray[1])) {
+            if ($setarray[0] === 'doc-type') {
+                if (count($setarray) === 2 && ! empty($setarray[1])) {
                     $finder->setDocumentType($setarray[1]);
                 } else {
                     return [];
                 }
-            } elseif ($setarray[0] == 'bibliography') {
-                if (count($setarray) !== 2 or empty($setarray[1])) {
+            } elseif ($setarray[0] === 'bibliography') {
+                if (count($setarray) !== 2 || empty($setarray[1])) {
                     return [];
                 }
                 $setValue = $setarray[1];
@@ -119,22 +117,22 @@ class Oai_Model_DocumentList
 
                 $finder->setBelongsToBibliography($bibliographyMap[$setValue]);
             } else {
-                if (count($setarray) < 1 or count($setarray) > 2) {
+                if (count($setarray) < 1 || count($setarray) > 2) {
                     $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
                     throw new Oai_Model_Exception($msg);
                 }
 
                 // Trying to locate collection role and filter documents.
                 $role = CollectionRole::fetchByOaiName($setarray[0]);
-                if (is_null($role)) {
+                if ($role === null) {
                     $msg = "Invalid SetSpec: Top level set does not exist.";
                     throw new Oai_Model_Exception($msg);
                 }
                 $finder->setCollectionRoleId($role->getId());
 
                 // Trying to locate given collection and filter documents.
-                if (count($setarray) == 2) {
-                    $subsetName = $setarray[1];
+                if (count($setarray) === 2) {
+                    $subsetName   = $setarray[1];
                     $foundSubsets = array_filter(
                         $role->getOaiSetNames(),
                         function ($s) use ($subsetName) {
@@ -166,7 +164,7 @@ class Oai_Model_DocumentList
             }
         }
 
-        if (array_key_exists('from', $oaiRequest) and ! empty($oaiRequest['from'])) {
+        if (array_key_exists('from', $oaiRequest) && ! empty($oaiRequest['from'])) {
             $from = DateTime::createFromFormat('Y-m-d', $oaiRequest['from']);
             $finder->setServerDateModifiedAfter($from->format('Y-m-d'));
         }

@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,29 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <?php
     $identifier = $this->element->getIdentifier();
-if (! is_null($identifier)) {
+if ($identifier !== null) {
     $identifierStatus = $identifier->getStatus();
-    $viewMode = $this->element->isViewModeEnabled();
+    $viewMode         = $this->element->isViewModeEnabled();
 }
 ?>
 
-<?php if (! is_null($identifier) && $identifierStatus != '') : ?>
+<?php if ($identifier !== null && $identifierStatus !== '') : ?>
     <div class="identifierStatus">
         <?php if ($viewMode) : ?>
-            <div class="<?= is_null($identifierStatus) ? 'unregistered' : $identifierStatus ?>">
-                <?= is_null($identifierStatus) ? htmlspecialchars($this->translate('admin_document_identifier_doi_unregistered')) : htmlspecialchars($this->translate('admin_document_identifier_doi_' . $identifierStatus)) ?>
+            <div class="<?= $identifierStatus === null ? 'unregistered' : $identifierStatus ?>">
+                <?= $identifierStatus === null ? htmlspecialchars($this->translate('admin_document_identifier_doi_unregistered')) : htmlspecialchars($this->translate('admin_document_identifier_doi_' . $identifierStatus)) ?>
             </div>
         <?php else : ?>
-            <?php if (! is_null($identifierStatus)) : ?>
+            <?php if ($identifierStatus !== null) : ?>
             <div class="warning"><?= htmlspecialchars($this->translate('admin_document_identifier_doi_donotedit')) ?></div>
             <?php endif; ?>
         <?php endif; ?>

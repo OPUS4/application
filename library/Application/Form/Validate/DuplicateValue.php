@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -50,19 +49,19 @@ use Opus\Common\Log;
  *
  * TODO Basisklasse mit getLogger
  */
-class Application_Form_Validate_DuplicateValue extends \Zend_Validate_Abstract
+class Application_Form_Validate_DuplicateValue extends Zend_Validate_Abstract
 {
-
     /**
      * Error constant for language ID that does not exist.
      */
-    const NOT_VALID = 'notValid';
+    public const NOT_VALID = 'notValid';
 
     /**
      * Werte fuer Feld in benachbarten Formularen.
-     * @var
+     *
+     * @var array
      */
-    private $_values;
+    private $values;
 
     /**
      * Position des Unterformulares.
@@ -72,27 +71,31 @@ class Application_Form_Validate_DuplicateValue extends \Zend_Validate_Abstract
      *
      * @var int
      */
-    private $_position;
+    private $position;
 
     /**
      * Error messages.
+     *
+     * @var string[]
+     * @phpcs:disable
      */
     protected $_messageTemplates = [
         self::NOT_VALID => 'admin_validate_error_duplicated_value',
     ];
+    // @phpcs:enable
 
     /**
      * Konstruiert Validator.
      *
-     * @param $values array Werte der benachbarten Unterformulare
-     * @param $position int Position des Unterformulars
-     * @param null $message Fehlermeldung
+     * @param array       $values Werte der benachbarten Unterformulare
+     * @param int         $position Position des Unterformulars
+     * @param string|null $message Fehlermeldung
      */
     public function __construct($values, $position, $message = null)
     {
-        $this->_values = $values;
-        $this->_position = $position;
-        if (! is_null($message)) {
+        $this->values   = $values;
+        $this->position = $position;
+        if ($message !== null) {
             $this->setMessage($message, self::NOT_VALID);
         }
     }
@@ -103,26 +106,27 @@ class Application_Form_Validate_DuplicateValue extends \Zend_Validate_Abstract
      * The function assumes that the context contains multiple arrays (subforms)
      * that contain the same element.
      *
-     * @param $value string Does not matter for this validator
-     * @param $context array Values of all the subforms
+     * @param string     $value Does not matter for this validator
+     * @param array|null $context Values of all the subforms
+     * @return bool
      */
     public function isValid($value, $context = null)
     {
         $value = (string) $value;
         $this->_setValue($value);
 
-        $valueCount = count($this->_values);
+        $valueCount = count($this->values);
 
-        if (! ($this->_position < $valueCount)) {
+        if (! $this->position < $valueCount) {
              Log::get()->err(
-                 __CLASS__ .
-                 ' mit Position > count(values) konstruiert.'
+                 __CLASS__
+                 . ' mit Position > count(values) konstruiert.'
              );
         }
 
-        if (! is_null($this->_values)) {
-            for ($index = 0; $index < $this->_position && $index < $valueCount; $index++) {
-                if ($this->isEqual($value, $context, $this->_values[$index])) {
+        if ($this->values !== null) {
+            for ($index = 0; $index < $this->position && $index < $valueCount; $index++) {
+                if ($this->isEqual($value, $context, $this->values[$index])) {
                     $this->_error(self::NOT_VALID);
                     return false;
                 }
@@ -134,18 +138,30 @@ class Application_Form_Validate_DuplicateValue extends \Zend_Validate_Abstract
         return true;
     }
 
+    /**
+     * @param string $value
+     * @param array  $context
+     * @param string $other
+     * @return bool
+     */
     protected function isEqual($value, $context, $other)
     {
-        return $value == $other;
+        return $value === $other;
     }
 
+    /**
+     * @return int
+     */
     public function getPosition()
     {
-        return $this->_position;
+        return $this->position;
     }
 
+    /**
+     * @return array
+     */
     public function getValues()
     {
-        return $this->_values;
+        return $this->values;
     }
 }

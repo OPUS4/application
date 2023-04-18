@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,61 +25,53 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 use Opus\Common\Log;
 
 class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
 {
-
-    /**
-     *
-     * @var \DOMDocument
-     */
+    /** @var DOMDocument */
     public $dom;
 
-    /**
-     *
-     * @var Publish_Form_PublishingSecond
-     */
+    /** @var Publish_Form_PublishingSecond */
     public $form;
 
-    /**
-     *
-     * @var array Array of Publish_Model_FormElement
-     */
+    /** @var array Array of Publish_Model_FormElement */
     public $formElements = [];
 
-    private $_log;
-    private $_session;
-    private $_postValues = [];
-    private $_additionalFields = [];
+    /** @var Zend_Log */
+    private $log;
+
+    /** @var Zend_Session_Namespace */
+    private $session;
+
+    /** @var array */
+    private $postValues = [];
+
+    /** @var array */
+    private $additionalFields = [];
 
     /**
-     *
-     * @param \DOMDocument $dom
+     * @param DOMDocument                   $dom
      * @param Publish_Form_PublishingSecond $form
-     * @param array $additionalFields
-     * @param array $postValues
+     * @param array                         $additionalFields
+     * @param array                         $postValues
      */
     public function __construct($dom, $form, $additionalFields = [], $postValues = [])
     {
-        $this->_log = Log::get();
-        $this->_session = new \Zend_Session_Namespace('Publish');
-        $this->form = $form;
-        $this->dom = $dom;
+        $this->log     = Log::get();
+        $this->session = new Zend_Session_Namespace('Publish');
+        $this->form    = $form;
+        $this->dom     = $dom;
         if (is_array($additionalFields)) {
-            $this->_additionalFields = $additionalFields;
+            $this->additionalFields = $additionalFields;
         }
         if (is_array($postValues)) {
-            $this->_postValues = $postValues;
+            $this->postValues = $postValues;
         }
     }
 
@@ -93,17 +86,17 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
         //parse root node for tags named 'field'
         foreach ($this->dom->getElementsByTagname('field') as $field) {
             $currentElement = new Publish_Model_FormElement($this->form);
-            $currentElement->setAdditionalFields($this->_additionalFields);
-            $this->_parseAttributes($field, $currentElement);
-            $this->_parseSubFields($field, $currentElement);
-            $this->_parseDefaultEntry($currentElement, $field);
-            $this->_parseRequiredIfFulltext($field, $currentElement);
-            $currentElement->setPostValues($this->_postValues);
-            $group = $currentElement->initGroup();
+            $currentElement->setAdditionalFields($this->additionalFields);
+            $this->parseAttributes($field, $currentElement);
+            $this->parseSubFields($field, $currentElement);
+            $this->parseDefaultEntry($currentElement, $field);
+            $this->parseRequiredIfFulltext($field, $currentElement);
+            $currentElement->setPostValues($this->postValues);
+            $group                = $currentElement->initGroup();
             $this->formElements[] = $group;
 
             if (! isset($group)) {
-                $element = $currentElement->transform();
+                $element              = $currentElement->transform();
                 $this->formElements[] = $element;
             }
         }
@@ -113,19 +106,16 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
      * Allocates member variables of currentElement with found attributes in XML Documenttype for element "field".
      * Parses for top elements "field" and their atrributes.
      *
-     * @param DomElement $field
      * @param Publish_Model_FormElement $currentElement
-     *
-     * @return false: field has no attributes
+     * @return bool
      */
-    private function _parseAttributes(DomElement $field, $currentElement)
+    private function parseAttributes(DOMElement $field, $currentElement)
     {
-
         if ($field->hasAttributes()) {
-            $elementName = $field->getAttribute('name');
-            $required = $field->getAttribute('required');
-            $formElement = $field->getAttribute('formelement');
-            $datatype = $field->getAttribute('datatype');
+            $elementName  = $field->getAttribute('name');
+            $required     = $field->getAttribute('required');
+            $formElement  = $field->getAttribute('formelement');
+            $datatype     = $field->getAttribute('datatype');
             $multiplicity = $field->getAttribute('multiplicity');
 
             if ($datatype === 'Enrichment') {
@@ -134,7 +124,7 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
                 }
             }
 
-            if ($datatype == 'Collection' || $datatype == 'CollectionLeaf') {
+            if ($datatype === 'Collection' || $datatype === 'CollectionLeaf') {
                 $collectionRole = $field->getAttribute('root');
                 $currentElement->setCollectionRole($collectionRole);
                 $currentElement->setCurrentCollectionId();
@@ -153,6 +143,7 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
             $currentElement->setFormElement($formElement);
             $currentElement->setDatatype($datatype);
             $currentElement->setMultiplicity($multiplicity);
+            return true;
         } else {
             // No Attributes found!
             return false;
@@ -162,10 +153,11 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
     /**
      * Allocates member variables of currentElement and its children.
      * Parses for child nodes and there atrributes.
-     * @param DomElement $field
-     * @return false: no child nodes or no attributes have been found.
+     *
+     * @param Publish_Model_FormElement $currentElement
+     * @return bool false: no child nodes or no attributes have been found.
      */
-    private function _parseSubFields(DomElement $field, $currentElement)
+    private function parseSubFields(DOMElement $field, $currentElement)
     {
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('subfield') as $subField) {
@@ -177,11 +169,11 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
 
                     if (! $this->useSubfield($currentElement->getElementName(), $subElementName)) {
                         continue;
-                    };
+                    }
 
-                    $subRequired = $subField->getAttribute('required');
+                    $subRequired    = $subField->getAttribute('required');
                     $subFormElement = $subField->getAttribute('formelement');
-                    $subDatatype = $subField->getAttribute('datatype');
+                    $subDatatype    = $subField->getAttribute('datatype');
 
                     $currentSubField->setElementName($currentElement->getElementName() . $subElementName);
                     if ($subRequired === 'yes') {
@@ -194,12 +186,12 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
 
                     $currentSubField->isSubField = true;
                 } else {
-                //No Attributes found!
+                    // No Attributes found!
                     return false;
                 }
 
                 if ($subField->hasChildNodes()) {
-                    $this->_parseDefaultEntry($currentElement, $subField, $currentSubField);
+                    $this->parseDefaultEntry($currentElement, $subField, $currentSubField);
                 }
                 $currentElement->addSubFormElement($currentSubField->transform());
             }
@@ -207,27 +199,38 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
             $options = [];
             foreach ($field->getElementsByTagname('option') as $option) {
                 if ($option->hasAttributes()) {
-                    $value = $option->getAttribute('value');
+                    $value           = $option->getAttribute('value');
                     $options[$value] = $value;
                 }
             }
             $currentElement->setListOptions($options);
+
+            return true;
         } else {
             // No Subfields found!
             return false;
         }
     }
 
+    /**
+     * @param string $elementName
+     * @param string $subfieldName
+     * @return bool
+     */
     private function useSubfield($elementName, $subfieldName)
     {
         switch ($elementName) {
             case 'PersonAuthor':
-                if (! $this->includeExtendedAuthorInformation()
-                    && in_array($subfieldName, ['DateOfBirth', 'PlaceOfBirth'])) {
+                if (
+                    ! $this->includeExtendedAuthorInformation()
+                    && in_array($subfieldName, ['DateOfBirth', 'PlaceOfBirth'])
+                ) {
                     return false;
                 }
-                if (! $this->includeAuthorEmail()
-                    && in_array($subfieldName, ['Email', 'AllowEmailContact'])) {
+                if (
+                    ! $this->includeAuthorEmail()
+                    && in_array($subfieldName, ['Email', 'AllowEmailContact'])
+                ) {
                     return false;
                 }
                 break;
@@ -240,14 +243,14 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
     /**
      * Allocates member variables of currentElement or can be used for subfields.
      * Parses for default values and the possibility of edit and make it public.
-     * @param DOMElement $field
-     * @param Publish_Model_FormElement $subfield
-     * @return false if there are no child nodes
+     *
+     * @param Publish_Model_FormElement $currentElement
+     * @return bool false if there are no child nodes
      */
-    private function _parseDefaultEntry(
+    private function parseDefaultEntry(
         $currentElement,
         DOMElement $field,
-        Publish_Model_FormElement $subfield = null
+        ?Publish_Model_FormElement $subfield = null
     ) {
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('default') as $default) {
@@ -276,7 +279,7 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
 
                     if (! isset($subfield)) {
                         $currentElement->setDefaultValue($defaultArray);
-                        $this->_log->debug(__METHOD__ . " : " . $value);
+                        $this->log->debug(__METHOD__ . " : " . $value);
                     } else {
                         $subfield->setDefaultValue($defaultArray);
                     }
@@ -284,27 +287,32 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
                     return false;
                 }
             }
+
+            return true;
         }
+
+        return false;
     }
 
     /**
      * Allocates member variables currentElement.
      * Parses for specific child node "required-if-fulltext" and sets the value "required" to true in case a fulltext
      * has been uploaded.
-     * @param DomElement $field
+     *
+     * @param Publish_Model_FormElement $currentElement
      */
-    private function _parseRequiredIfFulltext(DomElement $field, $currentElement)
+    private function parseRequiredIfFulltext(DOMElement $field, $currentElement)
     {
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('required-if-fulltext') as $fulltext) {
-                if ($this->_session->fulltext === '1') {
+                if ($this->session->fulltext) {
                     $currentElement->setRequired(true);
-                    $this->_log->debug(
+                    $this->log->debug(
                         "currentElement : " . $currentElement->getElementName()
                         . " and its required has been set to true!"
                     );
                 } else {
-                    $this->_log->debug(
+                    $this->log->debug(
                         "currentElement : " . $currentElement->getElementName()
                         . " and its required hasn't been changed!"
                     );
@@ -313,19 +321,21 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
         }
     }
 
+    /**
+     * @return array
+     */
     public function getFormElements()
     {
         return $this->formElements;
     }
 
     /**
+     * @param string $string
      * @return true if string can be used as zend_form_element name, else Exception
-     *
      */
     private function zendConformElementName($string)
     {
-
-        $element = new \Zend_Form_Element_Text($string);
+        $element = new Zend_Form_Element_Text($string);
         $element->setName($string);
 
         if ($element->getName() !== $string) {
@@ -335,16 +345,25 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
         return true;
     }
 
+    /**
+     * @param string $elementName
+     * @return true
+     * @throws Publish_Model_FormIncorrectEnrichmentKeyException
+     */
     private function isValidEnrichmentKey($elementName)
     {
         $enrichment = EnrichmentKey::fetchByName($elementName);
-        if (is_null($enrichment)) {
+        if ($enrichment === null) {
             throw new Publish_Model_FormIncorrectEnrichmentKeyException($elementName);
         }
 
         return true;
     }
 
+    /**
+     * @return bool
+     * @throws Zend_Exception
+     */
     public function includeAuthorEmail()
     {
         $config = $this->getConfig();
@@ -353,6 +372,10 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
             && filter_var($config->publish->includeAuthorEmail, FILTER_VALIDATE_BOOLEAN);
     }
 
+    /**
+     * @return bool
+     * @throws Zend_Exception
+     */
     public function includeExtendedAuthorInformation()
     {
         $config = $this->getConfig();

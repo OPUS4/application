@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -29,30 +29,36 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\Model\NotFoundException;
-
 /**
  * Form element for editing a list of collections.
  *
  * Collections can be searched and added. Collections in the list can be removed. The value of the form element is
  * an array of collection IDs.
  */
-class Application_Form_Element_CollectionAutoComplete extends \Zend_Form_Element_Xhtml
+class Application_Form_Element_CollectionAutoComplete extends Zend_Form_Element_Xhtml
 {
-
+    /** @var string */
     public $helper = 'formCollectionAutoComplete';
 
-    private $collections = null;
+    /** @var int[]|null */
+    private $collections;
 
+    /**
+     * @return int[]|null
+     */
     public function getValue()
     {
         return $this->collections;
     }
 
+    /**
+     * @param int[]|null $value
+     * @return $this
+     */
     public function setValue($value)
     {
         $this->collections = $value;
+        return $this;
     }
 
     /**
@@ -60,7 +66,7 @@ class Application_Form_Element_CollectionAutoComplete extends \Zend_Form_Element
      */
     public function loadDefaultDecorators()
     {
-        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) === 0) {
             $this->setDecorators([
                 'ViewHelper',
                 'Placeholder',
@@ -68,7 +74,7 @@ class Application_Form_Element_CollectionAutoComplete extends \Zend_Form_Element
                 'Errors',
                 'ElementHtmlTag',
                 ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
             ]);
         }
     }

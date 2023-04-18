@@ -1,4 +1,47 @@
 # OPUS 4 Release Notes
+
+## Release 4.8 - 2023-04-25
+
+### PHP 8 Kompatibilität
+
+OPUS 4.8 wurde mit PHP 7.1 und mit PHP 8.1 getestet. Diese Version ist
+noch nicht mit PHP 8.2 kompatibel.
+
+### Frontdoor
+
+GND-Schlagwörter mit ExternalKey werden nun mit Link zur GND angezeigt.
+
+### Enrichments
+
+Die maximale Größe für Optionen von EnrichmentKeys wurde auf 15000 erhöht,
+um längere Select-Listen zu erlauben. Das ist eine temporäre Maßnahme. Das 
+Enrichment-System wird sich mit dem Umbau der Datenbankanbindung weiter 
+verändern.
+
+--
+
+## Patch Release 4.7.1.2 - 2022-12-13
+
+ORCID und GND-ID werden jetzt in XMetaDissPlus für die Rollen `Author`,
+`Advisor`, `Referee` and `Editor` ausgegeben. 
+
+Ein Bug, der beim seitenweisen Export von Suchergebnissen unter Umständen
+für eine leere Export-Datei gesorgt hat, wurde beseitigt.
+
+--
+
+## Patch Release 4.7.1.1 - 2022-07-12
+
+Die Sprachen im Konfigurationsparameter `supportedLanguages` werden nun 
+automatisch getrimmt, um Leerzeichen zu entfernen. Die Leerzeichen hätten 
+Probleme beim Update verursachen können, wenn Namen für CollectionRoles 
+mit Sonderzeichen bereinigt werden müssen. Die Bereinigung wurde bereits 
+mit OPUS 4.7 ins Update integriert. 
+
+Für 4.7.1 Instanzen ist diese Änderung nicht relevant und kann einfach 
+mit `git pull` übernommen werden. Ältere Instanzen müssten dem normalen
+Update-Prozess folgen.
+
 ---
 
 ## Release 4.7.1 2022-03-24

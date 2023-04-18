@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Model\NotFoundException;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
 use Opus\Common\Repository;
 
 /**
@@ -42,13 +41,13 @@ use Opus\Common\Repository;
 
 $host = 'opus4web.zib.de';
 $port = '8984';
-$app = 'solr/opus';
+$app  = 'solr/opus';
 
 $solrServer = new Apache_Solr_Service($host, $port, $app);
 
 $docFinder = Repository::getInstance()->getDocumentFinder();
 
-$overallNumOfFulltexts = 0;
+$overallNumOfFulltexts        = 0;
 $numOfNonExtractableFulltexts = 0;
 
 foreach ($docFinder->getIds() as $id) {
@@ -61,7 +60,7 @@ foreach ($docFinder->getIds() as $id) {
     }
 
     $files = $d->getFile();
-    if (count($files) == 0) {
+    if (count($files) === 0) {
         continue;
     }
 
@@ -71,7 +70,7 @@ foreach ($docFinder->getIds() as $id) {
         try {
             $response = $solrServer->extract(
                 $file->getPath(),
-                [ 'extractOnly' => 'true', 'extractFormat' => 'text' ]
+                ['extractOnly' => 'true', 'extractFormat' => 'text']
             );
         } catch (Exception $e) {
             echo "error while extracting full text for document # " . $d->getId() . " (file name : "
@@ -79,7 +78,8 @@ foreach ($docFinder->getIds() as $id) {
             $numOfNonExtractableFulltexts++;
             continue;
         }
-        if (is_null($response->getRawResponse()) || strlen(trim($response->getRawResponse())) == 0) {
+        $rawResponse = $response->getRawResponse();
+        if ($rawResponse === null || strlen(trim($rawResponse)) === 0) {
             echo "non-extractable full text for document # " . $d->getId() . " (file name: "
                 . $file->getPath() . " )\n";
             $numOfNonExtractableFulltexts++;

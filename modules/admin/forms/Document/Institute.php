@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,44 +25,41 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
+use Opus\Common\Model\ModelException;
+use Opus\Common\Model\ModelInterface;
+use Opus\Common\Model\NotFoundException;
 use Opus\Model\Dependent\Link\DocumentDnbInstitute;
-use Opus\Model\NotFoundException;
-use Opus\Model\Dependent\Link\AbstractLinkModel;
 
 /**
  * Unterformular fuer Institute.
  *
- * @category    Application
- * @package     Module_Admin
- * @subpackage  Form_Document
+ * TODO BUG DocumentDnbInstitute is Framework class - need a Common replacement
  */
 class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
 {
+    public const ROLE_PUBLISHER = 'publisher';
 
-    const ROLE_PUBLISHER = 'publisher';
+    public const ROLE_GRANTOR = 'grantor';
 
-    const ROLE_GRANTOR = 'grantor';
+    public const ELEMENT_DOC_ID = 'Id';
 
-    const ELEMENT_DOC_ID = 'Id';
+    public const ELEMENT_INSTITUTE = 'Institute';
 
-    const ELEMENT_INSTITUTE = 'Institute';
+    /** @var string ROLE_GRANTOR or ROLE_PUBLISHER */
+    private $role;
 
     /**
-     * @var string ROLE_GRANTOR or ROLE_PUBLISHER
+     * @param string     $role
+     * @param array|null $options
      */
-    private $_role;
-
     public function __construct($role, $options = null)
     {
-        $this->_role = $role;
+        $this->role = $role;
         parent::__construct($options);
     }
 
@@ -71,7 +69,7 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
 
         $this->addElement('Hidden', self::ELEMENT_DOC_ID);
 
-        switch ($this->_role) {
+        switch ($this->role) {
             case self::ROLE_PUBLISHER:
                 $this->addElement('Publisher', self::ELEMENT_INSTITUTE);
                 break;
@@ -79,10 +77,13 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
                 $this->addElement('Grantor', self::ELEMENT_INSTITUTE);
                 break;
             default:
-                throw new Application_Exception(__METHOD__ . ' Unknown role \'' . $this->_role . '\'.');
+                throw new Application_Exception(__METHOD__ . ' Unknown role \'' . $this->role . '\'.');
         }
     }
 
+    /**
+     * @param ModelInterface $link
+     */
     public function populateFromModel($link)
     {
         $linkId = $link->getId();
@@ -91,13 +92,13 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * @param $model AbstractLinkModel
+     * @param ModelInterface $link
      */
     public function updateModel($link)
     {
         $instituteId = $this->getElement(self::ELEMENT_INSTITUTE)->getValue();
         try {
-            $institute = new DnbInstitute($instituteId);
+            $institute = DnbInstitute::get($instituteId);
 
             $link->setModel($institute);
         } catch (NotFoundException $omnfe) {
@@ -105,6 +106,10 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
         }
     }
 
+    /**
+     * @return DocumentDnbInstitute
+     * @throws ModelException
+     */
     public function getModel()
     {
         $docId = $this->getElement(self::ELEMENT_DOC_ID)->getValue();
@@ -113,7 +118,7 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
             $linkId = null;
         } else {
             $instituteId = $this->getElement(self::ELEMENT_INSTITUTE)->getValue();
-            $linkId = [$docId, $instituteId, $this->_role];
+            $linkId      = [$docId, $instituteId, $this->role];
         }
 
         try {

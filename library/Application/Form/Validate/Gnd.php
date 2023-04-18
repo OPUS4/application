@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,46 +25,45 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Validate_Gnd extends \Zend_Validate_Abstract
-{
 
+class Application_Form_Validate_Gnd extends Zend_Validate_Abstract
+{
     /**
      * Error message for numbers that are too long.
      */
-    const NOT_VALID_FORMAT = 'notValidFormat';
+    public const NOT_VALID_FORMAT = 'notValidFormat';
 
     /**
      * Error message for numbers that have an invalid check digit.
      */
-    const NOT_VALID_CHECKSUM = 'notValidChecksum';
+    public const NOT_VALID_CHECKSUM = 'notValidChecksum';
 
     /**
      * Pattern for format checking.
      */
-    const PATTERN = '/^[1-9]\d{6,10}[0-9X]/';
+    public const PATTERN = '/^[1-9]\d{6,10}[0-9X]/';
 
     /**
      * Translation keys for validation errors.
      *
      * @var array
+     * @phpcs:disable
      */
     protected $_messageTemplates = [
-        self::NOT_VALID_FORMAT => 'validation_error_person_gnd',
-        self::NOT_VALID_CHECKSUM => 'validation_error_person_gnd_checksum'
+        self::NOT_VALID_FORMAT   => 'validation_error_person_gnd',
+        self::NOT_VALID_CHECKSUM => 'validation_error_person_gnd_checksum',
     ];
+    // @phpcs:enable
 
     /**
      * Returns true if the gnd identifier can be validated.
      *
-     * @param  mixed $value
-     * @return boolean
-     * @throws Zend_Validate_Exception If validation of $value is impossible
+     * @param  string $value
+     * @return bool
+     * @throws Zend_Validate_Exception If validation of $value is impossible.
      */
     public function isValid($value)
     {
@@ -72,7 +72,7 @@ class Application_Form_Validate_Gnd extends \Zend_Validate_Abstract
             return false;
         }
 
-        if (self::generateCheckDigit(substr($value, 0, strlen($value) - 1)) != substr($value, -1)) {
+        if (self::generateCheckDigit(substr($value, 0, strlen($value) - 1)) !== substr($value, -1)) {
             $this->_error(self::NOT_VALID_CHECKSUM);
             return false;
         }
@@ -82,18 +82,21 @@ class Application_Form_Validate_Gnd extends \Zend_Validate_Abstract
 
     /**
      * Calculates the GND check digit.
+     *
+     * @param string $number
+     * @return string
      */
     public static function generateCheckDigit($number)
     {
-        $total = 0;
+        $total  = 0;
         $weight = 11 - (10 - strlen($number));
         for ($i = 0; $i < strlen($number); $i++) {
-            $digit = intval($number{$i});
+            $digit  = intval($number[$i]);
             $total += $digit * $weight;
             $weight--;
         }
         $remainder = $total % 11;
-        $result = (11 - $remainder) % 11;
-        return $result == 10 ? "X" : (string) $result;
+        $result    = (11 - $remainder) % 11;
+        return $result === 10 ? "X" : (string) $result;
     }
 }

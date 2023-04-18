@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,21 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Admin_InfoControllerTest
- *
  * @covers Admin_InfoController
  */
 class Admin_InfoControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function testIndexDisplayVersion()
@@ -59,11 +55,11 @@ class Admin_InfoControllerTest extends ControllerTestCase
         $this->useEnglish();
 
         // set version that would otherwise be retrieved from server
-        $versionHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('version');
+        $versionHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
         $versionHelper->setVersion('4.6');
 
-        $config = $this->getConfig();
-        $oldVersion = $config->version;
+        $config          = $this->getConfig();
+        $oldVersion      = $config->version;
         $config->version = '4.5-TEST';
         $this->dispatch('admin/info/update');
         $config->version = $oldVersion;
@@ -80,7 +76,7 @@ class Admin_InfoControllerTest extends ControllerTestCase
     public function testVersionWithCurrentVersion()
     {
         $this->useEnglish();
-        $helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('version');
+        $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
         $helper->setVersion($this->getConfig()->version);
 
         $this->dispatch('admin/info/update');

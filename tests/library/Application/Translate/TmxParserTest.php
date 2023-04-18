@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Translate_TmxParserTest extends ControllerTestCase
 {
-
     public function testParse()
     {
         $path = APPLICATION_PATH . '/tests/resources/tmx/testWithTags.tmx';
-        $tmx = file_get_contents($path);
+        $tmx  = file_get_contents($path);
 
         $parser = new Application_Translate_TmxParser();
 
@@ -45,26 +42,26 @@ class Application_Translate_TmxParserTest extends ControllerTestCase
 
         $this->assertCount(3, $translations);
         $this->assertEquals([
-            'testkey_cdata' => [
+            'testkey_cdata'      => [
                 'values' => [
                     'en' => '<span>Translation</span>',
-                    'de' => '&Uuml;bersetzung'
-                ]
+                    'de' => '&Uuml;bersetzung',
+                ],
             ],
-            'testkey' => [
+            'testkey'            => [
                 'module' => 'admin',
                 'values' => [
                     'en' => '<span class="highlight" name="title">Translation</span>',
-                    'de' => '&Uuml;bersetzung'
-                ]
+                    'de' => '&Uuml;bersetzung',
+                ],
             ],
             'testkey_whitespace' => [
                 'module' => 'home',
                 'values' => [
                     'en' => "line1\nline2\n  line3",
-                    'de' => "Zeile1\nZeile2\n  Zeile3"
-                ]
-            ]
+                    'de' => "Zeile1\nZeile2\n  Zeile3",
+                ],
+            ],
         ], $translations);
     }
 }

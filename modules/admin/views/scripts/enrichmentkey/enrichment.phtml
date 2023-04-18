@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Scripts_EnrichmentKey
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
-<?PHP if (! is_null($this->enrichments) && ! empty($this->enrichments)) : ?>
+<?PHP if ($this->enrichments !== null && ! empty($this->enrichments)) : ?>
 <table id="<?= $this->managed ? 'enrichmentkeyTableManaged' : 'enrichmentkeyTableUnmanaged' ?>">
     <thead>
     <tr>
@@ -48,7 +47,7 @@
         <tr class="<?= $this->element->getRowCssClass($enrichment)?>"
             title="<?= htmlspecialchars($this->translate($this->element->getRowTooltip($enrichment))) ?>">
             <td>
-                <?PHP if (is_null($enrichment->getId())) : ?>
+                <?PHP if ($enrichment->getId() === null) : ?>
                     <?= htmlspecialchars($enrichment->getDisplayName()) ?>
                 <?PHP else : ?>
                     <span class="strong">
@@ -65,13 +64,13 @@
                 <td>
                     <?= htmlspecialchars($enrichment->getType()) ?>
                     <?PHP $optionsPrintable = $enrichment->getOptionsPrintable();
-                    if (! is_null($optionsPrintable)) : ?>
+                    if ($optionsPrintable !== null) : ?>
                         <i title="<?= htmlspecialchars($optionsPrintable) ?>" class="fa fa-info-circle" aria-hidden="true"></i>
                     <?PHP endif ?>
                 </td>
             <?PHP endif ?>
             <td class="edit">
-                <?PHP if (is_null($enrichment->getId())) : ?>
+                <?PHP if ($enrichment->getId() === null) : ?>
                     <a href="<?= $this->url(['action' => 'new', 'id' => $enrichment->getName()]) ?>"
                     ><?= $this->translate('admin_button_create'); ?></a>
                 <?PHP elseif ($this->element->isModifiable($enrichment)) : ?>
@@ -80,7 +79,7 @@
                 <?PHP endif ?>
             </td>
             <td class="remove">
-                <?PHP if (is_null($enrichment->getId())) : ?>
+                <?PHP if ($enrichment->getId() === null) : ?>
                     <a href="<?= $this->url(['action' => 'removeFromDocs', 'id' => $enrichment->getName()]) ?>"
                     ><?= $this->translate('admin_button_remove_from_documents'); ?></a>
                 <?PHP elseif ($this->element->isModifiable($enrichment) && $this->element->isUsed($enrichment)) : ?>
@@ -90,18 +89,11 @@
             </td>
             <td>
                 <?PHP if ($this->element->isModifiable($enrichment)) : ?>
-                    <a href="<?= $this->url([
-                        'module' => 'setup',
-                        'controller' => 'language',
-                        'action' => 'index',
-                        'search' => $enrichment->getName(),
-                        'scope' => 'key'
-                    ]) ?>"
-                    ><?= $this->translate('admin_button_translations'); ?></a>
+                    <a href="<?= $this->url(['module' => 'setup', 'controller' => 'language', 'action' => 'index', 'search' => $enrichment->getName(), 'scope' => 'key']) ?>"><?= $this->translate('admin_button_translations'); ?></a>
                 <?PHP endif ?>
             </td>
             <td class="remove">
-                <?PHP if (! is_null($enrichment->getId()) && $this->element->isModifiable($enrichment)) : ?>
+                <?PHP if ($enrichment->getId() !== null && $this->element->isModifiable($enrichment)) : ?>
                     <a href="<?= $this->url(['action' => 'delete', 'id' => $enrichment->getId()]) ?>"
                     ><?= $this->translate('admin_button_remove'); ?></a>
                 <?PHP endif ?>

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Language;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Language;
 
 /**
  * Helper for printing the title of a OPUS document.
@@ -47,9 +46,10 @@ use Opus\Language;
  */
 class Application_View_Helper_DocumentTitle extends Application_View_Helper_Document_HelperAbstract
 {
-
     /**
      * Prints escaped main title of document.
+     *
+     * @param DocumentInterface|null $document
      * @return null|string
      */
     public function documentTitle($document = null)
@@ -62,7 +62,7 @@ class Application_View_Helper_DocumentTitle extends Application_View_Helper_Docu
             $title = $document->getMainTitle();
         }
 
-        if (! is_null($title)) {
+        if ($title !== null) {
             return htmlspecialchars($title->getValue());
         } else {
             return null;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Default
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Default_Bootstrap extends \Zend_Application_Module_Bootstrap
+/**
+ * @phpcs:disable PSR2.Methods.MethodDeclaration
+ */
+class Default_Bootstrap extends Zend_Application_Module_Bootstrap
 {
-
     /**
      * Add prefix for custom controller helper.
      *
@@ -43,11 +42,11 @@ class Default_Bootstrap extends \Zend_Application_Module_Bootstrap
      */
     public function _initControllerHelpers()
     {
-        \Zend_Controller_Action_HelperBroker::addPrefix('Application_Controller_Action_Helper');
+        Zend_Controller_Action_HelperBroker::addPrefix('Application_Controller_Action_Helper');
     }
 
     public function _initValidationNamespaces()
     {
-        \Zend_Validate::addDefaultNamespaces('Form_Validate');
+        Zend_Validate::addDefaultNamespaces('Form_Validate');
     }
 }

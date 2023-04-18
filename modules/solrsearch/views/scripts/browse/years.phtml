@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <h2><?= htmlspecialchars($this->translate('browse_year_title')) ?></h2>
@@ -41,15 +39,9 @@
     <ul class="nav browsing">
     <?php foreach ($this->facetitems as $facetitem) : ?>
         <li>
-            <a href="<?= $this->url([
-                    'module' => 'solrsearch', 'controller' => 'index', 'action' => 'search',
-                'searchtype' => 'simple', 'query' => '*:*', 'browsing' => 'true', 'yearfq' => $facetitem->getText()
-            ], null, true) ?>"><?= htmlspecialchars($this->translate($facetitem->getText())) ?></a>
+            <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'simple', 'query' => '*:*', 'browsing' => 'true', 'yearfq' => $facetitem->getText()], null, true) ?>"><?= htmlspecialchars($this->translate($facetitem->getText())) ?></a>
             &nbsp;(<?= $facetitem->getCount() ?>)
-            <a href="<?= $this->url([
-                    'module' => 'rss', 'controller' => 'index', 'action' => 'index',
-                'searchtype' => 'simple', 'query' => '*:*', 'yearfq' => $facetitem->getText()
-            ], null, true) ?>" class="rss" type="application/rss+xml">
+            <a href="<?= $this->url(['module' => 'rss', 'controller' => 'index', 'action' => 'index', 'searchtype' => 'simple', 'query' => '*:*', 'yearfq' => $facetitem->getText()], null, true) ?>" class="rss" type="application/rss+xml">
                 <img src="<?= $this->layoutPath() ?>/img/feed_small.png" width="12" height="12"
                      alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" />
             </a>

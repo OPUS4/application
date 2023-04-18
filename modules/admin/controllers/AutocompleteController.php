@@ -26,11 +26,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 use Opus\Enrichment\AbstractType;
 
 /**
@@ -45,7 +45,6 @@ use Opus\Enrichment\AbstractType;
  */
 class Admin_AutocompleteController extends Application_Controller_ModuleAccess
 {
-
     public function init()
     {
         parent::init();
@@ -54,7 +53,6 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
 
         $this->getResponse()->setHeader('Content-Type', 'application/json');
     }
-
 
     public function subjectAction()
     {
@@ -76,7 +74,7 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
         $data = [];
 
         foreach ($roles as $role) {
-            $translated = $this->view->translate('default_collection_role_' . $role->getOaiName());
+            $translated           = $this->view->translate('default_collection_role_' . $role->getOaiName());
             $data[$role->getId()] = $translated;
         }
 
@@ -92,7 +90,7 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
 
         if ($term !== null) {
             $provider = new Application_Data_CollectionProvider();
-            $data = $provider->getValues($term);
+            $data     = $provider->getValues($term);
         }
 
         echo json_encode($data);
@@ -103,13 +101,13 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
         $description = '';
 
         $typeName = $this->getRequest()->getParam('typeName');
-        if (! is_null($typeName) && $typeName !== '') {
+        if ($typeName !== null && $typeName !== '') {
             $typeName = 'Opus\\Enrichment\\' . $typeName;
             $allTypes = AbstractType::getAllEnrichmentTypes(true);
             if (in_array($typeName, $allTypes)) {
-                $typeObj = new $typeName();
+                $typeObj         = new $typeName();
                 $typeDescription = $typeObj->getDescription();
-                if (! is_null($typeDescription) && $typeDescription !== '') {
+                if ($typeDescription !== null && $typeDescription !== '') {
                     $description = $this->view->translate($typeDescription);
                 }
             }

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,41 +25,36 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Unterformular fuer Subjects eines bestimmten Typs im Metadaten-Formular.
  *
  * Diese Klasse überschreibt ein paar Funktion von Admin_Form_Document_MultiSubForm um Unterformulare vom richtigen Typ
  * zu verwenden und die richtigen Werte aus dem Modell zu holen.
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
 {
-
     /**
      * Der Schlagworttyp für den dieses Unterformular verwendet wird.
+     *
      * @var string
      */
-    private $_subjectType;
+    private $subjectType;
 
     /**
      * Konstruiert ein Unterformular für Schlagwörter eines bestimmten Typs.
-     * @param string $type Schlagworttyp (z.B. 'swd', 'psyndex' usw.)
-     * @param mixed $options
+     *
+     * @param string     $type Schlagworttyp (z.B. 'swd', 'psyndex' usw.)
+     * @param null|mixed $options
      */
     public function __construct($type, $options = null)
     {
-        $this->_subjectType = $type;
+        $this->subjectType = $type;
 
         $validator = null;
 
@@ -90,16 +86,17 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
     {
         parent::init();
 
-        $this->setLegend('admin_document_section_subject' . $this->_subjectType);
+        $this->setLegend('admin_document_section_subject' . $this->subjectType);
     }
 
     /**
      * Liefert den Schlagworttyp für das Formular zurück.
+     *
      * @return string Schlagworttyp
      */
     public function getSubjectType()
     {
-        return $this->_subjectType;
+        return $this->subjectType;
     }
 
     /**
@@ -109,7 +106,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
      * Schlagwoertern nicht passieren soll, da die Werte aus mehreren MultiSubForm-Formularen zusammengesammelt werden
      * muessen.
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      */
     public function updateModel($document)
     {
@@ -118,21 +115,22 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
 
     /**
      * Erzeugt neues Unterformular Instanz fuer den entsprechenden Schlagworttyp.
-     * @return \Admin_Form_Document_Subject
+     *
+     * @return Admin_Form_Document_Subject
      */
     public function createNewSubFormInstance()
     {
-        if ($this->_subjectType == 'swd') {
+        if ($this->subjectType === 'swd') {
             return new Admin_Form_Document_Subject('swd', 'deu');
         } else {
-            return new Admin_Form_Document_Subject($this->_subjectType);
+            return new Admin_Form_Document_Subject($this->subjectType);
         }
     }
 
     /**
      * Liefert die Schlagwoerter mit dem richtigen Typ.
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @return array
      */
     public function getFieldValues($document)
@@ -142,7 +140,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
         $subjects = [];
 
         foreach ($values as $value) {
-            if ($value->getType() == $this->_subjectType) {
+            if ($value->getType() === $this->subjectType) {
                 $subjects[] = $value;
             }
         }

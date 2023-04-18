@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Form for editing enrichments.
@@ -44,17 +42,20 @@ use Opus\Document;
  */
 class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_MultiSubForm
 {
-
     /**
      * Es wurde ein neuer Enrichmentkey im Select-Formularfeld ausgewählt.
      * Dieser Klick löst einen Formular-Submit aus (mittels JavaScript umgesetzt).
      */
-    const ELEMENT_SELECTION_CHANGED = "SelectionChanged";
+    public const ELEMENT_SELECTION_CHANGED = "SelectionChanged";
 
+    /**
+     * @param DocumentInterface $document
+     * @return array
+     */
     public function getFieldValues($document)
     {
         $value = parent::getFieldValues($document);
-        if (! is_null($value)) {
+        if ($value !== null) {
             $value = $this->filterEnrichments($value);
         }
         return $value;
@@ -67,8 +68,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
      * werden bei den DOI/URN-Enrichments auch konfligierende Eintragungen
      * zwischen Enrichment-Wert und Checkbox-Zustand vermieden)
      *
-     * @param $enrichments
-     *
+     * @param array $enrichments
      * @return array
      */
     private function filterEnrichments($enrichments)
@@ -76,7 +76,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
         $result = [];
         foreach ($enrichments as $enrichment) {
             $keyName = $enrichment->getKeyName();
-            if ($keyName == 'opus.doi.autoCreate' || $keyName == 'opus.urn.autoCreate') {
+            if ($keyName === 'opus.doi.autoCreate' || $keyName === 'opus.urn.autoCreate') {
                 continue;
             }
             $result[] = $enrichment;
@@ -91,7 +91,6 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
      *
      * @param array $data
      * @param array $context
-     *
      * @return array|string|null
      */
     public function processPost($data, $context)
@@ -133,8 +132,6 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
      * Ändert den Enrichment-Key und das zugehörige Eingabefeld für den Enrichment-Wert
      * auf Basis des zugeordneten Enrichment-Types. Ist für den Enrichment-Key
      * kein Enrichment-Type angegeben, so wird ein einfaches Textfeld verwendet.
-     *
-     * @return string
      */
     protected function processPostSelectionChanged()
     {
@@ -143,7 +140,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
             $subForm = reset($subForms);
             // das erste Unterformular auswählen als Sprungziel nach dem Neuladen
             // des Metadatenformulars
-            $this->_addAnchor($subForm);
+            $this->addAnchor($subForm);
         }
     }
 
@@ -152,7 +149,7 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
      * übergebenen Documents. Diese Methode wird immer dann aufgerufen,
      * wenn das Metadatenformular erstmalig (per GET) aufgerufen wird.
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      */
     public function populateFromModel($document)
     {
@@ -172,8 +169,8 @@ class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_Mul
      * der zugehörige Enrichment-Type abgeleitet werden. Daher musste die Methode
      * überschrieben werden.
      *
-     * @param      $post Variablen aus dem POST-Request
-     * @param null $document
+     * @param array                  $post Variablen aus dem POST-Request
+     * @param DocumentInterface|null $document
      */
     public function constructFromPost($post, $document = null)
     {

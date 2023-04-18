@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,29 +25,27 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Ramin Khorsandi <khorsandi@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\CollectionInterface;
+
 /**
- * Class Admin_Form_Collection.
- *
  * OPUSVIER-4071 Element 'Theme' is disabled, because it is currently unused.
  */
 class Admin_Form_Collection extends Application_Form_Model_Abstract
 {
-
-    const ELEMENT_NAME = 'Name';
-    const ELEMENT_NUMBER = 'Number';
-    const ELEMENT_VISIBLE = 'Visible';
-    const ELEMENT_VISIBLE_PUBLISH = 'VisiblePublish';
-    const ELEMENT_OAI_SUBSET = 'OaiSubset';
+    public const ELEMENT_NAME            = 'Name';
+    public const ELEMENT_NUMBER          = 'Number';
+    public const ELEMENT_VISIBLE         = 'Visible';
+    public const ELEMENT_VISIBLE_PUBLISH = 'VisiblePublish';
+    public const ELEMENT_OAI_SUBSET      = 'OaiSubset';
     // const ELEMENT_THEME = 'Theme';
 
+    /**
+     * @throws Zend_Form_Exception
+     */
     public function init()
     {
         parent::init();
@@ -66,6 +65,9 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract
         $this->removeElement('Cancel');
     }
 
+    /**
+     * @param CollectionInterface $collection
+     */
     public function populateFromModel($collection)
     {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($collection->getId());
@@ -77,6 +79,9 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract
         // $this->getElement(self::ELEMENT_THEME)->setValue($collection->getTheme());
     }
 
+    /**
+     * @param CollectionInterface $collection
+     */
     public function updateModel($collection)
     {
         $collection->setName($this->getElementValue(self::ELEMENT_NAME));

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,33 +25,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Job;
-use Opus\Job\Runner;
+use Opus\Common\Job;
 use Opus\Common\Log;
+use Opus\Job\Runner;
 
 /**
- * Class Admin_IndexmaintenanceControllerTest
- *
  * @covers Admin_IndexmaintenanceController
  */
 class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'all';
 
-    public function tearDown()
+    public function tearDown(): void
     {
         // Cleanup of Log File
-        $config = $this->getConfig();
+        $config   = $this->getConfig();
         $filename = $config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
         if (file_exists($filename)) {
             unlink($filename);
@@ -145,7 +142,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
 
         $baseUrl = $this->getRequest()->getBaseUrl();
-        $body = $this->getResponse()->getBody();
+        $body    = $this->getResponse()->getBody();
         $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
         // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
         // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
@@ -156,7 +153,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
 
         $baseUrl = $this->getRequest()->getBaseUrl();
-        $body = $this->getResponse()->getBody();
+        $body    = $this->getResponse()->getBody();
         $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
         // TODO $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
         // TODO $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
@@ -172,10 +169,13 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->setAsyncMode(self::CONFIG_VALUE_FALSE);
     }
 
+    /**
+     * @param string $value
+     */
     private function setAsyncMode($value)
     {
         $this->adjustConfiguration([
-            'runjobs' => ['asynchronous' => $value]
+            'runjobs' => ['asynchronous' => $value],
         ]);
     }
 
@@ -189,10 +189,13 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->setAsyncIndexmaintenanceMode(self::CONFIG_VALUE_FALSE);
     }
 
+    /**
+     * @param string $value
+     */
     private function setAsyncIndexmaintenanceMode($value)
     {
         $this->adjustConfiguration([
-            'runjobs' => ['indexmaintenance' => ['asynchronous' => $value]]
+            'runjobs' => ['indexmaintenance' => ['asynchronous' => $value]],
         ]);
     }
 
@@ -286,7 +289,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->assertResponseCode(200, 'foo');
 
         $baseUrl = $this->getRequest()->getBaseUrl();
-        $body = $this->getResponse()->getBody();
+        $body    = $this->getResponse()->getBody();
         $this->assertContains('div class="opprogress"', $body);
         $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
         // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
@@ -303,13 +306,13 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
         $jobs = Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL]);
         if (count($jobs) > 0) {
-            $job = $jobs[0];
+            $job     = $jobs[0];
             $message = 'at least one unexpected job found (Label: \'%s\', State: \'%s\', Data: \'%s\', Errors: \'%s\, SHA1 Hash: \'%s\')';
-            $label = $job->getLabel();
-            $state = $job->getState();
-            $data = $job->getData();
-            $errors = $job->getErrors();
-            $hash = $job->getSha1Id();
+            $label   = $job->getLabel();
+            $state   = $job->getState();
+            $data    = $job->getData();
+            $errors  = $job->getErrors();
+            $hash    = $job->getSha1Id();
             $this->fail(sprintf($message, $label, $state, $data, $errors, $hash));
         }
 
@@ -322,7 +325,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->assertResponseCode(200, 'bar');
 
         $baseUrl = $this->getRequest()->getBaseUrl();
-        $body = $this->getResponse()->getBody();
+        $body    = $this->getResponse()->getBody();
         $this->assertNotContains('div class="opprogress"', $body);
         $this->assertContains('pre class="opoutput"', $body);
         $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -35,12 +34,13 @@
  */
 class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation', 'mainMenu'];
 
-    private $_helper;
+    /** @var Application_View_Helper_LanguageSelector */
+    private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -48,14 +48,14 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase
 
         $this->dispatch('/home'); // TODO needed for proper routing setup (avoidable?)
 
-        $this->_helper = new Application_View_Helper_LanguageSelector();
+        $this->helper = new Application_View_Helper_LanguageSelector();
 
-        $this->_helper->setView($this->getView());
+        $this->helper->setView($this->getView());
     }
 
     public function testLanguageConfiguredAndInResourcesGerman()
     {
-        $result = $this->_helper->languageSelector();
+        $result = $this->helper->languageSelector();
 
         $this->assertCount(1, $result);
 
@@ -72,7 +72,7 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase
     {
         $this->useGerman();
 
-        $result = $this->_helper->languageSelector();
+        $result = $this->helper->languageSelector();
 
         $this->assertCount(1, $result);
 
@@ -92,7 +92,7 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase
     {
         $this->adjustConfiguration(['supportedLanguages' => 'de,en,ru']);
 
-        $result = $this->_helper->languageSelector();
+        $result = $this->helper->languageSelector();
 
         $this->assertCount(1, $result);
 
@@ -112,7 +112,7 @@ class Application_View_Helper_LanguageSelectorTest extends ControllerTestCase
     {
         $this->adjustConfiguration(['supportedLanguages' => 'en']);
 
-        $result = $this->_helper->languageSelector();
+        $result = $this->helper->languageSelector();
 
         $this->assertCount(0, $result);
     }

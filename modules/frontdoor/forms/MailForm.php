@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Wolfgang Filter <wolfgang.filter@ub.uni-stuttgart.de>
- * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -35,53 +32,50 @@
 /**
  * class to built the mail mask for document recommendation via e-mail
  */
-class Frontdoor_Form_MailForm extends \Zend_Form
+class Frontdoor_Form_MailForm extends Zend_Form
 {
-
     /**
      * Build easy mail form
-     *
-     * @return void
      */
     public function init()
     {
         // Create and configure query field elements:
-        $recipient = new \Zend_Form_Element_Text('recipient');
+        $recipient = new Zend_Form_Element_Text('recipient');
         $recipient->setRequired(false);
         $recipient->setLabel('frontdoor_recipientname');
 
-        $recipientMail = new \Zend_Form_Element_Text('recipient_mail');
+        $recipientMail = new Zend_Form_Element_Text('recipient_mail');
         $recipientMail->setRequired(true);
         $recipientMail->setLabel('frontdoor_recipientmail');
 
-        $sender = new \Zend_Form_Element_Text('sender');
+        $sender = new Zend_Form_Element_Text('sender');
         $sender->setRequired(false);
         $sender->setLabel('frontdoor_sendername');
 
-        $senderMail = new \Zend_Form_Element_Text('sender_mail');
+        $senderMail = new Zend_Form_Element_Text('sender_mail');
         $senderMail->setRequired(false);
         $senderMail->setLabel('frontdoor_sendermail');
 
-        $message = new \Zend_Form_Element_Textarea('message');
+        $message = new Zend_Form_Element_Textarea('message');
         $message->setRequired(false);
         $message->setLabel('frontdoor_messagetext');
 
-        $title = new \Zend_Form_Element_Hidden('title');
+        $title   = new Zend_Form_Element_Hidden('title');
         $htmlTag = $title->getDecorator('htmlTag');
         $htmlTag->setOption('tag', 'div');
         $title->removeDecorator('label');
 
-        $docId = new \Zend_Form_Element_Hidden('doc_id');
+        $docId   = new Zend_Form_Element_Hidden('doc_id');
         $htmlTag = $docId->getDecorator('htmlTag');
         $htmlTag->setOption('tag', 'div');
         $docId->removeDecorator('label');
 
-        $docType = new \Zend_Form_Element_Hidden('doc_type');
+        $docType = new Zend_Form_Element_Hidden('doc_type');
         $htmlTag = $docType->getDecorator('htmlTag');
         $htmlTag->setOption('tag', 'div');
         $docType->removeDecorator('label');
 
-        $submit = new \Zend_Form_Element_Submit('frontdoor_send_recommendation');
+        $submit = new Zend_Form_Element_Submit('frontdoor_send_recommendation');
         $submit->setLabel('frontdoor_sendrecommendation');
 
         // Add elements to form:

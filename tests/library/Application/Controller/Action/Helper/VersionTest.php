@@ -25,25 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_Controller_Action_Helper
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2014-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_Controller_Action_Helper_VersionTest extends TestCase
 {
-
     public function testDirect()
     {
-        $helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('version');
+        $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
         $helper->setVersion('Opus-noVersion');
         $this->assertEquals('Opus-noVersion', $helper->direct());
     }
 
     public function testSetGetVersion()
     {
-        $helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('version');
+        $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
         $helper->setVersion('Opus-noVersion');
         $this->assertEquals('Opus-noVersion', $helper->getVersion());
     }

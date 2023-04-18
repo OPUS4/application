@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,30 +25,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionInterface;
+use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 use Opus\Common\Model\ModelException;
+use Opus\Common\Model\NotFoundException;
 
 class Solrsearch_Model_CollectionListTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testMissingCollectionId()
     {
-        $this->setExpectedException('Solrsearch_Model_Exception');
+        $this->expectException(Solrsearch_Model_Exception::class);
         new Solrsearch_Model_CollectionList(null);
     }
 
     public function testInvalidCollectionId()
     {
-        $this->setExpectedException('Solrsearch_Model_Exception');
+        $this->expectException(Solrsearch_Model_Exception::class);
         new Solrsearch_Model_CollectionList('');
     }
 
@@ -115,7 +116,7 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
 
         $this->assertGreaterThan(0, count($rootCollection->getChildren()));
         foreach ($rootCollection->getChildren() as $childCollection) {
-            if ($childCollection->getVisible() === '1') {
+            if ($childCollection->getVisible()) {
                 $collectionList = new Solrsearch_Model_CollectionList($childCollection->getId());
                 $this->assertFalse($collectionList->isRootCollection());
             }
@@ -132,13 +133,13 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
 
     public function testGetParentsOfChildOfRootCollection()
     {
-        $rootCollection = $this->getRootCollection(1);
+        $rootCollection   = $this->getRootCollection(1);
         $childCollections = $rootCollection->getChildren();
 
         foreach ($childCollections as $childCollection) {
-            if ($childCollection->getVisible() === '1') {
+            if ($childCollection->getVisible()) {
                 $collectionList = new Solrsearch_Model_CollectionList($childCollection->getId());
-                $parents = $collectionList->getParents();
+                $parents        = $collectionList->getParents();
                 $this->assertEquals(1, count($parents));
                 $this->assertEquals($rootCollection->getId(), $parents[0]->getId());
                 $this->assertEquals($rootCollection->getRole()->getId(), $parents[0]->getRole()->getId());
@@ -148,16 +149,16 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
 
     public function testGetParentsOfGrandchildOfRootCollection()
     {
-        $rootCollection = $this->getRootCollection(1);
+        $rootCollection   = $this->getRootCollection(1);
         $childCollections = $rootCollection->getChildren();
 
         foreach ($childCollections as $childCollection) {
-            if ($childCollection->getVisible() === '1') {
+            if ($childCollection->getVisible()) {
                 $grandchildCollections = $childCollection->getChildren();
                 foreach ($grandchildCollections as $grandchildCollection) {
-                    if ($grandchildCollection->getVisible() === '1') {
+                    if ($grandchildCollection->getVisible()) {
                         $collectionList = new Solrsearch_Model_CollectionList($grandchildCollection->getId());
-                        $parents = $collectionList->getParents();
+                        $parents        = $collectionList->getParents();
                         $this->assertEquals(2, count($parents));
                         $this->assertEquals($rootCollection->getId(), $parents[0]->getId());
                         $this->assertEquals($rootCollection->getRole()->getId(), $parents[0]->getRole()->getId());
@@ -174,11 +175,11 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
         $rootCollection = $this->getRootCollection(1);
 
         $collectionList = new Solrsearch_Model_CollectionList($rootCollection->getId());
-        $children = $collectionList->getChildren();
+        $children       = $collectionList->getChildren();
 
         $childrenPointer = 0;
         foreach ($rootCollection->getChildren() as $childCollection) {
-            if ($childCollection->getVisible() === '1') {
+            if ($childCollection->getVisible()) {
                 $this->assertEquals($children[$childrenPointer], $childCollection);
                 $childrenPointer++;
             }
@@ -196,7 +197,7 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
     {
         $rootCollection = $this->getRootCollection(1);
         foreach ($rootCollection->getChildren() as $childCollection) {
-            if ($childCollection->getVisible() === '1') {
+            if ($childCollection->getVisible()) {
                 $collectionList = new Solrsearch_Model_CollectionList($childCollection->getId());
                 $collectionList->getTitle();
                 return;
@@ -233,7 +234,7 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
      */
     public function testGetChildrenWithoutEmptyCollections()
     {
-        $collRole = CollectionRole::fetchByName('msc');
+        $collRole             = CollectionRole::fetchByName('msc');
         $hideEmptyCollections = $collRole->getHideEmptyCollections();
         $collRole->setHideEmptyCollections(1);
         $collRole->store();
@@ -252,15 +253,24 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
         $collRole->store();
     }
 
+    /**
+     * @param int $collectionRoleId
+     * @return CollectionRoleInterface
+     * @throws NotFoundException
+     */
     private function getCollectionRole($collectionRoleId)
     {
-        $collectionRole = new CollectionRole($collectionRoleId);
+        $collectionRole = CollectionRole::get($collectionRoleId);
         $this->assertNotNull($collectionRole);
         $this->assertEquals('1', $collectionRole->getVisible());
         $this->assertEquals('1', $collectionRole->getVisibleBrowsingStart());
         return $collectionRole;
     }
 
+    /**
+     * @param int $collectionRoleId
+     * @return CollectionInterface
+     */
     private function getRootCollection($collectionRoleId)
     {
         $rootCollection = $this->getCollectionRole($collectionRoleId)->getRootCollection();
@@ -269,11 +279,15 @@ class Solrsearch_Model_CollectionListTest extends ControllerTestCase
         return $rootCollection;
     }
 
+    /**
+     * @param int $collectionRoleId
+     * @return null|CollectionInterface
+     */
     private function getFirstNonRootCollection($collectionRoleId)
     {
         $rootCollection = $this->getRootCollection($collectionRoleId);
-        $children = $rootCollection->getChildren();
-        if (count($children) == 0) {
+        $children       = $rootCollection->getChildren();
+        if (count($children) === 0) {
             return null;
         }
         return $children[0];

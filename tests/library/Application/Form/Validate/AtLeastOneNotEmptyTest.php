@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,41 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Class Application_Form_Validate_AtLeastOneNotEmptyTest
- *
- * @category    Application Unit Test
- * @package     Form_Validate
- */
 class Application_Form_Validate_AtLeastOneNotEmptyTest extends TestCase
 {
+    /** @var Application_Form_Validate_AtLeastOneNotEmpty */
+    private $validator;
 
-    private $_validator;
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->_validator = new Application_Form_Validate_AtLeastOneNotEmpty();
-        $this->_validator->addElement('name');
-        $this->_validator->addElement('number');
+        $this->validator = new Application_Form_Validate_AtLeastOneNotEmpty();
+        $this->validator->addElement('name');
+        $this->validator->addElement('number');
     }
 
     public function testIsValidFalse()
     {
-        $this->assertFalse($this->_validator->isValid(null, []));
+        $this->assertFalse($this->validator->isValid(null, []));
     }
 
     public function testIsValidTrue()
     {
         // TODO use case? $this->assertTrue($this->_validator->isValid('value', array()));
-        $this->assertTrue($this->_validator->isValid(null, ['name' => 'Test']));
-        $this->assertTrue($this->_validator->isValid(null, ['number' => '12']));
+        $this->assertTrue($this->validator->isValid(null, ['name' => 'Test']));
+        $this->assertTrue($this->validator->isValid(null, ['number' => '12']));
     }
 }

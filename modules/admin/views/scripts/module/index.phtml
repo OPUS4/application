@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <table>
@@ -41,13 +40,13 @@
         </tr>
     </thead>
 <?php foreach ($this->modules as $module) : ?>
-    <tr class="<?= ($module->isPublic() ? 'public' : 'closed') ?>">
+    <tr class="<?= $module->isPublic() ? 'public' : 'closed' ?>">
         <td><div class="opus-module-name"><?= $module->getName() ?></div>
             <div class="opus-module-description"><?= $this->translate($module->getDescription()) ?></div></td>
-        <td class="module-access <?= ($module->isPublic() ? 'public' : 'closed') ?>"
-            ><?= ($module->isPublic() ? $this->translate('admin_module_access_public') : $this->translate('admin_module_access_closed')) ?></td>
+        <td class="module-access <?= $module->isPublic() ? 'public' : 'closed' ?>"
+            ><?= $module->isPublic() ? $this->translate('admin_module_access_public') : $this->translate('admin_module_access_closed') ?></td>
         <td class="module-options"><?php if ($module->isConfigurable()) :
-?><a href="">Configure</a><?php
+            ?><a href="">Configure</a><?php
                                    endif; ?></td>
     </tr>
 <?php endforeach; ?>

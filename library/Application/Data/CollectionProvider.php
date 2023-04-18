@@ -30,18 +30,17 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
+use Opus\Common\Collection;
 
 class Application_Data_CollectionProvider
 {
-
     /**
      * Returns matching values as suggestions for autocomplete.
      *
      * value
      * extkey
      *
-     * @param $term
+     * @param string $term
      * @return array
      */
     public function getValues($term)

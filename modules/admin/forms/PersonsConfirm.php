@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,32 +25,27 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Person;
+use Opus\Common\Model\ModelInterface;
+use Opus\Common\Person;
 
 /**
- * Class Admin_Form_PersonsConfirm
- *
  * TODO use Application_Form_Abstract (actions group is missing in that case - move up?)
  */
 class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
 {
+    public const ELEMENT_BACK = 'Back';
 
-    const ELEMENT_BACK = 'Back';
+    public const SUBFORM_CHANGES = 'Changes';
 
-    const SUBFORM_CHANGES = 'Changes';
+    public const SUBFORM_DOCUMENTS = 'Documents';
 
-    const SUBFORM_DOCUMENTS = 'Documents';
+    public const RESULT_BACK = 'Back';
 
-    const RESULT_BACK = 'Back';
-
-    const ELEMENT_FORM_ID = 'FormId';
+    public const ELEMENT_FORM_ID = 'FormId';
 
     public function init()
     {
@@ -71,12 +67,12 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
         $back = $this->createElement('submit', self::ELEMENT_BACK, [
             'decorators' => [
                 'ViewHelper',
-                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'back-element']]
-            ]
+                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'back-element']],
+            ],
         ]);
         $this->addElement($back);
 
-        $actions = $this->getDisplayGroup('actions');
+        $actions  = $this->getDisplayGroup('actions');
         $elements = $actions->getElements();
 
         $actions->removeElement(self::ELEMENT_SAVE);
@@ -94,14 +90,23 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
         $this->addElement($formId);
     }
 
+    /**
+     * @param array $oldValues
+     */
     public function setOldValues($oldValues)
     {
         $this->getSubForm(self::SUBFORM_CHANGES)->setOldValues($oldValues);
     }
 
+    /**
+     * @param array $person
+     * @throws Zend_Form_Exception
+     */
     public function populateFromModel($person)
     {
-        $documentIds = Person::getPersonDocuments($person);
+        $persons = Person::getModelRepository();
+
+        $documentIds = $persons->getPersonDocuments($person);
 
         $docCount = count($documentIds);
 
@@ -109,25 +114,39 @@ class Admin_Form_PersonsConfirm extends Application_Form_Model_Abstract
         $subform->setDocuments($documentIds, $person);
         $subform->removeDecorator('fieldset');
         $subform->addDecorator('fieldset', [
-            'legend' => $this->getTranslator()->translate('admin_title_documents') . " ($docCount)"
+            'legend' => $this->getTranslator()->translate('admin_title_documents') . " ($docCount)",
         ]);
     }
 
+    /**
+     * @param array $changes
+     */
     public function setChanges($changes)
     {
         $this->getSubForm(self::SUBFORM_CHANGES)->setChanges($changes);
     }
 
+    /**
+     * @return int[]
+     */
     public function getDocuments()
     {
         return $this->getSubForm(self::SUBFORM_DOCUMENTS)->getSelectedDocuments();
     }
 
+    /**
+     * @param ModelInterface $model
+     */
     public function updateModel($model)
     {
         // TODO: Implement updateModel() method.
     }
 
+    /**
+     * @param array $post
+     * @param array $context
+     * @return string|null
+     */
     public function processPost($post, $context)
     {
         if (array_key_exists(self::ELEMENT_BACK, $post)) {

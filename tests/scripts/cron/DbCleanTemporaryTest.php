@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,34 +25,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Cronjob
- * @package     Tests
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once('CronTestCase.php');
-require_once('OpusDocumentMock.php');
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Model\ModelException;
+use Opus\Common\Model\NotFoundException;
 
-use Opus\Date;
-use Opus\Document;
-use Opus\Model\NotFoundException;
-
-/**
- *
- */
 class DbCleanTemporaryTest extends CronTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var DocumentInterface */
     private $doc;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->doc = new OpusDocumentMock();
+        $this->doc = Document::new();
+        $this->doc->setLifecycleListener(new DocumentLifecycleListenerMock());
         $this->doc->setServerState('temporary');
         $this->doc->store();
     }
@@ -63,7 +59,7 @@ class DbCleanTemporaryTest extends CronTestCase
         try {
             $doc = Document::get($this->doc->getId());
             $doc->delete();
-            $this->fail("expected Opus\Model\NotFoundException");
+            $this->fail("expected Opus\Common\Model\NotFoundException");
         } catch (NotFoundException $e) {
         }
     }
@@ -80,10 +76,15 @@ class DbCleanTemporaryTest extends CronTestCase
         }
     }
 
+    /**
+     * @param int $numDaysBeforeNow
+     * @throws ModelException
+     */
     private function changeDocumentDateModified($numDaysBeforeNow)
     {
         $date = new DateTime();
         $date->sub(new DateInterval("P{$numDaysBeforeNow}D"));
-        $this->doc->changeServerDateModified(new Date($date));
+        $this->doc->setServerDateModified(new Date($date));
+        $this->doc->store();
     }
 }

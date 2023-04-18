@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Update
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Translate\TranslateException;
 
 /**
  * Imports help files into database.
@@ -69,13 +69,12 @@
  */
 class Application_Update_ImportHelpFiles extends Application_Update_PluginAbstract
 {
-
+    /** @var bool */
     private $removeFilesEnabled = true;
 
-    private $helpPath = null;
+    /** @var string */
+    private $helpPath;
 
-    /**
-     */
     public function run()
     {
         // clean up help keys and move keys from home to help
@@ -115,8 +114,10 @@ class Application_Update_ImportHelpFiles extends Application_Update_PluginAbstra
 
         // find keys to move
         foreach ($translations as $key => $data) {
-            if (strpos($key, 'help_') === 0
-                    && ! in_array($key, ['help_content_contact', 'help_content_imprint'])) {
+            if (
+                strpos($key, 'help_') === 0
+                    && ! in_array($key, ['help_content_contact', 'help_content_imprint'])
+            ) {
                 $helpKeys[] = $key;
             }
         }
@@ -172,6 +173,12 @@ class Application_Update_ImportHelpFiles extends Application_Update_PluginAbstra
         return $files;
     }
 
+    /**
+     * @param string $key
+     * @param array  $files
+     * @param string $module
+     * @throws TranslateException
+     */
     public function importFiles($key, $files, $module)
     {
         $helpPath = $this->getHelpPath();
@@ -181,20 +188,21 @@ class Application_Update_ImportHelpFiles extends Application_Update_PluginAbstra
         foreach ($files as $lang => $file) {
             $path = $helpPath . $file;
             if (is_readable($path)) {
-                $content = file_get_contents($path);
+                $content       = file_get_contents($path);
                 $values[$lang] = $content;
                 $this->removeFile($path);
             } else {
                 // OPUSVIER-4304 Try to see if there is a file after all.
                 $this->log("Trying to resolve default file for key '$key' in language '$lang'.");
                 $prefix = 'help_content_';
-                if (substr($key, 0, strlen($prefix)) == $prefix) {
+                if (substr($key, 0, strlen($prefix)) === $prefix) {
                     $baseName = substr($key, strlen($prefix));
                     $fileName = "$baseName.{$lang}.txt";
-                    $path = $helpPath . $fileName;
+                    $path     = $helpPath . $fileName;
                     if (is_readable($path)) {
                         $this->log("Default file '$fileName' found.");
-                        $content = trim(file_get_contents($path));
+                        $content       = file_get_contents($path);
+                        $content       = trim($content ?: '');
                         $values[$lang] = $content;
                         $this->removeFile($path);
                     } else {
@@ -209,33 +217,52 @@ class Application_Update_ImportHelpFiles extends Application_Update_PluginAbstra
         $manager->setTranslation($key, $values, $module);
     }
 
+    /**
+     * @param bool $enabled
+     * @return $this
+     */
     public function setRemoveFilesEnabled($enabled)
     {
         $this->removeFilesEnabled = $enabled;
+        return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function isRemoveFilesEnabled()
     {
         return $this->removeFilesEnabled;
     }
 
+    /**
+     * @return string
+     */
     public function getHelpPath()
     {
-        if (is_null($this->helpPath)) {
+        if ($this->helpPath === null) {
             $this->helpPath = APPLICATION_PATH . '/application/configs/help/';
         }
 
         return $this->helpPath;
     }
 
+    /**
+     * @param string $path
+     * @return $this
+     */
     public function setHelpPath($path)
     {
         $this->helpPath = rtrim($path, '/') . '/';
+        return $this;
     }
 
+    /**
+     * @param string $path
+     */
     protected function removeFile($path)
     {
-        if ($this->isRemoveFilesEnabled() && is_writeable($path)) {
+        if ($this->isRemoveFilesEnabled() && is_writable($path)) {
             rename($path, $path . '.imported');
         }
     }

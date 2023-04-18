@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Unterformular fuer Subjects im Metadaten-Formular.
@@ -40,13 +38,9 @@ use Opus\Document;
  * das Feld "Subject" im Dokument zu aktualisieren.
  *
  * TODO Umgang mit alten Schlagwörtern mit unbekanntem Typ (siehe auch OPUSVIER-2604)
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
 {
-
     /**
      * Initialisiert Formular und fuegt Unterformulare fuer Schlagworttypen hinzu.
      */
@@ -57,8 +51,13 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
         $this->addSubForm(
             new Admin_Form_Document_SubjectType(
                 'swd',
-                ['columns' => [
-                [], ['label' => 'Opus_Subject_Value'], ['label' => 'ExternalKey']]]
+                [
+                    'columns' => [
+                        [],
+                        ['label' => 'Opus_Subject_Value'],
+                        ['label' => 'ExternalKey'],
+                    ],
+                ]
             ),
             'Swd'
         );
@@ -66,8 +65,13 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
         $this->addSubForm(
             new Admin_Form_Document_SubjectType(
                 'psyndex',
-                ['columns' => [
-                [], ['label' => 'Opus_Subject_Value'], ['label' => 'ExternalKey']]]
+                [
+                    'columns' => [
+                        [],
+                        ['label' => 'Opus_Subject_Value'],
+                        ['label' => 'ExternalKey'],
+                    ],
+                ]
             ),
             'Psyndex'
         );
@@ -75,8 +79,13 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
         $this->addSubForm(
             new Admin_Form_Document_SubjectType(
                 'uncontrolled',
-                ['columns' => [
-                [], ['label' => 'Opus_Subject_Value'], ['label' => 'ExternalKey']]]
+                [
+                    'columns' => [
+                        [],
+                        ['label' => 'Opus_Subject_Value'],
+                        ['label' => 'ExternalKey'],
+                    ],
+                ]
             ),
             'Uncontrolled'
         );
@@ -88,7 +97,8 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
 
     /**
      * Sammelt Schlagwoerter von Unterformularen ein und aktualisiert Dokument.
-     * @param Document $document
+     *
+     * @param DocumentInterface $document
      */
     public function updateModel($document)
     {
@@ -98,7 +108,7 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
 
         foreach ($subforms as $subform) {
             $subjectsWithType = $subform->getSubFormModels();
-            $subjects = array_merge($subjects, $subjectsWithType);
+            $subjects         = array_merge($subjects, $subjectsWithType);
         }
 
         $document->setSubject($subjects);

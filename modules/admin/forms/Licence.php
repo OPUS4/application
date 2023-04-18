@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,90 +24,86 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright Copyright (c) 2008, OPUS 4 development team
+ * @license   http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Licence;
-use Opus\Model\AbstractDb;
+use Opus\Common\Licence;
+use Opus\Common\LicenceInterface;
 
 /**
  * Formular fuer das Editieren und Anzeigen einer Lizenz.
  *
  * Die Klasse Licence enthaelt auch noch das Feld 'LinkSign'. Es gibt Ticket OPUSVIER-1492 fuer das Entfernen
  * dieses Feldes, daher wurde es in diesem Formular nicht mehr verwendet. TODO Kommentar entfernen
- *
- * @category    Application
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Admin_Form_Licence extends Application_Form_Model_Abstract
 {
-
     /**
      * Name von Formularelement fuer Aktivierungsstatus einer Lizenz.
      */
-    const ELEMENT_ACTIVE = 'Active';
+    public const ELEMENT_ACTIVE = 'Active';
 
     /**
      * Name von Formularelement fuer interne Kommentare zur Lizenz (Feld: CommentInternal).
      */
-    const ELEMENT_COMMENT_INTERNAL = 'CommentInternal';
+    public const ELEMENT_COMMENT_INTERNAL = 'CommentInternal';
 
     /**
      * Name von Formularelement fuer Feld 'DescMarkup' von Licence.
      */
-    const ELEMENT_DESC_MARKUP = 'DescMarkup';
+    public const ELEMENT_DESC_MARKUP = 'DescMarkup';
 
     /**
      * Name von Formularelement fuer Feld 'DescText' von Licence.
      */
-    const ELEMENT_DESC_TEXT = 'DescText';
+    public const ELEMENT_DESC_TEXT = 'DescText';
 
     /**
      * Name von Formularelement fuer Feld 'Language' von Licence.
      */
-    const ELEMENT_LANGUAGE = 'Language';
+    public const ELEMENT_LANGUAGE = 'Language';
 
     /**
      * Name von Formularelement fuer Feld 'LinkLicence' von Licence.
      */
-    const ELEMENT_LINK_LICENCE = 'LinkLicence';
+    public const ELEMENT_LINK_LICENCE = 'LinkLicence';
 
     /**
      * Name von Formularelement fuer Feld 'LinkLogo' von Licence.
      */
-    const ELEMENT_LINK_LOGO = 'LinkLogo';
+    public const ELEMENT_LINK_LOGO = 'LinkLogo';
 
     /**
      * Name of form element for link to contract document for licence.
      */
-    const ELEMENT_LINK_SIGN = 'LinkSign';
+    public const ELEMENT_LINK_SIGN = 'LinkSign';
 
     /**
      * Name von Formularelement fuer Feld 'MimeType' von Licence.
      */
-    const ELEMENT_MIME_TYPE = 'MimeType';
+    public const ELEMENT_MIME_TYPE = 'MimeType';
 
     /**
      * Name von Formularelement fuer Feld 'Name' von Licence.
      */
-    const ELEMENT_NAME = 'Name';
+    public const ELEMENT_NAME = 'Name';
 
     /**
      * Name von Formularelement fuer Feld 'NameLong' von Licence.
      */
-    const ELEMENT_NAME_LONG = 'NameLong';
+    public const ELEMENT_NAME_LONG = 'NameLong';
 
     /**
      * Name von Formularelement fuer Feld 'SortOrder' von Licence.
      */
-    const ELEMENT_SORT_ORDER = 'SortOrder';
+    public const ELEMENT_SORT_ORDER = 'SortOrder';
 
     /**
      * Name von Formularelement fuer Feld 'PodAllowed' von Licence.
      */
-    const ELEMENT_POD_ALLOWED = 'PodAllowed';
+    public const ELEMENT_POD_ALLOWED = 'PodAllowed';
 
     /**
      * Erzeugt die Formularelemente.
@@ -117,11 +114,11 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract
 
         $this->setRemoveEmptyCheckbox(false);
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus\Licence');
+        $this->setModelClass(Licence::class);
 
         $this->addElement('checkbox', self::ELEMENT_ACTIVE);
         $this->addElement('text', self::ELEMENT_NAME, [
-            'maxlength' => Licence::getFieldMaxLength('Name')
+            'maxlength' => Licence::describeField(Licence::FIELD_NAME)->getMaxSize(),
         ]);
         $this->addElement('text', self::ELEMENT_NAME_LONG, ['required' => true, 'size' => 70]);
         $this->addElement('Language', self::ELEMENT_LANGUAGE, ['required' => true]);
@@ -137,7 +134,8 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract
 
     /**
      * Initialisiert Formular von Licence Instanz.
-     * @param Licence $licence
+     *
+     * @param LicenceInterface $licence
      */
     public function populateFromModel($licence)
     {
@@ -158,7 +156,8 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract
 
     /**
      * Aktualisiert Instanz von Licence mit Werte aus Formular.
-     * @param AbstractDb $licence
+     *
+     * @param LicenceInterface $licence
      */
     public function updateModel($licence)
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,11 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -40,16 +37,13 @@
  */
 class Setup_LanguageController extends Application_Controller_Action
 {
+    public const PARAM_SORT   = 'sort';
+    public const PARAM_SEARCH = 'search';
+    public const PARAM_MODULE = 'modules';
+    public const PARAM_SCOPE  = 'scope';
+    public const PARAM_STATE  = 'state';
 
-    const PARAM_SORT = 'sort';
-    const PARAM_SEARCH = 'search';
-    const PARAM_MODULE = 'modules';
-    const PARAM_SCOPE = 'scope';
-    const PARAM_STATE = 'state';
-
-    /**
-     * TODO update name and values for new functionality
-     */
+    /** @var string[] TODO update name and values for new functionality */
     private $sortKeys = ['key', 'translation'];
 
     /**
@@ -71,10 +65,10 @@ class Setup_LanguageController extends Application_Controller_Action
     public function indexAction()
     {
         $searchTerm = $this->getParam('search', null);
-        $sortKey = $this->getParam('sort', 'key');
-        $modules = $this->getParam('modules', null);
-        $state = $this->getParam('state', null);
-        $scope = $this->getParam('scope', null);
+        $sortKey    = $this->getParam('sort', 'key');
+        $modules    = $this->getParam('modules', null);
+        $state      = $this->getParam('state', null);
+        $scope      = $this->getParam('scope', null);
 
         $config = $this->getConfig();
 
@@ -90,21 +84,21 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $form = $this->getSearchForm($searchTerm, $sortKey);
 
-        $form ->populateFromRequest($request);
+        $form->populateFromRequest($request);
 
         if ($request->isPost()) {
             $searchTerm = $form->getElement($form::ELEMENT_FILTER)->getValue();
-            $modules = $form->getElement($form::ELEMENT_MODULES)->getValue();
-            $state = $form->getElement($form::ELEMENT_STATE)->getValue();
-            $scope = $form->getElement($form::ELEMENT_SCOPE)->getValue();
+            $modules    = $form->getElement($form::ELEMENT_MODULES)->getValue();
+            $state      = $form->getElement($form::ELEMENT_STATE)->getValue();
+            $scope      = $form->getElement($form::ELEMENT_SCOPE)->getValue();
 
             // redirect so using the back button in the browser doesn't require resubmitting the form
             $this->_helper->Redirector->redirectTo('index', null, null, null, [
-                'search' => $searchTerm,
-                'sort'  => $sortKey,
+                'search'  => $searchTerm,
+                'sort'    => $sortKey,
                 'modules' => $modules,
-                'state' => $state,
-                'scope' => $scope
+                'state'   => $state,
+                'scope'   => $scope,
             ]);
         }
 
@@ -114,13 +108,13 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $translations = $translationManager->getMergedTranslations($sortKey);
 
-        $this->view->translations = $translations;
-        $this->view->form = $form;
-        $this->view->sortKeys = $this->sortKeys;
+        $this->view->translations   = $translations;
+        $this->view->form           = $form;
+        $this->view->sortKeys       = $this->sortKeys;
         $this->view->currentSortKey = $sortKey;
-        $this->view->searchTerm = $searchTerm;
-        $this->view->searchState = $state;
-        $this->view->searchScope = $scope;
+        $this->view->searchTerm     = $searchTerm;
+        $this->view->searchState    = $state;
+        $this->view->searchScope    = $scope;
         $this->view->headScript()->appendFile($this->view->layoutPath() . '/js/setup/setup.js');
     }
 
@@ -133,12 +127,12 @@ class Setup_LanguageController extends Application_Controller_Action
     {
         $request = $this->getRequest();
 
-        $key = $this->getParam('key', null);
+        $key    = $this->getParam('key', null);
         $module = $this->getParam('keymodule', null);
 
         if ($request->isPost()) {
-            $post = $request->getPost();
-            $form = $this->getTranslationForm();
+            $post   = $request->getPost();
+            $form   = $this->getTranslationForm();
             $result = $form->processPost($post, $post);
 
             switch ($result) {
@@ -164,8 +158,8 @@ class Setup_LanguageController extends Application_Controller_Action
                 case Setup_Form_Translation::RESULT_CANCEL:
                     $form = null;
             }
-            if (is_null($form)) {
-                if (! is_null($this->getParam('back', null))) {
+            if ($form === null) {
+                if ($this->getParam('back', null) !== null) {
                     $this->redirectBack();
                 } else {
                     $this->redirectWithParameters();
@@ -174,7 +168,7 @@ class Setup_LanguageController extends Application_Controller_Action
         } else {
             $form = $this->getTranslationForm();
 
-            if (! is_null($key)) {
+            if ($key !== null) {
                 $form->getElement($form::ELEMENT_KEY)->setValue($key);
                 $form->getElement($form::ELEMENT_MODULE)->setValue($module);
                 $form->disableKeyEditing();
@@ -204,19 +198,18 @@ class Setup_LanguageController extends Application_Controller_Action
             $post = $request->getPost();
             if (isset($post['Id'])) {
                 $key = $post['Id'];
-            } else {
-                // TODO handle error (this should not happen)
             }
+            // TODO handle error (POST without 'Id' should not happen)
         }
 
-        if (is_null($key)) {
+        if ($key === null) {
             $this->_helper->Redirector->redirectTo('index');
         }
 
         $form = $this->getTranslationForm();
 
         if ($request->isPost()) {
-            $post = $request->getPost();
+            $post   = $request->getPost();
             $result = $form->processPost($post, $post);
             switch ($result) {
                 case Setup_Form_Translation::RESULT_SAVE:
@@ -242,9 +235,8 @@ class Setup_LanguageController extends Application_Controller_Action
                         $form->updateTranslation();
                         $form = null;
                         Application_Translate::getInstance()->clearCache(); // TODO encapsulate
-                    } else {
-                        // TODO go back to form
                     }
+                    // TODO ELSE go back to form if $post is not valid
                     break;
                 case Setup_Form_Translation::RESULT_CANCEL:
                     // no break
@@ -252,8 +244,8 @@ class Setup_LanguageController extends Application_Controller_Action
                     // redirect back to search
                     $form = null;
             }
-            if (is_null($form)) {
-                if (! is_null($this->getParam('back', null))) {
+            if ($form === null) {
+                if ($this->getParam('back', null) !== null) {
                     $this->redirectBack();
                 } else {
                     $this->redirectWithParameters();
@@ -264,7 +256,7 @@ class Setup_LanguageController extends Application_Controller_Action
             $form->populateFromKey($key);
         }
 
-        if (! is_null($form)) {
+        if ($form !== null) {
             $this->_helper->viewRenderer->setNoRender(true);
             echo $form;
         }
@@ -297,7 +289,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $form = null;
 
-        if (! is_null($key)) {
+        if ($key !== null) {
             $form = new Setup_Form_DeleteKeyConfirmation();
 
             if ($request->isPost()) {
@@ -307,9 +299,9 @@ class Setup_LanguageController extends Application_Controller_Action
                     case $form::RESULT_YES:
                         if ($manager->keyExists($key)) {
                             $manager->delete($key);
-                        } else {
-                            // TODO error invalid request
                         }
+                        // TODO ELSE key does not exist -> error invalid request
+
                         $form = null;
                         break;
                     case $form::RESULT_NO:
@@ -329,20 +321,16 @@ class Setup_LanguageController extends Application_Controller_Action
                     $form->setLegend('setup_language_confirm_delete_key_title');
                 }
             }
-        } else {
-            // ignore invalid requests (no key or all parameter)
         }
+        // ELSE ignore invalid requests (no key or all parameter)
 
-        if (! is_null($form)) {
+        if ($form !== null) {
             $this->_helper->renderForm($form);
         } else {
             $this->redirectWithParameters();
         }
     }
 
-    /**
-     *
-     */
     public function deleteallAction()
     {
         $request = $this->getRequest();
@@ -372,10 +360,8 @@ class Setup_LanguageController extends Application_Controller_Action
                                 break;
                         }
                         $form = null;
-                    } else {
-                        // TODO logging/message
-                        // go back to form
                     }
+                    // TODO ELSE logging/message - go back to form
                     break;
 
                 case $form::RESULT_NO:
@@ -386,7 +372,7 @@ class Setup_LanguageController extends Application_Controller_Action
             }
         }
 
-        if (! is_null($form)) {
+        if ($form !== null) {
             $this->_helper->renderForm($form);
         } else {
             $this->redirectWithParameters();
@@ -400,7 +386,7 @@ class Setup_LanguageController extends Application_Controller_Action
     {
         $filename = $this->getParam('filename', null);
 
-        if (! is_null($filename)) {
+        if ($filename !== null) {
             $manager = $this->getTranslationManager();
             $this->setFilterParameters($manager);
 
@@ -410,7 +396,7 @@ class Setup_LanguageController extends Application_Controller_Action
             );
 
             $tmxFile = $manager->getExportTmxFile($unmodified);
-            $doc = $tmxFile->getDomDocument();
+            $doc     = $tmxFile->getDomDocument();
 
             $response = $this->getResponse();
             $response->setHeader('Content-Type', "text/xml; charset=UTF-8", true);
@@ -422,21 +408,29 @@ class Setup_LanguageController extends Application_Controller_Action
             $downloadLinks = [];
 
             $downloadLinks['setup_language_export_filtered'] = $this->view->url([
-                'action' => 'export', 'filename' => 'opus.tmx'
+                'action'   => 'export',
+                'filename' => 'opus.tmx',
             ]);
 
             $downloadLinks['setup_language_export_filtered_with_unmodified'] = $this->view->url([
-                'action' => 'export', 'filename' => 'opus.tmx', 'unmodified' => 'true'
+                'action'     => 'export',
+                'filename'   => 'opus.tmx',
+                'unmodified' => 'true',
             ]);
 
             $downloadLinks['setup_language_export_all'] = $this->view->url([
-                'action' => 'export', 'controller' => 'language', 'module' => 'setup',
-                'filename' => 'opus.tmx'
+                'action'     => 'export',
+                'controller' => 'language',
+                'module'     => 'setup',
+                'filename'   => 'opus.tmx',
             ], null, true);
 
             $downloadLinks['setup_language_export_all_with_unmodified'] = $this->view->url([
-                'action' => 'export', 'controller' => 'language', 'module' => 'setup',
-                'filename' => 'opus.tmx', 'unmodified' => 'true'
+                'action'     => 'export',
+                'controller' => 'language',
+                'module'     => 'setup',
+                'filename'   => 'opus.tmx',
+                'unmodified' => 'true',
             ], null, true);
 
             $this->view->downloadLinks = $downloadLinks;
@@ -454,8 +448,8 @@ class Setup_LanguageController extends Application_Controller_Action
 
         if ($request->isPost()) {
             // TODO validate form
-            $upload = new \Zend_File_Transfer_Adapter_Http();
-            $files = $upload->getFileInfo();
+            $upload = new Zend_File_Transfer_Adapter_Http();
+            $files  = $upload->getFileInfo();
 
             foreach ($files as $file => $fileInfo) {
                 $manager = $this->getTranslationManager();
@@ -464,7 +458,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
                     $post = $request->getPost();
 
-                    if (isset($post['Clear']) == '1') {
+                    if (isset($post['Clear']) === '1') {
                         $manager->deleteAll();
                     }
 
@@ -474,9 +468,8 @@ class Setup_LanguageController extends Application_Controller_Action
                     if (count($tmxFile->toArray()) > 0) {
                         $manager->importTmxFile($tmxFile);
                         $manager->clearCache();
-                    } else {
-                        // TODO redirect with message
                     }
+                    // TODO ELSE redirect with message
 
                     $this->redirectWithParameters();
                 }
@@ -500,10 +493,10 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $form = new Admin_Form_Configuration([
             'supportedLanguages' => [
-                'key' => 'activatedLanguages',
-                'type' => 'supportedLanguages',
-                'section' => 'general'
-            ]
+                'key'     => 'activatedLanguages',
+                'type'    => 'supportedLanguages',
+                'section' => 'general',
+            ],
         ]);
 
         if ($this->getRequest()->isPost()) {
@@ -516,7 +509,7 @@ class Setup_LanguageController extends Application_Controller_Action
             switch ($result) {
                 case Admin_Form_Configuration::RESULT_SAVE:
                     if ($form->isValid($data)) {
-                        $config = new \Zend_Config([], true);
+                        $config = new Zend_Config([], true);
                         $form->updateModel($config);
                         Application_Configuration::save($config);
                     } else {
@@ -545,11 +538,19 @@ class Setup_LanguageController extends Application_Controller_Action
         echo $form;
     }
 
+    /**
+     * @return Setup_Form_Translation
+     */
     protected function getTranslationForm()
     {
         return new Setup_Form_Translation();
     }
 
+    /**
+     * @param string|null $searchTerm
+     * @param string|null $sortKey
+     * @return Setup_Form_LanguageSearch
+     */
     protected function getSearchForm($searchTerm = null, $sortKey = null)
     {
         $sortKeysTranslated = [];
@@ -570,10 +571,10 @@ class Setup_LanguageController extends Application_Controller_Action
 
         // remove search parameter from URL (gets set when returning from edit forms)
         $form->setAction($this->view->url([
-            'action' => 'index',
+            'action'     => 'index',
             'controller' => 'language',
-            'module' => 'setup',
-            'search' => null
+            'module'     => 'setup',
+            'search'     => null,
         ], null, true));
 
         if (! empty($searchTerm)) {
@@ -583,15 +584,16 @@ class Setup_LanguageController extends Application_Controller_Action
         return $form;
     }
 
+    /**
+     * @return Application_Translate_TranslationManager
+     */
     protected function getTranslationManager()
     {
-        $translationManager = new Application_Translate_TranslationManager();
-
-        return $translationManager;
+        return new Application_Translate_TranslationManager();
     }
 
     /**
-     *
+     * @param string $action
      */
     protected function redirectWithParameters($action = 'index')
     {
@@ -603,9 +605,9 @@ class Setup_LanguageController extends Application_Controller_Action
             [
                 self::PARAM_SEARCH => $this->getParam(self::PARAM_SEARCH),
                 self::PARAM_MODULE => $this->getParam(self::PARAM_MODULE),
-                self::PARAM_SCOPE => $this->getParam(self::PARAM_SCOPE),
-                self::PARAM_STATE => $this->getParam(self::PARAM_STATE),
-                self::PARAM_SORT => $this->getParam(self::PARAM_SORT)
+                self::PARAM_SCOPE  => $this->getParam(self::PARAM_SCOPE),
+                self::PARAM_STATE  => $this->getParam(self::PARAM_STATE),
+                self::PARAM_SORT   => $this->getParam(self::PARAM_SORT),
             ]
         );
     }
@@ -623,12 +625,15 @@ class Setup_LanguageController extends Application_Controller_Action
         $this->_helper->Redirector->gotoUrl($url);
     }
 
+    /**
+     * @param Application_Translate_TranslationManager $manager
+     */
     protected function setFilterParameters($manager)
     {
         $searchTerm = $this->getParam('search', null);
-        $modules = $this->getParam('modules', null);
-        $state = $this->getParam('state', null);
-        $scope = $this->getParam('scope', null);
+        $modules    = $this->getParam('modules', null);
+        $state      = $this->getParam('state', null);
+        $scope      = $this->getParam('scope', null);
 
         if (! empty($searchTerm)) {
             $manager->setFilter($searchTerm);
@@ -636,14 +641,14 @@ class Setup_LanguageController extends Application_Controller_Action
 
         // check if modules parameter is allowed
         $allowedModules = $manager->getAllowedModules();
-        if (($allowedModules !== null && ! in_array($modules, $allowedModules)) || strcasecmp($modules, 'all') === 0) {
+        if ($modules === null || ($allowedModules !== null && ! in_array($modules, $allowedModules)) || strcasecmp($modules, 'all') === 0) {
             // TODO log unknown modules ?
             $modules = null;
         }
 
         $manager->setModules($modules);
 
-        switch (strtolower($state)) {
+        switch (strtolower($state ?? '')) {
             case 'edited':
                 $manager->setState($manager::STATE_EDITED);
                 break;
@@ -654,7 +659,7 @@ class Setup_LanguageController extends Application_Controller_Action
                 $manager->setState(null);
                 break;
         }
-        switch (strtolower($scope)) {
+        switch (strtolower($scope ?? '')) {
             case 'key':
                 $manager->setScope($manager::SCOPE_KEYS);
                 break;

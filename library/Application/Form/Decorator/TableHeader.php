@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,41 +24,42 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Dekorator für die Ausgabe eines Tabellenkopfes.
- *
- * @category    Application
- * @package     Application_Form_Decorator
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Decorator_TableHeader extends \Zend_Form_Decorator_Abstract
+class Application_Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract
 {
+    /** @var array */
+    private $columns;
 
-    private $_columns = null;
-
+    /**
+     * @param string $content
+     * @return string
+     */
     public function render($content)
     {
         // Zeige Tabellenkopf nur wenn es Einträge (Unterformulare) gibt
-        if (count($this->getElement()->getSubForms()) == 0) {
+        if (count($this->getElement()->getSubForms()) === 0) {
             return $content;
         }
 
         $view = $this->getElement()->getView();
 
-        if (! $view instanceof \Zend_View_Interface) {
+        if (! $view instanceof Zend_View_Interface) {
             return $content;
         }
 
         $markup = '<thead><tr>';
 
         foreach ($this->getColumns() as $column) {
-            $label = isset($column['label']) ? $view->escape($view->translate($column['label'])) : '&nbsp;';
-            $cssClass = isset($column['class']) ? $column['class'] : null;
-            $markup .= "<th class=\"$cssClass\">" . $label . "</th>";
+            $label    = isset($column['label']) ? $view->escape($view->translate($column['label'])) : '&nbsp;';
+            $cssClass = $column['class'] ?? null;
+            $markup  .= "<th class=\"$cssClass\">" . $label . "</th>";
         }
 
         $markup .= '</tr></thead>';
@@ -65,24 +67,33 @@ class Application_Form_Decorator_TableHeader extends \Zend_Form_Decorator_Abstra
         return $markup . $content;
     }
 
+    /**
+     * @param array $columns
+     */
     public function setColumns($columns)
     {
-        $this->_columns = $columns;
+        $this->columns = $columns;
     }
 
+    /**
+     * @return array|null
+     *
+     * TODO WHAT does it do? Explain!
+     */
     public function getColumns()
     {
         $columns = $this->getOption('columns');
 
-        if (! is_null($columns)) {
+        if ($columns !== null) {
             $this->removeOption('columns');
-            $this->_columns = $columns;
+            $this->columns = $columns;
         } else {
-            if (method_exists($this->getElement(), 'getColumns')) {
-                $this->_columns = $this->getElement()->getColumns();
+            $element = $this->getElement();
+            if ($element !== null && method_exists($element, 'getColumns')) {
+                $this->columns = $element->getColumns();
             }
         }
 
-        return $this->_columns;
+        return $this->columns;
     }
 }

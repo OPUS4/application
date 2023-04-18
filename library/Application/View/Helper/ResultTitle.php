@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\DocumentInterface;
 
 /**
  * Helper for printing the title of a OPUS document in search results.
@@ -38,14 +38,15 @@
  */
 class Application_View_Helper_ResultTitle extends Application_View_Helper_Document_HelperAbstract
 {
-
     /**
      * Prints escaped main title of document.
+     *
+     * @param DocumentInterface|null $document
      * @return null|string
      */
     public function resultTitle($document = null)
     {
-        if (is_null($document)) {
+        if ($document === null) {
             $document = $this->getDocument();
         }
 
@@ -55,8 +56,8 @@ class Application_View_Helper_ResultTitle extends Application_View_Helper_Docume
 
         $output = "<a href=\"$frontdoorUrl\"";
 
-        if (is_null($title)) {
-            $title = $this->view->translate('results_missingtitle');
+        if ($title === null) {
+            $title   = $this->view->translate('results_missingtitle');
             $output .= ' class="missing_title"';
         }
 
@@ -67,6 +68,9 @@ class Application_View_Helper_ResultTitle extends Application_View_Helper_Docume
 
     /**
      * TODO get rid of this here - there are already DocumentUrl and FrontdoorUrl
+     *
+     * @param DocumentInterface|null $document
+     * @return string
      */
     public function getFrontdoorUrl($document)
     {
@@ -78,16 +82,18 @@ class Application_View_Helper_ResultTitle extends Application_View_Helper_Docume
 
         // TODO hack - can this be avoided?
         $searchType = $this->view->searchType;
-        if (is_null($searchType)) {
-            $searchType = \Zend_Controller_Front::getInstance()->getRequest()->getParam('searchtype');
+        if ($searchType === null) {
+            $searchType = Zend_Controller_Front::getInstance()->getRequest()->getParam('searchtype');
         }
 
         return $this->view->url([
-            'module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
-            'docId' => $document->getId(),
-            'start' => $start,
-            'rows' => $this->view->rows,
-            'searchtype' => $searchType
+            'module'     => 'frontdoor',
+            'controller' => 'index',
+            'action'     => 'index',
+            'docId'      => $document->getId(),
+            'start'      => $start,
+            'rows'       => $this->view->rows,
+            'searchtype' => $searchType,
         ]);
     }
 }

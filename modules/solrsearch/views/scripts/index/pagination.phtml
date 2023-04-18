@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <div class="results_pagination">
@@ -56,12 +54,12 @@
         </li>
 
         <li>
-            <strong><?= (int)($this->start) + 1 ?></strong> <?= $this->translate('pagination_to') ?>
-            <strong><?= (((int)($this->start) + (int)($this->rows)) > $this->numOfHits) ? $this->numOfHits : (int)($this->start) + (int)($this->rows) ?></strong>
+            <strong><?= (int) ($this->start) + 1 ?></strong> <?= $this->translate('pagination_to') ?>
+            <strong><?= ((int) ($this->start) + (int) $this->rows) > $this->numOfHits ? $this->numOfHits : (int) ($this->start) + (int) $this->rows ?></strong>
         </li>
 
         <li>
-            <?php if ($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
+            <?php if ($this->start < (int) ($this->numOfHits) - (int) $this->rows) : ?>
             <a class="pagination-next" href="<?= $this->url($this->nextPage); ?>"
                 title="<?= $this->translate('pagination_next_page') ?>"></a>
             <?PHP else : ?>
@@ -70,7 +68,7 @@
         </li>
 
         <li>
-            <?php if ($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
+            <?php if ($this->start < (int) ($this->numOfHits) - (int) $this->rows) : ?>
             <a class="pagination-last" href="<?= $this->url($this->lastPage); ?>"
                 title="<?= $this->translate('pagination_last_page') ?>"></a>
             <?PHP else : ?>

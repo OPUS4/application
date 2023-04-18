@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,21 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
+use Opus\Common\Series;
 
 /**
  * Formularelement für Auswahl einer Schriftenreihe.
  */
 class Application_Form_Element_Series extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();
@@ -46,7 +43,7 @@ class Application_Form_Element_Series extends Application_Form_Element_Select
         $this->setRequired(true);
         $this->setDisableTranslator(true); // Schriftenreihen werden nicht übersetzt
 
-        $validator = new \Zend_Validate_Int();
+        $validator = new Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 

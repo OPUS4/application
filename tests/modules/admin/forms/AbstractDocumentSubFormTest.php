@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,34 +24,36 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Licence;
+use Opus\Common\Licence;
 
 /**
  * Unit Tests fuer abstrakte Parent-Klasse fuer Metadaten Unterformulare.
- *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var Admin_Form_AbstractDocumentSubForm */
     private $form;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->form = $this->getForm();
     }
 
+    /**
+     * @return Admin_Form_AbstractDocumentSubForm
+     */
     private function getForm()
     {
-        return $this->getMockForAbstractClass('Admin_Form_AbstractDocumentSubForm');
+        return $this->getMockForAbstractClass(Admin_Form_AbstractDocumentSubForm::class);
     }
 
     public function testInit()
@@ -72,7 +75,7 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
      */
     public function testPopulateFromModel()
     {
-        $this->form->populateFromModel(new Licence());
+        $this->form->populateFromModel(Licence::new());
     }
 
     /**
@@ -101,8 +104,8 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
         $this->markTestIncomplete('Mocking funktioniert noch nicht.');
         $post = [
             'subform1' => [
-                'Button' => 'Value'
-            ]
+                'Button' => 'Value',
+            ],
         ];
 
         $subform1 = $this->getMockForAbstractClass('Application_Form_Model_Abstract');

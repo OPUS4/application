@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,8 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Edouard Simon <edouard.simon@zib.de>
  * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -38,7 +37,7 @@
  * TODO move (is used for development and probably only of limited use)
  */
 
-if ($argc == 2) {
+if ($argc === 2) {
     $filename = realpath($argv[1]);
     if (! is_file($filename)) {
         echo "Could not find file {$argv[1]} ($filename)";
@@ -48,10 +47,10 @@ if ($argc == 2) {
     echo "No file supplied";
     exit;
 }
-$xml = new \DOMDocument();
+$xml = new DOMDocument();
 $xml->load($filename);
-$xslt = new \DomDocument;
-$xslt->load(dirname(__FILE__)."/doctype.xslt");
-$proc = new XSLTProcessor;
+$xslt = new DOMDocument();
+$xslt->load(dirname(__FILE__) . "/doctype.xslt");
+$proc = new XSLTProcessor();
 $proc->importStyleSheet($xslt);
 $proc->transformToURI($xml, 'php://output');

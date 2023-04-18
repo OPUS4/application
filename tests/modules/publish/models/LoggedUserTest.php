@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,17 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
+use Opus\Common\Account;
 
 class Publish_Model_LoggedUserTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     /**
@@ -44,7 +43,7 @@ class Publish_Model_LoggedUserTest extends ControllerTestCase
     {
         $this->setZendAuthIdentity(null);
 
-        $model = new Publish_Model_LoggedUser;
+        $model = new Publish_Model_LoggedUser();
         $this->assertNull($model->getUserId());
 
         $person = $model->createPerson();
@@ -59,7 +58,7 @@ class Publish_Model_LoggedUserTest extends ControllerTestCase
         $accountName = 'foo-' . rand();
         $this->setZendAuthIdentity($accountName);
 
-        $model = new Publish_Model_LoggedUser;
+        $model = new Publish_Model_LoggedUser();
         $this->assertNull($model->getUserId());
 
         $person = $model->createPerson();
@@ -71,17 +70,17 @@ class Publish_Model_LoggedUserTest extends ControllerTestCase
      */
     public function testCreatePersonValidUser()
     {
-        $accountName = 'foo-' . rand();
+        $accountName     = 'foo-' . rand();
         $accountPassword = 'passwd-' . rand();
 
         $this->setZendAuthIdentity($accountName);
 
-        $account = new Account();
+        $account = Account::new();
         $account->setLogin($accountName)
             ->setPassword($accountPassword)
             ->store();
 
-        $model = new Publish_Model_LoggedUser;
+        $model = new Publish_Model_LoggedUser();
         $this->assertNotNull($model->getUserId());
 
         $person = $model->createPerson();
@@ -92,12 +91,14 @@ class Publish_Model_LoggedUserTest extends ControllerTestCase
 
     /**
      * Helper to set fake Identity in Zend_Auth.
+     *
+     * @param string $identity
      */
     private function setZendAuthIdentity($identity)
     {
-        $namespace = \Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
-        $member = \Zend_Auth_Storage_Session::MEMBER_DEFAULT;
-        $session = new \Zend_Session_Namespace($namespace);
+        $namespace          = Zend_Auth_Storage_Session::NAMESPACE_DEFAULT;
+        $member             = Zend_Auth_Storage_Session::MEMBER_DEFAULT;
+        $session            = new Zend_Session_Namespace($namespace);
         $session->{$member} = $identity;
     }
 }

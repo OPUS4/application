@@ -25,18 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Admin_Form_Document
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
+use Opus\Common\File;
 
 class Admin_Form_Document_FileTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testConstructForm()
@@ -53,7 +50,7 @@ class Admin_Form_Document_FileTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_File();
 
-        $file = new File();
+        $file = File::new();
 
         $this->assertNull($form->getModel());
 

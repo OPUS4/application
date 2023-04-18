@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Edouard Simon <e.simon@aufzuneuenseiten.de>
- * @copyright   Copyright (c) 2015-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <div class="messages">
@@ -51,7 +50,7 @@
                 <?= $this->translate('results_title_single') ?> <span id="pagination-current-hit"><?= $this->searchPosition + 1 ?></span> <?= $this->translate('pagination_of') ?> <span id="pagination-num-hits"><?= $this->numOfHits ?></span>
             </li>
             <li id="pagination-previous">
-                <?php if ($this->searchPosition == $this->firstEntry) : ?>
+                <?php if ($this->searchPosition === $this->firstEntry) : ?>
                     <div title="<?= $this->translate('pagination_previous_entry') ?>"></div>
                 <?php else : ?>
                     <a id="frontdoor-link-prev" title="<?= $this->translate('pagination_previous_entry') ?>" href="<?= $this->url(['start' => $this->previousEntry, 'nav' => 'prev', 'docId' => null]); ?>"></a>
@@ -59,7 +58,7 @@
             </li>
 
             <li id="pagination-next">
-                <?php if ($this->searchPosition == $this->lastEntry) : ?>
+                <?php if ($this->searchPosition === $this->lastEntry) : ?>
                     <div title="<?= $this->translate('pagination_next_entry') ?>"></div>
                 <?php else : ?>
                     <a id="frontdoor-link-next" title="<?= $this->translate('pagination_next_entry') ?>" href="<?= $this->url(['start' => $this->nextEntry, 'nav' => 'next', 'docId' => null]); ?>"></a>
@@ -70,13 +69,13 @@
 
     <a id="pagination-link-hitlist" href="<?=
        $this->url([
-           'module' => 'solrsearch',
+           'module'     => 'solrsearch',
            'controller' => 'index',
-           'action' => 'search',
-           'rows' => $this->listRows,
-           'start' => floor(($this->searchPosition) / $this->listRows) * $this->listRows,
-           'nav' => null,
-           'docId' => null
+           'action'     => 'search',
+           'rows'       => $this->listRows,
+           'start'      => floor(($this->searchPosition) / $this->listRows) * $this->listRows,
+           'nav'        => null,
+           'docId'      => null,
        ])
         ?>"><?= $this->translate('back_to_result_list') ?></a>
 

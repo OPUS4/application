@@ -26,16 +26,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-if (false === is_null(ini_get('register_argc_argv'))
-        && ini_get('register_argc_argv') == 1
-        && $_SERVER['argc'] > 1) {
+if (
+    ini_get('register_argc_argv') !== null
+        && ini_get('register_argc_argv') === '1'
+        && $_SERVER['argc'] > 1
+) {
     $snippetFiles = $_SERVER['argv'];
     // removes script name
     array_shift($snippetFiles);
@@ -46,7 +45,7 @@ if (false === is_null(ini_get('register_argc_argv'))
         }
 
         try {
-            include_once($snippetFile);
+            include_once $snippetFile;
             echo "# included snippet $snippetFile\n";
         } catch (Exception $e) {
             echo "# failed including snippet $snippetFile: \n";

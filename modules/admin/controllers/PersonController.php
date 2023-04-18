@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Person;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Person;
 
 /**
  * Controller fuer die Verwaltung von Personen.
@@ -44,12 +42,10 @@ use Opus\Model\NotFoundException;
  */
 class Admin_PersonController extends Application_Controller_Action
 {
+    public const SESSION_NAMESPACE = 'Person';
 
-    const SESSION_NAMESPACE = 'Person';
-
-    private $_documentsHelper;
-
-    private $_dates;
+    /** @var Application_Controller_Action_Helper_Documents */
+    private $documentsHelper;
 
     /**
      * Initializes controller.
@@ -58,8 +54,7 @@ class Admin_PersonController extends Application_Controller_Action
     {
         parent::init();
 
-        $this->_documentsHelper = $this->_helper->getHelper('Documents');
-        $this->_dates = $this->_helper->getHelper('Dates');
+        $this->documentsHelper              = $this->_helper->getHelper('Documents');
         $this->view->contentWrapperDisabled = true;
     }
 
@@ -77,26 +72,26 @@ class Admin_PersonController extends Application_Controller_Action
         // check limit parameter
         $limit = $this->getParam('limit');
 
-        if ((! ctype_digit($limit) || $limit <= 0) && ! is_null($limit)) {
-            $limit = null;
+        if ($limit !== null && (! ctype_digit($limit) || $limit <= 0)) {
+            $limit    = null;
             $redirect = true;
         }
 
         // check role parameter
-        $role = $this->getParam('role');
+        $role         = $this->getParam('role');
         $allowedRoles = array_merge(['all'], Admin_Form_Document_Persons::getRoles());
 
         // TODO redirect for 'all' (since it is default)
-        if ((! ctype_alpha($role) || ! in_array(strtolower($role), $allowedRoles)) && ! is_null($role)) {
-            $role = null;
+        if ($role !== null && (! ctype_alpha($role) || ! in_array(strtolower($role), $allowedRoles))) {
+            $role     = null;
             $redirect = true;
         }
 
         // check page parameter
         $page = $this->getParam('page');
 
-        if ((! ctype_digit($page) || $page <= 0) && ! is_null($page)) {
-            $page = null;
+        if ($page !== null && (! ctype_digit($page) || $page <= 0)) {
+            $page     = null;
             $redirect = true;
         }
 
@@ -108,7 +103,7 @@ class Admin_PersonController extends Application_Controller_Action
             $redirectParams = ['role' => $role, 'limit' => $limit, 'filter' => $filter, 'page' => $page];
 
             $redirectParams = array_filter($redirectParams, function ($value) {
-                return ! is_null($value) && strlen(trim($value)) > 0;
+                return $value !== null && strlen(trim($value)) > 0;
             });
 
             $this->_helper->getHelper('Redirector')->gotoSimple(
@@ -121,7 +116,7 @@ class Admin_PersonController extends Application_Controller_Action
             return;
         }
 
-        if (is_null($limit)) {
+        if ($limit === null) {
             $limit = 50;
         }
 
@@ -129,23 +124,24 @@ class Admin_PersonController extends Application_Controller_Action
             $role = null;
         }
 
-        if (! is_null($page)) {
-            $page = $this->getParam('page', 1);
+        if ($page !== null) {
+            $page  = $this->getParam('page', 1);
             $start = ($page - 1) * $limit + 1;
         } else {
             $start = 1;
         }
 
-
         // TODO only include 'limit' and 'start' if provided as URL parameters (not defaults)
         $form = new Admin_Form_PersonListControl();
-        $form->setMethod(\Zend_Form::METHOD_POST);
+        $form->setMethod(Zend_Form::METHOD_POST);
 
         // TODO only include limit if not default
         $form->setAction($this->view->url(
             [
-                'module' => 'admin', 'controller' => 'person', 'action' => 'index',
-                'limit' => $limit
+                'module'     => 'admin',
+                'controller' => 'person',
+                'action'     => 'index',
+                'limit'      => $limit,
             ],
             null,
             true
@@ -156,8 +152,10 @@ class Admin_PersonController extends Application_Controller_Action
         $params = $this->getRequest()->getParams();
         $form->populate($params);
 
+        $persons = Person::getModelRepository();
+
         // TODO move into replaceable model class
-        $personsTotal = Person::getAllPersonsCount($role, $filter);
+        $personsTotal = $persons->getAllPersonsCount($role, $filter);
 
         if ($start > $personsTotal) {
             if ($personsTotal > 0 && ($personsTotal > $limit)) {
@@ -169,7 +167,7 @@ class Admin_PersonController extends Application_Controller_Action
 
         $page = intdiv($start, $limit) + 1;
 
-        $persons = Person::getAllPersons($role, $start - 1, $limit, $filter);
+        $persons = $persons->getAllPersons($role, $start - 1, $limit, $filter);
 
         $this->view->headScript()->appendFile($this->view->layoutPath() . '/js/admin.js');
 
@@ -179,19 +177,19 @@ class Admin_PersonController extends Application_Controller_Action
             $end = $personsTotal;
         }
 
-        $paginator = \Zend_Paginator::factory(( int )$personsTotal);
+        $paginator = Zend_Paginator::factory((int) $personsTotal);
         $paginator->setCurrentPageNumber($page);
         $paginator->setItemCountPerPage($limit);
 
-        $this->view->paginator = $paginator;
-        $this->view->role = $role;
-        $this->view->filter = $filter;
-        $this->view->limit = $limit;
-        $this->view->start = $start;
-        $this->view->end = $end;
+        $this->view->paginator  = $paginator;
+        $this->view->role       = $role;
+        $this->view->filter     = $filter;
+        $this->view->limit      = $limit;
+        $this->view->start      = $start;
+        $this->view->end        = $end;
         $this->view->totalCount = $personsTotal;
-        $this->view->form = $form;
-        $this->view->persons = $persons;
+        $this->view->form       = $form;
+        $this->view->persons    = $persons;
     }
 
     /**
@@ -201,7 +199,9 @@ class Admin_PersonController extends Application_Controller_Action
     {
         $person = $this->getPersonCrit();
 
-        $documents = Person::getPersonDocuments($person);
+        $persons = Person::getModelRepository();
+
+        $documents = $persons->getPersonDocuments($person);
 
         $this->view->documents = $documents;
     }
@@ -227,9 +227,11 @@ class Admin_PersonController extends Application_Controller_Action
             );
         }
 
-        $personValues = Person::getPersonValues($person);
+        $personRepository = Person::getModelRepository();
 
-        if (is_null($personValues)) {
+        $personValues = $personRepository->getPersonValues($person);
+
+        if ($personValues === null) {
             $this->_helper->Redirector->redirectTo(
                 'index',
                 ['failure' => 'admin_person_error_not_found']
@@ -241,13 +243,13 @@ class Admin_PersonController extends Application_Controller_Action
         $processForm = false;
 
         if ($request->isPost()) {
-            $data = $request->getPost();
+            $data        = $request->getPost();
             $processForm = true;
         } elseif ($request->getParam('step') === 'Back') {
             $formId = $this->getParam('formId');
 
             // check if the request is coming from the 'Back' button of the confirmation form
-            $session = new \Zend_Session_Namespace(self::SESSION_NAMESPACE);
+            $session = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
 
             if (isset($session->{$formId})) {
                 $data = $session->{$formId};
@@ -255,7 +257,7 @@ class Admin_PersonController extends Application_Controller_Action
             }
         }
 
-        if (! is_null($data)) {
+        if ($data !== null) {
             $form = new Admin_Form_Persons();
             $form->setPerson($person);
 
@@ -270,18 +272,20 @@ class Admin_PersonController extends Application_Controller_Action
                             $formId = $form->getElement(Admin_Form_Persons::ELEMENT_FORM_ID)->getValue();
 
                             // TODO store data in session for back button
-                            $personNamespace = new \Zend_Session_Namespace(self::SESSION_NAMESPACE);
+                            $personNamespace            = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
                             $personNamespace->{$formId} = $data;
 
                             $changes = $form->getChanges();
 
                             $confirmForm = new Admin_Form_PersonsConfirm();
                             $confirmForm->getElement(Admin_Form_PersonsConfirm::ELEMENT_FORM_ID)->setValue($formId);
-                            $confirmForm->setOldValues(Person::convertToFieldNames($personValues));
+                            $confirmForm->setOldValues($personRepository->convertToFieldNames($personValues));
                             $confirmForm->populateFromModel($person);
-                            $confirmForm->setChanges(Person::convertToFieldNames($changes));
+                            $confirmForm->setChanges($personRepository->convertToFieldNames($changes));
                             $confirmForm->setAction($this->view->url([
-                                'module' => 'admin', 'controller' => 'person', 'action' => 'update'
+                                'module'     => 'admin',
+                                'controller' => 'person',
+                                'action'     => 'update',
                             ], null, false));
 
                             $this->renderForm($confirmForm);
@@ -291,7 +295,6 @@ class Admin_PersonController extends Application_Controller_Action
                     case Admin_Form_Persons::RESULT_CANCEL:
                         $this->_helper->Redirector->redirectTo('index', null);
                         return;
-                        break;
                 }
             }
         } else {
@@ -333,7 +336,8 @@ class Admin_PersonController extends Application_Controller_Action
                         'person',
                         'admin',
                         array_merge($person, [
-                            'step' => 'Back', 'formId' => $formId
+                            'step'   => 'Back',
+                            'formId' => $formId,
                         ])
                     );
                     break;
@@ -341,7 +345,7 @@ class Admin_PersonController extends Application_Controller_Action
                     $formId = $form->getElementValue(Admin_Form_PersonsConfirm::ELEMENT_FORM_ID);
 
                     // make changes in database and redirect to list of persons with success message
-                    $session = new \Zend_Session_Namespace(self::SESSION_NAMESPACE);
+                    $session = new Zend_Session_Namespace(self::SESSION_NAMESPACE);
 
                     if (isset($session->{$formId})) {
                         $formData = $session->{$formId};
@@ -350,10 +354,11 @@ class Admin_PersonController extends Application_Controller_Action
                         if (! empty($formData)) {
                             $personForm = new Admin_Form_Persons();
                             $personForm->populate($formData);
-                            $changes = $personForm->getChanges();
+                            $changes   = $personForm->getChanges();
                             $documents = $form->getDocuments();
 
-                            Person::updateAll($person, $changes, $documents);
+                            $persons = Person::getModelRepository();
+                            $persons->updateAll($person, $changes, $documents);
 
                             $message = 'admin_person_bulk_update_success';
                         }
@@ -375,6 +380,7 @@ class Admin_PersonController extends Application_Controller_Action
 
     /**
      * Builds an array for identifying person from parameters.
+     *
      * @return array
      *
      * TODO move into model
@@ -405,15 +411,16 @@ class Admin_PersonController extends Application_Controller_Action
     {
         $docId = $this->getRequest()->getParam('document');
 
-        $document = $this->_documentsHelper->getDocumentForId($docId);
+        $document = $this->documentsHelper->getDocumentForId($docId);
 
         if (! isset($document)) {
-            return $this->_helper->Redirector->redirectTo(
+            $this->_helper->Redirector->redirectTo(
                 'index',
                 ['failure' => 'admin_document_error_novalidid'],
                 'documents',
                 'admin'
             );
+            return;
         }
 
         if (! $this->getRequest()->isPost()) {
@@ -441,36 +448,41 @@ class Admin_PersonController extends Application_Controller_Action
                         $person = $form->getModel();
                         $person->store();
 
-                        $linkProps = $form->getPersonLinkProperties($person->getId());
+                        $linkProps   = $form->getPersonLinkProperties($person->getId());
                         $editSession = new Admin_Model_DocumentEditSession($docId);
 
-                        if ($result == Admin_Form_Document_PersonAdd::RESULT_SAVE) {
+                        if ($result === Admin_Form_Document_PersonAdd::RESULT_SAVE) {
                             // Zurück zum Metadaten-Formular springen
                             if ($editSession->getPersonCount() > 0) {
                                 // Link Informationen durch Session übermitteln
                                 $editSession->addPerson($linkProps);
-                                return $this->_helper->Redirector->redirectToAndExit(
+                                $this->_helper->Redirector->redirectToAndExit(
                                     'edit',
                                     null,
                                     'document',
                                     'admin',
                                     [
-                                    'id' => $docId, 'continue' => 'addperson']
+                                        'id'       => $docId,
+                                        'continue' => 'addperson',
+                                    ]
                                 );
                             } else {
                                 // Link Informationen direkt als Parameter übergeben
-                                return $this->_helper->Redirector->redirectToAndExit(
+                                $this->_helper->Redirector->redirectToAndExit(
                                     'edit',
                                     null,
                                     'document',
                                     'admin',
                                     array_merge(
                                         [
-                                        'id' => $docId, 'continue' => 'addperson'],
+                                            'id'       => $docId,
+                                            'continue' => 'addperson',
+                                        ],
                                         $linkProps
                                     )
                                 );
                             }
+                            return;
                         } else {
                             // Person in Session merken
                             $editSession->addPerson($linkProps);
@@ -486,14 +498,17 @@ class Admin_PersonController extends Application_Controller_Action
                     break;
                 case Admin_Form_Document_PersonAdd::RESULT_CANCEL:
                     // Aktuelle Person nicht speichern, aber eventuell gemerkte Personen hinzufügen
-                    return $this->_helper->Redirector->redirectToAndExit(
+                    $this->_helper->Redirector->redirectToAndExit(
                         'edit',
                         null,
                         'document',
                         'admin',
                         [
-                        'id' => $docId, 'continue' => 'addperson']
+                            'id'       => $docId,
+                            'continue' => 'addperson',
+                        ]
                     );
+                    return;
                 default:
                     break;
             }
@@ -501,12 +516,12 @@ class Admin_PersonController extends Application_Controller_Action
             $this->view->form = $form;
         }
 
-        $this->view->document = $document;
+        $this->view->document        = $document;
         $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
 
         // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
         $this->view->languageSelectorDisabled = true;
-        $this->view->breadcrumbsDisabled = true;
+        $this->view->breadcrumbsDisabled      = true;
     }
 
     /**
@@ -518,15 +533,16 @@ class Admin_PersonController extends Application_Controller_Action
     {
         $docId = $this->getRequest()->getParam('document');
 
-        $document = $this->_documentsHelper->getDocumentForId($docId);
+        $document = $this->documentsHelper->getDocumentForId($docId);
 
         if (! isset($document)) {
-            return $this->_helper->Redirector->redirectTo(
+            $this->_helper->Redirector->redirectTo(
                 'index',
                 ['failure' => 'admin_document_error_novalidid'],
                 'documents',
                 'admin'
             );
+            return;
         }
 
         $form = new Admin_Form_Person();
@@ -535,21 +551,24 @@ class Admin_PersonController extends Application_Controller_Action
             // Formular anzeigen
             $personId = $this->getRequest()->getParam('personId');
 
-            if (strlen(trim($personId)) == 0 || is_null($personId)) {
+            if ($personId === null || strlen(trim($personId)) === 0) {
                 $this->getLogger()->err(__METHOD__ . ' No personId parameter.');
-                return $this->returnToMetadataForm($docId);
+                $this->returnToMetadataForm($docId);
+                return;
             }
 
             if (! is_numeric($personId)) {
                 $this->getLogger()->err(__METHOD__ . " Bad personId = '$personId' parameter.");
-                return $this->returnToMetadataForm($docId);
+                $this->returnToMetadataForm($docId);
+                return;
             }
 
             try {
-                $person = new Person($personId);
+                $person = Person::get($personId);
             } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . ' ' . $omnfe->getMessage());
-                return $this->returnToMetadataForm($docId);
+                $this->returnToMetadataForm($docId);
+                return;
             }
 
             $form->populateFromModel($person);
@@ -568,24 +587,25 @@ class Admin_PersonController extends Application_Controller_Action
                     if ($form->isValid($post)) {
                         $person = $form->getModel();
                         $person->store();
-                        return $this->_helper->Redirector->redirectToAndExit(
+                        $this->_helper->Redirector->redirectToAndExit(
                             'edit',
                             null,
                             'document',
                             'admin',
-                            ['id' => $docId,
-                            'continue' => 'updateperson',
-                            'person' => $person->getId()
+                            [
+                                'id'       => $docId,
+                                'continue' => 'updateperson',
+                                'person'   => $person->getId(),
                             ]
                         );
-                    } else {
-                        // TODO Validierungsfehlernachricht für Formular anzeigen (notwendig?)
+                        return;
                     }
+                    // TODO ELSE Validierungsfehlernachricht für Formular anzeigen (notwendig?)
                     break;
                 case Admin_Form_Person::RESULT_CANCEL:
                     // Person nicht speichern
-                    return $this->returnToMetadataForm($docId);
-                    break;
+                    $this->returnToMetadataForm($docId);
+                    return;
                 default:
                     break;
             }
@@ -593,27 +613,30 @@ class Admin_PersonController extends Application_Controller_Action
             $this->view->form = $form;
         }
 
-        $this->view->document = $document;
+        $this->view->document        = $document;
         $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
 
         // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
         $this->view->languageSelectorDisabled = true;
-        $this->view->breadcrumbsDisabled = true;
+        $this->view->breadcrumbsDisabled      = true;
     }
 
     /**
      * Führt Redirect zum Metadatenformular des Dokuments aus.
-     * @param $docId Dokument-ID
+     *
+     * @param int $docId Dokument-ID
      */
     public function returnToMetadataForm($docId)
     {
-        return $this->_helper->Redirector->redirectToAndExit(
+        $this->_helper->Redirector->redirectToAndExit(
             'edit',
             null,
             'document',
             'admin',
-            ['id' => $docId,
-            'continue' => 'true']
+            [
+                'id'       => $docId,
+                'continue' => 'true',
+            ]
         );
     }
 }

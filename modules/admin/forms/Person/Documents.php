@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,23 +25,20 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Person;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Person;
 
 /**
  * TODO Move documents element code into this subform? (use smaller single document element)
  */
 class Admin_Form_Person_Documents extends Application_Form_Abstract
 {
-
-    const ELEMENT_DOCUMENTS = 'Documents';
+    public const ELEMENT_DOCUMENTS = 'Documents';
 
     public function init()
     {
@@ -50,9 +48,15 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
         $this->addElement($documents);
     }
 
+    /**
+     * @param int[]      $documentIds
+     * @param array|null $person
+     * @throws Zend_Form_Exception
+     * @throws NotFoundException
+     */
     public function setDocuments($documentIds, $person = null)
     {
-        if (is_null($documentIds)) {
+        if ($documentIds === null) {
             // TODO do some logging
             return;
         }
@@ -71,11 +75,15 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
         $documents->setMultiOptions($options);
         $documents->setValue($documentIds);
 
-        if (! is_null($person)) {
-            $documents->setAttrib('person', Person::convertToFieldNames($person));
+        if ($person !== null) {
+            $persons = Person::getModelRepository();
+            $documents->setAttrib('person', $persons->convertToFieldNames($person));
         }
     }
 
+    /**
+     * @return int[]
+     */
     public function getSelectedDocuments()
     {
         return $this->getElement(self::ELEMENT_DOCUMENTS)->getValue();

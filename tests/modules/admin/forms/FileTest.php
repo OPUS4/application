@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,19 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
+use Opus\Common\File;
+use Opus\Common\FileInterface;
 
 class Admin_Form_FileTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testConstructForm()
@@ -46,8 +44,16 @@ class Admin_Form_FileTest extends ControllerTestCase
         $this->assertEquals(10, count($form->getElements()));
 
         $elements = [
-            'Id', 'FileLink', 'FileSize', 'Language', 'Label', 'Comment', 'VisibleIn', 'Roles', 'ServerDateSubmitted',
-            'SortOrder'
+            'Id',
+            'FileLink',
+            'FileSize',
+            'Language',
+            'Label',
+            'Comment',
+            'VisibleIn',
+            'Roles',
+            'ServerDateSubmitted',
+            'SortOrder',
         ];
 
         foreach ($elements as $element) {
@@ -63,7 +69,7 @@ class Admin_Form_FileTest extends ControllerTestCase
         $this->useEnglish();
         $form = new Admin_Form_File();
 
-        $file = new File(126); // hängt an Testdokument 146
+        $file = File::get(126); // hängt an Testdokument 146
 
         $form->populateFromModel($file);
 
@@ -89,7 +95,7 @@ class Admin_Form_FileTest extends ControllerTestCase
     {
         $form = new Admin_Form_File();
 
-        $file = new File(123); // von Dokument 122
+        $file = File::get(123); // von Dokument 122
 
         $form->populateFromModel($file);
 
@@ -180,7 +186,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $form->getElement('Id')->setValue(126); // Datei 'test.pdf' von Dokument 146
 
-        $file = new File(126);
+        $file = File::get(126);
 
         $form->populateFromModel($file);
 
@@ -188,7 +194,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $model = $form->getModel();
 
-        $this->assertInstanceOf('Opus\File', $model);
+        $this->assertInstanceOf(FileInterface::class, $model);
         $this->assertEquals(126, $model->getId());
         $this->assertEquals('Testkommentar', $model->getComment());
 
@@ -206,7 +212,8 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $form->getElement('Id')->setValue('bla');
 
-        $this->setExpectedException(Application_Exception::class, 'Bad file ID = \'bla\'.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Bad file ID = \'bla\'.');
         $form->getModel();
     }
 
@@ -216,7 +223,8 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $form->getElement('Id')->setValue('8888');
 
-        $this->setExpectedException(Application_Exception::class, 'Unknown file ID = \'8888\'.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Unknown file ID = \'8888\'.');
         $form->getModel();
     }
 
@@ -227,8 +235,8 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $post = [
             'File0' => [
-                'Id' => 116
-            ]
+                'Id' => 116,
+            ],
         ];
 
         $form->setDefaults($post);
@@ -247,7 +255,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $post = [
             'FileLink' => 123,
-            'Language' => 'deu'
+            'Language' => 'deu',
         ];
 
         $result = $form->isValid($post);
@@ -261,10 +269,11 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $post = [
             'FileLink' => '5555',
-            'Language' => 'eng'
+            'Language' => 'eng',
         ];
 
-        $this->setExpectedException(Application_Exception::class, 'File with ID = 5555 not found.');
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('File with ID = 5555 not found.');
         $result = $form->isValid($post);
     }
 

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,51 +25,49 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_HighlightTest extends ControllerTestCase
 {
+    /** @var Application_View_Helper_Highlight */
+    private $helper;
 
-    private $_helper;
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_Highlight();
+        $this->helper = new Application_View_Helper_Highlight();
     }
 
     public function testHighlight()
     {
-        $this->assertEquals('Muster<b>mann</b>', $this->_helper->highlight('Mustermann', 'mann'));
+        $this->assertEquals('Muster<b>mann</b>', $this->helper->highlight('Mustermann', 'mann'));
     }
 
     public function testHighlightCaseInsensitive()
     {
-        $this->assertEquals('Muster<b>mann</b>', $this->_helper->highlight('Mustermann', 'MaNn'));
+        $this->assertEquals('Muster<b>mann</b>', $this->helper->highlight('Mustermann', 'MaNn'));
     }
 
     public function testHighlightMultiple()
     {
-        $this->assertEquals('<b>Man</b>n <b>man</b>n', $this->_helper->highlight('Mann mann', 'man'));
+        $this->assertEquals('<b>Man</b>n <b>man</b>n', $this->helper->highlight('Mann mann', 'man'));
     }
 
     public function testCustomWrapping()
     {
-        $this->assertEquals('<i>Muster</i>mann', $this->_helper->highlight('Mustermann', 'muster', '<i>', '</i>'));
+        $this->assertEquals('<i>Muster</i>mann', $this->helper->highlight('Mustermann', 'muster', '<i>', '</i>'));
     }
 
     public function testHighlightStringWithDelimiter()
     {
-        $this->assertEquals('<b>Mus/ter</b>mann', $this->_helper->highlight('Mus/termann', 'mus/ter'));
+        $this->assertEquals('<b>Mus/ter</b>mann', $this->helper->highlight('Mus/termann', 'mus/ter'));
     }
 
     public function testHighlightWithEmptyString()
     {
-        $this->assertEquals('Ján', $this->_helper->highlight('Ján', null));
+        $this->assertEquals('Ján', $this->helper->highlight('Ján', null));
     }
 }

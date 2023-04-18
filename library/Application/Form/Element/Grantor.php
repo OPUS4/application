@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,23 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\DnbInstitute;
+use Opus\Common\DnbInstitute;
 use Opus\Common\Model\ModelException;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * Select Element für Thesis Grantor Institute.
  */
 class Application_Form_Element_Grantor extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();
@@ -48,7 +45,7 @@ class Application_Form_Element_Grantor extends Application_Form_Element_Select
         $this->setRequired(true);
         $this->setDisableTranslator(true); // Grantor institutes are not translated
 
-        $validator = new \Zend_Validate_Int();
+        $validator = new Zend_Validate_Int();
         $validator->setMessage('validation_error_int');
         $this->addValidator($validator);
 
@@ -65,19 +62,20 @@ class Application_Form_Element_Grantor extends Application_Form_Element_Select
      * If $value is a valid DNB institute a corresponding option is added to select if necessary.
      *
      * @param mixed $value
-     * @return void|Zend_Form_Element
+     * @return $this
      * @throws ModelException
      */
     public function setValue($value)
     {
         try {
-            $institute = new DnbInstitute($value);
+            $institute = DnbInstitute::get($value);
         } catch (NotFoundException $omne) {
             parent::setValue($value); // could be blocked, but keeping compatibility just in case
-            return;
+            return $this;
         }
 
         $this->addMultiOption($institute->getId(), $institute->getDisplayName());
         parent::setValue($value);
+        return $this;
     }
 }

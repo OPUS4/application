@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,28 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- *
- * TODO
- */
-class Admin_Form_CopyDocument extends \Zend_Form
+use Opus\Common\DocumentInterface;
+
+class Admin_Form_CopyDocument extends Zend_Form
 {
+    public const ELEMENT_COPY       = 'Copy';
+    public const ELEMENT_CANCEL     = 'Cancel';
+    public const ELEMENT_COPY_FILES = 'CopyFiles';
 
-    const ELEMENT_COPY = 'Copy';
-    const ELEMENT_CANCEL = 'Cancel';
-    const ELEMENT_COPY_FILES = 'CopyFiles';
+    public const SUBFORM_DOCUMENT = 'document';
 
-    const SUBFORM_DOCUMENT = 'document';
-
-    const RESULT_COPY = 'copy';
-    const RESULT_CANCEL = 'cancel';
+    public const RESULT_COPY   = 'copy';
+    public const RESULT_CANCEL = 'cancel';
 
     public function init()
     {
@@ -58,11 +53,19 @@ class Admin_Form_CopyDocument extends \Zend_Form
         $this->addElement('submit', self::ELEMENT_CANCEL);
     }
 
+    /**
+     * @param DocumentInterface $document
+     */
     public function populateFromModel($document)
     {
         $this->getSubForm(self::SUBFORM_DOCUMENT)->populateFromModel($document);
     }
 
+    /**
+     * @param array $post
+     * @param array $context
+     * @return string|null
+     */
     public function processPost($post, $context)
     {
         if (array_key_exists(self::ELEMENT_COPY, $post)) {
@@ -70,5 +73,7 @@ class Admin_Form_CopyDocument extends \Zend_Form
         } elseif (array_key_exists(self::ELEMENT_CANCEL, $post)) {
             return self::RESULT_CANCEL;
         }
+
+        return null;
     }
 }

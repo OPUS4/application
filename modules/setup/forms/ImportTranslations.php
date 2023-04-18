@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,12 +34,11 @@
  */
 class Setup_Form_ImportTranslations extends Application_Form_Abstract
 {
+    public const ELEMENT_FILE = 'File';
 
-    const ELEMENT_FILE = 'File';
+    public const ELEMENT_CLEAR = 'Clear';
 
-    const ELEMENT_CLEAR = 'Clear';
-
-    const ELEMENT_IMPORT = 'Import';
+    public const ELEMENT_IMPORT = 'Import';
 
     public function init()
     {
@@ -50,14 +47,14 @@ class Setup_Form_ImportTranslations extends Application_Form_Abstract
         $this->addElement('file', self::ELEMENT_FILE);
 
         $this->addElement('checkbox', self::ELEMENT_CLEAR, [
-            'label' => 'setup_language_clear_before_import'
+            'label' => 'setup_language_clear_before_import',
         ]);
 
         $this->addElement('submit', self::ELEMENT_IMPORT);
 
         $this->setDecorators([
             'FormElements',
-            'Form'
+            'Form',
         ]);
     }
 }

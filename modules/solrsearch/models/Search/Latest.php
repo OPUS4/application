@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Solrsearch_Model_Search
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\Util\Query;
+
 class Solrsearch_Model_Search_Latest extends Solrsearch_Model_Search_Basic
 {
-
     /**
      * Latest search should return default number of rows if not specified.
      *
-     * @param $request
+     * @param Zend_Controller_Request_Http $request
      * @return array
      * @throws Application_Search_QueryBuilderException
      */
@@ -45,6 +44,7 @@ class Solrsearch_Model_Search_Latest extends Solrsearch_Model_Search_Basic
     {
         $input = parent::createQueryBuilderInputFromRequest($request);
 
+        // TODO BUG? $request->rows works?
         if (! isset($request->rows)) {
             $input['rows'] = Opus\Search\Query::getDefaultRows();
         }
@@ -52,11 +52,16 @@ class Solrsearch_Model_Search_Latest extends Solrsearch_Model_Search_Basic
         return $input;
     }
 
+    /**
+     * @param array $input
+     * @return Query
+     * @throws Zend_Exception
+     */
     public function createSearchQuery($input)
     {
         $this->getLogger()->debug("Constructing query for latest search.");
 
-        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::LATEST_DOCS);
+        $query = new Query(Query::LATEST_DOCS);
         $query->setRows($input['rows']);
         $query->setStart($input['start']);
 

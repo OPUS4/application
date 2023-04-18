@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,48 +25,42 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Model\NotFoundException;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Mail\SendMail;
+use Opus\Common\Model\NotFoundException;
 
 class Frontdoor_Model_Authors
 {
+    /** @var DocumentInterface */
+    private $document;
 
     /**
-     *
-     * @var Document
-     */
-    private $_document;
-
-    /**
-     * @param $arg int|Document either an instance of Document or an int that is interpreted
-     * as a document ID
-     * @throws Frontdoor_Model_Exception throws Frontdoor_Model_Exception if
-     * no document with id $docId exists
-     * or requested document exists but is not in server_state published
+     * @param int|DocumentInterface $arg Either an instance of Document or an int that is interpreted
+     *                                   as a document ID
+     * @throws Frontdoor_Model_Exception Thrown if no document with id $docId exists or requested document exists but
+     *                                   is not in server_state published.
      */
     public function __construct($arg)
     {
-        if ($arg instanceof Document) {
-            $this->_document = $arg;
+        if ($arg instanceof DocumentInterface) {
+            $this->document = $arg;
         } else {
             try {
-                $this->_document = Document::get($arg);
+                $this->document = Document::get($arg);
             } catch (NotFoundException $e) {
-                throw new Frontdoor_Model_Exception('invalid value for parameter docId given', null, $e);
+                throw new Frontdoor_Model_Exception('invalid value for parameter docId given', 0, $e);
             }
         }
 
         // check if document access is allowed
         // TODO document access check will be refactored in later releases
         try {
-            new Application_Util_Document($this->_document);
+            new Application_Util_Document($this->document);
         } catch (Application_Exception $e) {
             throw new Frontdoor_Model_Exception('access to requested document is forbidden');
         }
@@ -80,15 +75,16 @@ class Frontdoor_Model_Authors
     public function getAuthors()
     {
         $authors = [];
-        foreach ($this->_document->getPersonAuthor() as $author) {
+        foreach ($this->document->getPersonAuthor() as $author) {
             $authorId = $author->getId();
             array_push(
                 $authors,
                 [
-                'id' => $authorId[0],
-                'name' => $author->getName(),
-                'mail' => $author->getEmail(),
-                'allowMail' => $author->getAllowEmailContact()]
+                    'id'        => $authorId[0],
+                    'name'      => $author->getName(),
+                    'mail'      => $author->getEmail(),
+                    'allowMail' => $author->getAllowEmailContact(),
+                ]
             );
         }
         return $authors;
@@ -115,17 +111,18 @@ class Frontdoor_Model_Authors
     /**
      * Returns the underlying document that was given at object creation time.
      *
-     * @return Document
+     * @return DocumentInterface
      */
     public function getDocument()
     {
-        return $this->_document;
+        return $this->document;
     }
 
     /**
      * Returns all contactable authors that were selected by the users. Ignores
      * all authors that are not contactable.
      *
+     * @param array $checkboxSelection
      * @return array An array with elements of the form
      * array('address' => 'doe@example.org', 'name' => 'Doe') that can be used
      * without conversion as input for the last argument of SendMail:sendMail().
@@ -135,7 +132,7 @@ class Frontdoor_Model_Authors
         $authors = [];
         foreach ($this->getContactableAuthors() as $author) {
             $authorId = $author['id'];
-            if (array_key_exists($authorId, $checkboxSelection) && $checkboxSelection[$authorId] == 1) {
+            if (array_key_exists($authorId, $checkboxSelection) && (int) $checkboxSelection[$authorId] === 1) {
                 array_push($authors, ['address' => $author['mail'], 'name' => $author['name']]);
             }
         }
@@ -143,10 +140,13 @@ class Frontdoor_Model_Authors
     }
 
     /**
-     *
-     * @param $mailProvider A class that provides mail service.
-     *
-     * @throws
+     * @param SendMail $mailProvider A class that provides mail service.
+     * @param string   $from
+     * @param string   $fromName
+     * @param string   $subject
+     * @param string   $bodyText
+     * @param array    $authorSelection
+     * @throws Frontdoor_Model_Exception
      */
     public function sendMail($mailProvider, $from, $fromName, $subject, $bodyText, $authorSelection)
     {

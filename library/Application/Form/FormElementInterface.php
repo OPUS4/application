@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,23 +25,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Controller
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-
 /**
- * Mock Document for unit testing.
+ * Interface fuer OPUS Form Element Klassen.
  */
-class Mock_Opus_Document extends Document
+interface Application_Form_FormElementInterface
 {
+    /**
+     * Liefert Hinweis zum Element-Value, z.B. das eine ISBN ungültig ist.
+     *
+     * Hinweise sind wie Validierungsfehler, die aber das Abspeichern nicht verhindern und schon beim Aufruf des
+     * Formulars für existierende Werte berechnet werden.
+     *
+     * @return string
+     */
+    public function getHint();
 
-    public function store()
-    {
-        // don't do anything
-    }
+    /**
+     * Ändert die Ausgabe (Dekoratoren) des Elements so, daß es als statischer View statt Formularelement ausgegeben
+     * wird.
+     *
+     * Statt eines Input-Tags könnte zum Beispiel nur der Wert als einfacher Text ausgegeben werden.
+     */
+    public function prepareRenderingAsView();
 }

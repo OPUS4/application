@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,27 +25,20 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Class Application_Form_Element_SearchFieldModifier
- */
 class Application_Form_Element_SearchFieldModifier extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();
 
         $options = [
-            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL => 'advanced_search_form_modifier_all',
-            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ANY => 'advanced_search_form_modifier_one',
-            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none'
+            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL  => 'advanced_search_form_modifier_all',
+            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ANY  => 'advanced_search_form_modifier_one',
+            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none',
         ];
 
         $this->addMultiOptions($options);

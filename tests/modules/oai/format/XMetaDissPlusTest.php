@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,38 +25,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Oai_Format
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Model\ModelException;
+use Opus\Person;
 
 /**
  * @covers Oai_IndexController
  */
 class Oai_Format_XMetaDissPlusTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu'];
 
-    private $xpathNamespaces = [
-        'oai' => "http://www.openarchives.org/OAI/2.0/",
-        'oai_dc' => "http://www.openarchives.org/OAI/2.0/oai_dc/",
-        'cc' => "http://www.d-nb.de/standards/cc/",
-        'dc' => "http://purl.org/dc/elements/1.1/",
-        'ddb' => "http://www.d-nb.de/standards/ddb/",
-        'pc' => "http://www.d-nb.de/standards/pc/",
+    /** @var string[] */
+    protected $xpathNamespaces = [
+        'oai'       => "http://www.openarchives.org/OAI/2.0/",
+        'oai_dc'    => "http://www.openarchives.org/OAI/2.0/oai_dc/",
+        'cc'        => "http://www.d-nb.de/standards/cc/",
+        'dc'        => "http://purl.org/dc/elements/1.1/",
+        'ddb'       => "http://www.d-nb.de/standards/ddb/",
+        'pc'        => "http://www.d-nb.de/standards/pc/",
         'xMetaDiss' => "http://www.d-nb.de/standards/xmetadissplus/",
-        'epicur' => "urn:nbn:de:1111-2004033116",
-        'dcterms' => "http://purl.org/dc/terms/",
-        'thesis' => "http://www.ndltd.org/standards/metadata/etdms/1.0/",
-        'eprints' => 'http://www.openarchives.org/OAI/1.1/eprints',
-        'oaiid' => 'http://www.openarchives.org/OAI/2.0/oai-identifier',
-        'marc' => 'http://www.loc.gov/MARC21/slim',
-        'PP' => 'http://www.proprint-service.de/xml/schemes/v1/CHECKED'
+        'epicur'    => "urn:nbn:de:1111-2004033116",
+        'dcterms'   => "http://purl.org/dc/terms/",
+        'thesis'    => "http://www.ndltd.org/standards/metadata/etdms/1.0/",
+        'eprints'   => 'http://www.openarchives.org/OAI/1.1/eprints',
+        'oaiid'     => 'http://www.openarchives.org/OAI/2.0/oai-identifier',
+        'marc'      => 'http://www.loc.gov/MARC21/slim',
+        'PP'        => 'http://www.proprint-service.de/xml/schemes/v1/CHECKED',
     ];
 
     public function testXmlXsiSchemaDeclarationPresentForXMetaDissPlusMetadata()
@@ -75,5 +78,79 @@ class Oai_Format_XMetaDissPlusTest extends ControllerTestCase
         } else {
             $this->fail('element \'xMetaDiss:xMetaDiss\' not found');
         }
+    }
+
+    /**
+     * @return array[]
+     */
+    public function personDataProvider()
+    {
+        return [
+            ['author', 'dc:creator'],
+            ['advisor', 'dc:contributor'],
+            ['referee', 'dc:contributor'],
+            ['editor', 'dc:contributor'],
+        ];
+    }
+
+    /**
+     * @param string $role
+     * @param string $elementName
+     * @throws ModelException
+     * @dataProvider personDataProvider
+     */
+    public function testPersonOrcidPresentInXmetaDissPlus($role, $elementName)
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+
+        $person = new Person();
+        $person->setLastName('author1');
+        $person->setIdentifierOrcid('1111-2222-3333-4444');
+        $documentPerson = $doc->addPerson($person);
+        $documentPerson->setRole($role);
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpath('//xMetaDiss:xMetaDiss');
+        $this->assertXpath("//xMetaDiss:xMetaDiss/$elementName/pc:person/ddb:ORCID");
+        $this->assertXpathContentContains(
+            "//xMetaDiss:xMetaDiss/$elementName/pc:person/ddb:ORCID",
+            '1111-2222-3333-4444'
+        );
+    }
+
+    /**
+     * @param string $role
+     * @param string $elementName
+     * @throws ModelException
+     * @dataProvider personDataProvider
+     */
+    public function testAuthorGndPresentInXmetaDissPlus($role, $elementName)
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+
+        $person = new Person();
+        $person->setLastName('author1');
+        $person->setIdentifierGnd('GndAuthor1');
+        $documentPerson = $doc->addPerson($person);
+        $documentPerson->setRole($role);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpath('//xMetaDiss:xMetaDiss');
+        $this->assertXpath("//xMetaDiss:xMetaDiss/$elementName/pc:person[@ddb:GND-Nr=\"GndAuthor1\"]");
     }
 }

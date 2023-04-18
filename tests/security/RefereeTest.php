@@ -25,45 +25,47 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
-use Opus\UserRole;
+use Opus\Common\Account;
+use Opus\Common\AccountInterface;
+use Opus\Common\UserRole;
 
 class RefereeTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
-    private $_refereeAccount;
+    /** @var AccountInterface */
+    private $refereeAccount;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $userRole = UserRole::fetchByName('reviewer');
 
-        $account = new Account();
+        $account = Account::new();
         $account->setLogin('referee');
         $account->setPassword('refereereferee');
         $account->setRole([$userRole]);
         $account->store();
 
-        $this->_refereeAccount = $account;
+        $this->refereeAccount = $account;
 
         $this->enableSecurity();
         $this->loginUser('referee', 'refereereferee');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->logoutUser();
         $this->restoreSecuritySetting();
 
-        if (! is_null($this->_refereeAccount)) {
-            $this->_refereeAccount->delete();
+        if ($this->refereeAccount !== null) {
+            $this->refereeAccount->delete();
         }
 
         parent::tearDown();

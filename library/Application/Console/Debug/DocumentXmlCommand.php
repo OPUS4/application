@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,42 +25,60 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Cronjob
- * @package     Tests
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Mock used by DbCleanTemporary
+ * Exports documents.
+ *
+ * TODO unit testing
  */
-class OpusDocumentMock extends Document
+class Application_Console_Debug_DocumentXmlCommand extends Command
 {
+    public const ARGUMENT_DOC_ID = 'DocID';
 
-    public function changeServerDateModified($date)
+    protected function configure()
     {
-        $this->setServerDateModified($date);
-        // Start transaction
-        $dbadapter = $this->getTableRow()->getTable()->getAdapter();
-        $dbadapter->beginTransaction();
+        parent::configure();
 
-        // store internal and external fields
-        try {
-            $id = $this->_storeInternalFields();
-            $this->_postStoreInternalFields();
-            $this->_storeExternalFields();
-            $this->_postStoreExternalFields();
-        } catch (Exception $e) {
-            $dbadapter->rollBack();
-            throw $e;
-        }
+        $help = <<<EOT
+Currently only debug:xml is supported. It shows the raw XML for a document.
+EOT;
 
-        // commit transaction
-        $dbadapter->commit();
+        $this->setName('debug:xml')
+            ->setDescription('Prints XML for document')
+            ->setHelp($help)
+            ->addArgument(
+                self::ARGUMENT_DOC_ID,
+                InputArgument::OPTIONAL,
+                'ID of document'
+            );
+    }
 
-        $this->_postStore();
+    /**
+     * @return int
+     * @throws NotFoundException
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $docId = $input->getArgument(self::ARGUMENT_DOC_ID);
+
+        $document = Document::get($docId);
+        $xml      = $document->toXml();
+
+        $xml->preserveWhiteSpace = false;
+        $xml->formatOutput       = true;
+
+        $output->write($xml->saveXml());
+
+        return 0;
     }
 }

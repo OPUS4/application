@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,21 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Admin_StatisticControllerTest.
- *
  * @covers Admin_StatisticController
  */
 class Admin_StatisticControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function testIndexAction()
@@ -53,7 +49,7 @@ class Admin_StatisticControllerTest extends ControllerTestCase
 
     public function testShowAction()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost(['selectedYear' => '2010']);
         $this->dispatch('/admin/statistic/show');
@@ -64,13 +60,13 @@ class Admin_StatisticControllerTest extends ControllerTestCase
         $this->validateXHTML();
     }
 
-    /*
+    /**
      * Fragt ab, ob bei einem falschen Jahr die Indexseite angezeigt wird
      */
     public function testIndexActionWithWrongYear()
     {
         $this->useEnglish();
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost(['selectedYear' => '1337']);
         $this->dispatch('/admin/statistic/show');
@@ -80,7 +76,7 @@ class Admin_StatisticControllerTest extends ControllerTestCase
     public function testDisplayCurrentYear()
     {
         $this->useGerman();
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost(['selectedYear' => '2010']);
         $this->dispatch('/admin/statistic/show');

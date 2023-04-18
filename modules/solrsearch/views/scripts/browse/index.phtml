@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Index View for BrowsingController including links to several browsing lists and search functions
  *
@@ -26,15 +27,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * TODO generate list dynamically (no special code here)
  */
+
 ?>
 
 <h2><?= htmlspecialchars($this->translate('search_index_browsing')) ?></h2>
@@ -42,51 +42,34 @@
 <div class="content">
     <ul class="nav browsing">
         <li>
-            <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search',
-                'searchtype' => 'latest'], null, true) ?>"
-                ><?= htmlspecialchars($this->translate('latest_documents_title')) ?></a>&nbsp;
-            <a href="<?= $this->url(['module' => 'rss', 'controller' => 'index', 'action' => 'index'], null, true)
-                ?>" class="rss" type="application/rss+xml">
-                <img src="<?= $this->layoutPath() ?>/img/feed_small.png" width="12" height="12"
-                     alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" />
+            <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'latest'], null, true) ?>"><?= htmlspecialchars($this->translate('latest_documents_title')) ?></a>&nbsp;
+            <a href="<?= $this->url(['module' => 'rss', 'controller' => 'index', 'action' => 'index'], null, true) ?>" class="rss" type="application/rss+xml">
+                <img src="<?= $this->layoutPath() ?>/img/feed_small.png" width="12" height="12" alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" />
             </a>
         </li>
         <li>
-            <a href="<?= $this->url(
-                         ['module' => 'solrsearch', 'controller' => 'browse', 'action' => 'doctypes'],
-                         null,
-                         true
-                     ) ?>"><?= htmlspecialchars($this->translate('search_index_doctype_browsing')) ?></a>
+            <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'browse', 'action' => 'doctypes'], null, true) ?>"><?= htmlspecialchars($this->translate('search_index_doctype_browsing')) ?></a>
         </li>
         <li>
-            <a href="<?= $this->url(
-                         ['module' => 'solrsearch', 'controller' => 'browse', 'action' => 'years'],
-                         null,
-                         true
-                     ) ?>"><?= htmlspecialchars($this->translate('search_index_year_browsing')) ?></a>
+            <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'browse', 'action' => 'years'], null, true) ?>"><?= htmlspecialchars($this->translate('search_index_year_browsing')) ?></a>
         </li>
         <?php if ($this->showSeriesBrowsing) : ?>
         <li>
-            <a href="<?= $this->url([
-                    'module' => 'solrsearch', 'controller' => 'browse', 'action' => 'series'
-            ], null, true) ?>"><?= htmlspecialchars($this->translate('search_index_series_browsing')) ?>
-            </a>
+            <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'browse', 'action' => 'series'], null, true) ?>"><?= htmlspecialchars($this->translate('search_index_series_browsing')) ?></a>
         </li>
         <?php endif ?>
 
         <?php foreach ($this->collectionRoles as $collectionRole) :
             $translatelabel = 'default_collection_role_' . $collectionRole->getName();
-            $printname = '';
+            $printname      = '';
             if ($translatelabel === $this->translate($translatelabel)) {
                 $printname = $collectionRole->getName();
             } else {
                 $printname = $this->translate($translatelabel);
             }
-        ?>
+            ?>
         <li>
-            <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search',
-                'searchtype' => 'collection', 'id' => $collectionRole->getRootCollection()->getId()], null, true)?>"
-                ><?= htmlspecialchars($printname) ?></a>
+            <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $collectionRole->getRootCollection()->getId()], null, true)?>"><?= htmlspecialchars($printname) ?></a>
         </li>
         <?php endforeach ?>
     </ul>

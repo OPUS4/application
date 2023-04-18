@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,25 +25,20 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- *
  * TODO rename controller to InfopagesController (or something better)
  */
 class Setup_TranslationController extends Application_Controller_Action
 {
-
+    /** @var string[] */
     private $validPages = [
-        'home' => 'Setup_Form_HomePage',
+        'home'    => 'Setup_Form_HomePage',
         'contact' => 'Setup_Form_ContactPage',
-        'imprint' => 'Setup_Form_ImprintPage'
+        'imprint' => 'Setup_Form_ImprintPage',
     ];
 
     public function init()
@@ -63,7 +59,7 @@ class Setup_TranslationController extends Application_Controller_Action
 
         if (in_array($page, array_keys($this->validPages))) {
             $formClass = $this->validPages[$page];
-            $form = new $formClass;
+            $form      = new $formClass();
 
             $request = $this->getRequest();
 
@@ -85,8 +81,7 @@ class Setup_TranslationController extends Application_Controller_Action
                 $this->_helper->viewRenderer->setNoRender(true);
                 echo $form;
             }
-        } else {
-            // TODO redirect with error message
         }
+        // TODO redirect in in_array returns false (ELSE) with error message
     }
 }

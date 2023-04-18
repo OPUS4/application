@@ -25,16 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Sword
- * @author      Sascha Szott
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2017
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Sword_Bootstrap extends \Zend_Application_Module_Bootstrap
-{
 
+/**
+ * @phpcs:disable PSR2.Methods.MethodDeclaration
+ */
+class Sword_Bootstrap extends Zend_Application_Module_Bootstrap
+{
     protected function _initSwordModule()
     {
         Application_Modules::registerModule(new Sword_Model_SwordModule());

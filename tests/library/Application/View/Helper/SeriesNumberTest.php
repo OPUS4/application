@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,53 +25,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
+use Opus\Common\Series;
 
 class Application_View_Helper_SeriesNumberTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
-    private $_helper = null;
+    /** @var Application_View_Helper_SeriesNumber */
+    private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_SeriesNumber();
+        $this->helper = new Application_View_Helper_SeriesNumber();
     }
 
     public function testSeriesNumberForLinkedDocument()
     {
         $document = $this->getDocument(146);
-        $series = new Series(1);
+        $series   = Series::get(1);
 
-        $this->assertEquals('5/5', $this->_helper->seriesNumber($document, $series));
+        $this->assertEquals('5/5', $this->helper->seriesNumber($document, $series));
     }
 
     public function testSeriesNumberForNotLinkedDocument()
     {
         $document = $this->getDocument(146);
-        $series = new Series(2);
+        $series   = Series::get(2);
 
-        $this->assertEquals('', $this->_helper->seriesNumber($document, $series));
+        $this->assertEquals('', $this->helper->seriesNumber($document, $series));
     }
 
     public function testSeriesNumberEscaped()
     {
         $document = $this->createTestDocument();
-        $series = new Series(5);
+        $series   = Series::get(5);
 
         $document->addSeries($series)->setNumber('<h>XIII</h>');
         $document->store();
 
-        $this->assertEquals('&lt;h&gt;XIII&lt;/h&gt;', $this->_helper->seriesNumber($document, $series));
+        $this->assertEquals('&lt;h&gt;XIII&lt;/h&gt;', $this->helper->seriesNumber($document, $series));
     }
 }

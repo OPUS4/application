@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Update
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -38,34 +36,40 @@
  */
 class Application_Update_Exception extends Exception
 {
+    /** @var int */
+    private $exitCode;
 
-    private $_exitCode = null;
-
-    private $_output = null;
+    /** @var null|string  */
+    private $output;
 
     /**
-     * Application_Update_Exception constructor.
-     * @param string $message
-     * @param null $exitCode
-     * @param null $output
+     * @param string      $message
+     * @param int         $exitCode
+     * @param string|null $output
      *
      * TODO $output needed? Not used right now.
      */
-    public function __construct($message, $exitCode = null, $output = null)
+    public function __construct($message, $exitCode = 0, $output = null)
     {
         parent::__construct($message);
 
-        $this->_exitCode = $exitCode;
-        $this->_output = $output;
+        $this->exitCode = $exitCode;
+        $this->output   = $output;
     }
 
+    /**
+     * @return int
+     */
     public function getExitCode()
     {
-        return $this->_exitCode;
+        return $this->exitCode;
     }
 
+    /**
+     * @return string|null
+     */
     public function getOutput()
     {
-        return $this->_output;
+        return $this->output;
     }
 }

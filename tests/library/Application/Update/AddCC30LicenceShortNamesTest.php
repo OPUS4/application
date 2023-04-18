@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,37 +25,38 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_Update
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Licence;
+use Opus\Common\Document;
+use Opus\Common\Licence;
 use Opus\Common\Repository;
 
 class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
-    private $_update = null;
+    /** @var Application_Update_AddCC30LicenceShortNames */
+    private $update;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_update = new Application_Update_AddCC30LicenceShortNames();
-        $this->_update->setLogger(new MockLogger());
-        $this->_update->setQuietMode(true);
+        $this->update = new Application_Update_AddCC30LicenceShortNames();
+        $this->update->setLogger(new MockLogger());
+        $this->update->setQuietMode(true);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
     }
 
+    /**
+     * @return string[][]
+     */
     public function licenceMatchProvider()
     {
         return [
@@ -69,16 +71,18 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
             ['CC BY-NC 3.0', 'Creative Commons - Namensnennung - Nicht kommerziell'],
             ['CC BY-ND 3.0', 'Creative Commons - Namensnennung - Keine Bearbeitung'],
             ['CC BY-ND 3.0', 'Creative Commons - Namensnennung - KeineBearbeitung'],
-            ['CC BY-SA 3.0', 'Creative Commons - Namensnennung - Weitergabe unter gleichen Bedingungen']
+            ['CC BY-SA 3.0', 'Creative Commons - Namensnennung - Weitergabe unter gleichen Bedingungen'],
         ];
     }
 
     /**
      * @dataProvider licenceMatchProvider
+     * @param string $expected
+     * @param string $longName
      */
     public function testGetShortName($expected, $longName)
     {
-        $this->assertEquals($expected, $this->_update->getShortName($longName), $longName);
+        $this->assertEquals($expected, $this->update->getShortName($longName), $longName);
     }
 
     /**
@@ -86,18 +90,18 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
      */
     public function testUpdateLicenceWithoutVersion()
     {
-        $licence = new Licence();
+        $licence = Licence::new();
         $licence->setNameLong('Creative Commons - Namensnennung');
         $licence->setLanguage('deu');
         $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
         $licenceId = $licence->store();
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $this->assertNull($licence->getName());
 
-        $this->_update->run();
+        $this->update->run();
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $licence->delete();
 
         $this->assertEquals('CC BY 3.0', $licence->getName());
@@ -105,18 +109,18 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function testDoNotUpdate40Licence()
     {
-        $licence = new Licence();
+        $licence = Licence::new();
         $licence->setNameLong('Creative Commons 4.0 - Namensnennung');
         $licence->setLanguage('deu');
         $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
         $licenceId = $licence->store();
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $this->assertNull($licence->getName());
 
-        $this->_update->run();
+        $this->update->run();
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $licence->delete();
 
         $this->assertNull($licence->getName());
@@ -124,18 +128,18 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function testUpdateForUnknownLicence()
     {
-        $licence = new Licence();
+        $licence = Licence::new();
         $licence->setNameLong('Custom licence');
         $licence->setLanguage('deu');
         $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
         $licenceId = $licence->store();
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $this->assertNull($licence->getName());
 
-        $this->_update->run();
+        $this->update->run();
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $licence->delete();
 
         $this->assertNull($licence->getName());
@@ -143,16 +147,16 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function testUpdateForLicenceWithShortName()
     {
-        $licence = new Licence();
+        $licence = Licence::new();
         $licence->setName('CC BY 5.0');
         $licence->setNameLong('Creative Commons - Namensnennung');
         $licence->setLanguage('deu');
         $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
         $licenceId = $licence->store();
 
-        $this->_update->run();
+        $this->update->run();
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $licence->delete();
 
         $this->assertEquals('CC BY 5.0', $licence->getName());
@@ -160,20 +164,20 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
     public function testRemoveLicence()
     {
-        $name = $this->_update->getShortName('Creative Commons - Namensnennung');
+        $name = $this->update->getShortName('Creative Commons - Namensnennung');
 
         $this->assertEquals('CC BY 3.0', $name);
 
-        $this->_update->removeLicence($name);
+        $this->update->removeLicence($name);
 
-        $name = $this->_update->getShortName('Creative Commons - Namensnennung');
+        $name = $this->update->getShortName('Creative Commons - Namensnennung');
 
         $this->assertNull($name);
     }
 
     public function testDoNotUpdateServerDateModified()
     {
-        $licence = new Licence();
+        $licence = Licence::new();
         $licence->setNameLong('Creative Commons - Namensnennung');
         $licence->setLanguage('deu');
         $licence->setLinkLicence('http://opus4.kobv.org/test-licence');
@@ -194,17 +198,17 @@ class Application_Update_AddCC30LicenceShotNamesTest extends ControllerTestCase
 
         sleep(2);
 
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $this->assertNull($licence->getName());
 
-        $this->_update->run();
+        $this->update->run();
 
         $doc = Document::get($docId);
 
         $cacheResult = $cache->getData($docId, '1.0');
 
         // clean up licence first
-        $licence = new Licence($licenceId);
+        $licence = Licence::get($licenceId);
         $licence->delete();
 
         $this->assertNull($cacheResult);

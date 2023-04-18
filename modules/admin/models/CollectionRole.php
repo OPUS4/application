@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,35 +25,37 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
-use Opus\Model\NotFoundException;
+use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
+use Opus\Common\Model\NotFoundException;
 
 /**
  * TODO überarbeiten (entfernen?)
  */
 class Admin_Model_CollectionRole
 {
+    /** @var CollectionRoleInterface */
+    private $collectionRole;
 
-    private $_collectionRole = null;
-
+    /**
+     * @param int|null $id TODO BUG cannot use NULL with int
+     * @throws Admin_Model_Exception
+     */
     public function __construct($id = null)
     {
         if ($id === '') {
             throw new Admin_Model_Exception('missing parameter roleid');
         }
-        if (is_null($id)) {
+        if ($id === null) {
             $this->initNewCollectionRole();
             return;
         }
         try {
-            $this->_collectionRole = new CollectionRole((int) $id);
+            $this->collectionRole = CollectionRole::get((int) $id);
         } catch (NotFoundException $e) {
             throw new Admin_Model_Exception('roleid parameter value unknown');
         }
@@ -63,19 +66,20 @@ class Admin_Model_CollectionRole
      */
     private function initNewCollectionRole()
     {
-        $this->_collectionRole = new CollectionRole();
+        $this->collectionRole = CollectionRole::new();
         foreach (['Visible', 'VisibleBrowsingStart', 'VisibleFrontdoor', 'VisibleOai'] as $field) {
-            $this->_collectionRole->getField($field)->setValue(1);
+            $this->collectionRole->getField($field)->setValue(1);
         }
     }
 
     /**
      * Liefert CollectionRole.
-     * @return null|CollectionRole
+     *
+     * @return null|CollectionRoleInterface
      */
     public function getObject()
     {
-        return $this->_collectionRole;
+        return $this->collectionRole;
     }
 
     /**
@@ -83,36 +87,38 @@ class Admin_Model_CollectionRole
      */
     public function delete()
     {
-        $this->_collectionRole->delete();
+        $this->collectionRole->delete();
     }
 
     /**
      * Setzt Sichtbarkeit von CollectionRole.
-     * @param $visibility
+     *
+     * @param bool $visibility
      */
     public function setVisibility($visibility)
     {
-        $this->_collectionRole->setVisible($visibility);
-        $this->_collectionRole->store();
+        $this->collectionRole->setVisible($visibility);
+        $this->collectionRole->store();
     }
 
     /**
      * Verschiebt CollectionRole zu neuer Position.
-     * @param $position
+     *
+     * @param int $position
      * @throws Admin_Model_Exception
      *
      * TODO make robuster
      */
     public function move($position)
     {
-        if (is_null($position)) {
+        if ($position === null) {
             return;
         }
         $position = (int) $position;
         if ($position < 1) {
             throw new Admin_Model_Exception('cannot move collection role');
         }
-        $this->_collectionRole->setPosition($position);
-        $this->_collectionRole->store();
+        $this->collectionRole->setPosition($position);
+        $this->collectionRole->store();
     }
 }

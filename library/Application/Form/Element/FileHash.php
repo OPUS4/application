@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,74 +24,99 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\HashValues;
+use Opus\Common\FileInterface;
+use Opus\Common\HashValueInterface;
 
 /**
  * Formularelement fuer Anzeige von File Hashes.
- *
- * @category    Application
- * @package     Application_Form_Element_FileHash
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_Form_Element_FileHash extends \Zend_Form_Element_Xhtml
+class Application_Form_Element_FileHash extends Zend_Form_Element_Xhtml
 {
+    /** @var HashValueInterface */
+    private $hash;
 
-    private $_hash;
-
-    private $_file;
+    /** @var FileInterface */
+    private $file;
 
     public function init()
     {
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
 
         $this->setLabel($this->getTranslator()->translate('admin_filemanager_checksum') . ' - ');
     }
 
     public function loadDefaultDecorators()
     {
-        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) === 0) {
             $this->setDecorators(
                 [
-                'FileHash',
-                ['ElementHtmlTag'],
-                ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true]],
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                    'FileHash',
+                    ['ElementHtmlTag'],
+                    [
+                        'LabelNotEmpty',
+                        [
+                            'tag'        => 'div',
+                            'tagClass'   => 'label',
+                            'placement'  => 'prepend',
+                            'disableFor' => true,
+                        ],
+                    ],
+                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
                 ]
             );
         }
     }
 
+    /**
+     * @param FileInterface $file
+     * @return $this
+     */
     public function setFile($file)
     {
-        $this->_file = $file;
+        $this->file = $file;
+        return $this;
     }
 
+    /**
+     * @return FileInterface
+     */
     public function getFile()
     {
-        return $this->_file;
+        return $this->file;
     }
 
+    /**
+     * @param HashValueInterface $hash
+     * @return $this
+     */
     public function setValue($hash)
     {
-        if ($hash instanceof HashValues) {
-            $this->_hash = $hash;
+        if ($hash instanceof HashValueInterface) {
+            $this->hash = $hash;
         }
+        return $this;
     }
 
+    /**
+     * @return HashValueInterface
+     */
     public function getValue()
     {
-        return $this->_hash;
+        return $this->hash;
     }
 
+    /**
+     * @return string
+     */
     public function getLabel()
     {
-        return parent::getLabel() . $this->getTranslator()->translate($this->_hash->getType());
+        return parent::getLabel() . $this->getTranslator()->translate($this->hash->getType());
     }
 }

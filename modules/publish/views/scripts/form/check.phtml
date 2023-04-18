@@ -25,13 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Doreen Thiede <thiede@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 ?>
 
 <h2><?= $this->translate($this->title) ?></h2>
@@ -49,23 +46,23 @@
                     <tr><td class='group' colspan="2"><b><?= $this->translate($group->getName()) ?></b></td></tr>
 
                 <?php } foreach ($group->getElements() as $element) : ?>
-                        <?php if ($element->getValue() != "") : ?>
+                        <?php if ($element->getValue() !== '') : ?>
                             <tr><td class='label'><?= $this->translate($element->getLabel()) ?></td>
                             <?php if ($element->getType() === 'Zend_Form_Element_Select') : ?>
                                 <td><?= htmlspecialchars($element->getMultiOption($element->getValue())) ?></td>
                             <?php  else : ?>
                                 <?php if ($element->getType() === 'Zend_Form_Element_Checkbox') : ?>
-                                    <?php if ($element->getValue() == '1') : ?>
+                                    <?php if ($element->getValue()) : ?>
                                         <td><?= $this->translate('yes'); ?></td>
                                     <?php else : ?>
                                         <td><?= $this->translate('no'); ?></td>
                                     <?php endif ?>
                                 <?php else : ?>
-                                    <td><?= htmlspecialchars($element->getValue(), ENT_DISALLOWED) ?></td>
+                                    <td><?= $element->getValue() !== null ? htmlspecialchars($element->getValue(), ENT_DISALLOWED) : '' ?></td>
                                 <?php endif ?> <!--checkbox-->
                             <?php endif ?> <!--select-->
                             </tr>
-                        <?php $this->form->removeElement($element->getName()); ?>
+                            <?php $this->form->removeElement($element->getName()); ?>
                         <?php endif; ?> <!--!=""-->
                 <?php endforeach;?> <!--$element-->
             <?php endforeach;?>
@@ -74,19 +71,19 @@
             <!-- listing all single elements -->
             <tr><td class='group' colspan="2"><b><?= $this->translate('publish_controller_check_otherElements') ?></b></td></tr>
             <?php foreach ($this->form->getElements() as $elem) : ?>
-                <?php if ($elem->getValue() != "") : ?>
+                <?php if ($elem->getValue() !== null && $elem->getValue() !== '') : ?>
                     <tr><td class='label'><?= $this->translate($elem->getLabel()) ?></td>
                         <?php if ($elem->getType() === 'Zend_Form_Element_Select') : ?>
                             <td><?= htmlspecialchars($elem->getMultiOption($elem->getValue())) ?></td>
                         <?php  else : ?>
                             <?php if ($elem->getType() === 'Zend_Form_Element_Checkbox') : ?>
-                                <?php if ($elem->getValue() == '1') : ?>
+                                <?php if ($elem->getValue()) : ?>
                                     <td><?= $this->translate('yes'); ?></td>
                                 <?php else : ?>
                                     <td><?= $this->translate('no'); ?></td>
                                 <?php endif ?>
                             <?php else : ?>
-                                <td><?= htmlspecialchars($elem->getValue(), ENT_DISALLOWED) ?></td>
+                                <td><?= htmlspecialchars($elem->getValue() ?? '', ENT_DISALLOWED) ?></td>
                             <?php endif ?>
                         <?php endif ?>
                     </tr>

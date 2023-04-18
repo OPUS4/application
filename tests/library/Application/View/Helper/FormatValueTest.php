@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,40 +25,39 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
-use Opus\Document;
+use Opus\Common\Date;
+use Opus\Common\Document;
 
 /**
  * Unit tests for FormatValue view helper.
  */
 class Application_View_Helper_FormatValueTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'translation'];
 
-    private $__helper;
+    /** @var Application_View_Helper_FormatValue */
+    private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
-        $this->__helper = new Application_View_Helper_FormatValue();
-        $this->__helper->setView($this->getView());
+        $this->helper = new Application_View_Helper_FormatValue();
+        $this->helper->setView($this->getView());
     }
 
     public function testViewHelperReturnsItself()
     {
-        $this->assertEquals($this->__helper, $this->__helper->formatValue());
+        $this->assertEquals($this->helper, $this->helper->formatValue());
     }
 
     public function testFormatValueForNull()
     {
-        $ouput = $this->__helper->format(null);
+        $ouput = $this->helper->format(null);
 
         $this->assertTrue(empty($output));
     }
@@ -66,7 +66,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
     {
         $value = "Test";
 
-        $output = $this->__helper->format($value);
+        $output = $this->helper->format($value);
 
         $this->assertEquals($value, $output);
     }
@@ -79,7 +79,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $field->setValue('deu');
 
-        $output = $this->__helper->format($field, 'Opus\Document');
+        $output = $this->helper->format($field, Opus\Document::class);
 
         $this->assertTrue(in_array($output, ['German', 'Deutsch']));
     }
@@ -92,7 +92,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $field->setValue(2010);
 
-        $output = $this->__helper->format($field);
+        $output = $this->helper->format($field);
 
         $this->assertEquals('2010', $output);
     }
@@ -109,7 +109,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $field = $doc->getField('ThesisDateAccepted');
 
-        $output = $this->__helper->format($field);
+        $output = $this->helper->format($field);
 
         $this->assertTrue(in_array($output, ['2002/06/17', '17.06.2002']));
     }
@@ -122,7 +122,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $field = $doc->getField('PublishedDate');
 
-        $output = $this->__helper->format($field);
+        $output = $this->helper->format($field);
 
         $this->assertEquals(null, $output);
     }
@@ -133,7 +133,7 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
         $field = $doc->getField('PublicationState');
 
-        $output = $this->__helper->format($field, 'Opus\Document');
+        $output = $this->helper->format($field, Opus\Document::class);
 
         // PublicationState is not translated right now
         $this->assertEquals('draft', $output);

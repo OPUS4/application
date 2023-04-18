@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -40,11 +38,12 @@
  *
  * A combobox has options like a select element, but it can also have a value that does not match any of the options.
  */
-class Application_Form_Element_Combobox extends \Zend_Form_Element_Multi
+class Application_Form_Element_Combobox extends Zend_Form_Element_Multi
 {
-
+    /** @var bool */
     public $multiple = false;
 
+    /** @var string */
     public $helper = 'formCombobox';
 
     public function init()
@@ -54,12 +53,12 @@ class Application_Form_Element_Combobox extends \Zend_Form_Element_Multi
 
         parent::init();
 
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators()
     {
-        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) === 0) {
             $this->setDecorators(
                 [
                     'ViewHelper',
@@ -67,7 +66,7 @@ class Application_Form_Element_Combobox extends \Zend_Form_Element_Multi
                     'Errors',
                     'ElementHtmlTag',
                     ['LabelNotEmpty', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
-                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
                 ]
             );
         }
@@ -75,11 +74,12 @@ class Application_Form_Element_Combobox extends \Zend_Form_Element_Multi
 
     /**
      * Sets multi option such that value and label are equal.
-     * @param $values
+     *
+     * @param array|string|null $values
      */
     public function setAutocompleteValues($values)
     {
-        if (! is_null($values)) {
+        if ($values !== null) {
             if (is_array($values)) {
                 $options = array_combine($values, $values);
                 $options = array_diff($options, [null]); // remove options with null value

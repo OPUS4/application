@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,49 +25,52 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Model\ModelInterface;
 
 /**
  * Interface fuer Formulare die Model-Instanzen anzeigen.
- *
- * @category    Application
- * @package     Application_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-interface Application_Form_IModel
+interface Application_Form_ModelFormInterface
 {
-
     /**
      * Erzeugt Model-Instanz fuer Formular, entweder neue oder existierende.
-     * @return mixed
+     *
+     * @return ModelInterface
      */
     public function getModel();
 
     /**
      * Liefert die gesetzte Modelklasse fuer das Formular.
-     * @return mixed
+     *
+     * @return string
      */
     public function getModelClass();
 
     /**
      * Verarbeitet POST Daten.
-     * @param $post array Daten fuer Formular
-     * @param $context array Daten fuer gesamten Request
-     * @return mixed
+     *
+     * @param array $post Daten fuer Formular
+     * @param array $context Daten fuer gesamten Request
+     * @return string|null
      */
     public function processPost($post, $context);
 
     /**
      * Initialisiert das Formular mit Werten einer Model-Instanz.
-     * @param $model
+     *
+     * @param ModelInterface $model
      */
     public function populateFromModel($model);
 
     /**
      * Aktualsiert Model-Instanz mit Werten im Formular.
-     * @param $model
+     *
+     * @param ModelInterface $model
      */
     public function updateModel($model);
 

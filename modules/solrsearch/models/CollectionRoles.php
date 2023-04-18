@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,51 +25,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 
 class Solrsearch_Model_CollectionRoles
 {
-
-    private $_collectionRoles = null;
+    /** @var CollectionRoleInterface[] */
+    private $collectionRoles;
 
     /**
      * Returns visible collection roles.
+     *
      * @return array of CollectionRole objects
      */
     public function getAllVisible()
     {
-        if (is_null($this->_collectionRoles)) {
-            $this->_collectionRoles = [];
+        if ($this->collectionRoles === null) {
+            $this->collectionRoles = [];
             foreach (CollectionRole::fetchAll() as $collectionRole) {
-                if ($this->isVisible($collectionRole)
+                if (
+                    $this->isVisible($collectionRole)
                     && ($this->hasVisibleChildren($collectionRole)
-                    || $this->hasPublishedDocs($collectionRole))) {
-                    array_push($this->_collectionRoles, $collectionRole);
+                    || $this->hasPublishedDocs($collectionRole))
+                ) {
+                    array_push($this->collectionRoles, $collectionRole);
                 }
             }
         }
 
-        return $this->_collectionRoles;
+        return $this->collectionRoles;
     }
 
     /**
      * Return true if the given collection role has at least one
      * first-level collection that is visible.
      *
-     * @param CollectionRole $collectionRole
+     * @param CollectionRoleInterface $collectionRole
      * @return bool
      */
     private function hasVisibleChildren($collectionRole)
     {
         $rootCollection = $collectionRole->getRootCollection();
-        if (is_null($rootCollection)) {
+        if ($rootCollection === null) {
             return false;
         }
         return $rootCollection->hasVisibleChildren();
@@ -78,26 +80,27 @@ class Solrsearch_Model_CollectionRoles
      * Returns true if the given collection role has at least one associated document
      * in server_state published.
      *
-     * @param CollectionRole $collectionRole
+     * @param CollectionRoleInterface $collectionRole
      * @return bool
      */
     private function hasPublishedDocs($collectionRole)
     {
         $rootCollection = $collectionRole->getRootCollection();
-        if (is_null($rootCollection)) {
+        if ($rootCollection === null) {
             return false;
         }
-        $publishedDocIDs = $rootCollection->getPublishedDocumentIds();
-        return is_array($publishedDocIDs) && ! empty($publishedDocIDs);
+        $publishedDocIds = $rootCollection->getPublishedDocumentIds();
+        return is_array($publishedDocIds) && ! empty($publishedDocIds);
     }
 
     /**
      * Returns true if collection role is visible in browsing.
-     * @param $collectionRole CollectionRole
+     *
+     * @param CollectionRoleInterface $collectionRole
      * @return bool
      */
     private function isVisible($collectionRole)
     {
-        return $collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1';
+        return $collectionRole->getVisible() && $collectionRole->getVisibleBrowsingStart();
     }
 }

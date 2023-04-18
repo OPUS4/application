@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,28 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Sascha Szott <szott@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
+use Opus\Common\Model\ModelException;
+use Opus\Common\Series;
 
 /**
- * Class Solrsearch_BrowseControllerTest.
- *
  * @covers Solrsearch_BrowseController
  */
 class Solrsearch_BrowseControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->requireSolrConfig();
@@ -97,7 +92,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $d->setServerState('unpublished');
         $d->store();
 
-        $s = new Series(7);
+        $s = Series::get(7);
         $s->setVisible('1');
         $s->store();
 
@@ -120,7 +115,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $d->setServerState('published');
         $d->store();
 
-        $s = new Series(7);
+        $s = Series::get(7);
         $s->setVisible('1');
         $s->store();
 
@@ -133,13 +128,20 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
 
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());
         foreach (Series::getAll() as $series) {
-            if ($series->getId() != 7) {
-                $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/' . $series->getId(), $this->getResponse()->getBody());
+            if ($series->getId() !== 7) {
+                $this->assertNotContains(
+                    '/solrsearch/index/search/searchtype/series/id/' . $series->getId(),
+                    $this->getResponse()->getBody()
+                );
             }
         }
         $this->assertResponseCode(200);
     }
 
+    /**
+     * @return array
+     * @throws ModelException
+     */
     private function setAllSeriesToUnvisible()
     {
         $visibilities = [];
@@ -151,6 +153,10 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         return $visibilities;
     }
 
+    /**
+     * @param array $visibilities
+     * @throws ModelException
+     */
     private function restoreSeriesVisibility($visibilities)
     {
         foreach (Series::getAll() as $seriesItem) {
@@ -164,7 +170,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = ['1', '4', '2', '5', '6'];
+        $seriesIds    = ['1', '4', '2', '5', '6'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -185,7 +191,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = ['6', '5', '2', '4', '1'];
+        $seriesIds    = ['6', '5', '2', '4', '1'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -199,18 +205,18 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     {
         $sortOrders = $this->getSortOrders();
 
-        $s = new Series(2);
+        $s = Series::get(2);
         $s->setSortOrder(6);
         $s->store();
 
-        $s = new Series(6);
+        $s = Series::get(6);
         $s->setSortOrder(0);
         $s->store();
 
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = ['1', '6', '4', '2', '5'];
+        $seriesIds    = ['1', '6', '4', '2', '5'];
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -220,6 +226,9 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->setSortOrders($sortOrders);
     }
 
+    /**
+     * @return array
+     */
     private function getSortOrders()
     {
         $sortOrders = [];
@@ -229,6 +238,10 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         return $sortOrders;
     }
 
+    /**
+     * @param array $sortOrders
+     * @throws ModelException
+     */
     private function setSortOrders($sortOrders)
     {
         foreach (Series::getAll() as $seriesItem) {

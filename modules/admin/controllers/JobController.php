@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,30 +24,25 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Job;
+use Opus\Common\Job;
 
 /**
  * Controller für die Anzeige von Informationen über Background-Jobs.
- *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Admin_JobController extends Application_Controller_Action
 {
-
     public function indexAction()
     {
-
         $config = $this->getConfig();
 
         if (isset($config->runjobs->asynchronous) && filter_var($config->runjobs->asynchronous, FILTER_VALIDATE_BOOLEAN)) {
-            $this->view->asyncjobs = true;
-            $this->view->failedJobCount = Job::getCountPerLabel(Job::STATE_FAILED);
+            $this->view->asyncjobs           = true;
+            $this->view->failedJobCount      = Job::getCountPerLabel(Job::STATE_FAILED);
             $this->view->unprocessedJobCount = Job::getCountPerLabel(Job::STATE_UNDEFINED);
         } else {
             $this->view->asyncjobs = false;
@@ -57,7 +53,6 @@ class Admin_JobController extends Application_Controller_Action
     {
         $this->view->title = $this->view->translate('admin_title_job');
     }
-
 
     /**
      * TODO review functionality and create ticket

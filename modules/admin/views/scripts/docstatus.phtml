@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,17 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-use Opus\Log;
+use Opus\Common\Log;
+
 ?>
 
-<?PHP if (! is_null($this->document)) : ?>
+<?PHP if ($this->document !== null) : ?>
 <div id="docstatus">
     <dl>
         <dt id="Document-ServerState"><?= $this->translate('ServerState') ?></dt>
@@ -46,6 +45,6 @@ use Opus\Log;
     </dl>
 </div>
 <?PHP else : ?>
-<?PHP Log::get()->err('Use of partial \'docstatus.phtml\' without document = null.'); ?>
+    <?PHP Log::get()->err('Use of partial \'docstatus.phtml\' without document = null.'); ?>
 <?PHP endif; ?>
 

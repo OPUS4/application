@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,11 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -47,7 +44,6 @@
  */
 class Admin_Form_Translation extends Application_Form_Abstract
 {
-
     public function init()
     {
         parent::init();
@@ -57,7 +53,7 @@ class Admin_Form_Translation extends Application_Form_Abstract
         $languages = $configHelper->getSupportedLanguages();
         $translate = $configHelper->getTranslate();
 
-        /*
+        /* TODO REMOVE
         $text = new Zend_Form_Element_Note('description');
         $text->setValue('Hello, world! This is a slightly longer description in order to test how it is displayed on the page.');
         $this->addElement($text);
@@ -66,11 +62,14 @@ class Admin_Form_Translation extends Application_Form_Abstract
         foreach ($languages as $language) {
             $this->addElement('text', $language, [
                 'label' => $translate->translateLanguage($language),
-                'size' => 60
+                'size'  => 60,
             ]);
         }
     }
 
+    /**
+     * @param string $key
+     */
     public function setKey($key)
     {
         $this->setLegend($key);

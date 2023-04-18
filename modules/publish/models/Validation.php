@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,42 +25,66 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\CollectionRole;
+use Opus\Common\Collection;
+use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 use Opus\Common\Config;
-use Opus\DnbInstitute;
-use Opus\Licence;
-use Opus\Series;
+use Opus\Common\DnbInstitute;
+use Opus\Common\Licence;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Series;
 
 class Publish_Model_Validation
 {
-
+    /** @var string */
     public $datatype;
+
+    /** @var array */
     public $validator = [];
+
+    /** @var array */
     public $institutes = [];
+
+    /** @var array */
     public $projects = [];
+
+    /** @var array */
     public $licences = [];
+
+    /** @var array */
     public $series = [];
+
+    /** @var array */
     public $languages = [];
+
+    /** @var array */
     public $listOptions = [];
+
+    /** @var CollectionRoleInterface */
     public $collectionRole;
 
-    private $_view;
-    private $_session;
+    /** @var Zend_View */
+    private $view;
 
+    /** @var Zend_Session_Namespace */
+    private $session;
+
+    /**
+     * @param string                       $datatype
+     * @param Zend_Session_Namespace       $session
+     * @param CollectionRoleInterface|null $collectionRole
+     * @param array|null                   $options
+     * @param Zend_View|null               $view
+     */
     public function __construct($datatype, $session, $collectionRole = null, $options = null, $view = null)
     {
         if (isset($options) && ! empty($options)) {
             $this->listOptions = $options;
-            $this->datatype = 'List';
+            $this->datatype    = 'List';
         }
 
         if (isset($collectionRole)) {
@@ -68,56 +93,56 @@ class Publish_Model_Validation
             $this->datatype = $datatype;
         }
 
-        $this->_view = $view;
-        $this->_session = $session;
+        $this->view    = $view;
+        $this->session = $session;
     }
 
     public function validate()
     {
-        $this->_datatypeValidation();
+        $this->datatypeValidation();
     }
 
-    private function _datatypeValidation()
+    private function datatypeValidation()
     {
         switch ($this->datatype) {
             case 'Date':
-                $this->validator = $this->_validateDate();
+                $this->validator = $this->validateDate();
                 break;
 
             case 'Email':
-                $this->validator = $this->_validateEmail();
+                $this->validator = $this->validateEmail();
                 break;
 
             case 'Integer':
-                $this->validator = $this->_validateInteger();
+                $this->validator = $this->validateInteger();
                 break;
 
             case 'Language':
-                $this->validator = $this->_validateLanguage();
+                $this->validator = $this->validateLanguage();
                 break;
 
             case 'Licence':
-                $this->validator = $this->_validateLicence();
+                $this->validator = $this->validateLicence();
                 break;
 
             case 'List':
-                $this->validator = $this->_validateList();
+                $this->validator = $this->validateList();
                 break;
 
             case 'Series':
-                $this->validator = $this->_validateSeries();
+                $this->validator = $this->validateSeries();
                 break;
 
             case 'ThesisGrantor':
-                $this->validator = $this->_validateThesis(true);
+                $this->validator = $this->validateThesis(true);
                 break;
 
             case 'ThesisPublisher':
-                $this->validator = $this->_validateThesis();
+                $this->validator = $this->validateThesis();
                 break;
 
             case 'Year':
-                $this->validator = $this->_validateYear();
+                $this->validator = $this->validateYear();
                 break;
 
             case 'Collection':
@@ -139,22 +164,25 @@ class Publish_Model_Validation
         }
     }
 
-    private function _validateDate()
+    /**
+     * @return array|null
+     */
+    private function validateDate()
     {
-        if (! isset($this->_session->language)) {
-            return;
+        if (! isset($this->session->language)) {
+            return null;
         }
 
-        $lang = $this->_session->language;
+        $lang       = $this->session->language;
         $validators = [];
 
         $validator = new Application_Form_Validate_Date();
         $validator->setLocale($lang);
 
         $messages = [
-            \Zend_Validate_Date::INVALID => $this->translate('publish_validation_error_date_invalid'),
-            \Zend_Validate_Date::INVALID_DATE => $this->translate('publish_validation_error_date_invaliddate'),
-            \Zend_Validate_Date::FALSEFORMAT => $this->translate('publish_validation_error_date_falseformat')
+            Zend_Validate_Date::INVALID      => $this->translate('publish_validation_error_date_invalid'),
+            Zend_Validate_Date::INVALID_DATE => $this->translate('publish_validation_error_date_invaliddate'),
+            Zend_Validate_Date::FALSEFORMAT  => $this->translate('publish_validation_error_date_falseformat'),
         ];
         $validator->setMessages($messages);
 
@@ -162,20 +190,26 @@ class Publish_Model_Validation
         return $validators;
     }
 
-    private function _validateEmail()
+    /**
+     * @return array
+     */
+    private function validateEmail()
     {
         $validators = [];
-        $validator = new Publish_Model_ValidationEmail();
+        $validator  = new Publish_Model_ValidationEmail();
+
+        $commonErrorMessage = 'publish_validation_error_email_invalid';
+
         $messages = [
-            \Zend_Validate_EmailAddress::INVALID => $this->translate('publish_validation_error_email_invalid'),
-            \Zend_Validate_EmailAddress::INVALID_FORMAT => $this->translate('publish_validation_error_email_invalid'),
-            \Zend_Validate_EmailAddress::INVALID_HOSTNAME => $this->translate('publish_validation_error_email_invalid'),
-            \Zend_Validate_EmailAddress::INVALID_LOCAL_PART => $this->translate('publish_validation_error_email_invalid'),
-            \Zend_Validate_EmailAddress::INVALID_MX_RECORD => $this->translate('publish_validation_error_email_invalid'),
-            \Zend_Validate_EmailAddress::INVALID_SEGMENT => $this->translate('publish_validation_error_email_invalid'),
-            \Zend_Validate_EmailAddress::LENGTH_EXCEEDED => $this->translate('publish_validation_error_email_invalid'),
-            \Zend_Validate_EmailAddress::QUOTED_STRING => $this->translate('publish_validation_error_email_invalid'),
-            \Zend_Validate_EmailAddress::DOT_ATOM => $this->translate('publish_validation_error_email_invalid'),
+            Zend_Validate_EmailAddress::INVALID            => $this->translate($commonErrorMessage),
+            Zend_Validate_EmailAddress::INVALID_FORMAT     => $this->translate($commonErrorMessage),
+            Zend_Validate_EmailAddress::INVALID_HOSTNAME   => $this->translate($commonErrorMessage),
+            Zend_Validate_EmailAddress::INVALID_LOCAL_PART => $this->translate($commonErrorMessage),
+            Zend_Validate_EmailAddress::INVALID_MX_RECORD  => $this->translate($commonErrorMessage),
+            Zend_Validate_EmailAddress::INVALID_SEGMENT    => $this->translate($commonErrorMessage),
+            Zend_Validate_EmailAddress::LENGTH_EXCEEDED    => $this->translate($commonErrorMessage),
+            Zend_Validate_EmailAddress::QUOTED_STRING      => $this->translate($commonErrorMessage),
+            Zend_Validate_EmailAddress::DOT_ATOM           => $this->translate($commonErrorMessage),
         ];
         $validator->setMessages($messages);
 
@@ -183,33 +217,44 @@ class Publish_Model_Validation
         return $validators;
     }
 
-    private function _validateInteger()
+    /**
+     * @return array
+     * @throws Zend_Validate_Exception
+     */
+    private function validateInteger()
     {
         $validators = [];
-        $validator = new \Zend_Validate_Int();
-        $validator->setMessage($this->translate('publish_validation_error_int'), \Zend_Validate_Int::NOT_INT);
+        $validator  = new Zend_Validate_Int();
+        $validator->setMessage($this->translate('publish_validation_error_int'), Zend_Validate_Int::NOT_INT);
 
         $validators[] = $validator;
         return $validators;
     }
 
-    private function _validateLanguage()
+    /**
+     * @return array|null
+     */
+    private function validateLanguage()
     {
-        $validators = [];
         $languages = array_keys($this->getLanguages());
 
-        if (is_null($languages)) {
+        if ($languages === null) {
             return null;
         }
 
         return $this->validateSelect($languages);
     }
 
+    /**
+     * @param array $set
+     * @return array
+     * @throws Zend_Validate_Exception
+     */
     private function validateSelect($set)
     {
-        $validator = new \Zend_Validate_InArray($set);
-        $messages = [
-            \Zend_Validate_InArray::NOT_IN_ARRAY => $this->translate('publish_validation_error_inarray_notinarray')
+        $validator = new Zend_Validate_InArray($set);
+        $messages  = [
+            Zend_Validate_InArray::NOT_IN_ARRAY => $this->translate('publish_validation_error_inarray_notinarray'),
         ];
         $validator->setMessages($messages);
 
@@ -217,31 +262,40 @@ class Publish_Model_Validation
         return $validators;
     }
 
-    private function _validateLicence()
+    /**
+     * @return array|null
+     * @throws Zend_Validate_Exception
+     */
+    private function validateLicence()
     {
-        $validators = [];
         $licences = array_keys($this->getLicences());
-        if (is_null($licences)) {
+        if ($licences === null) {
             return null;
         }
 
         return $this->validateSelect($licences);
     }
 
-    private function _validateSeries()
+    /**
+     * @return array|null
+     * @throws Zend_Validate_Exception
+     */
+    private function validateSeries()
     {
-        $validators = [];
         $series = array_keys($this->getSeries());
-        if (is_null($series)) {
+        if ($series === null) {
             return null;
         }
 
         return $this->validateSelect($series);
     }
 
-    private function _validateList()
+    /**
+     * @return array
+     * @throws Zend_Validate_Exception
+     */
+    private function validateList()
     {
-        $validators = [];
         foreach ($this->listOptions as $option) {
             $this->listOptions[$option] = $option;
         }
@@ -249,34 +303,44 @@ class Publish_Model_Validation
         return $this->validateSelect($this->listOptions);
     }
 
-    private function _validateThesis($grantors = null)
+    /**
+     * @param array|null $grantors
+     * @return array|null
+     * @throws Zend_Validate_Exception
+     */
+    private function validateThesis($grantors = null)
     {
-        $validators = [];
         $thesisGrantors = $this->getThesis($grantors);
-        if (! is_null($thesisGrantors)) {
+        if ($thesisGrantors !== null) {
             $thesises = array_keys($thesisGrantors);
-            if (is_null($thesises)) {
+            if ($thesises === null) {
                 return null;
             }
             return $this->validateSelect($thesises);
         }
+
+        return null;
     }
 
-    private function _validateYear()
+    /**
+     * @return array
+     * @throws Zend_Validate_Exception
+     */
+    private function validateYear()
     {
         $validators = [];
 
-        $greaterThan = new \Zend_Validate_GreaterThan('0000');
+        $greaterThan = new Zend_Validate_GreaterThan('0000');
         $greaterThan->setMessage(
             $this->translate('publish_validation_error_year_greaterthan'),
-            \Zend_Validate_GreaterThan::NOT_GREATER
+            Zend_Validate_GreaterThan::NOT_GREATER
         );
         $validators[] = $greaterThan;
 
-        $validInt = new \Zend_Validate_Int();
+        $validInt = new Zend_Validate_Int();
         $messages = [
-            \Zend_Validate_Int::INVALID => $this->translate('publish_validation_error_year_intinvalid'),
-            \Zend_Validate_Int::NOT_INT => $this->translate('publish_validation_error_year_notint')
+            Zend_Validate_Int::INVALID => $this->translate('publish_validation_error_year_intinvalid'),
+            Zend_Validate_Int::NOT_INT => $this->translate('publish_validation_error_year_notint'),
         ];
         $validInt->setMessages($messages);
         $validators[] = $validInt;
@@ -284,6 +348,10 @@ class Publish_Model_Validation
         return $validators;
     }
 
+    /**
+     * @param string|null $datatype
+     * @return array|null
+     */
     public function selectOptions($datatype = null)
     {
         if (isset($datatype)) {
@@ -295,51 +363,52 @@ class Publish_Model_Validation
         switch ($switchVar) {
             case 'Collection':
             case 'CollectionLeaf':
-                return $this->_collectionSelect();
-                break;
+                return $this->collectionSelect();
 
             case 'Language':
-                return $this->_languageSelect();
-                break;
+                return $this->languageSelect();
 
             case 'Licence':
-                return $this->_licenceSelect();
-                break;
+                return $this->licenceSelect();
 
             case 'List':
                 return $this->listOptions;
-                break;
 
             case 'ThesisGrantor':
-                return $this->_thesisSelect(true);
-                break;
+                return $this->thesisSelect(true);
 
             case 'ThesisPublisher':
-                return $this->_thesisSelect();
-                break;
+                return $this->thesisSelect();
 
             case 'Series':
-                return $this->_seriesSelect();
-                break;
+                return $this->seriesSelect();
 
             default:
                 //else no select options required
                 break;
         }
+
+        return null;
     }
 
-    private function _collectionSelect()
+    /**
+     * @return array|null
+     * @throws NotFoundException
+     */
+    private function collectionSelect()
     {
         $collectionRole = CollectionRole::fetchByName($this->collectionRole);
-        if (is_null($collectionRole) || is_null($collectionRole->getRootCollection())) {
+        if ($collectionRole === null || $collectionRole->getRootCollection() === null) {
             return null;
         }
 
-        if ($collectionRole->getVisible() == '1' && $collectionRole->getRootCollection()->getVisiblePublish() == '1'
-                    && $this->hasVisiblePublishChildren($collectionRole)) {
-            $children = [];
+        if (
+            $collectionRole->getVisible() && $collectionRole->getRootCollection()->getVisiblePublish()
+            && $this->hasVisiblePublishChildren($collectionRole)
+        ) {
+            $children     = [];
             $collectionId = $collectionRole->getRootCollection()->getId();
-            $collection = new Collection($collectionId);
+            $collection   = Collection::get($collectionId);
 
             $colls = $collection->getVisiblePublishChildren();
 
@@ -351,7 +420,10 @@ class Publish_Model_Validation
         return null;
     }
 
-    private function _languageSelect()
+    /**
+     * @return array|null
+     */
+    private function languageSelect()
     {
         $languages = $this->getLanguages();
         if (isset($languages) || count($languages) >= 1) {
@@ -363,8 +435,10 @@ class Publish_Model_Validation
 
     /**
      * TODO REFACTOR: Function still needed since it does not sort anymore?
+     *
+     * @return array|null
      */
-    private function _licenceSelect()
+    private function licenceSelect()
     {
         $licences = $this->getLicences();
         if (isset($licences) && count($licences) >= 1) {
@@ -373,7 +447,10 @@ class Publish_Model_Validation
         return null;
     }
 
-    private function _seriesSelect()
+    /**
+     * @return array|null
+     */
+    private function seriesSelect()
     {
         $sets = $this->getSeries();
         if (isset($sets) && count($sets) >= 1) {
@@ -382,10 +459,14 @@ class Publish_Model_Validation
         return null;
     }
 
-    private function _thesisSelect($grantors = null)
+    /**
+     * @param null|array $grantors
+     * @return array|null
+     */
+    private function thesisSelect($grantors = null)
     {
         $thesisList = $this->getThesis($grantors);
-        if (! is_null($thesisList)) {
+        if ($thesisList !== null) {
             asort($thesisList);
         }
         return $thesisList;
@@ -393,9 +474,9 @@ class Publish_Model_Validation
 
     /**
      * return the available languages from registry, database or chache
-     * @return <Array> languages
+     *
+     * @return string[] languages
      */
-
     private function getLanguages()
     {
         return Application_Form_Element_Language::getLanguageList();
@@ -403,16 +484,17 @@ class Publish_Model_Validation
 
     /**
      * return the available licences from registry, database or chache
-     * @return <Array> languages
+     *
+     * @return array languages
      */
     private function getLicences()
     {
         $licences = [];
         if (empty($this->licences)) {
             foreach ($dbLicences = Licence::getAll() as $lic) {
-                if ($lic->getActive() == '1') {
-                    $name = $lic->getDisplayName();
-                    $id = $lic->getId();
+                if ($lic->getActive()) {
+                    $name          = $lic->getDisplayName();
+                    $id            = $lic->getId();
                     $licences[$id] = $name;
                 }
             }
@@ -425,7 +507,8 @@ class Publish_Model_Validation
 
     /**
      * return all visible series from database or cache
-     * @return <Array> sets
+     *
+     * @return array sets
      */
     private function getSeries()
     {
@@ -433,16 +516,18 @@ class Publish_Model_Validation
         if (empty($this->series)) {
             foreach ($dbSeries = Series::getAllSortedBySortKey() as $set) {
                 if ($set->getVisible()) {
-                    $title = $set->getTitle();
-                    $id = $set->getId();
+                    $title     = $set->getTitle();
+                    $id        = $set->getId();
                     $sets[$id] = $title;
                 }
             }
 
             $config = Config::get();
 
-            if (isset($config->browsing->series->sortByTitle) &&
-                filter_var($config->browsing->series->sortByTitle, FILTER_VALIDATE_BOOLEAN)) {
+            if (
+                isset($config->browsing->series->sortByTitle) &&
+                filter_var($config->browsing->series->sortByTitle, FILTER_VALIDATE_BOOLEAN)
+            ) {
                 uasort($sets, function ($value1, $value2) {
                     return strnatcmp($value1, $value2);
                 });
@@ -459,16 +544,15 @@ class Publish_Model_Validation
      * Retrieves all available ThesisGrantors or ThesisPublishers in a array.
      * Used for generating a select box.
      *
-     * @param $grantors true -> get thesis grantors
-     *                  null -> get thesis publishers
-     * @return Array of Dnb_Institutes Objects
+     * @param bool|null $grantors true -> get thesis grantors; null -> get thesis publishers TODO BUG null
+     * @return array|null of Dnb_Institutes Objects
      */
     private function getThesis($grantors = null)
     {
         $thesises = [];
         if ($grantors === true) {
             $thesises = DnbInstitute::getGrantors();
-        } elseif (is_null($grantors)) {
+        } elseif ($grantors === null) {
             $thesises = DnbInstitute::getPublishers();
         }
         if (empty($thesises)) {
@@ -482,23 +566,28 @@ class Publish_Model_Validation
         return $thesisList;
     }
 
+    /**
+     * @param string $key
+     * @return string
+     */
     private function translate($key)
     {
-        if (is_null($this->_view)) {
+        if ($this->view === null) {
             return $key;
         }
-        return $this->_view->translate($key);
+        return $this->view->translate($key);
     }
 
     /**
-     *
      * code taken from Solrsearch_Model_CollectionRoles()
      *
+     * @param CollectionRoleInterface $collectionRole
+     * @return bool
      */
     private function hasVisiblePublishChildren($collectionRole)
     {
         $rootCollection = $collectionRole->getRootCollection();
-        if (is_null($rootCollection)) {
+        if ($rootCollection === null) {
             return false;
         }
         return $rootCollection->hasVisiblePublishChildren();

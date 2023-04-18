@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,70 +25,66 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * View Helper um Breadcrumbs in Administration zu rendern.
- *
- * @category    Application
- * @package     View
  */
-class Application_View_Helper_Breadcrumbs extends \Zend_View_Helper_Navigation_Breadcrumbs
+class Application_View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs
 {
+    /** @var bool */
+    private $suffixSeparatorDisabled = false;
 
-    private $_suffixSeparatorDisabled = false;
+    /** @var string */
+    private $suffix;
 
-    private $_suffix = null;
-
-    private $_replacement = null;
+    /** @var string */
+    private $replacement;
 
     /**
      * Setze String, der an die Breadcrumbs gehängt wird.
      *
-     * @param $suffix
+     * @param string $suffix
      * @return $this
      */
     public function setSuffix($suffix)
     {
-        $this->_suffix = $suffix;
+        $this->suffix = $suffix;
         return $this;
     }
 
     /**
      * Disable Trennzeichen zum Suffix.
      *
-     * @param $disabled
+     * @param bool $disabled
      * @return $this
      */
     public function setSuffixSeparatorDisabled($disabled)
     {
-        $this->_suffixSeparatorDisabled = $disabled;
+        $this->suffixSeparatorDisabled = $disabled;
         return $this;
     }
 
     /**
      * Ersetze den Breadcrumbs Text komplett mit gesetztem Wert.
-     * @param $replacement
+     *
+     * @param string $replacement
      * @return $this
      */
     public function setReplacement($replacement)
     {
-        $this->_replacement = $replacement;
+        $this->replacement = $replacement;
         return $this;
     }
 
     /**
      * Rendert den kompletten Breadcrumbs Pfad für die aktuelle Seite.
      *
-     * @param \Zend_Navigation_Container $container
      * @return string
      */
-    public function renderStraight(\Zend_Navigation_Container $container = null)
+    public function renderStraight(?Zend_Navigation_Container $container = null)
     {
         if (null === $container) {
             $container = $this->getContainer();
@@ -96,7 +93,7 @@ class Application_View_Helper_Breadcrumbs extends \Zend_View_Helper_Navigation_B
         $active = $this->findActive($container, 0);
 
         if ($active) {
-            $page = $active['page'];
+            $page     = $active['page'];
             $helpPage = $page->helpUrl;
         } else {
             $helpPage = null;
@@ -104,30 +101,29 @@ class Application_View_Helper_Breadcrumbs extends \Zend_View_Helper_Navigation_B
 
         $html = '<div class="breadcrumbsContainer"><div class="wrapper">';
 
-        if (! is_null($helpPage)) {
+        if ($helpPage !== null) {
             $title = $this->view->translate('page_help_link_title');
 
             $iconUrl = $this->view->layoutPath() . '/img/theme/admin/ic_help.png';
             $pageUrl = $helpPage; // TODO evtl. baseUrl verwenden und helpUrl durch helpUri ersetzen
-            $html .= '<a href="'
+            $html   .= '<a href="'
                 . $pageUrl
                 . '" class="admin-help" target="_blank"><img src="'
                 . $iconUrl
                 . '" width="25" height="20" alt="' . $title . '" title="' . $title . '"/></a>';
         }
 
-
-        if (is_null($this->_replacement)) {
+        if ($this->replacement === null) {
             $html .= parent::renderStraight($container);
         } else {
-            $html .= $this->_replacement;
+            $html .= $this->replacement;
         }
 
-        if (! is_null($this->_suffix)) {
-            if ($this->_suffixSeparatorDisabled !== true) {
+        if ($this->suffix !== null) {
+            if ($this->suffixSeparatorDisabled !== true) {
                 $html .= $this->getSeparator();
             }
-            $html .= $this->_suffix;
+            $html .= $this->suffix;
         }
 
         $html .= '</div></div>';

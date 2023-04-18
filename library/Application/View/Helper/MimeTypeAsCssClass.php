@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,28 +24,22 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-
-use Opus\File;
 
 /**
  * View Helper fuer Link zu Datei.
  *
  * Wird in der Dateientabelle in der Metadaten-Übersicht verwendet.
- *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_View_Helper_MimeTypeAsCssClass extends \Zend_View_Helper_Abstract
+class Application_View_Helper_MimeTypeAsCssClass extends Zend_View_Helper_Abstract
 {
-
     /**
      * Rendert Link fuer Datei.
      *
-     * @param $file File
+     * @param string $mimeType
      * @return string HTML output
      */
     public function mimeTypeAsCssClass($mimeType)

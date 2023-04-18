@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,25 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  **/
 
-use Opus\Document;
+use Opus\Common\Document;
 
 /**
  * Unit Tests fuer Unterformular fuer Personen im Metadaten-Formular.
  */
 class Admin_Form_Document_PersonsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var string[] */
     private $roles;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -88,19 +88,19 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $form = new Admin_Form_Document_Persons();
 
         $post = [
-            'author' => [
+            'author'  => [
                 'PersonAuthor0' => [
-                    'PersonId' => '310'
+                    'PersonId' => '310',
                 ],
                 'PersonAuthor1' => [
-                    'PersonId' => '311'
-                ]
+                    'PersonId' => '311',
+                ],
             ],
             'advisor' => [
                 'PersonAdvisor0' => [
-                    'PersonId' => '312'
-                ]
-            ]
+                    'PersonId' => '312',
+                ],
+            ],
         ];
 
         $form->constructFromPost($post);
@@ -129,18 +129,18 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $form = new Admin_Form_Document_Persons();
 
         $post = [
-            'author' => [
+            'author'  => [
                 'PersonAuthor0' => [
-                    'PersonId' => '310'
+                    'PersonId' => '310',
                 ],
                 'PersonAuthor1' => [ // Es wird kein Unterformular angelegt
-                ]
+                ],
             ],
             'advisor' => [
                 'PersonAdvisor0' => [
-                    'PersonId' => '312'
-                ]
-            ]
+                    'PersonId' => '312',
+                ],
+            ],
         ];
 
         $form->constructFromPost($post);
@@ -162,10 +162,10 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $request = $this->getRequest();
         $request->setParams([
             'continue' => 'addperson',
-            'person' => '310',
-            'role' => 'editor',
-            'order' => '2',
-            'contact' => '0'
+            'person'   => '310',
+            'role'     => 'editor',
+            'order'    => '2',
+            'contact'  => '0',
         ]);
 
         $session = new Admin_Model_DocumentEditSession(100);
@@ -195,9 +195,9 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $request = $this->getRequest();
         $request->setParams([
             'continue' => 'addperson',
-            'role' => 'editor',
-            'order' => '2',
-            'contact' => '0'
+            'role'     => 'editor',
+            'order'    => '2',
+            'contact'  => '0',
         ]);
 
         $session = new Admin_Model_DocumentEditSession(100);
@@ -220,17 +220,17 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
 
         $request = $this->getRequest();
         $request->setParams([
-            'continue' => 'addperson'
+            'continue' => 'addperson',
         ]);
 
         $session = new Admin_Model_DocumentEditSession(100);
         $session->addPerson([
             'person' => 310,
-            'role' => 'author'
+            'role'   => 'author',
         ]);
         $session->addPerson([
             'person' => 311,
-            'role' => 'editor'
+            'role'   => 'editor',
         ]);
 
         $this->assertEquals(0, count($form->getSubForm('author')->getSubForms()));
@@ -267,11 +267,11 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
             'author' => [
                 'PersonAuthor0' => [
                     'PersonId' => '310',
-                    'Roles' => [
-                        'RoleAdvisor' => 'Advisor'
-                    ]
-                ]
-            ]
+                    'Roles'    => [
+                        'RoleAdvisor' => 'Advisor',
+                    ],
+                ],
+            ],
         ];
 
         $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, null));
@@ -299,7 +299,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $form->populateFromModel($document);
 
         $post = [
-            'Sort' => 'Sortieren'
+            'Sort' => 'Sortieren',
         ];
 
         $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, null));
@@ -321,8 +321,8 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
 
         $this->assertNull($form->processPost([
             'unknown' => [ // unbekannter Name für Unterformular (sollte Rolle für Person sein, z.B. 'author')
-                'key' => 'value'
-            ]
+                'key' => 'value',
+            ],
         ], null));
     }
 
@@ -362,8 +362,8 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
 
         $post = [
             'author' => [
-                'Add' => 'Hinzufügen'
-            ]
+                'Add' => 'Hinzufügen',
+            ],
         ];
 
         $result = $form->processPost($post, null);
@@ -396,10 +396,10 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $form = new Admin_Form_Document_Persons();
 
         $person = [
-            'person' => 310, // von Document 250
-            'order' => 2,
-            'role' => 'editor',
-            'contact' => 1
+            'person'  => 310, // von Document 250
+            'order'   => 2,
+            'role'    => 'editor',
+            'contact' => 1,
         ];
 
         $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()), 'Es sollte keinen Editor geben.');

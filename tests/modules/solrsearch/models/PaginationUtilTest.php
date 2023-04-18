@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,172 +25,137 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Solrsearch_Model_PaginationUtilTest extends ControllerTestCase
 {
-
-
-    /**
-     *
-     * tests related to first page URL
-     */
-
     public function testGetFirstPageUrlArray()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 0, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 0, null, 'testSearchType');
         $array = $util->getFirstPageUrlArray();
         $this->assertUrlArray(0, 10, 'testSearchType', null, $array);
     }
 
     public function testGetFirstPageUrlArrayAfterApplyingPagination()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 10, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 10, null, 'testSearchType');
         $array = $util->getFirstPageUrlArray();
         $this->assertUrlArray(0, 10, 'testSearchType', null, $array);
     }
 
     public function testGetFirstPageUrlArrayAfterApplyingPaginationTwice()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 20, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 20, null, 'testSearchType');
         $array = $util->getFirstPageUrlArray();
         $this->assertUrlArray(0, 10, 'testSearchType', null, $array);
     }
 
     public function testGetFirstPageUrlArrayAfterApplyingUserDefinedPagination()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 44, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 44, null, 'testSearchType');
         $array = $util->getFirstPageUrlArray();
         $this->assertUrlArray(0, 10, 'testSearchType', null, $array);
     }
 
-
-    /**
-     *
-     * tests related to next page URL
-     */
-
     public function testGetNextPageUrlArray()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 0, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 0, null, 'testSearchType');
         $array = $util->getNextPageUrlArray();
         $this->assertUrlArray(10, 10, 'testSearchType', null, $array);
     }
 
     public function testGetNextPageUrlArrayAfterApplyingPagination()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 10, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 10, null, 'testSearchType');
         $array = $util->getNextPageUrlArray();
         $this->assertUrlArray(20, 10, 'testSearchType', null, $array);
     }
 
     public function testGetNextPageUrlArrayAfterApplyingPaginationTwice()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 20, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 20, null, 'testSearchType');
         $array = $util->getNextPageUrlArray();
         $this->assertUrlArray(30, 10, 'testSearchType', null, $array);
     }
 
     public function testGetNextPageUrlArrayAfterApplyingUserDefinedPagination()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 44, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 44, null, 'testSearchType');
         $array = $util->getNextPageUrlArray();
         $this->assertUrlArray(54, 10, 'testSearchType', null, $array);
     }
 
-
-    /**
-     *
-     * tests related to previous page URL
-     */
-
     public function testGetPreviousPageUrlArray()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 20, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 20, null, 'testSearchType');
         $array = $util->getPreviousPageUrlArray();
         $this->assertUrlArray(10, 10, 'testSearchType', null, $array);
     }
 
     public function testGetPreviousPageUrlArrayApplyingPagination()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 30, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 30, null, 'testSearchType');
         $array = $util->getPreviousPageUrlArray();
         $this->assertUrlArray(20, 10, 'testSearchType', null, $array);
     }
 
     public function testGetPreviousPageUrlArrayApplyingUserDefinedPagination()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 44, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 44, null, 'testSearchType');
         $array = $util->getPreviousPageUrlArray();
         $this->assertUrlArray(34, 10, 'testSearchType', null, $array);
     }
 
-
-    /**
-     *
-     * tests related to last page URL
-     */
-
     public function testGetLastPageUrlArray()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 0, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 0, null, 'testSearchType');
         $array = $util->getLastPageUrlArray();
         $this->assertUrlArray(90, 10, 'testSearchType', null, $array);
     }
 
     public function testGetLastPageUrlArrayApplyingPagination()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 10, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 10, null, 'testSearchType');
         $array = $util->getLastPageUrlArray();
         $this->assertUrlArray(90, 10, 'testSearchType', null, $array);
     }
 
     public function testGetLastPageUrlArrayApplyingPaginationTwice()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 20, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 20, null, 'testSearchType');
         $array = $util->getLastPageUrlArray();
         $this->assertUrlArray(90, 10, 'testSearchType', null, $array);
     }
 
     public function testGetLastPageUrlArrayApplyingUserDefinedPagination()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 44, null, 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 44, null, 'testSearchType');
         $array = $util->getLastPageUrlArray();
         $this->assertUrlArray(90, 10, 'testSearchType', null, $array);
     }
 
-
-    /**
-     *
-     * misc tests
-     */
-
     public function testAssignmentOfQueryTerm()
     {
-        $util = new Solrsearch_Model_PaginationUtil(10, 100, 0, 'queryTerm', 'testSearchType');
+        $util  = new Solrsearch_Model_PaginationUtil(10, 100, 0, 'queryTerm', 'testSearchType');
         $array = $util->getFirstPageUrlArray();
         $this->assertUrlArray(0, 10, 'testSearchType', 'queryTerm', $array);
     }
 
     /**
-     *
-     * @param int $startIndex
-     * @param int $rows
+     * @param int    $startIndex
+     * @param int    $rows
      * @param string $searchType
      * @param string $query
-     * @param array $array
+     * @param array  $array
      */
     private function assertUrlArray($startIndex, $rows, $searchType, $query, $array)
     {
         $this->assertEquals($array['start'], $startIndex);
         $this->assertEquals($array['rows'], $rows);
         $this->assertEquals($array['searchtype'], $searchType);
-        if ($query == null) {
+        if ($query === null) {
             $this->assertTrue(! isset($array['query']));
         } else {
             $this->assertEquals($array['query'], $query);

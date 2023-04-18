@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,38 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Solrsearch_Model_Search
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\LoggingTrait;
 
-class Application_Controller_Action_Helper_Redirector extends \Zend_Controller_Action_Helper_Redirector
+class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Action_Helper_Redirector
 {
-
     use LoggingTrait;
 
-    private $_flashMessenger;
+    /** @var Zend_Controller_Action_Helper_FlashMessenger */
+    private $flashMessenger;
 
     public function init()
     {
         parent::init();
 
-        $this->_flashMessenger = \Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+        $this->flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
     }
 
     /**
      * Redirects to an action / controller / module, sets a message for the redirect target view.
      *
-     * @param  string $action     The redirect target action
-     * @param  string $message    The message to be displayed
-     * @param  string $controller The redirect target controller
-     * @param  string $module     The redirect target model
-     * @param  array  $params     Parameters for the redirect target action
-     * @return void
+     * @param  string      $action     The redirect target action
+     * @param  null|string $message The message to be displayed
+     * @param  null|string $controller The redirect target controller
+     * @param  null|string $module The redirect target model
+     * @param  array       $params     Parameters for the redirect target action
      */
     public function redirectTo(
         $action,
@@ -64,19 +61,17 @@ class Application_Controller_Action_Helper_Redirector extends \Zend_Controller_A
         $module = null,
         $params = []
     ) {
-
         $this->performRedirect($action, $message, $controller, $module, $params);
     }
 
     /**
-     *
      * Performs a permanent (301) redirect.
      *
-     * @param string $action        The target action.
-     * @param string $message       The message to be displayed.
-     * @param string $controller    The target controller.
-     * @param string $module        The target module.
-     * @param array $params         Optional request parameters.
+     * @param string      $action        The target action.
+     * @param null|string $message The message to be displayed.
+     * @param null|string $controller The target controller.
+     * @param null|string $module The target module.
+     * @param array       $params        Optional request parameters.
      */
     public function redirectToPermanent(
         $action,
@@ -89,6 +84,14 @@ class Application_Controller_Action_Helper_Redirector extends \Zend_Controller_A
         $this->performRedirect($action, $message, $controller, $module, $params);
     }
 
+    /**
+     * @param string      $action
+     * @param null|string $message
+     * @param null|string $controller
+     * @param null|string $module
+     * @param array       $params
+     * @throws Application_Exception
+     */
     public function redirectToPermanentAndExit(
         $action,
         $message = null,
@@ -100,6 +103,14 @@ class Application_Controller_Action_Helper_Redirector extends \Zend_Controller_A
         $this->performRedirect($action, $message, $controller, $module, $params, true);
     }
 
+    /**
+     * @param string      $action
+     * @param null|string $message
+     * @param null|string $controller
+     * @param null|string $module
+     * @param array       $params
+     * @throws Application_Exception
+     */
     public function redirectToAndExit(
         $action,
         $message = null,
@@ -107,7 +118,6 @@ class Application_Controller_Action_Helper_Redirector extends \Zend_Controller_A
         $module = null,
         $params = []
     ) {
-
         $this->performRedirect($action, $message, $controller, $module, $params, true);
     }
 
@@ -122,12 +132,12 @@ class Application_Controller_Action_Helper_Redirector extends \Zend_Controller_A
      *
      * TODO because of problem described above 'AndExit' should never be used
      *
-     * @param $action
-     * @param null $message
-     * @param null $controller
-     * @param null $module
-     * @param array $params
-     * @param bool $exit
+     * @param string      $action
+     * @param string|null $message
+     * @param string|null $controller
+     * @param string|null $module
+     * @param array       $params
+     * @param bool        $exit
      * @throws Application_Exception
      */
     public function performRedirect(
@@ -138,18 +148,17 @@ class Application_Controller_Action_Helper_Redirector extends \Zend_Controller_A
         $params = [],
         $exit = false
     ) {
-
-        if (! is_null($message)) {
+        if ($message !== null) {
             if (is_array($message) && count($message) !== 0) {
                 $keys = array_keys($message);
-                $key = $keys[0];
+                $key  = $keys[0];
                 if ($key === 'failure' || $key === 'notice') {
-                    $this->_flashMessenger->addMessage(['level' => $key, 'message' => $message[$key]]);
+                    $this->flashMessenger->addMessage(['level' => $key, 'message' => $message[$key]]);
                 } else {
-                    $this->_flashMessenger->addMessage(['level' => 'notice', 'message' => $message[$key]]);
+                    $this->flashMessenger->addMessage(['level' => 'notice', 'message' => $message[$key]]);
                 }
-            } elseif (is_string($message) && $message != '') {
-                $this->_flashMessenger->addMessage(['level' => 'notice', 'message' => $message]);
+            } elseif (is_string($message) && $message !== '') {
+                $this->flashMessenger->addMessage(['level' => 'notice', 'message' => $message]);
             }
         }
         $this->getLogger()->debug("redirect to module: $module controller: $controller action: $action");
@@ -158,10 +167,12 @@ class Application_Controller_Action_Helper_Redirector extends \Zend_Controller_A
             $anchor = '#' . $params['anchor'];
             unset($params['anchor']);
 
-            $urlHelper = \Zend_Controller_Action_HelperBroker::getStaticHelper('url');
+            $urlHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('url');
 
             $gotoUrl = $urlHelper->url(array_merge([
-                'action' => $action, 'controller' => $controller, 'module' => $module
+                'action'     => $action,
+                'controller' => $controller,
+                'module'     => $module,
             ], $params));
 
             $this->gotoUrl($gotoUrl . $anchor, ['prependBase' => false]);

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Patent;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Patent;
+use Opus\Common\PatentInterface;
 
 /**
  * Formular für Patent Objekte.
@@ -40,52 +44,46 @@ use Opus\Model\NotFoundException;
  * - Application
  * - ID (hidden)
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
 {
-
     /**
      * Name fuer Formularelement fuer ID von Patent.
      */
-    const ELEMENT_ID = 'Id';
+    public const ELEMENT_ID = 'Id';
 
     /**
      * Name fuer Formularelement fuer Feld Number.
      */
-    const ELEMENT_NUMBER = 'Number';
+    public const ELEMENT_NUMBER = 'Number';
 
     /**
      * Name fuer Formularelement fuer Feld Countries.
      */
-    const ELEMENT_COUNTRIES = 'Countries';
+    public const ELEMENT_COUNTRIES = 'Countries';
 
     /**
      * Name fuer Formularelement fuer Feld YearApplied.
      */
-    const ELEMENT_YEAR_APPLIED = 'YearApplied';
+    public const ELEMENT_YEAR_APPLIED = 'YearApplied';
 
     /**
      * Name fuer Formularelement fuer Feld Application.
      */
-    const ELEMENT_APPLICATION = 'Application';
+    public const ELEMENT_APPLICATION = 'Application';
 
     /**
      * Name fuer Formularelement fuer Feld DateGranted.
      */
-    const ELEMENT_DATE_GRANTED = 'DateGranted';
+    public const ELEMENT_DATE_GRANTED = 'DateGranted';
 
     /**
      * Präfix fuer Übersetzungsschlüssel (noch nicht verwendet).
+     *
      * @var string
      */
-    protected $_translationPrefix = ''; // TODO OPUSVIER-1875 Sollte sein: 'Patent_';
+    protected $translationPrefix = ''; // TODO OPUSVIER-1875 Sollte sein: 'Patent_';
 
     /**
      * Erzeugt die Formularelemente.
@@ -108,7 +106,8 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
 
     /**
      * Setzt die Formularelement entsprechend der Instanz von Patent.
-     * @param Patent $patent
+     *
+     * @param PatentInterface $patent
      */
     public function populateFromModel($patent)
     {
@@ -126,7 +125,8 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
 
     /**
      * Aktualisiert Instanz von Patent mit Werten in Formular.
-     * @param Patent $patent
+     *
+     * @param PatentInterface $patent
      */
     public function updateModel($patent)
     {
@@ -138,7 +138,7 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
         $patent->setApplication($this->getElementValue(self::ELEMENT_APPLICATION));
 
         $value = $this->getElement(self::ELEMENT_DATE_GRANTED)->getValue();
-        $date = $datesHelper->getOpusDate($value);
+        $date  = $datesHelper->getOpusDate($value);
         $patent->setDateGranted($date);
     }
 
@@ -148,23 +148,23 @@ class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm
      * Wenn das Formular eine existierende Patent Instanz repräsentiert (gesetztes ID Feld) wird diese Instanz
      * zurück geliefert und ansonsten eine neue Instanz erzeugt.
      *
-     * @return Patent
+     * @return PatentInterface
      */
     public function getModel()
     {
         $patentId = $this->getElement(self::ELEMENT_ID)->getValue();
 
-        if (strlen(trim($patentId)) == 0 || ! is_numeric($patentId)) {
+        if ($patentId === null || strlen(trim($patentId)) === 0 || ! is_numeric($patentId)) {
             $patentId = null;
         }
 
         try {
-            $patent = new Patent($patentId);
+            $patent = Patent::get($patentId);
         } catch (NotFoundException $omnfe) {
             // kann eigentlich nur bei manipuliertem POST passieren
             $this->getLogger()->err($omnfe);
             // bei ungültiger ID wird Patentwie neu hinzugefügt behandelt
-            $patent = new Patent();
+            $patent = Patent::new();
         }
 
         $this->updateModel($patent);

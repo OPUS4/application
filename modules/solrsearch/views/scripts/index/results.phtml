@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <?php
@@ -42,11 +39,11 @@ if ($this->jQueryEnabled()) {
 
 <?php
     $this->headLink([
-        'rel' => 'alternate',
+        'rel'  => 'alternate',
         'type' => 'application/rss+xml',
-        'href' => $this->serverUrl() . $this->url($this->rssUrl)
+        'href' => $this->serverUrl() . $this->url($this->rssUrl),
     ]);
-?>
+    ?>
 
 <?php if (isset($this->specialTitle)) : ?>
     <h2><?= htmlspecialchars($this->specialTitle) ?></h2>
@@ -55,19 +52,19 @@ if ($this->jQueryEnabled()) {
 <div class="content">
     <?PHP
     if ($this->searchType === 'simple' && ! $this->browsing) {
-        include('simpleSearchForm.phtml');
+        include 'simpleSearchForm.phtml';
     } elseif (($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && ! $this->browsing) {
         echo $this->form;
     } elseif ($this->searchType === 'collection') {
-        include('browsecollection.phtml');
+        include 'browsecollection.phtml';
     } elseif ($this->searchType === 'series') {
-        include('browseseries.phtml');
+        include 'browseseries.phtml';
     }
     ?>
 </div>
 <div class="content">
 <?php if (! $this->isSimpleList) {
-    include('facetsMenu.phtml');
+    include 'facetsMenu.phtml';
 } ?>
     <div id="searchbar">
         <div class="breadcrumb_results">
@@ -75,7 +72,7 @@ if ($this->jQueryEnabled()) {
                 <h3><span id="search-result-numofhits"><?= $this->numOfHits . '</span> ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
             <?php endif ?>
 <?php if (! $this->isSimpleList) {
-    include('pagination.phtml');
+    include 'pagination.phtml';
 } ?>
             <?PHP if ($this->exportLinksEnabled('search')) : ?>
             <div class="export-links dropdown">
@@ -89,16 +86,16 @@ if ($this->jQueryEnabled()) {
             </div>
         </div>
 <?php if (! $this->isSimpleList) {
-    include('searchOptions.phtml');
+    include 'searchOptions.phtml';
 } ?>
-        <?php if (! is_null($this->results)) : ?>
+        <?php if ($this->results !== null) : ?>
             <div id="search_results" class="search_results">
                 <?= $this->partialLoop()->setObjectKey('result')->partialLoop($this->resultScript, $this->results) ?>
             </div>
         <?php endif ?>
         <div class="breadcrumb_results">
 <?php if (! $this->isSimpleList) {
-    include('pagination.phtml');
+    include 'pagination.phtml';
 } ?>
         </div>
     </div>

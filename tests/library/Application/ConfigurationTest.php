@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,28 +25,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Config;
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Document\Plugin\IdentifierDoi;
+use Opus\Document\Plugin\IdentifierUrn;
+use Opus\Document\Plugin\XmlCache;
+use Opus\Search\Plugin\Index;
 
 class Application_ConfigurationTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'locale'];
 
-    /**
-     * @var Application_Configuration
-     */
+    /** @var Application_Configuration */
     private $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->makeConfigurationModifiable();
@@ -56,7 +55,7 @@ class Application_ConfigurationTest extends ControllerTestCase
     {
         $zendConfig = $this->config->getConfig();
         $this->assertNotNull($zendConfig);
-        $this->assertInstanceOf(\Zend_Config::class, $zendConfig);
+        $this->assertInstanceOf(Zend_Config::class, $zendConfig);
     }
 
     public function testGetLogger()
@@ -64,7 +63,7 @@ class Application_ConfigurationTest extends ControllerTestCase
         $logger = $this->config->getLogger();
 
         $this->assertNotNull($logger);
-        $this->assertInstanceOf(\Zend_Log::class, $logger);
+        $this->assertInstanceOf(Zend_Log::class, $logger);
     }
 
     public function testSetLogger()
@@ -124,6 +123,15 @@ class Application_ConfigurationTest extends ControllerTestCase
         $this->assertTrue($this->config->isLanguageSelectionEnabled());
     }
 
+    public function testGetSupportedLanguagesValuesAreTrimmed()
+    {
+        $this->adjustConfiguration([
+            'supportedLanguages' => 'en, de',
+        ]);
+
+        $this->assertEquals(['en', 'de'], $this->config->getSupportedLanguages());
+    }
+
     public function testIsLanguageSelectionEnabledFalse()
     {
         Config::get()->supportedLanguages = 'de';
@@ -145,7 +153,7 @@ class Application_ConfigurationTest extends ControllerTestCase
     public function testGetDefaultLanguageUnsupportedConfigured()
     {
         // because bootstrapping already happened locale needs to be manipulated directly
-        $locale = new \Zend_Locale();
+        $locale = new Zend_Locale();
         $locale->setDefault('fr');
         $this->assertEquals('de', $this->config->getDefaultLanguage());
 
@@ -169,7 +177,7 @@ class Application_ConfigurationTest extends ControllerTestCase
     public function testGetWorkspacePathSetWithSlash()
     {
         $this->adjustConfiguration([
-            'workspacePath' => APPLICATION_PATH . '/tests/workspace/'
+            'workspacePath' => APPLICATION_PATH . '/tests/workspace/',
         ]);
 
         $workspacePath = $this->config->getWorkspacePath();
@@ -256,7 +264,7 @@ class Application_ConfigurationTest extends ControllerTestCase
 
         $subconfig = $config->getValue('orcid');
 
-        $this->assertInstanceOf(\Zend_Config::class, $subconfig);
+        $this->assertInstanceOf(Zend_Config::class, $subconfig);
     }
 
     public function testGetValueForNull()
@@ -272,10 +280,10 @@ class Application_ConfigurationTest extends ControllerTestCase
         $document = Document::new();
 
         $this->assertEquals([
-            'Opus\Search\Plugin\Index',
-            'Opus\Document\Plugin\XmlCache',
-            'Opus\Document\Plugin\IdentifierUrn',
-            'Opus\Document\Plugin\IdentifierDoi'
+            Index::class,
+            XmlCache::class,
+            IdentifierUrn::class,
+            IdentifierDoi::class,
         ], $document->getDefaultPlugins());
     }
 }

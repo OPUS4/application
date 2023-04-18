@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Maximilian Salomon <salomon@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -41,20 +38,16 @@
  */
 class Application_View_Helper_JavascriptMessages extends Application_View_Helper_Abstract
 {
-
-    /**
-     * @var array contains the messages with translation for javascript-files
-     */
+    /** @var array contains the messages with translation for javascript-files */
     private $javascriptMessages = [];
 
-    /**
-     * Indentation of generated script code.
-     * @var int Integer
-     */
+    /** @var int Indentation of generated script code. */
     private $indent = 8;
 
     /**
      * TODO can this function be used for more?
+     *
+     * @return $this
      */
     public function javascriptMessages()
     {
@@ -66,33 +59,46 @@ class Application_View_Helper_JavascriptMessages extends Application_View_Helper
      *
      * If no message provided, the function tries to translate the handed key.
      *
-     * @param string $key Message key
+     * @param string      $key Message key
      * @param null|string $message contains an optional message
      */
     public function addMessage($key, $message = null)
     {
-        if ($message != null) {
+        if ($message !== null) {
             $this->javascriptMessages[$key] = $message;
         } else {
             $this->javascriptMessages[$key] = $this->view->translate($key);
         }
     }
 
+    /**
+     * @return array
+     */
     public function getMessages()
     {
         return $this->javascriptMessages;
     }
 
+    /**
+     * @param array $value
+     */
     public function setMessages($value)
     {
         $this->javascriptMessages = $value;
     }
 
+    /**
+     * @return int
+     */
     public function getIndent()
     {
         return $this->indent;
     }
 
+    /**
+     * @param int $indent
+     * @return $this
+     */
     public function setIndent($indent)
     {
         if (is_int($indent) && $indent >= 0) {
@@ -106,6 +112,7 @@ class Application_View_Helper_JavascriptMessages extends Application_View_Helper
 
     /**
      * Renders Javascript for providing translated messages.
+     *
      * @return string Javascript snippet
      */
     public function toString()
@@ -113,16 +120,17 @@ class Application_View_Helper_JavascriptMessages extends Application_View_Helper
         $indent = str_repeat(' ', $this->getIndent());
 
         $output = $indent . '<script type="text/javascript">' . "\n";
-        if ($this->javascriptMessages != null) {
+        if ($this->javascriptMessages !== null) {
             foreach ($this->javascriptMessages as $key => $message) {
-                $output .= "$indent    opus4Messages[\"$key\"] = \"" . htmlspecialchars($message) . "\";\n";
+                $output .= "$indent    opus4Messages[\"$key\"] = \"" . htmlspecialchars($message, ENT_NOQUOTES) . "\";\n";
             }
         }
-        $output .= "$indent</script>\n";
-
-        return $output;
+        return $output . "$indent</script>\n";
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->toString();
@@ -130,6 +138,8 @@ class Application_View_Helper_JavascriptMessages extends Application_View_Helper
 
     /**
      * Default message-set
+     *
+     * TODO LAMINAS fix name of function
      */
     public function getDefaultMessageSet()
     {

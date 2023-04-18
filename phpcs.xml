@@ -1,10 +1,21 @@
 <?xml version="1.0"?>
 <ruleset name="OPUS 4 coding standard">
-    <rule ref="./vendor/zendframework/zend-coding-standard/ruleset.xml">
+    <rule ref="./vendor/opus4-repo/codesniffer/src/ruleset.xml">
         <!-- TODO remove excludes after switch to ZF3 -->
         <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace" />
         <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps" />
+        <exclude name="Squiz.Classes.ClassFileName" />
+        <exclude name="Generic.Files.InlineHTML"/>
+        <exclude name="WebimpressCodingStandard.NamingConventions.AbstractClass"/>
     </rule>
+
+    <!--rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="120"/>
+        </properties>
+    </rule-->
+
     <file>library</file>
     <file>modules</file>
     <file>scripts</file>

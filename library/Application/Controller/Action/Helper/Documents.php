@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,26 +25,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Model\NotFoundException;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Model\NotFoundException;
 use Opus\Common\Repository;
 
 /**
  * Helper for getting a list of document IDs used by admin and review module.
  */
-class Application_Controller_Action_Helper_Documents extends \Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_Documents extends Zend_Controller_Action_Helper_Abstract
 {
-
     /**
      * Gets called when the helper is used like a function of the helper broker.
      *
-     * @param string $sortOrder
-     * @param boolean $sortReverse
-     * @param string $state ('published', 'unpublished', ...)
+     * @param null|string $sortOrder
+     * @param bool        $sortReverse
+     * @param string      $state ('published', 'unpublished', ...)
      * @return array of document identifiers
      */
     public function direct($sortOrder = null, $sortReverse = 0, $state = 'published')
@@ -54,8 +54,9 @@ class Application_Controller_Action_Helper_Documents extends \Zend_Controller_Ac
 
     /**
      * Returns Document for provided ID or throws exception.
+     *
      * @param string $docId Document identifier
-     * @return Document
+     * @return DocumentInterface|null
      */
     public function getDocumentForId($docId)
     {
@@ -76,10 +77,10 @@ class Application_Controller_Action_Helper_Documents extends \Zend_Controller_Ac
     /**
      * Returns documents from database for browsing.
      *
-     * @param string $sortOrder
-     * @param boolean $sortReverse
-     * @param string @state
-     * @return array of document identifiers
+     * @param string|null $sortOrder
+     * @param bool        $sortReverse
+     * @param string|null $state
+     * @return int[] Document identifiers
      *
      * TODO following could be handled inside a application model
      */

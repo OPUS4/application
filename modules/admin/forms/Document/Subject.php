@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,44 +25,37 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Subject;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Subject;
 
 /**
  * Unterformular fuer das Editieren eines Stichwortes.
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
 {
-
     /**
      * Name von Formularelement für Schlagwort-ID in Datenbank.
      */
-    const ELEMENT_ID = 'Id';
+    public const ELEMENT_ID = 'Id';
 
     /**
      * Name von Formularelement für Sprache von Schlagwort.
      */
-    const ELEMENT_LANGUAGE = 'Language';
+    public const ELEMENT_LANGUAGE = 'Language';
 
     /**
      * Name von Formularelement für Wert von Schlagwort.
      */
-    const ELEMENT_VALUE = 'Value';
+    public const ELEMENT_VALUE = 'Value';
 
     /**
      * Name von Formularelement für externen Schlüssel für Schlagwort.
      */
-    const ELEMENT_EXTERNAL_KEY = 'ExternalKey';
+    public const ELEMENT_EXTERNAL_KEY = 'ExternalKey';
 
     /**
      * Typ des angezeigten Schlagworts.
@@ -71,7 +65,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
      *
      * @var string
      */
-    private $_subjectType;
+    private $subjectType;
 
     /**
      * Sprache des Schlagworts.
@@ -81,21 +75,21 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
      *
      * @var string
      */
-    private $_language;
+    private $language;
 
     /**
      * Konstruiert das Formular.
      *
      * Der Typ kommt vom übergeordneten Formular und muss daher auch nicht beim POST mit übermittelt werden.
      *
-     * @param string $type Typ des Schlagwortes
-     * @param string $language Sprache für das Schlagwort, wenn nicht editierbar
-     * @param array $options Weitere Optionen (für Zend_Form_SubForm)
+     * @param string      $type Typ des Schlagwortes
+     * @param null|string $language Sprache für das Schlagwort, wenn nicht editierbar
+     * @param null|array  $options Weitere Optionen (für Zend_Form_SubForm)
      */
     public function __construct($type, $language = null, $options = null)
     {
-        $this->_subjectType = $type;
-        $this->_language = $language;
+        $this->subjectType = $type;
+        $this->language    = $language;
         parent::__construct($options);
     }
 
@@ -109,21 +103,24 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
         $this->addElement('Hidden', self::ELEMENT_ID);
 
         // wenn die Sprache gesetzt wurde wird kein sichtbares Formularelement erzeugt
-        if (is_null($this->_language)) {
+        if ($this->language === null) {
             $element = $this->createElement('Language', self::ELEMENT_LANGUAGE);
         } else {
-            $element = $this->createElement('Hidden', self::ELEMENT_LANGUAGE, ['value' => $this->_language]);
+            $element = $this->createElement('Hidden', self::ELEMENT_LANGUAGE, ['value' => $this->language]);
         }
         $this->addElement($element);
 
         $this->addElement('Text', self::ELEMENT_VALUE, [
-            'required' => true, 'size' => 30, 'class' => 'subject ui-autocomplete-input'
+            'required' => true,
+            'size'     => 30,
+            'class'    => 'subject ui-autocomplete-input',
         ]);
         $this->addElement('Text', self::ELEMENT_EXTERNAL_KEY);
     }
 
     /**
      * Initialisiert das Formular mit den Werten in einem Subject Objekt.
+     *
      * @param Subject $subject
      */
     public function populateFromModel($subject)
@@ -136,6 +133,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
 
     /**
      * Überträgt die Werte im Formular in ein Subject Objekt.
+     *
      * @param Subject $subject
      */
     public function updateModel($subject)
@@ -143,7 +141,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
         $subject->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
         $subject->setValue($this->getElementValue(self::ELEMENT_VALUE));
         $subject->setExternalKey($this->getElementValue(self::ELEMENT_EXTERNAL_KEY));
-        $subject->setType($this->_subjectType);
+        $subject->setType($this->subjectType);
     }
 
     /**
@@ -157,15 +155,15 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
     {
         $subjectId = $this->getElement(self::ELEMENT_ID)->getValue();
 
-        if (strlen(trim($subjectId)) == 0 || ! is_numeric($subjectId)) {
+        if ($subjectId === null || strlen(trim($subjectId)) === 0 || ! is_numeric($subjectId)) {
             $subjectId = null;
         }
 
         try {
-            $subject = new Subject($subjectId);
+            $subject = Subject::get($subjectId);
         } catch (NotFoundException $omnfe) {
             $this->getLogger()->err(__METHOD__ . " Unknown subject ID = '$subjectId'.");
-            $subject = new Subject();
+            $subject = Subject::new();
         }
 
         $this->updateModel($subject);
@@ -187,23 +185,25 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
 
     /**
      * Liefert den Schlagworttyp für dieses Unterformular zurück.
+     *
      * @return string Schlagworttyp
      */
     public function getSubjectType()
     {
-        return $this->_subjectType;
+        return $this->subjectType;
     }
 
     /**
      * Liefert die festgelegte Sprache (bei SWD/GND) für dieses Unterformular zurück.
+     *
      * @return null|string Sprache
      */
     public function getLanguage()
     {
-        return $this->_language;
+        return $this->language;
     }
 
-    protected function _removeElements()
+    protected function removeElements()
     {
         $this->removeElement(Admin_Form_Document_MultiSubForm::ELEMENT_REMOVE);
     }

@@ -26,12 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 -->
@@ -59,7 +54,7 @@
     xmlns="http://www.d-nb.de/standards/subject/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:php="http://php.net/xsl"
-    xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd"
+    xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ https://d-nb.info/standards/schema/xmetadissplus.xsd"
     exclude-result-prefixes="php">
 
     <xsl:output method="xml" indent="yes" />
@@ -68,7 +63,7 @@
         <xMetaDiss:xMetaDiss
             xmlns:xMetaDiss="http://www.d-nb.de/standards/xmetadissplus/"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd">
+            xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ https://d-nb.info/standards/schema/xmetadissplus.xsd">
 
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="xmetadissplus" />
@@ -154,7 +149,7 @@
 
             <!-- weird DNB constraint: dc:language must appear after dcterms:medium -->
             <dc:language xsi:type="dcterms:ISO639-2">
-                <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
+                <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
             </dc:language >
 
             <!-- dcterms:isPartOf -->
@@ -256,7 +251,7 @@
     <xsl:template match="TitleMain" mode="xmetadissplus">
         <dc:title xsi:type="ddb:titleISO639-2">
             <xsl:attribute name="lang">
-              <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
+              <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
              </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
@@ -272,7 +267,7 @@
     <xsl:template match="TitleSub" mode="xmetadissplus">
         <dcterms:alternative xsi:type="ddb:talternativeISO639-2">
             <xsl:attribute name="lang">
-                 <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
+                 <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
             </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
@@ -287,7 +282,17 @@
 
     <xsl:template match="PersonAuthor" mode="xmetadissplus">
        <dc:creator xsi:type="pc:MetaPers">
-         <pc:person>          
+         <pc:person>
+           <xsl:if test="normalize-space(@IdentifierGnd)">
+             <xsl:attribute name="ddb:GND-Nr">
+               <xsl:value-of select="@IdentifierGnd"/>
+             </xsl:attribute>
+            </xsl:if>
+           <xsl:if test="normalize-space(@IdentifierOrcid)">
+              <ddb:ORCID>
+                <xsl:value-of select="@IdentifierOrcid"/>
+              </ddb:ORCID>
+           </xsl:if>
            <xsl:choose>
              <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
                <pc:name type="nameUsedByThePerson">
@@ -361,7 +366,7 @@
     <xsl:template match="TitleAbstract" mode="xmetadissplus">
         <dcterms:abstract xsi:type="ddb:contentISO639-2" ddb:type="noScheme">
             <xsl:attribute name="lang">
-                <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
+                <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dcterms:abstract>
@@ -370,6 +375,16 @@
     <xsl:template match="PersonAdvisor" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="advisor">
           <pc:person>
+            <xsl:if test="normalize-space(@IdentifierGnd)">
+                <xsl:attribute name="ddb:GND-Nr">
+                    <xsl:value-of select="@IdentifierGnd"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="normalize-space(@IdentifierOrcid)">
+                <ddb:ORCID>
+                    <xsl:value-of select="@IdentifierOrcid"/>
+                </ddb:ORCID>
+            </xsl:if>
             <xsl:choose>
               <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
                 <pc:name type="nameUsedByThePerson">
@@ -401,6 +416,16 @@
     <xsl:template match="PersonReferee" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="referee">
            <pc:person>
+            <xsl:if test="normalize-space(@IdentifierGnd)">
+                <xsl:attribute name="ddb:GND-Nr">
+                    <xsl:value-of select="@IdentifierGnd"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="normalize-space(@IdentifierOrcid)">
+                <ddb:ORCID>
+                    <xsl:value-of select="@IdentifierOrcid"/>
+                </ddb:ORCID>
+            </xsl:if>
              <xsl:choose>
                <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
                  <pc:name type="nameUsedByThePerson">
@@ -432,6 +457,16 @@
     <xsl:template match="PersonEditor" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="editor">
            <pc:person>
+            <xsl:if test="normalize-space(@IdentifierGnd)">
+                <xsl:attribute name="ddb:GND-Nr">
+                    <xsl:value-of select="@IdentifierGnd"/>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="normalize-space(@IdentifierOrcid)">
+                <ddb:ORCID>
+                    <xsl:value-of select="@IdentifierOrcid"/>
+                </ddb:ORCID>
+            </xsl:if>
              <xsl:choose>
                <xsl:when test="normalize-space(@FirstName) != '' and normalize-space(@LastName) != ''">
                  <pc:name type="nameUsedByThePerson">

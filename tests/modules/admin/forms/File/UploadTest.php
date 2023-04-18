@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,27 +24,24 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-use Opus\Document;
-
-/**
- * @category    Application Unit Test
- * @package     Admin_Form_File
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Document;
+
 class Admin_Form_File_UploadTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
-    private $_documentId;
+    /** @var int */
+    private $documentId;
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        $this->removeDocument($this->_documentId);
+        $this->removeDocument($this->documentId);
 
         parent::tearDown();
     }
@@ -109,10 +107,10 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
 
         $fileInfo = [
             [
-                'name' => 'test%202.txt',
-                'type' => 'text/plain',
-                'tmp_name' => 'test'
-            ]
+                'name'     => 'test%202.txt',
+                'type'     => 'text/plain',
+                'tmp_name' => 'test',
+            ],
         ];
 
         $form->setFileInfo($fileInfo);
@@ -148,7 +146,7 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
 
         // entspricht nicht der richtige Struktur, reicht aber für Test
         $fileInfo = [
-            ['file']
+            ['file'],
         ];
 
         $form->setFileInfo($fileInfo);

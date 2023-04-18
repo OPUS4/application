@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,46 +25,39 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Title;
+use Opus\Common\Title;
+use Opus\Common\TitleInterface;
 
 /**
  * Unterformular fuer das Editieren von Titeln.
  *
  * Für das Metadaten-Formular wurde vereinbart, daß der Typ eines Titels nicht mehr verändert werden kann.
- *
- * @category    Application
- * @package     Module_Admin
- * @subpackage  Form_Document
  */
 class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
 {
-
     /**
      * Name von Formularelement fuer ID von Title Objekt.
      */
-    const ELEMENT_ID = 'Id';
+    public const ELEMENT_ID = 'Id';
 
     /**
      * Name von Formularelement fuer Titeltyp.
      */
-    const ELEMENT_TYPE = 'Type';
+    public const ELEMENT_TYPE = 'Type';
 
     /**
      * Name von Formularelement fuer Titelsprache.
      */
-    const ELEMENT_LANGUAGE = 'Language';
+    public const ELEMENT_LANGUAGE = 'Language';
 
     /**
      * Name von Formularelement fuer Titeltext.
      */
-    const ELEMENT_VALUE = 'Value';
+    public const ELEMENT_VALUE = 'Value';
 
     /**
      * Erzeugt die Formularelemente.
@@ -76,15 +70,15 @@ class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
         $this->addElement('Hidden', self::ELEMENT_TYPE); // Der Typ eines Titels ist nicht editierbar
         $this->addElement('Language', self::ELEMENT_LANGUAGE, ['required' => true]);
         $this->addElement('textarea', self::ELEMENT_VALUE, [
-            'required' => true,
-            'rows' => '4',
+            'required'   => true,
+            'rows'       => '4',
             'decorators' => [
                 'ViewHelper',
                 'Errors',
                 'Description',
                 'ElementHtmlTag',
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
-            ]
+                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
+            ],
         ]);
         $this->getElement(self::ELEMENT_VALUE)->setErrorMessages(['isEmpty' => 'admin_validate_error_notempty']);
     }
@@ -104,7 +98,7 @@ class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
     /**
      * Initialisiert das Formular mit den Werten im Modell.
      *
-     * @param Title $title
+     * @param TitleInterface $title
      */
     public function populateFromModel($title)
     {
@@ -117,7 +111,7 @@ class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
     /**
      * Aktualisiert Modell mit den Werten im Formular.
      *
-     * @param Title $title
+     * @param TitleInterface $title
      */
     public function updateModel($title)
     {
@@ -128,13 +122,14 @@ class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm
 
     /**
      * Liefert das angezeigte Objekt bzw. eine neue Instanz für Titel die im Formular hinzugefügt wurden.
-     * @return Title
+     *
+     * @return TitleInterface
      */
     public function getModel()
     {
         $titleId = $this->getElementValue(self::ELEMENT_ID);
 
-        $title = new Title($titleId);
+        $title = Title::get($titleId);
 
         $this->updateModel($title);
 

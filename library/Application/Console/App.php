@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,19 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Console
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Search\Console\IndexCommand;
-use Opus\Search\Console\RemoveCommand;
-use Opus\Search\Console\ExtractCommand;
-use Opus\Search\Console\ExtractFileCommand;
 use Opus\Bibtex\Import\Console\BibtexImportCommand;
 use Opus\Bibtex\Import\Console\BibtexListCommand;
+use Opus\Search\Console\ExtractCommand;
+use Opus\Search\Console\ExtractFileCommand;
+use Opus\Search\Console\IndexCommand;
+use Opus\Search\Console\RemoveCommand;
 use Symfony\Component\Console\Application;
 
 /**
@@ -44,7 +42,6 @@ use Symfony\Component\Console\Application;
  */
 class Application_Console_App extends Application
 {
-
     public function __construct()
     {
         parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
@@ -58,6 +55,7 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Document_DeleteCommand());
         $this->add(new BibtexImportCommand());
         $this->add(new BibtexListCommand());
+        $this->add(new Application_Console_Debug_DocumentXmlCommand());
 
         $this->setDefaultCommand('list');
     }

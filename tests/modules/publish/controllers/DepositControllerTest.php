@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,24 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Common\Log;
 
 /**
- * Class Publish_DepositControllerTest.
- *
  * @covers Publish_DepositController
  */
 class Publish_DepositControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     /**
@@ -61,23 +57,23 @@ class Publish_DepositControllerTest extends ControllerTestCase
      */
     public function testDepositActionWithValidPostAndBackButton()
     {
-        $session = new \Zend_Session_Namespace('Publish');
-        $elemente = [
+        $session               = new Zend_Session_Namespace('Publish');
+        $elemente              = [
             1 => ['name' => 'PersonSubmitterFirstName_1', 'value' => 'Hans'],
             2 => ['name' => 'PersonSubmitterLastName_1', 'value' => 'Hansmann'],
             3 => ['name' => 'PersonSubmitterEmail_1', 'value' => 'test@mail.com'],
             4 => ['name' => 'CompletedDate', 'value' => '2011/03/03'],
             5 => ['name' => 'TitleMain_1', 'value' => 'Irgendwas'],
-            6 => ['name' => 'TitleMainLanguage_1', 'value' => 'deu']
+            6 => ['name' => 'TitleMainLanguage_1', 'value' => 'deu'],
         ];
-        $session->elements = $elemente;
-        $session->documentId = '712';
+        $session->elements     = $elemente;
+        $session->documentId   = '712';
         $session->documentType = 'preprint';
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'back' => ''
+                'back' => '',
             ]);
 
         $this->dispatch('/publish/deposit/deposit');
@@ -93,17 +89,17 @@ class Publish_DepositControllerTest extends ControllerTestCase
      */
     public function testDepositActionWithValidPostAndSendButton()
     {
-        $session = new \Zend_Session_Namespace('Publish');
+        $session  = new Zend_Session_Namespace('Publish');
         $elemente = [
-            1 => ['name' => 'PersonSubmitterFirstName_1', 'value' => 'Hans', 'datatype' => 'Person', 'subfield' => '0'],
-            2 => ['name' => 'PersonSubmitterLastName_1', 'value' => 'Hansmann', 'datatype' => 'Person', 'subfield' => '1'],
-            3 => ['name' => 'PersonSubmitterEmail_1', 'value' => 'test@mail.com', 'datatype' => 'Person', 'subfield' => '1'],
-            4 => ['name' => 'PersonSubmitterPlaceOfBirth_1', 'value' => 'Stadt', 'datatype' => 'Person', 'subfield' => '1'],
-            5 => ['name' => 'PersonSubmitterDateOfBirth_1', 'value' => '1970/01/01', 'datatype' => 'Person', 'subfield' => '1'],
-            6 => ['name' => 'PersonSubmitterAcademicTitle_1', 'value' => 'Dr.', 'datatype' => 'Person', 'subfield' => '1'],
-            7 => ['name' => 'PersonSubmitterAllowEmailContact_1', 'value' => '0', 'datatype' => 'Person', 'subfield' => '1'],
-            8 => ['name' => 'CompletedDate', 'value' => '2012/1/1', 'datatype' => 'Date', 'subfield' => '0'],
-            9 => ['name' => 'TitleMain_1', 'value' => 'Entenhausen', 'datatype' => 'Title', 'subfield' => '0'],
+            1  => ['name' => 'PersonSubmitterFirstName_1', 'value' => 'Hans', 'datatype' => 'Person', 'subfield' => '0'],
+            2  => ['name' => 'PersonSubmitterLastName_1', 'value' => 'Hansmann', 'datatype' => 'Person', 'subfield' => '1'],
+            3  => ['name' => 'PersonSubmitterEmail_1', 'value' => 'test@mail.com', 'datatype' => 'Person', 'subfield' => '1'],
+            4  => ['name' => 'PersonSubmitterPlaceOfBirth_1', 'value' => 'Stadt', 'datatype' => 'Person', 'subfield' => '1'],
+            5  => ['name' => 'PersonSubmitterDateOfBirth_1', 'value' => '1970/01/01', 'datatype' => 'Person', 'subfield' => '1'],
+            6  => ['name' => 'PersonSubmitterAcademicTitle_1', 'value' => 'Dr.', 'datatype' => 'Person', 'subfield' => '1'],
+            7  => ['name' => 'PersonSubmitterAllowEmailContact_1', 'value' => '0', 'datatype' => 'Person', 'subfield' => '1'],
+            8  => ['name' => 'CompletedDate', 'value' => '2012/1/1', 'datatype' => 'Date', 'subfield' => '0'],
+            9  => ['name' => 'TitleMain_1', 'value' => 'Entenhausen', 'datatype' => 'Title', 'subfield' => '0'],
             10 => ['name' => 'TitleMainLanguage_1', 'value' => 'deu', 'datatype' => 'Language', 'subfield' => '1'],
             11 => ['name' => 'TitleMain_2', 'value' => 'Irgendwas sonst', 'datatype' => 'Title', 'subfield' => '0'],
             12 => ['name' => 'TitleMainLanguage_2', 'value' => 'eng', 'datatype' => 'Language', 'subfield' => '1'],
@@ -139,19 +135,20 @@ class Publish_DepositControllerTest extends ControllerTestCase
             42 => ['name' => 'ReferenceUrl', 'value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'],
             43 => ['name' => 'ReferenceCrisLink', 'value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'],
             44 => ['name' => 'ReferenceStdDoi', 'value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'],
-            45 => ['name' => 'ReferenceSplashUrl', 'value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0']];
+            45 => ['name' => 'ReferenceSplashUrl', 'value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'],
+        ];
 
-        $session->elements = $elemente;
+        $session->elements     = $elemente;
         $session->documentType = 'preprint';
-        $doc = $this->createTestDocument();
+        $doc                   = $this->createTestDocument();
         $doc->setServerState('temporary');
         $doc->setType('preprint');
         $session->documentId = $doc->store();
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'send' => 'Save document'
+                'send' => 'Save document',
             ]);
 
         $this->dispatch('/publish/deposit/deposit');
@@ -167,7 +164,7 @@ class Publish_DepositControllerTest extends ControllerTestCase
 
     public function testConfirmAction()
     {
-        $session = new \Zend_Session_Namespace('Publish');
+        $session                           = new Zend_Session_Namespace('Publish');
         $session->depositConfirmDocumentId = '712';
         $this->dispatch('/publish/deposit/confirm');
         $this->assertController('deposit');
@@ -191,27 +188,27 @@ class Publish_DepositControllerTest extends ControllerTestCase
      */
     public function testDepositActionWithAbortInPost()
     {
-        $session = new \Zend_Session_Namespace('Publish');
+        $session  = new Zend_Session_Namespace('Publish');
         $elemente = [
             1 => ['name' => 'PersonSubmitterFirstName_1', 'value' => 'Hans'],
             2 => ['name' => 'PersonSubmitterLastName_1', 'value' => 'Hansmann'],
             3 => ['name' => 'PersonSubmitterEmail_1', 'value' => 'test@mail.com'],
             4 => ['name' => 'CompletedDate', 'value' => '2011/03/03'],
             5 => ['name' => 'TitleMain_1', 'value' => 'Irgendwas'],
-            6 => ['name' => 'TitleMainLanguage_1', 'value' => 'deu']
+            6 => ['name' => 'TitleMainLanguage_1', 'value' => 'deu'],
         ];
 
-        $session->elements = $elemente;
+        $session->elements     = $elemente;
         $session->documentType = 'preprint';
-        $doc = $this->createTestDocument(); // Cleanup des Dokuments erfolgt im Publish-Modul
+        $doc                   = $this->createTestDocument(); // Cleanup des Dokuments erfolgt im Publish-Modul
         $doc->setServerState('temporary');
         $doc->setType('preprint');
         $session->documentId = $doc->store();
 
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'abort' => ''
+                'abort' => '',
             ]);
 
         $this->dispatch('/publish/deposit/deposit');
@@ -227,10 +224,10 @@ class Publish_DepositControllerTest extends ControllerTestCase
         $doc->setServerState('published');
         $doc->setType('preprint');
 
-        $log = Log::get();
+        $log     = Log::get();
         $deposit = new Publish_Model_Deposit($log);
 
-        $this->setExpectedException(Publish_Model_FormDocumentNotFoundException::class);
+        $this->expectException(Publish_Model_FormDocumentNotFoundException::class);
         $deposit->storeDocument($doc->store());
     }
 }

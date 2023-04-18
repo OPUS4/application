@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,30 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Admin_Form_PersonsConfirmTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
-    private $_form;
+    /** @var Admin_Form_PersonsConfirm */
+    private $form;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_form = new Admin_Form_PersonsConfirm();
+        $this->form = new Admin_Form_PersonsConfirm();
     }
 
     public function testConstruct()
     {
-        $form = $this->_form;
+        $form = $this->form;
 
         $subforms = $form->getSubforms();
 
@@ -68,7 +67,7 @@ class Admin_Form_PersonsConfirmTest extends ControllerTestCase
 
     public function testProcessPostBack()
     {
-        $form = $this->_form;
+        $form = $this->form;
 
         $result = $form->processPost(['Back' => 'Zurück'], null);
 
@@ -79,11 +78,11 @@ class Admin_Form_PersonsConfirmTest extends ControllerTestCase
     {
         $this->disableTranslation();
 
-        $form = $this->_form;
+        $form = $this->form;
 
         $person = [
-            'last_name' => 'Doe',
-            'first_name' => 'Jane'
+            'last_name'  => 'Doe',
+            'first_name' => 'Jane',
         ];
 
         $form->populateFromModel($person);

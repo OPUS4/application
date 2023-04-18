@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,23 +25,23 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DocumentInterface;
+use Opus\Common\FileInterface;
+
 class Admin_Form_Document_Files extends Admin_Form_AbstractDocumentSubForm
 {
-
-    private $_header = [
+    /** @var array */
+    private $header = [
         ['label' => null, 'class' => 'file'],
         ['label' => 'files_column_size', 'class' => 'size'],
         ['label' => 'files_column_mimetype', 'class' => 'mimetype'],
         ['label' => 'files_column_language', 'class' => 'language'],
         ['label' => 'files_column_frontdoor', 'class' => 'visiblefrontdoor'],
-        ['label' => 'files_column_oai', 'class' => 'visibleoai']
+        ['label' => 'files_column_oai', 'class' => 'visibleoai'],
     ];
 
     public function init()
@@ -50,21 +51,24 @@ class Admin_Form_Document_Files extends Admin_Form_AbstractDocumentSubForm
         $this->setLegend('admin_document_section_files');
         $this->setDisableTranslator(true); // so legend won't be translated twice
 
-        $header = new Application_Form_TableHeader($this->_header);
+        $header = new Application_Form_TableHeader($this->header);
 
         $this->addSubForm($header, 'Header');
 
         $this->setDecorators(
             [
-            'FormElements',
-            [['table' => 'HtmlTag'], ['tag' => 'table']],
-            [['fieldsWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'fields-wrapper']],
-            'Fieldset',
-            [['divWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'subform']]
+                'FormElements',
+                [['table' => 'HtmlTag'], ['tag' => 'table']],
+                [['fieldsWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'fields-wrapper']],
+                'Fieldset',
+                [['divWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'subform']],
             ]
         );
     }
 
+    /**
+     * @param DocumentInterface $document
+     */
     public function populateFromModel($document)
     {
         foreach ($document->getFile() as $file) {
@@ -72,6 +76,9 @@ class Admin_Form_Document_Files extends Admin_Form_AbstractDocumentSubForm
         }
     }
 
+    /**
+     * @param FileInterface $file
+     */
     protected function addFileSubForm($file)
     {
         $form = new Admin_Form_Document_File();

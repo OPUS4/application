@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,76 +25,73 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Admin_Model_Option extends Application_Model_Abstract
 {
+    /** @var string Name of configuration option. */
+    private $name;
+
+    /** @var array Parameters for option. */
+    private $config;
 
     /**
-     * Name of configuration option.
-     * @var string
-     */
-    private $_name;
-
-    /**
-     * Parameters for option.
-     * @var array
-     */
-    private $_config;
-
-    /**
-     * Admin_Model_Option constructor.
-     * @param $name string Name of option
-     * @param $config array Parameters for option
+     * @param string $name Name of option
+     * @param array  $config Parameters for option
      */
     public function __construct($name, $config)
     {
-        $this->_name = $name;
-        $this->_config = $config;
+        $this->name   = $name;
+        $this->config = $config;
     }
 
+    /**
+     * @return string
+     */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
+    /**
+     * @return string
+     */
     public function getKey()
     {
-        return $this->_config['key'];
+        return $this->config['key'];
     }
 
     /**
      * Returns label name for option.
      *
-     * @param $name
      * @return string
      */
     public function getLabel()
     {
-        return Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . $this->_name;
+        return Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . $this->name;
     }
 
     /**
      * Returns translation key for option description.
+     *
      * @return string
      */
     public function getDescription()
     {
-        return Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . $this->_name . '_description';
+        return Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . $this->name . '_description';
     }
 
     /**
      * Returns name of form element type for option.
+     *
      * @return string
      */
     public function getElementType()
     {
-        if (isset($this->_config['type'])) {
-            $type = $this->_config['type'];
+        if (isset($this->config['type'])) {
+            $type = $this->config['type'];
         } else {
             $type = 'text';
         }
@@ -103,12 +101,13 @@ class Admin_Model_Option extends Application_Model_Abstract
 
     /**
      * Returns name of section in configuration for option.
+     *
      * @return string
      */
     public function getSection()
     {
-        if (isset($this->_config['section'])) {
-            $sectionName = $this->_config['section'];
+        if (isset($this->config['section'])) {
+            $sectionName = $this->config['section'];
         } else {
             $sectionName = 'general';
         }
@@ -118,12 +117,13 @@ class Admin_Model_Option extends Application_Model_Abstract
 
     /**
      * Returns additional options for configuration element.
+     *
      * @return array
      */
     public function getOptions()
     {
-        if (isset($this->_config['options'])) {
-            return $this->_config['options'];
+        if (isset($this->config['options'])) {
+            return $this->config['options'];
         } else {
             return [];
         }
