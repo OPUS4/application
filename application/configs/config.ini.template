@@ -281,9 +281,9 @@ publish.path.documenttemplates[] = APPLICATION_PATH "/tests/resources/doctypes_t
 ; if set to `1` PDF cover pages may be added in front of downloaded PDF files
 pdf.covers.generate = 1
 ; path to the covers directory that stores PDF cover templates
-pdf.covers.path = APPLICATION_PATH "/tests/resources/covers"
+pdf.covers.path = APPLICATION_PATH "/application/configs/covers"
 ; path relative to the covers directory pointing to a default cover template
-pdf.covers.default = 'demo/demo-cover-template.md'
+pdf.covers.default = 'demo-cover.md'
 ; path relative to the covers directory pointing to the cover template to be used
 ; (instead of the default cover template) for documents in a certain collection
 ;collection.15982.cover = ''
