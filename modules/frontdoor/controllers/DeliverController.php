@@ -160,7 +160,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
      * metadata.
      *
      * @param FileInterface $file
-     * @param bool $cover (Optional) Whether PDF cover generation shall be attempted; defaults to true
+     * @param bool          $cover (Optional) Whether PDF cover generation shall be attempted; defaults to true
      * @return string the file's path
      */
     private function prepareFile($file, $cover = true)
