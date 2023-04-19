@@ -47,8 +47,11 @@ class Frontdoor_DeliverController extends Application_Controller_Action
      */
     public function indexAction()
     {
+        // TODO unit test 'cover=false' URL parameter which should suppress PDF cover generation on file download
+
         $docId = $this->_getParam('docId', null);
         $path  = $this->_getParam('file', null);
+        $cover = $this->_getParam('cover', true);
 
         $realm = Realm::getInstance();
 
@@ -80,7 +83,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $baseFilename     = self::quoteFileName($baseFilename);
 
         try {
-            $filePath = $this->prepareFile($fileObject);
+            $filePath = $this->prepareFile($fileObject, $cover);
         } catch (Exception $e) {
             $this->handleDeliveryError($e);
             return;
@@ -157,11 +160,17 @@ class Frontdoor_DeliverController extends Application_Controller_Action
      * metadata.
      *
      * @param FileInterface $file
+     * @param bool $cover (Optional) Whether PDF cover generation shall be attempted; defaults to true
      * @return string the file's path
      */
-    private function prepareFile($file)
+    private function prepareFile($file, $cover = true)
     {
         $filePath = $file->getPath();
+
+        if ($cover !== true && $this->isAllowDownloadOfUnpublishedDocs()) {
+            // suppress PDF cover generation from within the administration
+            return $filePath;
+        }
 
         // only handle PDF files
         if ($file->getMimeType() !== 'application/pdf') {
@@ -224,5 +233,22 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $generator->setTempDir($tempDir);
 
         return $generator;
+    }
+
+    /**
+     * Download of unpublished documents is allowed only if the user has 'resource_documents'
+     * permission.
+     *
+     * @return bool true if download of unpublished documents is allowed
+     *
+     * TODO move to a better place
+     */
+    private function isAllowDownloadOfUnpublishedDocs()
+    {
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        if ($accessControl === null) {
+            return false;
+        }
+        return $accessControl->accessAllowed('documents');
     }
 }

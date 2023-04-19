@@ -48,6 +48,8 @@ class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract
      */
     public function fileLink($name, $file, $options = null)
     {
+        // TODO unit test 'cover=false' URL parameter which should suppress PDF cover generation on file download
+
         if ($file === null) {
             throw new Application_Exception(__METHOD__ . 'Parameter $file must not be null (for ' . $name . ').');
         }
@@ -60,7 +62,7 @@ class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract
 
         $fileName = $fileName === null || strlen(trim($fileName)) === 0 ? $file->getPathName() : $fileName;
         $fileUrl  = $this->view->serverUrl() . $this->view->baseUrl() . "/files/" . $file->getParentId()
-                . "/" . urlencode($file->getPathName());
+                . "/" . urlencode($file->getPathName()) . "?cover=false";
 
         return '<a href="' . $fileUrl . '" class="filelink">' . htmlspecialchars($fileName) . '</a>'
             . $this->view->formHidden($name, $file->getId(), null);
