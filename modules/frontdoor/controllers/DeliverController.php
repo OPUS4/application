@@ -47,8 +47,11 @@ class Frontdoor_DeliverController extends Application_Controller_Action
      */
     public function indexAction()
     {
+        // TODO unit test 'cover=false' URL parameter which should suppress PDF cover generation on file download
+
         $docId = $this->_getParam('docId', null);
         $path  = $this->_getParam('file', null);
+        $cover = filter_var($this->_getParam('cover', true), FILTER_VALIDATE_BOOLEAN);
 
         $realm = Realm::getInstance();
 
@@ -80,7 +83,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $baseFilename     = self::quoteFileName($baseFilename);
 
         try {
-            $filePath = $this->prepareFile($fileObject);
+            $filePath = $this->prepareFile($fileObject, $cover);
         } catch (Exception $e) {
             $this->handleDeliveryError($e);
             return;
@@ -157,14 +160,20 @@ class Frontdoor_DeliverController extends Application_Controller_Action
      * metadata.
      *
      * @param FileInterface $file
+     * @param bool          $cover (Optional) Whether PDF cover generation shall be attempted; defaults to true
      * @return string the file's path
      */
-    private function prepareFile($file)
+    private function prepareFile($file, $cover = true)
     {
         $filePath = $file->getPath();
 
         // only handle PDF files
         if ($file->getMimeType() !== 'application/pdf') {
+            return $filePath;
+        }
+
+        // suppress PDF cover generation from within the administration
+        if ($cover === false && $this->isDocumentsAdmin()) {
             return $filePath;
         }
 
@@ -224,5 +233,21 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $generator->setTempDir($tempDir);
 
         return $generator;
+    }
+
+    /**
+     * Returns true if the current user has documents access rights, otherwise false.
+     *
+     * @return bool
+     *
+     * TODO move to a better place
+     */
+    private function isDocumentsAdmin()
+    {
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        if ($accessControl === null) {
+            return false;
+        }
+        return $accessControl->accessAllowed('documents');
     }
 }
