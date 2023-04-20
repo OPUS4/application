@@ -340,6 +340,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="Enrichmentconference_title">
+      <tuv xml:lang="en">
+        <seg>Conference Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name der Konferenz</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="Enrichmentconference_place">
+      <tuv xml:lang="en">
+        <seg>Conference Location</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ort der Konferenz</seg>
+      </tuv>
+    </tu>
+
 <!-- BEGIN OF COMMENT
     Language keys can be used after the corresponding Enrichment keys
     were created in administration -> Enrichments.

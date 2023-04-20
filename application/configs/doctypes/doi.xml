@@ -43,8 +43,8 @@
     <field name="local_doiImportPopulated" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
 
 
-    <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1">
-        <subfield name="FirstName" required="yes" formelement="text" datatype="Text"/>
+    <field name="PersonSubmitter" required="no" formelement="Text" datatype="Person" multiplicity="1">
+        <subfield name="FirstName" required="no" formelement="text" datatype="Text"/>
         <subfield name="Email" required="no" formelement="text" datatype="Email"/>
     </field>
 
