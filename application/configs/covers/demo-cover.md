@@ -2,6 +2,9 @@
 # 
 # Demo Markdown template for PDF cover generation
 # -----------------------------------------------
+#   
+# This template can be used by OPUS4 to dynamically render a PDF cover which can be prepended
+# to a PDF file on download.
 # 
 # REQUIREMENTS:
 # - This template requires the packages `pandoc` (>= v2.11) and `texlive-xetex` to be installed.
@@ -14,34 +17,9 @@
 #   metadata according to Chicago Manual of Style (author-date). When not commented
 #   out (see `citation-style:` below), this template requires any CSL style from
 #   <https://github.com/citation-style-language/styles> to generate the formatted
-#   citation. 
-#   
-# NOTES:
-# - This template can be used by OPUS4 to dynamically render a PDF cover which can be prepended
-#   to a PDF file on download.
-#   
-# - This template can be converted to a cover PDF manually using Pandoc and XeTeX via two steps:
-#   
-#   - when using a single .yaml file containing both, general and bibliographic metadata:
-#     - `pandoc /PATH/TO/TEMPLATE_DIR/cover-template.md /PATH/TO/metadata.yaml --wrap=preserve --bibliography=/PATH/TO/metadata.yaml --template=/PATH/TO/TEMPLATE_DIR/cover-template.md --variable=images-basepath:/PATH/TO/TEMPLATE_DIR/ --variable=licence-logo-basepath:/PATH/TO/LICENCE_LOGO_DIR/ --output=cover.md`
-#     - `pandoc cover.md --resource-path=/PATH/TO/TEMPLATE_DIR/ --bibliography=/PATH/TO/metadata.yaml --citeproc --pdf-engine=xelatex --pdf-engine-opt=-output-driver="xdvipdfmx -V 3 -z 0" --output=cover.pdf`
-#   
-#   - when using separate .json files for general and bibliographic metadata:
-#     - `pandoc /PATH/TO/TEMPLATE_DIR/cover-template.md --wrap=preserve --metadata-file=/PATH/TO/meta.json --bibliography=/PATH/TO/csl.json --template=/PATH/TO/TEMPLATE_DIR/cover-template.md --variable=images-basepath:/PATH/TO/TEMPLATE_DIR/ --variable=licence-logo-basepath:/PATH/TO/LICENCE_LOGO_DIR/ --output=cover.md`
-#     - `pandoc cover.md --resource-path=/PATH/TO/TEMPLATE_DIR/ --bibliography=/PATH/TO/csl.json --citeproc --pdf-engine=xelatex --pdf-engine-opt=-output-driver="xdvipdfmx -V 3 -z 0" --output=cover.pdf`
-#   
-# - As in the examples above, this template requires two calls to pandoc with the following arguments:
-#   - `--wrap=` set to `preserve` which causes Pandoc to preserve the line wrapping from this template file
-#   - `--metadata-file=` set to the path of the metadata file containing the document's general metadata
-#   - `--bibliography=` set to the path of the metadata file containing the document's bibliographic metadata
-#   - `--template=` set to the path of this template file
-#   - `--variable=` set to `images-basepath:` and followed by the base path of the `images` subdirectory containing images used by this template
-#   - `--variable=` set to `licence-logo-basepath:` and followed by the path to a directory containing licence logos (arranged/named according to <https://licensebuttons.net>)
-#   - `--resource-path=` set to the base path of the `styles` subdirectory containing the citation style used by this template
-#   - `--citeproc` which causes a formatted citation to be generated from the bibliographic metadata
-#   - `--pdf-engine=` set to `xelatex` which specifies that XeTeX will be used to generate the PDF (allowing the template to use Unicode & system fonts)
-#   - `--pdf-engine-opt=` set to `-output-driver="xdvipdfmx -V 3 -z 0"` which specifies to use PDF version 1.3 without compression
-#        - NOTE: since this option seems to cause a Pandoc exception when passed through PHP code, we use below `\special{dvipdfmx:config ...}` includes instead
+#   citation.
+# 
+# For further info, see the [opus4-pdf package documentation](https://github.com/OPUS4/opus4-pdf/).
 # 
 # 
 # Pandoc options
