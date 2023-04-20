@@ -51,7 +51,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
 
         $docId = $this->_getParam('docId', null);
         $path  = $this->_getParam('file', null);
-        $cover = $this->_getParam('cover', true);
+        $cover = filter_var($this->_getParam('cover', true), FILTER_VALIDATE_BOOLEAN);
 
         $realm = Realm::getInstance();
 
@@ -167,13 +167,13 @@ class Frontdoor_DeliverController extends Application_Controller_Action
     {
         $filePath = $file->getPath();
 
-        if ($cover !== true && $this->isAllowDownloadOfUnpublishedDocs()) {
-            // suppress PDF cover generation from within the administration
+        // only handle PDF files
+        if ($file->getMimeType() !== 'application/pdf') {
             return $filePath;
         }
 
-        // only handle PDF files
-        if ($file->getMimeType() !== 'application/pdf') {
+        // suppress PDF cover generation from within the administration
+        if ($cover === false && $this->isDocumentsAdmin()) {
             return $filePath;
         }
 
@@ -236,14 +236,13 @@ class Frontdoor_DeliverController extends Application_Controller_Action
     }
 
     /**
-     * Download of unpublished documents is allowed only if the user has 'resource_documents'
-     * permission.
+     * Returns true if the current user has documents access rights, otherwise false.
      *
-     * @return bool true if download of unpublished documents is allowed
+     * @return bool
      *
      * TODO move to a better place
      */
-    private function isAllowDownloadOfUnpublishedDocs()
+    private function isDocumentsAdmin()
     {
         $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
         if ($accessControl === null) {
