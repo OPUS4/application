@@ -43,25 +43,26 @@ function cleanup()
 function leseDoi(doi)
 {
  // Diese Funktion wird beim Klick auf den Button "DOI-Daten übernehmen" aufgerufen und steuert alles Weitere
- 
+
     if (doi.trim() != '') {
 
-        var getUrl = window.location;
-			const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-			//alert("URL: "+getUrl.pathname);
-			const finalUrl = baseUrl+'/api/crossref?doi=' + doi;        
+        var getUrl        = window.location;
+            const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+            //alert("URL: "+getUrl.pathname);
+            const finalUrl = baseUrl + '/api/crossref?doi=' + doi;
         get(
             finalUrl,
             function () {
                 var jsonraw = this.responseText;
                 if (jsonraw == "Resource not found.") {
                     alert("DOI wurde nicht in Crossref gefunden.");
-                    colorOrange("IdentifierDoi")} else {
+                    colorOrange("IdentifierDoi")
+                } else {
                     // document.getElementById("Enrichmentlocal_doiJson").value = jsonraw;
                     document.getElementById("Enrichmentopus_import_data").value = jsonraw;
                     document.getElementById("Enrichmentopus_doi_flag").value    = "false";
                     parseJson(jsonraw);
-                    }
+                }
             }
         );
     }
@@ -409,66 +410,67 @@ var crossrefTypeMapping = {
  *      muesste also unter Umständen lokal angepasst werden. Das sollte gefixt werden.
  */
 async function getDoctypes(data)
-{ 
-			var getUrl = window.location;
-			const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-			//alert("URL: "+getUrl.pathname);
-			const finalUrl = baseUrl+'/api/doctypes';
-			get(finalUrl,
-				function() {
-					var existingDoctypes = this.responseText;
-					//alert("Doctypes: " + existingDoctypes);
+{
+    var getUrl    = window.location;
+    const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    //alert("URL: "+getUrl.pathname);
+    const finalUrl = baseUrl + '/api/doctypes';
+    get(
+        finalUrl,
+        function () {
+            var existingDoctypes = this.responseText;
+            //alert("Doctypes: " + existingDoctypes);
 
-					document.getElementById("CrossrefDocumentType").value = getType(data); 
-					var crossrefType = document.getElementById("CrossrefDocumentType").value;
-					document.getElementById("Enrichmentlocal_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "local_crossrefDocumentType"
-					
-                    // Map Crossref document type to OPUS type
-                    var opusType = crossrefTypeMapping[crossrefType];
+            document.getElementById("CrossrefDocumentType").value = getType(data);
+            var crossrefType                                      = document.getElementById("CrossrefDocumentType").value;
+            document.getElementById("Enrichmentlocal_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "local_crossrefDocumentType"
 
-                    if (! existingDoctypes.includes(opusType)) {
-                        opusType = 'other';
+            // Map Crossref document type to OPUS type
+            var opusType = crossrefTypeMapping[crossrefType];
+
+            if (! existingDoctypes.includes(opusType)) {
+                opusType = 'other';
+            }
+
+
+
+            if (crossrefType.includes("dissertation/")) {
+                // Wenn crossrefType "dissertation" mit Slash: mit Degree
+                const degree            = crossrefType.split('/')[1];
+                const keys_master       = ["master", "mestrado", "m.phil.", "m.a.", "m.sc.", "ll. m.", "m. ed.", "m. eng.", "m. f. a.", "m. mus.", "ll.m.", "m.ed.", "m.eng.", "m.f.a.", "m.mus.", "m.s."];
+                const keys_bachelor     = ["bachelor", "bacharel", "b.a.", "b.sc.", "ll. b.", "b. ed.", "b. eng.", "b. f. a.", "b. mus.", "b. m. a", "ll.b.", "b.ed.", "b.eng.", "b.f.a.", "b.mus.", "b.m.a"];
+                const keys_habilitation = ["habil"];
+                if (keys_master.some(el => degree.includes(el))) {
+                    if (existingDoctypes.includes("masterthesis")) {
+                        opusType = 'masterthesis';
+                    } else {
+                        opusType = 'doctoralthesis';
                     }
-
-                    
-
-                    if (crossrefType.includes("dissertation/")) {
-                        // Wenn crossrefType "dissertation" mit Slash: mit Degree
-                        const degree            = crossrefType.split('/')[1];
-                        const keys_master       = ["master", "mestrado", "m.phil.", "m.a.", "m.sc.", "ll. m.", "m. ed.", "m. eng.", "m. f. a.", "m. mus.", "ll.m.", "m.ed.", "m.eng.", "m.f.a.", "m.mus.", "m.s."];
-                        const keys_bachelor     = ["bachelor", "bacharel", "b.a.", "b.sc.", "ll. b.", "b. ed.", "b. eng.", "b. f. a.", "b. mus.", "b. m. a", "ll.b.", "b.ed.", "b.eng.", "b.f.a.", "b.mus.", "b.m.a"];
-                        const keys_habilitation = ["habil"];
-                        if (keys_master.some(el => degree.includes(el))) {
-                            if (existingDoctypes.includes("masterthesis")) {
-                                opusType = 'masterthesis';
-                            } else {
-                                opusType = 'doctoralthesis';
-                            }
-                        } else if (keys_bachelor.some(el_1 => degree.includes(el_1)) || degree === "ba") {
-                            if (existingDoctypes.includes("bachelorthesis")) {
-                                opusType = 'bachelorthesis';
-                            } else {
-                                opusType = 'doctoralthesis';
-                            }
-                        } else if (keys_habilitation.some(el_2 => degree.includes(el_2))) {
-                            if (existingDoctypes.includes("habilitation")) {
-                                opusType = 'habilitation';
-                            } else {
-                                opusType = 'doctoralthesis';
-                            }
-                        } else {
-                            opusType = 'doctoralthesis';
-                        }
+                } else if (keys_bachelor.some(el_1 => degree.includes(el_1)) || degree === "ba") {
+                    if (existingDoctypes.includes("bachelorthesis")) {
+                        opusType = 'bachelorthesis';
+                    } else {
+                        opusType = 'doctoralthesis';
                     }
+                } else if (keys_habilitation.some(el_2 => degree.includes(el_2))) {
+                    if (existingDoctypes.includes("habilitation")) {
+                        opusType = 'habilitation';
+                    } else {
+                        opusType = 'doctoralthesis';
+                    }
+                } else {
+                    opusType = 'doctoralthesis';
+                }
+            }
 
-                    document.getElementById('DocumentType').value = opusType;
+            document.getElementById('DocumentType').value = opusType;
 
-                    //alert("OpusDoctype: " + document.getElementById('DocumentType').value);
-                    document.getElementById("OpusDocumentType").value = document.getElementById("DocumentType").value;
-                    return;
-                    });
-						
-}	
+            //alert("OpusDoctype: " + document.getElementById('DocumentType').value);
+            document.getElementById("OpusDocumentType").value = document.getElementById("DocumentType").value;
+            return;
+        }
+    );
+}
 
 
 
