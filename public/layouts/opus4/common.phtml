@@ -64,6 +64,7 @@ if (isset($this->title)) {
 
 $this->headLink()
     ->prependStylesheet($this->layoutPath() . '/css/custom.css')
+    ->prependStylesheet($this->layoutPath() . '/css/doi-import.css')
     ->prependStylesheet($this->layoutPath() . '/css/print.css', 'print')
     ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
     ->prependStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')

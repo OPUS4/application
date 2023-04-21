@@ -63,7 +63,7 @@ function getConferenceTitle(json)
     if (json['message']['event'] != undefined) {
         var result = json['message']['event']['name'];
         if (result != undefined) {
-            finalize("EnrichmentConferenceTitle")
+            finalize("Enrichmentconference_title")
         }
     }
     return result ? result : ''
@@ -75,7 +75,7 @@ function getConferencePlace(json)
     if (json['message']['event'] != undefined) {
         var result = json['message']['event']['location'];
         if (result != undefined) {
-            finalize("EnrichmentConferencePlace")
+            finalize("Enrichmentconference_place")
         }
     }
     return result ? result : ''

@@ -3,7 +3,7 @@ let populatedFields = [];
 
 // TODO Englische Funktionsnamen fuer Einheitlichkeit im Code bitte
 
-function startePruefung()
+function startCheck()
 {
     var doi = document.getElementById("IdentifierDoi").value.trim();
     if (doi.trim() == '') {
@@ -15,14 +15,16 @@ function startePruefung()
     } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true") {
         // Import wurde bereits durchgeführt -> Bestätigung
         if (confirm("Achtung, alle Felder des Formulars werden gelöscht und ein neuer Import gestartet! Fortfahren?")) {
-            aufraeumen(doi)
+            cleanup();
+            document.getElementById("IdentifierDoi").value = doi;
+            leseDoi(doi);
         } else {
             return
         }
     }
 }
 
-function aufraeumen(doi)
+function cleanup()
 {
     let fields = document.getElementById("Enrichmentlocal_doiImportPopulated").value;
     document.getElementById("Alles").reset(); // Alle Felder leeren
@@ -36,17 +38,18 @@ function aufraeumen(doi)
             document.getElementById(element).style.backgroundColor = null;
         }
     }
-
-    // TODO Funktion sollte nicht leseDoi aufrufen - das sollte in startePruefung separat passieren
-    document.getElementById("IdentifierDoi").value = doi;
-    leseDoi(doi)
 }
 
 function leseDoi(doi)
 {
  // Diese Funktion wird beim Klick auf den Button "DOI-Daten übernehmen" aufgerufen und steuert alles Weitere
+ 
     if (doi.trim() != '') {
-        var finalUrl = "https://api.crossref.org/v1/works/" + doi + "?mailto=repositorien%40bsz-bw.de";
+
+        var getUrl = window.location;
+			const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+			//alert("URL: "+getUrl.pathname);
+			const finalUrl = baseUrl+'/api/crossref?doi=' + doi;        
         get(
             finalUrl,
             function () {
@@ -406,58 +409,66 @@ var crossrefTypeMapping = {
  *      muesste also unter Umständen lokal angepasst werden. Das sollte gefixt werden.
  */
 async function getDoctypes(data)
-{
-    const response                                        = await fetch('../../getDoctypes.php');
-    const text                                            = await response.text();
-    const split                                           = text.split(",");
-    const existingDoctypes                                = split.map(element => { return element.trim(); });
-    document.getElementById("CrossrefDocumentType").value = getType(data);
-    var crossrefType                                      = document.getElementById("CrossrefDocumentType").value;
-    document.getElementById("Enrichmentlocal_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "local_crossrefDocumentType"
+{ 
+			var getUrl = window.location;
+			const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+			//alert("URL: "+getUrl.pathname);
+			const finalUrl = baseUrl+'/api/doctypes';
+			get(finalUrl,
+				function() {
+					var existingDoctypes = this.responseText;
+					//alert("Doctypes: " + existingDoctypes);
 
-    // Map Crossref document type to OPUS type
-    var opusType = crossrefTypeMapping[crossrefType];
+					document.getElementById("CrossrefDocumentType").value = getType(data); 
+					var crossrefType = document.getElementById("CrossrefDocumentType").value;
+					document.getElementById("Enrichmentlocal_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "local_crossrefDocumentType"
+					
+                    // Map Crossref document type to OPUS type
+                    var opusType = crossrefTypeMapping[crossrefType];
 
-    if (! existingDoctypes.includes(opusType)) {
-        opusType = 'other';
-    }
+                    if (! existingDoctypes.includes(opusType)) {
+                        opusType = 'other';
+                    }
 
-    document.getElementById('DocumentType').value = opusType;
+                    
 
+                    if (crossrefType.includes("dissertation/")) {
+                        // Wenn crossrefType "dissertation" mit Slash: mit Degree
+                        const degree            = crossrefType.split('/')[1];
+                        const keys_master       = ["master", "mestrado", "m.phil.", "m.a.", "m.sc.", "ll. m.", "m. ed.", "m. eng.", "m. f. a.", "m. mus.", "ll.m.", "m.ed.", "m.eng.", "m.f.a.", "m.mus.", "m.s."];
+                        const keys_bachelor     = ["bachelor", "bacharel", "b.a.", "b.sc.", "ll. b.", "b. ed.", "b. eng.", "b. f. a.", "b. mus.", "b. m. a", "ll.b.", "b.ed.", "b.eng.", "b.f.a.", "b.mus.", "b.m.a"];
+                        const keys_habilitation = ["habil"];
+                        if (keys_master.some(el => degree.includes(el))) {
+                            if (existingDoctypes.includes("masterthesis")) {
+                                opusType = 'masterthesis';
+                            } else {
+                                opusType = 'doctoralthesis';
+                            }
+                        } else if (keys_bachelor.some(el_1 => degree.includes(el_1)) || degree === "ba") {
+                            if (existingDoctypes.includes("bachelorthesis")) {
+                                opusType = 'bachelorthesis';
+                            } else {
+                                opusType = 'doctoralthesis';
+                            }
+                        } else if (keys_habilitation.some(el_2 => degree.includes(el_2))) {
+                            if (existingDoctypes.includes("habilitation")) {
+                                opusType = 'habilitation';
+                            } else {
+                                opusType = 'doctoralthesis';
+                            }
+                        } else {
+                            opusType = 'doctoralthesis';
+                        }
+                    }
 
-    if (crossrefType.includes("dissertation/")) {
-        // Wenn crossrefType "dissertation" mit Slash: mit Degree
-        const degree            = crossrefType.split('/')[1];
-        const keys_master       = ["master", "mestrado", "m.phil.", "m.a.", "m.sc.", "ll. m.", "m. ed.", "m. eng.", "m. f. a.", "m. mus.", "ll.m.", "m.ed.", "m.eng.", "m.f.a.", "m.mus.", "m.s."];
-        const keys_bachelor     = ["bachelor", "bacharel", "b.a.", "b.sc.", "ll. b.", "b. ed.", "b. eng.", "b. f. a.", "b. mus.", "b. m. a", "ll.b.", "b.ed.", "b.eng.", "b.f.a.", "b.mus.", "b.m.a"];
-        const keys_habilitation = ["habil"];
-        if (keys_master.some(el => degree.includes(el))) {
-            if (existingDoctypes.includes("masterthesis")) {
-                document.getElementById("DocumentType").value = 'masterthesis';
-            } else {
-                document.getElementById("DocumentType").value = 'doctoralthesis';
-            }
-        } else if (keys_bachelor.some(el_1 => degree.includes(el_1)) || degree === "ba") {
-            if (existingDoctypes.includes("bachelorthesis")) {
-                document.getElementById("DocumentType").value = 'bachelorthesis';
-            } else {
-                document.getElementById("DocumentType").value = 'doctoralthesis';
-            }
-        } else if (keys_habilitation.some(el_2 => degree.includes(el_2))) {
-            if (existingDoctypes.includes("habilitation")) {
-                document.getElementById("DocumentType").value = 'habilitation';
-            } else {
-                document.getElementById("DocumentType").value = 'doctoralthesis';
-            }
-        } else {
-            document.getElementById("DocumentType").value = 'doctoralthesis';
-        }
-    }
+                    document.getElementById('DocumentType').value = opusType;
 
-    document.getElementById("OpusDocumentType").value = document.getElementById("DocumentType").value;
-    return text;
-}
-
+                    //alert("OpusDoctype: " + document.getElementById('DocumentType').value);
+                    document.getElementById("OpusDocumentType").value = document.getElementById("DocumentType").value;
+                    return;
+                    });
+						
+}	
 
 
 
