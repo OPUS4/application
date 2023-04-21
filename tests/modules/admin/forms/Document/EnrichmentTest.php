@@ -33,10 +33,10 @@ use Opus\Common\Document;
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentInterface;
 use Opus\Common\EnrichmentKey;
-use Opus\Enrichment\RegexType;
-use Opus\Enrichment\SelectType;
-use Opus\Enrichment\TextType;
-use Opus\Enrichment\TypeInterface;
+use Opus\Common\Model\FieldType\RegexType;
+use Opus\Common\Model\FieldType\SelectType;
+use Opus\Common\Model\FieldType\TextType;
+use Opus\Common\Model\FieldTypeInterface;
 
 /**
  * Unit Test für Unterformular für ein Enrichment im Metadaten-Formular.
@@ -1180,8 +1180,8 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
     }
 
     /**
-     * @param string        $name
-     * @param TypeInterface $type
+     * @param string             $name
+     * @param FieldTypeInterface $type
      * @return EnrichmentInterface
      */
     private function createEnrichmentKey($name, $type)

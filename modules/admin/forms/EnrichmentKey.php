@@ -31,8 +31,8 @@
 
 use Opus\Common\EnrichmentKey;
 use Opus\Common\EnrichmentKeyInterface;
-use Opus\Enrichment\AbstractType;
-use Opus\Enrichment\TypeInterface;
+use Opus\Common\Model\FieldTypeInterface;
+use Opus\Common\Model\FieldTypes;
 
 /**
  * Form for creating and editing an enrichment key.
@@ -106,6 +106,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             'label'    => 'DisplayName',
         ]);
 
+        // TODO create form element class for 'FieldType'
         $element = $this->createElement(
             'select',
             self::ELEMENT_TYPE,
@@ -117,7 +118,9 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         // alle verfügbaren EnrichmentTypes ermitteln und als Auswahlfeld anzeigen
         $availableTypes[''] = ''; // Standardauswahl des Select-Felds soll leer sein
-        $availableTypes     = array_merge($availableTypes, AbstractType::getAllEnrichmentTypes());
+        $fieldTypes         = FieldTypes::getAll();
+        $fieldTypes         = array_combine($fieldTypes, $fieldTypes); // Creates array where key === value
+        $availableTypes     = array_merge($availableTypes, $fieldTypes);
         $element->setMultiOptions($availableTypes);
         $this->addElement($element);
 
@@ -241,26 +244,15 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      * null, wenn der Typ-Name nicht aufgelöst werden kann.
      *
      * @param string $enrichmentTypeName Name des Enrichment-Typs
-     * @return TypeInterface|null
+     * @return FieldTypeInterface|null
      */
     private function initEnrichmentType($enrichmentTypeName)
     {
-        if ($enrichmentTypeName === null || $enrichmentTypeName === '') {
+        if ($enrichmentTypeName === null || empty($enrichmentTypeName)) {
             return null;
         }
 
-        // TODO better way? - allow registering namespaces/types like in Zend for form elements?
-        $enrichmentTypeName = 'Opus\\Enrichment\\' . $enrichmentTypeName;
-        try {
-            if (class_exists($enrichmentTypeName, false)) {
-                return new $enrichmentTypeName();
-            }
-            $this->getLogger()->err('could not find class ' . $enrichmentTypeName);
-        } catch (Throwable $ex) { // TODO Throwable only available in PHP 7+
-            $this->getLogger()->err('could not instantiate class ' . $enrichmentTypeName . ': ' . $ex->getMessage());
-        }
-
-        return null;
+        return FieldTypes::getType($enrichmentTypeName);
     }
 
     /**

@@ -29,15 +29,19 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Application_Form_FormElementBuilder;
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentInterface;
 use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
+use Opus\Common\Model\FieldType\SelectType;
+use Opus\Common\Model\FieldType\TextType;
 use Opus\Common\Model\ModelException;
-use Opus\Enrichment\SelectType;
-use Opus\Enrichment\TextType;
 
 /**
  * Unterformular für einzelne Enrichments im Metadaten-Formular.
+ *
+ * TODO move code for creating form elements to FormElementBuilder
  */
 class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 {
@@ -83,7 +87,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * Initialisiert die Formularelemente mit den Werten aus dem übergebenen Enrichment-Model. Diese Methode wird beim
      * initialen Formularaufruf (d.h. nur im Kontext eines GET-Requests) aufgerufen.
      *
-     * @param Enrichment $enrichment Enrichment aus der Datenbank, das im Formular angezeigt werden soll
+     * @param EnrichmentInterface $enrichment Enrichment aus der Datenbank, das im Formular angezeigt werden soll
      */
     public function populateFromModel($enrichment)
     {
@@ -111,11 +115,11 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * EnrichmentKey des Enrichments zugeordnet wurde). Ist kein EnrichmentType zugeordnet, so wird ein einfaches
      * Texteingabefeld verwendet.
      *
-     * @param string             $enrichmentValue Wert des anzuzeigenden Enrichments (in der Datenbank)
-     * @param EnrichmentKey|null $enrichmentKey EnrichmentKey des Enrichments, für das ein Eingabeformularelement
-     *                                               erzeugt werden soll
-     * @param string|null        $formValue aktueller Formularwert für das Enrichment (nur bei der Verarbeitung eines
-     *                                      POST-Requests gesetzt)
+     * @param string                      $enrichmentValue Wert des anzuzeigenden Enrichments (in der Datenbank)
+     * @param EnrichmentKeyInterface|null $enrichmentKey EnrichmentKey des Enrichments, für das ein
+     *                                                  Eingabeformularelement erzeugt werden soll
+     * @param string|null                 $formValue aktueller Formularwert für das Enrichment (nur bei der
+     *                                               Verarbeitung eines POST-Requests gesetzt)
      */
     private function createValueFormElement($enrichmentValue, $enrichmentKey = null, $formValue = null)
     {
@@ -231,7 +235,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     /**
      * Aktualisiert Enrichment Modell mit Werten im Formular.
      *
-     * @param Enrichment $enrichment
+     * @param EnrichmentInterface $enrichment
      */
     public function updateModel($enrichment)
     {
@@ -684,5 +688,13 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             return $translator->translate($translationKey);
         }
         return $translationKey;
+    }
+
+    /**
+     * @return FormElementBuilder
+     */
+    private function getFormElementBuilder()
+    {
+        return new FormElementBuilder();
     }
 }
