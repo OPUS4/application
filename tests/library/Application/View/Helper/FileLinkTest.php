@@ -50,7 +50,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
 
         $file = File::get(126);
 
-        $this->assertEquals('<a href="http:///files/146/test.pdf" class="filelink">foo-pdf</a>'
+        $this->assertEquals('<a href="http:///files/146/test.pdf?cover=false" class="filelink">foo-pdf</a>'
             . '<input type="hidden" name="" value="126" />', $helper->fileLink(
                 null,
                 $file,
@@ -67,7 +67,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
         $file = File::get(130);
 
         $this->assertEquals(
-            '<a href="http:///files/147/special-chars-%25-%22-%23-%26.pdf" class="filelink">Dateiname-mit-Sonderzeichen.pdf</a>'
+            '<a href="http:///files/147/special-chars-%25-%22-%23-%26.pdf?cover=false" class="filelink">Dateiname-mit-Sonderzeichen.pdf</a>'
             . '<input type="hidden" name="" value="130" />',
             $helper->fileLink(null, $file, ['useFileLabel' => true])
         );
@@ -82,7 +82,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
         $file = File::get(131);
 
         $this->assertEquals(
-            '<a href="http:///files/147/%27many%27++-++spaces++and++quotes.pdf" class="filelink">'
+            '<a href="http:///files/147/%27many%27++-++spaces++and++quotes.pdf?cover=false" class="filelink">'
             . 'Dateiname-mit-vielen-Spaces-und-Quotes.pdf</a><input type="hidden" name="" value="131" />',
             $helper->fileLink(null, $file, ['useFileLabel' => true])
         );
@@ -98,7 +98,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
         $file->setLabel(null);
 
         $this->assertEquals(
-            '<a href="http:///files/146/test.pdf" class="filelink">test.pdf</a>'
+            '<a href="http:///files/146/test.pdf?cover=false" class="filelink">test.pdf</a>'
             . '<input type="hidden" name="" value="126" />',
             $helper->fileLink(null, $file, ['useFileLabel' => true])
         );
@@ -119,7 +119,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase
 
         $file = File::get(126);
 
-        $this->assertEquals('<a href="http:///testbase/files/146/test.pdf" class="filelink">foo-pdf</a>'
+        $this->assertEquals('<a href="http:///testbase/files/146/test.pdf?cover=false" class="filelink">foo-pdf</a>'
             . '<input type="hidden" name="" value="126" />', $helper->fileLink(
                 null,
                 $file,
