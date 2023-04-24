@@ -31,6 +31,7 @@
 
 use Opus\Bibtex\Import\Console\BibtexImportCommand;
 use Opus\Bibtex\Import\Console\BibtexListCommand;
+use Opus\Pdf\Console\CoverGenerateCommand;
 use Opus\Search\Console\ExtractCommand;
 use Opus\Search\Console\ExtractFileCommand;
 use Opus\Search\Console\IndexCommand;
@@ -55,6 +56,8 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Document_DeleteCommand());
         $this->add(new BibtexImportCommand());
         $this->add(new BibtexListCommand());
+        $this->add(new Application_Console_Debug_DocumentXmlCommand());
+        $this->add(new CoverGenerateCommand());
 
         $this->setDefaultCommand('list');
     }

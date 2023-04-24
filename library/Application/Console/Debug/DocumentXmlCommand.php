@@ -25,46 +25,60 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\FileInterface;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * View Helper fuer Link zu Datei.
+ * Exports documents.
  *
- * Wird in der Dateientabelle in der Metadaten-Übersicht verwendet.
+ * TODO unit testing
  */
-class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract
+class Application_Console_Debug_DocumentXmlCommand extends Command
 {
-    /**
-     * Rendert Link fuer Datei.
-     *
-     * @param string        $name
-     * @param FileInterface $file
-     * @param array|null    $options
-     * @return string HTML output
-     */
-    public function fileLink($name, $file, $options = null)
+    public const ARGUMENT_DOC_ID = 'DocID';
+
+    protected function configure()
     {
-        // TODO unit test 'cover=false' URL parameter which should suppress PDF cover generation on file download
+        parent::configure();
 
-        if ($file === null) {
-            throw new Application_Exception(__METHOD__ . 'Parameter $file must not be null (for ' . $name . ').');
-        }
+        $help = <<<EOT
+Currently only debug:xml is supported. It shows the raw XML for a document.
+EOT;
 
-        $fileName = $file->getPathName();
+        $this->setName('debug:xml')
+            ->setDescription('Prints XML for document')
+            ->setHelp($help)
+            ->addArgument(
+                self::ARGUMENT_DOC_ID,
+                InputArgument::OPTIONAL,
+                'ID of document'
+            );
+    }
 
-        if (isset($options['useFileLabel']) && $options['useFileLabel']) {
-            $fileName = $file->getLabel();
-        }
+    /**
+     * @return int
+     * @throws NotFoundException
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $docId = $input->getArgument(self::ARGUMENT_DOC_ID);
 
-        $fileName = $fileName === null || strlen(trim($fileName)) === 0 ? $file->getPathName() : $fileName;
-        $fileUrl  = $this->view->serverUrl() . $this->view->baseUrl() . '/files/' . $file->getParentId()
-                . '/' . urlencode($file->getPathName()) . '?cover=false';
+        $document = Document::get($docId);
+        $xml      = $document->toXml();
 
-        return '<a href="' . $fileUrl . '" class="filelink">' . htmlspecialchars($fileName) . '</a>'
-            . $this->view->formHidden($name, $file->getId(), null);
+        $xml->preserveWhiteSpace = false;
+        $xml->formatOutput       = true;
+
+        $output->write($xml->saveXml());
+
+        return 0;
     }
 }

@@ -266,7 +266,16 @@ filetypes.html.mimeType = 'text/html'
 ; Allow displaying of PDF directly in browser (default for other types 'attachment')
 filetypes.pdf.contentDisposition = 'inline'
 
-; The following is needed even if sections are empty.
+; PDF COVER SETTINGS
+; if set to `1` PDF cover pages may be added in front of downloaded PDF files
+pdf.covers.generate = 0
+; path relative to the covers directory pointing to a default cover template
+pdf.covers.default = 'demo-cover.md'
+; path relative to the covers directory pointing to the cover template to be used
+; (instead of the default cover template) for documents in a certain collection
+;collection.15982.cover = ''
+
+; !!! The following is needed even if sections are empty. !!!
 [staging : production]
 
 [testing : production]
@@ -276,16 +285,5 @@ publish.path.documenttypes[] = APPLICATION_PATH "/application/configs/doctypes"
 publish.path.documenttypes[] = APPLICATION_PATH "/tests/resources/doctypes"
 publish.path.documenttemplates[] = APPLICATION_PATH "/application/configs/doctypes_templates"
 publish.path.documenttemplates[] = APPLICATION_PATH "/tests/resources/doctypes_templates"
-
-; PDF COVER SETTINGS
-; if set to `1` PDF cover pages may be added in front of downloaded PDF files
-pdf.covers.generate = 1
-; path to the covers directory that stores PDF cover templates
-pdf.covers.path = APPLICATION_PATH "/tests/resources/covers"
-; path relative to the covers directory pointing to a default cover template
-pdf.covers.default = 'demo/demo-cover-template.md'
-; path relative to the covers directory pointing to the cover template to be used
-; (instead of the default cover template) for documents in a certain collection
-;collection.15982.cover = ''
 
 [development : production]
