@@ -2,10 +2,39 @@
 
 ## Release 4.8 - 2023-04-25
 
+Für diesen Release wurden sehr viele Änderungen am Code von OPUS 4 
+vorgenommen, insbesondere für den Support von PHP 8.1 und für die 
+Vorbereitung des Umstiegs auf Doctrine und Laminas. Trotz intensiver
+manueller Tests durch die Hosting-Teams und einer umfangreichen 
+Abdeckung mit Unit-Tests, kann es immer noch Probleme geben, die 
+bisher nicht aufgefallen sind. Etwaige Schwierigkeiten am besten 
+auf GitHub melden.  
+
+https://github.com/orgs/OPUS4/discussions
+
 ### PHP 8 Kompatibilität
 
-OPUS 4.8 wurde mit PHP 7.1 und mit PHP 8.1 getestet. Diese Version ist
-noch nicht mit PHP 8.2 kompatibel.
+OPUS 4.8 wurde mit PHP 7.1 und PHP 8.1 getestet. Diese Version ist noch 
+nicht mit PHP 8.2 kompatibel. 
+
+Voraussichtlich wird mit OPUS 4.9 die Kompatibilität mit PHP 7.1 
+wegfallen, um die neuesten Versionen der verwendeten Libraries für die
+Weiterentwicklung nutzen zu können.
+
+### CrossRef-Import im Publish-Formular
+
+Es gibt einen neuen Dokumenttypen DOI, bei dem im Publish-Formular eine
+DOI eingeben werden kann, um das Formular automatisch mit Metadaten von
+CrossRef zu befüllen. Diese Funktionalität benötigt Javascript im 
+Browser. Für die Kommunikation mit der CrossRef API sollte in der OPUS 4
+Konfiguration eine E-Mail-Adresse angegeben werden, die es CrossRef 
+erlaubt den Repository Betreiber zu kontaktieren, falls die eingehenden 
+Requests Probleme verursachen. 
+
+    crossref.mailTo = ''
+
+Mehr dazu findet sich in der Dokumentation der CrossRef-API:
+https://github.com/CrossRef/rest-api-doc#etiquette
 
 ### Frontdoor
 
@@ -17,6 +46,36 @@ Die maximale Größe für Optionen von EnrichmentKeys wurde auf 15000 erhöht,
 um längere Select-Listen zu erlauben. Das ist eine temporäre Maßnahme. Das 
 Enrichment-System wird sich mit dem Umbau der Datenbankanbindung weiter 
 verändern.
+
+### Erweiterungen des 'opus4' Konsolen-Tools (bin/opus4)
+
+Es wurden ein Kommando `cover:generate` hingefügt, dass während der Arbeiten 
+an einem PDF-Deckblatt-Template, zu Testzwecken verwendet werden kann.
+
+Das `Index`-Kommando wurde erweitert, um die Indexierung auf Dokumente einer 
+Sammlung beschränken zu können. Das kann nützlich sein, wenn Sammlungen 
+direkt in der Datenbank geändert wurden.
+
+Mit `debug:xml` kann nun das interne XML für ein Dokument ausgegeben werden. 
+Das kann bei Arbeiten am XSLT und bei der Fehleranalyse nützlich sein.
+
+Eine Liste aller Kommandos lässt sich mit `bin/opus4` anzeigen. Weitere Hilfe 
+zu einem Kommando erhält man mit `help`, also z.B. `bin/opus4 help index`. 
+
+### PDF-Deckblätter
+
+Es wurde die Möglichkeit hinzugefügt mit auf LateX-basierenden Templates
+automatisch Deckblätter für PDF zu generieren. 
+
+Weitere Informationen 
+https://github.com/OPUS4/opus4-pdf
+
+### Vorarbeiten für Umstieg auf Doctrine und Laminas
+
+Im gesamten Code wurden viele der direkten Abhängigkeiten auf die Klassen 
+der aktuellen Framework-Implementation beseitigt. Dafür wurden zahlreiche 
+neue Klassen und Interfaces in **opus4-common** hinzugefügt. Lokaler Code
+muss unter Umständen entsprechend angepasst werden.
 
 --
 
