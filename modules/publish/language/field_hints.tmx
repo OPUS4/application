@@ -1597,7 +1597,7 @@ Beispieleingabe: "17.08" (für Semiotik)]]></seg>
         <seg>Shall your document appear in bibliography collection?</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Soll Ihr Dokument in der Bibliographie Sammlung erscheinen?</seg>
+        <seg>Soll Ihr Dokument in der Bibliographie-Sammlung erscheinen?</seg>
       </tuv>
     </tu>
 
@@ -1627,8 +1627,7 @@ Beispieleingabe: "17.08" (für Semiotik)]]></seg>
 
     <tu tuid="hint_add_SubjectUncontrolled">
       <tuv xml:lang="en">
-        <seg>You can index your document with free
-          English keywords here.
+        <seg>You can index your document with free English keywords here.
         </seg>
       </tuv>
       <tuv xml:lang="de">
@@ -1665,10 +1664,10 @@ Beispieleingabe: "17.08" (für Semiotik)]]></seg>
 
     <tu tuid="hint_Opus_Model_Filter_TitleAbstract_add">
       <tuv xml:lang="en">
-        <seg>If given an abstract, order an input field</seg>
+        <seg>If given an abstract, order an input field.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sofern es eine Zusammenfassung (Abstract) gibt, fordern Sie bitte ein Eingabefeld an</seg>
+        <seg>Sofern es eine Zusammenfassung (Abstract) gibt, fordern Sie bitte ein Eingabefeld an.</seg>
       </tuv>
     </tu>
 
@@ -1726,6 +1725,24 @@ Beispieleingabe: "17.08" (für Semiotik)]]></seg>
       </tuv>
     </tu>
 
+    <tu tuid="hint_Enrichmentconference_title">
+      <tuv xml:lang="en">
+        <seg>Please specify the conference's name.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie den Namen der Konferenz an.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_Enrichmentconference_place">
+      <tuv xml:lang="en">
+        <seg>Please specify the conference's location.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie den Ort der Konferenz an.</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="hint_rights">
       <tuv xml:lang="en">
         <seg><![CDATA[Please confirm that you read and agree to the <a href="home/index/help">legal notices</a> of our publication server.]]></seg>

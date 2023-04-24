@@ -350,7 +350,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     {
         $templates = $this->docTypeHelper->getTemplates();
 
-        $this->assertCount(31, $templates);
+        $this->assertCount(32, $templates);
 
         foreach ($templates as $name => $path) {
             $file = new SplFileInfo($path);
