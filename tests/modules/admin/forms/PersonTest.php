@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,22 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Person;
+use Opus\Common\Document;
+use Opus\Common\Person;
 
 /**
  * Unit Test fuer Formularklasse zum Editieren einer Person.
  */
 class Admin_Form_PersonTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function testCreateForm()
@@ -64,7 +62,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
 
         $form = new Admin_Form_Person();
 
-        $person = new Person();
+        $person = Person::new();
 
         $person->setFirstName('John');
         $person->setLastName('Doe');
@@ -115,8 +113,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form->getElement('IdentifierOrcid')->setValue('3456');
         $form->getElement('IdentifierMisc')->setValue('5678');
 
-
-        $person = new Person();
+        $person = Person::new();
 
         $form->updateModel($person);
 
@@ -148,7 +145,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('not instance of Opus\Person', $messages[0]);
+        $this->assertContains('not instance of PersonInterface', $messages[0]);
     }
 
     public function testGetModel()
@@ -158,8 +155,8 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form = new Admin_Form_Person();
 
         $document = Document::get(146);
-        $persons = $document->getPerson();
-        $person = $persons[0]->getModel();
+        $persons  = $document->getPerson();
+        $person   = $persons[0]->getModel();
 
         $form->getElement('PersonId')->setValue($person->getId());
         $form->getElement('AcademicTitle')->setValue('Prof. Dr.');
@@ -223,8 +220,8 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form = new Admin_Form_Person();
 
         $post = [
-            'LastName' => '', // Pflichtfeld
-            'DateOfBirth' => 'Sonntag' //
+            'LastName'    => '', // Pflichtfeld
+            'DateOfBirth' => 'Sonntag',
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -232,8 +229,8 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $this->assertContains('dateFalseFormat', $form->getErrors('DateOfBirth'));
 
         $post = [
-            'LastName' => 'Doe', // Pflichtfeld
-            'DateOfBirth' => '1990/02/01'
+            'LastName'    => 'Doe', // Pflichtfeld
+            'DateOfBirth' => '1990/02/01',
         ];
 
         $this->assertTrue($form->isValid($post));
@@ -246,8 +243,8 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form = new Admin_Form_Person();
 
         $post = [
-            'LastName' => 'Doe', // Pflichtfeld
-            'DateOfBirth' => '01.02.1990'
+            'LastName'    => 'Doe', // Pflichtfeld
+            'DateOfBirth' => '01.02.1990',
         ];
 
         $this->assertTrue($form->isValid($post));
@@ -258,7 +255,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form = new Admin_Form_Person();
 
         $post = [
-            'Save' => 'Speichern'
+            'Save' => 'Speichern',
         ];
 
         $this->assertEquals('save', $form->processPost($post, null));
@@ -269,7 +266,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $form = new Admin_Form_Person();
 
         $post = [
-            'Cancel' => 'Abbrechen'
+            'Cancel' => 'Abbrechen',
         ];
 
         $this->assertEquals('cancel', $form->processPost($post, null));

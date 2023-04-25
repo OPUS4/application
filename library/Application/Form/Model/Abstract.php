@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,62 +24,60 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright Copyright (c) 2008, OPUS 4 development team
+ * @license   http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Model\NotFoundException;
 use Opus\Model\AbstractDb;
-use Opus\Model\NotFoundException;
 
 /**
  * Abstrakte Basisklasse für Model-Formulare.
  *
  * Die Model-Formulare können zusammen mit Application_Controller_Action_CRUD fuer die Verwaltung von Modellen eines
  * Typs eingesetzt werden.
- *
- * @category    Application
- * @package     Application_Form_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-abstract class Application_Form_Model_Abstract extends Application_Form_AbstractViewable implements Application_Form_IModel
+abstract class Application_Form_Model_Abstract extends Application_Form_AbstractViewable implements Application_Form_ModelFormInterface
 {
-
     /**
      * Name von Formularelement fuer Model-ID.
      */
-    const ELEMENT_MODEL_ID = 'Id';
+    public const ELEMENT_MODEL_ID = 'Id';
 
     /**
      * Name von Button zum Speichern.
      */
-    const ELEMENT_SAVE = 'Save';
+    public const ELEMENT_SAVE = 'Save';
 
     /**
      * Name von Button zum Abbrechen.
      */
-    const ELEMENT_CANCEL = 'Cancel';
+    public const ELEMENT_CANCEL = 'Cancel';
 
     /**
      * Ergebnis von POST zum Speichern.
      */
-    const RESULT_SAVE = 'save';
+    public const RESULT_SAVE = 'save';
 
     /**
      * Ergebnis von POST zum Abbrechen.
      */
-    const RESULT_CANCEL = 'cancel';
+    public const RESULT_CANCEL = 'cancel';
 
     /**
      * Name der Modelklasse fuer Formular.
+     *
      * @var string
      */
-    private $_modelClass;
+    private $modelClass;
 
     /**
      * Most model IDs are numeric. If not set to false;
+     *
      * @var bool
      */
-    private $_verifyModelIdIsNumeric = true;
+    private $verifyModelIdIsNumeric = true;
 
     /**
      * Initialisiert die Formularelement und Dekoratoren.
@@ -89,46 +88,55 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
 
         $this->setDecorators(
             [
-            'FormElements',
-            'Form'
+                'FormElements',
+                'Form',
             ]
         );
 
         $this->addElement(
             'hidden',
             self::ELEMENT_MODEL_ID,
-            ['decorators' => [
-            'ViewHelper',
-            [['liWrapper' => 'HtmlTag'], ['tag' => 'li']]
-            ]]
+            [
+                'decorators' => [
+                    'ViewHelper',
+                    [['liWrapper' => 'HtmlTag'], ['tag' => 'li']],
+                ],
+            ]
         );
 
         $this->addElement(
             'submit',
             self::ELEMENT_SAVE,
-            ['decorators' => [
-                'ViewHelper',
-                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']]
-            ]]
+            [
+                'decorators' => [
+                    'ViewHelper',
+                    [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'save-element']],
+                ],
+            ]
         );
 
         $this->addElement(
             'submit',
             self::ELEMENT_CANCEL,
-            ['decorators' => [
-                'ViewHelper',
-                [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']]
-            ]]
+            [
+                'decorators' => [
+                    'ViewHelper',
+                    [['liWrapper' => 'HtmlTag'], ['tag' => 'li', 'class' => 'cancel-element']],
+                ],
+            ]
         );
 
         $this->addDisplayGroup(
             [self::ELEMENT_MODEL_ID, self::ELEMENT_SAVE, self::ELEMENT_CANCEL],
             'actions',
-            ['order' => 1000, 'decorators' => [
-                'FormElements',
-                [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
-                [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']]
-            ]]
+            [
+                'order'      => 1000,
+                'decorators' => [
+                    'FormElements',
+                    [['ulWrapper' => 'HtmlTag'], ['tag' => 'ul', 'class' => 'form-action']],
+                    [['divWrapper' => 'HtmlTag'], ['id' => 'form-action']],
+                ],
+            ]
         );
     }
 
@@ -158,7 +166,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
     {
         $modelClass = $this->getModelClass();
 
-        if (is_null($modelClass)) {
+        if ($modelClass === null) {
             throw new Application_Exception(__METHOD__ . ' Model class has not been set.');
         }
 
@@ -169,7 +177,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
         $model = null;
 
         try {
-            $model = new $modelClass($modelId);
+            $model = $modelClass::get($modelId);
         } catch (NotFoundException $omnfe) {
             $this->getLogger()->err($omnfe->getMessage());
             throw new Application_Exception(__METHOD__ . " Model with ID '$modelId' not found.");
@@ -182,6 +190,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
 
     /**
      * Holt die Model-ID vom Formularelement 'Id';
+     *
      * @return mixed
      */
     protected function getModelId()
@@ -197,32 +206,34 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      *
      * TODO support arbitrary validator (Zend) to check model ID
      *
-     * @param $modelId
+     * @param int|string $modelId
      * @throws Application_Exception
      */
     protected function validateModelId($modelId)
     {
-        if (! is_null($modelId) && ! is_numeric($modelId) && $this->getVerifyModelIdIsNumeric()) {
+        if ($modelId !== null && ! is_numeric($modelId) && $this->getVerifyModelIdIsNumeric()) {
             throw new Application_Exception(__METHOD__ . ' Model-ID must be numeric.');
         }
     }
 
     /**
      * Liefert die gesetzte Modelklasse fuer das Formular.
+     *
      * @return string
      */
     public function getModelClass()
     {
-        return $this->_modelClass;
+        return $this->modelClass;
     }
 
     /**
      * Setzt die Modelklasse fuer das Formular.
-     * @param $modelClass
+     *
+     * @param string $modelClass
      */
     public function setModelClass($modelClass)
     {
-        $this->_modelClass = $modelClass;
+        $this->modelClass = $modelClass;
     }
 
     /**
@@ -235,26 +246,28 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
         $this->removeDisplayGroup('actions');
 
         $modelIdElement = $this->getElement(self::ELEMENT_MODEL_ID);
-        if (! is_null($modelIdElement)) {
+        if ($modelIdElement !== null) {
             $modelIdElement->removeDecorator('liWrapper');
         }
     }
 
     /**
      * Set if model ID should be validated as numeric value.
-     * @param $enabled true to enable, false to disable model ID validation
+     *
+     * @param bool $enabled true to enable, false to disable model ID validation
      */
     public function setVerifyModelIdIsNumeric($enabled)
     {
-        $this->_verifyModelIdIsNumeric = $enabled;
+        $this->verifyModelIdIsNumeric = $enabled;
     }
 
     /**
      * Return setting for verifying model Ids as numeric values.
+     *
      * @return bool true - Model ID must be numeric; false - Model ID not verified
      */
     public function getVerifyModelIdIsNumeric()
     {
-        return $this->_verifyModelIdIsNumeric;
+        return $this->verifyModelIdIsNumeric;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,34 +25,31 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
-use Opus\Job;
+use Opus\Common\Config;
+use Opus\Common\Job;
+use Opus\Common\Log;
 use Opus\Job\Runner;
-use Opus\Log;
 
 class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'database';
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        if (! is_null($this->config)) {
+        if ($this->config !== null) {
             Config::set($this->config); // TODO why is this here?
         }
 
         // Cleanup of Log File
-        $config = $this->getConfig();
+        $config   = $this->getConfig();
         $filename = $config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
         if (file_exists($filename)) {
             unlink($filename);
@@ -106,14 +104,14 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
     private function enableAsyncMode()
     {
         $this->adjustConfiguration([
-            'runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE]
+            'runjobs' => ['asynchronous' => self::CONFIG_VALUE_TRUE],
         ]);
     }
 
     private function enableAsyncIndexmaintenanceMode()
     {
         $this->adjustConfiguration([
-            'runjobs' => ['indexmaintenance' => ['asynchronous' => self::CONFIG_VALUE_TRUE]]
+            'runjobs' => ['indexmaintenance' => ['asynchronous' => self::CONFIG_VALUE_TRUE]],
         ]);
     }
 
@@ -123,7 +121,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         $this->assertTrue($model->allowConsistencyCheck());
     }
 
-    /*
+    /**
      * TODO will be implemented in later version OPUSVIER-2956
      */
     public function testNotAllowIndexOptimization()
@@ -132,7 +130,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         $this->assertFalse($model->allowIndexOptimization());
     }
 
-    /*
+    /**
      * TODO will be implemented in later version OPUSVIER-2955
      */
     public function testNotAllowFulltextExtractionCheck()
@@ -174,7 +172,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
     {
         $this->assertEquals(1, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL));
 
-        $jobrunner = new Runner;
+        $jobrunner = new Runner();
         $jobrunner->setLogger(Log::get());
         $worker = new Opus\Search\Task\ConsistencyCheck();
         $jobrunner->registerWorker($worker);
@@ -266,6 +264,9 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         $this->assertContains('Completed operation after ', $logdata->getContent());
     }
 
+    /**
+     * @param bool $lock
+     */
     private function touchLogfile($lock = false)
     {
         $config = $this->getConfig();
@@ -284,7 +285,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         $this->enableAsyncMode();
 
         $model = new Admin_Model_IndexMaintenance();
-        $id1 = $model->createJob();
+        $id1   = $model->createJob();
         $this->assertFalse(is_bool($id1));
         $this->assertTrue($id1 >= 0, "Job seems to be not unique (id is $id1)");
 
@@ -296,7 +297,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
     public function testSubmitJobAndExecuteSynchronosly()
     {
         $model = new Admin_Model_IndexMaintenance();
-        $id = $model->createJob();
+        $id    = $model->createJob();
         $this->assertFalse($id);
     }
 }

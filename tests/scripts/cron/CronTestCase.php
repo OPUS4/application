@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,39 +25,37 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Cronjob
- * @package     Tests
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Job;
-use Opus\Model\NotFoundException;
+use Opus\Common\Job;
+use Opus\Common\Model\NotFoundException;
 
-/**
- *
- */
 class CronTestCase extends ControllerTestCase
 {
-
+    /** @var string */
     protected static $scriptPath;
+
+    /** @var string */
     protected static $lockDir;
+
+    /** @var array */
     private $jobIds = [];
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         self::$scriptPath = realpath(dirname(__FILE__) . '/../../../scripts/cron') . '/';
-        self::$lockDir = realpath(self::$scriptPath . '/../../workspace/cache/');
+        self::$lockDir    = realpath(self::$scriptPath . '/../../workspace/cache/');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (! empty($this->jobIds)) {
             foreach ($this->jobIds as $jobId) {
                 try {
-                    $job = new Job($jobId);
+                    $job = Job::get($jobId);
                     $job->delete();
                 } catch (NotFoundException $e) {
                 }
@@ -65,9 +64,13 @@ class CronTestCase extends ControllerTestCase
         parent::tearDown();
     }
 
+    /**
+     * @param string $fileName
+     * @return string
+     */
     protected function executeScript($fileName)
     {
-        $command = self::$scriptPath . 'cron-php-runner.sh ' . self::$scriptPath . $fileName . ' ' . self::$lockDir;
+        $command             = self::$scriptPath . 'cron-php-runner.sh ' . self::$scriptPath . $fileName . ' ' . self::$lockDir;
         $savedApplicationEnv = getenv('APPLICATION_ENV');
         putenv('APPLICATION_ENV=' . APPLICATION_ENV);
         $result = shell_exec($command);
@@ -77,9 +80,13 @@ class CronTestCase extends ControllerTestCase
         return $result;
     }
 
+    /**
+     * @param string $label
+     * @param array  $data
+     */
     protected function createJob($label, $data = [])
     {
-        $job = new Job();
+        $job = Job::new();
         $job->setLabel($label);
         $job->setData($data);
         $this->jobIds[] = $job->store();

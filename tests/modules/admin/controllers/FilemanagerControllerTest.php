@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,25 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO einiges durch Selenium abgedeckt; Unit Tests vielleicht möglich
  */
 
-use Opus\Date;
-use Opus\Document;
-use Opus\UserRole;
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\UserRole;
 
 /**
  * @covers Admin_FilemanagerController
  */
 class Admin_FilemanagerControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     /**
@@ -269,7 +267,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
     public function testRemoveGuestAccess()
     {
         $document = $this->createTestDocument();
-        $file = $document->addFile();
+        $file     = $document->addFile();
         $file->setPathName('testdatei.txt');
         $documentId = $document->store();
 
@@ -278,23 +276,23 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $fileId = $document->getFile(0)->getId();
 
         $roleGuest = UserRole::fetchByName('guest');
-        $files = $roleGuest->listAccessFiles();
+        $files     = $roleGuest->listAccessFiles();
         $this->assertContains($fileId, $files);
 
         $this->getRequest()->setMethod('POST')->setPost([
             'FileManager' => [
                 'Files' => [
                     'File0' => [
-                        'Id' => $fileId,
-                        'FileLink' => $fileId,
-                        'Language' => 'deu',
-                        'Comment' => 'Testkommentar',
-                        'Roles' => ['administrator'],
-                        'SortOrder' => '0'
-                    ]
+                        'Id'        => $fileId,
+                        'FileLink'  => $fileId,
+                        'Language'  => 'deu',
+                        'Comment'   => 'Testkommentar',
+                        'Roles'     => ['administrator'],
+                        'SortOrder' => '0',
+                    ],
                 ],
-                'Save' => 'Speichern'
-            ]
+                'Save'  => 'Speichern',
+            ],
         ]);
 
         $this->dispatch('/admin/filemanager/index/id/' . $documentId);
@@ -302,7 +300,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $this->assertRedirectTo('/admin/document/index/id/' . $documentId);
 
         $roleGuest = UserRole::fetchByName('guest');
-        $files = $roleGuest->listAccessFiles();
+        $files     = $roleGuest->listAccessFiles();
         $this->assertNotContains($fileId, $files);
     }
 
@@ -365,7 +363,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
     public function testFileSortOrder()
     {
         $this->dispatch('/admin/filemanager/index/id/155');
-        $body = $this->_response->getBody();
+        $body          = $this->_response->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt');
         $positionFile2 = strpos($body, 'test.txt');
         $positionFile3 = strpos($body, 'test.pdf');
@@ -381,7 +379,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
     public function testDocumentFilesWithoutSortOrder()
     {
         $this->dispatch('/admin/filemanager/index/id/92');
-        $body = $this->_response->getBody();
+        $body          = $this->_response->getBody();
         $positionFile1 = strpos($body, 'test.xhtml');
         $positionFile2 = strpos($body, 'datei mit unüblichem Namen.xhtml');
         $this->assertTrue($positionFile1 < $positionFile2);

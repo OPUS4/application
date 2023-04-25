@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,20 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
 
 /**
  * Unit Tests fuer Admin_Form_Document_General.
  */
 class Admin_Form_Document_GeneralTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testCreateForm()
@@ -99,15 +98,15 @@ class Admin_Form_Document_GeneralTest extends ControllerTestCase
         $this->assertEquals('masterthesis', $document->getType());
 
         $this->assertNotNull($document->getPublishedDate());
-        $this->assertEquals('2005/06/17', date('Y/m/d', $document->getPublishedDate()->getZendDate()->get()));
+        $this->assertEquals('2005/06/17', date('Y/m/d', $document->getPublishedDate()->getTimestamp()));
         $this->assertEquals('2006', $document->getPublishedYear());
 
         $this->assertNotNull($document->getCompletedDate());
-        $this->assertEquals('2006/07/03', date('Y/m/d', $document->getCompletedDate()->getZendDate()->get()));
+        $this->assertEquals('2006/07/03', date('Y/m/d', $document->getCompletedDate()->getTimestamp()));
         $this->assertEquals('2007', $document->getCompletedYear());
 
         $this->assertNotNull($document->getEmbargoDate());
-        $this->assertEquals('1986/03/29', date('Y/m/d', $document->getEmbargoDate()->getZendDate()->get()));
+        $this->assertEquals('1986/03/29', date('Y/m/d', $document->getEmbargoDate()->getTimestamp()));
     }
 
     public function testValidation()
@@ -117,13 +116,13 @@ class Admin_Form_Document_GeneralTest extends ControllerTestCase
         $form = new Admin_Form_Document_General();
 
         $post = [
-            'Language' => '',
-            'Type' => '',
+            'Language'      => '',
+            'Type'          => '',
             'PublishedDate' => 'date1', // muss Datum sein
             'PublishedYear' => 'year1', // muss Integer sein
             'CompletedDate' => '2008/02/31', // muss korrektes Datum sein
             'CompletedYear' => '-1', // muss groesser als 0 sein
-            'EmbargoDate' => '2008/02/31', // muss korrektes Datum sein
+            'EmbargoDate'   => '2008/02/31', // muss korrektes Datum sein
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -144,16 +143,16 @@ class Admin_Form_Document_GeneralTest extends ControllerTestCase
         $form = new Admin_Form_Document_General();
 
         $post = [
-            'Language' => 'deu',
-            'Type' => 'demo',
+            'Language'      => 'deu',
+            'Type'          => 'demo',
             'CompletedDate' => '30.01.2010', // korrektes Datum
         ];
 
         $this->assertTrue($form->isValid($post));
 
         $post = [
-            'Language' => 'bla', // ungültige Sprache
-            'Type' => 'unknown', // ungültiger Typ
+            'Language'      => 'bla', // ungültige Sprache
+            'Type'          => 'unknown', // ungültiger Typ
             'CompletedDate' => '30.02.2010', // ungültiges Datum
         ];
 

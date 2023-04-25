@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Update
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
-use Opus\Util\ConsoleColors;
+use Opus\Common\CollectionRole;
+use Opus\Common\Console\ConsoleColors;
+use Opus\Common\Translate\UnknownTranslationKeyException;
 
 /**
  * Handles update of "speaking" collection role names.
@@ -42,7 +41,6 @@ use Opus\Util\ConsoleColors;
  */
 class Application_Update_ConvertCollectionRoleTranslations extends Application_Update_PluginAbstract
 {
-
     public function run()
     {
         $this->log('Validation of collection role names starting ...');
@@ -65,7 +63,7 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
 
                 // create translation values using invalid collection role name
                 $supportedLanguages = Application_Configuration::getInstance()->getSupportedLanguages();
-                $translations = [];
+                $translations       = [];
                 foreach ($supportedLanguages as $lang) {
                     $translations[$lang] = $name;
                 }
@@ -88,14 +86,14 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
                 try {
                     $translation = $manager->getTranslation($translationKey);
 
-                    if (! is_null($translation)) {
+                    if ($translation !== null) {
                         $this->log($colors->red("  Translation key '{$colors->blue($translationKey)}' exists"));
                         $translations = $translation['translations'];
                         $this->log("  Keeping translations");
                         $manager->delete($translationKey);
                         $this->log("  Removing old translation key '{$colors->blue($translationKey)}'");
                     }
-                } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
+                } catch (UnknownTranslationKeyException $ex) {
                     $this->log("  Translation key '{$colors->blue($translationKey)}' does not exist");
                     $this->log('  Using old Name for translations');
                 }

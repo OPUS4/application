@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -40,7 +36,6 @@
  */
 class Solrsearch_DispatchController extends Application_Controller_Action
 {
-
     public function indexAction()
     {
         $this->getLogger()->debug('Received new search request. Redirecting to search action of IndexController.');
@@ -54,7 +49,7 @@ class Solrsearch_DispatchController extends Application_Controller_Action
 
         $searchType = $request->getParam('searchtype', 'invalid searchtype');
 
-        if (in_array($searchType, ['advanced', 'authorsearch']) && ! is_null($this->getParam('Reset'))) {
+        if (in_array($searchType, ['advanced', 'authorsearch']) && $this->getParam('Reset') !== null) {
             $this->_helper->Redirector->redirectTo('advanced', null, 'index', 'solrsearch');
             return;
         }

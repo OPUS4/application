@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,25 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
+use Opus\Common\Series;
 
 class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var array */
     private $visibilities = [];
 
+    /** @var Solrsearch_Model_SeriesUtil */
     private $model;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -53,7 +53,7 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
         $this->model = new Solrsearch_Model_SeriesUtil();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->restoreVisiblitySettings();
 
@@ -100,9 +100,9 @@ class Solrsearch_Model_SeriesUtilTest extends ControllerTestCase
         $this->adjustConfiguration([
             'browsing' => [
                 'series' => [
-                    'sortByTitle' => self::CONFIG_VALUE_TRUE
-                ]
-            ]
+                    'sortByTitle' => self::CONFIG_VALUE_TRUE,
+                ],
+            ],
         ]);
 
         $series = $this->model->getVisibleSeries();

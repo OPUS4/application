@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,36 +25,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Review
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
-use Opus\Document;
-use Opus\Log;
-use Opus\Person;
-use Opus\UserRole;
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\Log;
+use Opus\Common\Person;
+use Opus\Common\UserRole;
 
 /**
  * Contains code for clearing documents (switching to published state).
  */
 class Review_Model_ClearDocumentsHelper
 {
-
     /**
      * Publishes documents and adds the given Person as referee.
      *
-     * @param array $docIds
-     * @param mixed $userId
-     * @param Person $person
+     * @param null|mixed  $userId
+     * @param null|Person $person
      *
      * FIXME capture success or failure for display afterwards
      */
-    public function clear(array $docIds = null, $userId = null, $person = null)
+    public function clear(?array $docIds = null, $userId = null, $person = null)
     {
         $logger = Log::get();
 
@@ -89,20 +84,17 @@ class Review_Model_ClearDocumentsHelper
             $document->store();
             $guestRole->store();
         }
-
-        return;
     }
 
     /**
      * Rejects documents and adds the given Person as referee.
      *
-     * @param array $docIds
-     * @param mixed $userId
-     * @param Person $person
+     * @param null|mixed  $userId
+     * @param null|Person $person
      *
      * FIXME capture success or failure for display afterwards
      */
-    public function reject(array $docIds = null, $userId = null, $person = null)
+    public function reject(?array $docIds = null, $userId = null, $person = null)
     {
         $logger = Log::get();
 
@@ -121,7 +113,5 @@ class Review_Model_ClearDocumentsHelper
             $document->setServerState(Document::STATE_DELETED);
             $document->store();
         }
-
-        return;
     }
 }

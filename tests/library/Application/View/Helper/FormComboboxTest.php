@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,28 +25,25 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_FormComboboxTest extends ControllerTestCase
 {
+    /** @var Application_View_Helper_FormCombobox */
+    private $helper;
 
-    private $_helper;
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_FormCombobox();
+        $this->helper = new Application_View_Helper_FormCombobox();
     }
 
     public function testFormComboboxWithoutValues()
     {
-        $output = $this->_helper->formCombobox('email');
+        $output = $this->helper->formCombobox('email');
 
         $this->assertEquals(
             "<div class=\"ui-widget\">\n    <select name=\"email\" class=\"combobox\">\n</select>\n</div>\n",
@@ -55,7 +53,7 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
 
     public function testFormComboboxWithOptions()
     {
-        $output = $this->_helper->formCombobox(
+        $output = $this->helper->formCombobox(
             'city',
             null,
             null,
@@ -68,7 +66,7 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
 
     public function testFormComboboxWithValue()
     {
-        $output = $this->_helper->formCombobox(
+        $output = $this->helper->formCombobox(
             'city',
             'Bremen',
             null,
@@ -82,7 +80,7 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
 
     public function testFormComboboxWithValueMatchingOption()
     {
-        $output = $this->_helper->formCombobox(
+        $output = $this->helper->formCombobox(
             'city',
             'Hamburg',
             null,

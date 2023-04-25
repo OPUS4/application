@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,7 +34,6 @@
  */
 class Application_Form_Element_PersonRoleTest extends ControllerTestCase
 {
-
     public function testConstruct()
     {
         $element = new Application_Form_Element_PersonRole('Role');
@@ -54,8 +51,16 @@ class Application_Form_Element_PersonRoleTest extends ControllerTestCase
 
         $this->assertEquals(8, count($options));
 
-        $result = array_diff($options, ['author', 'editor', 'translator', 'contributor', 'other', 'advisor',
-            'referee', 'submitter']);
+        $result = array_diff($options, [
+            'author',
+            'editor',
+            'translator',
+            'contributor',
+            'other',
+            'advisor',
+            'referee',
+            'submitter',
+        ]);
 
         $this->assertEmpty($result, 'Die Optionen (Rollen) entsprechen nicht der Erwartung.');
     }

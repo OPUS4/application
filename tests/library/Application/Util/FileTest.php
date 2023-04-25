@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,29 +25,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Util_FileTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function testCopyAndFilter()
     {
         $source = $this->createOpusTestFile('source.txt');
-        $dest = $this->createOpusTestFile('test.txt');
+        $dest   = $this->createOpusTestFile('test.txt');
 
         $sourcePath = $source->getTempFile();
-        $destPath = $dest->getTempFile();
+        $destPath   = $dest->getTempFile();
 
         $properties = [
-            '@db.user.name@' => 'opus4user',
-            '@db.user.password@' => 'dummypwd'
+            '@db.user.name@'     => 'opus4user',
+            '@db.user.password@' => 'dummypwd',
         ];
 
         $content = <<<TEXT
@@ -70,17 +68,15 @@ TEXT;
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage could not read source file
-     */
     public function testCopyAndFilterMissingSource()
     {
         $source = APPLICATION_PATH . '/tests/resources/doesnotexist.txt';
-        $dest = $this->createOpusTestFile('dest.txt');
+        $dest   = $this->createOpusTestFile('dest.txt');
 
         $properties = ['@user@', 'admin'];
 
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('could not read source file');
         Application_Util_File::copyAndFilter($source, $dest->getTempFile(), $properties);
     }
 }

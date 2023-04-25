@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,33 +24,34 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Interface für Formulare, die als View angezeigt werden können.
  *
- * Das Metadaten-Formular (Admin_Form_Document) wird zum einen als Formular verwendet. Es wird aber auch für die
- * Anzeige der Metadaten-Übersicht verwendet. Das selbe wird mit den Formularen für Application_Controller_Action_CRUD
- * gemacht.
- *
- * @category    Application
- * @package     Application_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-interface Application_Form_IViewable
+
+use Opus\Common\DocumentInterface;
+use Opus\Common\Model\DocumentLifecycleListener;
+
+/**
+ * TODO This class is used by unit tests in two places and meets two different testing requirements. This different
+ *      responsibilities should be separated.
+ */
+class DocumentLifecycleListenerMock extends DocumentLifecycleListener
 {
-
     /**
-     * Bereites die Ausgabe des Formulares als View vor.
-     */
-    public function prepareRenderingAsView();
-
-    /**
-     * Prüft, ob das Formular leer ist und daher nicht mit angezeigt werden soll.
+     * Circumvents setting of ServerDateModified and ServerDatePublished for testing.
      *
-     * @return bool
+     * @param DocumentInterface $document
      */
-    public function isEmpty();
+    public function preStore($document)
+    {
+        $dateModified = $document->getServerDateModified();
+        parent::preStore($document);
+
+        if ($dateModified !== null) {
+            $document->setServerDateModified($dateModified);
+        }
+
+        $document->setServerDatePublished(null);
+    }
 }

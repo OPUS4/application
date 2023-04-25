@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,42 +25,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2018-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
+use Opus\Common\Log;
 use Opus\Identifier\Urn;
-use Opus\Log;
 
 class Admin_Model_UrnGenerator
 {
-
-    // erforderlicher Parameter für die Generierung von URNs
+    /** @var string Erforderlicher Parameter für die Generierung von URNs */
     private $nid;
 
-    // erforderlicher Parameter für die Generierung von URNs
+    /** @var string Erforderlicher Parameter für die Generierung von URNs */
     private $nss;
 
     /**
-     * Admin_Model_IdentifierUrnGenerator constructor.
-     *
-     * @throws Application_Exception Exception wird geworfen, wenn ein erforderlicher Konfigurationsparameter nicht vorhanden ist
+     * @throws Application_Exception Wenn ein erforderlicher Konfigurationsparameter nicht vorhanden ist.
      */
     public function __construct()
     {
         $config = Config::get();
 
-        if (! isset($config->urn->nid) || $config->urn->nid == '') {
-            throw new Application_Exception('missing configuration setting for urn.nid - is required for URN generation');
+        if (! isset($config->urn->nid) || $config->urn->nid === '') {
+            throw new Application_Exception(
+                'missing configuration setting for urn.nid - is required for URN generation'
+            );
         }
         $this->nid = $config->urn->nid;
 
-        if (! isset($config->urn->nss) || $config->urn->nss == '') {
-            throw new Application_Exception('missing configuration setting for urn.nss - is required for URN generation');
+        if (! isset($config->urn->nss) || $config->urn->nss === '') {
+            throw new Application_Exception(
+                'missing configuration setting for urn.nss - is required for URN generation'
+            );
         }
         $this->nss = $config->urn->nss;
     }
@@ -68,13 +67,13 @@ class Admin_Model_UrnGenerator
      * Generiert eine URN für das Dokument mit der übergebenen ID.
      * Hierbei wird NICHT geprüft, ob das Dokument einen Volltext mit dem aktiven Flag visibleInOai besitzt.
      *
-     * @param $docId int ID des OPUS-Dokuments für das URN generiert werden soll
+     * @param int $docId ID des OPUS-Dokuments für das URN generiert werden soll
      * @return string
      */
     public function generateUrnForDocument($docId)
     {
         $identifierUrn = new Urn($this->nid, $this->nss);
-        $urn = $identifierUrn->getUrn($docId);
+        $urn           = $identifierUrn->getUrn($docId);
 
         $log = Log::get();
         $log->debug('URN generation result for document ' . $docId . ' is ' . $urn);

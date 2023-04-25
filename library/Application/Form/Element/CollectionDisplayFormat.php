@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,26 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * The values of the options must be existing Collection field names that are separated by commas.
  */
 class Application_Form_Element_CollectionDisplayFormat extends Application_Form_Element_Select
 {
-
     public function init()
     {
         parent::init();
 
         $options = [
-            'Name' => 'Name',
-            'Number' => 'Number',
+            'Name'       => 'Name',
+            'Number'     => 'Number',
             'NameNumber' => 'Name,Number',
-            'NumberName' => 'Number,Name'
+            'NumberName' => 'Number,Name',
         ];
 
         foreach ($options as $label => $value) {
@@ -54,13 +53,15 @@ class Application_Form_Element_CollectionDisplayFormat extends Application_Form_
     /**
      * Set value of field.
      *
-     * @param String $value
+     * @param string $value
      */
     public function setValue($value)
     {
-        // previous database versions sometimes used spaces in value like "Name, Number"
-        $trimmed = preg_replace('/\s+/', '', $value);
+        if ($value !== null) {
+            // previous database versions sometimes used spaces in value like "Name, Number"
+            $value = preg_replace('/\s+/', '', $value);
+        }
 
-        parent::setValue($trimmed);
+        parent::setValue($value);
     }
 }

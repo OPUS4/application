@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,21 +24,24 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- */
+use Opus\Common\Language;
+use Opus\Common\LanguageInterface;
+
 class Admin_Form_Language extends Application_Form_Model_Abstract
 {
-
-    const ELEMENT_ACTIVE = 'Active';
-    const ELEMENT_PART2B = 'Part2B';
-    const ELEMENT_PART2T = 'Part2T';
-    const ELEMENT_PART1 = 'Part1';
-    const ELEMENT_SCOPE = 'Scope';
-    const ELEMENT_TYPE = 'Type';
-    const ELEMENT_REFNAME = 'RefName';
-    const ELEMENT_COMMENT = 'Comment';
+    public const ELEMENT_ACTIVE  = 'Active';
+    public const ELEMENT_PART2B  = 'Part2B';
+    public const ELEMENT_PART2T  = 'Part2T';
+    public const ELEMENT_PART1   = 'Part1';
+    public const ELEMENT_SCOPE   = 'Scope';
+    public const ELEMENT_TYPE    = 'Type';
+    public const ELEMENT_REFNAME = 'RefName';
+    public const ELEMENT_COMMENT = 'Comment';
 
     public function init()
     {
@@ -46,7 +50,7 @@ class Admin_Form_Language extends Application_Form_Model_Abstract
         $this->setRemoveEmptyCheckbox(false);
         $this->setLabelPrefix('Opus_Language_');
         $this->setUseNameAsLabel(true);
-        $this->setModelClass('Opus\Language');
+        $this->setModelClass(Language::class);
 
         $this->addElement('checkbox', self::ELEMENT_ACTIVE);
         $this->addElement('text', self::ELEMENT_REFNAME, ['required' => true]);
@@ -58,6 +62,9 @@ class Admin_Form_Language extends Application_Form_Model_Abstract
         $this->addElement('text', self::ELEMENT_COMMENT);
     }
 
+    /**
+     * @param LanguageInterface $language
+     */
     public function populateFromModel($language)
     {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($language->getId());
@@ -71,6 +78,9 @@ class Admin_Form_Language extends Application_Form_Model_Abstract
         $this->getElement(self::ELEMENT_COMMENT)->setValue($language->getComment());
     }
 
+    /**
+     * @param LanguageInterface $language
+     */
     public function updateModel($language)
     {
         $language->setActive($this->getElementValue(self::ELEMENT_ACTIVE));

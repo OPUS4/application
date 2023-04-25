@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,46 +25,46 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
- * @author      Gunar Maiwald <maiwald@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\EnrichmentKey;
+use Opus\Common\EnrichmentKey;
 
 /**
  * Checks if a enrichmentkey already exists.
  *
  * Enrichment key names are not case-sensitive.
  */
-class Application_Form_Validate_EnrichmentKeyAvailable extends \Zend_Validate_Abstract
+class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abstract
 {
-
     /**
      * Constants for enrichment key not available anymore.
      */
-    const NOT_AVAILABLE = 'isAvailable';
+    public const NOT_AVAILABLE = 'isAvailable';
 
     /**
      * Error messages.
+     * @phpcs:disable
      */
     protected $_messageTemplates = [
         self::NOT_AVAILABLE => 'admin_enrichmentkey_error_name_exists',
     ];
+    // @phpcs:enable
 
     /**
      * Checks if an enrichmentkey already exists.
+     *
+     * @param string     $value
+     * @param array|null $context
+     * @return bool
      */
     public function isValid($value, $context = null)
     {
-
         $value = (string) $value;
         $this->_setValue($value);
 
-        $name = null;
+        $name = '';
 
         if (is_array($context)) {
             if (isset($context['Id'])) {
@@ -73,11 +74,13 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends \Zend_Validate_Ab
             $name = $context;
         }
 
-        if (strtolower($name) === strtolower($value)) {
+        $value = $value ?? '';
+
+        if ($name === $value || strtolower($name) === strtolower($value)) {
             return true;
         }
 
-        if ($this->_isEnrichmentKeyUsed($value)) {
+        if ($this->isEnrichmentKeyUsed($value)) {
             $this->_error(self::NOT_AVAILABLE);
             return false;
         }
@@ -87,13 +90,14 @@ class Application_Form_Validate_EnrichmentKeyAvailable extends \Zend_Validate_Ab
 
     /**
      * Checks if a enrichmentkey already used.
-     * @param string $login
-     * @return boolean
+     *
+     * @param string $name
+     * @return bool
      */
-    protected function _isEnrichmentKeyUsed($name)
+    protected function isEnrichmentKeyUsed($name)
     {
         $enrichmentkey = EnrichmentKey::fetchByName($name);
 
-        return ! is_null($enrichmentkey);
+        return $enrichmentkey !== null;
     }
 }

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,21 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Security\Realm;
 
 /**
  * Class for registering and accessing export format handlers.
  */
 class Application_Export_Exporter
 {
+    /** @var array */
+    private $formats = [];
 
-    private $_formats = [];
-
+    /**
+     * @param array $options
+     * @throws Zend_Navigation_Exception
+     */
     public function addFormats($options)
     {
         if (! is_array($options)) {
@@ -47,23 +51,29 @@ class Application_Export_Exporter
 
         foreach ($options as $key => $option) {
             // TODO use addFormat function, get key from 'name' or use hash?
-            $format = new \Zend_Navigation_Page_Mvc($option);
+            $format = new Zend_Navigation_Page_Mvc($option);
 
             // TODO check if key is string
-            $this->_formats[$key] = $format;
+            $this->formats[$key] = $format;
         }
     }
 
+    /**
+     * @return array
+     */
     public function getFormats()
     {
-        return $this->_formats;
+        return $this->formats;
     }
 
     public function removeAll()
     {
-        $this->_formats = [];
+        $this->formats = [];
     }
 
+    /**
+     * @return array
+     */
     public function getAllowedFormats()
     {
         $formats = $this->getFormats();
@@ -73,7 +83,7 @@ class Application_Export_Exporter
         foreach ($formats as $format) {
             $module = $format->getModule();
 
-            if (\Opus\Security\Realm::getInstance()->checkModule($module)) {
+            if (Realm::getInstance()->checkModule($module)) {
                 $allowed[] = $format;
             }
         }

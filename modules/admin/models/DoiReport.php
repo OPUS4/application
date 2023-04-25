@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,25 +25,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Document;
+use Opus\Common\Repository;
 use Opus\Doi\DoiManager;
 
 class Admin_Model_DoiReport
 {
-
+    /** @var string|null */
     private $filter;
 
     /**
-     * Admin_Model_DoiReport constructor.
+     * @param string|null $filter
      */
     public function __construct($filter)
     {
@@ -60,7 +57,7 @@ class Admin_Model_DoiReport
         $result = [];
 
         $doiManager = new DoiManager();
-        $docs = $doiManager->getAll($this->filter);
+        $docs       = $doiManager->getAll($this->filter);
 
         foreach ($docs as $doc) {
             $dois = $doc->getIdentifierDoi();
@@ -68,7 +65,7 @@ class Admin_Model_DoiReport
                 continue;
             }
             $doiStatus = new Admin_Model_DoiStatus($doc, $dois[0]);
-            $result[] = $doiStatus;
+            $result[]  = $doiStatus;
         }
 
         return $result;
@@ -80,6 +77,7 @@ class Admin_Model_DoiReport
      *
      * Die Methode gibt hierzu die Anzahl der lokalen DOIs zurück, die noch nicht registriert wurden.
      *
+     * @return int
      */
     public function getNumDoisForBulkRegistration()
     {
@@ -89,12 +87,12 @@ class Admin_Model_DoiReport
         $docFinder->setServerState('published');
         $docFinder->setIdentifierExists('doi');
         foreach ($docFinder->getIds() as $docId) {
-            $doc = Document::get($docId);
+            $doc  = Document::get($docId);
             $dois = $doc->getIdentifierDoi();
-            if (! is_null($dois) && ! empty($dois)) {
+            if ($dois !== null && ! empty($dois)) {
                 // es wird nur die erste DOI für die DOI-Registrierung berücksichtigt
                 $doi = $dois[0];
-                if (is_null($doi->getStatus()) && $doi->isLocalDoi()) {
+                if ($doi->getStatus() === null && $doi->isLocalDoi()) {
                     $result++;
                 }
             }
@@ -109,6 +107,7 @@ class Admin_Model_DoiReport
      *
      * Die Methode gibt die Anzahl der registrierten, aber noch nicht geprüften DOIs zurück.
      *
+     * @return int
      */
     public function getNumDoisForBulkVerification()
     {
@@ -119,13 +118,13 @@ class Admin_Model_DoiReport
         $docFinder->setIdentifierExists('doi');
 
         foreach ($docFinder->getIds() as $docId) {
-            $doc = Document::get($docId);
+            $doc  = Document::get($docId);
             $dois = $doc->getIdentifierDoi();
-            if (! is_null($dois) && ! empty($dois)) {
+            if ($dois !== null && ! empty($dois)) {
                 // es wird nur die erste DOI für die DOI-Prüfung berücksichtigt
-                $doi = $dois[0];
+                $doi    = $dois[0];
                 $status = $doi->getStatus();
-                if (! is_null($status) && $status != 'verified') {
+                if ($status !== null && $status !== 'verified') {
                     $result++;
                 }
             }

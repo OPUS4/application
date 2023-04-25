@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <?php if (isset($this->messages)) : ?>
@@ -65,20 +63,20 @@
     </tr>
     </thead>
     <?PHP
-    $highlightTranslation = strcasecmp($this->searchScope, 'key') !== 0;
-    $highlightKey = strcasecmp($this->searchScope, 'text') !== 0;
+    $highlightTranslation = strcasecmp($this->searchScope ?? '', 'key') !== 0;
+    $highlightKey         = strcasecmp($this->searchScope ?? '', 'text') !== 0;
     foreach ($this->translations as $row) :
-        $key = array_shift($row);
+        $key       = array_shift($row);
         $langCount = count($row['translations']);
         ?>
         <tbody class="<?= isset($row['translationsTmx']) ? 'edited' : (! isset($row['filename']) ? 'added' : '') ?>">
         <tr>
             <td rowspan="<?= $langCount ?>" class="key"
                 ><?PHP if ($highlightKey) :
-                ?><?= $this->highlight($key, $this->searchTerm, '<span class="hilite">', '</span>')
-                ?><?PHP
+                    ?><?= $this->highlight($key, $this->searchTerm, '<span class="hilite">', '</span>')
+?><?PHP
                  else :
-                ?><?= $key ?><?PHP
+                        ?><?= $key ?><?PHP
                  endif ?>
                 <?php if (isset($row['module'])) : ?>
                 <div class="module"><?= $row['module'] ?>
@@ -97,21 +95,21 @@
             <td class="lang"><?= $language ?></td>
             <td class="value"><?PHP if ($highlightTranslation) :
                 ?><?= $this->highlight(htmlspecialchars($translation), $this->searchTerm, '<span class="hilite">', '</span>')
-                ?><?PHP
+?><?PHP
                               else :
-?><?= htmlspecialchars($translation) ?><?PHP
+                                    ?><?= htmlspecialchars($translation) ?><?PHP
                               endif ?></td>
-                <?PHP if ($index == 0) : ?>
+                <?PHP if ($index === 0) : ?>
             <td rowspan="<?= $langCount ?>" class="actions">
                 <div><a href="<?= $this->url(['action' => 'edit', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
                 ><?= $this->translate('setup_language_edit') ?></a></div>
-                <?PHP if (isset($row['translationsTmx'])) : ?>
+                    <?PHP if (isset($row['translationsTmx'])) : ?>
                 <a href="<?= $this->url(['action' => 'delete', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
                 ><?= $this->translate('setup_language_reset') ?></a>
-                <?PHP elseif (! isset($row['filename'])) : ?>
+                    <?PHP elseif (! isset($row['filename'])) : ?>
                 <a href="<?= $this->url(['action' => 'delete', 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey]) ?>"
                 ><?= $this->translate('setup_language_remove') ?></a>
-                <?PHP endif ?>
+                    <?PHP endif ?>
             </td>
                 <?PHP endif ?>
                 <?PHP $index++ ?>
@@ -120,7 +118,7 @@
         </tbody>
     <?PHP endforeach ?>
 </table>
-<?PHP if ($resultCount == 0) : ?>
+<?PHP if ($resultCount === 0) : ?>
     <div class="notranslationsfound">
         <?= $this->translate('setup_translation_non_found') ?>
     </div>

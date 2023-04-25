@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Cronjob
- * @package     Tests
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-require_once('CronTestCase.php');
 
-use Opus\Job;
-use Opus\Job\Worker\MailNotification;
+require_once 'CronTestCase.php';
+
+use Opus\Common\Job;
+use Opus\Job\MailNotification;
 
 /**
  * Dieser Test benötigt das opus-smtp-dumpserver.php ausgeführt wird, um prüfen zu können, ob Nachrichten verschickt
@@ -42,11 +41,10 @@ use Opus\Job\Worker\MailNotification;
  * php opus-smtp-dumpserver.php 2>&1 >> opus-smtp-dumpserver.log &
  *
  * TODO kann man das besser automatisieren
- *
  */
 class SendNotificationTest extends CronTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     public function testSendNotification()
@@ -54,7 +52,7 @@ class SendNotificationTest extends CronTestCase
         $this->createJob(MailNotification::LABEL, [
             'subject' => 'SendNotification Test',
             'message' => 'This is a test message generated in ' . __FILE__,
-            'users' => [['address' => 'user@example.org', 'name' => 'Test User']]
+            'users'   => [['address' => 'user@example.org', 'name' => 'Test User']],
         ]);
         $this->executeScript('cron-send-notification.php');
         $allJobs = Job::getByLabels([MailNotification::LABEL], null, Job::STATE_UNDEFINED);
@@ -68,7 +66,7 @@ class SendNotificationTest extends CronTestCase
         $this->createJob(MailNotification::LABEL, [
             'subject' => 'SendNotification Test',
             'message' => 'This is a test message generated in ' . __FILE__,
-            'users' => ''
+            'users'   => '',
         ]);
         $this->executeScript('cron-send-notification.php');
         $failedJobs = Job::getByLabels([MailNotification::LABEL], null, Job::STATE_FAILED);

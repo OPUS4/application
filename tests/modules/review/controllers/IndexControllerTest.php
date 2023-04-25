@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,13 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
 
 /**
  * Basic unit tests for class Review_IndexController.
@@ -39,12 +38,13 @@ use Opus\Document;
  */
 class Review_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    private $documentId = null;
+    /** @var int */
+    private $documentId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -92,10 +92,10 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionClearButtonWithOneDocumentGoesToClear()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'selected' => ['1', $this->documentId],
+                'selected'     => ['1', $this->documentId],
                 'buttonSubmit' => 'buttonSubmit',
             ]);
         $this->dispatch('/review/index/index');
@@ -115,7 +115,7 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testClearActionWithOneDocumentUnconfirmed()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
@@ -137,11 +137,11 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testClearActionWithOneDocumentCanceled()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
-                'sureno' => 'no',
+                'sureno'   => 'no',
             ]);
         $this->dispatch('/review/index/clear');
 
@@ -160,11 +160,11 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testClearActionWithOneDocumentConfirmed()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
-                'sureyes' => 'yes',
+                'sureyes'  => 'yes',
             ]);
         $this->dispatch('/review/index/clear');
 
@@ -183,7 +183,7 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testRejectActionWithOneDocumentUnconfirmed()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
@@ -205,11 +205,11 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testRejectActionWithOneDocumentCanceled()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
-                'sureno' => 'no',
+                'sureno'   => 'no',
             ]);
         $this->dispatch('/review/index/reject');
 
@@ -228,11 +228,11 @@ class Review_IndexControllerTest extends ControllerTestCase
 
     public function testRejectActionWithOneDocumentConfirmed()
     {
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
                 'selected' => $this->documentId,
-                'sureyes' => 'yes',
+                'sureyes'  => 'yes',
             ]);
         $this->dispatch('/review/index/reject');
 

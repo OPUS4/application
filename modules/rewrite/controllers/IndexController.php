@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,18 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Rewrite
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Repository;
+use Opus\Common\Repository;
 
 class Rewrite_IndexController extends Application_Controller_Action
 {
-
     /**
      * maps arbitrary OPUS document indentifiers to the
      * corresponding internal document id, e.g., this function provides
@@ -43,35 +40,39 @@ class Rewrite_IndexController extends Application_Controller_Action
      */
     public function idAction()
     {
-        $type = $this->getRequest()->getParam('type');
+        $type  = $this->getRequest()->getParam('type');
         $value = $this->getRequest()->getParam('value');
         if (empty($type) || empty($value)) {
-            return $this->_helper->Redirector->redirectToAndExit(
+            $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 ['failure' => 'missing argument'],
                 'index',
                 'home'
             );
+            return;
         }
         $finder = Repository::getInstance()->getDocumentFinder();
-        $ids = $finder->setIdentifierValue($type, $value)->getIds();
+        $ids    = $finder->setIdentifierValue($type, $value)->getIds();
         if (count($ids) < 1) {
-            return $this->_helper->Redirector->redirectToAndExit(
+            $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 ['failure' => 'given id is unknown'],
                 'index',
                 'home'
             );
+            return;
         }
         if (count($ids) > 1) {
-            return $this->_helper->Redirector->redirectToAndExit(
+            $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 ['failure' => 'given id is not unique'],
                 'index',
                 'home'
             );
+            return;
         }
-        return $this->_helper->Redirector->redirectToAndExit(
+
+        $this->_helper->Redirector->redirectToAndExit(
             'index',
             '',
             'index',
@@ -86,38 +87,44 @@ class Rewrite_IndexController extends Application_Controller_Action
      */
     public function opus3fileAction()
     {
-        $docid = $this->getRequest()->getParam('opus3id');
+        $docid    = $this->getRequest()->getParam('opus3id');
         $filename = $this->getRequest()->getParam('filename');
         if (empty($docid) || empty($filename)) {
-            return $this->_helper->Redirector->redirectToAndExit(
+            $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 ['failure' => 'missing argument'],
                 'index',
                 'home'
             );
+            return;
         }
         $finder = Repository::getInstance()->getDocumentFinder();
-        $ids = $finder->setIdentifierValue('opus3-id', $docid)->getIds();
+        $ids    = $finder->setIdentifierValue('opus3-id', $docid)->getIds();
         if (count($ids) < 1) {
-            return $this->_helper->Redirector->redirectToAndExit(
+            $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 ['failure' => 'given opus3id is unknown'],
                 'index',
                 'home'
             );
+            return;
         }
         if (count($ids) > 1) {
-            return $this->_helper->Redirector->redirectToAndExit(
+            $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 ['failure' => 'given opus3id is not unique'],
                 'index',
                 'home'
             );
+            return;
         }
-        return $this->_redirect(
+
+        $this->_redirect(
             $this->getRequest()->getBaseUrl() . '/files/' . $ids[0] . '/' . $filename,
-            ['prependBase' => false,
-            'code' => 301]
+            [
+                'prependBase' => false,
+                'code'        => 301,
+            ]
         );
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,32 +26,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Controller
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2011-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\LoggingTrait;
+use Opus\Common\Security\Realm;
+
 /**
  * Module-access-checking controller for Opus Applications.
- *
- * @category    Application
- * @package     Controller
  */
-class Application_Controller_ModuleAccess extends \Zend_Controller_Action
+class Application_Controller_ModuleAccess extends Zend_Controller_Action
 {
+    use LoggingTrait;
 
-    use \Opus\LoggingTrait;
-
-    const ACCESS_DENIED_ACTION = 'module-access-denied';
+    public const ACCESS_DENIED_ACTION = 'module-access-denied';
 
     /**
      * Konfigurationsobjekt.
-     * @var \Zend_Config
+     *
+     * @var Zend_Config
      */
-    private $_config = null;
+    private $config;
 
     /**
      * Use pre-dispatch to check user access rights *before* action is called.
@@ -72,8 +69,6 @@ class Application_Controller_ModuleAccess extends \Zend_Controller_Action
 
     /**
      * Checks if the user is allowed to access the given module.
-     *
-     * @return void
      */
     protected function checkAccessModulePermissions()
     {
@@ -81,42 +76,43 @@ class Application_Controller_ModuleAccess extends \Zend_Controller_Action
         $module = $this->_request->getModuleName();
 
         $action = $this->_request->getActionName();
-        if ($action == self::ACCESS_DENIED_ACTION) {
+        if ($action === self::ACCESS_DENIED_ACTION) {
             $logger->debug("forwarding to unchecked action $module ($action)");
-            return true;
+            return;
         }
 
         $logger->debug("starting authorization check for module '$module'");
 
-        $realm = \Opus\Security\Realm::getInstance();
+        $realm = Realm::getInstance();
 
         if (! $realm->skipSecurityChecks()) {
             // Check, if the user has accesss to the module...
             if (true !== $realm->checkModule($module)) {
                 $logger->debug("FAILED authorization check for module '$module'");
-                return $this->_forward(self::ACCESS_DENIED_ACTION);
+                $this->_forward(self::ACCESS_DENIED_ACTION);
+                return;
             }
 
             // Check, if the user has the right permission...
             if (true !== $this->checkPermissions()) {
                 $logger->debug("FAILED authorization through ACLs");
-                return $this->_forward(self::ACCESS_DENIED_ACTION);
+                $this->_forward(self::ACCESS_DENIED_ACTION);
+                return;
             }
         }
 
         // Check, controller-specific constraints...
         if (true !== $this->customAccessCheck()) {
             $logger->debug("FAILED custom authorization check for module '$module'");
-            return $this->_forward(self::ACCESS_DENIED_ACTION);
+            $this->_forward(self::ACCESS_DENIED_ACTION);
+            return;
         }
 
         $logger->debug("authorization check for module '$module' successful");
-        return;
     }
 
     /**
-     *
-     * @return boolean
+     * @return bool
      *
      * TODO Kann ein Teil davon vielleicht schon im Bootstrap passieren?
      */
@@ -124,10 +120,10 @@ class Application_Controller_ModuleAccess extends \Zend_Controller_Action
     {
         $logger = $this->getLogger();
 
-        $navigation = $this->view->getHelper('navigation');
-        $acl = $navigation->getAcl();
+        $navigation = $this->getNavigation();
+        $acl        = $navigation->getAcl();
 
-        if (is_null($acl)) {
+        if ($acl === null) {
             return true;
         }
 
@@ -139,7 +135,7 @@ class Application_Controller_ModuleAccess extends \Zend_Controller_Action
 
             $resource = $this->findResourceForPage($activePage);
 
-            return is_null($resource) || $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
+            return $resource === null || $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
         } else {
             $logger->debug('ACL: active page not found');
             // Entweder die Seite ist nicht erfasst oder Zugriff ist nicht erlaubt.
@@ -149,26 +145,34 @@ class Application_Controller_ModuleAccess extends \Zend_Controller_Action
 
             return ! $pageInNav;
         }
+    }
 
-        return true;
+    /**
+     * @return Zend_Navigation|object
+     */
+    protected function getNavigation()
+    {
+        return $this->view->getHelper('navigation');
     }
 
     /**
      * Searches navigation for resource definition for current request.
+     *
+     * @param Zend_Navigation_Page $activePage
      * @return string
      */
     protected function findResourceForPage($activePage)
     {
         $resource = null;
 
-        if ($activePage instanceof \Zend_Navigation_Page) {
+        if ($activePage instanceof Zend_Navigation_Page) {
             $resource = $activePage->getResource();
 
             $page = $activePage->getParent();
 
-            while (! is_null($page) && $page instanceof \Zend_Navigation_Page && is_null($resource)) {
+            while ($page !== null && $page instanceof Zend_Navigation_Page && $resource === null) {
                 $resource = $page->getResource();
-                $page = $page->getParent();
+                $page     = $page->getParent();
             }
         }
 
@@ -177,22 +181,25 @@ class Application_Controller_ModuleAccess extends \Zend_Controller_Action
 
     /**
      * Prüft ob die Seite in der Navigation definiert ist.
+     *
+     * @param Zend_Navigation $navigation
+     * @return bool
      */
     protected function isPageForRequestInNavigation($navigation)
     {
-        $module = $this->_request->getModuleName();
+        $module     = $this->_request->getModuleName();
         $controller = $this->_request->getControllerName();
-        $action = $this->_request->getActionName();
+        $action     = $this->_request->getActionName();
 
-        if (! is_null($module)) {
+        if ($module !== null) {
             $pages = $navigation->getContainer()->findAllBy('module', $this->_request->getModuleName());
 
-            if (! is_null($controller) && ! is_null($pages)) {
+            if ($controller !== null && $pages !== null) {
                 // found pages for module
                 foreach ($pages as $page) {
                     if ($page->getController() === $controller) {
                         // found pages for controller
-                        if (! is_null($action) && $page->getAction() === $action) {
+                        if ($action !== null && $page->getAction() === $action) {
                             return true;
                         }
                     }
@@ -207,7 +214,7 @@ class Application_Controller_ModuleAccess extends \Zend_Controller_Action
      * Method stub to be overridden by controllers.  Enables checks for custom
      * properties.
      *
-     * @return boolean
+     * @return true
      */
     protected function customAccessCheck()
     {
@@ -224,14 +231,15 @@ class Application_Controller_ModuleAccess extends \Zend_Controller_Action
 
     /**
      * Returns configuration object or null if none can be found.
+     *
      * @return null|Zend_Config
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
-            $this->_config = Application_Configuration::getInstance()->getConfig();
+        if ($this->config === null) {
+            $this->config = Application_Configuration::getInstance()->getConfig();
         }
-        return $this->_config;
+        return $this->config;
     }
 
     /**

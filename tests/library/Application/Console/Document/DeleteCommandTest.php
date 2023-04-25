@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,37 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Model\NotFoundException;
-use Symfony\Component\Console\Tester\CommandTester;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
 use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
-    /**
-     * @var int[] IDs of test documents
-     */
+    /** @var int[] IDs of test documents */
     protected $documents;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $documents = [];
 
         for ($i = 0; $i < 5; $i++) {
-            $doc = $this->createTestDocument();
-            $docId = $doc->store();
+            $doc         = $this->createTestDocument();
+            $docId       = $doc->store();
             $documents[] = $docId;
         }
 
@@ -71,15 +67,15 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
         $tester = new CommandTester($command);
 
         $docId = $this->documents[2];
-        $doc = Document::get($docId);
+        $doc   = Document::get($docId);
 
         $this->assertEquals('unpublished', $doc->getServerState());
 
         $tester->execute([
-            '--no-interaction' => true,
-            $command::ARGUMENT_START_ID => $docId
+            '--no-interaction'          => true,
+            $command::ARGUMENT_START_ID => $docId,
         ], [
-            'interactive' => false
+            'interactive' => false,
         ]);
 
         $doc = Document::get($this->documents[0]);
@@ -116,11 +112,11 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
         $tester = new CommandTester($command);
 
         $tester->execute([
-            '--no-interaction' => true,
+            '--no-interaction'          => true,
             $command::ARGUMENT_START_ID => $this->documents[1],
-            $command::ARGUMENT_END_ID => $this->documents[3]
+            $command::ARGUMENT_END_ID   => $this->documents[3],
         ], [
-            'interactive' => false
+            'interactive' => false,
         ]);
 
         $doc = Document::get($this->documents[0]);
@@ -149,16 +145,16 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
         $tester = new CommandTester($command);
 
         $docId = $this->documents[2];
-        $doc = Document::get($docId);
+        $doc   = Document::get($docId);
 
         $this->assertEquals('unpublished', $doc->getServerState());
 
         $tester->execute([
-            '--no-interaction' => true,
-            '--permanent' => true,
-            $command::ARGUMENT_START_ID => $docId
+            '--no-interaction'          => true,
+            '--permanent'               => true,
+            $command::ARGUMENT_START_ID => $docId,
         ], [
-            'interactive' => false
+            'interactive' => false,
         ]);
 
         $doc = Document::get($this->documents[0]);
@@ -173,7 +169,7 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
         $doc = Document::get($this->documents[4]);
         $this->assertEquals('unpublished', $doc->getServerState());
 
-        $this->setExpectedException('Opus\Model\NotFoundException');
+        $this->expectException(NotFoundException::class);
         Document::get($this->documents[2]);
     }
 
@@ -192,12 +188,12 @@ class Application_Console_Document_DeleteCommandTest extends ControllerTestCase
         $tester = new CommandTester($command);
 
         $tester->execute([
-            '--no-interaction' => true,
-            '--permanent' => true,
+            '--no-interaction'          => true,
+            '--permanent'               => true,
             $command::ARGUMENT_START_ID => $this->documents[1],
-            $command::ARGUMENT_END_ID => $this->documents[3]
+            $command::ARGUMENT_END_ID   => $this->documents[3],
         ], [
-            'interactive' => false
+            'interactive' => false,
         ]);
 
         $doc = Document::get($this->documents[0]);

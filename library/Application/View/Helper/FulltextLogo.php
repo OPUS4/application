@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,49 +25,49 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * View helper for rendering the fulltext logo for documents in the search result list.
  */
 class Application_View_Helper_FulltextLogo extends Application_View_Helper_Document_HelperAbstract
 {
-
+    /**
+     * @param null|DocumentInterface $doc
+     * @return string
+     * @throws Exception
+     */
     public function fulltextLogo($doc = null)
     {
-        if (is_null($doc)) {
+        if ($doc === null) {
             $doc = $this->getDocument();
         }
 
-        if (! $doc instanceof Document) {
-            // TODO log
-            return;
+        if (! $doc instanceof DocumentInterface) {
+            // TODO log OR throw exception?
+            return '';
         }
 
         $cssClass = "fulltext-logo";
-        $tooltip = null;
-
+        $tooltip  = null;
 
         if ($doc->hasFulltext()) {
             $cssClass .= ' fulltext';
-            $tooltip = 'fulltext_icon_tooltip';
+            $tooltip   = 'fulltext_icon_tooltip';
         }
 
         if ($doc->isOpenAccess()) {
             $cssClass .= ' openaccess';
-            $tooltip = 'fulltext_icon_oa_tooltip';
+            $tooltip   = 'fulltext_icon_oa_tooltip';
         }
 
         $output = "<div class=\"$cssClass\"";
 
-        if (! is_null($tooltip)) {
+        if ($tooltip !== null) {
             $tooltip = $this->view->translate([$tooltip]);
             $output .= " title=\"$tooltip\"";
         }

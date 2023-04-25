@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Notification
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\DocumentInterface;
 
 /**
  * Email notification class for PUBLICATION context.
@@ -38,11 +38,10 @@
  */
 class Application_Util_PublicationNotification extends Application_Util_Notification
 {
-
     /*
      * TODO old prepareMail code to get author emails in proper format
      *
-     * if ($context == self::PUBLICATION) {
+     * if ($context === self::PUBLICATION) {
                     $email = trim($author->getEmail());
                     if (!empty($email) && (empty($notifyAuthors) || (isset($notifyAuthors[$index])
                                 && $notifyAuthors[$index]))) {
@@ -51,6 +50,13 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
                 }
      */
 
+    /**
+     * @param array|null             $authorAddresses
+     * @param null|DocumentInterface $document
+     * @param bool                   $notifySubmitter
+     * @return array
+     * @throws Zend_Exception
+     */
     public function getRecipients($authorAddresses = null, $document = null, $notifySubmitter = true)
     {
         $addresses = [];
@@ -64,23 +70,28 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
             );
         }
 
-        for ($i = 0; $i < count($authorAddresses); $i++) {
-            $authorAddress = $authorAddresses[$i];
-            array_push($addresses, $authorAddress);
-            $logger->debug(
-                "send publication notification mail to author " . $authorAddress['address']
-                . " (" . $authorAddress['name'] . ")"
-            );
+        if ($authorAddresses !== null) {
+            for ($i = 0; $i < count($authorAddresses); $i++) {
+                $authorAddress = $authorAddresses[$i];
+                array_push($addresses, $authorAddress);
+                $logger->debug(
+                    'send publication notification mail to author ' . $authorAddress['address']
+                    . ' (' . $authorAddress['name'] . ')'
+                );
+            }
         }
 
-        if ($notifySubmitter && ! is_null($document)) {
+        if ($notifySubmitter && $document !== null) {
             $submitter = $document->getPersonSubmitter();
             if (! empty($submitter)) {
-                $name = trim($submitter[0]->getLastName() . ", " . $submitter[0]->getFirstName());
-                $email = trim($submitter[0]->getEmail());
-                if (! empty($email)) {
-                    array_push($addresses, ["name" => $name , "address" => $email]);
-                    $logger->debug("send publication notification mail to submitter $email ($name)");
+                $name  = trim($submitter[0]->getLastName() . ', ' . $submitter[0]->getFirstName());
+                $email = $submitter[0]->getEmail();
+                if ($email !== null) {
+                    $email = trim($email);
+                    if (strlen($email) > 0) {
+                        array_push($addresses, ["name" => $name, "address" => $email]);
+                        $logger->debug("send publication notification mail to submitter $email ($name)");
+                    }
                 }
             }
         }
@@ -88,6 +99,14 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
         return $addresses;
     }
 
+    /**
+     * @param int    $docId
+     * @param array  $authors
+     * @param string $title
+     * @param string $url
+     * @return string|null
+     * @throws Zend_Exception
+     */
     public function getMailBody($docId, $authors, $title, $url)
     {
         $config = $this->getConfig();
@@ -101,8 +120,14 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
                 $url
             );
         }
+
+        return null;
     }
 
+    /**
+     * @return bool
+     * @throws Zend_Exception
+     */
     public function isEnabled()
     {
         $config = $this->getConfig();
@@ -110,11 +135,16 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
             && filter_var($config->notification->document->published->enabled, FILTER_VALIDATE_BOOLEAN);
     }
 
+    /**
+     * @return string|null
+     * @throws Zend_Exception
+     */
     public function getSubjectTemplate()
     {
         $config = $this->getConfig();
         if (isset($config->notification->document->published->subject)) {
             return $config->notification->document->published->subject;
         }
+        return null;
     }
 }

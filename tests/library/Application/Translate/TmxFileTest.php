@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Translate_TmxFileTest extends ControllerTestCase
 {
-
     public function testConstruction()
     {
         $tmxFile = new Application_Translate_TmxFile();
@@ -81,8 +78,8 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         $this->assertEquals([
             'translation_key' => [
                 'en' => 'Translation Key',
-                'de' => 'Übersetzungsschlüssel'
-            ]
+                'de' => 'Übersetzungsschlüssel',
+            ],
         ], $tmxFile->toArray());
     }
 
@@ -104,12 +101,12 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         $tmxFile->fromArray([
             'home_index_contact_pagetitle' => [
                 'en' => 'Contact',
-                'de' => 'Kontakt'
+                'de' => 'Kontakt',
             ],
-            'home_index_contact_title' => [
+            'home_index_contact_title'     => [
                 'en' => 'Contact us...',
-                'de' => 'Nehmen Sie Kontakt mit uns auf...'
-            ]
+                'de' => 'Nehmen Sie Kontakt mit uns auf...',
+            ],
         ]);
 
         $this->verifyTestData($tmxFile->toArray());
@@ -122,17 +119,20 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         $this->verifyTestData($tmxFile->toArray());
     }
 
+    /**
+     * @param array $data
+     */
     protected function verifyTestData($data)
     {
         $this->assertEquals([
             'home_index_contact_pagetitle' => [
                 'en' => 'Contact',
-                'de' => 'Kontakt'
+                'de' => 'Kontakt',
             ],
-            'home_index_contact_title' => [
+            'home_index_contact_title'     => [
                 'en' => 'Contact us...',
-                'de' => 'Nehmen Sie Kontakt mit uns auf...'
-            ]
+                'de' => 'Nehmen Sie Kontakt mit uns auf...',
+            ],
         ], $data);
     }
 
@@ -143,7 +143,7 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         $tmxFile->setTranslation('translation_key', 'en', 'Translation Key');
 
         $this->assertEquals([
-            'translation_key' => ['en' => 'Translation Key']
+            'translation_key' => ['en' => 'Translation Key'],
         ], $tmxFile->toArray());
 
         $tmxFile->setTranslation('translation_key', 'de', 'Übersetzungsschlüssel');
@@ -151,8 +151,8 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         $this->assertEquals([
             'translation_key' => [
                 'en' => 'Translation Key',
-                'de' => 'Übersetzungsschlüssel'
-            ]
+                'de' => 'Übersetzungsschlüssel',
+            ],
         ], $tmxFile->toArray());
     }
 
@@ -169,8 +169,8 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
         $this->assertEquals([
             'translationKey' => [
                 'en' => 'Translation',
-                'de' => 'Übersetzung'
-            ]
+                'de' => 'Übersetzung',
+            ],
         ], $tmxFile->toArray());
 
         $this->assertEquals('default', $tmxFile->getModuleForKey('translationKey'));
@@ -271,18 +271,18 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
 
         $this->assertCount(3, $translations);
         $this->assertEquals([
-            'testkey_cdata' => [
+            'testkey_cdata'      => [
                 'en' => '<span>Translation</span>',
-                'de' => '&Uuml;bersetzung'
+                'de' => '&Uuml;bersetzung',
             ],
-            'testkey' => [
+            'testkey'            => [
                 'en' => '<span class="highlight" name="title">Translation</span>',
-                'de' => '&Uuml;bersetzung'
+                'de' => '&Uuml;bersetzung',
             ],
             'testkey_whitespace' => [
                 'en' => "line1\nline2\n  line3",
-                'de' => "Zeile1\nZeile2\n  Zeile3"
-            ]
+                'de' => "Zeile1\nZeile2\n  Zeile3",
+            ],
         ], $translations);
     }
 }

@@ -26,12 +26,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_CitationExport
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -127,8 +123,8 @@
            <xsl:apply-templates select="Subject" />
        </xsl:if>
        <xsl:choose>
-         <xsl:when test="normalize-space(ComletedDate/@Year)">
-             <xsl:text>Y1  - </xsl:text><xsl:value-of select="ComletedDate/@Year" />
+         <xsl:when test="normalize-space(CompletedDate/@Year)">
+             <xsl:text>Y1  - </xsl:text><xsl:value-of select="CompletedDate/@Year" />
          </xsl:when>
          <xsl:when test="string-length(PublishedDate/@Year)>0">
              <xsl:text>Y1  - </xsl:text><xsl:value-of select="PublishedDate/@Year" />

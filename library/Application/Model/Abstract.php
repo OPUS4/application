@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,49 +24,49 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
+use Opus\Common\LoggingTrait;
 
 /**
  * Abstract base class for model classes.
- *
- * @category    Application
- * @package     Application_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 abstract class Application_Model_Abstract
 {
-
-    use \Opus\LoggingTrait;
+    use LoggingTrait;
 
     /**
      * Configuration for application.
+     *
      * @var Zend_Config
      */
-    private $_config;
+    private $config;
 
     /**
      * Sets configuration.
-     * @param $config Zend_Config
+     *
+     * @param Zend_Config|null $config
      */
-    public function setConfig(\Zend_Config $config = null)
+    public function setConfig($config = null)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
      * Returns configuration object for application.
+     *
      * @return Zend_Config
      * @throws Zend_Exception
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
-            $this->_config = Config::get();
+        if ($this->config === null) {
+            $this->config = Config::get();
         }
-        return $this->_config;
+        return $this->config;
     }
 }

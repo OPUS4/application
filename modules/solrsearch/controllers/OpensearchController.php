@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,32 +25,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Sascha Szott <szott@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Solrsearch_OpensearchController extends Application_Controller_Xml
 {
-
     public function indexAction()
     {
         $config = Application_Configuration::getInstance();
-        $this->_proc->setParameter(
+        $this->proc->setParameter(
             '',
             'searchBaseUrl',
             $this->view->fullUrl() . '/solrsearch/index/search/searchtype/simple/query/{searchTerms}'
         );
-        $this->_proc->setParameter(
+        $this->proc->setParameter(
             '',
             'faviconUrl',
             $this->view->serverUrl() . $this->view->layoutPath() . '/img/logo/favicon.ico'
         );
-        $this->_proc->setParameter('', 'name', $config->getName());
+        $this->proc->setParameter('', 'name', $config->getName());
         $this->loadStyleSheet($this->view->getScriptPath('opensearch') . DIRECTORY_SEPARATOR . 'opensearch.xslt');
     }
 }

@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,39 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Controller
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
+use Opus\Common\Date;
 
 /**
  * Controller helper for handling conversion between Date and strings.
  */
-class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_Helper_Abstract
 {
-
-    /**
-     * Validator for dates.
-     * @var Application_Form_Validate_Date
-     */
-    private $_validator;
-
-    /**
-     * Constructs Application_Controller_Action_Helper_Dates.
-     */
-    public function __construct()
-    {
-        $this->_validator = new Application_Form_Validate_Date();
-    }
-
     /**
      * Gets called when helper is used like method of the broker.
+     *
      * @param string $datestr Date string
-     * @return
+     * @return Date
      */
     public function direct($datestr)
     {
@@ -65,28 +49,28 @@ class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action
 
     /**
      * Checks if date string is valid for current locale.
+     *
      * @param string $datestr Date string
-     * @return boolean TRUE - Only if date string is valid for current local
+     * @return bool TRUE - Only if date string is valid for current local
      */
     public function isValid($datestr)
     {
-        $validator = new Application_Form_Validate_Date();
-        return $validator->isValid($datestr);
+        return $this->getValidator()->isValid($datestr);
     }
 
     /**
      * Converts string to Date depending on current language.
+     *
      * @param string $datestr Date string
-     * @return Date
+     * @return Date|null
      */
     public function getOpusDate($datestr)
     {
-        if (! is_null($datestr) && $this->isValid($datestr)) {
-            $dateFormat = $this->_validator->getDateFormat();
-
-            $date = new \Zend_Date($datestr, $dateFormat);
-
-            $dateModel = new Date($date);
+        if ($datestr !== null && $this->isValid($datestr)) {
+            $dateFormat = $this->getDateFormat();
+            $date       = DateTime::createFromFormat($dateFormat, $datestr);
+            $dateModel  = new Date();
+            $dateModel->setDateOnly($date);
             return $dateModel;
         } else {
             // TODO throw exception
@@ -96,18 +80,39 @@ class Application_Controller_Action_Helper_Dates extends \Zend_Controller_Action
 
     /**
      * Converts Date into string depending on current language.
+     *
      * @param Date $date Date
-     * @return string Date string for current language
+     * @return string|null Date string for current language
      */
     public function getDateString($date)
     {
         // Protect against invalid dates
-        if (! is_null($date) && $date->isValid()) {
-            $dateFormat = $this->_validator->getDateFormat();
-            $zendDate = $date->getZendDate();
-            return $zendDate->get($dateFormat);
+        if ($date !== null && $date->isValid()) {
+            $dateFormat = $this->getDateFormat();
+            return $date->getDateTime()->format($dateFormat);
         } else {
             return null;
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getDateFormat()
+    {
+        return $this->getValidator()->getDateTimeFormat();
+    }
+
+    /**
+     * Returns validator for dates.
+     *
+     * TODO Cannot cache validator object, because at least for the tests it gets reconfigured
+     *      change design and allow injection of validator class
+     *
+     * @return Application_Form_Validate_Date
+     */
+    public function getValidator()
+    {
+        return new Application_Form_Validate_Date();
     }
 }

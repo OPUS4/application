@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,44 +34,44 @@
  */
 class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
 {
-
     /**
      * Name fuer Formularelement fuer Feld Role.
      */
-    const ELEMENT_PREFIX_ROLE = 'Role';
+    public const ELEMENT_PREFIX_ROLE = 'Role';
 
     /**
      * Konstante für das Ändern der Rolle für eine Person.
      */
-    const RESULT_CHANGE_ROLE = 'changeRole';
+    public const RESULT_CHANGE_ROLE = 'changeRole';
 
     /**
      * Mögliche Rollen für eine Person.
+     *
      * @var array
      *
      * TODO centralize
      */
-    private $_personRoles = [
-        'author' => 'author',
-        'editor' => 'editor',
-        'translator' => 'translator',
+    private $personRoles = [
+        'author'      => 'author',
+        'editor'      => 'editor',
+        'translator'  => 'translator',
         'contributor' => 'contributor',
-        'other' => 'other',
-        'advisor' => 'advisor',
-        'referee' => 'referee',
-        'submitter' => 'submitter'
+        'other'       => 'other',
+        'advisor'     => 'advisor',
+        'referee'     => 'referee',
+        'submitter'   => 'submitter',
     ];
 
     /**
      * Konstruiert Formular zum Ändern der Rolle einer Person.
      *
-     * @param string $role Name der aktuellen Rolle
-     * @param mixed $options
+     * @param null|string $role Name der aktuellen Rolle
+     * @param null|mixed  $options
      */
     public function __construct($role = null, $options = null)
     {
-        if (! is_null($role) && isset($this->_personRoles[$role])) {
-            unset($this->_personRoles[$role]);
+        if ($role !== null && isset($this->personRoles[$role])) {
+            unset($this->personRoles[$role]);
         }
 
         parent::__construct($options);
@@ -86,12 +84,12 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
     {
         parent::init();
 
-        $roles = $this->_personRoles;
+        $roles = $this->personRoles;
 
         $this->setDecorators(
             [
-            'FormElements',
-            ['HtmlTag', ['tag' => 'ul', 'class' => 'links']]
+                'FormElements',
+                ['HtmlTag', ['tag' => 'ul', 'class' => 'links']],
             ]
         );
 
@@ -100,8 +98,8 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
                 'submit',
                 $this->getRoleElementName($role),
                 [
-                'decorators' => ['ViewHelper', ['HtmlTag', ['tag' => 'li']]],
-                'label' => 'Opus_Person_Role_Value_' . ucfirst($role)
+                    'decorators' => ['ViewHelper', ['HtmlTag', ['tag' => 'li']]],
+                    'label'      => 'Opus_Person_Role_Value_' . ucfirst($role),
                 ]
             );
         }
@@ -109,18 +107,19 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Prüft ob in einem POST einer der Rollen-Buttons geklickt wurde.
+     *
      * @param array $post POST Daten für Formular
      * @param array $context POST Daten für gesamtes Formular
-     * @return array
+     * @return array|null
      */
     public function processPost($post, $context)
     {
         // Prüfen, ob Button für Rollenänderung ausgewählt wurde
-        foreach ($this->_personRoles as $role) {
+        foreach ($this->personRoles as $role) {
             if (array_key_exists($this->getRoleElementName($role), $post)) {
                 return [
-                    'result' => Admin_Form_Document_PersonRoles::RESULT_CHANGE_ROLE,
-                    'role' => $role
+                    'result' => self::RESULT_CHANGE_ROLE,
+                    'role'   => $role,
                 ];
             }
         }
@@ -130,11 +129,12 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Liefert Namen des Elements für eine Rolle.
+     *
      * @param string $role
      * @return string
      */
     public function getRoleElementName($role)
     {
-        return self::ELEMENT_PREFIX_ROLE . ucfirst($role);
+        return self::ELEMENT_PREFIX_ROLE . ucfirst($role ?? '');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Partial
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 ?>
 
 <table>
@@ -47,7 +45,7 @@
     <?PHP foreach ($this->element->getModels() as $model) : ?>
         <tr>
             <td><a href="<?= $this->url(['action' => 'show', 'id' => $model->getId()]) ?>"
-                class="displayname<?= (is_null($model->getField('Visible')) || $model->getVisible()) ? '' : ' invisible'?>"
+                class="displayname<?= $model->getField('Visible') === null || $model->getVisible() ? '' : ' invisible'?>"
                     ><?= htmlspecialchars($model->getDisplayName()) ?></a></td>
             <td>(ID = <?= $model->getId()?>)</td>
             <td class="edit">
@@ -57,9 +55,7 @@
             <td class="linked">
                 <?PHP $docCount = $model->getNumOfAssociatedDocuments(); ?>
                 <?PHP if ($docCount > 0) : ?>
-                <a href="<?= $this->url(['module' => 'admin', 'controller' => 'documents', 'action' => 'index',
-                    'seriesid' => $model->getId()]) ?>"
-                    ><?= $this->translate('admin_series_link_showdocuments') ?>
+                <a href="<?= $this->url(['module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'seriesid' => $model->getId()]) ?>"><?= $this->translate('admin_series_link_showdocuments') ?>
                     (<?= $model->getNumOfAssociatedDocuments() ?>)</a>
                 <?PHP else : ?>
                     <?= $this->translate('admin_series_link_nodocuments') ?>

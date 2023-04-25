@@ -19,7 +19,7 @@ $(document).ready(function () {
     $('#adminMenuContainer ul > li > *').height(max);
 
     // ActionBox
-    var $actionbox = $('#actionboxContainer');
+    var $actionbox       = $('#actionboxContainer');
     var $actionboxSpacer = $('<div />', {
         "class": "actionbox-spacer",
         "height": $actionbox.outerHeight()
@@ -29,7 +29,7 @@ $(document).ready(function () {
             if (! $actionbox.hasClass('fixed') && $(window).scrollTop() > $actionbox.offset().top) {
                 $actionbox.before($actionboxSpacer);
                 $actionbox.addClass("fixed");
-            } else if ($actionbox.hasClass('fixed')  && $(window).scrollTop() < $actionboxSpacer.offset().top) {
+            } else if ($actionbox.hasClass('fixed') && $(window).scrollTop() < $actionboxSpacer.offset().top) {
                 $actionbox.removeClass("fixed");
                 $actionboxSpacer.remove();
             }

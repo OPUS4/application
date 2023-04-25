@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,23 +25,25 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 
-class Application_Form_Validate_CollectionRoleNameUnique extends \Zend_Validate_Abstract
+class Application_Form_Validate_CollectionRoleNameUnique extends Zend_Validate_Abstract
 {
+    public const NAME_NOT_UNIQUE = 'notUnique';
 
-    const NAME_NOT_UNIQUE = 'notUnique';
-
+    /**
+     * @var string[]
+     * @phpcs:disable
+     */
     protected $_messageTemplates = [
-        self::NAME_NOT_UNIQUE => 'admin_collectionroles_error_not_unique'
+        self::NAME_NOT_UNIQUE => 'admin_collectionroles_error_not_unique',
     ];
+    // @phpcs:enable
 
     /**
      * Returns true if and only if $value meets the validation requirements
@@ -49,9 +52,10 @@ class Application_Form_Validate_CollectionRoleNameUnique extends \Zend_Validate_
      * getMessages() will return an array of messages that explain why the
      * validation failed.
      *
-     * @param  mixed $value
-     * @return boolean
-     * @throws \Zend_Validate_Exception If validation of $value is impossible
+     * @param string     $value
+     * @param array|null $context
+     * @return bool
+     * @throws Zend_Validate_Exception If validation of $value is impossible.
      */
     public function isValid($value, $context = null)
     {
@@ -59,15 +63,15 @@ class Application_Form_Validate_CollectionRoleNameUnique extends \Zend_Validate_
 
         $this->_setValue($value);
 
-        if (! is_null($context) && is_array($context) && array_key_exists('Id', $context)) {
-            $collectionId = $context['Id'];
+        if ($context !== null && is_array($context) && array_key_exists('Id', $context)) {
+            $collectionId = (int) $context['Id'];
         } else {
             $collectionId = 0;
         }
 
-        $model = $this->_getModel($value);
+        $model = $this->getModel($value);
 
-        if (! is_null($model) && $model->getId() != $collectionId) {
+        if ($model !== null && $model->getId() !== $collectionId) {
             // es gibt bereits CollectionRole mit Identifier (z.B. Name) und anderer ID
             $this->_error(self::NAME_NOT_UNIQUE);
             return false;
@@ -78,10 +82,11 @@ class Application_Form_Validate_CollectionRoleNameUnique extends \Zend_Validate_
 
     /**
      * Holt CollectionRole mit Identifier.
-     * @param $identifier
-     * @return CollectionRole
+     *
+     * @param string $identifier
+     * @return CollectionRoleInterface
      */
-    protected function _getModel($identifier)
+    protected function getModel($identifier)
     {
         return CollectionRole::fetchByName($identifier);
     }

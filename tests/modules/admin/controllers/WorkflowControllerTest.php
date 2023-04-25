@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,50 +25,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Person;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Model\ModelException;
+use Opus\Common\Person;
 
 /**
- * Class Admin_WorkflowControllerTest.
- *
  * @covers Admin_WorkflowController
  */
 class Admin_WorkflowControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     private function enablePublishNotification()
     {
-        $config = $this->getConfig();
+        $config                                             = $this->getConfig();
         $config->notification->document->published->enabled = self::CONFIG_VALUE_TRUE;
-        $config->notification->document->published->email = "published@localhost";
+        $config->notification->document->published->email   = "published@localhost";
     }
 
+    /**
+     * @param string $submitterMail
+     * @param string $authorMail
+     * @return DocumentInterface
+     * @throws ModelException
+     */
     private function createDocWithSubmitterAndAuthor($submitterMail, $authorMail)
     {
         $doc = $this->createTestDocument();
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("John");
         $author->setLastName("Doe");
-        if ($author != '') {
+        if ($author !== '') {
             $author->setEmail($authorMail);
         }
         $doc->addPersonAuthor($author);
 
-        $submitter = new Person();
+        $submitter = Person::new();
         $submitter->setFirstName("John");
         $submitter->setLastName("Submitter");
-        if ($submitterMail != '') {
+        if ($submitterMail !== '') {
             $submitter->setEmail($submitterMail);
         }
         $doc->addPersonSubmitter($submitter);
@@ -93,10 +96,10 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
      */
     public function testDeleteActionConfirmNo()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
-                    'sureno' => 'sureno'
+                    'sureno' => 'sureno',
                 ]);
         $this->dispatch('/admin/workflow/changestate/docId/24/targetState/deleted');
         $this->assertModule('admin');
@@ -113,10 +116,10 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
      */
     public function testDeleteActionConfirmYes()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
-                    'sureyes' => 'sureyes'
+                    'sureyes' => 'sureyes',
                 ]);
         $this->dispatch('/admin/workflow/changestate/docId/102/targetState/deleted');
         $this->assertModule('admin');
@@ -156,10 +159,10 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $document->setServerState('deleted');
         $documentId = $document->store();
 
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
-                    'sureno' => 'sureno'
+                    'sureno' => 'sureno',
                 ]);
         $this->dispatch('/admin/workflow/changestate/docId/' . $documentId . '/targetState/removed');
         $this->assertModule('admin');
@@ -176,10 +179,10 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
      */
     public function testPublishActionConfirmYes()
     {
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost([
-                    'sureyes' => 'sureyes'
+                    'sureyes' => 'sureyes',
                 ]);
         $this->dispatch('/admin/workflow/changestate/docId/100/targetState/published');
         $this->assertModule('admin');
@@ -208,11 +211,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/document/index/id/100');
 
         $this->assertFalse(
-            $this->getResponse()->getHttpResponseCode() == 200,
+            $this->getResponse()->getHttpResponseCode() === 200,
             "Request was not redirected."
         );
         $this->assertTrue(
-            $this->getResponse()->getHttpResponseCode() != 500,
+            $this->getResponse()->getHttpResponseCode() !== 500,
             "Request produced internal error. " . $this->getResponse()->getBody()
         );
     }
@@ -228,7 +231,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), '<span>123') == 0);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), '<span>123') === 0);
     }
 
     /**
@@ -243,11 +246,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/document/index/id/123');
 
         $this->assertFalse(
-            $this->getResponse()->getHttpResponseCode() == 200,
+            $this->getResponse()->getHttpResponseCode() === 200,
             "Request was not redirected."
         );
         $this->assertTrue(
-            $this->getResponse()->getHttpResponseCode() != 500,
+            $this->getResponse()->getHttpResponseCode() !== 500,
             "Request produced internal error."
         );
     }
@@ -264,11 +267,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 
         $this->assertFalse(
-            $this->getResponse()->getHttpResponseCode() == 200,
+            $this->getResponse()->getHttpResponseCode() === 200,
             "Request was not redirected."
         );
         $this->assertTrue(
-            $this->getResponse()->getHttpResponseCode() != 500,
+            $this->getResponse()->getHttpResponseCode() !== 500,
             "Request produced internal error. " . $this->getResponse()->getBody()
         );
     }
@@ -285,11 +288,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 
         $this->assertFalse(
-            $this->getResponse()->getHttpResponseCode() == 200,
+            $this->getResponse()->getHttpResponseCode() === 200,
             "Request was not redirected."
         );
         $this->assertTrue(
-            $this->getResponse()->getHttpResponseCode() != 500,
+            $this->getResponse()->getHttpResponseCode() !== 500,
             "Request produced internal error. " . $this->getResponse()->getBody()
         );
     }
@@ -386,18 +389,18 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
             'author@localhost.de'
         );
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("AFN");
         $author->setLastName("ALN");
         $author->setEmail("A@localhost.de");
         $doc->addPersonAuthor($author);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("BFN");
         $author->setLastName("BLN");
         $doc->addPersonAuthor($author);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName("CFN");
         $author->setLastName("CLN");
         $author->setEmail("C@localhost.de");
@@ -437,7 +440,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
     public function testConfirmationDisabled()
     {
         $this->adjustConfiguration([
-            'confirmation' => ['document' => ['statechange' => ['enabled' => self::CONFIG_VALUE_FALSE]]]
+            'confirmation' => ['document' => ['statechange' => ['enabled' => self::CONFIG_VALUE_FALSE]]],
         ]);
 
         $this->dispatch('/admin/workflow/changestate/docId/102/targetState/deleted');

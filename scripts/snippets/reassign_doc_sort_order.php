@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Series;
+use Opus\Common\Document;
+use Opus\Common\Series;
 
 /**
- *
  * Setzt die interne Sortierreihenfolge (doc_sort_order) für die einer
  * Schriftenreihe zugeordneten Dokumente auf Basis der vergebenenen Bandnummern
  * neu.
@@ -44,7 +42,6 @@ use Opus\Series;
  * neu zugeordnet. Als Sortierkriterium wird dabei die existierende Bandnummer
  * betrachtet. Sind alle Bandnummern numerisch, so wird numerisch nach
  * Bandnummer sortiert; andernfalls lexikographisch nach Bandnummer.
- *
  */
 
 foreach (Series::getAll() as $series) {
@@ -90,7 +87,7 @@ foreach (Series::getAll() as $series) {
 
     $seriesCounter = 0;
     foreach ($seriesNumbers as $docId => $seriesNumber) {
-        $doc = Document::get($docId);
+        $doc       = Document::get($docId);
         $allSeries = $doc->getSeries();
         $doc->setSeries([]);
         $doc->store();

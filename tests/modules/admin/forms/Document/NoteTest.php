@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,21 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Note;
+use Opus\Common\Document;
+use Opus\Common\Note;
 
 /**
  * Description of Document_NoteTest
  */
 class Admin_Form_Document_NoteTest extends ControllerTestCase
 {
-
     public function testCreateForm()
     {
         $form = new Admin_Form_Document_Note();
@@ -56,7 +54,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Note();
 
-        $note = new Note();
+        $note = Note::new();
         $note->setMessage('Message1');
         $note->setVisibility('public');
 
@@ -79,7 +77,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
         $form->getElement('Message')->setValue('Test Message');
         $form->getElement('Visibility')->setChecked(true);
 
-        $note = new Note();
+        $note = Note::new();
 
         $form->updateModel($note);
 
@@ -134,7 +132,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
 
         $post = [
             'Visibility' => '0',
-            'Message' => ''
+            'Message'    => '',
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -146,7 +144,7 @@ class Admin_Form_Document_NoteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Note();
 
-        $note = new Note();
+        $note = Note::new();
         $note->setMessage('Message1');
         $note->setVisibility('public');
 

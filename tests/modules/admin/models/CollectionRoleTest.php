@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,28 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 
 class Admin_Model_CollectionRoleTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var int */
     private $collectionRoleId;
 
-    private $moveTestColId = null;
+    /** @var int */
+    private $moveTestColId;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $collectionRole = new CollectionRole();
+        $collectionRole = CollectionRole::new();
         $collectionRole->setName('TestCollectionRole-Name');
         $collectionRole->setOaiName('TestCollectionRole-OaiName');
         $collectionRole->setVisible(1);
@@ -59,13 +60,13 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
         $this->collectionRoleId = $collectionRole->store();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        $collectionRole = new CollectionRole($this->collectionRoleId);
+        $collectionRole = CollectionRole::get($this->collectionRoleId);
         $collectionRole->delete();
 
-        if (! is_null($this->moveTestColId)) {
-            $collectionRole = new CollectionRole($this->moveTestColId);
+        if ($this->moveTestColId !== null) {
+            $collectionRole = CollectionRole::get($this->moveTestColId);
             $collectionRole->delete();
         }
 
@@ -83,7 +84,7 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
 
     public function testConstructModelWithNull()
     {
-        $model = new Admin_Model_CollectionRole();
+        $model          = new Admin_Model_CollectionRole();
         $collectionRole = $model->getObject();
         $this->assertEquals(1, $collectionRole->getVisible());
         $this->assertEquals(1, $collectionRole->getVisibleBrowsingStart());
@@ -91,30 +92,24 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
         $this->assertEquals(1, $collectionRole->getVisibleOai());
     }
 
-    /**
-     * @expectedException Admin_Model_Exception
-     * @expectedExceptionMessage missing parameter roleid
-     */
     public function testConstructModelWithEmptyParameter()
     {
+        $this->expectException(Admin_Model_Exception::class);
+        $this->expectExceptionMessage('missing parameter roleid');
         $model = new Admin_Model_CollectionRole('');
     }
 
-    /**
-     * @expectedException Admin_Model_Exception
-     * @expectedExceptionMessage roleid parameter value unknown
-     */
     public function testConstructModelWithUnknownId()
     {
+        $this->expectException(Admin_Model_Exception::class);
+        $this->expectExceptionMessage('roleid parameter value unknown');
         $model = new Admin_Model_CollectionRole(2222);
     }
 
-    /**
-     * @expectedException Admin_Model_Exception
-     * @expectedExceptionMessage roleid parameter value unknown
-     */
     public function testContructModelWithBadParameter()
     {
+        $this->expectException(Admin_Model_Exception::class);
+        $this->expectExceptionMessage('roleid parameter value unknown');
         $model = new Admin_Model_CollectionRole('noId');
     }
 
@@ -138,7 +133,7 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
 
         $model->setVisibility(true);
 
-        $collectionRole = new CollectionRole($this->collectionRoleId);
+        $collectionRole = CollectionRole::get($this->collectionRoleId);
 
         $this->assertEquals(1, $collectionRole->getVisible());
     }
@@ -153,14 +148,14 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase
 
         $model->setVisibility(false);
 
-        $collectionRole = new CollectionRole($this->collectionRoleId);
+        $collectionRole = CollectionRole::get($this->collectionRoleId);
 
         $this->assertEquals(0, $collectionRole->getVisible());
     }
 
     public function testMove()
     {
-        $colRole = new CollectionRole();
+        $colRole = CollectionRole::new();
         $colRole->setName('MoveTestColRole-Name');
         $colRole->setOaiName('MoveTestColRole-OaiName');
         $colRole->setDisplayFrontdoor('Number');

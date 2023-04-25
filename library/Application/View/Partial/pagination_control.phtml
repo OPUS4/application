@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Review
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO remove display decision from script
  * TODO on/off switch for numbered pages
  */
+
 ?>
 
 <?PHP if ($this->pageCount > 1) : ?>
@@ -52,7 +51,7 @@
 
         <!-- Numbered page links -->
         <?php foreach ($this->pagesInRange as $page) : ?>
-            <?php if ($page != $this->current) : ?>
+            <?php if ($page !== $this->current) : ?>
                 <li><a href="<?= $this->url(['page' => $page]) ?>"><?= $page ?></a></li>
             <?php else : ?>
                 <li class="currentPage"><?= $page ?></li>

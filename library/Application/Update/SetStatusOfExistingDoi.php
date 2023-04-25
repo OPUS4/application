@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Scripts
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Document;
+use Opus\Common\Repository;
 
 /**
  * Set registration status of all existing DOIs to "registered".
@@ -40,7 +38,6 @@ use Opus\Repository;
  */
 class Application_Update_SetStatusOfExistingDoi extends Application_Update_PluginAbstract
 {
-
     public function run()
     {
         $this->log('Set registration status of all DOIs to "registered"');

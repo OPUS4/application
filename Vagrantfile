@@ -2,10 +2,10 @@
 # vi: set ft=ruby :
 
 $software = <<SCRIPT
-# Downgrade to PHP 7.1
+# Downgrade to PHP 8.1
 apt-add-repository -y ppa:ondrej/php
 apt-get -yq update
-apt-get -yq install php7.1
+apt-get -yq install php8.1
 
 # Install MYSQL
 debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
@@ -13,19 +13,20 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 apt-get -yq install mysql-server
 
 # Install required PHP packages
-apt-get -yq install php7.1-dom
-apt-get -yq install php7.1-mbstring
-apt-get -yq install php7.1-intl
-apt-get -yq install php7.1-gd
-apt-get -yq install php7.1-mcrypt
-apt-get -yq install php7.1-curl
-apt-get -yq install php7.1-zip
-apt-get -yq install php7.1-mysql
+apt-get -yq install php8.1-dom
+apt-get -yq install php8.1-mbstring
+apt-get -yq install php8.1-intl
+apt-get -yq install php8.1-gd
+apt-get -yq install php8.1-mcrypt
+apt-get -yq install php8.1-curl
+apt-get -yq install php8.1-zip
+apt-get -yq install php8.1-mysql
 
 # Install Java
 apt-get -yq install openjdk-11-jdk
 
 # Install required tools
+apt-get -yq install texlive-xetex
 apt-get -yq install libxml2-utils
 apt-get -yq install ant
 SCRIPT
@@ -35,6 +36,19 @@ $pandoc = <<SCRIPT
 cd /home/vagrant
 wget https://github.com/jgm/pandoc/releases/download/2.17.1.1/pandoc-2.17.1.1-1-amd64.deb
 dpkg -i pandoc-2.17.1.1-1-amd64.deb
+SCRIPT
+
+$fonts = <<SCRIPT
+# Install "Open Sans" font family (available under the Apache License v.2.0 at
+# https://fonts.google.com/specimen/Open+Sans) to be used for PDF cover generation
+# by cover templates (e.g., in application/configs/covers or tests/resources/covers)
+mkdir -p /usr/share/fonts/opentype
+cd /home/vagrant
+wget https://fonts.google.com/download?family=Open%20Sans -O Open_Sans.zip
+unzip -o Open_Sans.zip -d Open_Sans
+cp -r /home/vagrant/Open_Sans/static/OpenSans/ /usr/share/fonts/opentype/
+apt-get -yq install fontconfig
+fc-cache -f -v
 SCRIPT
 
 $composer = <<SCRIPT
@@ -56,8 +70,12 @@ cd /home/vagrant/solr-7.7.2
 mkdir -p server/solr/opus4/conf
 echo name=opus4 > server/solr/opus4/core.properties
 cd server/solr/opus4/conf/
-ln -s /vagrant/vendor/opus4-repo/search/conf/schema.xml schema.xml
-ln -s /vagrant/vendor/opus4-repo/search/conf/solrconfig.xml solrconfig.xml
+if test ! -f "schema.xml"; then
+  ln -s /vagrant/vendor/opus4-repo/search/conf/schema.xml schema.xml
+fi
+if test ! -f "solrconfig.xml"; then
+  ln -s /vagrant/vendor/opus4-repo/search/conf/solrconfig.xml solrconfig.xml
+fi
 # cd /home/vagrant/solr-7.7.2
 # ./bin/solr start
 SCRIPT
@@ -74,7 +92,9 @@ if test ! -f "apache.conf"; then
   BASEDIR="/vagrant"
   sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "apache24.conf.template" > "apache.conf"
 fi
-ln -s /vagrant/apacheconf/apache.conf /etc/apache2/sites-available/opus4.conf
+if test ! -f "/etc/apache2/sites-available/opus4.conf"; then
+  ln -s /vagrant/apacheconf/apache.conf /etc/apache2/sites-available/opus4.conf
+fi
 a2enmod rewrite
 a2ensite opus4
 service apache2 restart
@@ -125,7 +145,7 @@ echo "You can use 'ant reset-testdata' to reinitialize the database."
 SCRIPT
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/ubuntu-20.04"
+  config.vm.box = "bento/ubuntu-22.04"
 
   config.vm.synced_folder "workspace", "/vagrant/workspace", group: "www-data", create: true
 
@@ -134,6 +154,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "Install required software...", type: "shell", inline: $software
   config.vm.provision "Install pandoc...", type: "shell", inline: $pandoc
+  config.vm.provision "Install fonts...", type: "shell", inline: $fonts
   config.vm.provision "Install Composer dependencies...", type: "shell", privileged: false, inline: $composer
   config.vm.provision "Install Apache Solr...", type: "shell", privileged: false, inline: $solr
   config.vm.provision "Create database...", type: "shell", inline: $database

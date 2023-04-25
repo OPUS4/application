@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,21 +25,23 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Controller_Action_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Controller_Action_Helper_RenderForm extends \Zend_Controller_Action_Helper_Abstract
+class Application_Controller_Action_Helper_RenderForm extends Zend_Controller_Action_Helper_Abstract
 {
-
+    /**
+     * @param Zend_Form $form
+     */
     public function direct($form)
     {
-        return $this->renderForm($form);
+        $this->renderForm($form);
     }
 
+    /**
+     * @param Zend_Form $form
+     */
     public function renderForm($form)
     {
         $controller = $this->getActionController();
@@ -53,11 +56,12 @@ class Application_Controller_Action_Helper_RenderForm extends \Zend_Controller_A
 
     /**
      * Prueft, ob fuer die Action ein View Script existiert.
+     *
      * @return bool
      */
     public function isViewScriptPresent()
     {
         $controller = $this->getActionController();
-        return (! $controller->view->getScriptPath($controller->getHelper('ViewRenderer')->getViewScript())) ? false : true;
+        return ! $controller->view->getScriptPath($controller->getHelper('ViewRenderer')->getViewScript()) ? false : true;
     }
 }

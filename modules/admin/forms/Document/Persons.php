@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,40 +25,44 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Unterformular fuer die mit einem Dokument verknuepften Personen.
  */
 class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm
 {
-
     /**
      * Button, um die Sortierung der Personen auszulösen nachdem die SortOrder Werte editiert wurden.
      *
      * Der Button muss nicht verwendet werden, dient aber dazu dem Nutzer eine Möglichkeit zu geben das Ergebnis der
      * Sortierung zu überprüfen, bevor das Dokument gespeichert wird.
      */
-    const ELEMENT_SORT = 'Sort';
+    public const ELEMENT_SORT = 'Sort';
 
     /**
      * Button zum Hinzufügen einer Person zum Dokument.
      */
-    const ELEMENT_ADD = 'Add';
+    public const ELEMENT_ADD = 'Add';
 
     /**
      * Bestimmt die Reihenfolge der Sektionen für die einzelnen Rollen.
+     *
      * @var array
      */
-    private static $_personRoles = [
-        'author', 'editor', 'translator', 'contributor', 'other', 'advisor', 'referee', 'submitter'
+    private static $personRoles = [
+        'author',
+        'editor',
+        'translator',
+        'contributor',
+        'other',
+        'advisor',
+        'referee',
+        'submitter',
     ];
 
     /**
@@ -75,23 +80,22 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm
             'submit',
             'Sort',
             [
-                'label' => 'admin_button_sort',
-                'decorators' => [],
-                'disableLoadDefaultDecorators' => true
+                'label'                        => 'admin_button_sort',
+                'decorators'                   => [],
+                'disableLoadDefaultDecorators' => true,
             ]
         );
 
         $this->getDecorator('FieldsetWithButtons')->setLegendButtons(['Sort']);
 
-        foreach (self::$_personRoles as $roleName) {
+        foreach (self::$personRoles as $roleName) {
             $subform = new Admin_Form_Document_PersonRole($roleName);
             $this->addSubForm($subform, $roleName);
         }
     }
 
     /**
-     *
-     * @param Document $model
+     * @param DocumentInterface $document
      */
     public function populateFromModel($document)
     {
@@ -107,13 +111,14 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm
      *
      * Die Teilbereiche des POST werden an die entsprechenden Unterformulare weitergereicht.
      *
-     * @param array $post
+     * @param array                  $post
+     * @param DocumentInterface|null $document
      */
     public function constructFromPost($post, $document = null)
     {
         foreach ($post as $key => $data) {
             $subform = $this->getSubForm($key);
-            if (! is_null($subform)) {
+            if ($subform !== null) {
                 $subform->constructFromPost($data, $document);
             }
         }
@@ -121,24 +126,26 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Verarbeitet einen POST um die notwendigen Aktionen zu ermitteln.
-     * @param array $data POST Daten fur dieses Formular
+     *
+     * @param array $post POST Daten fur dieses Formular
      * @param array $context Komplette POST Daten
+     * @return array|string|null
      */
     public function processPost($post, $context)
     {
         foreach ($post as $index => $data) {
             $subform = $this->getSubForm($index);
-            if (! is_null($subform)) {
+            if ($subform !== null) {
                 $result = $subform->processPost($data, $context);
 
-                if (! is_null($result)) {
-                    $action = (is_array($result)) ? $result['result'] : $result;
+                if ($result !== null) {
+                    $action = is_array($result) ? $result['result'] : $result;
 
                     switch ($action) {
                         case Admin_Form_Document_PersonRoles::RESULT_CHANGE_ROLE:
-                            $role = $result['role'];
+                            $role        = $result['role'];
                             $subFormName = $result['subformName'];
-                            $personForm = $subform->getSubForm($subFormName);
+                            $personForm  = $subform->getSubForm($subFormName);
                             $subform->removeSubForm($subFormName);
                             $this->getSubForm($role)->addSubFormForPerson($personForm); // TODO Seiteneffekte?
                             $result = Admin_Form_Document::RESULT_SHOW;
@@ -165,25 +172,25 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm
     /**
      * Wird nach dem Rücksprung von Add/Edit Seite für Person aufgerufen, um das Ergebnis ins Formular einzubringen.
      *
-     * @param type $request
-     * @param Admin_Model_DocumentEditSession $session
+     * @param Zend_Controller_Request_Http         $request
+     * @param null|Admin_Model_DocumentEditSession $session
      */
     public function continueEdit($request, $session = null)
     {
         $addedPersons = $session->retrievePersons();
 
-        if (count($addedPersons) == 0) {
+        if (count($addedPersons) === 0) {
             $action = $request->getParam('continue', null);
 
             if ($action === 'addperson') {
                 $personId = $request->getParam('person', null);
 
-                if (! is_null($personId)) {
+                if ($personId !== null) {
                     $addedPersons[] = [
-                        'person' => $personId,
-                        'role' => $request->getParam('role', 'author'),
+                        'person'  => $personId,
+                        'role'    => $request->getParam('role', 'author'),
                         'contact' => $request->getParam('contact', 'false'),
-                        'order' => $request->getParam('order', null)
+                        'order'   => $request->getParam('order', null),
                     ];
                 } else {
                     $this->getLogger()->err(__METHOD__ . ' Attempt to add person without ID.');
@@ -201,21 +208,22 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm
      *
      * Wenn keine Rolle angegeben wurde, wird 'other' verwendet. Das war eine willkürliche Entscheidung.
      *
-     * @param array $person
+     * @param array $personProps
      */
     public function addPerson($personProps)
     {
-        $role = (isset($personProps['role'])) ? $personProps['role'] : 'other';
+        $role = $personProps['role'] ?? 'other';
 
         $subform = $this->getSubFormForRole($role);
 
-        if ($subform != null) {
+        if ($subform !== null) {
             $subform->addPerson($personProps);
         }
     }
 
     /**
      * Liefert das Unterformular für eine Rolle.
+     *
      * @param string $role
      * @return Admin_Form_Document_PersonRole
      */
@@ -226,12 +234,13 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * Liefert Array mit vom Datemmodell erlaubten Rollen.
+     *
      * @return array
      *
      * TODO wohin?
      */
     public static function getRoles()
     {
-        return self::$_personRoles;
+        return self::$personRoles;
     }
 }

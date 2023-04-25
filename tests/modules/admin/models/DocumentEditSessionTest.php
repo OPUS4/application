@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
 {
-
     public function testCreateModel()
     {
         $model = new Admin_Model_DocumentEditSession(146);
@@ -41,7 +39,8 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
 
     public function testCreateModelWithBadId()
     {
-        $this->setExpectedException(\InvalidArgumentException::class, 'mit document ID \'-1\' aufgerufen');
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('mit document ID \'-1\' aufgerufen');
         new Admin_Model_DocumentEditSession(-1);
     }
 
@@ -50,10 +49,10 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
         $model = new Admin_Model_DocumentEditSession(146);
 
         $props = [
-            'person' => 310,
-            'role' => 'author',
-            'order' => 2,
-            'contact' => 1
+            'person'  => 310,
+            'role'    => 'author',
+            'order'   => 2,
+            'contact' => 1,
         ];
 
         $this->assertEquals(0, $model->getPersonCount());
@@ -70,10 +69,10 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
         $this->assertEmpty($model->retrievePersons());
 
         $props = [
-            'person' => 310,
-            'role' => 'author',
-            'order' => 2,
-            'contact' => 1
+            'person'  => 310,
+            'role'    => 'author',
+            'order'   => 2,
+            'contact' => 1,
         ];
 
         $model->addPerson($props);
@@ -89,12 +88,12 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
         $model = new Admin_Model_DocumentEditSession(146);
 
         $post = [
-            'key1' => 'value1',
-            'key2' => 'value2',
+            'key1'     => 'value1',
+            'key2'     => 'value2',
             'subform1' => [
                 'key1' => 'value1',
-                'key2' => 'value2'
-            ]
+                'key2' => 'value2',
+            ],
         ];
 
         $model->storePost($post);
@@ -110,12 +109,12 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
         $model = new Admin_Model_DocumentEditSession(146);
 
         $post = [
-            'key1' => 'value1',
-            'key2' => 'value2',
+            'key1'     => 'value1',
+            'key2'     => 'value2',
             'subform1' => [
                 'key1' => 'value1',
-                'key2' => 'value2'
-            ]
+                'key2' => 'value2',
+            ],
         ];
 
         $model->storePost($post, 'files');

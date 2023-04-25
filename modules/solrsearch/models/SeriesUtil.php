@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,22 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
+use Opus\Common\Series;
 
-/**
- */
 class Solrsearch_Model_SeriesUtil extends Application_Model_Abstract
 {
-
     /**
      * Checks if any series is available for display in browsing.
+     *
      * @return bool Number of displayable series
      */
     public function hasDisplayableSeries()
@@ -56,7 +52,7 @@ class Solrsearch_Model_SeriesUtil extends Application_Model_Abstract
     {
         $visibleSeries = [];
         foreach (Series::getAllSortedBySortKey() as $series) {
-            if ($series->getVisible() == '1' && $series->getNumOfAssociatedPublishedDocuments() > 0) {
+            if ($series->getVisible() && $series->getNumOfAssociatedPublishedDocuments() > 0) {
                 array_push($visibleSeries, $series);
             }
         }
@@ -79,8 +75,10 @@ class Solrsearch_Model_SeriesUtil extends Application_Model_Abstract
 
         $config = $this->getConfig();
 
-        if (isset($config->browsing->series->sortByTitle) &&
-            filter_var($config->browsing->series->sortByTitle, FILTER_VALIDATE_BOOLEAN)) {
+        if (
+            isset($config->browsing->series->sortByTitle) &&
+            filter_var($config->browsing->series->sortByTitle, FILTER_VALIDATE_BOOLEAN)
+        ) {
             usort($allSeries, function ($value1, $value2) {
                     return strnatcmp($value1['title'], $value2['title']);
             });

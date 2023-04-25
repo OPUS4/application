@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,30 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Import
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018-2019
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Import_ZipPackageReader extends Application_Import_PackageReader
+interface Application_Security_AccessControlInterface
 {
-    protected function extractPackage($dirName)
-    {
-        $filename = $dirName . DIRECTORY_SEPARATOR . 'package.zip';
-        $this->getLogger()->info('processing ZIP package in file system ' . $filename);
-
-        if (! is_readable($filename)) {
-            $errMsg = 'ZIP package ' . $filename . ' is not readable!';
-            $this->getLogger()->err($errMsg);
-            throw new Exception($errMsg);
-        }
-
-        $zip = new ZipArchive();
-        $zip->open($filename);
-        $zip->extractTo($dirName . DIRECTORY_SEPARATOR . self::EXTRACTION_DIR_NAME);
-        $zip->close();
-    }
+    /**
+     * @param string $resource
+     * @return bool
+     */
+    public function accessAllowed($resource);
 }

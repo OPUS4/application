@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,21 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Title;
+use Opus\Common\Document;
+use Opus\Common\Title;
 
 /**
  * Unit Tests für Metadaten-Formular Klasse.
  */
 class Admin_Form_DocumentTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testConstructForm()
@@ -62,7 +61,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
             'Licences',
             'Patents',
             'Notes',
-            'Actions'
+            'Actions',
         ];
 
         $this->verifySubForms($form, $subformNames);
@@ -112,8 +111,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase
 
         $post = [
             'ActionBox' => [
-                'Save' => 'Speichern'
-            ]
+                'Save' => 'Speichern',
+            ],
         ];
 
         $this->assertEquals(Admin_Form_Document::RESULT_SAVE, $form->processPost($post, $post));
@@ -126,10 +125,10 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $request = $this->getRequest();
         $request->setParams([
             'continue' => 'addperson',
-            'person' => '310',
-            'role' => 'editor',
-            'order' => '2',
-            'contact' => '0'
+            'person'   => '310',
+            'role'     => 'editor',
+            'order'    => '2',
+            'contact'  => '0',
         ]);
 
         $session = new Admin_Model_DocumentEditSession(100);
@@ -153,26 +152,26 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Title());
+        $document->addTitleMain(Title::new());
 
         $form->populateFromModel($document);
 
         $post = [
             'General' => [
                 'Language' => 'deu',
-                'Type' => 'all'
+                'Type'     => 'all',
             ],
-            'Titles' => [
+            'Titles'  => [
                 'Main' => [
                     'TitleMain0' => [
                         'Language' => 'deu',
-                        'Value' => 'Deutscher Titel'
-                    ]
-                ]
+                        'Value'    => 'Deutscher Titel',
+                    ],
+                ],
             ],
             'Actions' => [
-                'OpusHash' => $this->getHash($form)
-            ]
+                'OpusHash' => $this->getHash($form),
+            ],
         ];
 
         $result = $form->isValid($post, $post);
@@ -189,26 +188,26 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Title());
+        $document->addTitleMain(Title::new());
 
         $form->populateFromModel($document);
 
         $post = [
             'General' => [
                 'Language' => 'deu',
-                'Type' => 'all'
+                'Type'     => 'all',
             ],
-            'Titles' => [
+            'Titles'  => [
                 'Main' => [
                     'TitleMain0' => [
                         'Language' => 'deu',
-                        'Value' => ''
-                    ]
-                ]
+                        'Value'    => '',
+                    ],
+                ],
             ],
             'Actions' => [
-                'OpusHash' => $this->getHash($form)
-            ]
+                'OpusHash' => $this->getHash($form),
+            ],
         ];
 
         $result = $form->isValid($post, $post);
@@ -229,26 +228,26 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Title());
+        $document->addTitleMain(Title::new());
 
         $form->populateFromModel($document);
 
         $post = [
             'General' => [
                 'Language' => 'deu',
-                'Type' => 'all'
+                'Type'     => 'all',
             ],
-            'Titles' => [
+            'Titles'  => [
                 'Main' => [
                     'TitleMain0' => [
                         'Language' => 'eng',
-                        'Value' => 'English Title'
-                    ]
-                ]
+                        'Value'    => 'English Title',
+                    ],
+                ],
             ],
             'Actions' => [
-                'OpusHash' => $this->getHash($form)
-            ]
+                'OpusHash' => $this->getHash($form),
+            ],
         ];
 
         $result = $form->isValid($post, $post);
@@ -269,31 +268,31 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-        $document->addTitleMain(new Title());
-        $document->addTitleMain(new Title());
+        $document->addTitleMain(Title::new());
+        $document->addTitleMain(Title::new());
 
         $form->populateFromModel($document);
 
         $post = [
             'General' => [
                 'Language' => 'deu',
-                'Type' => 'all'
+                'Type'     => 'all',
             ],
-            'Titles' => [
+            'Titles'  => [
                 'Main' => [
                     'TitleMain0' => [
                         'Language' => 'eng',
-                        'Value' => 'English Title'
+                        'Value'    => 'English Title',
                     ],
                     'TitleMain1' => [
                         'Language' => 'rus',
-                        'Value' => ''
-                    ]
-                ]
+                        'Value'    => '',
+                    ],
+                ],
             ],
             'Actions' => [
-                'OpusHash' => $this->getHash($form)
-            ]
+                'OpusHash' => $this->getHash($form),
+            ],
         ];
 
         $result = $form->isValid($post, $post);
@@ -343,7 +342,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
             'Licences',
             'Patents',
             'Notes',
-            'Files'
+            'Files',
         ]);
     }
 
@@ -375,6 +374,10 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $this->verifySubForms($form, ['ActionBox', 'InfoBox', 'Bibliographic', 'IdentifiersAll']);
     }
 
+    /**
+     * @param Zend_Form $form
+     * @param string[]  $names
+     */
     protected function verifySubForms($form, $names)
     {
         $this->assertEquals(count($names), count($form->getSubForms()));
@@ -384,9 +387,13 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         }
     }
 
+    /**
+     * @param Zend_Form $form
+     * @return mixed
+     */
     protected function getHash($form)
     {
-        $session = new \Zend_Session_Namespace('testing');
+        $session = new Zend_Session_Namespace('testing');
 
         $hashElement = $form->getSubForm('Actions')->getElement('OpusHash');
         $hashElement->setSession($session);

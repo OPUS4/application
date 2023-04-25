@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,18 +25,20 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Xslt
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_View_Helper_ExportLinksEnabled extends Application_View_Helper_Abstract
 {
-
+    /**
+     * @param string|null $context
+     * @return bool
+     * @throws Zend_Exception
+     */
     public function exportLinksEnabled($context = null)
     {
-        $exporter = \Zend_Registry::get('Opus_Exporter'); // TODO use constant
+        $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use constant
 
         $formats = $exporter->getAllowedFormats();
 
@@ -43,7 +46,7 @@ class Application_View_Helper_ExportLinksEnabled extends Application_View_Helper
 
         foreach ($formats as $format) {
             // if context provided skip format if it has been set to false
-            if (is_null($context) || $format->get($context) !== false) {
+            if ($context === null || $format->get($context) !== false) {
                 $formatsInContext[] = $format;
             }
         }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,11 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Doreen Thiede <thiede@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 /**
  * Dieses Skript gibt alle IDs der Dokumente zurück, die keinen Titel
  * in der Sprache des Dokuments besitzen.
@@ -38,17 +38,17 @@
  *  TODO integrity check (where to put it?) - should be part of problem analysis package
  */
 
-use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Document;
+use Opus\Common\Repository;
 
 $updateRequired = 0;
-$docfinder = Repository::getInstance()->getDocumentFinder();
+$docfinder      = Repository::getInstance()->getDocumentFinder();
 foreach ($docfinder->getIds() as $docId) {
     $doc = Document::get($docId);
 
     foreach ($doc->getTitleMain() as $title) {
         $titleLanguage = $title->getLanguage();
-        $docLanguage = $doc->getLanguage();
+        $docLanguage   = $doc->getLanguage();
     }
 
     $lang = strpbrk($docLanguage, $titleLanguage);
@@ -58,7 +58,7 @@ foreach ($docfinder->getIds() as $docId) {
     }
 }
 
-if ($updateRequired == 0) {
+if ($updateRequired === 0) {
     echo "Alle Dokumente wurden überprüft -- alles ok!\n";
 } else {
     echo "Alle Dokumente wurden überprüft -- Anzahl der Dokumente, die  keinen Titel in der Sprache des Dokuments"

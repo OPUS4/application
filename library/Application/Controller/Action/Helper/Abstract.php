@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,42 +24,42 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\LoggingTrait;
 
 /**
  * Basisklasse fuer OPUS 4 Controller Action Helper.
- *
- * @category    Application
- * @package     Application_Controller_Action_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-abstract class Application_Controller_Action_Helper_Abstract extends \Zend_Controller_Action_Helper_Abstract
+abstract class Application_Controller_Action_Helper_Abstract extends Zend_Controller_Action_Helper_Abstract
 {
+    use LoggingTrait;
 
-    use \Opus\LoggingTrait;
+    /** @var Zend_View_Interface */
+    private $view;
 
-    private $_view = null;
-
-    private $_config = null;
+    /** @var Zend_Config */
+    private $config;
 
     /**
      * Returns view if it has been set or tries to retrieve view from action controller.
      *
      * NOTE: This helps with unit tests.
      *
-     * @return null|\Zend_View_Interface
+     * @return null|Zend_View_Interface
      */
     public function getView()
     {
-        if (is_null($this->_view)) {
+        if ($this->view === null) {
             $controller = $this->getActionController();
-            if (! is_null($controller)) {
-                $this->_view = $controller->view;
+            if ($controller !== null) {
+                $this->view = $controller->view;
             }
         }
-        return $this->_view;
+        return $this->view;
     }
 
     /**
@@ -66,22 +67,24 @@ abstract class Application_Controller_Action_Helper_Abstract extends \Zend_Contr
      *
      * NOTE: This helps with unit tests.
      *
-     * @param $view
+     * @param Zend_View_Interface $view
      */
     public function setView($view)
     {
-        $this->_view = $view;
+        $this->view = $view;
     }
 
     /**
      * Returns application configuration.
+     *
+     * @return Zend_Config
      */
     public function getConfig()
     {
-        if (is_null($this->_config)) {
-            $this->_config = Application_Configuration::getInstance()->getConfig();
+        if ($this->config === null) {
+            $this->config = Application_Configuration::getInstance()->getConfig();
         }
 
-        return $this->_config;
+        return $this->config;
     }
 }

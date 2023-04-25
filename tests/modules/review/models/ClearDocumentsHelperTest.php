@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,25 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Person;
-use Opus\Date;
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Person;
+use Opus\Common\PersonInterface;
 
 class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
-    private $documentId = null;
-    private $person = null;
+    /** @var int */
+    private $documentId;
 
-    public function setUp()
+    /** @var PersonInterface */
+    private $person;
+
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -56,7 +60,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $this->assertEquals(0, count($document->getPersonReferee()));
         $this->assertEquals(0, count($document->getEnrichment()));
 
-        $person = new Person();
+        $person = Person::new();
         $person->setFirstName('John');
         $person->setLastName('Doe');
         $this->person = $person;
@@ -121,7 +125,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     {
         $helper = new Review_Model_ClearDocumentsHelper();
 
-        $this->setExpectedException('Opus\Model\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $helper->clear([$this->documentId + 100000], 23);
     }
 
@@ -129,7 +133,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
     {
         $helper = new Review_Model_ClearDocumentsHelper();
 
-        $this->setExpectedException('Opus\Model\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $helper->reject([$this->documentId + 100000], 23);
     }
 
@@ -177,18 +181,18 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 
         $this->assertNotNull($publishedDate);
 
-        $today = new DateTime('today');
+        $today             = new DateTime('today');
         $publishedDateTime = $publishedDate->getDateTime($today->getTimezone()->getName());
         $publishedDateTime->setTime(0, 0, 0);
 
-        $this->assertEquals(0, (integer)$today->diff($publishedDateTime)->format('%R%a'));
+        $this->assertEquals(0, (int) $today->diff($publishedDateTime)->format('%R%a'));
     }
 
     public function testPublishedDateIsNotOverwritten()
     {
         // set PublishedDate to yesterday
-        $document = Document::get($this->documentId);
-        $yesterday = new DateTime('yesterday');
+        $document     = Document::get($this->documentId);
+        $yesterday    = new DateTime('yesterday');
         $expectedDate = new Date($yesterday);
         $document->setPublishedDate($expectedDate);
         $document->store();

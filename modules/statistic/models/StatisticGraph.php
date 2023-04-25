@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,68 +25,105 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Statistic
- * @author      Birgit Dressler (b.dressler@sulb.uni-saarland.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Statistic_Model_StatisticGraph
 {
+    /** @var array|null */
+    protected $dataPdf;
 
-    protected $_dataPdf = null;
-    protected $_dataFrontdoor = null;
-    protected $_xaxis = 'x axis';
-    protected $_yaxis = 'y axis';
-    protected $_frontdoorLabel = 'frontdoor';
-    protected $_filesLabel = 'files';
-    protected $_title;
+    /** @var array|null */
+    protected $dataFrontdoor;
 
-    protected $_width = 330;
-    protected $_height = 200;
+    /** @var string */
+    protected $xaxis = 'x axis';
 
+    /** @var string */
+    protected $yaxis = 'y axis';
+
+    /** @var string */
+    protected $frontdoorLabel = 'frontdoor';
+
+    /** @var string */
+    protected $filesLabel = 'files';
+
+    /** @var string  */
+    protected $title;
+
+    /** @var int */
+    protected $width = 330;
+
+    /** @var int */
+    protected $height = 200;
+
+    /**
+     * @param string     $title
+     * @param array|null $dataPdf
+     * @param array|null $dataFrontdoor
+     */
     public function __construct($title = 'Statistic Graph', $dataPdf = null, $dataFrontdoor = null)
     {
-        $this->_title = $title;
-        $this->_dataPdf = $dataPdf;
-        $this->_dataFrontdoor = $dataFrontdoor;
+        $this->title         = $title;
+        $this->dataPdf       = $dataPdf;
+        $this->dataFrontdoor = $dataFrontdoor;
     }
 
+    /**
+     * @param string $title
+     */
     public function setXAxisTitle($title)
     {
-        $this->_xaxis = $title;
+        $this->xaxis = $title;
     }
 
+    /**
+     * @param string $title
+     */
     public function setYAxisTitle($title)
     {
-        $this->_yaxis = $title;
+        $this->yaxis = $title;
     }
 
+    /**
+     * @param string $title
+     */
     public function setTitle($title)
     {
-        $this->_title = $title;
+        $this->title = $title;
     }
 
+    /**
+     * @param int $width
+     * @param int $height
+     */
     public function setSize($width, $height)
     {
-        $this->_width = $width;
-        $this->_height = $height;
+        $this->width  = $width;
+        $this->height = $height;
     }
 
+    /**
+     * @param string $frontdoor
+     */
     public function setLegendFrontdoorLabel($frontdoor)
     {
-        $this->_frontdoorLabel = $frontdoor;
+        $this->frontdoorLabel = $frontdoor;
     }
 
+    /**
+     * @param string $files
+     */
     public function setLegendFilesLabel($files)
     {
-        $this->_filesLabel = $files;
+        $this->filesLabel = $files;
     }
 
     public function drawGraph()
     {
         // generate graphic
-        $graph = new \Graph($this->_width, $this->_height, "auto");
+        $graph = new Graph($this->width, $this->height, "auto");
         $graph->SetScale("textlin");
 
         // add shadow
@@ -95,11 +133,11 @@ class Statistic_Model_StatisticGraph
         $graph->img->SetMargin(40, 30, 20, 40);
         $graph->legend->Pos(0.05, 0.05, "right", "top");
         // generate bars
-        $bplot = new \BarPlot(array_values($this->_dataPdf));
-        $bplot->SetLegend($this->_filesLabel);
-        $bplotFrontdoor = new \BarPlot(array_values($this->_dataFrontdoor));
-        $bplotFrontdoor->SetLegend($this->_frontdoorLabel);
-        $gbplot  = new \GroupBarPlot([$bplot ,$bplotFrontdoor]);
+        $bplot = new BarPlot(array_values($this->dataPdf));
+        $bplot->SetLegend($this->filesLabel);
+        $bplotFrontdoor = new BarPlot(array_values($this->dataFrontdoor));
+        $bplotFrontdoor->SetLegend($this->frontdoorLabel);
+        $gbplot = new GroupBarPlot([$bplot, $bplotFrontdoor]);
         $graph->Add($gbplot);
 
         // format bars
@@ -124,10 +162,10 @@ class Statistic_Model_StatisticGraph
         $bplotFrontdoor->value->SetColor("darkgreen", "darkred");
 
         // format graphic
-        $graph->title->Set($this->_title);
-        $graph->xaxis->title->Set($this->_xaxis);
-        $graph->yaxis->title->Set($this->_yaxis);
-        $graph->xaxis->SetTickLabels(array_keys($this->_dataPdf));
+        $graph->title->Set($this->title);
+        $graph->xaxis->title->Set($this->xaxis);
+        $graph->yaxis->title->Set($this->yaxis);
+        $graph->xaxis->SetTickLabels(array_keys($this->dataPdf));
 
         $graph->title->SetFont(FF_FONT1, FS_BOLD);
         $graph->yaxis->title->SetFont(FF_FONT1, FS_BOLD);

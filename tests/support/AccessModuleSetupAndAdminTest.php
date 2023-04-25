@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,27 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var array */
     private $acls = [
-        'module_admin' => false,
-        'module_setup' => false,
+        'module_admin'          => false,
+        'module_setup'          => false,
         'controller_staticpage' => false,
-        'controller_helppage' => false,
-        'controller_language' => false
+        'controller_helppage'   => false,
+        'controller_language'   => false,
     ];
 
+    /**
+     * @param string|null $username
+     * @param string|null $password
+     * @param array|null  $acls
+     */
     public function setUpTests($username = null, $password = null, $acls = null)
     {
         $this->acls = $acls;
@@ -52,13 +58,17 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase
         $this->loginUser($username, $password);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->logoutUser();
         $this->restoreSecuritySetting();
         parent::tearDown();
     }
 
+    /**
+     * @param string $xpath
+     * @param bool   $present
+     */
     private function assertElement($xpath, $present = true)
     {
         if ($present) {
@@ -94,7 +104,6 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase
             );
         }
     }
-
 
     /**
      * Überprüft, ob auf die Seite zur Verwaltung von Lizenzen zugegriffen werden kann.
@@ -211,7 +220,6 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase
             );
         }
     }
-
 
     /**
      * Prüft, ob fuer Nutzer mit vollem Zugriff auf Admin Modul der Edit Link in der Frontdoor angezeigt wird.

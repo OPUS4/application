@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -34,29 +32,30 @@
 /**
  * Angepasste Klasse für Checkbox Formularelemente.
  */
-class Application_Form_Element_Checkbox extends \Zend_Form_Element_Checkbox implements Application_Form_IElement
+class Application_Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Application_Form_FormElementInterface
 {
+    /** @var string */
+    private $viewCheckedValue = 'Field_Value_True';
 
-    private $_viewCheckedValue = 'Field_Value_True';
-
-    private $_viewUncheckedValue = 'Field_Value_False';
+    /** @var string */
+    private $viewUncheckedValue = 'Field_Value_False';
 
     public function init()
     {
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators()
     {
-        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) === 0) {
             $this->setDecorators(
                 [
-                'ViewHelper',
-                'Errors',
-                'Description',
-                'ElementHtmlTag',
-                ['Label', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
-                [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']]
+                    'ViewHelper',
+                    'Errors',
+                    'Description',
+                    'ElementHtmlTag',
+                    ['Label', ['tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend']],
+                    [['dataWrapper' => 'HtmlTagWithId'], ['tag' => 'div', 'class' => 'data-wrapper']],
                 ]
             );
         }
@@ -69,12 +68,12 @@ class Application_Form_Element_Checkbox extends \Zend_Form_Element_Checkbox impl
             $viewHelper->setViewOnlyEnabled(true);
         }
         $translator = $this->getTranslator();
-        if (! is_null($translator)) {
-            $this->setCheckedValue($translator->translate($this->_viewCheckedValue));
-            $this->setUncheckedValue($translator->translate($this->_viewUncheckedValue));
+        if ($translator !== null) {
+            $this->setCheckedValue($translator->translate($this->viewCheckedValue));
+            $this->setUncheckedValue($translator->translate($this->viewUncheckedValue));
         } else {
-            $this->setCheckedValue($this->_viewCheckedValue);
-            $this->setUncheckedValue($this->_viewUncheckedValue);
+            $this->setCheckedValue($this->viewCheckedValue);
+            $this->setUncheckedValue($this->viewUncheckedValue);
         }
 
         $this->setChecked($this->getValue());
@@ -86,32 +85,46 @@ class Application_Form_Element_Checkbox extends \Zend_Form_Element_Checkbox impl
      * Hinweise sind wie Validierungsfehler, die aber das Abspeichern nicht verhindern und schon beim Aufruf des
      * Formulars für existierende Werte berechnet werden.
      *
-     * @return string
+     * @return null|string
      */
     public function getHint()
     {
         return null;
     }
 
+    /**
+     * @return string|null
+     */
     public function getViewCheckedValue()
     {
-        return $this->_viewCheckedValue;
+        return $this->viewCheckedValue;
     }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setViewCheckedValue($value)
     {
-        $this->_viewCheckedValue = $value;
+        $this->viewCheckedValue = $value;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getViewUncheckedValue()
     {
-        return $this->_viewUncheckedValue;
+        return $this->viewUncheckedValue;
     }
 
+    /**
+     * @param string $value
+     * @return $this
+     */
     public function setViewUncheckedValue($value)
     {
-        $this->_viewUncheckedValue = $value;
+        $this->viewUncheckedValue = $value;
         return $this;
     }
 }

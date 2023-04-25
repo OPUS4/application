@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,7 +24,13 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\Translate\TranslateException;
+use Opus\Common\Translate\UnknownTranslationKeyException;
 
 /**
  * Form element for editing translations.
@@ -32,29 +39,29 @@
  *
  * This is a special form element. Most forms
  *
- * @category    Application
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
  * TODO get value (?)
  * TODO validation
  * TODO should translation functions be added at model level (in framework)?
  */
-class Application_Form_Element_Translation extends \Zend_Form_Element_Multi
+class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 {
-
+    /** @var string */
     public $helper = 'formTranslation';
 
+    /**
+     * @var bool
+     * @phpcs:disable
+     */
     protected $_isArray = false;
+    // @phpcs:enable
 
+    /** @var string */
     private $key;
 
     public function init()
     {
         parent::init();
-        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', \Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
         $this->setRegisterInArrayValidator(false);
         $this->loadDefaultOptions();
     }
@@ -74,32 +81,40 @@ class Application_Form_Element_Translation extends \Zend_Form_Element_Multi
 
     public function loadDefaultDecorators()
     {
-        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+        if (! $this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) === 0) {
             $this->setDecorators([
                 'ViewHelper',
                 'ElementHtmlTag',
                 [
-                    'LabelNotEmpty', [
-                        'tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                        'disableFor' => true
-                    ]
+                    'LabelNotEmpty',
+                    [
+                        'tag'        => 'div',
+                        'tagClass'   => 'label',
+                        'placement'  => 'prepend',
+                        'disableFor' => true,
+                    ],
                 ],
                 [
-                    ['dataWrapper' => 'HtmlTagWithId'], [
-                        'tag' => 'div', 'class' => 'data-wrapper'
-                    ]
-                ]
+                    ['dataWrapper' => 'HtmlTagWithId'],
+                    [
+                        'tag'   => 'div',
+                        'class' => 'data-wrapper',
+                    ],
+                ],
             ]);
         }
     }
 
+    /**
+     * @param string $key
+     */
     public function populateFromTranslations($key)
     {
         $manager = new Application_Translate_TranslationManager();
 
         try {
             $translation = $manager->getTranslation($key);
-        } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
+        } catch (UnknownTranslationKeyException $ex) {
             $translation = null;
         }
 
@@ -108,30 +123,36 @@ class Application_Form_Element_Translation extends \Zend_Form_Element_Multi
         }
     }
 
+    /**
+     * @param string      $key
+     * @param string|null $module
+     * @param string|null $oldKey
+     * @throws TranslateException
+     */
     public function updateTranslations($key, $module = null, $oldKey = null)
     {
         $manager = new Application_Translate_TranslationManager();
 
         $old = null;
 
-        if (! is_null($oldKey) && $key !== $oldKey) {
+        if ($oldKey !== null && $key !== $oldKey) {
             $manager->delete($oldKey, $module);
         } else {
             try {
                 $translation = $manager->getTranslation($key);
-                $old = $translation['translations'];
-            } catch (\Opus\Translate\UnknownTranslationKeyException $ex) {
+                $old         = $translation['translations'];
+            } catch (UnknownTranslationKeyException $ex) {
             }
         }
 
-        if (is_null($module) && isset($translation['module'])) {
+        if ($module === null && isset($translation['module'])) {
             $module = $translation['module'];
         }
 
         $new = $this->getValue();
 
         if ($new !== $old) {
-            if (! is_null($new)) {
+            if ($new !== null) {
                 $manager->setTranslation($key, $new, $module);
             } else {
                 $manager->delete($key, $module);
@@ -140,26 +161,45 @@ class Application_Form_Element_Translation extends \Zend_Form_Element_Multi
         }
     }
 
+    /**
+     * @param string|string[] $value
+     * @return $this
+     */
     public function setValue($value)
     {
         parent::setValue($value);
         if (is_array($value)) {
             $this->setMultiOptions($value);
         }
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getKey()
     {
         return $this->key;
     }
 
+    /**
+     * @param string $key
+     * @return $this
+     */
     public function setKey($key)
     {
         $this->key = $key;
+        return $this;
     }
 
+    /**
+     * @param string $value
+     * @return string
+     * @phpcs:disable PSR2.Methods.MethodDeclaration
+     */
     protected function _translateValue($value)
     {
+        // @phpcs:enable
         return $value;
     }
 }

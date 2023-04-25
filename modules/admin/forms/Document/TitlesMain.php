@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,27 +25,20 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Unterformular fuer Haupttitel eines Dokuments.
  *
  * Die Basisklasse wurde erweitert um dafür zu sorgen, dass der Titel in der Dokumentensprache zuerst angezeigt wird.
  * Außerdem wird zusätzlich bei der Validierung geprüft, ob ein Titel in der Dokumentsprache existiert.
- *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm
 {
-
     /**
      * Konstruiert Unterformular fuer die Haupttitel eines Dokuments.
      */
@@ -62,19 +56,22 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm
         parent::init();
         $this->setDecorators(
             [
-            'FormElements',
-            [['fieldsWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'fields-wrapper']],
-            ['FormErrors', [
-                'placement' => 'prepend',
-                'ignoreSubForms' => true,
-                'onlyCustomFormErrors' => true,
-                'markupListStart' => '<div class="form-errors">',
-                'markupListItemStart' => '',
-                'markupListItemEnd' => '',
-                'markupListEnd' => '</div>'
-            ]],
-            ['FieldsetWithButtons', ['legendButtons' => self::ELEMENT_ADD]],
-            [['divWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'subform']]
+                'FormElements',
+                [['fieldsWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'fields-wrapper']],
+                [
+                    'FormErrors',
+                    [
+                        'placement'            => 'prepend',
+                        'ignoreSubForms'       => true,
+                        'onlyCustomFormErrors' => true,
+                        'markupListStart'      => '<div class="form-errors">',
+                        'markupListItemStart'  => '',
+                        'markupListItemEnd'    => '',
+                        'markupListEnd'        => '</div>',
+                    ],
+                ],
+                ['FieldsetWithButtons', ['legendButtons' => self::ELEMENT_ADD]],
+                [['divWrapper' => 'HtmlTag'], ['tag' => 'div', 'class' => 'subform']],
             ]
         );
     }
@@ -87,7 +84,7 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm
      *
      * @param array $data
      * @param array $globalContext Daten für das gesamte Metadaten-Formular
-     * @return boolean true - wenn keine Abhängigkeiten verletzt wurden
+     * @return bool true - wenn keine Abhängigkeiten verletzt wurden
      */
     public function isDependenciesValid($data, $globalContext)
     {
@@ -116,7 +113,7 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm
      *
      * Sorgt dafuer, dass der Titel in der Dokumentensprache zuerst im Array steht.
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      * @return array
      */
     public function getFieldValues($document)
@@ -128,7 +125,7 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm
         $sortedValues = [];
 
         foreach ($values as $index => $value) {
-            if ($value->getLanguage() == $doclang) {
+            if ($value->getLanguage() === $doclang) {
                 $sortedValues[] = $value;
                 unset($values[$index]);
                 break;

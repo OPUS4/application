@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,21 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2011-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Repository;
+use Opus\Common\Repository;
 
 /**
  * Generating site links suitable for search engine indexing.
- *
- * @category    Application
- * @package     Module_Crawlers
  */
 class Crawlers_SitelinksController extends Application_Controller_Action
 {
-
     /**
      * Disable access control for this controller.
      */
@@ -69,23 +65,23 @@ class Crawlers_SitelinksController extends Application_Controller_Action
     {
         $this->indexAction();
 
-        $year = trim($this->_getParam('year'));
+        $year = trim($this->_getParam('year') ?? '');
 
         if (preg_match('/^\d{4}$/', $year) > 0) {
             $finder = Repository::getInstance()->getDocumentFinder();
             $finder->setServerState('published');
-            $finder->setServerDatePublishedRange($year, $year + 1);
+            $finder->setServerDatePublishedRange($year, strval((int) $year + 1));
             $this->view->ids = $finder->getIds();
 
             if (count($this->view->ids) > 0) {
                 $this->view->listYear = $year;
-                $this->view->title = $this->view->translate('crawlers_sitelinks_list', $year);
+                $this->view->title    = $this->view->translate('crawlers_sitelinks_list', $year);
             } else {
-                $this->view->ids = null;
+                $this->view->ids   = null;
                 $this->view->title = $this->view->translate('crawlers_sitelinks_index');
             }
         }
 
-        return $this->render('index');
+        $this->render('index');
     }
 }

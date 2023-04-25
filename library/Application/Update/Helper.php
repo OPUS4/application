@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Update
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -39,7 +37,6 @@
  */
 class Application_Update_Helper extends Application_Update_PluginAbstract
 {
-
     public function run()
     {
         // do nothing
@@ -47,14 +44,18 @@ class Application_Update_Helper extends Application_Update_PluginAbstract
 
     /**
      * Asks the user a yes|no question during update.
-     * @param $question
+     *
+     * @param string $question
+     * @return bool
      */
     public function askYesNo($question)
     {
-        print($question);
+        print $question;
 
-        $response = trim(readline());
+        $line = readline();
 
-        return ($response == 'Y' || $response == 'y');
+        $response = trim($line ?: '');
+
+        return $response === 'Y' || $response === 'y';
     }
 }

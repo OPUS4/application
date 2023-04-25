@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,29 +25,33 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Solrsearch_Model_Search
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Solrsearch_Model_Search_AdvancedTest extends ControllerTestCase
 {
+    /** @var string[] */
+    protected $additionalResources = ['database'];
 
-    private $_search;
+    /** @var Solrsearch_Model_Search_Advanced */
+    private $search;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_search = new Solrsearch_Model_Search_Advanced();
+        $this->search = new Solrsearch_Model_Search_Advanced();
     }
 
     public function testPerformSearch()
     {
         $this->markTestIncomplete('TODO - do some testing');
 
-        // $results = $this->_search->performSearch($query);
+        $query = null;
+
+        $results = $this->search->getSearchType(); // $this->search->performSearch($query);
+
+        $this->assertNotNull($results);
     }
 }

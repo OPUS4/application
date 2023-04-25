@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,32 +25,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Export_ExportServiceTest extends ControllerTestCase
 {
+    /** @var Application_Export_ExportService */
+    private $service;
 
-    private $_service;
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->makeConfigurationModifiable();
 
-        $this->_service = new Application_Export_ExportService();
+        $this->service = new Application_Export_ExportService();
     }
 
     public function testLoadPlugins()
     {
-        $this->_service->loadPlugins();
+        $this->service->loadPlugins();
 
-        $plugins = $this->_service->getAllPlugins();
+        $plugins = $this->service->getAllPlugins();
 
         $this->assertInternalType('array', $plugins);
         $this->assertCount(7, $plugins);
@@ -60,7 +58,7 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $this->assertArrayHasKey('publist', $plugins);
         $this->assertArrayHasKey('datacite', $plugins);
 
-        $this->assertInstanceOf(\Zend_Config::class, $plugins['index']);
+        $this->assertInstanceOf(Zend_Config::class, $plugins['index']);
 
         $bibtexConfig = $plugins['bibtex'];
 
@@ -74,9 +72,9 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
 
     public function testGetPlugin()
     {
-        $this->_service->loadPlugins();
+        $this->service->loadPlugins();
 
-        $plugin = $this->_service->getPlugin('index');
+        $plugin = $this->service->getPlugin('index');
 
         $this->assertNotNull($plugin);
         $this->assertInstanceOf('Export_Model_XmlExport', $plugin);
@@ -84,44 +82,44 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $pluginConfig = $plugin->getConfig();
 
         $this->assertNotNull($pluginConfig);
-        $this->assertInstanceOf(\Zend_Config::class, $pluginConfig);
+        $this->assertInstanceOf(Zend_Config::class, $pluginConfig);
 
         $this->assertEquals(100, $pluginConfig->maxDocumentsGuest);
     }
 
     public function testGetDefaults()
     {
-        $defaults = $this->_service->getDefaults();
+        $defaults = $this->service->getDefaults();
 
         $this->assertNotNull($defaults);
-        $this->assertInstanceOf(\Zend_Config::class, $defaults);
+        $this->assertInstanceOf(Zend_Config::class, $defaults);
 
         $this->assertEquals('Export_Model_XmlExport', $defaults->class);
     }
 
     public function testSetDefaults()
     {
-        $this->_service->setDefaults(new \Zend_Config([
-            'class' => 'Export_Model_XsltExport'
+        $this->service->setDefaults(new Zend_Config([
+            'class' => 'Export_Model_XsltExport',
         ]));
 
-        $defaults = $this->_service->getDefaults();
+        $defaults = $this->service->getDefaults();
 
         $this->assertEquals('Export_Model_XsltExport', $defaults->class);
     }
 
     public function testAddPlugin()
     {
-        $this->_service->addPlugin('marc', new \Zend_Config([
-            'class' => 'Export_Model_XsltExport',
-            'stylesheet' => 'marc.xslt'
+        $this->service->addPlugin('marc', new Zend_Config([
+            'class'      => 'Export_Model_XsltExport',
+            'stylesheet' => 'marc.xslt',
         ]));
 
-        $plugins = $this->_service->getAllPlugins();
+        $plugins = $this->service->getAllPlugins();
 
         $this->assertCount(1, $plugins);
 
-        $plugin = $this->_service->getPlugin('marc');
+        $plugin = $this->service->getPlugin('marc');
 
         $this->assertNotNull($plugin);
         $this->assertInstanceOf('Export_Model_XsltExport', $plugin);

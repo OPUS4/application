@@ -26,7 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2021-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -36,7 +36,6 @@ use Opus\Bibtex\Import\Console\Helper\BibtexImportResult;
 
 class Admin_ImportController extends Application_Controller_Action
 {
-
     /**
      * TODO move processing into model class
      *
@@ -64,16 +63,18 @@ class Admin_ImportController extends Application_Controller_Action
                 return;
             }
 
-            $upload = new \Zend_File_Transfer_Adapter_Http();
-            $files = $upload->getFileInfo();
+            $upload = new Zend_File_Transfer_Adapter_Http();
+            $files  = $upload->getFileInfo();
 
             if (count($files) > 0) {
                 $bibtexFile = $files['File'];
                 if (isset($bibtexFile['tmp_name'])) {
                     $bibtexImportResult = new BibtexImportResult();
 
-                    if (array_key_exists(Admin_Form_Import::ELEMENT_VERBOSE, $postData)
-                        && $postData[Admin_Form_Import::ELEMENT_VERBOSE] === '1') {
+                    if (
+                        array_key_exists(Admin_Form_Import::ELEMENT_VERBOSE, $postData)
+                        && $postData[Admin_Form_Import::ELEMENT_VERBOSE] === '1'
+                    ) {
                         $bibtexImportResult->setVerboseEnabled(true);
                     }
 
@@ -90,11 +91,11 @@ class Admin_ImportController extends Application_Controller_Action
                         return;
                     }
 
-                    $this->view->importResult = $bibtexImportResult->getMessages();
-                    $this->view->numDocsImported = $bibtexImportResult->getNumDocsImported();
+                    $this->view->importResult     = $bibtexImportResult->getMessages();
+                    $this->view->numDocsImported  = $bibtexImportResult->getNumDocsImported();
                     $this->view->numDocsProcessed = $bibtexImportResult->getNumDocsProcessed();
-                    $this->view->numSkipped = $bibtexImportResult->getNumSkipped();
-                    $this->view->numErrors = $bibtexImportResult->getNumErrors();
+                    $this->view->numSkipped       = $bibtexImportResult->getNumSkipped();
+                    $this->view->numErrors        = $bibtexImportResult->getNumErrors();
                 }
             } else {
                 // POST-Request ist zwar gültig; allerdings konnte keine Datei ausgelesen werden
@@ -108,14 +109,15 @@ class Admin_ImportController extends Application_Controller_Action
             }
         } else {
             // show upload form
-            $this->view->headScript()->prependFile($this->view->layoutPath() . '/js/collections.js'); // TODO refactor - tie to form element class
+            // TODO refactor - tie to form element class
+            $this->view->headScript()->prependFile($this->view->layoutPath() . '/js/collections.js');
             $this->view->form = $form;
         }
     }
 
     /**
-     * @param $fileName
-     * @param $postData
+     * @param string $fileName
+     * @param array  $postData
      * @return BibtexImportHelper
      *
      * TODO move form processing into form class

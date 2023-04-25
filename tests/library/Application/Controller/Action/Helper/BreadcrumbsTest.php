@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,36 +25,38 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_Controller_Action_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Title;
+use Opus\Common\Document;
+use Opus\Common\Title;
 
 class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'database', 'navigation'];
 
-    private $helper = null;
+    /** @var Zend_Controller_Action_Helper_Abstract */
+    private $helper;
 
-    private $navigation = null;
+    /** @var Zend_View_Helper_Navigation */
+    private $navigation;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('breadcrumbs');
+        $this->helper     = Zend_Controller_Action_HelperBroker::getStaticHelper('breadcrumbs');
         $this->navigation = $this->getView()->navigation();
         $this->helper->setNavigation($this->navigation);
         $this->helper->setView($this->getView());
     }
 
+    /**
+     * @param string $label
+     * @return mixed
+     */
     private function getPage($label)
     {
         return $this->navigation->findOneBy('label', $label);
@@ -104,7 +107,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
     public function testSetGetNavigation()
     {
-        $navigation = new \Zend_Navigation();
+        $navigation = new Zend_Navigation();
 
         $this->helper->setNavigation($navigation);
         $this->assertEquals($navigation, $this->helper->getNavigation());
@@ -142,7 +145,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
 
         $document->setLanguage('deu');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('01234567890123456789012345678901234567890123456789'); // 50 Zeichen lang
 
@@ -159,7 +162,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $document = $this->createTestDocument();
         $document->setLanguage('deu');
 
-        $title = new Title();
+        $title = Title::new();
         $title->setLanguage('deu');
         $title->setValue('012345678901234567890123456789012345678ü123'); // 50 Zeichen lang
 

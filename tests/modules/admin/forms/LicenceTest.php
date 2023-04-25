@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,22 +24,19 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Licence;
+use Opus\Common\Licence;
 
 /**
  * Unit Tests fuer Formular fuer eine Lizenz.
- *
- * @category    Application Unit Test
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Admin_Form_LicenceTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'translation'];
 
     public function testConstructForm()
@@ -69,7 +67,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase
     {
         $form = new Admin_Form_Licence();
 
-        $licence = new Licence();
+        $licence = Licence::new();
         $licence->setActive(true);
         $licence->setCommentInternal('Test Internal Comment');
         $licence->setDescMarkup('<h1>Test Markup</h1>');
@@ -103,7 +101,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase
     {
         $form = new Admin_Form_Licence();
 
-        $licence = new Licence(2);
+        $licence = Licence::get(2);
 
         $form->populateFromModel($licence);
 
@@ -128,7 +126,7 @@ class Admin_Form_LicenceTest extends ControllerTestCase
         $form->getElement('SortOrder')->setValue(5);
         $form->getElement('PodAllowed')->setChecked(true);
 
-        $licence = new Licence();
+        $licence = Licence::new();
 
         $form->updateModel($licence);
 
@@ -164,9 +162,9 @@ class Admin_Form_LicenceTest extends ControllerTestCase
         $form = new Admin_Form_Licence();
 
         $this->assertFalse($form->isValid([
-            'NameLong' => '  ',
-            'Language' => 'abc',
-            'LinkLicence' => '  '
+            'NameLong'    => '  ',
+            'Language'    => 'abc',
+            'LinkLicence' => '  ',
         ]));
 
         $this->assertContains('isEmpty', $form->getErrors('NameLong'));
@@ -179,9 +177,9 @@ class Admin_Form_LicenceTest extends ControllerTestCase
         $form = new Admin_Form_Licence();
 
         $this->assertFalse($form->isValid([
-            'NameLong' => 'Name',
-            'Language' => 'abc',
-            'LinkLicence' => 'Link'
+            'NameLong'    => 'Name',
+            'Language'    => 'abc',
+            'LinkLicence' => 'Link',
         ]));
 
         $this->assertContains('notInArray', $form->getErrors('Language'));
@@ -192,9 +190,9 @@ class Admin_Form_LicenceTest extends ControllerTestCase
         $form = new Admin_Form_Licence();
 
         $this->assertTrue($form->isValid([
-            'NameLong' => 'New Test Licence',
-            'Language' => 'deu',
-            'LinkLicence' => 'link'
+            'NameLong'    => 'New Test Licence',
+            'Language'    => 'deu',
+            'LinkLicence' => 'link',
         ]));
     }
 }

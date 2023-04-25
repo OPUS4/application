@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_View_Helper
- * @author      Michael Lang <lang@zib.de>
  * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_FullUrlTest extends ControllerTestCase
 {
-
     /**
      * Testet die url.
      * Im PhpUnit-Test ist der Host leer, deswegen wird er hier im Test nicht mit berücksichtigt.
@@ -42,8 +39,8 @@ class Application_View_Helper_FullUrlTest extends ControllerTestCase
     public function testFullUrl()
     {
         $helper = new Application_View_Helper_FullUrl();
-        $view = new \Zend_View();
-        \Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
+        $view   = new Zend_View();
+        Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
         $helper->setView($view);
         $this->assertEquals($helper->fullUrl(), 'http://opus4dev');
     }

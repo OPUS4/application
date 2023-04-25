@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,8 +34,8 @@
  */
 class Application_View_Helper_ShortenText extends Application_View_Helper_Abstract
 {
-
-    private $_maxLength = null;
+    /** @var int */
+    private $maxLength;
 
     /**
      * Shortens text while not cutting in the middle of words.
@@ -45,7 +43,7 @@ class Application_View_Helper_ShortenText extends Application_View_Helper_Abstra
      * TODO the string '. ' should be handled like a space after the last word
      * TODO how to handle opened HTML tags in shortened text
      *
-     * @param $text
+     * @param string $text
      * @return string Shortened text
      */
     public function shortenText($text)
@@ -74,32 +72,34 @@ class Application_View_Helper_ShortenText extends Application_View_Helper_Abstra
      */
     public function getMaxLength()
     {
-        if (is_null($this->_maxLength)) {
+        if ($this->maxLength === null) {
             $config = $this->getConfig();
 
             $maxLength = 0;
 
-            if (! is_null($config) && isset($config->frontdoor->numOfShortAbstractChars)) {
+            if ($config !== null && isset($config->frontdoor->numOfShortAbstractChars)) {
                 $maxLength = trim($config->frontdoor->numOfShortAbstractChars);
             }
 
             $this->setMaxLength($maxLength);
         }
 
-        return $this->_maxLength;
+        return $this->maxLength;
     }
 
     /**
      * Sets maximum length of text.
      *
-     * @param $length int
+     * @param int $length
      */
     public function setMaxLength($length)
     {
-        if (! is_int($length) && ! ctype_digit($length)) {
-            $length = 0;
+        if (is_int($length)) {
+            $this->maxLength = $length;
+        } elseif (is_string($length) && ctype_digit($length)) {
+            $this->maxLength = intval($length);
+        } else {
+            $this->maxLength = 0;
         }
-
-        $this->_maxLength = $length;
     }
 }

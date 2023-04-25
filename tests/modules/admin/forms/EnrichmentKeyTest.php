@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,26 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\EnrichmentKey;
-use Opus\Model\ModelException;
+use Opus\Common\EnrichmentKey;
+use Opus\Translate\Dao;
 
 /**
  * Unit Tests for Admin_Form_Enrichmentkey.
- *
- * @category Application Unit Test
- * @package Admin_Form
  */
 class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function testConstructForm()
@@ -64,7 +58,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
     public function testPopulateFromModel()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('Test');
 
         $form = new Admin_Form_EnrichmentKey();
@@ -78,7 +72,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
     public function testPopulateFromExistingModel()
     {
-        $enrichment = new EnrichmentKey('City');
+        $enrichment = EnrichmentKey::get('City');
         $this->assertNotNull($enrichment);
 
         $form = new Admin_Form_EnrichmentKey();
@@ -92,7 +86,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
     public function testPopulateFromModelWithEnrichmentType()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->setType('TextType');
 
@@ -107,7 +101,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
     public function testPopulateFromModelWithUnknownEnrichmentType()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->setType('FooType');
 
@@ -122,7 +116,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
     public function testPopulateFromModelWithEnrichmentTypeAndOptionsAndStrictValidation()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->setType('RegexType');
         $enrichmentKey->setOptions(json_encode(['regex' => '^a$', 'validation' => 'strict']));
@@ -138,7 +132,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
     public function testPopulateFromModelWithEnrichmentTypeAndOptionsAndNoValidation()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->setType('RegexType');
         $enrichmentKey->setOptions(json_encode(['regex' => '^a$', 'validation' => 'none']));
@@ -154,7 +148,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
     public function testPopulateFromModelWithUnknownEnrichmentTypeAndOptions()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->setType('FooType');
         $enrichmentKey->setOptions(json_encode(['regex' => '^a$', 'validation' => 'strict']));
@@ -173,7 +167,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $form = new Admin_Form_EnrichmentKey();
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME)->setValue('TestEnrichmentKey');
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $form->updateModel($enrichmentKey);
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
@@ -187,7 +181,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME)->setValue('TestEnrichmentKey');
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_TYPE)->setValue('TextType');
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $form->updateModel($enrichmentKey);
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
@@ -201,7 +195,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME)->setValue('TestEnrichmentKey');
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_TYPE)->setValue('UnknownType');
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $form->updateModel($enrichmentKey);
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
@@ -217,7 +211,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_OPTIONS)->setValue('^a$');
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_VALIDATION)->setValue('1');
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $form->updateModel($enrichmentKey);
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
@@ -233,7 +227,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_OPTIONS)->setValue('^a$');
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_VALIDATION)->setValue('0');
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $form->updateModel($enrichmentKey);
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
@@ -249,7 +243,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_OPTIONS)->setValue('^a$');
         $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_VALIDATION)->setValue('1');
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $form->updateModel($enrichmentKey);
 
         $this->assertEquals('TestEnrichmentKey', $enrichmentKey->getName());
@@ -266,7 +260,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $this->assertTrue($form->isValid($this->createArray('Test', 'RegexType', '^a$')));
         $this->assertTrue($form->isValid(
             $this->createArray(
-                str_pad('Long', EnrichmentKey::getFieldMaxLength('Name'), 'g'),
+                str_pad('Long', EnrichmentKey::describeField(EnrichmentKey::FIELD_NAME)->getMaxSize(), 'g'),
                 "TextType"
             )
         ));
@@ -283,7 +277,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $this->assertFalse($form->isValid($this->createArray(' ', 'TextType')));
         $this->assertFalse($form->isValid(
             $this->createArray(
-                str_pad('toolong', EnrichmentKey::getFieldMaxLength('Name') + 1, 'g'),
+                str_pad('toolong', EnrichmentKey::describeField(EnrichmentKey::FIELD_NAME)->getMaxSize() + 1, 'g'),
                 "TextType"
             )
         ));
@@ -303,12 +297,12 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     public function testSetNameElementValue()
     {
         $form = new Admin_Form_EnrichmentKey();
-        $form->populateFromModel(new EnrichmentKey());
+        $form->populateFromModel(EnrichmentKey::new());
         $form->setNameElementValue('foo');
 
         $this->assertEquals('foo', $form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME)->getValue());
 
-        $form->populateFromModel(new EnrichmentKey());
+        $form->populateFromModel(EnrichmentKey::new());
         $this->assertNull($form->getElement(Admin_Form_EnrichmentKey::ELEMENT_NAME)->getValue());
     }
 
@@ -316,11 +310,11 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
      * Hat ein existierender Enrichment Key bereits einen zugeordneten Enrichment Type,
      * so kann dieser nicht mehr gelöscht, sondern nur auf einen anderen Typ geändert werden.
      *
-     * @throws \Zend_Form_Exception
+     * @throws Zend_Form_Exception
      */
     public function testTypeIsRequiredForExistingTypedKey()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->setType('BooleanType');
 
@@ -338,11 +332,11 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
      * Hat ein existierender Enrichment Key keinen zugeordneten Enrichment Type,
      * so muss dieser beim erneuten Speichern des Enrichment Keys auch nicht gesetzt werden.
      *
-     * @throws \Zend_Form_Exception
+     * @throws Zend_Form_Exception
      */
     public function testTypeIsRequiredForExistingUntypedKey()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('TestKey');
 
         $form = new Admin_Form_EnrichmentKey();
@@ -355,13 +349,19 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $this->assertTrue($form->isValid($this->createArray('TestKey', '')));
     }
 
+    /**
+     * @param string      $name
+     * @param string|null $type
+     * @param array|null  $options
+     * @return array
+     */
     private function createArray($name, $type = null, $options = null)
     {
         $result = [Admin_Form_EnrichmentKey::ELEMENT_NAME => $name];
-        if (! is_null($type)) {
+        if ($type !== null) {
             $result[Admin_Form_EnrichmentKey::ELEMENT_TYPE] = $type;
         }
-        if (! is_null($options)) {
+        if ($options !== null) {
             $result[Admin_Form_EnrichmentKey::ELEMENT_OPTIONS] = $options;
         }
         return $result;
@@ -369,7 +369,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
     public function testPopulateDisplayName()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('Country');
 
         $form = new Admin_Form_EnrichmentKey();
@@ -379,7 +379,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals([
             'de' => 'Land der Veranstaltung',
-            'en' => 'Country of event'
+            'en' => 'Country of event',
         ], $translation);
     }
 
@@ -387,16 +387,16 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $key = 'MyTestKey';
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName($key);
         $enrichmentKey->store();
 
         $this->addModelToCleanup($enrichmentKey);
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->setTranslation("Enrichment$key", [
             'en' => 'Old',
-            'de' => 'Alt'
+            'de' => 'Alt',
         ], 'default');
 
         $form = new Admin_Form_EnrichmentKey();
@@ -404,7 +404,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $form->getElement($form::ELEMENT_DISPLAYNAME)->setValue([
             'de' => 'Neu',
-            'en' => 'New'
+            'en' => 'New',
         ]);
 
         $form->updateModel($enrichmentKey);
@@ -413,7 +413,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals([
             'de' => 'Neu',
-            'en' => 'New'
+            'en' => 'New',
         ], $translation);
     }
 
@@ -421,14 +421,14 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $oldKey = 'EnrichmentTestKey';
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
         $database->setTranslation($oldKey, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], 'default');
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->store();
         $this->addModelToCleanup($enrichmentKey);
@@ -438,7 +438,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], $form->getElementValue($form::ELEMENT_DISPLAYNAME));
 
         $form->getElement($form::ELEMENT_NAME)->setValue('NewTestKey');
@@ -451,7 +451,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
         $translation = $database->getTranslation('EnrichmentNewTestKey');
         $this->assertEquals([
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], $translation);
     }
 
@@ -459,14 +459,14 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $key = 'EnrichmentTestKey';
 
-        $database = new \Opus\Translate\Dao();
+        $database = new Dao();
         $database->removeAll();
         $database->setTranslation($key, [
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], 'default');
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('TestKey');
         $enrichmentKey->store();
         $this->addModelToCleanup($enrichmentKey);
@@ -476,7 +476,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
 
         $this->assertEquals([
             'en' => 'English',
-            'de' => 'Deutsch'
+            'de' => 'Deutsch',
         ], $form->getElementValue($form::ELEMENT_DISPLAYNAME));
 
         $form->getElement($form::ELEMENT_DISPLAYNAME)->setValue(null);
@@ -492,7 +492,7 @@ class Admin_Form_EnrichmentKeyTest extends ControllerTestCase
     {
         $form = new Admin_Form_EnrichmentKey();
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
 
         $form->populateFromModel($enrichmentKey);
 

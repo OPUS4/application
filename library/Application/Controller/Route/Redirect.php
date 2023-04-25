@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Controller
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -34,13 +32,16 @@
 /**
  * Route for automatic redirect for matching route.
  */
-class Application_Controller_Route_Redirect extends \Zend_Controller_Router_Route_Regex
+class Application_Controller_Route_Redirect extends Zend_Controller_Router_Route_Regex
 {
-
+    /**
+     * @param string $path
+     * @param bool   $partial
+     */
     public function match($path, $partial = false)
     {
         if ($route = parent::match($path, $partial)) {
-            $helper = \Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
+            $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('redirector');
             $helper->setCode(301);
             $helper->gotoRoute($route);
         }

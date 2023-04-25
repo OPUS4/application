@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,27 +25,23 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Security\Realm;
+use Opus\Common\Security\Realm;
 
-class Application_View_Helper_FileAccessAllowed extends \Zend_View_Helper_Abstract
+class Application_View_Helper_FileAccessAllowed extends Zend_View_Helper_Abstract
 {
-
     /**
      * Checks if user has access to file,
      *
-     * @param string|int $fileId
-     * @return boolean
+     * @param string|int|null $fileId
+     * @return bool
      */
     public function fileAccessAllowed($fileId = null)
     {
-        if (is_null($fileId)) {
+        if ($fileId === null) {
             return false;
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,25 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class Publish_IndexControllerTest.
- *
  * @covers Publish_IndexController
  */
 class Publish_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->useGerman();
@@ -58,7 +53,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
 
     public function testShowFileUpload()
     {
-        $config = $this->getConfig();
+        $config                             = $this->getConfig();
         $config->form->first->enable_upload = self::CONFIG_VALUE_TRUE;
 
         $this->dispatch('/publish');
@@ -78,7 +73,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
 
     public function testDoNotShowFileUpload()
     {
-        $config = $this->getConfig();
+        $config                             = $this->getConfig();
         $config->form->first->enable_upload = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/publish');
@@ -96,10 +91,9 @@ class Publish_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='Fügen Sie hier einen Kommentar hinzu.'  id='uploadComment'></textarea>", $this->getResponse()->getBody());
     }
 
-
     public function testShowBibliographyCheckbox()
     {
-        $config = $this->getConfig();
+        $config                             = $this->getConfig();
         $config->form->first->bibliographie = self::CONFIG_VALUE_TRUE;
 
         $this->dispatch('/publish');
@@ -117,7 +111,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
 
     public function testDoNotShowBibliographyCheckbox()
     {
-        $config = $this->getConfig();
+        $config                             = $this->getConfig();
         $config->form->first->bibliographie = self::CONFIG_VALUE_FALSE;
 
         $this->dispatch('/publish');
@@ -139,9 +133,9 @@ class Publish_IndexControllerTest extends ControllerTestCase
     public function testDocumentTypeSelectBoxIsSortedAlphabetically()
     {
         // manipulate list of available document types in application configuration
-        $config = $this->getConfig();
-        $include = $config->documentTypes->include;
-        $exclude = $config->documentTypes->exclude;
+        $config                         = $this->getConfig();
+        $include                        = $config->documentTypes->include;
+        $exclude                        = $config->documentTypes->exclude;
         $config->documentTypes->include = 'all, article, workingpaper, demodemo';
         $config->documentTypes->exclude = '';
 
@@ -154,10 +148,10 @@ class Publish_IndexControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $doctypeAllPos = strpos($body, '<option value="all" label="Alle Felder (Testdokumenttyp)">Alle Felder (Testdokumenttyp)</option>');
-        $doctypeArticlePos = strpos($body, '<option value="article" label="Wissenschaftlicher Artikel">Wissenschaftlicher Artikel</option>');
+        $doctypeAllPos       = strpos($body, '<option value="all" label="Alle Felder (Testdokumenttyp)">Alle Felder (Testdokumenttyp)</option>');
+        $doctypeArticlePos   = strpos($body, '<option value="article" label="Wissenschaftlicher Artikel">Wissenschaftlicher Artikel</option>');
         $doctypeWorkingpaper = strpos($body, '<option value="workingpaper" label="Arbeitspapier">Arbeitspapier</option>');
-        $doctypeDemodemo = strpos($body, '<option value="demodemo" label="demodemo">demodemo</option>');
+        $doctypeDemodemo     = strpos($body, '<option value="demodemo" label="demodemo">demodemo</option>');
 
         $this->assertTrue($doctypeAllPos < $doctypeWorkingpaper);
         $this->assertTrue($doctypeWorkingpaper < $doctypeArticlePos);

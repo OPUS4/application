@@ -1,5 +1,13 @@
 # OPUS 4 Change Log
 
+## Release 4.8 - 2023-04-25
+
+OPUS 4.8 Project on GitHub
+https://github.com/orgs/OPUS4/projects/24
+
+Vollständige Liste aller Änderungen in Application
+https://github.com/OPUS4/application/compare/4.7.1.2...4.8
+
 ## Release 4.7.1.2 - 2022-12-13
 
 * OPUS4/application#983 - Export von Suchtreffern ab 100 liefert leere Datei

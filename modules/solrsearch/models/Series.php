@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,36 +25,37 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
-use Opus\Model\NotFoundException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Series;
+use Opus\Common\SeriesInterface;
 
 class Solrsearch_Model_Series
 {
+    /** @var SeriesInterface */
+    private $series;
 
-    private $_series;
-
+    /**
+     * @param int $seriesId
+     * @throws Solrsearch_Model_Exception
+     */
     public function __construct($seriesId)
     {
-        if (is_null($seriesId)) {
+        if ($seriesId === null) {
             throw new Solrsearch_Model_Exception('Could not browse series due to missing id parameter.', 400);
         }
 
         $s = null;
         try {
-            $s = new Series($seriesId);
+            $s = Series::get($seriesId);
         } catch (NotFoundException $e) {
             throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.", 404);
         }
 
-        if ($s->getVisible() !== '1') {
+        if (! $s->getVisible()) {
             throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' is not visible.", 404);
         }
 
@@ -63,30 +65,42 @@ class Solrsearch_Model_Series
                 404
             );
         }
-        $this->_series = $s;
+        $this->series = $s;
     }
 
+    /**
+     * @return int
+     */
     public function getId()
     {
-        return $this->_series->getId();
+        return $this->series->getId();
     }
 
+    /**
+     * @return string
+     */
     public function getTitle()
     {
-        return $this->_series->getTitle();
+        return $this->series->getTitle();
     }
 
+    /**
+     * @return string
+     */
     public function getInfobox()
     {
-        return $this->_series->getInfobox();
+        return $this->series->getInfobox();
     }
 
+    /**
+     * @return string|null
+     */
     public function getLogoFilename()
     {
         $logoDir = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'series_logos'
-            . DIRECTORY_SEPARATOR . $this->_series->getId();
+            . DIRECTORY_SEPARATOR . $this->series->getId();
         if (is_readable($logoDir)) {
-            $iterator = new \DirectoryIterator($logoDir);
+            $iterator = new DirectoryIterator($logoDir);
             foreach ($iterator as $fileinfo) {
                 if ($fileinfo->isFile()) {
                     return $fileinfo->getFilename();

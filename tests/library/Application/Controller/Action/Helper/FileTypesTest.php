@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,29 +25,25 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_Controller_Action_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
  */
 
 class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestCase
 {
+    /** @var Application_Controller_Action_Helper_FileTypes */
+    private $helper;
 
-    private $_helper;
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->makeConfigurationModifiable();
-        $this->_helper = new Application_Controller_Action_Helper_FileTypes();
+        $this->helper = new Application_Controller_Action_Helper_FileTypes();
     }
 
     public function testGetValidMimeTypes()
     {
-        $types = $this->_helper->getValidMimeTypes();
+        $types = $this->helper->getValidMimeTypes();
 
         $this->assertNotNull($types);
         $this->assertInternalType('array', $types);
@@ -63,12 +60,17 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
     public function testMimeTypeAddedToBaseConfigurationFromApplicationIni()
     {
         $this->adjustConfiguration([
-            'filetypes' => ['xml' => ['mimeType' => [
-                'text/xml', 'application/xml'
-            ]]]
+            'filetypes' => [
+                'xml' => [
+                    'mimeType' => [
+                        'text/xml',
+                        'application/xml',
+                    ],
+                ],
+            ],
         ]);
 
-        $types = $this->_helper->getValidMimeTypes();
+        $types = $this->helper->getValidMimeTypes();
 
         $this->assertNotNull($types);
         $this->assertCount(5, $types);
@@ -83,64 +85,74 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
 
     public function testGetContentDisposition()
     {
-        $this->assertEquals('attachment', $this->_helper->getContentDisposition('text/plain'));
-        $this->assertEquals('inline', $this->_helper->getContentDisposition('application/pdf'));
+        $this->assertEquals('attachment', $this->helper->getContentDisposition('text/plain'));
+        $this->assertEquals('inline', $this->helper->getContentDisposition('application/pdf'));
     }
 
     public function testIsValidMimeType()
     {
-        $this->assertTrue($this->_helper->isValidMimeType('text/plain'));
-        $this->assertTrue($this->_helper->isValidMimeType('text/html'));
+        $this->assertTrue($this->helper->isValidMimeType('text/plain'));
+        $this->assertTrue($this->helper->isValidMimeType('text/html'));
 
-        $this->assertFalse($this->_helper->isValidMimeType('text/xslt'));
-        $this->assertFalse($this->_helper->isValidMimeType('application/doc'));
+        $this->assertFalse($this->helper->isValidMimeType('text/xslt'));
+        $this->assertFalse($this->helper->isValidMimeType('application/doc'));
     }
 
     public function testIsValidMimeTypeForExtensionWithMultipleTypes()
     {
         $this->adjustConfiguration([
-            'filetypes' => ['xml' => ['mimeType' => [
-                'text/xml', 'application/xml'
-            ]]]
+            'filetypes' => [
+                'xml' => [
+                    'mimeType' => [
+                        'text/xml',
+                        'application/xml',
+                    ],
+                ],
+            ],
         ]);
 
-        $this->assertTrue($this->_helper->isValidMimeType('application/xml'));
-        $this->assertTrue($this->_helper->isValidMimeType('text/xml'));
+        $this->assertTrue($this->helper->isValidMimeType('application/xml'));
+        $this->assertTrue($this->helper->isValidMimeType('text/xml'));
     }
 
     public function testIsValidMimeTypeForExtension()
     {
         $this->adjustConfiguration([
-            'filetypes' => ['xml' => ['mimeType' => [
-                'text/xml', 'application/xml'
-            ]]]
+            'filetypes' => [
+                'xml' => [
+                    'mimeType' => [
+                        'text/xml',
+                        'application/xml',
+                    ],
+                ],
+            ],
         ]);
 
-        $this->assertTrue($this->_helper->isValidMimeType('application/xml', 'xml'));
-        $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'xml'));
-        $this->assertTrue($this->_helper->isValidMimeType('text/plain', 'txt'));
-        $this->assertTrue($this->_helper->isValidMimeType('application/pdf', 'pdf'));
+        $this->assertTrue($this->helper->isValidMimeType('application/xml', 'xml'));
+        $this->assertTrue($this->helper->isValidMimeType('text/xml', 'xml'));
+        $this->assertTrue($this->helper->isValidMimeType('text/plain', 'txt'));
+        $this->assertTrue($this->helper->isValidMimeType('application/pdf', 'pdf'));
 
-        $this->assertFalse($this->_helper->isValidMimeType('text/plain', 'xml'));
-        $this->assertFalse($this->_helper->isValidMimeType('application/pdf', 'doc'));
-        $this->assertFalse($this->_helper->isValidMimeType('image/jpeg', 'jpeg'));
-        $this->assertFalse($this->_helper->isValidMimeType('audio/mpeg', 'txt'));
+        $this->assertFalse($this->helper->isValidMimeType('text/plain', 'xml'));
+        $this->assertFalse($this->helper->isValidMimeType('application/pdf', 'doc'));
+        $this->assertFalse($this->helper->isValidMimeType('image/jpeg', 'jpeg'));
+        $this->assertFalse($this->helper->isValidMimeType('audio/mpeg', 'txt'));
     }
 
     public function testIsValidMimeTypeForNull()
     {
-        $this->assertFalse($this->_helper->isValidMimeType(null));
-        $this->assertFalse($this->_helper->isValidMimeType(null, 'txt'));
+        $this->assertFalse($this->helper->isValidMimeType(null));
+        $this->assertFalse($this->helper->isValidMimeType(null, 'txt'));
     }
 
     public function testExtensionCaseInsensitive()
     {
         $this->adjustConfiguration([
-            'filetypes' => ['XML' => ['mimeType' => 'text/xml']]
+            'filetypes' => ['XML' => ['mimeType' => 'text/xml']],
         ]);
 
-        $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'xml'));
-        $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'XML'));
-        $this->assertTrue($this->_helper->isValidMimeType('text/xml', 'XmL'));
+        $this->assertTrue($this->helper->isValidMimeType('text/xml', 'xml'));
+        $this->assertTrue($this->helper->isValidMimeType('text/xml', 'XML'));
+        $this->assertTrue($this->helper->isValidMimeType('text/xml', 'XmL'));
     }
 }

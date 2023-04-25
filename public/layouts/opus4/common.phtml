@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Julian Heise <heise@zib.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 
 $config = Config::get();
 
@@ -68,6 +64,7 @@ if (isset($this->title)) {
 
 $this->headLink()
     ->prependStylesheet($this->layoutPath() . '/css/custom.css')
+    ->prependStylesheet($this->layoutPath() . '/css/doi-import.css')
     ->prependStylesheet($this->layoutPath() . '/css/print.css', 'print')
     ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
     ->prependStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
@@ -75,17 +72,17 @@ $this->headLink()
     ->prependStylesheet($this->layoutPath() . '/fontawesome/css/solid.css')
     ->prependStylesheet($this->layoutPath() . '/fontawesome/css/fontawesome.min.css')
     ->headLink([
-        'rel' => 'shortcut icon',
+        'rel'  => 'shortcut icon',
         'type' => 'image/x-icon',
-        'href' => $this->layoutPath() . '/img/logo/favicon.ico'
+        'href' => $this->layoutPath() . '/img/logo/favicon.ico',
     ])->headLink([
-        'rel' => 'search',
+        'rel'   => 'search',
         'title' => 'OPUS 4 Search',
-        'type' => 'application/opensearchdescription+xml',
-        'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'
+        'type'  => 'application/opensearchdescription+xml',
+        'href'  => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch',
     ]);
 
-$this->container = \Zend_Registry::get('Opus_Navigation');
+$this->container = Zend_Registry::get('Opus_Navigation');
 
 $jsFiles = ['searchutil.js', 'frontdoorutil.js', 'submit.js'];
 
@@ -95,6 +92,8 @@ if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) {
     $jsFiles[] = 'opus-ui.js';
 } elseif (in_array($this->moduleName, ['publish'])) {
     $jsFiles[] = 'upload.js';
+    $jsFiles[] = 'getDoi.js';
+    $jsFiles[] = 'doiAssist.js';
 }
 
 if (in_array($this->moduleName, ['admin'])) {
@@ -158,10 +157,10 @@ if (isset($config->javascript->latex->mathjax)) {
         <div id="container">
             <div id="top-header">
                 <div class="wrapper">
-                    <?php if (! is_null($languageSelectors)) : ?>
+                    <?php if ($languageSelectors !== null) : ?>
                         <ul id="lang-switch" class="nav" title="Choose your language">
                             <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
-                                <li class="<?= ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
+                                <li class="<?= $i === 0 ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
                             <?php endforeach ?>
                         </ul>
                     <?php endif ?>
@@ -181,7 +180,7 @@ if (isset($config->javascript->latex->mathjax)) {
                     <ul id="primary-nav" class="nav">
                     <?php foreach ($this->container as $page) : ?>
                         <?php $pageIsActive = $page->isActive(false); ?>
-                        <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '').$page->getClass()?>">
+                        <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '') . $page->getClass()?>">
                             <a href="<?= $page->getHref() ?>" title="<?= $this->translate($page->getTitle()) ?>">
                                 <?php if ($pageIsActive) : ?>
                                 <em>
@@ -212,10 +211,10 @@ if (isset($config->javascript->latex->mathjax)) {
                         <?= $this->layout()->content ?>
                     </div>
                     <?PHP else : ?>
-                    <?= $this->layout()->content ?>
+                        <?= $this->layout()->content ?>
                     <?PHP endif; ?>
                 <?PHP else : ?>
-                    <?PHP if ($this->accessAllowed('documents') && ! is_null($this->adminform)) : // TODO module specific code ?>
+                    <?PHP if ($this->accessAllowed('documents') && $this->adminform !== null) : // TODO module specific code ?>
                         <?= $this->adminform ?>
                     <?PHP endif ?>
 
@@ -239,7 +238,7 @@ if (isset($config->javascript->latex->mathjax)) {
             </div>
         </div>
 
-        <?PHP include('debug.phtml') ?>
+        <?PHP include 'debug.phtml' ?>
 
     </body>
 </html>

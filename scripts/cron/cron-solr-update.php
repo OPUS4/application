@@ -26,8 +26,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -37,9 +35,9 @@ define('APPLICATION_ENV', 'development');
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Common\Log;
 use Opus\Job\Runner;
 use Opus\Search\Task\IndexOpusDocument;
-use Opus\Log;
 
 $jobrunner = new Runner();
 $jobrunner->setLogger(Log::get());

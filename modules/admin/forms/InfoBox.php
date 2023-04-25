@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 /**
  * Unterformular mit Haupttitel, ID, und Authoren eines Dokuments.
@@ -41,12 +39,12 @@ use Opus\Document;
  */
 class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
 {
-
     /**
      * Dokument das angezeigt wird.
-     * @var Document
+     *
+     * @var DocumentInterface
      */
-    private $_document;
+    private $document;
 
     /**
      * Initialisiert das Formular.
@@ -61,36 +59,38 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
 
         $this->setDecorators(
             [
-            ['ViewScript', ['viewScript' => 'infobox.phtml']]
+                ['ViewScript', ['viewScript' => 'infobox.phtml']],
             ]
         );
     }
 
     /**
      * Initialisiert Formular mit Dokument.
-     * @param Document $document
+     *
+     * @param DocumentInterface $document
      */
     public function populateFromModel($document)
     {
-        if ($document instanceof Document) {
-            $this->_document = $document;
+        if ($document instanceof DocumentInterface) {
+            $this->document = $document;
         } else {
-            $objclass = ($document !== null) ? get_class($document) : 'null';
+            $objclass = $document !== null ? get_class($document) : 'null';
             $this->getLogger()->err(__METHOD__ . " Called with instance of '$objclass'.");
         }
     }
 
     /**
      * Initialisiert Formular nach POST.
-     * @param array $post
-     * @param Document $document
+     *
+     * @param array                  $post
+     * @param null|DocumentInterface $document
      */
     public function constructFromPost($post, $document = null)
     {
-        if ($document instanceof Document) {
-            $this->_document = $document;
+        if ($document instanceof DocumentInterface) {
+            $this->document = $document;
         } else {
-            $objclass = ($document !== null) ? get_class($document) : 'null';
+            $objclass = $document !== null ? get_class($document) : 'null';
             $this->getLogger()->err(__METHOD__ . " Called with instance of '$objclass'.");
         }
     }
@@ -99,11 +99,12 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
      * Liefert Dokument zurück.
      *
      * Wird vom ViewScript verwendet, um das Dokument zu holen.
-     * @return Document
+     *
+     * @return DocumentInterface
      */
     public function getDocument()
     {
-        return $this->_document;
+        return $this->document;
     }
 
     /**
@@ -111,7 +112,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm
      *
      * Dieses Formular soll immer angezeigt werden, daher liefert diese Funktion immer FALSE zurück.
      *
-     * @return boolean FALSE immer
+     * @return false FALSE immer
      */
     public function isEmpty()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,38 +25,55 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Sword
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2016-2020
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO separate differentiation of ZIP and TAR into separate classes - it should be possible to ADD another class to
  *      support a new type of package - it should not be necessary to MODIFY existing classes for that
  */
+
+use Opus\Import\AbstractPackageReader;
+use Opus\Import\AdditionalEnrichments;
+use Opus\Import\ImportStatusDocument;
+use Opus\Import\TarPackageReader;
+use Opus\Import\ZipPackageReader;
+
 class Sword_Model_PackageHandler
 {
+    /** @var AdditionalEnrichments */
     private $additionalEnrichments;
 
+    /** @var string */
     private $packageType;
 
-    const PACKAGE_TYPE_ZIP = 'zip';
+    public const PACKAGE_TYPE_ZIP = 'zip';
 
-    const PACKAGE_TYPE_TAR = 'tar';
+    public const PACKAGE_TYPE_TAR = 'tar';
 
+    /**
+     * @param string $contentType
+     * @throws Exception
+     */
     public function __construct($contentType)
     {
         $this->setPackageType($contentType);
     }
 
+    /**
+     * @param AdditionalEnrichments $additionalEnrichments
+     */
     public function setAdditionalEnrichments($additionalEnrichments)
     {
         $this->additionalEnrichments = $additionalEnrichments;
     }
 
+    /**
+     * @param string $contentType
+     * @throws Exception
+     */
     private function setPackageType($contentType)
     {
-        if (is_null($contentType) || $contentType === false) {
+        if ($contentType === null || $contentType === false) {
             throw new Exception('Content-Type header is required');
         }
 
@@ -75,27 +93,26 @@ class Sword_Model_PackageHandler
      * Verarbeitet die mit dem SWORD-Request übergebene Paketdatei.
      *
      * @param string $payload der Inhalt der Paketdatei
-     * @return mixed
+     * @return ImportStatusDocument|null
      */
     public function handlePackage($payload)
     {
         $packageReader = $this->getPackageReader();
-        if (is_null($packageReader)) {
+        if ($packageReader === null) {
             // TODO improve error handling
             return null;
         }
 
         $tmpDirName = null;
-        $statusDoc = null;
+        $statusDoc  = null;
         try {
             $tmpDirName = $this->createTmpDir($payload);
             $this->savePackage($payload, $tmpDirName);
 
-
             $statusDoc = $packageReader->readPackage($tmpDirName);
         } finally {
             // TODO copy file before cleanup if error occured
-            if (! is_null($tmpDirName)) {
+            if ($tmpDirName !== null) {
                 $this->cleanupTmpDir($tmpDirName);
             }
         }
@@ -111,7 +128,7 @@ class Sword_Model_PackageHandler
      */
     private function cleanupTmpDir($tmpDirName)
     {
-        $it = new RecursiveDirectoryIterator($tmpDirName, RecursiveDirectoryIterator::SKIP_DOTS);
+        $it    = new RecursiveDirectoryIterator($tmpDirName, RecursiveDirectoryIterator::SKIP_DOTS);
         $files = new RecursiveIteratorIterator($it, RecursiveIteratorIterator::CHILD_FIRST);
         foreach ($files as $file) {
             if ($file->isDir()) {
@@ -127,7 +144,7 @@ class Sword_Model_PackageHandler
      * Liefert in Abhängigkeit vom zu verarbeitenden Pakettyp ein passendes Objekt zum Einlesen des Pakets zurück.
      * Liefert null zurück, wenn der Pakettyp nicht verarbeitet werden kann.
      *
-     * @return Application_Import_PackageReader
+     * @return AbstractPackageReader
      *
      * TODO make types configurable and remove explicit TAR/ZIP declarations in this class (use factory class?)
      */
@@ -136,10 +153,10 @@ class Sword_Model_PackageHandler
         $packageReader = null;
         switch ($this->packageType) {
             case self::PACKAGE_TYPE_ZIP:
-                $packageReader = new Application_Import_ZipPackageReader();
+                $packageReader = new ZipPackageReader();
                 break;
             case self::PACKAGE_TYPE_TAR:
-                $packageReader = new Application_Import_TarPackageReader();
+                $packageReader = new TarPackageReader();
                 break;
             default:
                 break;
@@ -174,8 +191,8 @@ class Sword_Model_PackageHandler
     {
         $baseDirName = Application_Configuration::getInstance()->getTempPath()
             . DIRECTORY_SEPARATOR . md5($payload) . '-' . time() . '-' . rand(10000, 99999);
-        $suffix = 0;
-        $dirName = "$baseDirName-$suffix";
+        $suffix      = 0;
+        $dirName     = "$baseDirName-$suffix";
         while (is_readable($dirName)) {
             // add another suffix to make file name unique (even if collision events are not very likely)
             $suffix++;

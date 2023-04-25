@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,28 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Rss
- * @author      Sascha Szott <szott@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO context spezifische Titel für RSS feed (latest, collections, ...)
  * TODO move feed code into Rss_Model_Feed
  */
 
-use Opus\Document;
+use Opus\Common\Document;
+use Opus\Search\Result\Base;
+use Opus\Search\SearchException;
 
 class Rss_IndexController extends Application_Controller_Xml
 {
+    public const NUM_OF_ITEMS_PER_FEED = '25';
 
-    const NUM_OF_ITEMS_PER_FEED = '25';
+    public const RSS_SORT_FIELD = 'server_date_published';
 
-    const RSS_SORT_FIELD = 'server_date_published';
-
-    const RSS_SORT_ORDER = 'desc';
+    public const RSS_SORT_ORDER = 'desc';
 
     public function init()
     {
@@ -71,8 +68,8 @@ class Rss_IndexController extends Application_Controller_Xml
         } catch (Application_Search_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $applicationException = new Application_Exception($e->getMessage());
-            $code = $e->getCode();
-            if ($code != 0) {
+            $code                 = $e->getCode();
+            if ($code !== 0) {
                 $applicationException->setHttpResponseCode($code);
             }
             throw $applicationException;
@@ -80,7 +77,7 @@ class Rss_IndexController extends Application_Controller_Xml
 
         // overwrite parameters in rss context
         // rss feeds have a fixed maximum number of items
-        $params['rows'] = self::NUM_OF_ITEMS_PER_FEED;
+        $params['rows']  = self::NUM_OF_ITEMS_PER_FEED;
         $params['start'] = 0;
         // rss feeds have both a fixed sort field and sort order
         $params['sortField'] = self::RSS_SORT_FIELD;
@@ -88,9 +85,9 @@ class Rss_IndexController extends Application_Controller_Xml
 
         $resultList = [];
         try {
-            $searcher = Application_Search_SearcherFactory::getSearcher();
+            $searcher   = Application_Search_SearcherFactory::getSearcher();
             $resultList = $searcher->search($search->createSearchQuery($params));
-        } catch (Opus\Search\Exception $exception) {
+        } catch (SearchException $exception) {
             $this->handleSolrError($exception);
         }
 
@@ -102,7 +99,7 @@ class Rss_IndexController extends Application_Controller_Xml
         $this->setFrontdoorBaseUrl();
     }
 
-    private function handleSolrError(Opus\Search\Exception $exception)
+    private function handleSolrError(SearchException $exception)
     {
         $this->_helper->layout()->enableLayout();
         $this->getLogger()->err(__METHOD__ . ' : ' . $exception);
@@ -131,42 +128,53 @@ class Rss_IndexController extends Application_Controller_Xml
 
         $feedLink = $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/index/index/';
 
-        $this->_proc->setParameter('', 'feedTitle', $feed->getTitle());
-        $this->_proc->setParameter('', 'feedDescription', $feed->getDescription());
-        $this->_proc->setParameter('', 'link', $feedLink);
+        $this->proc->setParameter('', 'feedTitle', $feed->getTitle());
+        $this->proc->setParameter('', 'feedDescription', $feed->getDescription());
+        $this->proc->setParameter('', 'link', $feedLink);
     }
 
+    /**
+     * @param Base $resultList
+     * @throws Exception
+     */
     private function setDates($resultList)
     {
         if ($resultList->getNumberOfHits() > 0) {
             $latestDoc = $resultList->getResults();
-            $document = Document::get($latestDoc[0]->getId());
-            $date = new \Zend_Date($document->getServerDatePublished());
+            $document  = Document::get($latestDoc[0]->getId());
+            $date      = $document->getServerDatePublished()->getDateTime();
         } else {
-            $date = \Zend_Date::now();
+            $date = new DateTime(); // now
         }
-        $this->_proc->setParameter('', 'lastBuildDate', $date->get(\Zend_Date::RFC_2822));
-        $this->_proc->setParameter('', 'pubDate', $date->get(\Zend_Date::RFC_2822));
+
+        $dateOutput = $date->format(DateTime::RFC2822);
+        $this->proc->setParameter('', 'lastBuildDate', $dateOutput);
+        $this->proc->setParameter('', 'pubDate', $dateOutput);
     }
 
+    /**
+     * @param Base $resultList
+     * @throws Application_Exception
+     * @throws DOMException
+     */
     private function setItems($resultList)
     {
-        $this->_xml->appendChild($this->_xml->createElement('Documents'));
+        $this->xml->appendChild($this->xml->createElement('Documents'));
         foreach ($resultList->getResults() as $result) {
-            $document = Document::get($result->getId());
+            $document    = Document::get($result->getId());
             $documentXml = new Application_Util_Document($document);
-            $domNode = $this->_xml->importNode($documentXml->getNode(), true);
+            $domNode     = $this->xml->importNode($documentXml->getNode(), true);
 
             // add publication date in RFC_2822 format
-            $date = $document->getServerDatePublished()->getDateTime();
-            $itemPubDate = $this->_xml->createElement('ItemPubDate', $date->format(DateTime::RFC2822));
+            $date        = $document->getServerDatePublished()->getDateTime();
+            $itemPubDate = $this->xml->createElement('ItemPubDate', $date->format(DateTime::RFC2822));
             $domNode->appendChild($itemPubDate);
-            $this->_xml->documentElement->appendChild($domNode);
+            $this->xml->documentElement->appendChild($domNode);
         }
     }
 
     private function setFrontdoorBaseUrl()
     {
-        $this->_proc->setParameter('', 'frontdoorBaseUrl', $this->view->fullUrl() . '/frontdoor/index/index/docId/');
+        $this->proc->setParameter('', 'frontdoorBaseUrl', $this->view->fullUrl() . '/frontdoor/index/index/docId/');
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,27 +25,35 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Sword
- * @author      Sascha Szott
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2019
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\CollectionInterface;
+use Opus\Common\DocumentInterface;
+use Opus\Common\EnrichmentInterface;
+use Opus\Common\FileInterface;
+use Opus\Common\LicenceInterface;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\NoteInterface;
+use Opus\Common\PersonInterface;
+use Opus\Common\SeriesInterface;
+use Opus\Common\SubjectInterface;
+use Opus\Common\TitleInterface;
+use Opus\Import\AdditionalEnrichments;
 
 /**
  * @covers Sword_DepositController
  */
 class Sword_DepositControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
+    /** @var DepositTestHelper */
     private $testHelper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->testHelper = new DepositTestHelper();
@@ -145,7 +154,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('single-doc-files-implicit.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain', 3);
-        $files = $doc->getFile();
+        $files    = $doc->getFile();
         $language = $doc->getLanguage();
         $this->checkFile($files[0], 'doc1.pdf', $language, null, 1, 1);
         $this->checkFile($files[1], 'doc1.txt', $language, null, 1, 1);
@@ -158,7 +167,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     {
         $doc = $this->depositSuccessful('single-doc-files-implicit.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
         $this->checkMinimalDoc($doc, 'eng', 'book', 'titlemain', 3);
-        $files = $doc->getFile();
+        $files    = $doc->getFile();
         $language = $doc->getLanguage();
         $this->checkFile($files[0], 'doc1.pdf', $language, null, 1, 1);
         $this->checkFile($files[1], 'doc1.txt', $language, null, 1, 1);
@@ -176,11 +185,11 @@ class Sword_DepositControllerTest extends ControllerTestCase
             false
         );
 
-        $config = Application_Configuration::getInstance();
-        $importDir = $config->getWorkspacePath() . 'import/';
+        $config      = Application_Configuration::getInstance();
+        $importDir   = $config->getWorkspacePath() . 'import/';
         $enrichments = $doc->getEnrichmentValues();
-        $filename = $enrichments['opus.import.file'];
-        $filePath = $importDir . $filename;
+        $filename    = $enrichments['opus.import.file'];
+        $filePath    = $importDir . $filename;
 
         $this->addFileToCleanup($filePath);
 
@@ -189,6 +198,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     public function testFileIsKeptInImportFolderAfterError()
     {
+        // TODO LAMINAS BUG
         $doc = $this->depositWithError(
             'invalid-xml.zip',
             DepositTestHelper::CONTENT_TYPE_ZIP,
@@ -198,10 +208,10 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
         $this->assertNull($doc);
 
-        $config = Application_Configuration::getInstance();
+        $config    = Application_Configuration::getInstance();
         $importDir = $config->getWorkspacePath() . 'import/';
 
-        $payload = file_get_contents(APPLICATION_PATH . '/tests/resources/sword-packages/invalid-xml.zip');
+        $payload  = file_get_contents(APPLICATION_PATH . '/tests/resources/sword-packages/invalid-xml.zip');
         $checksum = md5($payload);
 
         $filename = "$checksum-invalid-xml.zip";
@@ -212,7 +222,9 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->assertFileExists($filePath);
     }
 
-
+    /**
+     * @param DocumentInterface $doc
+     */
     private function checkOnlyOneDocIsImported($doc)
     {
         $this->assertEquals('eng', $doc->getLanguage());
@@ -221,6 +233,13 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->assertEquals('colliding-urn', $doc->getIdentifierUrn(0)->getValue());
     }
 
+    /**
+     * @param DocumentInterface $doc
+     * @param string            $language
+     * @param string            $docType
+     * @param string            $titleMainValue
+     * @param int               $fileCount
+     */
     private function checkMinimalDoc($doc, $language = 'deu', $docType = 'book', $titleMainValue = 'Title Main deu', $fileCount = 0)
     {
         $this->assertEquals($language, $doc->getLanguage());
@@ -230,7 +249,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      * @throws Exception
      */
     private function checkAllFieldsImport($doc)
@@ -260,17 +279,18 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $persons = $doc->getPerson();
         $this->assertEquals(8, count($persons));
         $roles = [
-            'advisor' => 1,
-            'author' => 2,
+            'advisor'     => 1,
+            'author'      => 2,
             'contributor' => 3,
-            'editor' => 4,
-            'referee' => 5,
-            'translator' => 6,
-            'submitter' => 7,
-            'other' => 8];
+            'editor'      => 4,
+            'referee'     => 5,
+            'translator'  => 6,
+            'submitter'   => 7,
+            'other'       => 8,
+        ];
         for ($i = 0; $i < count($persons); $i++) {
             $person = $persons[$i];
-            $role = $person->getRole();
+            $role   = $person->getRole();
             if (! array_key_exists($role, $roles)) {
                 throw new Exception('unexpected person role ' . $role);
             }
@@ -348,81 +368,124 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->checkFile($files[3], 'doc1.pdf', 'deu', 'doc1', 1, 1, 2, 'comment1');
     }
 
+    /**
+     * @param FileInterface $file
+     * @param string        $name
+     * @param string        $language
+     * @param string        $displayName
+     * @param bool          $visibleInOai
+     * @param bool          $visibleInFrontdoor
+     * @param int|null      $sortOrder
+     * @param string|null   $comment
+     */
     private function checkFile($file, $name, $language, $displayName, $visibleInOai, $visibleInFrontdoor, $sortOrder = null, $comment = null)
     {
         $this->assertEquals($name, $file->getPathName());
         $this->assertEquals($language, $file->getLanguage());
-        if (! is_null($displayName)) {
+        if ($displayName !== null) {
             $this->assertEquals($displayName, $file->getLabel());
         }
         $this->assertEquals($visibleInOai, $file->getVisibleInOai());
         $this->assertEquals($visibleInFrontdoor, $file->getVisibleInFrontdoor());
-        if (! is_null($sortOrder)) {
+        if ($sortOrder !== null) {
             $this->assertEquals($sortOrder, $file->getSortOrder());
         }
-        if (! is_null($comment)) {
+        if ($comment !== null) {
             $this->assertEquals($comment, $file->getComment());
         }
     }
 
+    /**
+     * @param LicenceInterface $licence
+     * @param int              $id
+     */
     private function checkLicence($licence, $id)
     {
         $this->assertEquals($id, $licence->getModel()->getId());
     }
 
+    /**
+     * @param EnrichmentInterface[] $enrichments
+     */
     private function checkNonImportEnrichments($enrichments)
     {
         foreach ($enrichments as $enrichment) {
             $keyName = $enrichment->getKeyName();
-            if ($keyName != Application_Import_AdditionalEnrichments::OPUS_SOURCE && strpos($keyName, 'opus.import.') !== 0) {
+            if ($keyName !== AdditionalEnrichments::OPUS_SOURCE && strpos($keyName, 'opus.import.') !== 0) {
                 // überprüfe hier nur die Enrichments, die nicht automatisch beim Import eines Dokuments angelegt werden
                 $value = $enrichment->getValue();
-                $this->assertTrue($keyName == 'SourceSwb' && $value == 'enrichment1' || $keyName == 'SourceTitle' && $value == 'enrichment2');
+                $this->assertTrue($keyName === 'SourceSwb' && $value === 'enrichment1' || $keyName === 'SourceTitle' && $value === 'enrichment2');
             }
         }
     }
 
+    /**
+     * @param SeriesInterface $series
+     * @param int             $id
+     * @param string          $number
+     */
     private function checkSeries($series, $id, $number)
     {
         $this->assertEquals($id, $series->getModel()->getId());
         $this->assertEquals($number, $series->getNumber());
     }
 
+    /**
+     * @param CollectionInterface[] $collections
+     */
     private function checkCollections($collections)
     {
         $idsFound = [];
         foreach ($collections as $collection) {
-            $collId = $collection->getId();
-            if ($collId == $this->testHelper->getCollectionId() || $collId == 15997 || $collId == 7871) {
+            $collId = (int) $collection->getId();
+            if ($collId === $this->testHelper->getCollectionId() || $collId === 15997 || $collId === 7871) {
                 $idsFound[$collId] = true;
             }
         }
         $this->assertEquals(3, count($idsFound));
     }
 
+    /**
+     * @param NoteInterface $note
+     * @param string        $type
+     */
     private function checkNote($note, $type)
     {
         $this->assertEquals('note-' . $type, $note->getMessage());
         $this->assertEquals($type, $note->getVisibility());
     }
 
+    /**
+     * @param DocumentInterface $doc
+     * @param string            $type
+     * @param null|string       $value
+     */
     private function checkIdentifier($doc, $type, $value = null)
     {
         $methodName = 'getIdentifier' . ucfirst($type);
         $identifier = $doc->$methodName(0);
-        if (is_null($value)) {
+        if ($value === null) {
             $this->assertEquals($type, $identifier->getValue());
         } else {
             $this->assertEquals($value, $identifier->getValue());
         }
     }
 
+    /**
+     * @param SubjectInterface $subject
+     * @param string           $value
+     * @param string           $type
+     */
     private function checkSubject($subject, $value, $type)
     {
         $this->assertEquals($value, $subject->getValue());
         $this->assertEquals($type, $subject->getType());
     }
 
+    /**
+     * @param PersonInterface $person
+     * @param int             $index
+     */
     private function checkPersonFields($person, $index)
     {
         $this->assertEquals('fn' . $index, $person->getFirstName());
@@ -433,13 +496,17 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->assertEquals('pob' . $index, $person->getPlaceOfBirth());
         $this->assertEquals('198' . $index . '-01-02', $person->getDateOfBirth()->__toString());
 
-        if ($person->getRole() == 'advisor') {
+        if ($person->getRole() === 'advisor') {
             $this->assertEquals('orcid', $person->getIdentifierOrcid());
             $this->assertEquals('gnd', $person->getIdentifierGnd());
             $this->assertEquals('intern', $person->getIdentifierMisc());
         }
     }
 
+    /**
+     * @param TitleInterface[] $titles
+     * @param string           $titleType
+     */
     private function checkTitleFields($titles, $titleType)
     {
         $this->assertEquals(2, count($titles));
@@ -448,16 +515,15 @@ class Sword_DepositControllerTest extends ControllerTestCase
     }
 
     /**
-     *
      * @param string $fileName
      * @param string $contentType
-     * @param bool $abstractExist
-     * @param bool $deleteDoc
-     * @param bool $deleteCollection
-     * @param int $numOfEnrichments
-     * @param int $numOfCollections
+     * @param bool   $abstractExist
+     * @param bool   $deleteDoc
+     * @param bool   $deleteCollection
+     * @param int    $numOfEnrichments
+     * @param int    $numOfCollections
      * @param string $serverState
-     * @return Document
+     * @return DocumentInterface
      */
     private function depositSuccessful(
         $fileName,
@@ -469,7 +535,6 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $numOfCollections = 1,
         $serverState = 'unpublished'
     ) {
-
         $this->testHelper->assertEmptyTmpDir();
         $this->testHelper->disableExceptionConversion();
         $this->getRequest()->setMethod('POST');
@@ -492,6 +557,17 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     /**
      * TODO addapt function to run deposit requests producing various errors
+     *
+     * @param string $fileName
+     * @param string $contentType
+     * @param bool   $abstractExist
+     * @param bool   $deleteDoc
+     * @param bool   $deleteCollection
+     * @param int    $numOfEnrichments
+     * @param int    $numOfCollections
+     * @param string $serverState
+     * @throws Zend_Controller_Exception
+     * @throws Zend_Exception
      */
     private function depositWithError(
         $fileName,
@@ -503,7 +579,6 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $numOfCollections = 1,
         $serverState = 'unpublished'
     ) {
-
         $this->testHelper->assertEmptyTmpDir();
         $this->testHelper->disableExceptionConversion();
         $this->getRequest()->setMethod('POST');
@@ -516,12 +591,24 @@ class Sword_DepositControllerTest extends ControllerTestCase
         $this->dispatch('/sword/deposit');
         $this->testHelper->assertEmptyTmpDir();
 
+        // TODO LAMINAS BUG
         $doc = $this->checkErrorDocument($checksum, $fileName, $abstractExist, $numOfEnrichments, $numOfCollections, $serverState, $deleteDoc);
         if ($deleteCollection) {
             $this->testHelper->removeImportCollection();
         }
     }
 
+    /**
+     * @param string $checksum
+     * @param string $fileName
+     * @param bool   $abstractExist
+     * @param int    $numOfEnrichments
+     * @param int    $numOfCollections
+     * @param string $serverState
+     * @param bool   $deleteDoc
+     * @return DocumentInterface|null
+     * @throws NotFoundException
+     */
     private function checkAtomEntryDocument($checksum, $fileName, $abstractExist, $numOfEnrichments, $numOfCollections, $serverState, $deleteDoc)
     {
         $this->assertEquals(201, $this->getResponse()->getHttpResponseCode());
@@ -542,10 +629,20 @@ class Sword_DepositControllerTest extends ControllerTestCase
         }
 
         $doc->delete();
+
+        return null;
     }
 
     /**
      * TODO adapt function for checking error document OPUSVIER-4500
+     *
+     * @param string $checksum
+     * @param string $fileName
+     * @param bool   $abstractExist
+     * @param int    $numOfEnrichments
+     * @param int    $numOfCollections
+     * @param string $serverState
+     * @param bool   $deleteDoc
      */
     private function checkErrorDocument($checksum, $fileName, $abstractExist, $numOfEnrichments, $numOfCollections, $serverState, $deleteDoc)
     {
@@ -571,11 +668,15 @@ class Sword_DepositControllerTest extends ControllerTestCase
          */
     }
 
+    /**
+     * @param string $frontdoorUrl
+     * @throws Exception
+     */
     private function checkHttpResponseHeaders($frontdoorUrl)
     {
         $headers = $this->getResponse()->getHeaders();
         foreach ($headers as $header) {
-            $name = $header['name'];
+            $name  = $header['name'];
             $value = $header['value'];
             switch ($name) {
                 case 'Location':

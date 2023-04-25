@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Script
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -34,18 +33,18 @@ define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+use Opus\Common\Log;
+use Opus\Import\Worker\MetadataImportWorker;
 use Opus\Job\Runner;
-use Opus\Job\Worker\MetadataImport;
-use Opus\Log;
 
-$jobrunner = new Runner;
+$jobrunner = new Runner();
 $jobrunner->setLogger(Log::get());
 // no waiting between jobs
 $jobrunner->setDelay(0);
 // set a limit of 100 index jobs per run
 $jobrunner->setLimit(100);
 
-$importWorker = new MetadataImport(null);
+$importWorker = new MetadataImportWorker(null);
 $importWorker->setLogger(Log::get());
 
 $jobrunner->registerWorker($importWorker);

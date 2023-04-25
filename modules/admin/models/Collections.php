@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,22 +25,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Admin_Model
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
+use Opus\Common\CollectionRole;
 
 class Admin_Model_Collections extends Application_Model_Abstract
 {
-
+    /** @var Zend_View_Interface */
     private $view;
 
     /**
      * Returns array with information about collection roles.
+     *
+     * @param int|null $documentId
      * @return array
      *
      * TODO using view in action helper is not best design
@@ -52,18 +52,18 @@ class Admin_Model_Collections extends Application_Model_Abstract
 
         foreach ($collectionRoles as $collectionRole) {
             $rootCollection = $collectionRole->getRootCollection();
-            if (! is_null($rootCollection)) {
+            if ($rootCollection !== null) {
                 $collection = [
-                    'id' => $rootCollection->getId(),
-                    'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
+                    'id'          => $rootCollection->getId(),
+                    'name'        => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
                     'hasChildren' => $rootCollection->hasChildren(),
-                    'visible' => $collectionRole->getVisible(),
-                    'isRoot' => true,
-                    'role' => $collectionRole,
-                    'collection' => $rootCollection
+                    'visible'     => $collectionRole->getVisible(),
+                    'isRoot'      => true,
+                    'role'        => $collectionRole,
+                    'collection'  => $rootCollection,
                 ];
 
-                if (! is_null($documentId)) {
+                if ($documentId !== null) {
                     $collection['assigned'] = $rootCollection->holdsDocumentById($documentId);
                 } else {
                     $collection['assigned'] = false;
@@ -76,6 +76,9 @@ class Admin_Model_Collections extends Application_Model_Abstract
         return $collections;
     }
 
+    /**
+     * @param Zend_View_Interface $view
+     */
     public function setView($view)
     {
         $this->view = $view;

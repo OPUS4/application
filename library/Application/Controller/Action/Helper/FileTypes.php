@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Configuration
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2018
+ * @copyright   Copyright (c) 2017, OPUS4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * Class for handling file type configuration.
@@ -36,43 +34,39 @@
  *      access getFileType()->getContentDisposition OR getContentDisposition($fileType)
  * TODO different configuration structure might be more efficient
  */
+
+use Opus\Common\Config\FileTypes;
+
 class Application_Controller_Action_Helper_FileTypes extends Application_Controller_Action_Helper_Abstract
 {
+    /** @var FileTypes */
+    private $fileTypes;
 
-    private $_validMimeTypes = null;
+    /**
+     * Constructor of Application_Controller_Action_Helper_FileTypes
+     */
+    public function __construct()
+    {
+        $this->fileTypes = new FileTypes();
+    }
 
     /**
      * Returns valid MIME-Types for imports.
      *
      * TODO not used by "publish"-module yet
      *
-     * @return mixed
+     * @return array
      */
     public function getValidMimeTypes()
     {
-        if (is_null($this->_validMimeTypes)) {
-            $config = $this->getConfig();
-
-            $mimeTypes = [];
-
-            $fileTypes = $config->filetypes->toArray();
-
-            foreach ($fileTypes as $extension => $fileType) {
-                if (isset($fileType['mimeType']) && $extension !== 'default') {
-                    $mimeTypes[strtolower($extension)] = $fileType['mimeType'];
-                }
-            }
-
-            $this->_validMimeTypes = $mimeTypes;
-        }
-
-        return $this->_validMimeTypes;
+        return $this->fileTypes->getValidMimeTypes();
     }
 
     /**
      * Checks if a MIME-type is allowed for OPUS 4 files.
      *
-     * @param $mimeType
+     * @param string      $mimeType
+     * @param string|null $extension
      * @return bool
      *
      * TODO more efficient method to check?
@@ -80,58 +74,17 @@ class Application_Controller_Action_Helper_FileTypes extends Application_Control
      */
     public function isValidMimeType($mimeType, $extension = null)
     {
-        $mimeTypes = $this->getValidMimeTypes();
-
-        if (! is_null($extension)) {
-            $extension = strtolower($extension);
-
-            if (isset($mimeTypes[$extension])) {
-                $mimeTypes = $mimeTypes[$extension];
-            } else {
-                // unknown extension
-                return false;
-            }
-
-            if (is_array($mimeTypes)) {
-                return in_array($mimeType, $mimeTypes);
-            } else {
-                return $mimeType === $mimeTypes;
-            }
-        } else {
-            if (in_array($mimeType, $mimeTypes)) {
-                return true;
-            } else {
-                foreach ($mimeTypes as $extension => $types) {
-                    if (is_array($types) && in_array($mimeType, $types)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        return false;
+        return $this->fileTypes->isValidMimeType($mimeType, $extension);
     }
 
     /**
      * Returns content disposition for MIME-type used for downloads.
+     *
+     * @param string|null $mimeType
+     * @return string
      */
     public function getContentDisposition($mimeType = null)
     {
-        $config = $this->getConfig();
-
-        $fileTypes = $config->filetypes;
-
-        $contentDisposition = $fileTypes->default->contentDisposition;
-
-        foreach ($fileTypes->toArray() as $extension => $fileType) {
-            if (isset($fileType['mimeType']) && $fileType['mimeType'] === $mimeType) {
-                if (isset($fileType['contentDisposition'])) {
-                    $contentDisposition = $fileType['contentDisposition'];
-                    break;
-                }
-            }
-        }
-
-        return $contentDisposition;
+        return $this->fileTypes->getContentDisposition($mimeType);
     }
 }

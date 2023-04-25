@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -36,18 +34,18 @@
  */
 class Application_View_Helper_OptionEnabled extends Application_View_Helper_Abstract
 {
-
     /**
      * Checks if configuration option is enabled.
-     * @param $optionKey Name of option
-     * @param null $context Context for option
+     *
+     * @param string     $optionKey Name of option
+     * @param array|null $context Context for option
      * @return bool true if option exists and has value '1' or 'true'
      */
     public function optionEnabled($optionKey, $context = null)
     {
         $key = $optionKey;
 
-        if (! is_null($context)) {
+        if ($context !== null) {
             $key = "$context.$key";
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,23 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Sword
- * @author      Sascha Szott
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2016-2021
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+use Opus\Common\Log;
+use Opus\Import\AdditionalEnrichments;
+use Opus\Import\ImportStatusDocument;
+use Opus\Import\Xml\MetadataImportInvalidXmlException;
+
+/**
  * TODO use OPUS 4 base class?
  * TODO too much code in this controller
  * TODO change AdditionalEnrichments into something like ImportInfo and make it easy to access properties like "user"
  */
-
-use Opus\Log;
-
-class Sword_DepositController extends \Zend_Rest_Controller
+class Sword_DepositController extends Zend_Rest_Controller
 {
-
     public function init()
     {
         $this->getHelper('Layout')->disableLayout();
@@ -52,7 +52,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
      */
     public function postAction()
     {
-        $request = $this->getRequest();
+        $request  = $this->getRequest();
         $response = $this->getResponse();
 
         $userName = Application_Security_BasicAuthProtection::accessAllowed($request, $response);
@@ -64,15 +64,15 @@ class Sword_DepositController extends \Zend_Rest_Controller
 
         // mediated deposit is currently not supported by OPUS
         $mediatedDeposit = $request->getHeader('X-On-Behalf-Of');
-        if (! is_null($mediatedDeposit) && $mediatedDeposit !== false) {
+        if ($mediatedDeposit !== null && $mediatedDeposit !== false) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setMediationNotAllowed();
             return;
         }
 
-        // currently OPUS supports deposit of ZIP and TAR packages only
+    // currently OPUS supports deposit of ZIP and TAR packages only
         try {
-            $contentType = $request->getHeader('Content-Type');
+            $contentType    = $request->getHeader('Content-Type');
             $packageHandler = new Sword_Model_PackageHandler($contentType);
         } catch (Exception $e) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
@@ -80,7 +80,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
             return;
         }
 
-        // check that package size does not exceed maximum upload size
+    // check that package size does not exceed maximum upload size
         $payload = $request->getRawBody();
         if ($this->maxUploadSizeExceeded($payload)) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
@@ -88,7 +88,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
             return;
         }
 
-        // check that all import enrichment keys are present
+    // check that all import enrichment keys are present
         try {
             $additionalEnrichments = $this->getAdditionalEnrichments($userName, $request);
             $packageHandler->setAdditionalEnrichments($additionalEnrichments);
@@ -98,20 +98,20 @@ class Sword_DepositController extends \Zend_Rest_Controller
             return;
         }
 
-        // compare checksums (if given in HTTP request header)
+    // compare checksums (if given in HTTP request header)
         $checksum = $additionalEnrichments->getChecksum();
-        if (! is_null($checksum)) {
+        if ($checksum !== null) {
             $checksumPayload = md5($payload);
-            if (strcasecmp($checksum, $checksumPayload) != 0) {
+            if (strcasecmp($checksum, $checksumPayload) !== 0) {
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
                 $errorDoc->setErrorChecksumMismatch($checksum, $checksumPayload);
                 return;
             }
         }
 
-        // TODO data is stored again within handlePackage - that should be avoied
+    // TODO data is stored again within handlePackage - that should be avoied
         $filename = $this->generatePackageFileName($additionalEnrichments);
-        $config = Application_Configuration::getInstance();
+        $config   = Application_Configuration::getInstance();
         $filePath = $config->getWorkspacePath() . 'import/' . $filename;
         file_put_contents($filePath, $payload);
 
@@ -119,7 +119,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
 
         try {
             $statusDoc = $packageHandler->handlePackage($payload);
-            if (is_null($statusDoc)) {
+            if ($statusDoc === null) {
                 // im Archiv befindet sich keine Datei opus.xml oder die Datei ist leer
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
                 $errorDoc->setMissingXml();
@@ -129,7 +129,7 @@ class Sword_DepositController extends \Zend_Rest_Controller
                 $errorDoc = new Sword_Model_ErrorDocument($request, $response);
                 $errorDoc->setInternalFrameworkError();
             }
-        } catch (Application_Import_MetadataImportInvalidXmlException $ex) {
+        } catch (MetadataImportInvalidXmlException $ex) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
             $errorDoc->setInvalidXml();
         } catch (Exception $ex) {
@@ -140,12 +140,18 @@ class Sword_DepositController extends \Zend_Rest_Controller
             return;
         }
 
-        // cleanup file after successful import
+    // cleanup file after successful import
         unlink($filePath);
 
         $this->returnAtomEntryDocument($statusDoc, $request, $response, $userName);
     }
 
+    /**
+     * @param ImportStatusDocument          $statusDoc
+     * @param Zend_Controller_Request_Http  $request
+     * @param Zend_Controller_Response_Http $response
+     * @param string                        $userName
+     */
     private function returnAtomEntryDocument($statusDoc, $request, $response, $userName)
     {
         $atomDoc = $this->createAtomEntryDocument($statusDoc);
@@ -153,8 +159,8 @@ class Sword_DepositController extends \Zend_Rest_Controller
     }
 
     /**
-     *
-     * @param Application_Import_ImportStatusDocument $statusDoc
+     * @param ImportStatusDocument $statusDoc
+     * @return Sword_Model_AtomEntryDocument
      */
     private function createAtomEntryDocument($statusDoc)
     {
@@ -163,9 +169,13 @@ class Sword_DepositController extends \Zend_Rest_Controller
         return $atomEntryDoc;
     }
 
+    /**
+     * @param string $payload
+     * @return bool
+     * @throws Zend_Exception
+     */
     private function maxUploadSizeExceeded($payload)
     {
-
         // retrieve number of bytes (not characters) of HTTP payload (SWORD package)
         $size = mb_strlen($payload, '8bit');
 
@@ -178,32 +188,43 @@ class Sword_DepositController extends \Zend_Rest_Controller
         return false;
     }
 
+    /**
+     * @param string                       $userName
+     * @param Zend_Controller_Request_Http $request
+     * @return AdditionalEnrichments
+     */
     private function getAdditionalEnrichments($userName, $request)
     {
-        $additionalEnrichments = new Application_Import_AdditionalEnrichments();
+        $additionalEnrichments = new AdditionalEnrichments();
 
         $additionalEnrichments->addUser($userName);
 
         $fileName = $request->getHeader('Content-Disposition');
-        if (! is_null($fileName) && $fileName !== false) {
+        if ($fileName !== null && $fileName !== false) {
             $additionalEnrichments->addFile($fileName);
         }
 
         $checksum = $request->getHeader('Content-MD5');
-        if (! is_null($checksum) && $checksum !== false) {
+        if ($checksum !== null && $checksum !== false) {
             $additionalEnrichments->addChecksum($checksum);
         }
 
         return $additionalEnrichments;
     }
 
+    /**
+     * @return string
+     */
     private function getFullUrl()
     {
         $fullUrlHelper = new Application_View_Helper_FullUrl();
-        $fullUrlHelper->setView(new \Zend_View());
+        $fullUrlHelper->setView(new Zend_View());
         return $fullUrlHelper->fullUrl();
     }
 
+    /**
+     * @param Zend_Controller_Response_Abstract $response
+     */
     private function return500($response)
     {
         $response->setHttpResponseCode(500);
@@ -237,7 +258,9 @@ class Sword_DepositController extends \Zend_Rest_Controller
 
     /**
      * Generates a name for storing the package as a file.\
-     * @param Application_Import_AdditionalEnrichments $importInfo
+     *
+     * @param AdditionalEnrichments $importInfo
+     * @return string
      */
     protected function generatePackageFileName($importInfo)
     {

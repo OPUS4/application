@@ -1,5 +1,6 @@
 <?PHP
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -38,16 +36,15 @@
  */
 class Application_Form_Element_IpAddress extends Application_Form_Element_Text
 {
-
     public function init()
     {
         parent::init();
 
-        $validator = new \Zend_Validate_Ip(['allowipv4' => true, 'allowipv6' => false]);
+        $validator = new Zend_Validate_Ip(['allowipv4' => true, 'allowipv6' => false]);
         $validator->setMessages(
             [
-                \Zend_Validate_Ip::INVALID => 'validation_error_ip_invalid',
-                \Zend_Validate_Ip::NOT_IP_ADDRESS => 'validation_error_ip_not_address',
+                Zend_Validate_Ip::INVALID        => 'validation_error_ip_invalid',
+                Zend_Validate_Ip::NOT_IP_ADDRESS => 'validation_error_ip_not_address',
             ]
         );
         $this->setValidators([$validator]);

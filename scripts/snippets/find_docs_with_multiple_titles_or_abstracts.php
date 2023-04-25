@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Document;
+use Opus\Common\Repository;
 
 /**
- *
  * Dieses Skript gibt alle IDs der Dokumente zurück, die mehr als einen Titel
  * und/oder Abstract in der Sprache des Dokuments besitzen.
  *
@@ -65,7 +63,7 @@ foreach ($docfinder->getIds() as $docId) {
     }
 
     if ($numOfTitles > 1 || $numOfAbstracts > 1) {
-        $msg = "document #$docId (";
+        $msg         = "document #$docId (";
         $opusThreeId = $doc->getIdentifierOpus3();
         if (count($opusThreeId) > 0) {
             $msg .= 'opus3id #' . $opusThreeId[0]->getValue() . ' ';
@@ -82,7 +80,7 @@ foreach ($docfinder->getIds() as $docId) {
     }
 }
 
-if ($updateRequired == 0) {
+if ($updateRequired === 0) {
     echo "all docs were checked -- nothing to do!\n";
 } else {
     echo "$updateRequired docs need to be updated manually!\n";

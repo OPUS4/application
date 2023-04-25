@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,66 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Import
- * @author      Gunar Maiwald <maiwald@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Import_MetadataImportInvalidXmlException extends \Exception
+/**
+ * Interface for export plugins.
+ *
+ * The plugins are dynamically registered as actions in the export controller.
+ *
+ * TODO The export mechanism should/could be separated from the request/response handling.
+ */
+interface Application_Export_ExportPluginInterface
 {
+    /**
+     * Returns name of plugin.
+     *
+     * @return mixed
+     */
+    public function getName();
+
+    /**
+     * Sets the plugin configuration.
+     *
+     * @param null|Zend_Config $config
+     */
+    public function setConfig($config = null);
+
+    /**
+     * Sets the HTTP request being processed.
+     *
+     * @param Zend_Controller_Request_Abstract $request
+     */
+    public function setRequest($request);
+
+    /**
+     * Sets the HTTP response.
+     *
+     * @param Zend_Controller_Response_Abstract $response
+     */
+    public function setResponse($response);
+
+    /**
+     * Sets the view objekt for rendering the response.
+     *
+     * @param Zend_View_Interface $view
+     */
+    public function setView($view);
+
+    /**
+     * Main function performing export.
+     */
+    public function execute();
+
+    /**
+     * @return bool returns true if plugin access is restricted to administrators
+     */
+    public function isAccessRestricted();
+
+    /**
+     * @return bool returns true if export of unpublished documents is allowed
+     */
+    public function isAllowExportOfUnpublishedDocs();
 }

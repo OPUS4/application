@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,6 +24,9 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
@@ -31,40 +35,39 @@
  * Der Decorator wird dem Formular zugewiesen und er sorgt dafür, dass ein
  * Input-Feld fuer den Remove-Button ausgegeben wird.
  *
- * @category    Application
- * @package     Application_Form_Decorator
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
  * TODO find better solution that is more generic
  */
-class Application_Form_Decorator_RemoveButton extends \Zend_Form_Decorator_Abstract
+
+class Application_Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract
 {
+    /** @var Zend_Form_Element|null */
+    private $secondElement;
 
-    private $_secondElement;
-
+    /**
+     * @param string $content
+     * @return string
+     */
     public function render($content)
     {
         $button = $this->getElement();
 
-        if ($button instanceof \Zend_Form) {
+        if ($button instanceof Zend_Form) {
             $button = $button->getElement(Admin_Form_Document_MultiSubForm::ELEMENT_REMOVE);
         }
 
-        if (is_null($button)) {
+        if ($button === null) {
             return $content;
         }
 
         $view = $button->getView();
 
-        if (! $view instanceof \Zend_View_Interface) {
+        if (! $view instanceof Zend_View_Interface) {
             return $content;
         }
 
         $markup = $this->renderElement($button);
 
-        if (! is_null($this->getSecondElement())) {
+        if ($this->getSecondElement() !== null) {
             $markup = $this->renderElement($this->getSecondElement(), 'hidden') . $markup;
         }
 
@@ -72,41 +75,46 @@ class Application_Form_Decorator_RemoveButton extends \Zend_Form_Decorator_Abstr
     }
 
     /**
-     * @param $element
+     * @param Zend_Form_Element $element
+     * @param string            $type
      * @return string
      */
     public function renderElement($element, $type = 'submit')
     {
-        $buttonId = $element->getId();
+        $buttonId       = $element->getId();
         $buttonFullName = $element->getFullyQualifiedName();
-        $buttonName = $element->getName();
+        $buttonName     = $element->getName();
 
         // TODO hack (find transparent solution)
-        $value = ($type === 'submit') ? $element->getLabel() : null;
+        $value = $type === 'submit' ? $element->getLabel() : null;
 
-        if (strlen(trim($value)) == 0) {
+        if ($value === null || strlen(trim($value)) === 0) {
             $value = $element->getValue();
         }
 
-        $markup = "<input type=\"$type\" name=\"$buttonFullName\" id=\"$buttonId\" value=\"$value\" />";
-
-        return $markup;
+        return "<input type=\"$type\" name=\"$buttonFullName\" id=\"$buttonId\" value=\"$value\" />";
     }
 
+    /**
+     * @param Zend_Form_Element|null $element
+     */
     public function setSecondElement($element)
     {
-        $this->_secondElement = $element;
+        $this->secondElement = $element;
     }
 
+    /**
+     * @return Zend_Form_Element|null
+     */
     public function getSecondElement()
     {
         $element = $this->getOption('element');
 
-        if (! is_null($element)) {
+        if ($element !== null) {
             $this->removeOption('element');
-            $this->_secondElement = $element;
+            $this->secondElement = $element;
         }
 
-        return $this->_secondElement;
+        return $this->secondElement;
     }
 }

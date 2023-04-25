@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Security
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-
-interface Application_Security_AccessControl
+/**
+ * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
+ */
+interface Application_Form_Validate_MultiSubFormInterface
 {
+    /**
+     * Bereitet die Validierung vor.
+     *
+     * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
+     *
+     * @param Zend_Form  $form
+     * @param array      $data
+     * @param null|array $context
+     */
+    public function prepareValidation($form, $data, $context = null);
 
-    public function accessAllowed($resource);
+    /**
+     * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein
+     * sollen.
+     *
+     * @param array      $data
+     * @param null|array $context
+     */
+    public function isValid($data, $context = null);
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,19 +25,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Configuration
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2020
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\OpusException;
 
 /**
  * Checking of information about workspace.
  */
 class Application_Configuration_Workspace
 {
-
+    /**
+     * @return array
+     * @throws OpusException
+     */
     public function getFolders()
     {
         $workspacePath = Application_Configuration::getInstance()->getWorkspacePath();
@@ -44,7 +47,7 @@ class Application_Configuration_Workspace
         $folders = [];
 
         foreach (new DirectoryIterator($workspacePath) as $fileInfo) {
-            if ($fileInfo->isDot() or $fileInfo->isFile()) {
+            if ($fileInfo->isDot() || $fileInfo->isFile()) {
                 continue; // ignore '.' and '..' and files
             }
 
@@ -54,7 +57,7 @@ class Application_Configuration_Workspace
                 continue; // ignore folders starting with a dot
             }
 
-            $status = $fileInfo->isReadable() ? 'r' : '';
+            $status  = $fileInfo->isReadable() ? 'r' : '';
             $status .= $fileInfo->isWritable() ? 'w' : '';
 
             $folders[$name] = $status;

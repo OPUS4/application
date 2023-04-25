@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Home
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Search\Result\Base;
+use Opus\Search\SearchException;
 
 /**
  * Basic unit test for inded controller of home module.
@@ -39,7 +39,7 @@
  */
 class Home_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
     /**
@@ -82,7 +82,7 @@ class Home_IndexControllerTest extends ControllerTestCase
 
     public function testHelpActionSeparate()
     {
-        $config = $this->getConfig();
+        $config                 = $this->getConfig();
         $config->help->separate = self::CONFIG_VALUE_TRUE;
         $this->dispatch('/home/index/help');
         $this->assertResponseCode(200);
@@ -136,14 +136,18 @@ class Home_IndexControllerTest extends ControllerTestCase
         $this->assertAction('notice');
     }
 
+    /**
+     * @param bool $checkConsistency
+     * @return Base
+     * @throws SearchException
+     */
     private function getDocsInSearchIndex($checkConsistency = true)
     {
         $searcher = Application_Search_SearcherFactory::getSearcher();
-        $query = new Opus\Search\Util\Query();
+        $query    = new Opus\Search\Util\Query();
         $query->setCatchAll("*:*");
         $query->setRows(Opus\Search\Util\Query::MAX_ROWS);
-        $resultList = $searcher->search($query, $checkConsistency);
-        return $resultList;
+        return $searcher->search($query, $checkConsistency);
     }
 
     /**
@@ -156,10 +160,10 @@ class Home_IndexControllerTest extends ControllerTestCase
 
         $document = new DOMDocument();
         $document->loadHTML($this->getResponse()->getBody());
-        $element = $document->getElementById('search-result-numofhits');
+        $element   = $document->getElementById('search-result-numofhits');
         $numOfHits = $element->firstChild->textContent;
 
-        $docsInIndex = $this->getDocsInSearchIndex();
+        $docsInIndex    = $this->getDocsInSearchIndex();
         $numOfIndexDocs = $docsInIndex->getNumberOfHits();
         $this->assertEquals($numOfIndexDocs, $numOfHits);
 
@@ -169,7 +173,7 @@ class Home_IndexControllerTest extends ControllerTestCase
 
         $document = new DOMDocument();
         $document->loadHTML($this->getResponse()->getBody());
-        $element = $document->getElementById('solrsearch-totalnumofdocs');
+        $element   = $document->getElementById('solrsearch-totalnumofdocs');
         $numOfDocs = $element->firstChild->textContent;
 
         $docFinder = $this->getDocumentFinder();
@@ -186,11 +190,11 @@ class Home_IndexControllerTest extends ControllerTestCase
         // wenn sie abweichen, dann aufgrund einer Inkonsistenz zwischen Datenbank
         // und Suchindex (das sollte im Rahmen der Tests eigentlich nicht auftreten)
 
-        if ($numOfDbDocs != $numOfIndexDocs) {
+        if ($numOfDbDocs !== $numOfIndexDocs) {
             // ermittle die Doc-IDs, die im Index, aber nicht in der DB existieren
             // bzw. die in der DB, aber nicht im Index existieren
             $idsIndex = [];
-            $results = $docsInIndex->getResults();
+            $results  = $docsInIndex->getResults();
             foreach ($results as $result) {
                 array_push($idsIndex, $result->getId());
             }

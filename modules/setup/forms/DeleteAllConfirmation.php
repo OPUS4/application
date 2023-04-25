@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,17 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Setup_Form
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Setup_Form_DeleteAllConfirmation extends Setup_Form_Confirmation
 {
-
-    const ELEMENT_DELETE_ALL = 'DeleteAll';
+    public const ELEMENT_DELETE_ALL = 'DeleteAll';
 
     public function init()
     {
@@ -43,7 +40,7 @@ class Setup_Form_DeleteAllConfirmation extends Setup_Form_Confirmation
         $element = $this->createElement('radio', self::ELEMENT_DELETE_ALL);
         $element->setMultiOptions([
             'filter' => 'Delete current filter result',
-            'all' => 'setup_translation_delete_all_option'
+            'all'    => 'setup_translation_delete_all_option',
         ])->setValue('filter');
         $this->addElement($element);
 
@@ -52,7 +49,7 @@ class Setup_Form_DeleteAllConfirmation extends Setup_Form_Confirmation
 
         $this->setDecorators([
             ['ViewScript', ['viewScript' => 'language/deleteallConfirmation.phtml']],
-            'Form'
+            'Form',
         ]);
 
         $this->removeElement(self::ELEMENT_MODEL_ID);

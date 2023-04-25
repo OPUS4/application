@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,11 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Julian Heise <heise@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -57,7 +54,7 @@
         <ul class="permissions-list">
         <?php foreach ($this->allModules as $module) : ?>
             <li>
-            <input type="hidden" name="<?= 'list_'.$module ?>" value="list" />
+            <input type="hidden" name="<?= 'list_' . $module ?>" value="list" />
             <input name="<?= 'set_' . $module ?>" type="checkbox" value="set"
                 <?= in_array($module, $this->modules) ? ' checked="checked" ' : '' ?>
                 <?= in_array($module, ['default']) ? ' disabled="disabled" ' : '' ?>
@@ -75,8 +72,8 @@
         <ul class="permissions-list">
         <?php foreach ($this->allResources as $resource) : ?>
             <li>
-            <input type="hidden" name="<?= 'list_'.$resource ?>" value="list" />
-            <input name="<?= 'set_'.$resource ?>" type="checkbox" value="set"
+            <input type="hidden" name="<?= 'list_' . $resource ?>" value="list" />
+            <input name="<?= 'set_' . $resource ?>" type="checkbox" value="set"
                 <?= in_array($resource, $this->modules) ? ' checked="checked" ' : '' ?>
                 <?= in_array($resource, ['default']) ? ' disabled="disabled" ' : '' ?>
             /> <?= $this->translate('acl_' . $resource); ?>
@@ -93,8 +90,8 @@
         <ul class="permissions-list">
         <?php foreach ($this->allWorkflow as $resource) : ?>
             <li>
-            <input type="hidden" name="<?= 'list_'.$resource ?>" value="list" />
-            <input name="<?= 'set_'.$resource ?>" type="checkbox" value="set"
+            <input type="hidden" name="<?= 'list_' . $resource ?>" value="list" />
+            <input name="<?= 'set_' . $resource ?>" type="checkbox" value="set"
                 <?= in_array($resource, $this->modules) ? ' checked="checked" ' : '' ?>
                 <?= in_array($resource, ['default']) ? ' disabled="disabled" ' : '' ?>
             />

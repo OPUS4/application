@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,38 +25,37 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 ?>
 
-<?php if (is_array($this->results) and count($this->results) > 1) : ?>
+<?php if (is_array($this->results) && count($this->results) > 1) : ?>
 <div id="search_options" class="search_options">
 
     <p class="label"><?= $this->translate('sorting_sort_by') ?></p>
     <ul class="sorting_options">
     
-    <?php if ($this->q !== '' && ! $this->browsing
+    <?php if (
+    $this->q !== '' && ! $this->browsing
             && $this->searchType !== 'authorsearch'
             && $this->searchType !== 'collection'
             && $this->searchType !== 'series'
-            && $this->searchType !== 'all') :
-        $urlparams = $this->firstPage;
-        $urlparams['sortfield'] = 'score';
-        $urlparams['sortorder'] = 'desc';
-    ?>
+            && $this->searchType !== 'all'
+) :
+                         $urlparams              = $this->firstPage;
+                         $urlparams['sortfield'] = 'score';
+                         $urlparams['sortorder'] = 'desc';
+                            ?>
         <li class="sorting_option">
-            <?php if ($this->sortfield === 'score' && $this->sortorder === 'desc') : ?>
-                <?= $this->translate('sorting_relevancy') ?>
-            <?php else : ?>
+                         <?php if ($this->sortfield === 'score' && $this->sortorder === 'desc') : ?>
+                                <?= $this->translate('sorting_relevancy') ?>
+                         <?php else : ?>
                 <a href="<?= $this->url($urlparams) ?>" rel="nofollow">
-                    <?= $this->translate('sorting_relevancy') ?>
+                             <?= $this->translate('sorting_relevancy') ?>
                 </a>
-            <?php endif ?>
+                         <?php endif ?>
         </li>
     <?php endif ?>
 
@@ -63,12 +63,12 @@
         $availableSearchFields = ['year', 'title', 'author'];
     if ($this->searchType === 'series') {
         array_unshift($availableSearchFields, 'seriesnumber');
-    };
+    }
     ?>
 
     <?php foreach ($availableSearchFields as $sortfield) : ?>
         <?php foreach (['asc', 'desc'] as $sortorder) :
-                    $urlparams = $this->firstPage;
+                    $urlparams              = $this->firstPage;
                     $urlparams['sortfield'] = $sortfield;
                     $urlparams['sortorder'] = $sortorder; ?>
         <li class="sorting_option sort_<?= $sortorder ?>">

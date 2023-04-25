@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,20 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
 
 /**
  * Unit Tests fuer Unterformular fuer bibliographische Information im Metadaten-Formular.
  */
 class Admin_Form_Document_BibliographicTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['translation'];
 
     public function testCreateForm()
@@ -59,7 +58,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
             'Volume',
             'ThesisDateAccepted',
             'ThesisYearAccepted',
-            'BelongsToBibliography'
+            'BelongsToBibliography',
         ];
 
         $this->assertEquals(count($elements), count($form->getElements()));
@@ -100,7 +99,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $this->assertEquals($doc->getVolume(), $form->getElement('Volume')->getValue());
 
         $datesHelper = new Application_Controller_Action_Helper_Dates();
-        $date = $datesHelper->getDateString($doc->getThesisDateAccepted());
+        $date        = $datesHelper->getDateString($doc->getThesisDateAccepted());
         $this->assertEquals($date, $form->getElement('ThesisDateAccepted')->getValue());
 
         $this->assertEquals($doc->getThesisYearAccepted(), $form->getElement('ThesisYearAccepted')->getValue());
@@ -236,7 +235,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
 
         $post = [
             'ThesisDateAccepted' => '2010/02/31', // muss korrektes Datum sein
-            'ThesisYearAccepted' => 'Jahr' // muss Zahl sein
+            'ThesisYearAccepted' => 'Jahr', // muss Zahl sein
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -250,7 +249,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
 
         $post = [
             'ThesisDateAccepted' => '20. Feb 2010',
-            'ThesisYearAccepted' => '-1'
+            'ThesisYearAccepted' => '-1',
         ];
 
         $this->assertFalse($form->isValid($post)); // keine Pflichteingaben
@@ -263,10 +262,10 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
         $form = new Admin_Form_Document_Bibliographic();
 
         $post = [
-            'PageFirst' => 'XI',
-            'PageLast' => '12',
-            'PageCount' => 'iiv',
-            'ArticleNumber' => '42'
+            'PageFirst'     => 'XI',
+            'PageLast'      => '12',
+            'PageCount'     => 'iiv',
+            'ArticleNumber' => '42',
         ];
 
         $this->assertTrue($form->isValid($post));

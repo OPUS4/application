@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Oai_Format
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
 
 /**
  * TODO unit tests transformations directly without "dispatch"
@@ -41,31 +39,42 @@ use Opus\Document;
  */
 class Oai_Format_DcTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu'];
 
-    private $xpathNamespaces = [
-        'oai' => "http://www.openarchives.org/OAI/2.0/",
-        'oai_dc' => "http://www.openarchives.org/OAI/2.0/oai_dc/",
-        'cc' => "http://www.d-nb.de/standards/cc/",
-        'dc' => "http://purl.org/dc/elements/1.1/",
-        'ddb' => "http://www.d-nb.de/standards/ddb/",
-        'pc' => "http://www.d-nb.de/standards/pc/",
+    /** @var string[] */
+    protected $xpathNamespaces = [
+        'oai'     => "http://www.openarchives.org/OAI/2.0/",
+        'oai_dc'  => "http://www.openarchives.org/OAI/2.0/oai_dc/",
+        'cc'      => "http://www.d-nb.de/standards/cc/",
+        'dc'      => "http://purl.org/dc/elements/1.1/",
+        'ddb'     => "http://www.d-nb.de/standards/ddb/",
+        'pc'      => "http://www.d-nb.de/standards/pc/",
         'dcterms' => "http://purl.org/dc/terms/",
-        'thesis' => "http://www.ndltd.org/standards/metadata/etdms/1.0/",
-        'oaiid' => 'http://www.openarchives.org/OAI/2.0/oai-identifier',
-        'xmlns' => 'http://www.openarchives.org/OAI/2.0/'
+        'thesis'  => "http://www.ndltd.org/standards/metadata/etdms/1.0/",
+        'oaiid'   => 'http://www.openarchives.org/OAI/2.0/oai-identifier',
+        'xmlns'   => 'http://www.openarchives.org/OAI/2.0/',
     ];
 
     /**
      * Method to check response for "bad" strings.
+     *
+     * @param string $body
      */
     protected function checkForBadStringsInHtml($body)
     {
         $badStrings = [
-            "Exception", "Fehler", "Stacktrace", "badVerb", "unauthorized", "internal error", "<error", "</error>"
+            "Exception",
+            "Fehler",
+            "Stacktrace",
+            "badVerb",
+            "unauthorized",
+            "internal error",
+            "<error",
+            "</error>",
         ];
         $this->checkForCustomBadStringsInHtml($body, $badStrings);
     }
@@ -113,7 +122,7 @@ class Oai_Format_DcTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::91');
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
+        $response   = $this->getResponse();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
@@ -136,7 +145,7 @@ class Oai_Format_DcTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::146');
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
+        $response   = $this->getResponse();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
@@ -150,7 +159,7 @@ class Oai_Format_DcTest extends ControllerTestCase
 
         // Regression test for OPUSVIER-2393 (show dc:identifier)
         $urnResolverUrl = $this->getConfig()->urn->resolverUrl;
-        $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="' . $urnResolverUrl . 'urn:nbn:op:123"]');
+        $elements       = $xpath->query('//oai_dc:dc/dc:identifier[text()="' . $urnResolverUrl . 'urn:nbn:op:123"]');
         $this->assertEquals(1, $elements->length, 'dc:identifier URN count changed');
 
         $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="123"]');
@@ -165,7 +174,7 @@ class Oai_Format_DcTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::91');
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
+        $response   = $this->getResponse();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
@@ -199,10 +208,10 @@ class Oai_Format_DcTest extends ControllerTestCase
      */
     public function testGetRecordOaiDcDoc10SubjectDdcAndDate()
     {
-        $doc = Document::get(10);
+        $doc  = Document::get(10);
         $ddcs = [];
         foreach ($doc->getCollection() as $c) {
-            if ($c->getRoleName() == 'ddc') {
+            if ($c->getRoleName() === 'ddc') {
                 $ddcs[] = $c->getNumber();
             }
         }
@@ -211,7 +220,7 @@ class Oai_Format_DcTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::10');
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
+        $response   = $this->getResponse();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
@@ -247,14 +256,14 @@ class Oai_Format_DcTest extends ControllerTestCase
      */
     public function testGetRecordOaiDcDoc114DcDate()
     {
-        $doc = Document::get(114);
+        $doc           = Document::get(114);
         $completedDate = $doc->getCompletedDate();
         $this->assertEquals("2011-04-19", "$completedDate", "testdata changed");
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::114');
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
+        $response   = $this->getResponse();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
@@ -285,7 +294,7 @@ class Oai_Format_DcTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::1');
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
+        $response   = $this->getResponse();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
@@ -304,7 +313,7 @@ class Oai_Format_DcTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=urn:nbn:de:gbv:830-opus-225');
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
+        $response   = $this->getResponse();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
@@ -344,21 +353,21 @@ class Oai_Format_DcTest extends ControllerTestCase
 
     public function testListRecordsMetadataSchemaWithResumptionToken()
     {
-        $max_records = '2';
+        $maxRecords = '2';
 
-        $this->adjustConfiguration(['oai' => ['max' => ['listrecords' => $max_records]]]);
+        $this->adjustConfiguration(['oai' => ['max' => ['listrecords' => $maxRecords]]]);
 
         // first request: fetch documents list and expect resumption code
         $this->dispatch("/oai?verb=ListRecords&metadataPrefix=oai_dc");
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
+        $response   = $this->getResponse();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
-        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $xpath          = $this->prepareXpathFromResultString($response->getBody());
         $recordElements = $xpath->query('//oai:ListRecords/oai:record');
-        $this->assertEquals($max_records, $recordElements->length);
+        $this->assertEquals($maxRecords, $recordElements->length);
 
         $rsTokenElement = $xpath->query('//oai:ListRecords/oai:resumptionToken[@cursor="0"]');
         $this->assertEquals(1, $rsTokenElement->length, 'foobar');
@@ -370,15 +379,15 @@ class Oai_Format_DcTest extends ControllerTestCase
         $this->dispatch("/oai?verb=ListRecords&resumptionToken=$rsToken");
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
+        $response   = $this->getResponse();
         $badStrings = ["Exception", "Stacktrace", "badVerb", "badArgument"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
-        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $xpath          = $this->prepareXpathFromResultString($response->getBody());
         $recordElements = $xpath->query('//oai:ListRecords/oai:record');
-        $this->assertEquals($max_records, $recordElements->length);
+        $this->assertEquals($maxRecords, $recordElements->length);
 
-        $rsTokenElement = $xpath->query('//oai:ListRecords/oai:resumptionToken[@cursor="' . $max_records . '"]');
+        $rsTokenElement = $xpath->query('//oai:ListRecords/oai:resumptionToken[@cursor="' . $maxRecords . '"]');
         $this->assertEquals(1, $rsTokenElement->length, 'foobar');
         $this->registerXpathNamespaces($this->xpathNamespaces);
 

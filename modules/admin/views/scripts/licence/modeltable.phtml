@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,12 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Scripts_Licence
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2018, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <table>
@@ -46,7 +45,7 @@
     <?PHP foreach ($this->element->getModels() as $model) : ?>
         <tr>
             <td><a href="<?= $this->url(['action' => 'show', 'id' => $model->getId()]) ?>"
-                class="displayname<?= (is_null($model->getField('Visible')) || $model->getVisible()) ? '' : ' invisible'?>"
+                class="displayname<?= $model->getField('Visible') === null || $model->getVisible() ? '' : ' invisible'?>"
                     ><?= htmlspecialchars($model->getDisplayName()) ?></a></td>
             <td><?= $model->getName()?></td>
             <?PHP // Hide '0' in output for readability TODO good way to move code out of here?

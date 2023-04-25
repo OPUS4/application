@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,36 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @package     Application - Module Review
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Repository;
-use Opus\Security\Realm;
+use Opus\Common\DocumentFinderInterface;
+use Opus\Common\Repository;
+use Opus\Common\Security\Realm;
 
 /**
  * Main entry point for the review module.
- *
- * @category    Application
- * @package     Module_Publish
  */
 class Review_IndexController extends Application_Controller_Action
 {
-
     /**
      * Restrict reviewable documents to the given status.
      *
      * @var string
      */
-    private static $_reviewServerState = 'unpublished';
+    private static $reviewServerState = 'unpublished';
 
-    /**
-     * @var Publish_Model_LoggedUser
-     */
-    private $_loggedUser = null;
+    /** @var Publish_Model_LoggedUser */
+    private $loggedUser;
 
     /**
      * Setup module.  Check privileges.
@@ -69,7 +62,7 @@ class Review_IndexController extends Application_Controller_Action
             $this->getHelper('MainMenu')->setActive('review');
         }
 
-        $this->_loggedUser = new Publish_Model_LoggedUser();
+        $this->loggedUser  = new Publish_Model_LoggedUser();
         $this->view->title = $this->view->translate('review_index_title');
     }
 
@@ -80,53 +73,55 @@ class Review_IndexController extends Application_Controller_Action
      */
     public function indexAction()
     {
-        $ids = $this->_filterReviewableIds($this->_getParam('selected'));
+        $ids = $this->filterReviewableIds($this->_getParam('selected'));
 
-        if ($this->_isButtonPressed('buttonSubmit', true, false)) {
-            return $this->_forward('clear', null, null, ['selected' => $ids]);
+        if ($this->isButtonPressed('buttonSubmit', true, false)) {
+            $this->_forward('clear', null, null, ['selected' => $ids]);
+            return;
         }
 
-        if ($this->_isButtonPressed('buttonReject', true, false)) {
-            return $this->_forward('reject', null, null, ['selected' => $ids]);
+        if ($this->isButtonPressed('buttonReject', true, false)) {
+            $this->_forward('reject', null, null, ['selected' => $ids]);
+            return;
         }
 
-        $sortOrder = $this->_getParam('sort_order');
+        $sortOrder   = $this->_getParam('sort_order');
         $sortReverse = $this->_getParam('sort_reverse') ? 1 : 0;
-        $sortReverse = $this->_isButtonPressed('buttonUp', '0', $sortReverse);
-        $sortReverse = $this->_isButtonPressed('buttonDown', '1', $sortReverse);
+        $sortReverse = $this->isButtonPressed('buttonUp', '0', $sortReverse);
+        $sortReverse = $this->isButtonPressed('buttonDown', '1', $sortReverse);
 
-        $this->view->selected = $ids;
-        $this->view->actionUrl = $this->view->url(['action' => 'index']);
-        $this->view->sort_order = $sortOrder;
+        $this->view->selected     = $ids;
+        $this->view->actionUrl    = $this->view->url(['action' => 'index']);
+        $this->view->sort_order   = $sortOrder;
         $this->view->sort_reverse = $sortReverse;
-        $this->view->selectAll = $this->_getParam('buttonSelectAll') ? 1 : 0;
-        $this->view->selectNone = $this->_getParam('buttonSelectNone') ? 1 : 0;
-        $this->view->sortOptions = [
-            'author' => $this->view->translate('review_option_author'),
+        $this->view->selectAll    = $this->_getParam('buttonSelectAll') ? 1 : 0;
+        $this->view->selectNone   = $this->_getParam('buttonSelectNone') ? 1 : 0;
+        $this->view->sortOptions  = [
+            'author'          => $this->view->translate('review_option_author'),
             'publicationDate' => $this->view->translate('review_option_date'),
-            'docType' => $this->view->translate('review_option_doctype'),
-            'title' => $this->view->translate('review_option_title'),
-            'id' => $this->view->translate('review_option_docid'),
+            'docType'         => $this->view->translate('review_option_doctype'),
+            'title'           => $this->view->translate('review_option_title'),
+            'id'              => $this->view->translate('review_option_docid'),
         ];
 
         // Get list of document identifiers
-        $finder = $this->_prepareDocumentFinder();
+        $finder = $this->prepareDocumentFinder();
 
         switch ($sortOrder) {
             case 'author':
-                $finder->setOrder($finder::ORDER_AUTHOR, $sortReverse != 1);
+                $finder->setOrder($finder::ORDER_AUTHOR, $sortReverse !== 1);
                 break;
             case 'publicationDate':
-                $finder->setOrder($finder::ORDER_SERVER_DATE_PUBLISHED, $sortReverse != 1);
+                $finder->setOrder($finder::ORDER_SERVER_DATE_PUBLISHED, $sortReverse !== 1);
                 break;
             case 'docType':
-                $finder->setOrder($finder::ORDER_DOCUMENT_TYPE, $sortReverse != 1);
+                $finder->setOrder($finder::ORDER_DOCUMENT_TYPE, $sortReverse !== 1);
                 break;
             case 'title':
-                $finder->setOrder($finder::ORDER_TITLE, $sortReverse != 1);
+                $finder->setOrder($finder::ORDER_TITLE, $sortReverse !== 1);
                 break;
             default:
-                $finder->setOrder($finder::ORDER_ID, $sortReverse != 1);
+                $finder->setOrder($finder::ORDER_ID, $sortReverse !== 1);
         }
 
         $this->view->breadcrumbsDisabled = true;
@@ -135,17 +130,18 @@ class Review_IndexController extends Application_Controller_Action
 
         if (empty($result)) {
             $this->view->message = 'review_no_docs_found';
-            return $this->render('message');
+            $this->render('message');
+            return;
         }
 
         $currentPage = $this->_getParam('page', 1);
-        $paginator = \Zend_Paginator::factory($result);
+        $paginator   = Zend_Paginator::factory($result);
         $paginator->setCurrentPageNumber($currentPage);
         $paginator->setItemCountPerPage(10);
 
-        $this->view->currentPage = $currentPage;
+        $this->view->currentPage   = $currentPage;
         $this->view->documentCount = count($result);
-        $this->view->paginator = $paginator;
+        $this->view->paginator     = $paginator;
     }
 
     /**
@@ -153,49 +149,52 @@ class Review_IndexController extends Application_Controller_Action
      */
     public function clearAction()
     {
-        $ids = $this->_filterReviewableIds($this->_getParam('selected'));
+        $ids = $this->filterReviewableIds($this->_getParam('selected'));
 
         if (count($ids) < 1) {
             $this->view->message = 'review_error_noselection';
-            return $this->render('message');
+            $this->render('message');
+            return;
         }
 
-        $this->view->selected = $ids;
+        $this->view->selected      = $ids;
         $this->view->documentCount = count($ids);
-        $this->view->actionUrl = $this->view->url(['action' => 'clear']);
+        $this->view->actionUrl     = $this->view->url(['action' => 'clear']);
 
         $person = null;
 
-        $config = $this->getConfig();
+        $config         = $this->getConfig();
         $useCurrentUser = isset($config, $config->clearing->addCurrentUserAsReferee) &&
             filter_var($config->clearing->addCurrentUserAsReferee, FILTER_VALIDATE_BOOLEAN);
 
         if ($useCurrentUser) {
-            $person = $this->_loggedUser->createPerson();
+            $person = $this->loggedUser->createPerson();
 
-            if (is_null($person) or ! $person->isValid()) {
+            if ($person === null || ! $person->isValid()) {
                 $message = "Problem clearing documents.  Information for current user is incomplete or invalid.";
                 $this->getLogger()->err($message);
                 throw new Application_Exception($message);
             }
         }
 
-        if ($this->_isButtonPressed('sureno', true, false)) {
-            return $this->_forward('index', null, null, ['selected' => $ids]);
+        if ($this->isButtonPressed('sureno', true, false)) {
+            $this->_forward('index', null, null, ['selected' => $ids]);
+            return;
         }
 
-        if ($this->_isButtonPressed('sureyes', true, false)) {
+        if ($this->isButtonPressed('sureyes', true, false)) {
             $helper = new Review_Model_ClearDocumentsHelper();
 
-            $userId = $this->_loggedUser->getUserId();
-            if (is_null($userId) or empty($userId)) {
+            $userId = $this->loggedUser->getUserId();
+            if ($userId === null || empty($userId)) {
                 $userId = 'unknown';
             }
 
             $helper->clear($ids, $userId, $person);
 
             $this->view->message = 'review_accept_success';
-            return $this->render('message');
+            $this->render('message');
+            return;
         }
 
         $this->view->title       = 'review_accept_title';
@@ -208,33 +207,36 @@ class Review_IndexController extends Application_Controller_Action
      */
     public function rejectAction()
     {
-        $ids = $this->_filterReviewableIds($this->_getParam('selected'));
+        $ids = $this->filterReviewableIds($this->_getParam('selected'));
 
         if (count($ids) < 1) {
             $this->view->message = 'review_error_noselection';
-            return $this->render('message');
+            $this->render('message');
+            return;
         }
 
-        $this->view->selected = $ids;
+        $this->view->selected      = $ids;
         $this->view->documentCount = count($ids);
-        $this->view->actionUrl = $this->view->url(['action' => 'reject']);
+        $this->view->actionUrl     = $this->view->url(['action' => 'reject']);
 
-        if ($this->_isButtonPressed('sureno', true, false)) {
-            return $this->_forward('index', null, null, ['selected' => $ids]);
+        if ($this->isButtonPressed('sureno', true, false)) {
+            $this->_forward('index', null, null, ['selected' => $ids]);
+            return;
         }
 
-        if ($this->_isButtonPressed('sureyes', true, false)) {
+        if ($this->isButtonPressed('sureyes', true, false)) {
             $helper = new Review_Model_ClearDocumentsHelper();
 
-            $userId = $this->_loggedUser->getUserId();
-            if (is_null($userId) or empty($userId)) {
+            $userId = $this->loggedUser->getUserId();
+            if ($userId === null || empty($userId)) {
                 $userId = 'unknown';
             }
 
             $helper->reject($ids, $userId);
 
             $this->view->message = 'review_reject_success';
-            return $this->render('message');
+            $this->render('message');
+            return;
         }
 
         $this->view->title       = 'review_reject_title';
@@ -247,13 +249,13 @@ class Review_IndexController extends Application_Controller_Action
      *
      * @return DocumentFinderInterface
      */
-    protected function _prepareDocumentFinder()
+    protected function prepareDocumentFinder()
     {
         $finder = Repository::getInstance()->getDocumentFinder();
-        $finder->setServerState(self::$_reviewServerState);
+        $finder->setServerState(self::$reviewServerState);
 
-        $logger = $this->getLogger();
-        $userId = $this->_loggedUser->getUserId();
+        $logger               = $this->getLogger();
+        $userId               = $this->loggedUser->getUserId();
         $onlyReviewerByUserId = false;
 
         // Add constraint for reviewer, if current user is *not* admin.
@@ -283,19 +285,19 @@ class Review_IndexController extends Application_Controller_Action
      * @param array $ids
      * @return array
      */
-    protected function _filterReviewableIds($ids)
+    protected function filterReviewableIds($ids)
     {
-        if (isset($ids) and ! is_array($ids)) {
+        if (isset($ids) && ! is_array($ids)) {
             $ids = [$ids];
         }
 
-        if (! isset($ids) or ! is_array($ids) or (count($ids) < 1)) {
+        if (! isset($ids) || ! is_array($ids) || (count($ids) < 1)) {
             return [];
         }
 
         $this->getLogger()->debug("ids before filtering: " . implode(", ", $ids));
 
-        $finder = $this->_prepareDocumentFinder();
+        $finder   = $this->prepareDocumentFinder();
         $foundIds = $finder->setDocumentIds($ids)->getIds();
 
         $this->getLogger()->debug("ids after filtering: " . implode(", ", $foundIds));
@@ -305,14 +307,15 @@ class Review_IndexController extends Application_Controller_Action
 
     /**
      * Checks if a button has been pressed and selects value.
-     * @param <type> $name
-     * @param <type> $value
-     * @param <type> $default
-     * @return mixed
+     *
+     * @param string      $name
+     * @param string      $value
+     * @param string|null $default
+     * @return string
      */
-    protected function _isButtonPressed($name, $value, $default = null)
+    protected function isButtonPressed($name, $value, $default = null)
     {
         $button = $this->_getParam($name);
-        return (isset($button) && ! empty($button)) ? $value : $default;
+        return isset($button) && ! empty($button) ? $value : $default;
     }
 }

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,15 +25,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Admin_Form_Document_PersonAddTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'translation'];
 
     public function testConstructForm()
@@ -52,7 +51,7 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
         $form = new Admin_Form_Document_PersonAdd();
 
         $post = [
-            'Cancel' => 'Abbrechen'
+            'Cancel' => 'Abbrechen',
         ];
 
         $this->assertEquals(Admin_Form_Document_PersonAdd::RESULT_CANCEL, $form->processPost($post, null));
@@ -63,7 +62,7 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
         $form = new Admin_Form_Document_PersonAdd();
 
         $post = [
-            'Next' => 'Weiter'
+            'Next' => 'Weiter',
         ];
 
         $this->assertEquals(Admin_Form_Document_PersonAdd::RESULT_NEXT, $form->processPost($post, null));
@@ -112,13 +111,13 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
         $form = new Admin_Form_Document_PersonAdd();
 
         $post = [
-            'LastName' => '', // darf nicht leer sein
-            'Email' => 'beispiel', // muss Email sein ('name@domain')
+            'LastName'    => '', // darf nicht leer sein
+            'Email'       => 'beispiel', // muss Email sein ('name@domain')
             'DateOfBirth' => '1970/02/31', // muss gültiges Datum sein
-            'Document' => [
-                'Role' => 'unknown', // muss gültige Rolle sein
-                'SortOrder' => 'Erster' // muss Integer sein
-            ]
+            'Document'    => [
+                'Role'      => 'unknown', // muss gültige Rolle sein
+                'SortOrder' => 'Erster', // muss Integer sein
+            ],
         ];
 
         $this->assertFalse($form->isValid($post));
@@ -137,13 +136,13 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
         $form = new Admin_Form_Document_PersonAdd();
 
         $post = [
-            'LastName' => 'Meier', // darf nicht leer sein
-            'Email' => 'beispiel@example.org', // muss Email sein ('name@domain')
+            'LastName'    => 'Meier', // darf nicht leer sein
+            'Email'       => 'beispiel@example.org', // muss Email sein ('name@domain')
             'DateOfBirth' => '1970/01/31', // muss gültiges Datum sein
-            'Document' => [
-                'Role' => 'editor', // muss gültige Rolle sein
-                'SortOrder' => '1' // muss Integer sein
-            ]
+            'Document'    => [
+                'Role'      => 'editor', // muss gültige Rolle sein
+                'SortOrder' => '1', // muss Integer sein
+            ],
         ];
 
         $this->assertTrue($form->isValid($post));

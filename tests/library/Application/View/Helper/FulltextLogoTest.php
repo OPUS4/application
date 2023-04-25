@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,29 +25,27 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\CollectionRole;
-use Opus\Document;
+use Opus\Common\CollectionRole;
+use Opus\Common\Document;
 
 class Application_View_Helper_FulltextLogoTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
-    private $_helper;
+    /** @var Application_View_Helper_FulltextLogo */
+    private $helper;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_helper = new Application_View_Helper_FulltextLogo();
-        $this->_helper->setView($this->getView());
+        $this->helper = new Application_View_Helper_FulltextLogo();
+        $this->helper->setView($this->getView());
 
         $this->useEnglish();
     }
@@ -56,7 +55,7 @@ class Application_View_Helper_FulltextLogoTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc = Document::get($doc->store());
 
-        $this->assertEquals('<div class="fulltext-logo"></div>', $this->_helper->fulltextLogo($doc));
+        $this->assertEquals('<div class="fulltext-logo"></div>', $this->helper->fulltextLogo($doc));
     }
 
     /**
@@ -67,12 +66,12 @@ class Application_View_Helper_FulltextLogoTest extends ControllerTestCase
         $doc = $this->createTestDocument();
 
         $openAccessRole = CollectionRole::fetchByName('open_access');
-        $openAccess = $openAccessRole->getCollectionByOaiSubset('open_access');
+        $openAccess     = $openAccessRole->getCollectionByOaiSubset('open_access');
         $doc->addCollection($openAccess);
 
         $doc = Document::get($doc->store());
 
-        $this->assertEquals('<div class="fulltext-logo openaccess" title="Open Access fulltext available"></div>', $this->_helper->fulltextLogo($doc));
+        $this->assertEquals('<div class="fulltext-logo openaccess" title="Open Access fulltext available"></div>', $this->helper->fulltextLogo($doc));
     }
 
     public function testFulltextLogoFulltext()
@@ -84,7 +83,7 @@ class Application_View_Helper_FulltextLogoTest extends ControllerTestCase
 
         $doc = Document::get($doc->store());
 
-        $this->assertEquals('<div class="fulltext-logo fulltext" title="Fulltext available"></div>', $this->_helper->fulltextLogo($doc));
+        $this->assertEquals('<div class="fulltext-logo fulltext" title="Fulltext available"></div>', $this->helper->fulltextLogo($doc));
     }
 
     public function testFulltextLogoOpenAccessFulltext()
@@ -92,7 +91,7 @@ class Application_View_Helper_FulltextLogoTest extends ControllerTestCase
         $doc = $this->createTestDocument();
 
         $openAccessRole = CollectionRole::fetchByName('open_access');
-        $openAccess = $openAccessRole->getCollectionByOaiSubset('open_access');
+        $openAccess     = $openAccessRole->getCollectionByOaiSubset('open_access');
         $doc->addCollection($openAccess);
 
         $file = $this->createOpusTestFile('article.pdf');
@@ -100,6 +99,6 @@ class Application_View_Helper_FulltextLogoTest extends ControllerTestCase
 
         $doc = Document::get($doc->store());
 
-        $this->assertEquals('<div class="fulltext-logo fulltext openaccess" title="Open Access fulltext available"></div>', $this->_helper->fulltextLogo($doc));
+        $this->assertEquals('<div class="fulltext-logo fulltext openaccess" title="Open Access fulltext available"></div>', $this->helper->fulltextLogo($doc));
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
+use Opus\Common\Series;
 
 /**
  * Controller for management of Series models in database.
@@ -41,7 +39,6 @@ use Opus\Series;
  */
 class Admin_SeriesController extends Application_Controller_ActionCRUD
 {
-
     /**
      * Konfiguriere Formularklasse für den Controller.
      */
@@ -54,6 +51,7 @@ class Admin_SeriesController extends Application_Controller_ActionCRUD
 
     /**
      * Setzt Defaultwerte für das Formular.
+     *
      * @return Series
      */
     public function getNewModel()
@@ -66,6 +64,7 @@ class Admin_SeriesController extends Application_Controller_ActionCRUD
 
     /**
      * Modifiziert Formular für Indextabelle, so daß angepasstes ViewScript verwendet wird.
+     *
      * @return Application_Form_Model_Table
      */
     public function getIndexForm()

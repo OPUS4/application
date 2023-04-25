@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,9 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -35,14 +34,14 @@
  */
 class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
     public function testImplementsInterface()
     {
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedLanguages();
 
-        $this->assertTrue($instance instanceof Application_Form_Validate_IMultiSubForm);
+        $this->assertTrue($instance instanceof Application_Form_Validate_MultiSubFormInterface);
     }
 
     public function testIsValidReturnsTrue()
@@ -56,20 +55,20 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends Contr
     {
         $post = [
             'TitleMain0' => [
-                'Id' => '1',
+                'Id'       => '1',
                 'Language' => 'deu',
-                'Value' => 'Titel 1'
+                'Value'    => 'Titel 1',
             ],
             'TitleMain1' => [
-                'Id' => '2',
+                'Id'       => '2',
                 'Language' => 'fra',
-                'Value' => 'Titel 2'
+                'Value'    => 'Titel 2',
             ],
             'TitleMain2' => [
-                'Id' => '3',
+                'Id'       => '3',
                 'Language' => 'rus',
-                'Value' => 'Titel 3'
-            ]
+                'Value'    => 'Titel 3',
+            ],
         ];
 
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedLanguages();
@@ -88,47 +87,47 @@ class Application_Form_Validate_MultiSubForm_RepeatedLanguagesTest extends Contr
      */
     public function testPrepareValidation()
     {
-        $form = new \Zend_Form();
+        $form = new Zend_Form();
 
         $titleCount = 3;
 
         for ($index = 0; $index < $titleCount; $index++) {
-            $subform = new \Zend_Form_SubForm();
+            $subform = new Zend_Form_SubForm();
             $subform->addElement(new Application_Form_Element_Language('Language'));
             $form->addSubForm($subform, 'Title' . $index);
         }
 
-        $subform = new \Zend_Form_Subform();
+        $subform = new Zend_Form_Subform();
         $subform->addElement('submit', 'Add');
         $form->addSubForm($subform, 'Actions');
 
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedLanguages();
 
         $post = [
-            'Title0' => [
-                'Id' => '1',
+            'Title0'  => [
+                'Id'       => '1',
                 'Language' => 'deu',
-                'Value' => 'Titel 1'
+                'Value'    => 'Titel 1',
             ],
-            'Title1' => [
-                'Id' => '2',
+            'Title1'  => [
+                'Id'       => '2',
                 'Language' => 'fra',
-                'Value' => 'Titel 2'
+                'Value'    => 'Titel 2',
             ],
-            'Title2' => [
-                'Id' => '3',
+            'Title2'  => [
+                'Id'       => '3',
                 'Language' => 'rus',
-                'Value' => 'Titel 3'
+                'Value'    => 'Titel 3',
             ],
             'Actions' => [
-                'Add' => 'Add'
-            ]
+                'Add' => 'Add',
+            ],
         ];
 
         $instance->prepareValidation($form, $post);
 
         for ($index = 0; $index < $titleCount; $index++) {
-            $subform = $form->getSubForm('Title' . $index);
+            $subform   = $form->getSubForm('Title' . $index);
             $validator = $subform->getElement('Language')->getValidator(
                 'Application_Form_Validate_LanguageUsedOnceOnly'
             );

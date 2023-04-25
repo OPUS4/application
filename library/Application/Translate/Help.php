@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,41 +25,48 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Translate
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  *
  * TODO define and use interface
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 
 abstract class Application_Translate_Help
 {
+    /** @var self */
+    private static $instance;
 
-    static private $instance;
-
+    /** @var Zend_Config */
     private $config;
 
+    /**
+     * @return self
+     */
     public static function getInstance()
     {
-        if (is_null(self::$instance)) {
+        if (self::$instance === null) {
             self::$instance = new Home_Model_HelpFiles();
         }
 
         return self::$instance;
     }
 
+    /**
+     * @return Zend_Config
+     */
     public function getConfig()
     {
-        if (is_null($this->config)) {
+        if ($this->config === null) {
             $this->config = Config::get();
         }
         return $this->config;
     }
 
+    /**
+     * @return bool
+     */
     public function getSeparateViewEnabled()
     {
         $config = $this->getConfig();
@@ -70,9 +78,20 @@ abstract class Application_Translate_Help
         }
     }
 
+    /**
+     * @return array
+     */
     abstract public function getHelpEntries();
 
+    /**
+     * @param string $key
+     * @return string|null
+     */
     abstract public function getContent($key);
 
+    /**
+     * @param string $key
+     * @return bool
+     */
     abstract public function isContentAvailable($key);
 }

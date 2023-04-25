@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * SubForm used for editing translations for multiple languages.
  */
-class Setup_Form_TranslationValues extends \Zend_Form_SubForm
+class Setup_Form_TranslationValues extends Zend_Form_SubForm
 {
-
     public function init()
     {
         parent::init();
@@ -46,7 +42,7 @@ class Setup_Form_TranslationValues extends \Zend_Form_SubForm
             'ViewHelper',
             [['InputWrapper' => 'HtmlTag'], ['class' => 'col-input']],
             ['Label', ['tag' => 'div', 'tagClass' => 'col-label', 'placement' => 'prepend']],
-            [['Wrapper' => 'HtmlTag'], ['class' => 'row']]
+            [['Wrapper' => 'HtmlTag'], ['class' => 'row']],
         ]);
 
         $translator = Application_Translate::getInstance();
@@ -56,15 +52,18 @@ class Setup_Form_TranslationValues extends \Zend_Form_SubForm
         foreach ($languages as $language) {
             $this->addElement('textarea', $language, [
                 'label' => $translator->translateLanguage($language),
-                'rows' => 10
+                'rows'  => 10,
             ]);
         }
 
         $this->setDecorators([
-            'FormElements'
+            'FormElements',
         ]);
     }
 
+    /**
+     * @return array
+     */
     public function getTranslations()
     {
         $elements = $this->getElements();
@@ -72,25 +71,30 @@ class Setup_Form_TranslationValues extends \Zend_Form_SubForm
         $translations = [];
 
         foreach ($elements as $name => $element) {
-            $value = $element->getValue();
-            $translations[$name] = trim($value);
+            $value               = $element->getValue();
+            $translations[$name] = trim($value ?? '');
         }
 
         return $translations;
     }
 
+    /**
+     * @param array $translations
+     */
     public function setTranslations($translations)
     {
         foreach ($translations as $lang => $value) {
             $element = $this->getElement($lang);
-            if (! is_null($element)) {
+            if ($element !== null) {
                 $element->setValue($value);
-            } else {
-                // TODO deal with missing language
             }
+            // TODO ELSE deal with missing language
         }
     }
 
+    /**
+     * @return array
+     */
     protected function getLanguages()
     {
         return Application_Configuration::getInstance()->getSupportedLanguages();

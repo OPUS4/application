@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,25 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Export
- * @author      Sascha Szott <opus-development@saschaszott.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
-use Opus\Document;
-use Opus\Identifier;
-use Opus\Model\ModelException;
-use Opus\Person;
-use Opus\Title;
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Identifier;
+use Opus\Common\Model\ModelException;
+use Opus\Common\Person;
+use Opus\Common\Title;
 
 class Export_DataCiteExportTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'all';
 
     public function testExportOfValidDataCiteXML()
@@ -193,9 +193,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->adjustConfiguration([
             'plugins' => [
                 'export' => [
-                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
-                ]
-            ]
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE],
+                ],
+            ],
         ]);
 
         $doc = $this->createTestDocument();
@@ -206,7 +206,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         Application_Security_AclProvider::init();
 
-        $this->dispatch("/export/index/datacite/docId/${docId}");
+        $this->dispatch("/export/index/datacite/docId/{$docId}");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -228,9 +228,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->adjustConfiguration([
             'plugins' => [
                 'export' => [
-                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
-                ]
-            ]
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE],
+                ],
+            ],
         ]);
 
         $doc = $this->createTestDocument();
@@ -241,13 +241,13 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->loginUser('admin', 'adminadmin');
 
-        $this->dispatch("/export/index/datacite/docId/${docId}");
+        $this->dispatch("/export/index/datacite/docId/{$docId}");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
 
         $this->assertResponseCode(200);
-        $this->assertContains("DataCite XML of document ${docId} is not valid", $this->getResponse()->getBody());
+        $this->assertContains("DataCite XML of document {$docId} is not valid", $this->getResponse()->getBody());
     }
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithPermission()
@@ -260,9 +260,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->adjustConfiguration([
             'plugins' => [
                 'export' => [
-                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
-                ]
-            ]
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE],
+                ],
+            ],
         ]);
 
         $doc = $this->createTestDocument();
@@ -273,7 +273,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->loginUser('security8', 'security8pwd');
 
-        $this->dispatch("/export/index/datacite/docId/${docId}");
+        $this->dispatch("/export/index/datacite/docId/{$docId}");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -283,7 +283,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(200);
-        $this->assertContains("DataCite XML of document ${docId} is not valid", $this->getResponse()->getBody());
+        $this->assertContains("DataCite XML of document {$docId} is not valid", $this->getResponse()->getBody());
     }
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithoutPermission()
@@ -296,9 +296,9 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->adjustConfiguration([
             'plugins' => [
                 'export' => [
-                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE]
-                ]
-            ]
+                    'datacite' => ['adminOnly' => self::CONFIG_VALUE_FALSE],
+                ],
+            ],
         ]);
 
         $doc = $this->createTestDocument();
@@ -309,7 +309,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->loginUser('security9', 'security9pwd');
 
-        $this->dispatch("/export/index/datacite/docId/${docId}");
+        $this->dispatch("/export/index/datacite/docId/{$docId}");
 
         // revert configuration changes
         $this->restoreSecuritySetting();
@@ -323,7 +323,7 @@ class Export_DataCiteExportTest extends ControllerTestCase
     }
 
     /**
-     * @param Document $doc
+     * @param DocumentInterface $doc
      * @return int ID des gespeicherten Dokuments
      */
     private function addRequiredFields($doc)
@@ -335,33 +335,32 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $doc = Document::get($docId);
 
-        $doi = new Identifier();
+        $doi = Identifier::new();
         $doi->setType('doi');
         $doi->setValue('10.2345/opustest-' . $docId);
         $doc->setIdentifier([$doi]);
 
-        $author = new Person();
+        $author = Person::new();
         $author->setFirstName('John');
         $author->setLastName('Doe');
         $doc->setPersonAuthor([$author]);
 
-        $title = new Title();
+        $title = Title::new();
         $title->setValue('Meaningless title');
         $title->setLanguage('deu');
         $doc->setTitleMain([$title]);
 
-        $docId = $doc->store();
-        return $docId;
+        return $doc->store();
     }
 
     private function adaptDoiConfiguration()
     {
         $this->adjustConfiguration([
             'doi' => [
-                'autoCreate' => false,
-                'prefix' => '10.2345',
-                'localPrefix' => 'opustest'
-            ]
+                'autoCreate'  => false,
+                'prefix'      => '10.2345',
+                'localPrefix' => 'opustest',
+            ],
         ]);
     }
 }

@@ -25,29 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Log\LogService;
-
+use Opus\Common\Log\LogService;
+use Opus\Common\Repository;
 use Opus\Db\DatabaseBootstrap;
-use Opus\Repository;
+use Opus\Search\Plugin\Index;
 
 /**
  * Provide methods to setup and run the application. It also provides a couple of static
  * variables for quicker access to application components like the front controller.
  *
  * TODO unit test bootstrap
+ *
+ * @phpcs:disable PSR2.Methods.MethodDeclaration
  */
 class Application_Bootstrap extends DatabaseBootstrap
 {
-
     /**
      * Setup a front controller instance with error options and module
      * directory.
-     *
-     * @return void
      *
      * TODO rename to _initControllerPlugins
      */
@@ -80,13 +79,13 @@ class Application_Bootstrap extends DatabaseBootstrap
         $router->addDefaultRoutes();
 
         // specity the SWORD module as RESTful
-        $restRoute = new \Zend_Rest_Route($frontController, [], ['sword']);
+        $restRoute = new Zend_Rest_Route($frontController, [], ['sword']);
         $router->addRoute('rest', $restRoute);
 
         $documentRoute = new Application_Controller_Route_Redirect(
             '^(\d+)/?$',
-            ['module' => 'frontdoor', 'controller' => 'index', 'controller' => 'index', 'docId' => 1],
-            [ 1 => 'docId'],
+            ['module' => 'frontdoor', 'controller' => 'index', 'docId' => 1],
+            [1 => 'docId'],
             'document/%s'
         );
 
@@ -105,11 +104,11 @@ class Application_Bootstrap extends DatabaseBootstrap
      * Configure view with UTF-8 options and ViewRenderer action helper.
      * The \Zend_Layout component also gets initialized here.
      *
-     * @return \Zend_View
+     * @return Zend_View
      */
     protected function _initView()
     {
-        $this->bootstrap(['Configuration','OpusFrontController']);
+        $this->bootstrap(['Configuration', 'OpusFrontController']);
 
         $config = $this->getResource('Configuration');
 
@@ -123,14 +122,15 @@ class Application_Bootstrap extends DatabaseBootstrap
             throw new Exception('Requested theme "' . $theme . '" not found.');
         }
 
-        \Zend_Layout::startMvc(
+        Zend_Layout::startMvc(
             [
                 'layoutPath' => $layoutpath,
-                'layout' => 'common']
+                'layout'     => 'common',
+            ]
         );
 
         // Initialize view with custom encoding and global view helpers.
-        $view = new \Zend_View;
+        $view = new Zend_View();
         $view->setEncoding('UTF-8');
 
         // Set doctype to XHTML1 strict
@@ -150,12 +150,12 @@ class Application_Bootstrap extends DatabaseBootstrap
         $breadcrumbsHelper = new Application_View_Helper_Breadcrumbs();
         $view->registerHelper($breadcrumbsHelper, 'breadcrumbs');
 
-        $viewRenderer = new \Zend_Controller_Action_Helper_ViewRenderer($view);
+        $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);
 
-        \Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
+        Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
 
         // Make View available to unit test (TODO maybe there is a better way?)
-        \Zend_Registry::set('Opus_View', $view);
+        Zend_Registry::set('Opus_View', $view);
 
         return $view;
     }
@@ -173,7 +173,7 @@ class Application_Bootstrap extends DatabaseBootstrap
     {
         $this->bootstrap('View');
 
-        $view = $this->getResource('View');
+        $view   = $this->getResource('View');
         $config = $this->getResource('Configuration');
 
         if (isset($config->url)) {
@@ -201,40 +201,39 @@ class Application_Bootstrap extends DatabaseBootstrap
 
     /**
      * Setup \Zend_Cache for caching application data and register under '\Zend_Cache_Page'.
-     *
-     * @return void
      */
     protected function _setupPageCache()
     {
         $config = $this->getResource('Configuration');
 
-        $pagecache = null;
+        $pagecache       = null;
         $frontendOptions = [
-            'lifetime' => 600, // in seconds
+            'lifetime'     => 600, // in seconds
             'debug_header' => false,
             // turning on could slow down caching
             'automatic_serialization' => false,
-            'default_options' => [
-                'cache_with_get_variables' => true,
-                'cache_with_post_variables' => true,
-                'cache_with_session_variables' => true,
-                'cache_with_files_variables' => true,
-                'cache_with_cookie_variables' => true,
-                'make_id_with_get_variables' => true,
-                'make_id_with_post_variables' => true,
+            'default_options'         => [
+                'cache_with_get_variables'       => true,
+                'cache_with_post_variables'      => true,
+                'cache_with_session_variables'   => true,
+                'cache_with_files_variables'     => true,
+                'cache_with_cookie_variables'    => true,
+                'make_id_with_get_variables'     => true,
+                'make_id_with_post_variables'    => true,
                 'make_id_with_session_variables' => true,
-                'make_id_with_files_variables' => true,
-                'make_id_with_cookie_variables' => true,
-                'cache' => true]
+                'make_id_with_files_variables'   => true,
+                'make_id_with_cookie_variables'  => true,
+                'cache'                          => true,
+            ],
         ];
 
         $backendOptions = [
             // Directory where to put the cache files. Must be writeable for application server
-            'cache_dir' => $config->workspacePath . '/cache/'
-            ];
+            'cache_dir' => $config->workspacePath . '/cache/',
+        ];
 
-        $pagecache = \Zend_Cache::factory('Page', 'File', $frontendOptions, $backendOptions);
-        \Zend_Registry::set('Zend_Cache_Page', $pagecache);
+        $pagecache = Zend_Cache::factory('Page', 'File', $frontendOptions, $backendOptions);
+        Zend_Registry::set('Zend_Cache_Page', $pagecache);
     }
 
     /**
@@ -254,23 +253,24 @@ class Application_Bootstrap extends DatabaseBootstrap
      * - Locale (if supported)
      * - Default
      *
-     * @return \Zend_Translate
+     * @return Zend_Translate
      */
     protected function _initTranslation()
     {
         $this->bootstrap(['Configuration', 'Session', 'Logging', 'ZendCache']);
         $logService = LogService::getInstance();
-        $logger = $logService->getLog('translation');
+        $logger     = $logService->getLog('translation');
 
-        if (is_null($logger)) {
+        if ($logger === null) {
             $logger = $this->getResource('logging');
         }
 
         $translate = Application_Translate::getInstance();
         $translate->setOptions([
-            'log' => $logger,
-            'route' => ['en' => 'de'] // TODO make configurable in administration AND/OR generate automatically (all lang -> default)
+            'log'   => $logger,
+            'route' => ['en' => 'de'],
         ]);
+        // TODO make 'route' configurable in administration AND/OR generate automatically (all lang -> default)
 
         Application_Translate::setInstance($translate);
 
@@ -282,7 +282,7 @@ class Application_Bootstrap extends DatabaseBootstrap
 
         // check if language is supported; if not, use language from locale
         if (! $configHelper->isLanguageSupported($language)) {
-            $locale = new \Zend_Locale();
+            $locale   = new Zend_Locale();
             $language = $locale->getLanguage();
             $logger->debug("Current locale = '$language'");
             // check if locale is supported; if not, use default language
@@ -302,18 +302,18 @@ class Application_Bootstrap extends DatabaseBootstrap
     /**
      * Setup session.
      *
-     * @return \Zend_Session_Namespace
+     * @return Zend_Session_Namespace
      */
     protected function _initSession()
     {
         $this->bootstrap(['Database']);
-        return new \Zend_Session_Namespace();
+        return new Zend_Session_Namespace();
     }
 
     /**
      * Initializes general navigation as configured in navigationModules.xml'
      *
-     * @return void
+     * @return Zend_Navigation
      *
      * TODO possible to cache? performance improvement?
      */
@@ -325,14 +325,14 @@ class Application_Bootstrap extends DatabaseBootstrap
         $log->debug('Initializing \Zend_Navigation');
 
         $navigationConfigFile = APPLICATION_PATH . '/application/configs/navigationModules.xml';
-        $navConfig = new \Zend_Config_Xml($navigationConfigFile, 'nav');
+        $navConfig            = new Zend_Config_Xml($navigationConfigFile, 'nav');
 
         $log->debug('Navigation config file is: ' . $navigationConfigFile);
 
         $container = null;
         try {
-            $container = new \Zend_Navigation($navConfig);
-        } catch (\Zend_Navigation_Exception $e) {
+            $container = new Zend_Navigation($navConfig);
+        } catch (Zend_Navigation_Exception $e) {
             /* TODO This suppresses the "Mystery Bug" that is producing errors
              * in unit tests sometimes. So far we haven't figured out the real
              * reason behind the errors. In regular Opus instances the error
@@ -351,7 +351,6 @@ class Application_Bootstrap extends DatabaseBootstrap
 
     /**
      * Initializes navigation container for main menu.
-     * @return \Zend_Navigation
      */
     protected function _initMainMenu()
     {
@@ -359,16 +358,16 @@ class Application_Bootstrap extends DatabaseBootstrap
 
         $navigationConfigFile = APPLICATION_PATH . '/application/configs/navigation.xml';
 
-        $navConfig = new \Zend_Config_Xml($navigationConfigFile, 'nav');
+        $navConfig = new Zend_Config_Xml($navigationConfigFile, 'nav');
 
-        $container = new \Zend_Navigation($navConfig);
+        $container = new Zend_Navigation($navConfig);
 
         $view = $this->getResource('View');
 
         $view->navigationMainMenu = $container;
 
         // TODO Find better way without \Zend_Registry
-        \Zend_Registry::set('Opus_Navigation', $container);
+        Zend_Registry::set('Opus_Navigation', $container);
 
         // return $container;
     }
@@ -394,12 +393,12 @@ class Application_Bootstrap extends DatabaseBootstrap
 
         $exporter = new Application_Export_Exporter();
 
-        \Zend_Registry::set('Opus_Exporter', $exporter);
+        Zend_Registry::set('Opus_Exporter', $exporter);
 
         $exportService = new Application_Export_ExportService();
 
         // TODO merge ExportService with Exporter class (?)
-        \Zend_Registry::set('Opus_ExportService', $exportService);
+        Zend_Registry::set('Opus_ExportService', $exportService);
 
         return $exporter;
     }
@@ -409,6 +408,6 @@ class Application_Bootstrap extends DatabaseBootstrap
         $cache = Repository::getInstance()->getDocumentXmlCache();
 
         // TODO this is a dependency on a specific implementation (refactor to remove)
-        $cache::setIndexPluginClass('Opus\Search\Plugin\Index');
+        $cache::setIndexPluginClass(Index::class);
     }
 }

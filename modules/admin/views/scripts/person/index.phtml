@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * TODO use view helper to clean up this page
  * TODO fix translations of column headers (use appropriate keys)
  */
+
+use Opus\Common\Person;
+
+$persons = Person::getModelRepository();
 ?>
 
 <div id="personsMenu" class="fixedMenubar">
@@ -57,7 +61,7 @@
 <?PHP foreach ($this->persons as $person) : ?>
     <tr>
         <td class="lastname"><?= $this->highlight(htmlspecialchars($person['last_name']), $this->filter) ?></td>
-        <td class="firstname"><?= $this->highlight(htmlspecialchars($person['first_name']), $this->filter) ?></td>
+        <td class="firstname"><?= $this->highlight(htmlspecialchars($person['first_name'] ?? ''), $this->filter) ?></td>
         <td>
             <div><?= $person['identifier_orcid'] ?></div>
             <div><?= $person['identifier_gnd'] ?></div>
@@ -65,23 +69,35 @@
         </td>
         <td class="documents"><a href="<?= $this->url(array_merge(
             [
-                    'module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'state' => 'all'],
+                'module'     => 'admin',
+                'controller' => 'documents',
+                'action'     => 'index',
+                'state'      => 'all',
+            ],
             $person
-        )) ?>"><?= count(\Opus\Person::getPersonDocuments($person)) ?></a></td>
+        )) ?>"><?= count($persons->getPersonDocuments($person)) ?></a></td>
         <td class="roles">
-            <?PHP foreach (\Opus\Person::getPersonRoles($person) as $role) : ?>
+            <?PHP foreach ($persons->getPersonRoles($person) as $role) : ?>
             <a href="<?= $this->url(array_merge(
                 [
-                    'module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'state' => 'all', 'role' => $role['role']],
+                    'module'     => 'admin',
+                    'controller' => 'documents',
+                    'action'     => 'index',
+                    'state'      => 'all',
+                    'role'       => $role['role'],
+                ],
                 $person
             )) ?>" class="role <?= $role['role'] ?>"><?=
                 $this->translate('Opus_Person_Role_Value_' . ucfirst($role['role']))
-                ?> <span class="count">(<?= $role['documents'] ?>)</span></a>
+?> <span class="count">(<?= $role['documents'] ?>)</span></a>
             <?PHP endforeach ?>
         </td>
         <td><a href="<?= $this->url(array_merge(
             [
-                'module' => 'admin', 'controller' => 'person', 'action' => 'edit'],
+                'module'     => 'admin',
+                'controller' => 'person',
+                'action'     => 'edit',
+            ],
             $person
         )) ?>"><?= $this->translate('admin_form_action_edit') ?></a></td>
     </tr>

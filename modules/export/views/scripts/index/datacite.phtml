@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,21 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
  */
+
 ?>
 
 <?php
 if ($this->validUnpublishedDoc) {
-    $colorCode = '#ff9933';
+    $colorCode   = '#ff9933';
     $headlineKey = 'export_datacite_notice_head_title';
 } else {
-    $colorCode = '#d44950';
+    $colorCode   = '#d44950';
     $headlineKey = 'export_datacite_error_head_title';
 }
 ?>
@@ -89,7 +87,7 @@ if ($this->validUnpublishedDoc) {
 
     <?php foreach ($this->errors as $error) : ?>
 <pre class="exceptionMessage" style="white-space: pre-wrap;">
-<?= $error ?>
+        <?= $error ?>
 </pre>
     <?php endforeach; ?>
 </p>

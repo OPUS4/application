@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,18 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Repository;
-use Opus\Search\Service;
+use Opus\Common\Repository;
 use Opus\Search\QueryFactory;
+use Opus\Search\Service;
 
 /**
- *
  * Dieses Skript gibt alle IDs der Dokumente zurück, die im Server State
  * published sind, aber aufgrund eines Fehlers nicht im Index repräsentiert sind.
  *
@@ -54,7 +52,7 @@ foreach ($finder->getIds() as $docId) {
     $search = Service::selectSearchingService();
     $query  = QueryFactory::selectDocumentById($search, $docId);
 
-    if ($search->customSearch($query)->getAllMatchesCount() != 1) {
+    if ($search->customSearch($query)->getAllMatchesCount() !== 1) {
         echo "document # $docId is not stored in search index\n";
         $numOfErrors++;
     }

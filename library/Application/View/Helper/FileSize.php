@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,34 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Application_View_Helper_FileSize extends \Zend_View_Helper_Abstract
-{
 
-    private $_labels = ["Byte", "KB", "MB", "GB"];
+class Application_View_Helper_FileSize extends Zend_View_Helper_Abstract
+{
+    /** @var string[] */
+    private $labels = ["Byte", "KB", "MB", "GB"];
 
     /**
      * Formats file size for output.
      *
+     * @param string     $name
+     * @param mixed      $value
+     * @param array|null $options
      * @return string
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter) // Variables part of interface
      */
     public function fileSize($name, $value = 0, $options = null)
     {
         $labelIndex = 0;
-        $maxIndex = count($this->_labels) - 1;
+        $maxIndex   = count($this->labels) - 1;
 
         while ($value >= 1024 && $labelIndex < $maxIndex) {
             $labelIndex++;
-            $value = $value / 1024;
+            $value /= 1024;
         }
 
-        return sprintf('%1$s %2$s', round($value, 2), $this->_labels[$labelIndex]);
+        return sprintf('%1$s %2$s', round($value, 2), $this->labels[$labelIndex]);
     }
 }

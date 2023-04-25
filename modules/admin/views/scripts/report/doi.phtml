@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,11 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    View Script
- * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <div>
@@ -36,22 +36,22 @@
         <?= $this->translate('admin_report_doi_filter') ?>
     </p>
     <ul>
-        <?php if (! is_null($this->filter)) : ?>
+        <?php if ($this->filter !== null) : ?>
             <li><a href="<?= $this->url(['filter' => null]) ?>"><?= $this->translate('admin_report_doi_filter_all') ?></a></li>
         <?php else : ?>
             <li><b><?= $this->translate('admin_report_doi_filter_all') ?></b></li>
         <?php endif; ?>
-        <?php if ($this->filter != 'unregistered') : ?>
+        <?php if ($this->filter !== 'unregistered') : ?>
             <li><a href="<?= $this->url(['filter' => 'unregistered']) ?>"><?= $this->translate('admin_report_doi_filter_unregistered') ?></a></li>
         <?php else : ?>
             <li><b><?= $this->translate('admin_report_doi_filter_unregistered') ?></b></li>
         <?php endif; ?>
-        <?php if ($this->filter != 'registered') : ?>
+        <?php if ($this->filter !== 'registered') : ?>
             <li><a href="<?= $this->url(['filter' => 'registered']) ?>"><?= $this->translate('admin_report_doi_filter_registered') ?></a></li>
         <?php else : ?>
             <li><b><?= $this->translate('admin_report_doi_filter_registered') ?></b></li>
         <?php endif; ?>
-        <?php if ($this->filter != 'verified') : ?>
+        <?php if ($this->filter !== 'verified') : ?>
             <li><a href="<?= $this->url(['filter' => 'verified']) ?>"><?= $this->translate('admin_report_doi_filter_verified') ?></a></li>
         <?php else : ?>
             <li><b><?= $this->translate('admin_report_doi_filter_verified') ?></b></li>
@@ -90,23 +90,23 @@
             </td>
             <td class="registrationState">
                 <span class="<?= $doc->getDoiStatus() ?>">
-                    <?= is_null($doc->getDoiStatus()) ? $this->translate('admin_report_doi_unregistered') : $this->translate('admin_report_doi_' . $doc->getDoiStatus()) ?>
+                    <?= $doc->getDoiStatus() === null ? $this->translate('admin_report_doi_unregistered') : $this->translate('admin_report_doi_' . $doc->getDoiStatus()) ?>
                 </span>
             </td>
             <td>
-                <?php if ($doc->getDoiStatus() == 'registered') : ?>
+                <?php if ($doc->getDoiStatus() === 'registered') : ?>
                     <form action="<?= $this->url(['op' => 'verify', 'docId' => $doc->getDocId()]) ?>" method="POST">
                         <input type="submit" value="<?= $this->translate('admin_report_doi_verify') ?>" />
                     </form>
-                <?php elseif ($doc->getDoiStatus() == 'verified') : ?>
+                <?php elseif ($doc->getDoiStatus() === 'verified') : ?>
                     <form action="<?= $this->url(['op' => 'verify', 'docId' => $doc->getDocId()]) ?>" method="POST">
                         <input type="submit" value="<?= $this->translate('admin_report_doi_verify_again') ?>" />
                     </form>
-                <?php elseif ($doc->isPublished() && is_null($doc->getDoiStatus())) : ?>
+                <?php elseif ($doc->isPublished() && $doc->getDoiStatus() === null) : ?>
                     <form action="<?= $this->url(['op' => 'register', 'docId' => $doc->getDocId()]) ?>" method="POST">
                         <input type="submit" value="<?= $this->translate('admin_report_doi_register') ?>" />
                     </form>
-                <?php elseif (! $doc->isPublished() && is_null($doc->getDoiStatus())) :  ?>
+                <?php elseif (! $doc->isPublished() && $doc->getDoiStatus() === null) :  ?>
                     <i><?= $this->translate('admin_report_doi_unpublished_doc') ?></i>
                 <?php endif; ?>
             </td>

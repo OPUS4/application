@@ -1,6 +1,6 @@
 <?php
+
 /**
- *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,52 +25,46 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Admin_IndexmaintenanceController extends Application_Controller_Action
 {
-
-    /**
-     * @var Admin_Model_IndexMaintenance
-     */
-    private $_model;
+    /** @var Admin_Model_IndexMaintenance */
+    private $model;
 
     public function init()
     {
         parent::init();
-        $this->_model = new Admin_Model_IndexMaintenance($this->getLogger());
+        $this->model = new Admin_Model_IndexMaintenance($this->getLogger());
 
         // TODO features will be enabled in later version
         $this->view->disabledFeatureFulltextExtractionCheck = true; // TODO OPUSVIER-2955
-        $this->view->disabledFeatureIndexOptimization = true; // TODO OPUSVIER-2956
+        $this->view->disabledFeatureIndexOptimization       = true; // TODO OPUSVIER-2956
 
-        if ($this->_model->getFeatureDisabled()) {
+        if ($this->model->getFeatureDisabled()) {
             $this->view->featureDisabled = true;
         } else {
-            $this->view->allowConsistencyCheck = $this->_model->allowConsistencyCheck();
-            $this->view->allowFulltextExtractionCheck = $this->_model->allowFulltextExtractionCheck();
-            $this->view->allowIndexOptimization = $this->_model->allowIndexOptimization();
+            $this->view->allowConsistencyCheck        = $this->model->allowConsistencyCheck();
+            $this->view->allowFulltextExtractionCheck = $this->model->allowFulltextExtractionCheck();
+            $this->view->allowIndexOptimization       = $this->model->allowIndexOptimization();
         }
     }
 
     public function indexAction()
     {
-        if (! $this->_model->getFeatureDisabled()) {
-            $state = $this->_model->getProcessingState();
+        if (! $this->model->getFeatureDisabled()) {
+            $state             = $this->model->getProcessingState();
             $this->view->state = ['consistencycheck' => $state];
-            if ($state == 'scheduled' || $state == 'completed') {
-                $data = $this->_model->readLogFile();
-                if (! is_null($data)) {
-                    $this->view->content = ['consistencycheck' => $data->getContent()];
+            if ($state === 'scheduled' || $state === 'completed') {
+                $data = $this->model->readLogFile();
+                if ($data !== null) {
+                    $this->view->content            = ['consistencycheck' => $data->getContent()];
                     $this->view->contentLastModTime = ['consistencycheck' => $data->getModifiedDate()];
                 }
             }
-            if (is_null($state)) {
+            if ($state === null) {
                 $this->view->error = ['consistencycheck' => true];
             }
         }
@@ -78,42 +72,41 @@ class Admin_IndexmaintenanceController extends Application_Controller_Action
 
     public function checkconsistencyAction()
     {
-        if (! $this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
-            $jobId = $this->_model->createJob();
-            if (! is_null($jobId)) {
-                return $this->_helper->Redirector->redirectToAndExit(
+        if (! $this->model->getFeatureDisabled() && $this->getRequest()->isPost()) {
+            $jobId = $this->model->createJob();
+            if ($jobId !== null) {
+                $this->_helper->Redirector->redirectToAndExit(
                     'index',
                     $this->view->translate(
                         'admin_indexmaintenance_jobsubmitted',
                         [$jobId]
                     )
                 );
+                return;
             }
         }
-        return $this->_helper->Redirector->redirectToAndExit('index');
+        $this->_helper->Redirector->redirectToAndExit('index');
     }
 
     /**
-     *
      * TODO implementation needed OPUSVIER-2956
      */
     public function optimizeindexAction()
     {
-        if (! $this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
-            // add a job
-        }
-        return $this->_helper->Redirector->redirectToAndExit('index');
+        // if (! $this->model->getFeatureDisabled() && $this->getRequest()->isPost()) {
+            // TODO add a job
+        //}
+        $this->_helper->Redirector->redirectToAndExit('index');
     }
 
     /**
-     *
      * TODO implementation needed OPUSVIER-2955
      */
     public function checkfulltextsAction()
     {
-        if (! $this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
-            // add a job
-        }
-        return $this->_helper->Redirector->redirectToAndExit('index');
+        // if (! $this->model->getFeatureDisabled() && $this->getRequest()->isPost()) {
+            // TODO add a job
+        // }
+        $this->_helper->Redirector->redirectToAndExit('index');
     }
 }

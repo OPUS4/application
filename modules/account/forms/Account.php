@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,25 +25,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Account
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
+use Opus\Common\AccountInterface;
 
 class Account_Form_Account extends Application_Form_Model_Abstract
 {
-
-    const ELEMENT_LOGIN = 'username';
-    const ELEMENT_FIRSTNAME = 'firstname';
-    const ELEMENT_LASTNAME = 'lastname';
-    const ELEMENT_EMAIL = 'email';
-    const ELEMENT_PASSWORD = 'password';
-    const ELEMENT_CONFIRM_PASSWORD = 'confirm';
-    const ELEMENT_SUBMIT = 'submit';
+    public const ELEMENT_LOGIN            = 'username';
+    public const ELEMENT_FIRSTNAME        = 'firstname';
+    public const ELEMENT_LASTNAME         = 'lastname';
+    public const ELEMENT_EMAIL            = 'email';
+    public const ELEMENT_PASSWORD         = 'password';
+    public const ELEMENT_CONFIRM_PASSWORD = 'confirm';
+    public const ELEMENT_SUBMIT           = 'submit';
 
     public function init()
     {
@@ -52,7 +49,7 @@ class Account_Form_Account extends Application_Form_Model_Abstract
         $this->setLabelPrefix('admin_account_label_');
 
         $this->addElement('Login', self::ELEMENT_LOGIN, [
-            'label' => 'admin_account_label_login'
+            'label' => 'admin_account_label_login',
         ]);
         $this->getElement(self::ELEMENT_LOGIN)->addValidator(
             new Application_Form_Validate_LoginAvailable(['ignoreCase' => true])
@@ -64,7 +61,7 @@ class Account_Form_Account extends Application_Form_Model_Abstract
 
         $this->addElement('Password', self::ELEMENT_PASSWORD);
         $this->addElement('Password', self::ELEMENT_CONFIRM_PASSWORD, [
-            'label' => 'admin_account_label_confirmPassword'
+            'label' => 'admin_account_label_confirmPassword',
         ]);
 
         $this->getElement(self::ELEMENT_CONFIRM_PASSWORD)->addValidator(
@@ -72,12 +69,12 @@ class Account_Form_Account extends Application_Form_Model_Abstract
         );
 
         $this->getElement(self::ELEMENT_PASSWORD)->addErrorMessages(
-            [\Zend_Validate_StringLength::TOO_SHORT => 'admin_account_error_password_tooshort']
+            [Zend_Validate_StringLength::TOO_SHORT => 'admin_account_error_password_tooshort']
         );
     }
 
     /**
-     * @param $account Account
+     * @param AccountInterface $account
      */
     public function populateFromModel($account)
     {
@@ -105,6 +102,9 @@ class Account_Form_Account extends Application_Form_Model_Abstract
         }
     }
 
+    /**
+     * @param AccountInterface $account
+     */
     public function updateModel($account)
     {
     }

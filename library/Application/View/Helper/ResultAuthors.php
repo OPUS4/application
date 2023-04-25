@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2019, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -40,11 +38,12 @@
  */
 class Application_View_Helper_ResultAuthors extends Application_View_Helper_Document_HelperAbstract
 {
-
+    /** @var string */
     private $separator = ' ; ';
 
     /**
      * Prints escaped main title of document.
+     *
      * @return null|string
      */
     public function resultAuthors()
@@ -57,9 +56,9 @@ class Application_View_Helper_ResultAuthors extends Application_View_Helper_Docu
             $authorStr = rtrim($author, ', '); // TODO should not be necessary (OPUSVIER-3891)
 
             // TODO put somewhere else -> view helper for author search ?
-            $authorSearch = $this->view->authorSearch;
+            $authorSearch           = $this->view->authorSearch;
             $authorSearch['author'] = $authorStr;
-            $authorSearchUrl = $this->view->url($authorSearch, null, true);
+            $authorSearchUrl        = $this->view->url($authorSearch, null, true);
 
             if ($authorIndex !== 0) {
                 $output .= $this->separator;
@@ -73,6 +72,9 @@ class Application_View_Helper_ResultAuthors extends Application_View_Helper_Docu
         return $output;
     }
 
+    /**
+     * @param string $separator
+     */
     public function setSeparator($separator)
     {
         $this->separator = $separator;

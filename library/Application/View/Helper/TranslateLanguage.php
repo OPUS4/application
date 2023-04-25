@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,9 +25,6 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
@@ -34,9 +32,8 @@
 /**
  * View helper for translations modifying behaviour of base class.
  */
-class Application_View_Helper_TranslateLanguage extends \Zend_View_Helper_Translate
+class Application_View_Helper_TranslateLanguage extends Zend_View_Helper_Translate
 {
-
     /**
      * Changes default behaviour of translate function to return empty string for null values.
      *
@@ -49,6 +46,9 @@ class Application_View_Helper_TranslateLanguage extends \Zend_View_Helper_Transl
      * (for more information see OPUSVIER-2546)
      *
      * TODO review if the behaviour changes are worth it - is there a better way?
+     *
+     * @param string $langId
+     * @return string
      */
     public function translateLanguage($langId)
     {

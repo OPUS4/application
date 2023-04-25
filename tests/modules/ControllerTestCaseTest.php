@@ -25,24 +25,27 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\DocumentFinderInterface;
-use Opus\DocumentFinder\DefaultDocumentFinder;
-use Opus\Model\NotFoundException;
-use Opus\Security\Realm;
+use Opus\Common\Document;
+use Opus\Common\DocumentFinderInterface;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\Security\Realm;
 
+/**
+ * TODO LAMINAS use appropriate assertions instead of generic assertTrue
+ */
 class ControllerTestCaseTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'translation'];
 
+    /** @var bool */
     protected $configModifiable = true;
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->restoreSecuritySetting();
         parent::tearDown();
@@ -62,7 +65,7 @@ class ControllerTestCaseTest extends ControllerTestCase
         $this->assertContains(
             'administrator',
             $realm->getRoles(),
-            \Zend_Debug::dump($realm->getRoles(), null, false)
+            Zend_Debug::dump($realm->getRoles(), null, false)
         );
     }
 
@@ -114,12 +117,12 @@ class ControllerTestCaseTest extends ControllerTestCase
      */
     public function testRemoveDocumentById()
     {
-        $doc = Document::new();
+        $doc   = Document::new();
         $docId = $doc->store();
 
         $this->removeDocument($docId);
 
-        $this->setExpectedException(NotFoundException::class);
+        $this->expectException(NotFoundException::class);
 
         Document::get($docId);
     }
@@ -129,12 +132,12 @@ class ControllerTestCaseTest extends ControllerTestCase
      */
     public function testRemoveDocument()
     {
-        $doc = Document::new();
+        $doc   = Document::new();
         $docId = $doc->store();
 
         $this->removeDocument($doc);
 
-        $this->setExpectedException(NotFoundException::class);
+        $this->expectException(NotFoundException::class);
 
         Document::get($docId);
     }
@@ -190,25 +193,23 @@ class ControllerTestCaseTest extends ControllerTestCase
         $workspacePath = $this->getWorkspacePath();
 
         $this->assertTrue(is_dir($workspacePath));
-        $this->assertTrue(is_writeable($workspacePath));
+        $this->assertTrue(is_writable($workspacePath));
     }
 
-    /**
-     * @expectedException Exception
-     * @expectedExceptionMessage config key 'workspacePath' not defined in config file
-     */
     public function testGetWorkspacePathNotDefined()
     {
         $this->adjustConfiguration([
-            'workspacePath' => null
+            'workspacePath' => null,
         ]);
 
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('config key \'workspacePath\' not defined in config file');
         $this->getWorkspacePath();
     }
 
     public function testSetWorkspacePath()
     {
-        $path = $this->getWorkspacePath();
+        $path    = $this->getWorkspacePath();
         $newPath = $path . DIRECTORY_SEPARATOR . 'tmp';
 
         $this->setWorkspacePath($newPath);
@@ -223,7 +224,7 @@ class ControllerTestCaseTest extends ControllerTestCase
         $path = $this->createTestFolder();
 
         $this->assertTrue(is_dir($path));
-        $this->assertTrue(is_writeable($path));
+        $this->assertTrue(is_writable($path));
     }
 
     public function testCleanupTestFolders()
@@ -231,7 +232,7 @@ class ControllerTestCaseTest extends ControllerTestCase
         $path = $this->createTestFolder();
 
         $this->assertTrue(is_dir($path));
-        $this->assertTrue(is_writeable($path));
+        $this->assertTrue(is_writable($path));
 
         $this->cleanupTestFolders();
 
@@ -243,7 +244,7 @@ class ControllerTestCaseTest extends ControllerTestCase
         $path = $this->createTestFolder();
 
         $this->assertTrue(is_dir($path));
-        $this->assertTrue(is_writeable($path));
+        $this->assertTrue(is_writable($path));
 
         $file1 = $this->createTestFile('test1.txt', null, $path);
         $file2 = $this->createTestFile('test2.txt', null, $path);
@@ -316,7 +317,7 @@ class ControllerTestCaseTest extends ControllerTestCase
         $file1 = $this->createTestFile('test1.txt', null, $path);
 
         $folder = $this->createTestFolder();
-        $file2 = $this->createTestFile('test2.txt', null, $folder);
+        $file2  = $this->createTestFile('test2.txt', null, $folder);
 
         $link = $folder . DIRECTORY_SEPARATOR . 'link.txt';
         symlink($file1, $link);
@@ -424,7 +425,7 @@ class ControllerTestCaseTest extends ControllerTestCase
         $folder = $this->createTestFolder();
 
         $helpFiles = new Home_Model_HelpFiles();
-        $helpPath = $helpFiles->getHelpPath();
+        $helpPath  = $helpFiles->getHelpPath();
 
         $this->copyFiles($helpPath, $folder);
 
@@ -440,6 +441,6 @@ class ControllerTestCaseTest extends ControllerTestCase
     {
         $finder = $this->getDocumentFinder();
 
-        $this->assertInstanceOf(DefaultDocumentFinder::class, $finder);
+        $this->assertInstanceOf(DocumentFinderInterface::class, $finder);
     }
 }

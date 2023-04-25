@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,13 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Default
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2011-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 ?>
 
 <h1>Sitelinks for Web Crawlers</h1>
@@ -45,10 +43,10 @@
 <?php endforeach; ?>
 </span>
 
-<?PHP if (! is_null($this->ids)) : ?>
+<?PHP if ($this->ids !== null) : ?>
 <ol id="documents">
-<?php foreach ($this->ids as $id) : ?>
+    <?php foreach ($this->ids as $id) : ?>
     <li><a href="<?= $this->url(['module' => 'frontdoor', 'controller' => 'index', 'action' => 'index', 'docId' => $id]) ?>">document <?= $id ?></a></li>
-<?php endforeach; ?>
+    <?php endforeach; ?>
 </ol>
 <?PHP endif ?>

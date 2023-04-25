@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,18 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Sword
- * @author      Sascha Szott
- * @copyright   Copyright (c) 2016-2021
+ * @copyright   Copyright (c) 2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 
-class Sword_ServicedocumentController extends \Zend_Rest_Controller
+class Sword_ServicedocumentController extends Zend_Rest_Controller
 {
-
     public function init()
     {
         $this->getHelper('Layout')->disableLayout();
@@ -47,10 +44,15 @@ class Sword_ServicedocumentController extends \Zend_Rest_Controller
         $this->getAction();
     }
 
+    /**
+     * @throws Zend_Auth_Adapter_Exception
+     *
+     * TODO BUG function is called get... and does not return anything
+     */
     public function getAction()
     {
-        $request = $this->getRequest();
-        $response = $this->getResponse();
+        $request  = $this->getHttpRequest();
+        $response = $this->getHttpResponse();
 
         $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
 
@@ -62,30 +64,38 @@ class Sword_ServicedocumentController extends \Zend_Rest_Controller
         $this->setServiceDocument($response);
     }
 
+    /**
+     * @param Zend_Controller_Response_Abstract $response
+     * @throws DOMException
+     */
     private function setErrorDocument($response)
     {
         $response->setHttpResponseCode(403);
         $domDocument = new DOMDocument();
-        $element = $domDocument->createElement('error', 'Access to SWORD module is forbidden.');
+        $element     = $domDocument->createElement('error', 'Access to SWORD module is forbidden.');
         $domDocument->appendChild($element);
         $response->setBody($domDocument->saveXML());
     }
 
+    /**
+     * @param Zend_Controller_Response_Abstract $response
+     */
     private function setServiceDocument($response)
     {
-        $fullUrl = $this->view->fullUrl();
+        $fullUrl         = $this->view->fullUrl();
         $serviceDocument = new Sword_Model_ServiceDocument($fullUrl);
-        $domDocument = $serviceDocument->getDocument();
+        $domDocument     = $serviceDocument->getDocument();
 
-        $config = Config::get();
+        $config         = Config::get();
         $prettyPrinting = isset($config->prettyXml) && filter_var($config->prettyXml, FILTER_VALIDATE_BOOLEAN);
         if ($prettyPrinting) {
             $domDocument->preserveWhiteSpace = false;
-            $domDocument->formatOutput = true;
+            $domDocument->formatOutput       = true;
         }
 
         $response->setBody($domDocument->saveXml());
     }
+
     public function deleteAction()
     {
         $this->return500($this->getResponse());
@@ -106,9 +116,32 @@ class Sword_ServicedocumentController extends \Zend_Rest_Controller
         $this->return500($this->getResponse());
     }
 
+    /**
+     * @param Zend_Controller_Response_Abstract $response
+     */
     private function return500($response)
     {
         $response->setHttpResponseCode(500);
         $response->appendBody("Method not allowed");
+    }
+
+    /**
+     * @return Zend_Controller_Request_Http|Zend_Controller_Request_Abstract
+     *
+     * TODO LAMINAS function exists to typecast
+     */
+    protected function getHttpRequest()
+    {
+        return $this->getRequest();
+    }
+
+    /**
+     * @return Zend_Controller_Response_Http|Zend_Controller_Response_Abstract
+     *
+     * TODO LAMINAS function exists to typecast
+     */
+    protected function getHttpResponse()
+    {
+        return $this->getResponse();
     }
 }

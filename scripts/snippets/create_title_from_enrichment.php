@@ -25,10 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Edouard Simon (edouard.simon@zib.de)
- * @author      Michael Lang  (lang@zib.de)
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,10 +34,11 @@
  * as title (--type). The script is executed for all documents of the specified type (--doctype). If no document type
  * is provided, the script runs for all documents.
  *
- * @param enrichment
- * @param type
- * @param doctype
- * @param dryrun
+ * Command line parameters:
+ * - enrichment
+ * - type
+ * - doctype
+ * - dryrun
  */
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)" . PHP_EOL;
@@ -49,15 +47,15 @@ if (basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Document;
-use Opus\Repository;
+use Opus\Common\Document;
+use Opus\Common\Repository;
 
 $options = getopt('', ['dryrun', 'type:', 'doctype:', 'enrichment:']);
 
 $dryrun = isset($options['dryrun']);
 
 $doctype = '';
-if (is_null($options['doctype'])) {
+if ($options['doctype'] === null) {
     echo "parameter --doctype not specified; function will be executed for all document types" . PHP_EOL;
 } else {
     $doctype = $options['doctype'];
@@ -70,7 +68,7 @@ if (! isset($options['type']) || empty($options['type'])) {
 }
 
 $enrichmentField = '';
-if (is_null($options['enrichment'])) {
+if ($options['enrichment'] === null) {
     echo "parameter --enrichment not specified; function will now exit" . PHP_EOL;
     exit;
 } else {
@@ -81,24 +79,24 @@ $getType = 'getTitle' . ucfirst(strtolower($options['type']));
 $addType = 'addTitle' . ucfirst(strtolower($options['type']));
 
 if ($dryrun) {
-    _log("TEST RUN: NO DATA WILL BE MODIFIED");
+    writeMessage("TEST RUN: NO DATA WILL BE MODIFIED");
 }
 
-$docFinder = Repository::getInstance()->DocumentFinder();
-$docIds = $docFinder->setEnrichmentExists($enrichmentField)->getIds();
+$docFinder = Repository::getInstance()->getDocumentFinder();
+$docIds    = $docFinder->setEnrichmentExists($enrichmentField)->getIds();
 
-_log(count($docIds) . " documents found");
+writeMessage(count($docIds) . " documents found");
 
 foreach ($docIds as $docId) {
     $doc = Document::get($docId);
-    if ($doc->getType() == $doctype || $doctype == '') {
+    if ($doc->getType() === $doctype || $doctype === '') {
         $enrichments = $doc->getEnrichment();
         foreach ($enrichments as $enrichment) {
             $enrichmentArray = $enrichment->toArray();
-            if ($enrichmentArray['KeyName'] == $enrichmentField) {
+            if ($enrichmentArray['KeyName'] === $enrichmentField) {
                 $titles = $doc->{$getType}();
                 if (count($titles) > 0) {
-                    _log(
+                    writeMessage(
                         'Title ' . ucfirst(strtolower($options['type'])) . ' already exists for Document #' . $docId
                         . '. Skipping.. '
                     );
@@ -108,14 +106,17 @@ foreach ($docIds as $docId) {
                     if (! $dryrun) {
                         $doc->store();
                     }
-                    _log('Document #' . $docId . ' updated');
+                    writeMessage('Document #' . $docId . ' updated');
                 }
             }
         }
     }
 }
 
-function _log($message)
+/**
+ * @param string $message
+ */
+function writeMessage($message)
 {
     echo $message . PHP_EOL;
 }

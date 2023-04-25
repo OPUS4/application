@@ -25,25 +25,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class CollectionsAdminTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->enableSecurity();
         $this->loginUser('security9', 'security9pwd');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->logoutUser();
         $this->restoreSecuritySetting();

@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,32 +25,35 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Application_Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_Form_Validate_EmailAddressTest extends TestCase
 {
+    /** @var Application_Form_Validate_EmailAddress */
+    private $validator;
 
-    private $_validator;
-
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->_validator = new Application_Form_Validate_EmailAddress();
+        $this->validator = new Application_Form_Validate_EmailAddress();
     }
 
+    /**
+     * @return array
+     */
     public function validEmails()
     {
         return [
-            ['test@example.org']
+            ['test@example.org'],
         ];
     }
 
+    /**
+     * @return array
+     */
     public function badEmails()
     {
         return [
@@ -57,23 +61,25 @@ class Application_Form_Validate_EmailAddressTest extends TestCase
             ['test@example'],
             ['example.org'],
             ['test'],
-            [' ']
+            [' '],
         ];
     }
 
     /**
      * @dataProvider validEmails
+     * @param string $address
      */
     public function testValidTrue($address)
     {
-        $this->assertTrue($this->_validator->isValid($address));
+        $this->assertTrue($this->validator->isValid($address));
     }
 
     /**
      * @dataProvider badEmails
+     * @param string $address
      */
     public function testValidFalse($address)
     {
-        $this->assertFalse($this->_validator->isValid($address));
+        $this->assertFalse($this->validator->isValid($address));
     }
 }

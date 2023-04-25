@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Account
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Account;
-use Opus\Config;
+use Opus\Common\Account;
+use Opus\Common\AccountInterface;
+use Opus\Common\Config;
+use Opus\Common\Model\ModelException;
+use Opus\Common\Security\SecurityException;
 
 /**
  * Basic unit tests for account module.
@@ -41,33 +42,39 @@ use Opus\Config;
  */
 class Account_IndexControllerTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database', 'view', 'mainMenu', 'navigation', 'translation'];
 
+    /** @var AccountInterface */
     private $user;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         $this->deleteUser('john');
-        $this->user = new Account();
+        $this->user = Account::new();
         $this->user->setLogin('john');
         $this->user->setPassword('testpwd');
         $this->user->store();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->user->delete();
         parent::tearDown();
     }
 
+    /**
+     * @param string $username
+     * @throws ModelException
+     */
     private function deleteUser($username)
     {
-        $account = Account::fetchAccountByLogin($username);
-        if ($account instanceof Account) {
+        try {
+            $account = Account::fetchAccountByLogin($username);
             $account->delete();
+        } catch (SecurityException $ex) {
         }
     }
 
@@ -76,7 +83,7 @@ class Account_IndexControllerTest extends ControllerTestCase
      */
     public function testIndexSuccessAction()
     {
-        $config = Config::get();
+        $config                          = Config::get();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('admin', 'adminadmin');
@@ -92,7 +99,7 @@ class Account_IndexControllerTest extends ControllerTestCase
      */
     public function testIndexDeniedIfEditAccountDisabledAction()
     {
-        $config = Config::get();
+        $config                          = Config::get();
         $config->account->editOwnAccount = self::CONFIG_VALUE_FALSE;
 
         $this->loginUser('admin', 'adminadmin');
@@ -112,14 +119,14 @@ class Account_IndexControllerTest extends ControllerTestCase
 
     public function testChangePasswordFailsOnMissingInputAction()
     {
-        $config = $this->getConfig();
+        $config                          = $this->getConfig();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'password' => 'newpassword'
+                'password' => 'newpassword',
             ]);
         $this->dispatch('/account/index/save');
         $this->assertResponseCode(200);
@@ -128,7 +135,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->assertAction('save');
 
         // Check if change failed...
-        $account = new Account(null, null, 'john');
+        $account = Account::fetchAccountByLogin('john');
         $this->assertTrue($account->isPasswordCorrect('testpwd'));
         $this->assertFalse($account->isPasswordCorrect('newpassword'));
 
@@ -137,15 +144,15 @@ class Account_IndexControllerTest extends ControllerTestCase
 
     public function testChangePasswordFailsOnNoMatch()
     {
-        $config = $this->getConfig();
+        $config                          = $this->getConfig();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'password' => 'newpassword',
-                'confirmPassword' => 'anotherpassword'
+                'password'        => 'newpassword',
+                'confirmPassword' => 'anotherpassword',
             ]);
         $this->dispatch('/account/index/save');
         $this->assertResponseCode(200);
@@ -154,7 +161,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->assertAction('save');
 
         // Check if change failed...
-        $account = new Account(null, null, 'john');
+        $account = Account::fetchAccountByLogin('john');
         $this->assertTrue($account->isPasswordCorrect('testpwd'));
         $this->assertFalse($account->isPasswordCorrect('newpassword'));
 
@@ -166,25 +173,25 @@ class Account_IndexControllerTest extends ControllerTestCase
      */
     public function testChangePasswordSuccess()
     {
-        $config = $this->getConfig();
+        $config                          = $this->getConfig();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'username' => 'john',
+                'username'  => 'john',
                 'firstname' => '',
-                'lastname' => '',
-                'email' => '',
-                'password' => 'newpassword',
-                'confirm' => 'newpassword'
+                'lastname'  => '',
+                'email'     => '',
+                'password'  => 'newpassword',
+                'confirm'   => 'newpassword',
             ]);
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
 
         // Check if change succeeded...
-        $account = new Account(null, null, 'john');
+        $account = Account::fetchAccountByLogin('john');
         $this->assertTrue($account->isPasswordCorrect('newpassword'));
 
         $this->assertNotContains('<ul class="errors">', $this->getResponse()->getBody());
@@ -195,25 +202,25 @@ class Account_IndexControllerTest extends ControllerTestCase
      */
     public function testChangePasswordSuccessWithSpecialChars()
     {
-        $config = $this->getConfig();
+        $config                          = $this->getConfig();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->loginUser('john', 'testpwd');
-        $this->request
+        $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'username' => 'john',
+                'username'  => 'john',
                 'firstname' => '',
-                'lastname' => '',
-                'email' => '',
-                'password' => 'new@pwd$%',
-                'confirm' => 'new@pwd$%'
+                'lastname'  => '',
+                'email'     => '',
+                'password'  => 'new@pwd$%',
+                'confirm'   => 'new@pwd$%',
             ]);
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
 
         // Check if change succeeded...
-        $account = new Account(null, null, 'john');
+        $account = Account::fetchAccountByLogin('john');
         $this->assertTrue($account->isPasswordCorrect('new@pwd$%'));
 
         $this->assertNotContains('<ul class="errors">', $this->getResponse()->getBody());
@@ -224,7 +231,7 @@ class Account_IndexControllerTest extends ControllerTestCase
      */
     public function testChangeLoginSuccess()
     {
-        $config = $this->getConfig();
+        $config                          = $this->getConfig();
         $config->account->editOwnAccount = self::CONFIG_VALUE_TRUE;
 
         $this->deleteUser('john2');
@@ -233,10 +240,10 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->getRequest()
             ->setMethod('POST')
             ->setPost([
-                'username' => 'john2',
+                'username'  => 'john2',
                 'firstname' => '',
-                'lastname' => '',
-                'email' => ''
+                'lastname'  => '',
+                'email'     => '',
             ]);
         $this->dispatch('/account/index/save');
 
@@ -247,11 +254,11 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->assertNotNull($account);
         $this->assertTrue($account->isPasswordCorrect('testpwd'));
 
-        $account = Account::fetchAccountByLogin('john');
-        $this->assertNull($account);
-
         // Delete user 'john2' if we're done...
         $this->deleteUser('john2');
+
+        $this->expectException(SecurityException::class, 'Account with login name \'john\' not found');
+        Account::fetchAccountByLogin('john');
     }
 
     public function testAccessAccountModule()

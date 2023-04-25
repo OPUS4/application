@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,55 +25,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @package     Application
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Import_TarPackageReaderTest extends ControllerTestCase
+/**
+ * Interface fuer OPUS Form Element Klassen.
+ */
+interface Application_Form_FormElementInterface
 {
+    /**
+     * Liefert Hinweis zum Element-Value, z.B. das eine ISBN ungültig ist.
+     *
+     * Hinweise sind wie Validierungsfehler, die aber das Abspeichern nicht verhindern und schon beim Aufruf des
+     * Formulars für existierende Werte berechnet werden.
+     *
+     * @return string
+     */
+    public function getHint();
 
-    protected $additionalResources = 'database';
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->makeConfigurationModifiable();
-    }
-
-    public function testReadPackageWithXmlFile()
-    {
-        $this->adjustConfiguration([
-            'filetypes' => ['xml' => ['mimeType' => [
-                'text/xml', 'application/xml'
-            ]]]
-        ]);
-
-        $reader = new Application_Import_TarPackageReader();
-
-        $tmpDir = APPLICATION_PATH . '/tests/workspace/tmp/TarPackageReaderTest_ReadPackageWithXmlFile';
-        mkdir($tmpDir);
-
-        copy(
-            APPLICATION_PATH . '/tests/resources/sword-packages/single-doc-pdf-xml.tar',
-            $tmpDir . DIRECTORY_SEPARATOR . 'package.tar'
-        );
-
-        $status = $reader->readPackage($tmpDir);
-
-        $this->assertFalse($status->noDocImported());
-        $this->assertCount(1, $status->getDocs());
-
-        $document = $status->getDocs()[0];
-
-        $this->addTestDocument($document); // for cleanup
-
-        $files = $document->getFile();
-
-        $this->assertCount(2, $files);
-
-        Application_Import_PackageReaderTest::cleanupTmpDir($tmpDir);
-    }
+    /**
+     * Ändert die Ausgabe (Dekoratoren) des Elements so, daß es als statischer View statt Formularelement ausgegeben
+     * wird.
+     *
+     * Statt eines Input-Tags könnte zum Beispiel nur der Wert als einfacher Text ausgegeben werden.
+     */
+    public function prepareRenderingAsView();
 }

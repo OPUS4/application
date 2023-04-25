@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,12 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
+
 ?>
 
 <h1><?= $this->translate('admin_title_indexmaintenance') ?></h1>
@@ -61,9 +60,9 @@
         <div>
         <?= $this->translate('admin_indexmaintenance_joboutput') ?> (<?= $this->translate('admin_indexmaintenance_jobcompletiontime') ?>: <?= $this->contentLastModTime['consistencycheck'] ?>):
 
-<?PHP /* DO NOT INDENT pre ELEMENT */ ?>
+        <?PHP /* DO NOT INDENT pre ELEMENT */ ?>
 <pre class="opoutput">
-<?= $this->content['consistencycheck'] ?>
+        <?= $this->content['consistencycheck'] ?>
 </pre>
         
         </div>
@@ -71,61 +70,61 @@
 </div>
 
 <!-- TODO feature will be implemented in a later version OPUSVIER-2955 -->
-<?php if (! $this->disabledFeatureFulltextExtractionCheck) : ?>
+    <?php if (! $this->disabledFeatureFulltextExtractionCheck) : ?>
 <div class="operation">
     <div class="opname"><?= $this->translate('admin_indexmaintenance_fulltextextractioncheck_name') ?></div>    
     <div class="opdescription"><?= $this->translate('admin_indexmaintenance_fulltextextractioncheck_description') ?></div>
-    <?php if ($this->allowFulltextExtractionCheck) : ?>
+        <?php if ($this->allowFulltextExtractionCheck) : ?>
         <div class="oprun">
             <form method="post" action="<?= $this->url(['module' => 'admin', 'controller' => 'indexmaintenance', 'action' => 'checkfulltexts'], null, true) ?>">
                 <input type="submit" value="<?= $this->translate('admin_indexmaintenance_runjob') ?>">
             </form>
         </div>
-    <?php else : ?>
+        <?php else : ?>
         <div class="opprogress"><?= $this->translate('admin_indexmaintenance_' . $this->state['fulltextextractioncheck']) ?></div>
-    <?php endif ?>
+        <?php endif ?>
         
-    <?php if (isset($this->content) && array_key_exists('fulltextextractioncheck', $this->content)) : ?>
+        <?php if (isset($this->content) && array_key_exists('fulltextextractioncheck', $this->content)) : ?>
         <div>
-        <?= $this->translate('admin_indexmaintenance_joboutput') ?> (<?= $this->translate('admin_indexmaintenance_jobcompletiontime') ?>: <?= $this->contentLastModTime['fulltextextractioncheck'] ?>):
+            <?= $this->translate('admin_indexmaintenance_joboutput') ?> (<?= $this->translate('admin_indexmaintenance_jobcompletiontime') ?>: <?= $this->contentLastModTime['fulltextextractioncheck'] ?>):
 
-<?PHP /* DO NOT INDENT pre ELEMENT */ ?>
+            <?PHP /* DO NOT INDENT pre ELEMENT */ ?>
 <pre class="opoutput">
-<?= $this->content['fulltextextractioncheck'] ?>
+            <?= $this->content['fulltextextractioncheck'] ?>
 </pre>
         
         </div>
-    <?php endif ?>        
+        <?php endif ?>        
 </div>
-<?php endif ?>
+    <?php endif ?>
 
 <!-- TODO feature will be implemented in a later version OPUSVIER-2956 -->
-<?php if (! $this->disabledFeatureIndexOptimization) : ?>
+    <?php if (! $this->disabledFeatureIndexOptimization) : ?>
 <div class="operation">    
     <div class="opname"><?= $this->translate('admin_indexmaintenance_indexoptimize_name') ?></div>        
     <div class="opdescription"><?= $this->translate('admin_indexmaintenance_indexoptimize_description') ?></div>
-    <?php if ($this->allowIndexOptimization) : ?>
+        <?php if ($this->allowIndexOptimization) : ?>
         <div class="oprun">
             <form method="post" action="<?= $this->url(['module' => 'admin', 'controller' => 'indexmaintenance', 'action' => 'optimizeindex'], null, true) ?>">
                 <input type="submit" value="<?= $this->translate('admin_indexmaintenance_runjob') ?>">
             </form>
         </div>
-    <?php else : ?>
+        <?php else : ?>
         <div class="opprogress"><?= $this->translate('admin_indexmaintenance_' . $this->state['indexoptimize']) ?></div>
-    <?php endif ?>
+        <?php endif ?>
         
-    <?php if (isset($this->content) && array_key_exists('indexoptimize', $this->content)) : ?>
+        <?php if (isset($this->content) && array_key_exists('indexoptimize', $this->content)) : ?>
         <div>
-        <?= $this->translate('admin_indexmaintenance_joboutput') ?> (<?= $this->translate('admin_indexmaintenance_jobcompletiontime') ?>: <?= $this->contentLastModTime['indexoptimize'] ?>):
+            <?= $this->translate('admin_indexmaintenance_joboutput') ?> (<?= $this->translate('admin_indexmaintenance_jobcompletiontime') ?>: <?= $this->contentLastModTime['indexoptimize'] ?>):
 
-<?PHP /* DO NOT INDENT pre ELEMENT */ ?>
+            <?PHP /* DO NOT INDENT pre ELEMENT */ ?>
 <pre class="opoutput">
-<?= $this->content['indexoptimize'] ?>
+            <?= $this->content['indexoptimize'] ?>
 </pre>
         
         </div>
-    <?php endif ?>        
+        <?php endif ?>        
 </div>
-<?php endif ?>
+    <?php endif ?>
 
 <?php endif ?>

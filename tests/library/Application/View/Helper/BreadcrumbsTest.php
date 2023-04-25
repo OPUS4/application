@@ -25,26 +25,25 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Class BreadcrumbsTest.
- *
- */
 class Application_View_Helper_BreadcrumbsTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['view', 'mainMenu', 'navigation', 'translation'];
 
-    private $page = null;
+    /** @var Zend_Navigation_Page */
+    private $page;
 
-    private $breadcrumbs = null;
+    /** @var Application_View_Helper_Breadcrumbs */
+    private $breadcrumbs;
 
-    private $view = null;
+    /** @var Zend_View */
+    private $view;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

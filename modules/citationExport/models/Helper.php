@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,60 +25,58 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_CitationExport
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Model\NotFoundException;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
+use Opus\Common\Model\NotFoundException;
 
 class CitationExport_Model_Helper extends Application_Model_Abstract
 {
+    /** @var string */
+    private $baseUrl;
 
-    private $_baseUrl;
+    /** @var string */
+    private $scriptPath;
 
-    private $_scriptPath;
-
+    /**
+     * @param string $baseUrl
+     * @param string $scriptPath
+     */
     public function __construct($baseUrl, $scriptPath)
     {
-        $this->_baseUrl = $baseUrl;
-        $this->_scriptPath = $scriptPath;
+        $this->baseUrl    = $baseUrl;
+        $this->scriptPath = $scriptPath;
     }
 
     /**
-     * @param $request
-     * @return null|string
+     * @param Zend_Controller_Request_Abstract $request
+     * @return string
      * @throws Application_Exception
      * @throws CitationExport_Model_Exception
      */
     public function getOutput($request)
     {
-        $output = null;
         $outputFormat = $request->getParam('output');
 
         $document = $this->getDocument($request);
 
         $template = $this->getTemplateForDocument($document, $outputFormat);
 
-        $output = $this->getPlainOutput($document, $template);
-
-        return $output;
+        return $this->getPlainOutput($document, $template);
     }
 
     /**
-     *
-     * @param string $docId
-     * @throws CitationExport_Module_Exception in case of an invalid parameter value
-     *
-     * @return Document
+     * @param Zend_Controller_Request_Abstract $request
+     * @throws CitationExport_Model_Exception In case of an invalid parameter value.
+     * @return DocumentInterface
      */
     public function getDocument($request)
     {
         $docId = $request->getParam('docId');
-        if (is_null($docId)) {
+        if ($docId === null) {
             throw new CitationExport_Model_Exception('invalid_docid');
         }
 
@@ -85,7 +84,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
         try {
             $document = Document::get($docId);
         } catch (NotFoundException $e) {
-            throw new CitationExport_Model_Exception('invalid_docid', null, $e);
+            throw new CitationExport_Model_Exception('invalid_docid', 0, $e);
         }
 
         // check if document access is allowed
@@ -97,7 +96,9 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
 
     /**
      * Returns file extension for output format.
-     * @param $outputFormat
+     *
+     * @param string $outputFormat
+     * @return string
      */
     public function getExtension($outputFormat)
     {
@@ -116,15 +117,14 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
     }
 
     /**
-     *
-     * @param Document $document
-     * @throws CitationExport_Module_Exception in case of an invalid parameter value
-     *
+     * @param DocumentInterface $document
+     * @param string            $outputFormat
+     * @throws CitationExport_Model_Exception In case of an invalid parameter value.
      * @return string
      */
     public function getTemplateForDocument($document, $outputFormat)
     {
-        if (is_null($outputFormat)) {
+        if ($outputFormat === null) {
             throw new CitationExport_Model_Exception('invalid_format');
         }
 
@@ -147,7 +147,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
     }
 
     /**
-     *
+     * @return array
      */
     public function getAvailableStylesheets()
     {
@@ -165,19 +165,18 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getScriptPath()
     {
-        return $this->_scriptPath;
+        return $this->scriptPath;
     }
 
     /**
      * transform XML output to desired output format
      *
-     * @param Document $document Document that should be transformed
-     * @param string $template XSLT stylesheet that should be applied
-     *
+     * @param DocumentInterface $document Document that should be transformed
+     * @param string            $template XSLT stylesheet that should be applied
      * @return string document in the given output format as plain text
      */
     public function getPlainOutput($document, $template)
@@ -185,23 +184,25 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
         $xml = $document->toXml();
 
         // Set up XSLT-Stylesheet
-        $xslt = new DomDocument;
+        $xslt = new DOMDocument();
         $xslt->load($this->getScriptPath() . DIRECTORY_SEPARATOR . $template);
 
         // find Enrichment that should be included in bibtex-output as note
         // TODO document this feature
         $enrichmentNote = null;
-        $config = $this->getConfig();
-        if (isset($config->citationExport->bibtex->enrichment)
-            && ! empty($config->citationExport->bibtex->enrichment)) {
+        $config         = $this->getConfig();
+        if (
+            isset($config->citationExport->bibtex->enrichment)
+            && ! empty($config->citationExport->bibtex->enrichment)
+        ) {
             $enrichmentNote = $config->citationExport->bibtex->enrichment;
         }
 
         // Set up XSLT-Processor
         try {
-            $proc = new XSLTProcessor;
-            $proc->setParameter('', 'enrichment_note', $enrichmentNote);
-            $proc->setParameter('', 'url_prefix', $this->_baseUrl);
+            $proc = new XSLTProcessor();
+            $proc->setParameter('', 'enrichment_note', $enrichmentNote ?? '');
+            $proc->setParameter('', 'url_prefix', $this->baseUrl);
             $proc->setParameter('', 'urnResolverUrl', $config->urn->resolverUrl);
             $proc->registerPHPFunctions();
             $proc->importStyleSheet($xslt);

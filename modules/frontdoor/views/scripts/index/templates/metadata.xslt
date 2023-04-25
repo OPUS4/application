@@ -26,13 +26,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2009-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -664,9 +659,24 @@
             </xsl:call-template>
             <xsl:text>:</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;/th&gt;</xsl:text>
-            <xsl:text disable-output-escaping="yes">&lt;td&gt;&lt;em class="data-marker"&gt;</xsl:text>
+            <xsl:text disable-output-escaping="yes">&lt;td&gt;&lt;em class="data-marker subject"&gt;</xsl:text>
         </xsl:if>
         <xsl:value-of select="@Value" />
+        <xsl:if test="@Type='swd' and @ExternalKey">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'gnd.baseUrl')"/>
+                    <xsl:value-of select="@ExternalKey" />
+                </xsl:attribute>
+                <xsl:attribute name="class">
+                    <xsl:text>gnd-link</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="rel">
+                    <xsl:text>nofollow</xsl:text>
+                </xsl:attribute>
+                <xsl:text>GND</xsl:text>
+            </xsl:element>
+        </xsl:if>
         <xsl:if test="position() != last()">; </xsl:if>
         <xsl:if test="position() = last()">
             <xsl:text disable-output-escaping="yes">&lt;/em&gt;&lt;/td&gt;</xsl:text>

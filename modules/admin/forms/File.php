@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,54 +24,51 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
-use Opus\UserRole;
-use Opus\Model\AbstractDb;
-use Opus\Model\NotFoundException;
+use Opus\Common\File;
+use Opus\Common\FileInterface;
+use Opus\Common\Model\ModelException;
+use Opus\Common\Model\NotFoundException;
+use Opus\Common\UserRole;
 
 /**
  * Formular fuer Anzeige/Editieren einer Datei.
- *
- * @category    Application
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 {
-
     /**
      * Name fuer die Formularelemente.
      */
-    const ELEMENT_ID                    = 'Id';
-    const ELEMENT_FILE_LINK             = 'FileLink'; // nicht editierbar
-    const ELEMENT_LABEL                 = 'Label';
-    const ELEMENT_COMMENT               = 'Comment';
-    const ELEMENT_MIME_TYPE             = 'MimeType'; // nicht editierbar
-    const ELEMENT_LANGUAGE              = 'Language';
-    const ELEMENT_FILE_SIZE             = 'FileSize'; // nicht editierbar
-    const ELEMENT_VISIBILITY            = 'VisibleIn';
-    const ELEMENT_SERVER_DATE_SUBMITTED = 'ServerDateSubmitted';
-    const ELEMENT_SORT_ORDER            = 'SortOrder';
+    public const ELEMENT_ID                    = 'Id';
+    public const ELEMENT_FILE_LINK             = 'FileLink'; // nicht editierbar
+    public const ELEMENT_LABEL                 = 'Label';
+    public const ELEMENT_COMMENT               = 'Comment';
+    public const ELEMENT_MIME_TYPE             = 'MimeType'; // nicht editierbar
+    public const ELEMENT_LANGUAGE              = 'Language';
+    public const ELEMENT_FILE_SIZE             = 'FileSize'; // nicht editierbar
+    public const ELEMENT_VISIBILITY            = 'VisibleIn';
+    public const ELEMENT_SERVER_DATE_SUBMITTED = 'ServerDateSubmitted';
+    public const ELEMENT_SORT_ORDER            = 'SortOrder';
 
     /**
      * Namen der Formularelemente fuer Hashes aus der Datenbank. (nicht editierbar)
      */
-    const ELEMENT_HASH_MD5              = 'HashMD5';
-    const ELEMENT_HASH_SHA512           = 'HashSHA512';
+    public const ELEMENT_HASH_MD5    = 'HashMD5';
+    public const ELEMENT_HASH_SHA512 = 'HashSHA512';
 
     /**
      * Namen der Formularelement fuer berechnete Hashes der Datei. (nicht editierbar)
      */
-    const ELEMENT_HASH_MD5_ACTUAL       = 'HashMD5Actual';
-    const ELEMENT_HASH_SHA512_ACTUAL    = 'HashSHA512Actual';
+    public const ELEMENT_HASH_MD5_ACTUAL    = 'HashMD5Actual';
+    public const ELEMENT_HASH_SHA512_ACTUAL = 'HashSHA512Actual';
 
-    const ELEMENT_ROLES                 = 'Roles';
+    public const ELEMENT_ROLES = 'Roles';
 
-    const SUBFORM_HASHES                = 'Hashes';
+    public const SUBFORM_HASHES = 'Hashes';
 
     public function init()
     {
@@ -110,11 +108,11 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
             'multiCheckbox',
             self::ELEMENT_VISIBILITY,
             [
-            'multiOptions' => [
-                'frontdoor' => 'admin_filemanager_label_visibleinfrontdoor',
-                'oai' => 'admin_filemanager_label_visibleinoai'
-            ],
-            'label' => 'admin_filemanager_file_visibility'
+                'multiOptions' => [
+                    'frontdoor' => 'admin_filemanager_label_visibleinfrontdoor',
+                    'oai'       => 'admin_filemanager_label_visibleinoai',
+                ],
+                'label'        => 'admin_filemanager_file_visibility',
             ]
         );
 
@@ -123,7 +121,8 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
     /**
      * Initialisierung des Formulars mit den Werten in einer Model-Instanz.
-     * @param File $file
+     *
+     * @param FileInterface $file
      */
     public function populateFromModel($file)
     {
@@ -156,27 +155,27 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
     /**
      * Sets default values for form.
      *
-     * @param array $post
-     * @return \Zend_Form
+     * @return $this
      */
     public function setDefaults(array $defaults)
     {
-        $return = parent::setDefaults($defaults);
+        parent::setDefaults($defaults);
 
         if (isset($defaults[$this->getName()])) {
             $fileId = $defaults[$this->getName()][self::ELEMENT_ID];
-            $file = new File($fileId);
+            $file   = File::get($fileId);
             $this->getSubForm(self::SUBFORM_HASHES)->populateFromModel($file);
             $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
         } else {
             $this->getLogger()->err('No POST data for subform \'' . $this->getName() . '\'.');
         }
-        return $return;
+        return $this;
     }
 
     /**
      * Update einer Model-Instanz mit den Werten im Formular.
-     * @param AbstractDb $model
+     *
+     * @param FileInterface $file
      */
     public function updateModel($file)
     {
@@ -185,10 +184,10 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
         $file->setComment($this->getElementValue(self::ELEMENT_COMMENT));
 
         $sortOrder = $this->getElementValue(self::ELEMENT_SORT_ORDER);
-        $file->setSortOrder(! is_null($sortOrder) ? $sortOrder : 0);
+        $file->setSortOrder($sortOrder ?? 0);
 
         $visibility = $this->getElementValue(self::ELEMENT_VISIBILITY);
-        $visibility = (is_array($visibility)) ? $visibility : [$visibility];
+        $visibility = is_array($visibility) ? $visibility : [$visibility];
 
         $file->setVisibleInFrontdoor(in_array('frontdoor', $visibility));
         $file->setVisibleInOai(in_array('oai', $visibility));
@@ -200,14 +199,17 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
 
     /**
      * Liefert angezeigte Datei.
+     *
+     * @return FileInterface
+     * @throws Application_Exception
      */
     public function getModel()
     {
         $fileId = $this->getElementValue(self::ELEMENT_ID);
 
-        if (strlen(trim($fileId)) > 0 && is_numeric($fileId)) {
+        if ($fileId !== null && strlen(trim($fileId)) > 0 && is_numeric($fileId)) {
             try {
-                $file = new File($fileId);
+                $file = File::get($fileId);
             } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown file ID = '$fileId'.");
                 throw new Application_Exception("Unknown file ID = '$fileId'.");
@@ -220,10 +222,12 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
             $this->getLogger()->err(__METHOD__ . " Bad file ID = '$fileId'.");
             throw new Application_Exception("Bad file ID = '$fileId'.");
         }
-
-        return null;
     }
 
+    /**
+     * @param int $fileId
+     * @return array
+     */
     public function getRolesForFile($fileId)
     {
         $checkedRoles = [];
@@ -240,9 +244,15 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
         return $checkedRoles;
     }
 
+    /**
+     * @param FileInterface   $file
+     * @param string|string[] $selectedRoles
+     * @throws Zend_Exception
+     * @throws ModelException
+     */
     public function updateFileRoles($file, $selectedRoles)
     {
-        $selectedRoles = (is_array($selectedRoles)) ? $selectedRoles : [$selectedRoles];
+        $selectedRoles = is_array($selectedRoles) ? $selectedRoles : [$selectedRoles];
 
         $fileId = $file->getId();
 
@@ -258,14 +268,14 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
             }
         }
 
-        if (count($selectedRoles) == 1 && is_null($selectedRoles[0])) {
+        if (count($selectedRoles) === 1 && $selectedRoles[0] === null) {
             return;
         }
 
         // add selected roles
         foreach ($selectedRoles as $roleName) {
             $role = UserRole::fetchByName($roleName);
-            if (! is_null($role)) {
+            if ($role !== null) {
                 if (! in_array($roleName, $currentRoleNames)) {
                     $role->appendAccessFile($fileId);
                     $role->store();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,18 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 class Application_View_Helper_OptionUrlTest extends ControllerTestCase
 {
-
+    /** @var bool */
     protected $configModifiable = true;
 
+    /** @var string */
     protected $additionalResources = 'view';
 
     public function testOptionUrl()
@@ -48,19 +47,19 @@ class Application_View_Helper_OptionUrlTest extends ControllerTestCase
         $helper->setView($this->getView());
 
         $this->adjustConfiguration([
-            'logoLink' => 'home'
+            'logoLink' => 'home',
         ]);
 
         $this->assertEquals('http://localhost/opus4/home', $helper->optionUrl('logoLink'));
 
         $this->adjustConfiguration([
-            'logoLink' => '/opus4/home'
+            'logoLink' => '/opus4/home',
         ]);
 
         $this->assertEquals('http://localhost/opus4/home', $helper->optionUrl('logoLink'));
 
         $this->adjustConfiguration([
-            'logoLink' => 'http://www.opus-repository.org'
+            'logoLink' => 'http://www.opus-repository.org',
         ]);
 
         $this->assertEquals('http://www.opus-repository.org', $helper->optionUrl('logoLink'));

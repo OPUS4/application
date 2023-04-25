@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Module_Setup
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- */
 class Setup_Form_Validate_TranslationKeyFormatTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'translation';
 
+    /**
+     * @return array[]
+     */
     public function validationTestCases()
     {
         return [
@@ -47,12 +46,14 @@ class Setup_Form_Validate_TranslationKeyFormatTest extends ControllerTestCase
             ['key_123_test', true],
             ['1key', false],
             ['KEY', true],
-            ['key$', false]
+            ['key$', false],
         ];
     }
 
     /**
      * @dataProvider validationTestCases
+     * @param string $value
+     * @param bool   $result
      */
     public function testIsValid($value, $result)
     {
@@ -63,10 +64,10 @@ class Setup_Form_Validate_TranslationKeyFormatTest extends ControllerTestCase
 
     public function testMessagesTranslated()
     {
-        $validator = new Setup_Form_Validate_TranslationKeyFormat();
-        $translate = Application_Translate::getInstance();
+        $validator        = new Setup_Form_Validate_TranslationKeyFormat();
+        $translate        = Application_Translate::getInstance();
         $messageTemplates = $validator->getMessageTemplates();
-        $key = $messageTemplates[$validator::NOT_MATCH];
+        $key              = $messageTemplates[$validator::NOT_MATCH];
         $this->assertTrue($translate->isTranslated($key));
     }
 }

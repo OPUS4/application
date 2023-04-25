@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application_Configuration
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2017
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\UserRole;
+use Opus\Common\UserRole;
 
 /**
  * Default descriptor for modules.
@@ -41,46 +39,48 @@ use Opus\UserRole;
  */
 class Application_Configuration_Module implements Application_Configuration_ModuleInterface
 {
-
     /**
      * Name (also folder) of module.
+     *
      * @var string
      */
-    private $_name;
+    private $name;
 
     /**
      * Short module description.
+     *
      * @var string
      */
-    private $_description;
+    private $description;
 
     /**
-     * Application_Configuration_Module constructor.
-     * @param $name Name/folder of module.
-     * @param null $description Short module description.
+     * @param string      $name Name/folder of module.
+     * @param string|null $description Short module description.
      */
     public function __construct($name, $description = null)
     {
-        $this->_name = $name;
-        $this->_description = $description;
+        $this->name        = $name;
+        $this->description = $description;
     }
 
     /**
      * Returns name of module.
-     * @return Name|string
+     *
+     * @return string
      */
     public function getName()
     {
-        return $this->_name;
+        return $this->name;
     }
 
     /**
      * Returns short description of module.
+     *
      * @return null|string
      */
     public function getDescription()
     {
-        return $this->_description;
+        return $this->description;
     }
 
     /**
@@ -97,11 +97,12 @@ class Application_Configuration_Module implements Application_Configuration_Modu
 
     /**
      * Checks if 'guest' user has access to module.
+     *
      * @return bool true - if 'guest' user has access
      */
     public function isPublic()
     {
-        $guest = UserRole::fetchByName('guest');
+        $guest        = UserRole::fetchByName('guest');
         $guestModules = $guest->listAccessModules();
 
         return in_array($this->getName(), $guestModules);
@@ -109,7 +110,8 @@ class Application_Configuration_Module implements Application_Configuration_Modu
 
     /**
      * Validates requirments for using module.
-     * @return bool - true if module can be used
+     *
+     * @return true - true if module can be used
      */
     public function validateSetup()
     {
@@ -119,7 +121,8 @@ class Application_Configuration_Module implements Application_Configuration_Modu
 
     /**
      * Returns true if the module has configurable options.
-     * @return bool true - if module has options
+     *
+     * @return false true - if module has options
      */
     public function isConfigurable()
     {

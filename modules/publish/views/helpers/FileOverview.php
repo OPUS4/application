@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,56 +25,58 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
-use Opus\Document;
+use Opus\Common\Config;
+use Opus\Common\Document;
+use Opus\Common\DocumentInterface;
 
-class Publish_View_Helper_FileOverview extends \Zend_View_Helper_Abstract
+class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract
 {
-
+    /** @var Zend_View_Interface */
     public $view;
+
+    /** @var Zend_Session_Namespace */
     public $session;
+
+    /** @var DocumentInterface */
     public $document;
 
     /**
      * method to render specific elements of an form
-     * @param <type> $type element type that has to rendered
-     * @param <type> $value value of element or Zend_Form_Element
-     * @param <type> $name name of possible hidden element
-     * @return element to render in view
+     *
+     * @return string Element to render in view
      */
     public function fileOverview()
     {
         $config = Config::get();
-        if (! isset($config->form->first->enable_upload) ||
-            (! filter_var($config->form->first->enable_upload, FILTER_VALIDATE_BOOLEAN))) {
-            return;
+        if (
+            ! isset($config->form->first->enable_upload) ||
+            (! filter_var($config->form->first->enable_upload, FILTER_VALIDATE_BOOLEAN))
+        ) {
+            return '';
         }
 
-        $this->session = new \Zend_Session_Namespace('Publish');
+        $this->session = new Zend_Session_Namespace('Publish');
 
         $fieldsetStart = "<fieldset><legend>" . $this->view->translate('already_uploaded_files')
             . "</legend>\n\t\t\n\t\t";
-        $fieldsetEnd = "</fieldset>";
+        $fieldsetEnd   = "</fieldset>";
 
-        if ($this->session->documentId == "") {
-            return "";
+        if ($this->session->documentId === '') {
+            return '';
         }
 
         $this->document = Document::get($this->session->documentId);
-        $files = $this->document->getFile();
+        $files          = $this->document->getFile();
 
         if (empty($files)) {
-            return $fieldsetStart . "<b>" . $this->view->translate('no_uploaded_files') . "</b>" . $fieldsetEnd;
+            return $fieldsetStart . '<b>' . $this->view->translate('no_uploaded_files') . '</b>' . $fieldsetEnd;
         }
 
-        $overview = "";
+        $overview = '';
 
         if ($this->view->uploadSuccess === false) {
             $overview .= "<div class='form-errors'><ul><li>" . $this->view->translate('error_uploaded_files')

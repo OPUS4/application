@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,67 +25,60 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\SearchException;
+
 /**
- * Class Solrsearch_BrowseController
- *
  * TODO move list handling into model
  * TODO use one action for different lists, so that a list can be added without changes
  * TODO eliminate standard list rendering PHTML
  */
 class Solrsearch_BrowseController extends Application_Controller_Action
 {
-
-    /**
-     * @var Solrsearch_Model_SeriesUtil
-     */
+    /** @var Solrsearch_Model_SeriesUtil */
     private $seriesUtil;
 
     public function init()
     {
         parent::init();
         $this->_helper->mainMenu('browsing');
-        $this->seriesUtil = new Solrsearch_Model_SeriesUtil();
+        $this->seriesUtil   = new Solrsearch_Model_SeriesUtil();
         $this->view->robots = 'noindex, nofollow';
     }
 
     public function indexAction()
     {
-        $this->view->baseUrl = $this->getRequest()->getBaseUrl();
-        $collectionRoles = new Solrsearch_Model_CollectionRoles();
-        $this->view->collectionRoles = $collectionRoles->getAllVisible();
+        $this->view->baseUrl            = $this->getRequest()->getBaseUrl();
+        $collectionRoles                = new Solrsearch_Model_CollectionRoles();
+        $this->view->collectionRoles    = $collectionRoles->getAllVisible();
         $this->view->showSeriesBrowsing = $this->seriesUtil->hasDisplayableSeries();
     }
 
     public function doctypesAction()
     {
         $facetname = 'doctype';
-        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::FACET_ONLY);
+        $query     = new Opus\Search\Util\Query(Opus\Search\Util\Query::FACET_ONLY);
         $query->setFacetField($facetname);
 
         try {
             $searcher = Application_Search_SearcherFactory::getSearcher();
-            $facets = $searcher->search($query)->getFacets();
-        } catch (Opus\Search\Exception $e) {
+            $facets   = $searcher->search($query)->getFacets();
+        } catch (SearchException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);
         }
 
         $docTypesTranslated = [];
         foreach ($facets[$facetname] as $facetitem) {
-            $translation = $this->view->translate($facetitem->getText());
+            $translation                      = $this->view->translate($facetitem->getText());
             $docTypesTranslated[$translation] = $facetitem;
         }
         uksort($docTypesTranslated, "strnatcasecmp");
         $this->view->facetitems = $docTypesTranslated;
-        $this->view->title = $this->view->translate('solrsearch_browse_doctypes');
+        $this->view->title      = $this->view->translate('solrsearch_browse_doctypes');
     }
 
     public function yearsAction()
@@ -94,7 +88,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action
         $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::FACET_ONLY);
 
         $facetManager = new Application_Search_FacetManager();
-        $facet = $facetManager->getFacet($facetname);
+        $facet        = $facetManager->getFacet($facetname);
 
         $indexField = $facet->getIndexField();
         // do not use inverted field TODO this is a hack - better solution?
@@ -104,8 +98,8 @@ class Solrsearch_BrowseController extends Application_Controller_Action
 
         try {
             $searcher = Application_Search_SearcherFactory::getSearcher();
-            $facets = $searcher->search($query)->getFacets();
-        } catch (Opus\Search\Exception $ose) {
+            $facets   = $searcher->search($query)->getFacets();
+        } catch (SearchException $ose) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $ose);
             throw new Application_SearchException($ose);
         }
@@ -115,7 +109,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action
         krsort($years);
 
         $this->view->facetitems = $years;
-        $this->view->title = 'solrsearch_browse_years';
+        $this->view->title      = 'solrsearch_browse_years';
     }
 
     /**
@@ -125,7 +119,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action
     {
         $visibleSeries = $this->seriesUtil->getVisibleSeries();
 
-        if (count($visibleSeries) == 0) {
+        if (count($visibleSeries) === 0) {
             $this->_helper->Redirector->redirectToAndExit('index');
         }
 

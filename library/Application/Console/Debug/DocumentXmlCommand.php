@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,34 +25,60 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
- * Interface fuer OPUS Form Element Klassen.
+ * Exports documents.
+ *
+ * TODO unit testing
  */
-interface Application_Form_IElement
+class Application_Console_Debug_DocumentXmlCommand extends Command
 {
+    public const ARGUMENT_DOC_ID = 'DocID';
+
+    protected function configure()
+    {
+        parent::configure();
+
+        $help = <<<EOT
+Currently only debug:xml is supported. It shows the raw XML for a document.
+EOT;
+
+        $this->setName('debug:xml')
+            ->setDescription('Prints XML for document')
+            ->setHelp($help)
+            ->addArgument(
+                self::ARGUMENT_DOC_ID,
+                InputArgument::OPTIONAL,
+                'ID of document'
+            );
+    }
 
     /**
-     * Liefert Hinweis zum Element-Value, z.B. das eine ISBN ungültig ist.
-     *
-     * Hinweise sind wie Validierungsfehler, die aber das Abspeichern nicht verhindern und schon beim Aufruf des
-     * Formulars für existierende Werte berechnet werden.
-     *
-     * @return string
+     * @return int
+     * @throws NotFoundException
      */
-    public function getHint();
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $docId = $input->getArgument(self::ARGUMENT_DOC_ID);
 
-    /**
-     * Ändert die Ausgabe (Dekoratoren) des Elements so, daß es als statischer View statt Formularelement ausgegeben
-     * wird.
-     *
-     * Statt eines Input-Tags könnte zum Beispiel nur der Wert als einfacher Text ausgegeben werden.
-     */
-    public function prepareRenderingAsView();
+        $document = Document::get($docId);
+        $xml      = $document->toXml();
+
+        $xml->preserveWhiteSpace = false;
+        $xml->formatOutput       = true;
+
+        $output->write($xml->saveXml());
+
+        return 0;
+    }
 }

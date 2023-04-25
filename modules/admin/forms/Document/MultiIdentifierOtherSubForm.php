@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,28 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\DocumentInterface;
 
 class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Document_MultiSubForm
 {
-
     public function init()
     {
         parent::init();
         $this->setLegend('admin_document_section_identifier_other');
     }
 
+    /**
+     * @param DocumentInterface $document
+     * @return array
+     */
     public function getFieldValues($document)
     {
         $value = parent::getFieldValues($document);
-        if (! is_null($value)) {
+        if ($value !== null) {
             $value = $this->filterIdentifier($value);
         }
         return $value;
@@ -55,14 +56,14 @@ class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Documen
      * Identifier vom Typ DOI und URN werden separat behandelt und müssen daher bei der allgemeinen
      * Behandlung der Identifier ausgeschlossen werden, da sie sonst doppelt angezeigt werden
      *
-     * @param $identifiers
+     * @param array $identifiers
      * @return array
      */
     private function filterIdentifier($identifiers)
     {
         $result = [];
         foreach ($identifiers as $identifier) {
-            if ($identifier->getType() == 'doi' || $identifier->getType() == 'urn') {
+            if ($identifier->getType() === 'doi' || $identifier->getType() === 'urn') {
                 continue;
             }
             $result[] = $identifier;
@@ -75,17 +76,17 @@ class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Documen
      * wir dürfen hier nicht die setIdentifier-Methode direkt verwenden, sonst löschen wir DOIs/URNs
      * die mit dem Dokument verknüpft sind
      *
-     * @param Document $document
+     * @param DocumentInterface $document
      */
     public function updateModel($document)
     {
-        $values = $this->getSubFormModels($document);
+        $values      = $this->getSubFormModels($document);
         $identifiers = $document->getIdentifier();
 
         $result = [];
         foreach ($identifiers as $identifier) {
             $identifierType = $identifier->getType();
-            if ($identifierType == 'doi' || $identifierType == 'urn') {
+            if ($identifierType === 'doi' || $identifierType === 'urn') {
                 $result[] = $identifier;
             }
         }

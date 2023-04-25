@@ -1,7 +1,7 @@
 <?php
-$dbprofiler = \Zend_Db_Table::getDefaultAdapter()->getProfiler();
-$profiler_show_queries = isset($config->db->params->showqueries) && filter_var($config->db->params->showqueries, FILTER_VALIDATE_BOOLEAN);
-$profiler_max_queries = (int) $config->db->params->maxqueries;
+$dbprofiler          = Zend_Db_Table::getDefaultAdapter()->getProfiler();
+$profilerShowQueries = isset($config->db->params->showqueries) && filter_var($config->db->params->showqueries, FILTER_VALIDATE_BOOLEAN);
+$profilerMaxQueries  = (int) $config->db->params->maxqueries;
 if ($dbprofiler->getEnabled() === true) : ?>
     <div class="debug dbprofiler">
         <div class="wrapper">
@@ -14,19 +14,19 @@ if ($dbprofiler->getEnabled() === true) : ?>
             <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br/>
             <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br/>
             <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br/>
-            <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
+            <?php if ($profilerShowQueries === true && $profilerQueryProfiles = $dbprofiler->getQueryProfiles()) : ?>
                 <b>Queries:</b><br/>
                 <dl>
                     <?php $queryCount = null; ?>
-                    <?php foreach ($profiler_query_profiles as $value) :
-                        if (is_null($queryCount)) {
+                    <?php foreach ($profilerQueryProfiles as $value) :
+                        if ($queryCount === null) {
                             // erste DB-Anweisung ist immer 'connect' - diese soll nicht ausgegeben werden; daher überspringen
                             $queryCount = 0;
                             continue;
                         } ?>
                         <dd style="margin-inline-start: 0;"><?= ++$queryCount ?>:</dd>
                         <dt style="margin-inline-start: 1em; font-family: monospace; white-space: pre"
-                            ><?php if ($queryCount > $profiler_max_queries) :
+                            ><?php if ($queryCount > $profilerMaxQueries) :
                                 echo '...';
                                 break;
                              endif ?><?= htmlspecialchars($value->getQuery()) ?>
@@ -40,7 +40,7 @@ if ($dbprofiler->getEnabled() === true) : ?>
 
 <?php
 $identity = Zend_Auth::getInstance()->getIdentity();
-if (isset($config->debugSession) and ((bool)$config->debugSession === true) and ! empty($identity)) :
+if (isset($config->debugSession) && ((bool) $config->debugSession === true) && ! empty($identity)) :
     ?>
     <div class="debug session">
         <div class="wrapper">
@@ -48,7 +48,7 @@ if (isset($config->debugSession) and ((bool)$config->debugSession === true) and 
 
             <?php /* do not apply indentation here! */ ?>
 <pre>
-<?= Zend_Debug::dump($_SESSION, 'Session Data', false); ?>
+    <?= Zend_Debug::dump($_SESSION, 'Session Data', false); ?>
 </pre>
 
         </div>

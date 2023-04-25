@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Log;
+use Opus\Common\Log;
 
 /**
  * Prüft, ob die Sprache bereits benutzt wurde.
@@ -42,32 +40,37 @@ use Opus\Log;
  *
  * TODO Redundanz mit DuplicateValue eliminieren
  */
-class Application_Form_Validate_LanguageUsedOnceOnly extends \Zend_Validate_Abstract
+class Application_Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract
 {
-
     /**
      * Error constant for language ID that does not exist.
      */
-    const NOT_VALID = 'notValid';
+    public const NOT_VALID = 'notValid';
 
     /**
      * Ausgewählte Sprachen in den Unterformularen.
+     *
      * @var array
      */
-    private $_languages;
+    private $languages;
 
     /**
      * Position des Formulars im übergeordneten Formular.
-     * @var type
+     *
+     * @var int
      */
-    private $_position;
+    private $position;
 
     /**
      * Definition der Fehlermeldungen.
+     *
+     * @var array
+     * @phpcs:disable
      */
     protected $_messageTemplates = [
-        self::NOT_VALID => 'admin_document_error_MoreThanOneTitleInLanguage'
+        self::NOT_VALID => 'admin_document_error_MoreThanOneTitleInLanguage',
     ];
+    // @phpcs:enable
 
     /**
      * Konstruiert Validator der prüft, ob Sprache bereits genutzt wurde.
@@ -76,36 +79,41 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends \Zend_Validate_Abst
      * (TitleMain0 bis TitleMain[n]).
      *
      * @param array $languages Ausgewählte Sprachen in den Unterformularen (Titeln gleichen Typs)
-     * @param int $position Position des Unterformulars im Context
+     * @param int   $position Position des Unterformulars im Context
      */
     public function __construct($languages, $position)
     {
-        $this->_languages = $languages;
-        $this->_position = $position;
+        $this->languages = $languages;
+        $this->position  = $position;
         $this->setTranslator(Application_Translate::getInstance());
     }
 
     /**
      * Prüft, ob ausgewählte Sprache bereits vorher verwendet wurde.
      *
-     * @param string $value Ausgewählte Sprache
-     * @param array $context POST Daten für gesamtes Unterformular
-     * @return boolean true - wenn die Sprache noch nicht verwendet wurde; ansonten false
+     * @param string     $value Ausgewählte Sprache
+     * @param array|null $context POST Daten für gesamtes Unterformular
+     * @return bool true - wenn die Sprache noch nicht verwendet wurde; ansonten false
      */
     public function isValid($value, $context = null)
     {
         $value = (string) $value;
         $this->_setValue($value);
 
-        $langCount = count($this->_languages);
+        // TODO WHY
+        if ($this->languages === null) {
+            return true;
+        }
 
-        if (! ($this->_position < $langCount)) {
+        $langCount = count($this->languages);
+
+        if (! $this->position < $langCount) {
              Log::get()->err(__CLASS__ . ' mit Position > count(Languages) konstruiert.');
         }
 
-        if (! is_null($this->_languages)) {
-            for ($index = 0; $index < $this->_position && $index < $langCount; $index++) {
-                if ($value == $this->_languages[$index]) {
+        if ($this->languages !== null) {
+            for ($index = 0; $index < $this->position && $index < $langCount; $index++) {
+                if ($value === $this->languages[$index]) {
                     $this->_error(self::NOT_VALID);
                     return false;
                 }
@@ -119,25 +127,28 @@ class Application_Form_Validate_LanguageUsedOnceOnly extends \Zend_Validate_Abst
 
     /**
      * Liefert Position für Validator.
+     *
      * @return int
      */
     public function getPosition()
     {
-        return $this->_position;
+        return $this->position;
     }
 
     /**
      * Liefert Array mit ausgewählten Sprachen aller Unterformulare.
+     *
      * @return array
      */
     public function getLanguages()
     {
-        return $this->_languages;
+        return $this->languages;
     }
 
     /**
      * Translation is required for error messages, even if validated element is not translated (e.g. Languages).
-     * @return bool
+     *
+     * @return false
      */
     public function translatorIsDisabled()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,18 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Admin_Form
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Series;
+use Opus\Common\Series;
 
 class Admin_Form_SeriesTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testConstructForm()
@@ -58,7 +56,7 @@ class Admin_Form_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Series();
 
-        $series = new Series();
+        $series = Series::new();
         $series->setTitle('TestTitle');
         $series->setInfobox('TestInfo');
         $series->setVisible(1);
@@ -76,7 +74,7 @@ class Admin_Form_SeriesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Series();
 
-        $series = new Series(2);
+        $series = Series::get(2);
 
         $form->populateFromModel($series);
 
@@ -92,7 +90,7 @@ class Admin_Form_SeriesTest extends ControllerTestCase
         $form->getElement('Visible')->setValue(1);
         $form->getElement('SortOrder')->setValue(22);
 
-        $series = new Series();
+        $series = Series::new();
 
         $form->updateModel($series);
 

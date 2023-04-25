@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,20 +25,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @author      Gunar Maiwald <maiwald@zib.de>
- * @author      Maximilian Salomon <salomon@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @author      Sascha Szott <opus-development@saschaszott.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
-use Opus\Enrichment;
-use Opus\EnrichmentKey;
+use Opus\Common\Document;
+use Opus\Common\Enrichment;
+use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
+use Opus\Common\Model\NotFoundException;
 use Opus\Enrichment\AbstractType;
-use Opus\Model\NotFoundException;
 
 /**
  * Basic unit tests for Admin_EnrichmentkeyController class.
@@ -46,15 +43,13 @@ use Opus\Model\NotFoundException;
  */
 class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    /**
-     * @var EnrichmentKey[] All enrichment keys
-     */
+    /** @var EnrichmentKey[] All enrichment keys */
     private $allEnrichmentKeys = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->setController('enrichmentkey');
         parent::setUp();
@@ -63,21 +58,32 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         }
     }
 
+    /**
+     * @return EnrichmentKeyInterface[]
+     */
     public function getModels()
     {
         return EnrichmentKey::getAll();
     }
 
+    /**
+     * @return string
+     */
     public function createNewModel()
     {
-        $model = new EnrichmentKey();
+        $model = EnrichmentKey::new();
         $model->setName('TestEnrichmentKey');
         return $model->store();
     }
 
+    /**
+     * @param string $identifier
+     * @return EnrichmentKeyInterface
+     * @throws NotFoundException
+     */
     public function getModel($identifier)
     {
-        return new EnrichmentKey($identifier);
+        return EnrichmentKey::get($identifier);
     }
 
     /**
@@ -112,11 +118,11 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->createsModels = true;
 
         $post = [
-            'Name' => 'MyTestEnrichment',
-            'Type' => 'TextType',
-            'Options' => '',
+            'Name'       => 'MyTestEnrichment',
+            'Type'       => 'TextType',
+            'Options'    => '',
             'Validation' => '0',
-            'Save' => 'Speichern'
+            'Save'       => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -127,7 +133,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $enrichmentKey = new EnrichmentKey('MyTestEnrichment');
+        $enrichmentKey = EnrichmentKey::get('MyTestEnrichment');
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
         $this->assertNull($enrichmentKey->getOptions());
@@ -138,11 +144,11 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->createsModels = true;
 
         $post = [
-            'Name' => 'MyTestEnrichment',
-            'Type' => 'RegexType',
-            'Options' => '^.*$',
+            'Name'       => 'MyTestEnrichment',
+            'Type'       => 'RegexType',
+            'Options'    => '^.*$',
             'Validation' => '1',
-            'Save' => 'Speichern'
+            'Save'       => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -153,7 +159,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $enrichmentKey = new EnrichmentKey('MyTestEnrichment');
+        $enrichmentKey = EnrichmentKey::get('MyTestEnrichment');
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
@@ -165,11 +171,11 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->createsModels = true;
 
         $post = [
-            'Name' => 'MyTestEnrichment',
-            'Type' => 'RegexType',
-            'Options' => '^.*$',
+            'Name'       => 'MyTestEnrichment',
+            'Type'       => 'RegexType',
+            'Options'    => '^.*$',
             'Validation' => '0',
-            'Save' => 'Speichern'
+            'Save'       => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -180,7 +186,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $enrichmentKey = new EnrichmentKey('MyTestEnrichment');
+        $enrichmentKey = EnrichmentKey::get('MyTestEnrichment');
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
@@ -193,7 +199,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $post = [
             'Name' => 'MyTestEnrichment',
-            'Save' => 'Speichern'
+            'Save' => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -204,7 +210,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $enrichmentKey = new EnrichmentKey('MyTestEnrichment');
+        $enrichmentKey = EnrichmentKey::get('MyTestEnrichment');
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
         $this->assertNull($enrichmentKey->getOptions());
@@ -217,7 +223,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $post = [
             'Name' => 'MyTestEnrichment',
             'Type' => '',
-            'Save' => 'Speichern'
+            'Save' => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -228,7 +234,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $enrichmentKey = new EnrichmentKey('MyTestEnrichment');
+        $enrichmentKey = EnrichmentKey::get('MyTestEnrichment');
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
         $this->assertNull($enrichmentKey->getOptions());
@@ -239,11 +245,11 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->createsModels = true;
 
         $post = [
-            'Name' => 'MyTestEnrichment',
-            'Type' => 'FooBarType',
-            'Options' => '',
+            'Name'       => 'MyTestEnrichment',
+            'Type'       => 'FooBarType',
+            'Options'    => '',
             'Validation' => '0',
-            'Save' => 'Speichern'
+            'Save'       => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -275,8 +281,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $modelCount = count($this->getModels());
 
         $post = [
-            'Name' => 'MyTestEnrichment',
-            'Cancel' => 'Abbrechen'
+            'Name'   => 'MyTestEnrichment',
+            'Cancel' => 'Abbrechen',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -295,7 +301,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $post = [
             'Name' => 'City',
-            'Save' => 'Speichern'
+            'Save' => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -310,6 +316,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     /**
      * @dataProvider enrichmentKeyNamesProvider
+     * @param string $enrichmentKeyName
      */
     public function testEditActionShowFormForUnprotectedEnrichmentKey($enrichmentKeyName)
     {
@@ -327,7 +334,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     public function testEditActionShowFormForProtectedEnrichmentKey()
     {
         $protectedEnrichmentKeyName = 'ClassRvk';
-        $this->assertNotNull(new EnrichmentKey($protectedEnrichmentKeyName));
+        $this->assertNotNull(EnrichmentKey::get($protectedEnrichmentKeyName));
 
         $this->dispatch($this->getControllerPath() . '/edit/id/' . $protectedEnrichmentKeyName);
 
@@ -335,7 +342,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo($this->getControllerPath());
         $this->verifyFlashMessage('controller_crud_model_not_modifiable', self::MESSAGE_LEVEL_FAILURE);
 
-        $enrichmentKey = new EnrichmentKey($protectedEnrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($protectedEnrichmentKeyName);
         $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
     }
 
@@ -343,36 +350,34 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('MyTestEnrichment');
         $enrichmentKey->setType('TextType');
         $enrichmentKey->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => 'MyTestEnrichment',
-            'Name' => 'MyTestEnrichmentModified',
-            'Type' => 'RegexType',
-            'Options' => '^.*$',
+            'Id'         => 'MyTestEnrichment',
+            'Name'       => 'MyTestEnrichmentModified',
+            'Type'       => 'RegexType',
+            'Options'    => '^.*$',
             'Validation' => '1',
-            'Save' => 'Speichern'
+            'Save'       => 'Speichern',
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
         $this->assertRedirectTo($this->getControllerPath());
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $enrichmentKey = new EnrichmentKey('MyTestEnrichmentModified');
+        $enrichmentKey = EnrichmentKey::get('MyTestEnrichmentModified');
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichmentModified', $enrichmentKey->getName());
         $this->assertEquals('RegexType', $enrichmentKey->getType());
         $this->assertEquals(json_encode(["regex" => "^.*$", "validation" => "strict"]), $enrichmentKey->getOptions());
 
-        $this->setExpectedException(
-            NotFoundException::class,
-            'No Opus\Db\EnrichmentKeys with id MyTestEnrichment in database.'
-        );
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('No Opus\Db\EnrichmentKeys with id MyTestEnrichment in database.');
 
-        new EnrichmentKey('MyTestEnrichment');
+        EnrichmentKey::get('MyTestEnrichment');
 
         $this->fail('Previous statement should have thrown exception.');
     }
@@ -380,15 +385,15 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     public function testEditActionSaveForProtectedEnrichment()
     {
         $protectedEnrichmentKeyName = 'ClassRvk';
-        $this->assertNotNull(new EnrichmentKey($protectedEnrichmentKeyName));
+        $this->assertNotNull(EnrichmentKey::get($protectedEnrichmentKeyName));
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $protectedEnrichmentKeyName,
-            'Name' => "${protectedEnrichmentKeyName}Modified",
-            'Type' => 'TextType',
-            'Options' => '',
+            'Id'         => $protectedEnrichmentKeyName,
+            'Name'       => "{$protectedEnrichmentKeyName}Modified",
+            'Type'       => 'TextType',
+            'Options'    => '',
             'Validation' => '0',
-            'Save' => 'Speichern'
+            'Save'       => 'Speichern',
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
@@ -397,15 +402,13 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo($this->getControllerPath());
         $this->verifyFlashMessage('controller_crud_model_not_modifiable', self::MESSAGE_LEVEL_FAILURE);
 
-        $enrichmentKey = new EnrichmentKey($protectedEnrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($protectedEnrichmentKeyName);
         $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
 
-        $this->setExpectedException(
-            NotFoundException::class,
-            'No Opus\Db\EnrichmentKeys with id ClassRvkModified in database.'
-        );
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('No Opus\Db\EnrichmentKeys with id ClassRvkModified in database.');
 
-        new EnrichmentKey("${protectedEnrichmentKeyName}Modified");
+        EnrichmentKey::get("{$protectedEnrichmentKeyName}Modified");
         $this->fail('Previous statement should have thrown exception.');
     }
 
@@ -413,15 +416,15 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('MyTestEnrichment');
         $enrichmentKey->setType('TextType');
         $enrichmentKey->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => 'MyTestEnrichment',
+            'Id'   => 'MyTestEnrichment',
             'Name' => 'MyTestEnrichment',
-            'Save' => 'Speichern'
+            'Save' => 'Speichern',
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
@@ -434,16 +437,16 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('MyTestEnrichment');
         $enrichmentKey->setType('TextType');
         $enrichmentKey->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => 'MyTestEnrichment',
+            'Id'   => 'MyTestEnrichment',
             'Name' => 'MyTestEnrichment',
             'Type' => '',
-            'Save' => 'Speichern'
+            'Save' => 'Speichern',
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
@@ -456,16 +459,16 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('MyTestEnrichment');
         $enrichmentKey->setType('TextType');
         $enrichmentKey->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => 'MyTestEnrichment',
+            'Id'   => 'MyTestEnrichment',
             'Name' => 'MyTestEnrichment',
             'Type' => 'BooleanType',
-            'Save' => 'Speichern'
+            'Save' => 'Speichern',
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
@@ -479,15 +482,15 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('MyTestEnrichment');
         $enrichmentKey->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => 'MyTestEnrichment',
+            'Id'   => 'MyTestEnrichment',
             'Name' => 'MyTestEnrichmentModified',
             'Type' => 'FooBarType',
-            'Save' => 'Speichern'
+            'Save' => 'Speichern',
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
@@ -501,36 +504,34 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $this->createsModels = true;
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('MyTestEnrichment');
         $enrichmentKey->setType('TextType');
         $enrichmentKey->store();
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => 'MyTestEnrichment',
-            'Name' => 'MyTestEnrichmentModified',
-            'Type' => 'RegexType',
-            'Options' => '^.*$',
+            'Id'         => 'MyTestEnrichment',
+            'Name'       => 'MyTestEnrichmentModified',
+            'Type'       => 'RegexType',
+            'Options'    => '^.*$',
             'Validation' => '0',
-            'Cancel' => 'Abbrechen'
+            'Cancel'     => 'Abbrechen',
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
         $this->assertRedirectTo($this->getControllerPath());
 
-        $enrichmentKey = new EnrichmentKey('MyTestEnrichment');
+        $enrichmentKey = EnrichmentKey::get('MyTestEnrichment');
 
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
         $this->assertEquals('TextType', $enrichmentKey->getType());
         $this->assertNull($enrichmentKey->getOptions());
 
-        $this->setExpectedException(
-            NotFoundException::class,
-            'No Opus\Db\EnrichmentKeys with id MyTestEnrichmentModified in database.'
-        );
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('No Opus\Db\EnrichmentKeys with id MyTestEnrichmentModified in database.');
 
-        new EnrichmentKey('MyTestEnrichmentModified');
+        EnrichmentKey::get('MyTestEnrichmentModified');
 
         $this->fail('Previous statement should have thrown exception.');
     }
@@ -538,12 +539,12 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     public function testEditActionCancelForProtectedEnrichment()
     {
         $protectedEnrichmentKeyName = 'ClassRvk';
-        $this->assertNotNull(new EnrichmentKey($protectedEnrichmentKeyName));
+        $this->assertNotNull(EnrichmentKey::get($protectedEnrichmentKeyName));
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Id' => $protectedEnrichmentKeyName,
-            'Name' => "${protectedEnrichmentKeyName}Modified",
-            'Cancel' => 'Abbrechen'
+            'Id'     => $protectedEnrichmentKeyName,
+            'Name'   => "{$protectedEnrichmentKeyName}Modified",
+            'Cancel' => 'Abbrechen',
         ]);
 
         $this->dispatch($this->getControllerPath() . '/edit');
@@ -551,20 +552,19 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirect();
         $this->assertRedirectTo($this->getControllerPath());
 
-        $enrichmentKey = new EnrichmentKey($protectedEnrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($protectedEnrichmentKeyName);
         $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
 
-        $this->setExpectedException(
-            NotFoundException::class,
-            'No Opus\Db\EnrichmentKeys with id ClassRvkModified in database.'
-        );
+        $this->expectException(NotFoundException::class);
+        $this->expectExceptionMessage('No Opus\Db\EnrichmentKeys with id ClassRvkModified in database.');
 
-        new EnrichmentKey("${protectedEnrichmentKeyName}Modified");
+        EnrichmentKey::get("{$protectedEnrichmentKeyName}Modified");
         $this->fail('Previous statement should have thrown exception.');
     }
 
     /**
      * @dataProvider enrichmentKeyNamesProvider
+     * @param string $enrichmentKeyName
      */
     public function testDeleteActionShowFormForUnprotectedEnrichmentKey($enrichmentKeyName)
     {
@@ -577,7 +577,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertQuery('input#ConfirmYes');
         $this->assertQuery('input#ConfirmNo');
 
-        $enrichmentKey = new EnrichmentKey($enrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($enrichmentKeyName);
 
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
@@ -586,7 +586,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     public function testDeleteActionShowFormForProtectedEnrichmentKey()
     {
         $protectedEnrichmentKeyName = 'ClassRvk';
-        $this->assertNotNull(new EnrichmentKey($protectedEnrichmentKeyName));
+        $this->assertNotNull(EnrichmentKey::get($protectedEnrichmentKeyName));
 
         $this->dispatch($this->getControllerPath() . '/delete/id/' . $protectedEnrichmentKeyName);
 
@@ -594,14 +594,14 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo($this->getControllerPath());
         $this->verifyFlashMessage('controller_crud_model_cannot_delete', self::MESSAGE_LEVEL_FAILURE);
 
-        $enrichmentKey = new EnrichmentKey($protectedEnrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($protectedEnrichmentKeyName);
         $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
     }
 
     public function testRemoveFromDocsShowFormForProtectedEnrichment()
     {
         $protectedEnrichmentKeyName = 'ClassRvk';
-        $this->assertNotNull(new EnrichmentKey($protectedEnrichmentKeyName));
+        $this->assertNotNull(EnrichmentKey::get($protectedEnrichmentKeyName));
 
         $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/' . $protectedEnrichmentKeyName);
 
@@ -609,14 +609,14 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo($this->getControllerPath());
         $this->verifyFlashMessage('controller_crud_model_cannot_delete', self::MESSAGE_LEVEL_FAILURE);
 
-        $enrichmentKey = new EnrichmentKey($protectedEnrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($protectedEnrichmentKeyName);
         $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
     }
 
     public function testRemoveFromDocsShowFormForUnprotectedEnrichment()
     {
         $enrichmentKeyName = 'Audience'; // wird von einem Dokument verwendet
-        $enrichmentKey = new EnrichmentKey($enrichmentKeyName);
+        $enrichmentKey     = EnrichmentKey::get($enrichmentKeyName);
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
 
         $this->useEnglish();
@@ -628,17 +628,17 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertQuery('input#ConfirmYes');
         $this->assertQuery('input#ConfirmNo');
 
-        $enrichmentKey = new EnrichmentKey($enrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($enrichmentKeyName);
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
     }
 
     public function testRemoveFromDocsForProtectedEnrichmentKey()
     {
         $protectedEnrichmentKeyName = 'ClassRvk';
-        $this->assertNotNull(new EnrichmentKey($protectedEnrichmentKeyName));
+        $this->assertNotNull(EnrichmentKey::get($protectedEnrichmentKeyName));
 
         $post = [
-            'Id' => $protectedEnrichmentKeyName,
+            'Id'         => $protectedEnrichmentKeyName,
             'ConfirmYes' => 'Yes',
         ];
 
@@ -649,16 +649,16 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectTo($this->getControllerPath());
         $this->verifyFlashMessage('controller_crud_model_cannot_delete', self::MESSAGE_LEVEL_FAILURE);
 
-        $enrichmentKey = new EnrichmentKey($protectedEnrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($protectedEnrichmentKeyName);
         $this->assertEquals($protectedEnrichmentKeyName, $enrichmentKey->getName());
     }
 
     public function testRemoveFromDocsForUnprotectedEnrichmentKey()
     {
-        $enrichmentKeyName = 'testRemoveFromDocsForUnprotectedEnrichmentKey';
+        $enrichmentKeyName   = 'testRemoveFromDocsForUnprotectedEnrichmentKey';
         $this->createsModels = true; // damit am Ende des Test ein Cleanup durchgeführt wird (neu angelegter EK wird gelöscht)
 
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName($enrichmentKeyName);
         $enrichmentKey->setType('TextType');
         $enrichmentKey->store();
@@ -668,7 +668,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         // assign test document to enrichment key
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName($enrichmentKeyName);
         $enrichment->setValue('foo');
         $doc->addEnrichment($enrichment);
@@ -680,7 +680,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->useEnglish();
 
         $post = [
-            'Id' => $enrichmentKeyName,
+            'Id'         => $enrichmentKeyName,
             'ConfirmYes' => 'Yes',
         ];
 
@@ -692,7 +692,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->verifyFlashMessage('controller_crud_delete_success', self::MESSAGE_LEVEL_NOTICE);
 
         // EnrichmentKey muss noch vorhanden sein, aber das entsprechende Enrichment im Testdokument wurde gelöscht
-        $enrichmentKey = new EnrichmentKey($enrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($enrichmentKeyName);
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
 
         $doc = Document::get($docId);
@@ -707,11 +707,11 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         // neuen Enrichmentkey mit Typ und Optionen anlegen
         $post = [
-            'Name' => $enrichmentKeyName,
-            'Type' => 'RegexType',
-            'Options' => '^abc$',
+            'Name'       => $enrichmentKeyName,
+            'Type'       => 'RegexType',
+            'Options'    => '^abc$',
             'Validation' => '1',
-            'Save' => 'Speichern'
+            'Save'       => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -722,7 +722,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $enrichmentKey = new EnrichmentKey($enrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($enrichmentKeyName);
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
         $this->assertEquals($post['Type'], $enrichmentKey->getType());
@@ -768,11 +768,11 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->createsModels = true;
 
         $post = [
-            'Name' => $enrichmentKeyName,
-            'Type' => 'RegexType',
-            'Options' => '[', // dieser Regex ist ungültig
+            'Name'       => $enrichmentKeyName,
+            'Type'       => 'RegexType',
+            'Options'    => '[', // dieser Regex ist ungültig
             'Validation' => '0',
-            'Save' => 'Speichern'
+            'Save'       => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -782,7 +782,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
         $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-        $enrichmentKey = new EnrichmentKey($enrichmentKeyName);
+        $enrichmentKey = EnrichmentKey::get($enrichmentKeyName);
         $this->assertNotNull($enrichmentKey);
         $this->assertEquals($enrichmentKeyName, $enrichmentKey->getName());
         $this->assertNull($enrichmentKey->getOptions());
@@ -832,7 +832,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     public function testProtectedCssClassIsSet()
     {
         $enrichmentKeys = new Admin_Model_EnrichmentKeys();
-        $protectedKeys = $enrichmentKeys->getProtectedEnrichmentKeys();
+        $protectedKeys  = $enrichmentKeys->getProtectedEnrichmentKeys();
         $this->dispatch($this->getControllerPath());
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
@@ -876,7 +876,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
      */
     public function testProtectedCssClassIsNotSet()
     {
-        $enrichmentKeys = new Admin_Model_EnrichmentKeys();
+        $enrichmentKeys  = new Admin_Model_EnrichmentKeys();
         $unprotectedKeys = array_diff($this->allEnrichmentKeys, $enrichmentKeys->getProtectedEnrichmentKeys());
         $this->dispatch($this->getControllerPath());
         $response = $this->getResponse();
@@ -926,7 +926,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('unregistered');
         $enrichment->setValue('value');
 
@@ -941,13 +941,13 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     public function testInitializedNewFormWithRegisteredUnusedKeyName()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('unused');
         $id = $enrichmentKey->store();
 
         $this->dispatch($this->getControllerPath() . '/new/id/unused');
 
-        $enrichmentKey = new EnrichmentKey($id);
+        $enrichmentKey = EnrichmentKey::get($id);
         $enrichmentKey->delete();
 
         // Formularfeld "Name" darf nicht gefüllt sein
@@ -956,13 +956,13 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     public function testInitializedNewFormWithRegisteredUsedKeyName()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('used');
         $id = $enrichmentKey->store();
 
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('used');
         $enrichment->setValue('value');
 
@@ -971,7 +971,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $this->dispatch($this->getControllerPath() . '/new/id/used');
 
-        $enrichmentKey = new EnrichmentKey($id);
+        $enrichmentKey = EnrichmentKey::get($id);
         $enrichmentKey->delete();
 
         // Formularfeld "Name" darf nicht gefüllt sein
@@ -1008,7 +1008,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('testRemoveFromDocsActionWithUnregisteredId');
         $enrichment->setValue('value');
 
@@ -1022,13 +1022,13 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     public function testRemoveFromDocsActionWithRegisteredUnusedId()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('unused');
         $id = $enrichmentKey->store();
 
         $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/unused');
 
-        $enrichmentKey = new EnrichmentKey($id);
+        $enrichmentKey = EnrichmentKey::get($id);
         $enrichmentKey->delete();
 
         $this->assertRedirectTo('/admin/enrichmentkey');
@@ -1036,13 +1036,13 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     public function testRemoveFromDocsActionWithRegisteredUsedId()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('used');
         $id = $enrichmentKey->store();
 
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('used');
         $enrichment->setValue('value');
 
@@ -1051,7 +1051,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $this->dispatch($this->getControllerPath() . '/removeFromDocs/id/used');
 
-        $enrichmentKey = new EnrichmentKey($id);
+        $enrichmentKey = EnrichmentKey::get($id);
         $enrichmentKey->delete();
 
         $this->assertResponseCode(200);
@@ -1062,7 +1062,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('unregistered');
         $enrichment->setValue('value');
 
@@ -1070,8 +1070,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $id = $doc->store();
 
         $post = [
-            'Id' => 'unregistered',
-            'ConfirmYes' => 'Yes'
+            'Id'         => 'unregistered',
+            'ConfirmYes' => 'Yes',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -1086,13 +1086,13 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     public function testRemoveFromDocsActionPostWithRegisteredKey()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('used');
         $id = $enrichmentKey->store();
 
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('used');
         $enrichment->setValue('value');
 
@@ -1100,8 +1100,8 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $docId = $doc->store();
 
         $post = [
-            'Id' => 'used',
-            'ConfirmYes' => 'Yes'
+            'Id'         => 'used',
+            'ConfirmYes' => 'Yes',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -1112,7 +1112,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         // das Testdokument sollte kein Enrichment mehr haben; der EnrichmentKey muss weiterhin existieren
         $doc = Document::get($docId);
         $this->assertNull($doc->getEnrichment('used'));
-        $enrichmentKey = new EnrichmentKey($id);
+        $enrichmentKey = EnrichmentKey::get($id);
         $this->assertNotNull($enrichmentKey);
 
         // cleanup
@@ -1123,7 +1123,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     {
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('unregistered');
         $enrichment->setValue('value');
 
@@ -1141,13 +1141,13 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     public function testIndexPageShowRegisteredUnusedKeys()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('unused');
         $id = $enrichmentKey->store();
 
         $this->dispatch($this->getControllerPath() . '/');
 
-        $enrichmentKey = new EnrichmentKey($id);
+        $enrichmentKey = EnrichmentKey::get($id);
         $enrichmentKey->delete();
 
         $this->assertResponseCode(200);
@@ -1159,13 +1159,13 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
     public function testIndexPageShowRegisteredUsedKeys()
     {
-        $enrichmentKey = new EnrichmentKey();
+        $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('used');
         $id = $enrichmentKey->store();
 
         $doc = $this->createTestDocument();
 
-        $enrichment = new Enrichment();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('used');
         $enrichment->setValue('value');
 
@@ -1174,7 +1174,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $this->dispatch($this->getControllerPath() . '/');
 
-        $enrichmentKey = new EnrichmentKey($id);
+        $enrichmentKey = EnrichmentKey::get($id);
         $enrichmentKey->delete();
 
         $this->assertResponseCode(200);
@@ -1187,18 +1187,18 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     public function testNewActionWithRenamingUnregisteredKey()
     {
         // prepare test document with unregistered enrichment key
-        $doc = $this->createTestDocument();
-        $enrichment = new Enrichment();
+        $doc        = $this->createTestDocument();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('unregistered');
         $enrichment->setValue('value');
         $doc->addEnrichment($enrichment);
         $id = $doc->store();
 
         $post = [
-            'Name' => 'unregisterednew',
-            'Type' => 'TextType',
+            'Name'    => 'unregisterednew',
+            'Type'    => 'TextType',
             'Options' => '',
-            'Save' => 'Speichern'
+            'Save'    => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -1213,7 +1213,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $enrichmentKey = EnrichmentKey::fetchByName('unregisterednew');
         $this->assertNotNull($enrichmentKey);
 
-        $doc = Document::get($id);
+        $doc         = Document::get($id);
         $enrichments = $doc->getEnrichment();
         $this->assertCount(1, $enrichments);
         $this->assertEquals('unregisterednew', $enrichments[0]->getKeyName());
@@ -1225,18 +1225,18 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
     public function testNewActionWithoutRenamingUnregisteredKey()
     {
         // prepare test document with unregistered enrichment key
-        $doc = $this->createTestDocument();
-        $enrichment = new Enrichment();
+        $doc        = $this->createTestDocument();
+        $enrichment = Enrichment::new();
         $enrichment->setKeyName('unregistered');
         $enrichment->setValue('value');
         $doc->addEnrichment($enrichment);
         $id = $doc->store();
 
         $post = [
-            'Name' => 'unregistered',
-            'Type' => 'TextType',
+            'Name'    => 'unregistered',
+            'Type'    => 'TextType',
             'Options' => '',
-            'Save' => 'Speichern'
+            'Save'    => 'Speichern',
         ];
 
         $this->getRequest()->setPost($post)->setMethod('POST');
@@ -1248,7 +1248,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $enrichmentKey = EnrichmentKey::fetchByName('unregistered');
         $this->assertNotNull($enrichmentKey);
 
-        $doc = Document::get($id);
+        $doc         = Document::get($id);
         $enrichments = $doc->getEnrichment();
         $this->assertCount(1, $enrichments);
         $this->assertEquals('unregistered', $enrichments[0]->getKeyName());
@@ -1257,11 +1257,14 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $enrichmentKey->delete();
     }
 
+    /**
+     * @return array[]
+     */
     public function enrichmentKeyNamesProvider()
     {
         return [
             ['BibtexRecord'], // unreferenced enrichment key
-            ['Audience']      // referenced enrichment key
+            ['Audience'], // referenced enrichment key
         ];
     }
 
@@ -1278,15 +1281,15 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $domDoc = new DOMDocument();
         $domDoc->loadHTML($this->getResponse()->getBody());
-        $xpath = new DOMXPath($domDoc);
-        $nodeList = $xpath->query('//table[@id="enrichmentkeyTableUnmanaged"]/tbody/tr');
+        $xpath         = new DOMXPath($domDoc);
+        $nodeList      = $xpath->query('//table[@id="enrichmentkeyTableUnmanaged"]/tbody/tr');
         $tableRowCount = $nodeList->length;
 
-        $enrichmentKeyLast = new EnrichmentKey();
+        $enrichmentKeyLast = EnrichmentKey::new();
         $enrichmentKeyLast->setName('unmanagedEKlast');
         $enrichmentKeyLast->store();
 
-        $enrichmentKeyFirst = new EnrichmentKey();
+        $enrichmentKeyFirst = EnrichmentKey::new();
         $enrichmentKeyFirst->setName('unmanagedEKfirst');
         $enrichmentKeyFirst->store();
 
@@ -1310,7 +1313,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         // unmanagedEKfirst sollte direkt vor unmanagedEKlast erscheinen (in der Tabelle für unmanaged EKs)
         $foundFirst = false;
-        $foundLast = false;
+        $foundLast  = false;
         foreach ($nodeList as $node) {
             $textContent = trim($node->textContent);
             if (strpos($textContent, 'unmanagedEKfirst') === 0) {
@@ -1340,16 +1343,16 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         $domDoc = new DOMDocument();
         $domDoc->loadHTML($this->getResponse()->getBody());
-        $xpath = new DOMXPath($domDoc);
-        $nodeList = $xpath->query('//table[@id="enrichmentkeyTableManaged"]/tbody/tr');
+        $xpath         = new DOMXPath($domDoc);
+        $nodeList      = $xpath->query('//table[@id="enrichmentkeyTableManaged"]/tbody/tr');
         $tableRowCount = $nodeList->length;
 
-        $enrichmentKeyLast = new EnrichmentKey();
+        $enrichmentKeyLast = EnrichmentKey::new();
         $enrichmentKeyLast->setName('managedEKlast');
         $enrichmentKeyLast->setType('TextType');
         $enrichmentKeyLast->store();
 
-        $enrichmentKeyFirst = new EnrichmentKey();
+        $enrichmentKeyFirst = EnrichmentKey::new();
         $enrichmentKeyFirst->setName('managedEKfirst');
         $enrichmentKeyFirst->setType('TextType');
         $enrichmentKeyFirst->store();
@@ -1374,7 +1377,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
 
         // managedEKfirst sollte direkt vor managedEKlast erscheinen (in der Tabelle für managed EKs)
         $foundFirst = false;
-        $foundLast = false;
+        $foundLast  = false;
         foreach ($nodeList as $node) {
             $textContent = trim($node->textContent);
             if (strpos($textContent, 'managedEKfirst') === 0) {

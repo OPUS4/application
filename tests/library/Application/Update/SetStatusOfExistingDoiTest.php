@@ -25,19 +25,20 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2018-2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Date;
-use Opus\Document;
-use Opus\Identifier;
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\Identifier;
+use Opus\Common\Model\ModelException;
+use Opus\Db\Documents;
 use Opus\Db\TableGateway;
-use Opus\Model\ModelException;
 
 class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
     /**
@@ -51,7 +52,7 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
-        $doi = new Identifier();
+        $doi = Identifier::new();
         $doi->setType('doi');
         $doi->setValue('testdoi');
 
@@ -66,7 +67,7 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
 
         $debug = "$modified (before)" . PHP_EOL;
 
-        $doc = Document::get($docId);
+        $doc       = Document::get($docId);
         $modified2 = $doc->getServerDateModified();
 
         $debug .= "$modified2 (before - from new object)" . PHP_EOL;
@@ -94,9 +95,13 @@ class Application_Update_SetStatusOfExistingDoiTest extends ControllerTestCase
         $this->assertEquals('registered', $doc->getIdentifierDoi(0)->getStatus());
     }
 
+    /**
+     * @param int $docId
+     * @return string
+     */
     protected function getServerDateModifiedFromDatabase($docId)
     {
-        $table = TableGateway::getInstance('Opus\Db\Documents');
+        $table  = TableGateway::getInstance(Documents::class);
         $select = $table->select()
             ->from($table, ['server_date_modified'])
             ->where("id = $docId");

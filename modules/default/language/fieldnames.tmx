@@ -2301,6 +2301,78 @@
                 <seg>Veröffentlichend</seg>
             </tuv>
         </tu>
+        
+        <tu tuid="Enrichmentconference_title">
+            <tuv xml:lang="en">
+                <seg>Conference Name</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Name der Konferenz</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentconference_place">
+            <tuv xml:lang="en">
+                <seg>Conference Location</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Ort der Konferenz</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentopus_import_data">
+            <tuv xml:lang="en">
+                <seg>JSON-Data</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>JSON-Daten</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentopus_doi_flag">
+            <tuv xml:lang="en">
+                <seg>doi_import_successful</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>doi_import_successful</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentlocal_crossrefDocumentType">
+            <tuv xml:lang="en">
+                <seg>Document Type (Crossref original)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokumenttyp (Crossref original)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentlocal_crossrefLicence">
+            <tuv xml:lang="en">
+                <seg>Licence (Crossref)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Lizenz (Crossref)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentlocal_doiImportPopulated">
+            <tuv xml:lang="en">
+                <seg>imported_fields</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>imported_fields</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentlocal_import_origin">
+            <tuv xml:lang="en">
+                <seg>import_origin</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>import_origin</seg>
+            </tuv>
+        </tu>
 
     </body>
 

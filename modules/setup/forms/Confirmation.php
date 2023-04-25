@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,50 +24,47 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
  * Formular für Bestätigungsabfragen an den Nutzer, z.B. beim Löschen von Modellen.
- *
- * @category    Application
- * @package     Setup_Form_Confirmation
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2020, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 class Setup_Form_Confirmation extends Application_Form_Abstract
 {
-
     /**
      * Name von Formularelement für Model-ID.
      */
-    const ELEMENT_MODEL_ID = 'Id';
+    public const ELEMENT_MODEL_ID = 'Id';
 
     /**
      * Name für Button zum Bestätigen der Abfrage.
      */
-    const ELEMENT_YES = 'ConfirmYes';
+    public const ELEMENT_YES = 'ConfirmYes';
 
     /**
      * Name für Button zum Verneinen der Abfrage.
      */
-    const ELEMENT_NO = 'ConfirmNo';
+    public const ELEMENT_NO = 'ConfirmNo';
 
     /**
      * Ergebnis für Bestätigung der Frage (Ja).
      */
-    const RESULT_YES = 'true';
+    public const RESULT_YES = 'true';
 
     /**
      * Ergebnis für Abbrechen des Vorgangs (Nein).
      */
-    const RESULT_NO = 'false';
+    public const RESULT_NO = 'false';
 
     /**
      * Frage für Bestätigungsformular.
+     *
      * @var string
      */
-    private $question = null;
+    private $question;
 
     /**
      * Initialisiert die Formularelement.
@@ -85,19 +83,19 @@ class Setup_Form_Confirmation extends Application_Form_Abstract
             [
                 ['ViewScript', ['viewScript' => 'confirmation.phtml']],
                 ['Fieldset', ['class' => 'headline']],
-                'Form'
+                'Form',
             ]
         );
     }
 
     /**
      * Erzeugt Text für Überschrift (Legend) des Formulars.
+     *
      * @return string
      */
     public function getFormLegend()
     {
-        $legend = $this->getTranslator()->translate('confirmation_title_default');
-        return $legend;
+        return $this->getTranslator()->translate('confirmation_title_default');
     }
 
     /**
@@ -105,17 +103,18 @@ class Setup_Form_Confirmation extends Application_Form_Abstract
      *
      * Der POST muss gültig sein (mit Model-ID) und der Button ELEMENT_YES muss geklickt worden sein.
      *
-     * @param $post POST array
+     * @param array $post POST array
      * @return bool
      */
     public function isConfirmed($post)
     {
-        return ($this->isValid($post) && ($this->processPost($post) === self::RESULT_YES)) ? true : false;
+        return $this->isValid($post) && ($this->processPost($post) === self::RESULT_YES) ? true : false;
     }
 
     /**
      * Verarbeitet POST und stellt fest welcher Button geklickt wurde.
-     * @param $post POST array
+     *
+     * @param array $post POST array
      * @return string
      */
     public function processPost($post)
@@ -129,11 +128,12 @@ class Setup_Form_Confirmation extends Application_Form_Abstract
 
     /**
      * Liefert den Fragetext für das Formular.
+     *
      * @return string
      */
     public function getQuestion()
     {
-        if (is_null($this->question)) {
+        if ($this->question === null) {
             return 'confirmation_question_default';
         } else {
             return $this->question;
@@ -142,6 +142,7 @@ class Setup_Form_Confirmation extends Application_Form_Abstract
 
     /**
      * Setzt den Fragetext für das Formular.
+     *
      * @param string $question
      */
     public function setQuestion($question)
@@ -160,8 +161,6 @@ class Setup_Form_Confirmation extends Application_Form_Abstract
      */
     public function renderQuestion()
     {
-        $question = $this->getTranslator()->translate($this->getQuestion());
-
-        return $question;
+        return $this->getTranslator()->translate($this->getQuestion());
     }
 }

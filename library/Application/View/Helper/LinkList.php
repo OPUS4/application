@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,21 +25,23 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Appliation_View_Helper
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Application_View_Helper_LinkList extends Application_View_Helper_Abstract
 {
-
+    /**
+     * @param array $links
+     * @return string
+     * @throws Zend_Exception
+     */
     public function linkList($links)
     {
         if (is_array($links)) {
             $markup = '<ul>';
             foreach ($links as $href => $label) {
-                $text = htmlspecialchars($label); // section legends are already translated
+                $text    = htmlspecialchars($label); // section legends are already translated
                 $markup .= "<li><a href=\"$href\">$text</a></li>";
             }
             $markup .= '</ul>';

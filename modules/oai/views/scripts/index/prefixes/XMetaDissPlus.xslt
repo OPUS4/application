@@ -26,12 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Oai
- * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 -->
@@ -154,7 +149,7 @@
 
             <!-- weird DNB constraint: dc:language must appear after dcterms:medium -->
             <dc:language xsi:type="dcterms:ISO639-2">
-                <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
+                <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
             </dc:language >
 
             <!-- dcterms:isPartOf -->
@@ -256,7 +251,7 @@
     <xsl:template match="TitleMain" mode="xmetadissplus">
         <dc:title xsi:type="ddb:titleISO639-2">
             <xsl:attribute name="lang">
-              <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
+              <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
              </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
@@ -272,7 +267,7 @@
     <xsl:template match="TitleSub" mode="xmetadissplus">
         <dcterms:alternative xsi:type="ddb:talternativeISO639-2">
             <xsl:attribute name="lang">
-                 <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
+                 <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
             </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
@@ -371,7 +366,7 @@
     <xsl:template match="TitleAbstract" mode="xmetadissplus">
         <dcterms:abstract xsi:type="ddb:contentISO639-2" ddb:type="noScheme">
             <xsl:attribute name="lang">
-                <xsl:value-of select="php:functionString('Opus\Language::getLanguageCode', @Language)" />
+                <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dcterms:abstract>

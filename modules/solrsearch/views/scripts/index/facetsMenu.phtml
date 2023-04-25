@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,21 +25,19 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @author      Michael Lang <lang@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * TODO What is "firstPage"?
  * TODO use view helpers to render components of interface (remove link, extender, etc.)
  */
+
 ?>
 
 <?php
-    $remove_fq_params = $this->removeFilterQueryBase; // TODO refactor (explain it)
+    $removeFilterQueryParams = $this->removeFilterQueryBase; // TODO refactor (explain it)
 ?>
 
 <div id="facets" class="results_facets">
@@ -46,25 +45,25 @@
     <?php foreach ($this->facets as $key => $facet) : ?>
         <div id="<?= $key ?>_facet" class="facet">
             <?PHP
-                $facetUrl = $this->firstPage; // TODO why do we use firstPage here and not something like baseUrl?
+                $facetUrl                     = $this->firstPage; // TODO why do we use firstPage here and not something like baseUrl?
                 $facetUrl["facetNumber_$key"] = 'all';
             ?>
             <h4><?= $this->translate($facet->getHeading()) ?> </h4>
             <ul>
                 <?php foreach ($facet->getValues() as $facetItem) :
-                    $fqUrl = $this->firstPage;
-                    $fqUrl[$key.'fq'] = $facetItem->getText();
-                    $facetValue = htmlspecialchars($facet->getLabel($facetItem->getText()));
-                ?>
+                    $fqUrl              = $this->firstPage;
+                    $fqUrl[$key . 'fq'] = $facetItem->getText();
+                    $facetValue         = htmlspecialchars($facet->getLabel($facetItem->getText()));
+                    ?>
                     <?php if ($facet->isSelected()) : ?>
-                        <?php if ($facet->getSelected() == $facetItem->getText()) :
+                        <?php if ($facet->getSelected() === strval($facetItem->getText())) :
                             // remove fq param from URL
-                            unset($remove_fq_params[$key . 'fq']);
-                            $remove_fqUrl = $this->url($remove_fq_params, null, true);
-                        ?>
+                            unset($removeFilterQueryParams[$key . 'fq']);
+                            $removeFqUrl = $this->url($removeFilterQueryParams, null, true);
+                            ?>
                             <li class="activeFacet"><?= $facetValue ?>&nbsp;(<?= $facetItem->getCount() ?>)
                             <span class="removeFacetLink"
-                                ><a href="<?= $remove_fqUrl ?>" rel="nofollow"
+                                ><a href="<?= $removeFqUrl ?>" rel="nofollow"
                                 >(<?= $this->translate('facets_remove') ?>)</a></span>
                             </li>
                         <?php endif ?>

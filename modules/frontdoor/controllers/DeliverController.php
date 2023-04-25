@@ -25,33 +25,33 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Frontdoor
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
+ */
+
+/**
  * Controller for handling file downloads in the frontdoor.
  */
 
-use Opus\Config;
-use Opus\Document;
-use Opus\File;
+use Opus\Common\Config;
+use Opus\Common\Document;
+use Opus\Common\FileInterface;
+use Opus\Common\Security\Realm;
 use Opus\Pdf\Cover\CoverGeneratorFactory;
 use Opus\Pdf\Cover\CoverGeneratorInterface;
-use Opus\Security\Realm;
 
 class Frontdoor_DeliverController extends Application_Controller_Action
 {
-
     /**
      * Handles file downloads.
      */
     public function indexAction()
     {
+        // TODO unit test 'cover=false' URL parameter which should suppress PDF cover generation on file download
+
         $docId = $this->_getParam('docId', null);
-        $path = $this->_getParam('file', null);
+        $path  = $this->_getParam('file', null);
+        $cover = filter_var($this->_getParam('cover', true), FILTER_VALIDATE_BOOLEAN);
 
         $realm = Realm::getInstance();
 
@@ -79,11 +79,11 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         }
 
         $originalFilePath = $fileObject->getPath();
-        $baseFilename = basename($originalFilePath);
-        $baseFilename = self::quoteFileName($baseFilename);
+        $baseFilename     = basename($originalFilePath);
+        $baseFilename     = self::quoteFileName($baseFilename);
 
         try {
-            $filePath = $this->prepareFile($fileObject);
+            $filePath = $this->prepareFile($fileObject, $cover);
         } catch (Exception $e) {
             $this->handleDeliveryError($e);
             return;
@@ -91,7 +91,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
 
         $this->disableViewRendering();
 
-        $mimeType = $fileObject->getMimeType();
+        $mimeType           = $fileObject->getMimeType();
         $contentDisposition = $this->_helper->fileTypes->getContentDisposition($mimeType);
 
         $this->getResponse()
@@ -111,8 +111,6 @@ class Frontdoor_DeliverController extends Application_Controller_Action
             $response->clearBody();
             $response->setHttpResponseCode(500);
         }
-
-        return;
     }
 
     /**
@@ -129,16 +127,24 @@ class Frontdoor_DeliverController extends Application_Controller_Action
     public static function quoteFileName($filename)
     {
         if (preg_match('/[^A-Za-z0-9_., -]/', $filename)) {
-            return '=?UTF-8?B?'.base64_encode($filename).'?=';
+            return '=?UTF-8?B?' . base64_encode($filename) . '?=';
         }
         return $filename;
     }
 
+    /**
+     * @param Exception $exception
+     * @throws Zend_Exception
+     */
     private function logError($exception)
     {
         $this->getLogger()->err($exception);
     }
 
+    /**
+     * @param Exception $exception
+     * @throws Zend_Controller_Response_Exception
+     */
     private function handleDeliveryError($exception)
     {
         $this->getResponse()->setHttpResponseCode($exception->getCode());
@@ -153,15 +159,21 @@ class Frontdoor_DeliverController extends Application_Controller_Action
      * may include a PDF cover that was generated based on a template and using the document's
      * metadata.
      *
-     * @param File $file
+     * @param FileInterface $file
+     * @param bool          $cover Whether PDF cover generation shall be attempted (true) or not (false)
      * @return string the file's path
      */
-    private function prepareFile($file)
+    private function prepareFile($file, $cover)
     {
         $filePath = $file->getPath();
 
         // only handle PDF files
         if ($file->getMimeType() !== 'application/pdf') {
+            return $filePath;
+        }
+
+        // suppress PDF cover generation from within the administration
+        if ($cover === false && $this->isDocumentsAdmin()) {
             return $filePath;
         }
 
@@ -172,10 +184,10 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         }
 
         // get the file's parent document
-        $doc = null;
+        $doc   = null;
         $docId = $file->getParentId();
         if ($docId !== null) {
-            $doc = new Document($docId);
+            $doc = Document::get($docId);
         }
 
         if ($doc === null) {
@@ -184,9 +196,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
 
         // if a PDF cover should be served for this file, create a file copy that includes an
         // appropriate cover page and return its path (instead of the original file's path)
-        $filePath = $coverGenerator->processFile($doc, $file);
-
-        return $filePath;
+        return $coverGenerator->processFile($doc, $file);
     }
 
     /**
@@ -200,8 +210,8 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $config = Config::get();
 
         // check if a PDF cover should be generated
-        $generatePdfCover = (isset($config->pdf->covers->generate)
-            && filter_var($config->pdf->covers->generate, FILTER_VALIDATE_BOOLEAN));
+        $generatePdfCover = isset($config->pdf->covers->generate)
+            && filter_var($config->pdf->covers->generate, FILTER_VALIDATE_BOOLEAN);
 
         if (! $generatePdfCover) {
             return null;
@@ -223,5 +233,21 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $generator->setTempDir($tempDir);
 
         return $generator;
+    }
+
+    /**
+     * Returns true if the current user has documents access rights, otherwise false.
+     *
+     * @return bool
+     *
+     * TODO move to a better place
+     */
+    private function isDocumentsAdmin()
+    {
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        if ($accessControl === null) {
+            return false;
+        }
+        return $accessControl->accessAllowed('documents');
     }
 }

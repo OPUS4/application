@@ -736,5 +736,23 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
+    <tu tuid="header_Enrichmentconference_title">
+      <tuv xml:lang="en">
+        <seg>Conference Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name der Konferenz</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_Enrichmentconference_place">
+      <tuv xml:lang="en">
+        <seg>Conference Location</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ort der Konferenz</seg>
+      </tuv>
+    </tu>
+
     </body>
 </tmx>

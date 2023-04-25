@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,55 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2018-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Import_ZipPackageReaderTest extends ControllerTestCase
+/**
+ * Interface für Formulare, die als View angezeigt werden können.
+ *
+ * Das Metadaten-Formular (Admin_Form_Document) wird zum einen als Formular verwendet. Es wird aber auch für die
+ * Anzeige der Metadaten-Übersicht verwendet. Das selbe wird mit den Formularen für Application_Controller_Action_CRUD
+ * gemacht.
+ */
+interface Application_Form_ViewableInterface
 {
+    /**
+     * Bereites die Ausgabe des Formulares als View vor.
+     */
+    public function prepareRenderingAsView();
 
-    protected $additionalResources = 'database';
-
-    public function setUp()
-    {
-        parent::setUp();
-        $this->makeConfigurationModifiable();
-    }
-
-    public function testReadPackageWithXmlFile()
-    {
-        $this->adjustConfiguration([
-            'filetypes' => ['xml' => ['mimeType' => [
-                'text/xml', 'application/xml'
-            ]]]
-        ]);
-
-        $reader = new Application_Import_ZipPackageReader();
-
-        $tmpDir = APPLICATION_PATH . '/tests/workspace/tmp/ZipPackageReaderTest_ReadPackageWithXmlFile';
-        mkdir($tmpDir);
-
-        copy(
-            APPLICATION_PATH . '/tests/resources/sword-packages/single-doc-pdf-xml.zip',
-            $tmpDir . DIRECTORY_SEPARATOR . 'package.zip'
-        );
-
-        $status = $reader->readPackage($tmpDir);
-
-        $this->assertFalse($status->noDocImported());
-        $this->assertCount(1, $status->getDocs());
-
-        $document = $status->getDocs()[0];
-
-        $this->addTestDocument($document); // for cleanup
-
-        $files = $document->getFile();
-
-        $this->assertCount(2, $files);
-
-        Application_Import_PackageReaderTest::cleanupTmpDir($tmpDir);
-    }
+    /**
+     * Prüft, ob das Formular leer ist und daher nicht mit angezeigt werden soll.
+     *
+     * @return bool
+     */
+    public function isEmpty();
 }

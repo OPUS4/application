@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,14 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Document;
+use Opus\Common\Document;
 use Opus\Model\Dependent\Link\DocumentDnbInstitute;
 
 /**
@@ -39,7 +37,7 @@ use Opus\Model\Dependent\Link\DocumentDnbInstitute;
  */
 class Admin_Form_Document_InstituteTest extends ControllerTestCase
 {
-
+    /** @var string[] */
     protected $additionalResources = ['database'];
 
     public function testCreateForm()
@@ -51,12 +49,10 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
         $this->assertNotNull($form->getElement('Institute'));
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Unknown role 'unknown_role'.
-     */
     public function testCreateFormBadRole()
     {
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Unknown role \'unknown_role\'.');
         $form = new Admin_Form_Document_Institute('unknown_role');
     }
 
@@ -64,9 +60,9 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
-        $doc = Document::get(146);
+        $doc        = Document::get(146);
         $publishers = $doc->getThesisPublisher();
-        $publisher = $publishers[0];
+        $publisher  = $publishers[0];
 
         $form->populateFromModel($publisher);
 
@@ -91,15 +87,15 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
-        $doc = Document::get(146);
-        $publishers = $doc->getThesisPublisher();
-        $publisher = $publishers[0];
+        $doc         = Document::get(146);
+        $publishers  = $doc->getThesisPublisher();
+        $publisher   = $publishers[0];
         $publisherId = $publisher->getModel()->getId();
 
         $form->getElement('Id')->setValue($doc->getId());
         $form->getElement('Institute')->setValue($publisherId);
 
-        $model = $form->getModel();
+        $model   = $form->getModel();
         $modelId = $model->getId();
 
         $this->assertNotNull($model);
@@ -133,7 +129,7 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
         $this->assertContains('isEmpty', $form->getErrors('Institute'));
 
         $post = [
-            'Institute' => 'a'
+            'Institute' => 'a',
         ];
 
         $this->assertFalse($form->isValid($post));

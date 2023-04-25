@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Export
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\CollectionRole;
-use Opus\Config;
+use Opus\Common\Collection;
+use Opus\Common\CollectionInterface;
+use Opus\Common\CollectionRole;
+use Opus\Common\Config;
 
 /**
  * Export plugin for exporting collections based on role name and collection number.
@@ -46,18 +45,19 @@ use Opus\Config;
  */
 class Export_Model_PublistExport extends Export_Model_XsltExport
 {
-
     /**
      * File mime types that are allowed for publication list.
-     * @var
+     *
+     * @var array
      */
-    private $_allowedMimeTypes;
+    private $allowedMimeTypes;
+
+    /** @var array containing instances of plugin */
+    private static $instances;
 
     /**
-     * @var Array containing instances of plugin
+     * @param string $name
      */
-    private static $_instances;
-
     public function __construct($name)
     {
         $this->setName($name);
@@ -65,38 +65,38 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
     }
 
     /**
-     * @throws Application_Exception if parameters are not sufficient
+     * @throws Application_Exception If parameters are not sufficient.
      */
     public function execute()
     {
-        $config = $this->getConfig();
+        $config  = $this->getConfig();
         $request = $this->getRequest();
-        $view = $this->getView();
-        $logger = $this->getLogger();
+        $view    = $this->getView();
+        $logger  = $this->getLogger();
 
         // TODO Xslt stuff
         if (isset($config->stylesheetDirectory)) {
             $stylesheetDirectory = $config->stylesheetDirectory;
         } else {
-            $logger->debug(\Zend_Debug::dump($config->toArray(), 'no stylesheet directory specified'));
+            $logger->debug(Zend_Debug::dump($config->toArray(), 'no stylesheet directory specified'));
         }
 
         if (isset($config->stylesheet)) {
             $stylesheet = $config->stylesheet;
         }
 
-        if (! is_null($request->getParam('stylesheet'))) {
+        if ($request->getParam('stylesheet') !== null) {
             $stylesheet = $request->getParam('stylesheet');
         }
 
         // TODO params
         $roleParam = $request->getParam('role');
-        if (is_null($roleParam)) {
+        if ($roleParam === null) {
             throw new Application_Exception('role is not specified');
         }
 
         $numberParam = $request->getParam('number');
-        if (is_null($numberParam)) {
+        if ($numberParam === null) {
             throw new Application_Exception('number is not specified');
         }
 
@@ -111,106 +111,118 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
         $request->setParam('searchtype', 'collection');
         $request->setParam('id', $collection->getId());
         $request->setParam('export', 'xml');
-        $this->_proc->setParameter('', 'collName', $collection->getName());
+        $this->proc->setParameter('', 'collName', $collection->getName());
 
-        $this->_proc->registerPHPFunctions('max');
-        $this->_proc->registerPHPFunctions('urlencode');
-        $this->_proc->registerPHPFunctions('Export_Model_PublistExport::getMimeTypeDisplayName');
+        $this->proc->registerPHPFunctions('max');
+        $this->proc->registerPHPFunctions('urlencode');
+        $this->proc->registerPHPFunctions('Export_Model_PublistExport::getMimeTypeDisplayName');
 
         // TODO find way to allow instance to add new helpers without modifying code here
-        Application_Xslt::registerViewHelper($this->_proc, [
-            'embargoHasPassed'
+        Application_Xslt::registerViewHelper($this->proc, [
+            'embargoHasPassed',
         ]);
-        $this->_proc->setParameter('', 'fullUrl', $view->fullUrl());
-        $this->_proc->setParameter('', 'groupBy', $groupBy);
-        $this->_proc->setParameter('', 'pluginName', $this->getName());
+        $this->proc->setParameter('', 'fullUrl', $view->fullUrl());
+        $this->proc->setParameter('', 'groupBy', $groupBy);
+        $this->proc->setParameter('', 'pluginName', $this->getName());
 
         $urnResolverUrl = Config::get()->urn->resolverUrl;
-        $this->_proc->setParameter('', 'urnResolverUrl', $urnResolverUrl);
+        $this->proc->setParameter('', 'urnResolverUrl', $urnResolverUrl);
 
         $this->loadStyleSheet($this->buildStylesheetPath($stylesheet, $view->getScriptPath('') . $stylesheetDirectory));
 
         $this->prepareXml();
     }
 
+    /**
+     * @param array $mimeTypes
+     */
     public function setMimeTypes($mimeTypes)
     {
-        $this->_allowedMimeTypes = $mimeTypes;
+        $this->allowedMimeTypes = $mimeTypes;
     }
 
     /**
      * Initialize the mime types from configuration
+     *
+     * @return array
      */
     public function getMimeTypes()
     {
-        if (is_null($this->_allowedMimeTypes)) {
-            $config = $this->getConfig();
-            $this->_allowedMimeTypes =
+        if ($this->allowedMimeTypes === null) {
+            $config                 = $this->getConfig();
+            $this->allowedMimeTypes =
                 isset($config->file->allow->mimetype) ? $config->file->allow->mimetype->toArray() : [];
         }
 
-        return $this->_allowedMimeTypes;
+        return $this->allowedMimeTypes;
     }
 
     /**
      * Registers instances of plugin by name.
-     * @param $instance
+     *
+     * @param self $instance
      */
     private static function registerInstance($instance)
     {
-        self::$_instances[$instance->getName()] = $instance;
+        self::$instances[$instance->getName()] = $instance;
     }
 
     /**
      * Gets instances of plugin by name.
-     * @param $pluginName
-     * @return null
+     *
+     * @param string $pluginName
+     * @return null|self
      */
     public static function getInstance($pluginName)
     {
-        return isset(self::$_instances[$pluginName]) ? self::$_instances[$pluginName] : null;
+        return self::$instances[$pluginName] ?? null;
     }
 
     /**
      * Return the display name as configured for a specific mime type
-     * @param string $mimeType Mime type to get display name for.
-     * If mime type is not configured, an empty string is returned.
      *
-     * @result string display name for mime type
+     * @param string $pluginName
+     * @param string $mimeType Mime type to get display name for.
+     * @return string display name for mime type, If mime type is not configured, an empty string is returned.
      */
     public static function getMimeTypeDisplayName($pluginName, $mimeType)
     {
-        $instance = self::getInstance($pluginName);
+        $instance  = self::getInstance($pluginName);
         $mimeTypes = $instance->getMimeTypes();
-        return isset($mimeTypes[$mimeType]) ? $mimeTypes[$mimeType] : '';
+        return $mimeTypes[$mimeType] ?? '';
     }
 
     /**
      * Maps query for publist action.
+     *
+     * @param string $roleParam
+     * @param string $numberParam
+     * @return CollectionInterface
+     * @throws Application_Exception
      */
     public function mapQuery($roleParam, $numberParam)
     {
-        if (is_null(CollectionRole::fetchByName($roleParam))) {
+        if (CollectionRole::fetchByName($roleParam) === null) {
             throw new Application_Exception('specified role does not exist');
         }
 
         $role = CollectionRole::fetchByName($roleParam);
-        if ($role->getVisible() != '1') {
+        if (! $role->getVisible()) {
             throw new Application_Exception('specified role is invisible');
         }
 
-        if (count(Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam)) == 0) {
+        if (count(Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam)) === 0) {
             throw new Application_Exception('specified number does not exist for specified role');
         }
 
         $collection = null;
         foreach (Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam) as $coll) {
-            if ($coll->getVisible() == '1' && is_null($collection)) {
+            if ($coll->getVisible() && $collection === null) {
                 $collection = $coll;
             }
         }
 
-        if (is_null($collection)) {
+        if ($collection === null) {
             throw new Application_Exception('specified collection is invisible');
         }
 

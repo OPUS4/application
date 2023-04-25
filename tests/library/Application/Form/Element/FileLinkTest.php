@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,27 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Form_Element
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\File;
+use Opus\Common\File;
 
 class Application_Form_Element_FileLinkTest extends FormElementTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'database';
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->_formElementClass = 'Application_Form_Element_FileLink';
-        $this->_expectedDecoratorCount = 8;
-        $this->_expectedDecorators = ['ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
-            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper'];
-        $this->_staticViewHelper = 'fileLink';
+        $this->formElementClass       = 'Application_Form_Element_FileLink';
+        $this->expectedDecoratorCount = 8;
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Placeholder',
+            'Description',
+            'ElementHint',
+            'Errors',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+        ];
+        $this->staticViewHelper       = 'fileLink';
         parent::setUp();
     }
 
@@ -57,7 +63,7 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
 
     public function testSetValueWithFile()
     {
-        $file = new File(130);
+        $file = File::get(130);
 
         $element = $this->getElement();
 
@@ -74,13 +80,13 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
 
         $file = $element->getValue();
 
-        $this->assertInstanceOf('Opus\File', $file);
+        $this->assertInstanceOf(Opus\File::class, $file);
         $this->assertEquals(130, $file->getId());
     }
 
     public function testSetValueWithMissingFile()
     {
-        $file = new File(123);
+        $file = File::get(123);
 
         $element = $this->getElement();
 
@@ -92,25 +98,21 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
         $this->assertEquals('admin_filemanager_file_does_not_exist', $messages[0]);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage File with ID = 5555 not found.
-     */
     public function testSetValueWithUnknownFileId()
     {
         $element = $this->getElement();
 
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('File with ID = 5555 not found.');
         $element->setValue(5555);
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage Value must not be null.
-     */
     public function testSetValueNull()
     {
         $element = $this->getElement();
 
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('Value must not be null.');
         $element->setValue(null);
     }
 
@@ -122,14 +124,12 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
         $this->assertTrue($element->isValid(116)); // File 116 exists (document 91)
     }
 
-    /**
-     * @expectedException Application_Exception
-     * @expectedExceptionMessage File with ID = 5555 not found.
-     */
     public function testIsValidUnknownId()
     {
         $element = $this->getElement();
 
+        $this->expectException(Application_Exception::class);
+        $this->expectExceptionMessage('File with ID = 5555 not found.');
         $this->assertFalse($element->isValid(5555)); // File 5555 does not exist
     }
 }

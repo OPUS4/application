@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
- * @package     Admin
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Collection;
-use Opus\CollectionRole;
+use Opus\Common\Collection;
+use Opus\Common\CollectionInterface;
+use Opus\Common\CollectionRole;
+use Opus\Common\CollectionRoleInterface;
 
 /**
  * Basic unit tests for the collections controller in admin module.
@@ -42,20 +41,29 @@ use Opus\CollectionRole;
  */
 class Admin_CollectionControllerTest extends ControllerTestCase
 {
-
+    /** @var string */
     protected $additionalResources = 'all';
 
-    private $emptyCollectionRole = null;
-    private $nonEmptyCollectionRole = null;
-    private $collection = null;
-    private $anotherCollection = null;
-    private $rootCollection = null;
+    /** @var CollectionRoleInterface */
+    private $emptyCollectionRole;
 
-    public function setUp()
+    /** @var CollectionRoleInterface */
+    private $nonEmptyCollectionRole;
+
+    /** @var CollectionInterface */
+    private $collection;
+
+    /** @var CollectionInterface */
+    private $anotherCollection;
+
+    /** @var CollectionInterface */
+    private $rootCollection;
+
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->emptyCollectionRole = new CollectionRole();
+        $this->emptyCollectionRole = CollectionRole::new();
         $this->emptyCollectionRole->setName("test1role");
         $this->emptyCollectionRole->setOaiName("test1role");
         $this->emptyCollectionRole->setDisplayBrowsing("Name");
@@ -63,7 +71,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->emptyCollectionRole->setPosition(100);
         $this->emptyCollectionRole->store();
 
-        $this->nonEmptyCollectionRole = new CollectionRole();
+        $this->nonEmptyCollectionRole = CollectionRole::new();
         $this->nonEmptyCollectionRole->setName("test2role");
         $this->nonEmptyCollectionRole->setOaiName("test2role");
         $this->nonEmptyCollectionRole->setDisplayBrowsing("Name");
@@ -74,25 +82,25 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->rootCollection = $this->nonEmptyCollectionRole->addRootCollection();
         $this->rootCollection->store();
 
-        $this->collection = new Collection();
+        $this->collection = Collection::new();
         $this->collection->setName("first collection");
         $this->collection->setNumber("123");
         $this->rootCollection->addFirstChild($this->collection);
         $this->collection->store();
 
-        $this->anotherCollection = new Collection();
+        $this->anotherCollection = Collection::new();
         $this->anotherCollection->setName("last collection");
         $this->anotherCollection->setNumber("987");
         $this->rootCollection->addLastChild($this->anotherCollection);
         $this->anotherCollection->store();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
-        if (! is_null($this->nonEmptyCollectionRole) && ! is_null($this->nonEmptyCollectionRole->getId())) {
+        if ($this->nonEmptyCollectionRole !== null && $this->nonEmptyCollectionRole->getId() !== null) {
             $this->nonEmptyCollectionRole->delete();
         }
-        if (! is_null($this->emptyCollectionRole) && ! is_null($this->emptyCollectionRole->getId())) {
+        if ($this->emptyCollectionRole !== null && $this->emptyCollectionRole->getId() !== null) {
             $this->emptyCollectionRole->delete();
         }
         parent::tearDown();
@@ -268,16 +276,16 @@ class Admin_CollectionControllerTest extends ControllerTestCase
     {
         $this->dispatch('/admin/collection/move/id/' . $this->collection->getId() . '/pos/2');
         $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' .
-            $this->rootCollection->getId());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/'
+            . $this->rootCollection->getId());
     }
 
     public function testMoveActionUpmove()
     {
         $this->dispatch('/admin/collection/move/id/' . $this->anotherCollection->getId() . '/pos/1');
         $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' .
-            $this->rootCollection->getId());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/'
+            . $this->rootCollection->getId());
     }
 
     public function testMoveActionWithRootCollection()
@@ -413,9 +421,9 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->markTestIncomplete('Cancel Buttons hinzufügen und Test erweitern (OPUSVIER-3329)');
 
         $this->getRequest()->setMethod('POST')->setPost([
-            'Name' => 'TestCollection',
+            'Name'    => 'TestCollection',
             'Visible' => '1',
-            'Cancel' => 'Abbrechen'
+            'Cancel'  => 'Abbrechen',
         ]);
 
         $this->dispatch('/admin/collection/create/id/16216/type/sibling');
@@ -426,11 +434,11 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->markTestIncomplete('TODO implement test');
 
         $post = [
-            'Name' => 'TestCol',
-            'Number' => 'TestCol',
-            'Visible' => 1,
+            'Name'           => 'TestCol',
+            'Number'         => 'TestCol',
+            'Visible'        => 1,
             'VisiblePublish' => 1,
-            'Save' => 'Speichern'
+            'Save'           => 'Speichern',
         ];
 
         $this->dispatch('/admin/collection/create/id/type/child');

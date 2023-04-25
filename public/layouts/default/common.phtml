@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,16 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Julian Heise <heise@zib.de>
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2010-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Config;
+use Opus\Common\Config;
 
 $config = Config::get();
 
@@ -60,21 +56,23 @@ $this->headLink()
     ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
     ->appendStylesheet($this->layoutPath() . '/css/theme.css', 'screen')
     ->headLink([
-        'rel' => 'shortcut icon',
+        'rel'  => 'shortcut icon',
         'type' => 'image/x-icon',
-        'href' => $this->layoutPath() . '/img/logo/favicon.ico'])
+        'href' => $this->layoutPath() . '/img/logo/favicon.ico',
+    ])
     ->headLink([
-        'rel' => 'search',
+        'rel'   => 'search',
         'title' => 'OPUS 4 Search',
-        'type' => 'application/opensearchdescription+xml',
-        'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch']);
+        'type'  => 'application/opensearchdescription+xml',
+        'href'  => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch',
+    ]);
 
 /*
 uncomment the following line if you want to enable your own layout changes
 $this->headLink()->appendStylesheet($this->layoutPath() . '/css/custom.css');
 */
 
-$this->container = \Zend_Registry::get('Opus_Navigation');
+$this->container = Zend_Registry::get('Opus_Navigation');
 
 $jsFiles = ['searchutil.js', 'frontdoorutil.js', 'submit.js'];
 
@@ -141,10 +139,10 @@ if (isset($config->javascript->latex->mathjax)) {
 <div id="container">
     <div id="top-header">
         <div class="wrapper">
-            <?php if (! is_null($languageSelectors)) : ?>
+            <?php if ($languageSelectors !== null) : ?>
                 <ul id="lang-switch" class="nav" title="Choose your language">
                     <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
-                        <li class="<?= ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>"
+                        <li class="<?= $i === 0 ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>"
                                                                         title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a>
                         </li>
                     <?php endforeach ?>
@@ -187,7 +185,7 @@ if (isset($config->javascript->latex->mathjax)) {
     <?PHP // TODO searchType as CSS only for 'collection' and 'latest' used - Can it be refactored? ?>
     <div id="content" class="opus <?= $this->adminCssClass() ?> <?= $this->moduleName ?> <?= $this->actionCssClass() ?> <?= $this->searchType ?>">
 
-        <?PHP $messages = ! is_null($this->flashMessenger) ? $this->flashMessenger->getMessages() : null ?>
+        <?PHP $messages = $this->flashMessenger !== null ? $this->flashMessenger->getMessages() : null ?>
 
         <?PHP if (in_array($this->moduleName, ['admin', 'review', 'setup'])) : ?>
             <?PHP if ($this->breadcrumbsDisabled !== true) : ?>
@@ -210,7 +208,7 @@ if (isset($config->javascript->latex->mathjax)) {
                 <?= $this->layout()->content ?>
             <?PHP endif; ?>
         <?PHP else : ?>
-            <?PHP if ($this->accessAllowed('documents') && ! is_null($this->adminform)) : ?>
+            <?PHP if ($this->accessAllowed('documents') && $this->adminform !== null) : ?>
                 <?= $this->adminform ?>
             <?PHP endif ?>
 
@@ -258,9 +256,9 @@ if (isset($config->javascript->latex->mathjax)) {
 </div>
 
 <?php
-$dbprofiler = Zend_Db_Table::getDefaultAdapter()->getProfiler();
-$profiler_show_queries = isset($config->db->params->showqueries) && filter_var($config->db->params->showqueries, FILTER_VALIDATE_BOOLEAN);
-$profiler_max_queries = (int) $config->db->params->maxqueries;
+$dbprofiler          = Zend_Db_Table::getDefaultAdapter()->getProfiler();
+$profilerShowQueries = isset($config->db->params->showqueries) && filter_var($config->db->params->showqueries, FILTER_VALIDATE_BOOLEAN);
+$profilerMaxQueries  = (int) $config->db->params->maxqueries;
 if ($dbprofiler->getEnabled() === true) : ?>
     <div class="debug dbprofiler">
         <div class="wrapper">
@@ -273,19 +271,19 @@ if ($dbprofiler->getEnabled() === true) : ?>
             <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br/>
             <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br/>
             <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br/>
-            <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
+            <?php if ($profilerShowQueries === true && $profilerQueryProfiles = $dbprofiler->getQueryProfiles()) : ?>
                 <b>Queries:</b><br/>
                 <dl>
                     <?php $queryCount = null; ?>
-                    <?php foreach ($profiler_query_profiles as $value) :
-                        if (is_null($queryCount)) {
+                    <?php foreach ($profilerQueryProfiles as $value) :
+                        if ($queryCount === null) {
                             // erste DB-Anweisung ist immer 'connect' - diese soll nicht ausgegeben werden; daher überspringen
                             $queryCount = 0;
                             continue;
                         } ?>
                         <dd style="margin-inline-start: 0;"><?= ++$queryCount ?>:</dd>
                         <dt style="margin-inline-start: 1em;">
-                            <?php if ($queryCount > $profiler_max_queries) :
+                            <?php if ($queryCount > $profilerMaxQueries) :
                                 echo '...';
                                 break;
                             endif ?>
@@ -300,7 +298,7 @@ if ($dbprofiler->getEnabled() === true) : ?>
 
 <?php
 $identity = Zend_Auth::getInstance()->getIdentity();
-if (isset($config->debugSession) and ((bool)$config->debugSession === true) and ! empty($identity)) :
+if (isset($config->debugSession) && ((bool) $config->debugSession === true) && ! empty($identity)) :
     ?>
     <div class="debug session">
         <div class="wrapper">
@@ -308,7 +306,7 @@ if (isset($config->debugSession) and ((bool)$config->debugSession === true) and 
 
             <?php /* do not apply indentation here! */ ?>
 <pre>
-<?= Zend_Debug::dump($_SESSION, 'Session Data', false); ?>
+    <?= Zend_Debug::dump($_SESSION, 'Session Data', false); ?>
 </pre>
 
         </div>

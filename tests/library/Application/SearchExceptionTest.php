@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,19 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\SearchException;
+
 class Application_SearchExceptionTest extends ControllerTestCase
 {
-
     public function testConstructForServerUnreachable()
     {
-        $cause = new Opus\Search\Exception('test', Opus\Search\Exception::SERVER_UNREACHABLE);
+        $cause = new SearchException('test', SearchException::SERVER_UNREACHABLE);
 
         $exception = new Application_SearchException($cause, false);
 
@@ -46,7 +45,7 @@ class Application_SearchExceptionTest extends ControllerTestCase
 
     public function testConstructForServerUnreachablePlainMessage()
     {
-        $cause = new Opus\Search\Exception('test', Opus\Search\Exception::SERVER_UNREACHABLE);
+        $cause = new SearchException('test', SearchException::SERVER_UNREACHABLE);
 
         $exception = new Application_SearchException($cause, true);
 
@@ -56,7 +55,7 @@ class Application_SearchExceptionTest extends ControllerTestCase
 
     public function testConstructForInvalidQuery()
     {
-        $cause = new Opus\Search\Exception('test', Opus\Search\Exception::INVALID_QUERY);
+        $cause = new SearchException('test', SearchException::INVALID_QUERY);
 
         $exception = new Application_SearchException($cause, false);
 
@@ -66,7 +65,7 @@ class Application_SearchExceptionTest extends ControllerTestCase
 
     public function testConstructForInvalidQueryPlainMessage()
     {
-        $cause = new Opus\Search\Exception('test', Opus\Search\Exception::INVALID_QUERY);
+        $cause = new SearchException('test', SearchException::INVALID_QUERY);
 
         $exception = new Application_SearchException($cause, true);
 
@@ -76,7 +75,7 @@ class Application_SearchExceptionTest extends ControllerTestCase
 
     public function testContructPlainMessage()
     {
-        $cause = new Opus\Search\Exception('test');
+        $cause = new SearchException('test');
 
         $exception = new Application_SearchException($cause, true);
 
@@ -86,7 +85,7 @@ class Application_SearchExceptionTest extends ControllerTestCase
 
     public function testConstruct()
     {
-        $cause = new Opus\Search\Exception('test');
+        $cause = new SearchException('test');
 
         $exception = new Application_SearchException($cause, false);
 
