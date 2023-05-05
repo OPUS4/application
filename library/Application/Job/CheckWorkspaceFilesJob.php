@@ -50,9 +50,6 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
     private $errors = 0;
 
     /** @var string */
-    private $file;
-
-    /** @var string */
     private $filesPath;
 
     /**
@@ -71,7 +68,7 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
         $this->errors = 0;
 
         foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
-            $this->file = $file;
+
             if ($count > 0 && $count % 100 === 0) {
                 echo "INFO: checked $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.\n";
             }
@@ -88,8 +85,14 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
                 continue;
             }
 
+            // Check if document with specified id exists and can be fetched.
             $id = $matches[1];
-            $d  = $this->checkDocument($id);
+            try {
+                Document::get($id);
+            } catch (NotFoundException $e) {
+                echo "ERROR: No document $id found for workspace path '$file'!\n";
+                $this->errors++;
+            }
         }
 
         echo "INFO: Checked a total of $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.\n";
@@ -107,15 +110,6 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
      * @param int $id
      * @return Document
      */
-    private function checkDocument($id)
-    {
-        try {
-            return Document::get($id);
-        } catch (NotFoundException $e) {
-            echo "ERROR: No document $id found for workspace path '$this->file'!\n";
-            $this->errors++;
-        }
-    }
 
     /**
      * Get files directory.
