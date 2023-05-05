@@ -32,6 +32,7 @@
 use Opus\Common\Date;
 use Opus\Common\Model\NotFoundException;
 use Opus\Document;
+use Opus\Common\Repository;
 
 class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
 {
@@ -41,7 +42,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
     /** @var Application_Job_CleanTemporariesJob */
     private $job;
 
-    /** @var Mock_OpusDocumentMock */
+    /** @var Document */
     private $doc;
 
     public function setUp(): void
@@ -49,7 +50,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
         parent::setUp();
         $this->job = new Application_Job_CleanTemporariesJob();
         $this->job->setDuration('P2D');
-        $this->doc = new Mock_OpusDocumentMock();
+        $this->doc = new Document();
         $this->doc->setServerState('temporary');
         $this->doc->store();
     }
@@ -67,7 +68,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
     {
         $this->changeDocumentDateModified($this->doc, 3);
 
-        $newDoc = new Mock_OpusDocumentMock();
+        $newDoc = new Document();
         $newDoc->setServerState('temporary');
         $newDoc->store();
         $this->changeDocumentDateModified($newDoc, 3);
@@ -104,6 +105,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
     {
         $date = new DateTime();
         $date->sub(new DateInterval("P{$numDaysBeforeNow}D"));
-        $document->changeServerDateModified(new Date($date));
+        $documents = Repository::getInstance()->getModelRepository(Document::class);
+        $documents->setServerDateModifiedForDocuments(new Date($date), [$document->getId()]);
     }
 }
