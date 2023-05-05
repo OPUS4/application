@@ -47,7 +47,7 @@ class Application_Job_RegisterLocalDoisJob implements Application_Job_JobInterfa
     /**
      * setze auf $printErrors auf true, um Fehlermeldungen auf der Konsole auszugeben
      */
-    public function printErrors()
+    public function enablePrintErrors()
     {
         $this->printErrors = true;
     }
