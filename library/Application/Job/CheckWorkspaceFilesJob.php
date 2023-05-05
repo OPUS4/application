@@ -60,6 +60,8 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
      */
     public function run()
     {
+        $this->startTime = microtime(true);
+
         $filesPath = $this->getFilesPath();
 
         echo "INFO: Scanning directory '$filesPath'...\n";
@@ -122,8 +124,6 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
      */
     private function getFilesPath()
     {
-        $this->startTime = microtime(true);
-
         if ($this->filesPath === null) {
             $config          = $this->getConfig();
             $this->filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
