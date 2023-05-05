@@ -46,9 +46,6 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
     /** @var int */
     private $startTime;
 
-    /** @var int */
-    private $errors = 0;
-
     /** @var string */
     private $filesPath;
 
@@ -64,8 +61,8 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
         echo "INFO: Scanning directory '$filesPath'...\n";
 
         // Iterate over all files
-        $count        = 0;
-        $this->errors = 0;
+        $count  = 0;
+        $errors = 0;
 
         foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
 
@@ -81,7 +78,7 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
 
             if (! is_dir($file)) {
                 echo "ERROR: expected directory: $file\n";
-                $this->errors++;
+                $errors++;
                 continue;
             }
 
@@ -91,14 +88,14 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
                 Document::get($id);
             } catch (NotFoundException $e) {
                 echo "ERROR: No document $id found for workspace path '$file'!\n";
-                $this->errors++;
+                $errors++;
             }
         }
 
         echo "INFO: Checked a total of $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.\n";
 
-        if ($this->errors !== 0) {
-            throw new Exception("Found $this->errors ERRORs in workspace files directory '$filesPath'!\n");
+        if ($errors !== 0) {
+            throw new Exception("Found $errors ERRORs in workspace files directory '$filesPath'!\n");
         }
 
         return $count;
