@@ -35,6 +35,8 @@ $config = Config::get();
 
 $pageLanguage = Application_Translate::getInstance()->getLocale();
 
+$this->headMeta()->prependName('viewport', 'width=device-width,initial-scale=1.0,minimum-scale=1.0');
+
 /**
  * Prevent indexing and following of links by web crawlers. Dynamic search pages should not be indexed, since their
  * content might change, e.g. "Latest documents".
