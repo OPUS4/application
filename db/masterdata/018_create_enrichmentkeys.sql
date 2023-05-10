@@ -10,4 +10,12 @@ INSERT INTO `enrichmentkeys` (`name`) VALUES
 ('BibtexRecord'),
 ('Relation'),
 ('Audience'),
-('Coverage');
+('Coverage'),
+('opus_import_data'),
+('local_crossrefDocumentType'),
+('local_crossrefLicence'),
+('local_doiImportPopulated'),
+('local_import_origin'),
+('opus_doi_flag'),
+('conference_place'),
+('conference_title');

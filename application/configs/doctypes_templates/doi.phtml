@@ -1,0 +1,173 @@
+﻿<?php
+
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ */
+
+?>
+
+<?php
+
+use Opus\Common\Config;
+
+$config = Config::get();
+?>
+
+<h2><?= $this->translate($this->title) ?></h2>
+<div class="content">
+<h3 class="document-type" title="<?= $this->translate('selecttype'); ?>"><?= $this->subtitle?></h3>
+
+<?php if (isset($this->errorCaseMessage)) : ?>
+    <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
+<?php endif; ?>
+<form id="Alles" enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
+    <div class="form-items-wrapper">
+        <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
+        
+            <?php $this->count = 0; ?>
+            <!-- <?= $this->fileOverview(); ?> -->            
+         
+
+            <?= $this->element($this->IdentifierDoi); ?>
+            <!-- <input type="button" name="go_import" value="Metadaten von Crossref holen" onclick="leseDoi();"> --> <!-- DOI-Button -->
+
+            <input type="button" name="go_import" value="Metadaten von Crossref holen" onclick="startCheck()">
+
+            <span id="unsichtbares_formularfeld">
+                <?= $this->element($this->opus_doi_flag); ?>
+                <?= $this->element($this->local_import_origin); ?>
+                <?= $this->element($this->opus_import_data); ?>
+                <?= $this->element($this->local_crossrefDocumentType); ?>
+                <?= $this->element($this->local_crossrefLicence); ?>
+                <?= $this->element($this->local_doiImportPopulated); ?>
+                
+                <input type="text" name="DocumentType" id="DocumentType" value="" />
+                Dokumenttyp in Crossref:&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="CrossrefDocumentType" id="CrossrefDocumentType" size="35" /> <!-- Für Prod: type="hidden" --> 
+                <br /><br />Wird in OPUS angelegt als:
+                <input type="text" name="OpusDocumentType" id="OpusDocumentType" size="35" value="<?= $this->translate($GET['DocumentType']) ?>" /> <!-- Für Prod: type="hidden" -->
+                <br /><br />
+            </span>
+
+
+            <?= $this->group($this->groupPersonSubmitter); ?>
+            <?= $this->element($this->Language); ?>         
+            <?= $this->element($this->CompletedYear); ?>
+            <!-- <?= $this->element($this->CompletedDate); ?> -->
+            <span id="no_delete">
+                <?= $this->group($this->groupPersonAuthor); ?>
+            </span> 
+			<?= $this->group($this->groupPersonEditor); ?>
+            <?= $this->group($this->groupPersonTranslator); ?>
+            <?= $this->element($this->ContributingCorporation); ?>
+            <?= $this->group($this->groupTitleMain); ?>
+            <?= $this->group($this->groupTitleAbstract); ?>
+            <?= $this->group($this->groupTitleSub); ?>
+            <?= $this->group($this->groupTitleAdditional); ?>
+            <?= $this->group($this->groupTitleParent); ?>
+			<?= $this->element($this->Volume); ?>
+            <?= $this->element($this->Issue); ?>
+            <?= $this->element($this->Edition); ?>
+			<?= $this->element($this->PageNumber); ?>
+            <?= $this->element($this->PageFirst); ?>
+            <?= $this->element($this->PageLast); ?>
+		    <?= $this->element($this->ArticleNumber); ?>
+			<?= $this->element($this->IdentifierIsbn); ?>
+            <?= $this->element($this->IdentifierIssn); ?>
+            <?= $this->element($this->conference_title); ?>
+            <?= $this->element($this->conference_place); ?>
+			<?= $this->element($this->ThesisDateAccepted); ?>
+            <?= $this->element($this->ThesisYearAccepted); ?>   			
+			<?= $this->element($this->PublisherName); ?>
+            <?= $this->element($this->PublisherPlace); ?>            
+            <?= $this->group($this->groupSubjectUncontrolled); ?>
+            <hr><br />
+            
+		   
+			
+                
+
+<div class="button-wrapper">
+        <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
+        <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
+    </div>
+
+    </div>
+</form>
+
+<?php if ($this->endTemplate($this->form, $this->count) !== "") : ?>
+    <div class="form-hint form-errors"><?= $this->endTemplate($this->form, $this->count); ?></div>
+<?php endif; ?>
+</div>
+
+<!-- Nach Reload nochmal parsen, falls local_doiJson schon gefüllt ist. Anderenfalls würden alle Felder wieder geleert, sobald ein Feld hinzugefügt wird. -->
+<script language="javascript" type="text/javascript">
+
+    let opusConfig = {
+        "crossrefUrl": '<?= $config->crossref->url ?>',
+        "crossrefMailTo": '<?= $config->crossref->mailTo ?>'
+    }
+
+	 var doiJson = document.getElementById("Enrichmentopus_import_data").value;
+ if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "false"){
+    parseJson(doiJson);
+    } else if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true"){
+    let fields = document.getElementById("Enrichmentlocal_doiImportPopulated").value;
+    const usedFields = fields.split(',');
+    getDoctypes(JSON.parse(doiJson)); // DokType nochmal parsen, falls z.B. ein Autor gelöscht und dadurch die Seite neu aufgebaut wurde
+    for (const element of usedFields) { // Hier werden die importierten Felder nach Reload (z.B. "Autor löschen") nochmal begrünt
+        if (document.getElementById(element)){
+            colorGreen(element);
+        }        
+        }
+
+    const mandatory_fields = ['PersonSubmitterLastName_1','PersonSubmitterFirstName_1','Language','TitleMain_1'];
+    for (const mandatory of mandatory_fields) { //Pflichtfelder Rot färben, wenn leer 
+        if (document.getElementById(mandatory).value == "") {
+            colorPink(mandatory);
+            }
+        }
+    
+    }
+    
+
+    /* if (document.getElementById("IdentifierDoi").value !== "") {
+        document.getElementById("go_import").addEventListener('click', (event) => {
+            alert("Löschen!");
+        }) */
+
+    /* document.getElementById("IdentifierDoi").addEventListener('click', (event) => { 
+        if (confirm("Achtung! Formular wird geleert und ein neuer Import gestartet!")) 
+            {   document.Alles.reset();
+                alert("Löschen!");
+                //parseJson(doiJson)
+            }
+        else {return}
+    }) 
+    }*/
+
+</script>

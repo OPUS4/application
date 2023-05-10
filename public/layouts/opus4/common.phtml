@@ -63,6 +63,7 @@ if (isset($this->title)) {
 }
 
 $this->headLink()->prependStylesheet($this->layoutPath() . '/css/custom.css');
+$this->headLink()->prependStylesheet($this->layoutPath() . '/css/doi-import.css');
 $this->moduleCss();
 $this->headLink()->prependStylesheet($this->layoutPath() . '/css/print.css', 'print');
 
@@ -104,6 +105,8 @@ if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) {
     $jsFiles[] = 'opus-ui.js';
 } elseif (in_array($this->moduleName, ['publish'])) {
     $jsFiles[] = 'upload.js';
+    $jsFiles[] = 'getDoi.js';
+    $jsFiles[] = 'doiAssist.js';
 }
 
 if (in_array($this->moduleName, ['admin'])) {
