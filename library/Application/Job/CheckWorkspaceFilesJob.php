@@ -65,7 +65,6 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
         $errors = 0;
 
         foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
-
             if ($count > 0 && $count % 100 === 0) {
                 echo "INFO: checked $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.\n";
             }
