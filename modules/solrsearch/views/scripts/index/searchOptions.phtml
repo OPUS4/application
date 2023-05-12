@@ -50,7 +50,7 @@
                             ?>
         <li class="sorting_option">
                          <?php if ($this->sortfield === 'score' && $this->sortorder === 'desc') : ?>
-                                <?= $this->translate('sorting_relevancy') ?>
+                             <span><?= $this->translate('sorting_relevancy') ?></span>
                          <?php else : ?>
                 <a href="<?= $this->url($urlparams) ?>" rel="nofollow">
                              <?= $this->translate('sorting_relevancy') ?>
