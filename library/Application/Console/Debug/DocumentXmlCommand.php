@@ -25,37 +25,60 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Document;
+use Opus\Common\Model\NotFoundException;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
- * Helper class for common functions used in update scripts.
+ * Exports documents.
  *
- * This class extends Application_Update_PluginAbstract for the common logging and other functions, but
- * it is not meant to be "run" like other update plugin classes.
+ * TODO unit testing
  */
-class Application_Update_Helper extends Application_Update_PluginAbstract
+class Application_Console_Debug_DocumentXmlCommand extends Command
 {
-    public function run()
+    public const ARGUMENT_DOC_ID = 'DocID';
+
+    protected function configure()
     {
-        // do nothing
+        parent::configure();
+
+        $help = <<<EOT
+Currently only debug:xml is supported. It shows the raw XML for a document.
+EOT;
+
+        $this->setName('debug:xml')
+            ->setDescription('Prints XML for document')
+            ->setHelp($help)
+            ->addArgument(
+                self::ARGUMENT_DOC_ID,
+                InputArgument::OPTIONAL,
+                'ID of document'
+            );
     }
 
     /**
-     * Asks the user a yes|no question during update.
-     *
-     * @param string $question
-     * @return bool
+     * @return int
+     * @throws NotFoundException
      */
-    public function askYesNo($question)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        print $question;
+        $docId = $input->getArgument(self::ARGUMENT_DOC_ID);
 
-        $line = readline();
+        $document = Document::get($docId);
+        $xml      = $document->toXml();
 
-        $response = trim($line ?: '');
+        $xml->preserveWhiteSpace = false;
+        $xml->formatOutput       = true;
 
-        return $response === 'Y' || $response === 'y';
+        $output->write($xml->saveXml());
+
+        return 0;
     }
 }

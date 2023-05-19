@@ -62,7 +62,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
             filter_var($this->config->form->first->show_rights_checkbox, FILTER_VALIDATE_BOOLEAN)
         ) {
             if (array_key_exists('rights', $data)) {
-                if ($data['rights'] === '0') {
+                if (! $data['rights']) {
                     $rights = $this->getElement('rights');
                     $rights->addError($this->view->translate('publish_error_rights_checkbox_empty'));
                     $valid = false;
@@ -193,7 +193,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
             isset($this->config->form->first->require_upload) &&
             filter_var($this->config->form->first->require_upload, FILTER_VALIDATE_BOOLEAN)
         ) {
-            if (! isset($this->session->fulltext) || $this->session->fulltext === '0') {
+            if (! isset($this->session->fulltext) || ! $this->session->fulltext) {
                 // noch keine Datei zum Upload ausgewählt
                 $fileupload->setRequired(true);
             }

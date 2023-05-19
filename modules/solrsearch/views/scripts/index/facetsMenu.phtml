@@ -56,7 +56,7 @@
                     $facetValue         = htmlspecialchars($facet->getLabel($facetItem->getText()));
                     ?>
                     <?php if ($facet->isSelected()) : ?>
-                        <?php if ($facet->getSelected() === $facetItem->getText()) :
+                        <?php if ($facet->getSelected() === strval($facetItem->getText())) :
                             // remove fq param from URL
                             unset($removeFilterQueryParams[$key . 'fq']);
                             $removeFqUrl = $this->url($removeFilterQueryParams, null, true);

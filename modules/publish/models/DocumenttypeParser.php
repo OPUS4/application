@@ -305,7 +305,7 @@ class Publish_Model_DocumenttypeParser extends Application_Model_Abstract
     {
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('required-if-fulltext') as $fulltext) {
-                if ($this->session->fulltext === '1') {
+                if ($this->session->fulltext) {
                     $currentElement->setRequired(true);
                     $this->log->debug(
                         "currentElement : " . $currentElement->getElementName()

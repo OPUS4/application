@@ -182,7 +182,7 @@ class Application_Update extends Application_Update_PluginAbstract
     {
         $answer = readline("Run script '$name' [Y|n]?");
 
-        return strlen(trim($answer)) === 0 || $answer === 'Y' || $answer === 'y';
+        return $answer === false || strlen(trim($answer)) === 0 || $answer === 'Y' || $answer === 'y';
     }
 
     /**

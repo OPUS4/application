@@ -295,4 +295,14 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase
         $this->assertNotQuery('//li/input[@name="Id"]');
         $this->assertQuery('//div[@class="wrapper"]/input[@name="Id"]');
     }
+
+    public function testModelClassIsTranslated()
+    {
+        $this->useGerman();
+
+        $this->dispatch('/admin/series');
+
+        $this->assertNotXpathContentContains('//thead/tr/th', Series::class);
+        $this->assertXpathContentContains('//thead/tr/th', 'Schriftenreihe');
+    }
 }

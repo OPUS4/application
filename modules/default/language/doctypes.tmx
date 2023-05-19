@@ -97,6 +97,15 @@
         </tuv>
    </tu>
 
+   <tu tuid="doi">
+        <tuv xml:lang="en">
+            <seg>*Import from DOI*</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>*DOI-Import*</seg>
+        </tuv>
+   </tu>
+
    <tu tuid="examen">
         <tuv xml:lang="en">
             <seg>Examination Thesis</seg>

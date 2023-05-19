@@ -75,8 +75,8 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
                 $authorAddress = $authorAddresses[$i];
                 array_push($addresses, $authorAddress);
                 $logger->debug(
-                    "send publication notification mail to author " . $authorAddress['address']
-                    . " (" . $authorAddress['name'] . ")"
+                    'send publication notification mail to author ' . $authorAddress['address']
+                    . ' (' . $authorAddress['name'] . ')'
                 );
             }
         }
@@ -84,7 +84,7 @@ class Application_Util_PublicationNotification extends Application_Util_Notifica
         if ($notifySubmitter && $document !== null) {
             $submitter = $document->getPersonSubmitter();
             if (! empty($submitter)) {
-                $name  = trim($submitter[0]->getLastName() . ", " . $submitter[0]->getFirstName());
+                $name  = trim($submitter[0]->getLastName() . ', ' . $submitter[0]->getFirstName());
                 $email = $submitter[0]->getEmail();
                 if ($email !== null) {
                     $email = trim($email);

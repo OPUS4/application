@@ -78,7 +78,8 @@ foreach ($docFinder->getIds() as $id) {
             $numOfNonExtractableFulltexts++;
             continue;
         }
-        if ($response->getRawResponse() === null || strlen(trim($response->getRawResponse())) === 0) {
+        $rawResponse = $response->getRawResponse();
+        if ($rawResponse === null || strlen(trim($rawResponse)) === 0) {
             echo "non-extractable full text for document # " . $d->getId() . " (file name: "
                 . $file->getPath() . " )\n";
             $numOfNonExtractableFulltexts++;

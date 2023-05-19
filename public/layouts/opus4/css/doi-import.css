@@ -1,0 +1,26 @@
+/*
+to ensure compatibility with later OPUS 4 releases we recommend to insert custom layout changes here
+*/
+
+
+
+#unsichtbares_formularfeld {
+    display: none;
+}
+
+#DoiButton {
+    background-color: #26517D; /* Green */
+    border: 2px solid black;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+    border-radius: 4px;
+}
+
+#TitleMain_1, #TitleSub_1, #TitleAbstract_1, #TitleParent_1, #IdentifierUrl, #PublisherName, #EnrichmentConferenceTitle, #EnrichmentConferencePlace, #Enrichmentlocal_crossrefLicence {
+    width: 600px !important;
+}
+
