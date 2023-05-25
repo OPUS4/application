@@ -25,21 +25,48 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Document;
+use Opus\Common\Repository;
+use Opus\Model\Xml;
+use Opus\Model\Xml\Version1;
+
 /**
- * This file is not part of the main OPUS 4 distribution!
+ * Class to update document cache
  *
- * It is currently used in the matheon module. The tarball
- * creation script prepare_directories.sh ignores this file and
- * does not add it to the tarball.
+ * Since the metadata of documents are stored in multiple tables,
+ * the cache stores the metadata in one place for faster access.
  */
+class Application_Job_UpdateDocumentCacheJob implements Application_Job_JobInterface
+{
+    public function run()
+    {
+        $repository = Repository::getInstance();
 
-define('APPLICATION_ENV', 'production');
+        $finder = $repository->getDocumentFinder();
+        $cache  = $repository->getDocumentXmlCache();
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+        $docIds = $finder->setNotInXmlCache()->getIds();
 
-$job = new Application_Job_SendReviewRequestJob();
-$job->run();
+        echo 'Processing ' . count($docIds) . ' documents' . PHP_EOL;
+
+        foreach ($docIds as $docId) {
+            $document = Document::get($docId);
+
+            // xml version 1
+            $omx = new Xml();
+            $omx->setStrategy(new Version1())
+                ->excludeEmptyFields()
+                ->setModel($document)
+                ->setXmlCache($cache);
+
+            // TODO cache is updated as a side effect (that is not ideal and might not always be true)
+            $omx->getDomDocument();
+
+            echo "Cache refreshed for document #$docId\n";
+        }
+    }
+}

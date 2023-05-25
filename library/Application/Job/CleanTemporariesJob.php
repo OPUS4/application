@@ -25,21 +25,60 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Document;
+use Opus\Common\Repository;
+
 /**
- * This file is not part of the main OPUS 4 distribution!
- *
- * It is currently used in the matheon module. The tarball
- * creation script prepare_directories.sh ignores this file and
- * does not add it to the tarball.
+ * Class for cleaning temporary documents.
  */
+class Application_Job_CleanTemporariesJob implements Application_Job_JobInterface
+{
+    /** @var string Duration of the temporary document */
+    private $duration;
 
-define('APPLICATION_ENV', 'production');
+    /**
+     * @param string $duration Duration e.g., P2D, P4M
+     */
+    public function setDuration($duration)
+    {
+        $this->duration = $duration;
+    }
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+    public function run()
+    {
+        $dateString = $this->getPreviousDate();
+        $finder     = Repository::getInstance()->getDocumentFinder();
+        $finder->setServerState('temporary')
+            ->setServerDateModifiedBefore($dateString);
 
-$job = new Application_Job_SendReviewRequestJob();
-$job->run();
+        foreach ($finder->getIds() as $id) {
+            $doc = Document::get($id);
+            if ($doc->getServerState() === 'temporary') {
+                echo "deleting document: $id\n";
+                $doc->delete();
+            } else {
+                echo "NOT deleting document: $id because it has server state " . $doc->getServerState();
+            }
+        }
+    }
+
+    /**
+     * Returns the previous date of the duration set.
+     *
+     * @return string date
+     */
+    private function getPreviousDate()
+    {
+        $date = new DateTime();
+
+        if ($this->duration !== null) {
+            return $date->sub(new DateInterval($this->duration))->format('Y-m-d');
+        }
+
+        return $date->format('Y-m-d');
+    }
+}
