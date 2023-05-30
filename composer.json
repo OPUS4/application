@@ -34,7 +34,8 @@
     "components/jqueryui": "1.12.*",
     "oomphinc/composer-installers-extender": "^2.0",
     "symfony/console": "*",
-    "pear/log": "*"
+    "pear/log": "*",
+    "lavary/crunz": "1.12.*"
   },
   "require-dev": {
     "phpunit/phpunit": "<9",
@@ -56,7 +57,8 @@
     "allow-plugins": {
       "composer/installers": true,
       "oomphinc/composer-installers-extender": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true
+      "dealerdirect/phpcodesniffer-composer-installer": true,
+      "kylekatarnls/update-helper": true
     }
   },
   "scripts": {
@@ -89,6 +91,7 @@
     "phploc": "phploc --log-csv build/phploc.csv src",
     "phpcpd": "phpcpd . --min-lines 3 --min-tokens 30 --log-pmd build/pmd-cpd.xml --progress || true",
     "index": "bin/opus4 index:index",
-    "metrics": "phpmetrics --config=phpmetrics.json"
+    "metrics": "phpmetrics --config=phpmetrics.json",
+    "cronlist": "crunz schedule:list"
   }
 }
