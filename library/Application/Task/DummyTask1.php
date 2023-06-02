@@ -25,13 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2023, OPUS 4 development team
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-define('APPLICATION_ENV', 'production');
-
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
-
-$taskScheduler = new Application_Task_TaskScheduler();
-return $taskScheduler->run();
+/**
+ * Class to check consistency
+ */
+class Application_Task_DummyTask1 implements Application_Task_TaskInterface
+{
+    public function run()
+    {
+        echo "DummyTask 1 running \n";
+    }
+}

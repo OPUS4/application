@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,55 +25,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Script
- * @author      Kaustabh Barman <barman@zib.de>
  * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Job\Runner;
-use Opus\Log;
-use Opus\Search\Task\ConsistencyCheck;
-use Opus\Config;
+define('APPLICATION_ENV', 'production');
 
-/**
- * Class to check consistency
- */
-class Application_Jobs_CheckConsistencyJob
-{
-//    private $enabled;
+require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-    /**
-     * @param $status
-     */
-//    public function __construct($status="enabled")
-//    {
-//
-//    }
+$class = getopt(null, ["taskclass:"]);
 
-    public function run()
-    {
-        $log = Log::get();
-        if ($this->isEnabled()) {
-            $log->debug("Inside the run");
-
-            $jobrunner = new Runner;
-            $jobrunner->setLogger(Log::get());
-            // no waiting between jobs
-            $jobrunner->setDelay(0);
-            // set a limit of 100 index jobs per run
-            $jobrunner->setLimit(100);
-
-            $worker = new ConsistencyCheck();
-            $jobrunner->registerWorker($worker);
-            $jobrunner->run();
-        }
-        $log->debug("Finnished run");
-    }
-
-    public function isEnabled()
-    {
-        $config = Config::get();
-        return $config->cron->jobs->consistencyCheck->active;
-    }
-}
+$task = new $class['taskclass']();
+$task->run();

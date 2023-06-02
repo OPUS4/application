@@ -29,9 +29,54 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-define('APPLICATION_ENV', 'production');
+use Crunz\Event;
+use Crunz\Schedule;
+use Opus\Common\ConfigTrait;
+use Opus\Common\LoggingTrait;
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+class Application_Task_TaskScheduler
+{
+    use ConfigTrait;
+    use LoggingTrait;
 
-$taskScheduler = new Application_Task_TaskScheduler();
-return $taskScheduler->run();
+    /**
+     * @return Schedule
+     */
+    public function run()
+    {
+        $log    = $this->getLogger();
+        $config = $this->getConfig();
+
+        $schedule = new Schedule();
+
+        $cronScript = APPLICATION_PATH . "/" . $config->cron->taskRunner;
+
+        if (isset($config->cron->jobs)) {
+            foreach ($config->cron->jobs as $job => $options) {
+                if (
+                    isset($options->class)
+                    && isset($options->schedule)
+                    && filter_var($options->enabled, FILTER_VALIDATE_BOOLEAN)
+                ) {
+                    // $log->debug("Adding job " . $options->class);
+                    $task = $schedule->run(PHP_BINARY . " " . $cronScript, ['--taskclass' => $options->class]);
+                    $task
+                        ->cron($options->schedule)
+                        ->description($options->class);
+
+                    $schedule
+                        ->onError(function (Event $evt) use (&$error) {
+                            $error .= $evt->getExpression() . ' ' . $evt->buildCommand() . PHP_EOL;
+                            throw new Exception($error);
+                        });
+                } else {
+                    $log->err("Cron job class name or schedule not configured");
+                }
+            }
+        } else {
+            $log->err("Couldn't access jobs from configuration file");
+        }
+
+        return $schedule;
+    }
+}

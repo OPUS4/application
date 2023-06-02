@@ -67,6 +67,7 @@ $application = new Zend_Application(
             APPLICATION_PATH . '/application/configs/application.ini',
             APPLICATION_PATH . '/application/configs/config.ini',
             APPLICATION_PATH . '/application/configs/console.ini',
+            APPLICATION_PATH . '/application/configs/tasks.ini',
         ],
     ]
 );

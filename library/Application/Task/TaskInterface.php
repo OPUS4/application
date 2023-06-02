@@ -29,9 +29,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-define('APPLICATION_ENV', 'production');
-
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
-
-$taskScheduler = new Application_Task_TaskScheduler();
-return $taskScheduler->run();
+/**
+ * Basic process interface as required to define
+ * tasks for job cron job
+ */
+interface Application_Task_TaskInterface
+{
+    /**
+     * Perform task.
+     *
+     * @return mixed
+     */
+    public function run();
+}
