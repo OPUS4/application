@@ -1,0 +1,102 @@
+<?php
+
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ */
+
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+
+/**
+ */
+class Application_Console_Collection_CopyCommand extends Application_Console_Collection_AbstractCollectionCommand
+{
+    protected function configure()
+    {
+        parent::configure();
+
+        $help = <<<EOT
+The <fg=green>collection:copy</> command can be used to copy the documents assigned to 
+one collection to another collection. Documents that are already present in the target
+collection, are not modified.  
+EOT;
+
+        $this->setName('collection:copy')
+            ->setDescription('Copies documents from one collection to another')
+            ->setHelp($help);
+    }
+
+    /**
+     * @return int
+     *
+     * TODO handle collection not found
+     * TODO handle no documents in collection
+     * TODO show info about documents already present in destination
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $this->processOptions($input);
+
+        $sourceCol = $this->sourceCol;
+        $destCol   = $this->destCol;
+
+        $sourceId = $sourceCol->getId();
+        $destId   = $destCol->getId();
+
+        $sourceDocuments = $sourceCol->getDocumentIds();
+        $destDocuments   = $destCol->getDocumentIds();
+
+        $sourceCount = count($sourceDocuments);
+
+        $output->writeln("Copy documents (${sourceCount}) from collection (ID = ${sourceId})");
+        $output->writeln('');
+        $output->writeln('  "' . $sourceCol->getDisplayName() . '"');
+        $output->writeln('');
+        $output->writeln("to collection (ID = ${destId})");
+        $output->writeln('');
+        $output->writeln('  "' . $destCol->getDisplayName() . '"');
+        $output->writeln('');
+
+        if ($this->updateDateModified) {
+            $output->writeln('NOTE: ServerDateModified of documents will be updated');
+            $output->writeln('');
+        }
+
+        $askHelper = $this->getHelper('question');
+        $question  = new ConfirmationQuestion('Copy documents [Y|n]?', true);
+
+        if ($askHelper->ask($input, $output, $question)) {
+            $sourceCol->copyDocuments($destCol->getId(), $this->updateDateModified);
+        } else {
+            $output->writeln('Copying cancelled');
+        }
+
+        return 0;
+    }
+}
