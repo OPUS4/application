@@ -31,6 +31,7 @@
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Application_Console_Collection_MoveCommand extends Application_Console_Collection_AbstractCollectionCommand
 {
