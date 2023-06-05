@@ -31,6 +31,7 @@
 
 use Opus\Common\Collection;
 use Opus\Common\CollectionInterface;
+use Opus\Common\CollectionRole;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -76,7 +77,7 @@ abstract class Application_Console_Collection_AbstractCollectionCommand extends 
             'ID of destination collection'
         )->addOption(
             self::OPTION_SRC_ROLE_NAME,
-            'sr',
+            null,
             InputOption::VALUE_REQUIRED,
             'Name of source collection role'
         )->addOption(
@@ -107,12 +108,38 @@ abstract class Application_Console_Collection_AbstractCollectionCommand extends 
         $sourceId = $input->getOption(self::OPTION_SRC_COL_ID);
         $destId   = $input->getOption(self::OPTION_DST_COL_ID);
 
-        // TODO process role and col options
+        if ($sourceId === null) {
+            $srcRoleName  = $input->getOption(self::OPTION_SRC_ROLE_NAME);
+            $srcColNumber = $input->getOption(self::OPTION_SRC_COL_NUMBER);
 
-        $this->sourceCol = Collection::get($sourceId);
-        $this->destCol   = Collection::get($destId);
+            if ($srcRoleName !== null && $srcColNumber !== null) {
+                $role            = CollectionRole::fetchByName($srcRoleName);
+                $collections     = Collection::getModelRepository()->fetchCollectionsByRoleNumber(
+                    $role->getId(),
+                    $srcColNumber
+                );
+                $this->sourceCol = $collections[0];
+            }
+        } else {
+            $this->sourceCol = Collection::get($sourceId);
+        }
 
-        // TODO process UPDATE option
+        if ($destId === null) {
+            $destRoleName  = $input->getOption(self::OPTION_DST_ROLE_NAME);
+            $destColNumber = $input->getOption(self::OPTION_DST_COL_NUMBER);
+
+            if ($destRoleName !== null && $destColNumber !== null) {
+                $role          = CollectionRole::fetchByName($destRoleName);
+                $collections   = Collection::getModelRepository()->fetchCollectionsByRoleNumber(
+                    $role->getId(),
+                    $destColNumber
+                );
+                $this->destCol = $collections[0];
+            }
+        } else {
+            $this->destCol = Collection::get($destId);
+        }
+
         $this->updateDateModified = $input->getOption(self::OPTION_UPDATE_DATE_MODIFIED);
     }
 }

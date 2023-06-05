@@ -33,8 +33,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
-/**
- */
 class Application_Console_Collection_CopyCommand extends Application_Console_Collection_AbstractCollectionCommand
 {
     protected function configure()
@@ -54,10 +52,6 @@ EOT;
 
     /**
      * @return int
-     *
-     * TODO handle collection not found
-     * TODO handle no documents in collection
-     * TODO show info about documents already present in destination
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -66,27 +60,55 @@ EOT;
         $sourceCol = $this->sourceCol;
         $destCol   = $this->destCol;
 
+        if ($sourceCol === null) {
+            $output->writeln('Source collection needs to be specified.');
+            return 0;
+        }
+
+        if ($destCol === null) {
+            $output->writeln('Destination collection needs to be specified.');
+            return 0;
+        }
+
         $sourceId = $sourceCol->getId();
         $destId   = $destCol->getId();
 
         $sourceDocuments = $sourceCol->getDocumentIds();
-        $destDocuments   = $destCol->getDocumentIds();
 
         $sourceCount = count($sourceDocuments);
 
-        $output->writeln("Copy documents (${sourceCount}) from collection (ID = ${sourceId})");
+        if ($sourceCount === 0) {
+            $output->writeln("Collection (ID = ${sourceId}) does not contain documents.");
+            $output->writeln('');
+            $output->writeln('  "' . $sourceCol->getDisplayName() . '"');
+            $output->writeln('');
+            return 0;
+        }
+
+        $destDocuments = $destCol->getDocumentIds();
+        $moveDocuments = array_diff($sourceDocuments, $destDocuments);
+        $moveCount     = count($moveDocuments);
+
+        if ($moveCount === 0) {
+            $output->writeln("Destination collection already contains all the documents (${sourceCount}) of source collection.");
+            return 0;
+        }
+
+        $output->writeln("Copy documents (${moveCount}) from source collection (ID = ${sourceId})");
         $output->writeln('');
         $output->writeln('  "' . $sourceCol->getDisplayName() . '"');
         $output->writeln('');
-        $output->writeln("to collection (ID = ${destId})");
+        $output->writeln("to destination collection (ID = ${destId})");
         $output->writeln('');
         $output->writeln('  "' . $destCol->getDisplayName() . '"');
         $output->writeln('');
 
         if ($this->updateDateModified) {
             $output->writeln('NOTE: ServerDateModified of documents will be updated');
-            $output->writeln('');
+        } else {
+            $output->writeln('NOTE: ServerDateModified of documents will NOT be updated');
         }
+        $output->writeln('');
 
         $askHelper = $this->getHelper('question');
         $question  = new ConfirmationQuestion('Copy documents [Y|n]?', true);

@@ -40,8 +40,8 @@ class Application_Console_Collection_MoveCommand extends Application_Console_Col
 
         $help = <<<EOT
 The <fg=green>collection:move</> command can be used to move the documents assigned to 
-one collection to another collection. Documents that are already present in the destination
-collection, are not still removed from the source collection.  
+one collection to another collection. All documents are removed from the source collection,
+even those that were already present in the destination collection.  
 EOT;
 
         $this->setName('collection:move')
@@ -54,6 +54,61 @@ EOT;
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->processOptions($input);
+
+        $sourceCol = $this->sourceCol;
+        $destCol   = $this->destCol;
+
+        if ($sourceCol === null) {
+            $output->writeln('Source collection needs to be specified.');
+            return 0;
+        }
+
+        if ($destCol === null) {
+            $output->writeln('Destination collection needs to be specified.');
+            return 0;
+        }
+
+        $sourceId = $sourceCol->getId();
+        $destId   = $destCol->getId();
+
+        $sourceDocuments = $sourceCol->getDocumentIds();
+
+        $sourceCount = count($sourceDocuments);
+
+        if ($sourceCount === 0) {
+            $output->writeln("Collection (ID = ${sourceId}) does not contain documents.");
+            $output->writeln('');
+            $output->writeln('  "' . $sourceCol->getDisplayName() . '"');
+            $output->writeln('');
+            return 0;
+        }
+
+        $output->writeln("Move documents (${sourceCount}) from source collection (ID = ${sourceId})");
+        $output->writeln('');
+        $output->writeln('  "' . $sourceCol->getDisplayName() . '"');
+        $output->writeln('');
+        $output->writeln("to destination collection (ID = ${destId})");
+        $output->writeln('');
+        $output->writeln('  "' . $destCol->getDisplayName() . '"');
+        $output->writeln('');
+
+        if ($this->updateDateModified) {
+            $output->writeln('NOTE: ServerDateModified of documents will be updated');
+        } else {
+            $output->writeln('NOTE: ServerDateModified of documents will NOT be updated');
+        }
+        $output->writeln('');
+
+        $askHelper = $this->getHelper('question');
+        $question  = new ConfirmationQuestion('Move documents [Y|n]?', true);
+
+        if ($askHelper->ask($input, $output, $question)) {
+            $sourceCol->moveDocuments($destCol->getId(), $this->updateDateModified);
+        } else {
+            $output->writeln('Moving cancelled');
+        }
+
         return 0;
     }
 }
