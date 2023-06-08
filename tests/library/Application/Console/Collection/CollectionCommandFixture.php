@@ -34,7 +34,7 @@ use Opus\Common\CollectionRole;
 use Opus\Common\CollectionRoleInterface;
 use Opus\Common\Document;
 
-class Application_Console_Collection_CollectionCommandFixtures
+class Application_Console_Collection_CollectionCommandFixture
 {
     /** @var CollectionRoleInterface */
     protected $role;
@@ -55,10 +55,12 @@ class Application_Console_Collection_CollectionCommandFixtures
 
         $col1 = $root->addLastChild();
         $col1->setName('Col1');
+        $col1->setNumber('col1');
         $this->collections[] = $col1;
 
         $col2 = $root->addLastChild();
         $col2->setName('Col2');
+        $col2->setNumber('col2');
         $this->collections[] = $col2;
 
         $role->store();
@@ -86,6 +88,14 @@ class Application_Console_Collection_CollectionCommandFixtures
         }
 
         $this->role->delete();
+    }
+
+    /**
+     * @return CollectionRoleInterface
+     */
+    public function getRole()
+    {
+        return $this->role;
     }
 
     /**
