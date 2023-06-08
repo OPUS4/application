@@ -113,11 +113,17 @@ abstract class Application_Console_Collection_AbstractCollectionCommand extends 
             $srcColNumber = $input->getOption(self::OPTION_SRC_COL_NUMBER);
 
             if ($srcRoleName !== null && $srcColNumber !== null) {
-                $role            = CollectionRole::fetchByName($srcRoleName);
-                $collections     = Collection::getModelRepository()->fetchCollectionsByRoleNumber(
+                $role = CollectionRole::fetchByName($srcRoleName);
+                if ($role === null) {
+                    throw new Exception("CollectionRole with name '${srcRoleName}' not found.");
+                }
+                $collections = Collection::getModelRepository()->fetchCollectionsByRoleNumber(
                     $role->getId(),
                     $srcColNumber
                 );
+                if (count($collections) === 0) {
+                    throw new Exception("No collection found for role '${srcRoleName}' and number '$srcColNumber'.");
+                }
                 $this->sourceCol = $collections[0];
             }
         } else {
@@ -129,11 +135,17 @@ abstract class Application_Console_Collection_AbstractCollectionCommand extends 
             $destColNumber = $input->getOption(self::OPTION_DST_COL_NUMBER);
 
             if ($destRoleName !== null && $destColNumber !== null) {
-                $role          = CollectionRole::fetchByName($destRoleName);
-                $collections   = Collection::getModelRepository()->fetchCollectionsByRoleNumber(
+                $role = CollectionRole::fetchByName($destRoleName);
+                if ($role === null) {
+                    throw new Exception("CollectionRole with name '${destRoleName}' not found.");
+                }
+                $collections = Collection::getModelRepository()->fetchCollectionsByRoleNumber(
                     $role->getId(),
                     $destColNumber
                 );
+                if (count($collections) === 0) {
+                    throw new Exception("No collection found for role '${destRoleName}' and number '$destColNumber'.");
+                }
                 $this->destCol = $collections[0];
             }
         } else {
