@@ -29,18 +29,65 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
+
 class Application_Console_Collection_RemoveCommandTest extends ControllerTestCase
 {
     /** @var string[] */
     protected $additionalResources = ['database'];
 
+    /** @var Application_Console_Collection_CollectionCommandFixture */
+    protected $fixture;
+
+    /** @var Application_Console_Collection_MoveCommand */
+    protected $command;
+
+    /** @var CommandTester */
+    protected $tester;
+
     public function setUp(): void
     {
         parent::setUp();
 
-        // TODO put the staff holding into separate class?
-        // TODO create collection role
-        // TODO create two collections for copying
-        // TODO create documents that are copied
+        $this->fixture = new Application_Console_Collection_CollectionCommandFixture();
+        $this->fixture->setUp();
+
+        $app = new Application();
+
+        $this->command = new Application_Console_Collection_MoveCommand();
+        $this->command->setApplication($app);
+
+        $this->tester = new CommandTester($this->command);
+    }
+
+    public function tearDown(): void
+    {
+        $this->fixture->tearDown();
+        parent::tearDown();
+    }
+
+    public function testRemoveAllDocumentsUsingColId()
+    {
+    }
+
+    public function testRemoveAllDocumentsUsingRoleNameAndColNumber()
+    {
+    }
+
+    public function testRemoveAllDocumentsUsingRoleOaiNameAndColNumber()
+    {
+    }
+
+    public function testRemoveDocumentsUsingFilterCollection()
+    {
+    }
+
+    public function testDefaultDoesNotUpdateServerDateModified()
+    {
+    }
+
+    public function testOptionUpdateServerDateModified()
+    {
     }
 }
