@@ -201,7 +201,7 @@ class Application_Console_Collection_CopyCommandTest extends ControllerTestCase
         $this->assertEquals($documents, $copiedDocuments);
 
         $this->assertEquals(0, $dateModified1->compare($doc1->getServerDateModified()));
-        $this->assertEquals(0, $dateModified1->compare($doc2->getServerDateModified()));
+        $this->assertEquals(0, $dateModified2->compare($doc2->getServerDateModified()));
     }
 
     public function testCopyDocumentsUpdateDateModified()
@@ -244,6 +244,6 @@ class Application_Console_Collection_CopyCommandTest extends ControllerTestCase
         $this->assertEquals($documents, $copiedDocuments);
 
         $this->assertEquals(-1, $dateModified1->compare($doc1->getServerDateModified()));
-        $this->assertEquals(-1, $dateModified1->compare($doc2->getServerDateModified()));
+        $this->assertEquals(-1, $dateModified2->compare($doc2->getServerDateModified()));
     }
 }
