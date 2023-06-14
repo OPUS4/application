@@ -66,9 +66,9 @@ header-includes: |
   }
   \cohead{}
   \rohead{
-    \subsection{\hfill $repository-name$}
+    \subsection{\hfill $config-name$}
     \begin{minipage}[b]{0.30\textwidth}
-    \rightline{\small \url{$repository-url$}}
+    \rightline{\small \url{$config-url$}}
     \end{minipage}
   }
   \lofoot{
