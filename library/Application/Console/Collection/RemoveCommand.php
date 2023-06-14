@@ -184,7 +184,7 @@ EOT;
 
             if ($filterColNumber !== null && $filterRole !== null) {
                 $collections     = Collection::getModelRepository()->fetchCollectionsByRoleNumber(
-                    $role->getId(),
+                    $filterRole->getId(),
                     $filterColNumber
                 );
                 $this->filterCol = $collections[0];
@@ -220,13 +220,14 @@ EOT;
             return 0;
         }
 
-        $filterDocuments = null;
+        $removeDocuments = null;
 
         if ($filterCol === null) {
             $output->writeln("Remove all documents (${targetCount}) from collection (ID = ${targetId})");
             $output->writeln('');
             $output->writeln('  "' . $targetCol->getDisplayName() . '"');
             $output->writeln('');
+            $removeDocuments = $targetDocuments;
         } else {
             $filterId        = $filterCol->getId();
             $filterDocuments = $filterCol->getDocumentIds();
@@ -276,7 +277,7 @@ EOT;
         $question  = new ConfirmationQuestion('Remove documents [Y|n]?', true);
 
         if ($askHelper->ask($input, $output, $question)) {
-            $targetCol->removeDocuments($filterDocuments, $this->updateDateModified);
+            $targetCol->removeDocuments($removeDocuments, $this->updateDateModified);
         } else {
             $output->writeln('Removing cancelled');
         }

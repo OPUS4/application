@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Document;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -40,7 +41,7 @@ class Application_Console_Collection_RemoveCommandTest extends ControllerTestCas
     /** @var Application_Console_Collection_CollectionCommandFixture */
     protected $fixture;
 
-    /** @var Application_Console_Collection_MoveCommand */
+    /** @var Application_Console_Collection_RemoveCommand */
     protected $command;
 
     /** @var CommandTester */
@@ -55,7 +56,7 @@ class Application_Console_Collection_RemoveCommandTest extends ControllerTestCas
 
         $app = new Application();
 
-        $this->command = new Application_Console_Collection_MoveCommand();
+        $this->command = new Application_Console_Collection_RemoveCommand();
         $this->command->setApplication($app);
 
         $this->tester = new CommandTester($this->command);
@@ -69,25 +70,223 @@ class Application_Console_Collection_RemoveCommandTest extends ControllerTestCas
 
     public function testRemoveAllDocumentsUsingColId()
     {
+        $collections = $this->fixture->getCollections();
+
+        $col1 = $collections[0];
+
+        $this->assertCount(2, $col1->getDocumentIds());
+
+        $this->tester->execute([
+            '--no-interaction'                   => true,
+            '--' . $this->command::OPTION_COL_ID => $col1->getId(),
+        ], [
+            'interactive' => false,
+        ]);
+
+        $this->assertCount(0, $col1->getDocumentIds());
     }
 
     public function testRemoveAllDocumentsUsingRoleNameAndColNumber()
     {
+        $role        = $this->fixture->getRole();
+        $collections = $this->fixture->getCollections();
+
+        $col1 = $collections[0];
+
+        $this->assertCount(2, $col1->getDocumentIds());
+
+        $this->tester->execute([
+            '--no-interaction'                       => true,
+            '--' . $this->command::OPTION_ROLE_NAME  => $role->getName(),
+            '--' . $this->command::OPTION_COL_NUMBER => $col1->getNumber(),
+        ], [
+            'interactive' => false,
+        ]);
+
+        $this->assertCount(0, $col1->getDocumentIds());
     }
 
     public function testRemoveAllDocumentsUsingRoleOaiNameAndColNumber()
     {
+        $role        = $this->fixture->getRole();
+        $collections = $this->fixture->getCollections();
+
+        $col1 = $collections[0];
+
+        $this->assertCount(2, $col1->getDocumentIds());
+
+        $this->tester->execute([
+            '--no-interaction'                          => true,
+            '--' . $this->command::OPTION_ROLE_OAI_NAME => $role->getOaiName(),
+            '--' . $this->command::OPTION_COL_NUMBER    => $col1->getNumber(),
+        ], [
+            'interactive' => false,
+        ]);
+
+        $this->assertCount(0, $col1->getDocumentIds());
     }
 
     public function testRemoveDocumentsUsingFilterCollection()
     {
+        $collections = $this->fixture->getCollections();
+
+        $col1 = $collections[0];
+        $col2 = $collections[1];
+
+        $documentIds = $col1->getDocumentIds();
+
+        $this->assertCount(2, $documentIds);
+        $this->assertCount(0, $col2->getDocumentIds());
+
+        $doc1 = Document::get($documentIds[0]);
+        $doc2 = Document::get($documentIds[1]);
+
+        $doc1->addCollection($col2);
+        $doc1->store();
+
+        $this->tester->execute([
+            '--no-interaction'                          => true,
+            '--' . $this->command::OPTION_COL_ID        => $col1->getId(),
+            '--' . $this->command::OPTION_FILTER_COL_ID => $col2->getId(),
+        ], [
+            'interactive' => false,
+        ]);
+
+        $documentIds = $col1->getDocumentIds();
+        $this->assertCount(1, $col1->getDocumentIds());
+        $this->assertContains($doc2->getId(), $documentIds); // not removed, because not in 2nd collection (filter)
+    }
+
+    public function testRemoveDocumentsUsingFilterCollectionRoleNameAndColNumber()
+    {
+        $role        = $this->fixture->getRole();
+        $collections = $this->fixture->getCollections();
+
+        $col1 = $collections[0];
+        $col2 = $collections[1];
+
+        $documentIds = $col1->getDocumentIds();
+
+        $this->assertCount(2, $documentIds);
+        $this->assertCount(0, $col2->getDocumentIds());
+
+        $doc1 = Document::get($documentIds[0]);
+        $doc2 = Document::get($documentIds[1]);
+
+        $doc1->addCollection($col2);
+        $doc1->store();
+
+        $this->tester->execute([
+            '--no-interaction'                              => true,
+            '--' . $this->command::OPTION_COL_ID            => $col1->getId(),
+            '--' . $this->command::OPTION_FILTER_ROLE_NAME  => $role->getName(),
+            '--' . $this->command::OPTION_FILTER_COL_NUMBER => $col2->getNumber(),
+        ], [
+            'interactive' => false,
+        ]);
+
+        $documentIds = $col1->getDocumentIds();
+        $this->assertCount(1, $col1->getDocumentIds());
+        $this->assertContains($doc2->getId(), $documentIds); // not removed, because not in 2nd collection (filter)
+    }
+
+    public function testRemoveDocumentsUsingFilterCollectionRoleOaiNameAndColNumber()
+    {
+        $role        = $this->fixture->getRole();
+        $collections = $this->fixture->getCollections();
+
+        $col1 = $collections[0];
+        $col2 = $collections[1];
+
+        $documentIds = $col1->getDocumentIds();
+
+        $this->assertCount(2, $documentIds);
+        $this->assertCount(0, $col2->getDocumentIds());
+
+        $doc1 = Document::get($documentIds[0]);
+        $doc2 = Document::get($documentIds[1]);
+
+        $doc1->addCollection($col2);
+        $doc1->store();
+
+        $this->tester->execute([
+            '--no-interaction'                                 => true,
+            '--' . $this->command::OPTION_COL_ID               => $col1->getId(),
+            '--' . $this->command::OPTION_FILTER_ROLE_OAI_NAME => $role->getOaiName(),
+            '--' . $this->command::OPTION_FILTER_COL_NUMBER    => $col2->getNumber(),
+        ], [
+            'interactive' => false,
+        ]);
+
+        $documentIds = $col1->getDocumentIds();
+        $this->assertCount(1, $col1->getDocumentIds());
+        $this->assertContains($doc2->getId(), $documentIds); // not removed, because not in 2nd collection (filter)
     }
 
     public function testDefaultDoesNotUpdateServerDateModified()
     {
+        $collections = $this->fixture->getCollections();
+
+        $col1 = $collections[0];
+
+        $documentIds = $col1->getDocumentIds();
+
+        $doc1 = Document::get($documentIds[0]);
+        $doc2 = Document::get($documentIds[1]);
+
+        $lastModified1 = $doc1->getServerDateModified();
+        $lastModified2 = $doc2->getServerDateModified();
+
+        $this->assertCount(2, $documentIds);
+
+        sleep(2);
+
+        $this->tester->execute([
+            '--no-interaction'                   => true,
+            '--' . $this->command::OPTION_COL_ID => $col1->getId(),
+        ], [
+            'interactive' => false,
+        ]);
+
+        $doc1 = Document::get($documentIds[0]);
+        $doc2 = Document::get($documentIds[1]);
+
+        $this->assertCount(0, $col1->getDocumentIds());
+        $this->assertEquals(0, $lastModified1->compare($doc1->getServerDateModified()));
+        $this->assertEquals(0, $lastModified2->compare($doc2->getServerDateModified()));
     }
 
     public function testOptionUpdateServerDateModified()
     {
+        $collections = $this->fixture->getCollections();
+
+        $col1 = $collections[0];
+
+        $documentIds = $col1->getDocumentIds();
+
+        $doc1 = Document::get($documentIds[0]);
+        $doc2 = Document::get($documentIds[1]);
+
+        $lastModified1 = $doc1->getServerDateModified();
+        $lastModified2 = $doc2->getServerDateModified();
+
+        $this->assertCount(2, $documentIds);
+
+        sleep(2);
+
+        $this->tester->execute([
+            '--no-interaction'                                 => true,
+            '--' . $this->command::OPTION_COL_ID               => $col1->getId(),
+            '--' . $this->command::OPTION_UPDATE_DATE_MODIFIED => true,
+        ], [
+            'interactive' => false,
+        ]);
+
+        $doc1 = Document::get($documentIds[0]);
+        $doc2 = Document::get($documentIds[1]);
+
+        $this->assertCount(0, $col1->getDocumentIds());
+        $this->assertEquals(-1, $lastModified1->compare($doc1->getServerDateModified()));
+        $this->assertEquals(-1, $lastModified2->compare($doc2->getServerDateModified()));
     }
 }
