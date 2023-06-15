@@ -23,9 +23,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -218,7 +216,7 @@ table.result-data {
     width: 28%;
 }
 .result-data .data-marker{
-/*      white-space: nowrap;    */
+    /* white-space: nowrap; */
     font-style: normal;
 }
 .frontdoor div#abstract ul {
@@ -324,14 +322,14 @@ ul.paginationControl .pagination-last {
 }
 
 .frontdoor .frontdoor_pagination {
-     background-color:#F3F6F8;
-     overflow:hidden;
-     margin-bottom:1em;
+    background-color: #F3F6F8;
+    overflow: hidden;
+    margin-bottom: 1em;
 }
 
 .frontdoor .frontdoor_pagination #pagination-link-hitlist {
-     display:inline-block;
-     margin: 0.8em 0.7em;
+    display: inline-block;
+    margin: 0.8em 0.7em;
 }
 
 .frontdoor .frontdoor_pagination ul.paginationControl {
@@ -351,12 +349,12 @@ ul.paginationControl .pagination-last {
 .frontdoor .frontdoor_pagination #pagination-next a,
 .frontdoor .frontdoor_pagination #pagination-next div
 {
-  display: block;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  width: 12px;
-  height: 13px;
-  margin-left: 9px;
+    display: block;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 12px;
+    height: 13px;
+    margin-left: 9px;
 }
 
 .frontdoor .frontdoor_pagination #pagination-previous a {
@@ -380,12 +378,12 @@ ul.paginationControl .pagination-last {
 }
 
 .frontdoor .frontdoor_pagination #pagination-previous {
-     border:none;
+    border: none;
 }
 
 .frontdoor .frontdoor_pagination #pagination-current-hit,
 .frontdoor .frontdoor_pagination #pagination-num-hits {
-     font-weight: bold;
+    font-weight: bold;
 }
 
 /* form styles
@@ -802,7 +800,7 @@ body > #top-header{
 .exceptionMessage,
 .stacktrace pre,
 .request pre {
-        font: 1em "Courier New", Courier, monospace;
+    font: 1em "Courier New", Courier, monospace;
 }
 
 .opus .messages .notice{
@@ -1112,17 +1110,17 @@ body > #top-header{
     background-image: url(../img/theme/icon-author.gif);
 }
 .results_seriesnumber + .results_title {
-        padding-right: 75px!important;
+    padding-right: 75px!important;
 }
 .results_title .missing_title {
     color: #ff5a5a;
 }
 .result_box .results_seriesnumber {
-        float: right;
-        text-align: right;
-        min-width: 50px;
-        padding: 4px 8px 0 12px;
-        color: black;
+    float: right;
+    text-align: right;
+    min-width: 50px;
+    padding: 4px 8px 0 12px;
+    color: black;
 }
 .result_box .abstractText {
     padding: 3px 6px;
@@ -1205,7 +1203,7 @@ body > #top-header{
 }
 .form-submit{
     background: transparent url(../img/theme/bg_button_r.gif) no-repeat right center;
-        border: none;
+    border: none;
     color: white;
     font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
@@ -1222,7 +1220,7 @@ body > #top-header{
 .solrsearch_advanced .form-submit,
 .solrsearch_search #reset-form .form-submit,
 .solrsearch_search .opus_form .form-submit{
-        -moz-border-radius: 6px;
+    -moz-border-radius: 6px;
     border-radius: 6px;
 }
 #edit-submit-advanced-search-wrapper{
