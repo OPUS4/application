@@ -25,21 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * This file is not part of the main OPUS 4 distribution!
- *
- * It is currently used in the matheon module. The tarball
- * creation script prepare_directories.sh ignores this file and
- * does not add it to the tarball.
- */
+use Opus\Common\LoggingTrait;
+use Opus\Job\MailNotification;
+use Opus\Job\Runner;
 
-define('APPLICATION_ENV', 'production');
+class Application_Job_SendReviewRequestJob implements Application_Job_JobInterface
+{
+    use LoggingTrait;
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+    public function run()
+    {
+        $jobrunner = new Runner();
+        $jobrunner->setLogger($this->getLogger());
 
-$job = new Application_Job_SendReviewRequestJob();
-$job->run();
+        // no waiting between jobs
+        $jobrunner->setDelay(0);
+
+        // set a limit of 100 index jobs per run
+        $jobrunner->setLimit(100);
+
+        $mailWorker = new MailNotification();
+        $mailWorker->setLogger($this->getLogger());
+
+        $jobrunner->registerWorker($mailWorker);
+
+        $jobrunner->run();
+    }
+}

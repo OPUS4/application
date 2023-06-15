@@ -25,21 +25,20 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * This file is not part of the main OPUS 4 distribution!
- *
- * It is currently used in the matheon module. The tarball
- * creation script prepare_directories.sh ignores this file and
- * does not add it to the tarball.
- */
-
-define('APPLICATION_ENV', 'production');
-
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
-
-$job = new Application_Job_SendReviewRequestJob();
-$job->run();
+ /**
+  * Basic process interface as required to define
+  * jobs for background processes
+  */
+interface Application_Job_JobInterface
+{
+    /**
+     * Perform job.
+     *
+     * @return mixed
+     */
+    public function run();
+}

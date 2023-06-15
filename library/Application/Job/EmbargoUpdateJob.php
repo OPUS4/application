@@ -25,21 +25,48 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * This file is not part of the main OPUS 4 distribution!
+use Opus\Common\Date;
+use Opus\Common\Document;
+use Opus\Common\Repository;
+
+/*
+ * This cron job must be used if embargo dates are used in repository.
  *
- * It is currently used in the matheon module. The tarball
- * creation script prepare_directories.sh ignores this file and
- * does not add it to the tarball.
+ * This script finds documents with expired embargo date that have to been
+ * updated after the expiration (ServerDateModified < EmbargoDate) and sets
+ * ServerDateModified to the current time.
+ *
+ * The expiration of an embargo date does not change the document. Until the
+ * date is expired access to the files of the document is blocked. After the
+ * expiration access to the files is possible. However the document will not
+ * be harvested again automatically. In order for the document to be included
+ * in the next harvesting ServerDateModified needs to be updated.
+ *
+ * TODO document policies of EmbargoDate - is it '<' or '<=' ?
  */
+class Application_Job_EmbargoUpdateJob implements Application_Job_JobInterface
+{
+    public function run()
+    {
+        $finder = Repository::getInstance()->getDocumentFinder();
 
-define('APPLICATION_ENV', 'production');
+        // Find documents with expired EmbargoDate and ServerDateModified < EmbargoDate
+        $finder->setEmbargoDateBefore(date('Y-m-d', time()));
+        $finder->setNotModifiedAfterEmbargoDate();
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+        $foundIds = $finder->getIds();
 
-$job = new Application_Job_SendReviewRequestJob();
-$job->run();
+        // Update ServerDateModified for all found documents
+
+        $now = new Date();
+        $now->setNow();
+
+        $documents = Repository::getInstance()->getModelRepository(Document::class);
+
+        $documents->setServerDateModifiedForDocuments($now, $foundIds);
+    }
+}

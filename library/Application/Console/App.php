@@ -58,6 +58,9 @@ class Application_Console_App extends Application
         $this->add(new BibtexListCommand());
         $this->add(new Application_Console_Debug_DocumentXmlCommand());
         $this->add(new CoverGenerateCommand());
+        $this->add(new Application_Console_Collection_CopyCommand());
+        $this->add(new Application_Console_Collection_MoveCommand());
+        $this->add(new Application_Console_Collection_RemoveCommand());
 
         $this->setDefaultCommand('list');
     }
