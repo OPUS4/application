@@ -4,15 +4,15 @@
 }
 ul#primary-nav #primary-nav-administration.active a,
 ul#primary-nav #primary-nav-administration.active a:hover {
-	padding: 0;
+    padding: 0;
 }
 ul#primary-nav #primary-nav-administration.active * {
-	color: var(--dark);
+    color: var(--dark);
   background-color: transparent;
 }
 ul#primary-nav #primary-nav-administration.active a span {
-	padding-left: 0;
-	padding-right: 0;
-	background: transparent;
-	filter:none;
+    padding-left: 0;
+    padding-right: 0;
+    background: transparent;
+    filter:none;
 }
