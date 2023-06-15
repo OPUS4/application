@@ -1,0 +1,175 @@
+/*!
+ * Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com
+ * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
+ * Copyright 2023 Fonticons, Inc.
+ */
+:root, :host {
+  --fa-style-family-classic: 'Font Awesome 6 Free';
+  --fa-style-family-brands: 'Font Awesome 6 Brands';
+  --fa-font-solid: normal 900 1em/1 'Font Awesome 6 Free';
+  --fa-font-regular: normal 400 1em/1 'Font Awesome 6 Free';
+  --fa-font-brands: normal 400 1em/1 'Font Awesome 6 Brands';
+}
+
+
+@font-face {
+  font-family: 'Font Awesome 6 Free';
+  font-style: normal;
+  font-weight: 900;
+  font-display: block;
+  src: url("../../fontawesome/webfonts/fa-solid-900.woff2") format("woff2"), url("../../fontawesome/webfonts/fa-solid-900.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Font Awesome 6 Free';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../../fontawesome/webfonts/fa-regular-400.woff2") format("woff2"), url("../../fontawesome/webfonts/fa-regular-400.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: 'Font Awesome 6 Brands';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url("../../fontawesome/webfonts/fa-brands-400.woff2") format("woff2"), url("../../fontawesome/webfonts/fa-brands-400.ttf") format("truetype");
+}
+
+.fab,
+.fa-brands,
+#additional-services a[href*="twitter.com"]::before {
+  font-family: 'Font Awesome 6 Brands';
+}
+
+.fab,
+.far,
+.fa-brands,
+.fa-regular,
+.fulltext-logo.fulltext::before,
+#additional-services a[href*="twitter.com"]::before {
+  font-weight: 400;
+}
+
+.fas,
+.fa-solid,
+#login-bar a::before,
+#primary-nav>li>a::before,
+#content>.wrapper>h2::before,
+#fieldset-search .form-submit-wrapper::before,
+#fieldset-search .footer-link>a.rss::before,
+#facets>h3::before,
+.removeFacetLink>a::after,
+#search_options>p.label::before,
+li.sorting_option a::after,
+li.sorting_option span::after,
+button.dropdown-button::after,
+a[class*="pagination-"]::after,
+.frontdoor_pagination li[id*="pagination-"] a::after,
+#pagination-link-hitlist::before,
+.results_author::before,
+.frontdoor #author::before,
+.abstract-toggle,
+fieldset .description.hint::before,
+label[for="fileupload"]::before,
+.form-errors::before,
+a.rss::before,
+ul.nav.browsing>li>a[href*="solrsearch"]::before,
+.section.answers dt::before,
+.section.answers dd::before,
+div#additional-services a[href*="mail/toauthor"]::before,
+div#additional-services a[href*="javascript:void"]::before,
+div.accessible-file::before,
+div.protected-file::before {
+  font-weight: 900;
+}
+
+.fa {
+  font-family: var(--fa-style-family, "Font Awesome 6 Free");
+  font-weight: var(--fa-style, 900);
+}
+
+.fa,
+.fa-classic,
+.fa-sharp,
+.fas,
+.fa-solid,
+.far,
+.fa-regular,
+.fab,
+.fa-brands,
+#login-bar a::before,
+#primary-nav>li>a::before,
+#content>.wrapper>h2::before,
+#fieldset-search .form-submit-wrapper::before,
+#fieldset-search .footer-link>a.rss::before,
+#facets>h3::before,
+.removeFacetLink>a::after,
+#search_options>p.label::before,
+li.sorting_option a::after,
+li.sorting_option span::after,
+button.dropdown-button::after,
+a[class*="pagination-"]::after,
+.frontdoor_pagination li[id*="pagination-"] a::after,
+#pagination-link-hitlist::before,
+.results_author::before,
+.frontdoor #author::before,
+.fulltext-logo.fulltext::before,
+.abstract-toggle,
+fieldset .description.hint::before,
+label[for="fileupload"]::before,
+.form-errors::before,
+a.rss::before,
+ul.nav.browsing>li>a[href*="solrsearch"]::before,
+.section.answers dt::before,
+.section.answers dd::before,
+#additional-services a[href*="twitter.com"]::before,
+div#additional-services a[href*="mail/toauthor"]::before,
+div#additional-services a[href*="javascript:void"]::before,
+div.accessible-file::before,
+div.protected-file::before {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: var(--fa-display, inline-block);
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+}
+
+.fas,
+.fa-classic,
+.fa-solid,
+.far,
+.fa-regular,
+#login-bar a::before,
+#primary-nav>li>a::before,
+#content>.wrapper>h2::before,
+#fieldset-search .form-submit-wrapper::before,
+#fieldset-search .footer-link>a.rss::before,
+#facets>h3::before,
+.removeFacetLink>a::after,
+#search_options>p.label::before,
+li.sorting_option a::after,
+li.sorting_option span::after,
+button.dropdown-button::after,
+a[class*="pagination-"]::after,
+.frontdoor_pagination li[id*="pagination-"] a::after,
+#pagination-link-hitlist::before,
+.results_author::before,
+.frontdoor #author::before,
+.fulltext-logo.fulltext::before,
+.abstract-toggle,
+fieldset .description.hint::before,
+label[for="fileupload"]::before,
+.form-errors::before,
+a.rss::before,
+ul.nav.browsing>li>a[href*="solrsearch"]::before,
+.section.answers dt::before,
+.section.answers dd::before,
+div#additional-services a[href*="mail/toauthor"]::before,
+div#additional-services a[href*="javascript:void"]::before,
+div.accessible-file::before,
+div.protected-file::before {
+  font-family: 'Font Awesome 6 Free';
+}

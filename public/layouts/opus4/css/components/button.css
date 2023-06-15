@@ -1,0 +1,109 @@
+li.sorting_option a,
+li.sorting_option span,
+input[type="submit"],
+label[for="fileupload"],
+div.services a.export,
+div.facetValueExtender a {
+  font: 600 0.875rem var(--font-fam-xstyle);
+  text-decoration: none;
+  border-radius: 50px;
+}
+
+input[type="submit"],
+label[for="fileupload"],
+div.services a.export {
+  padding: 0.3rem 1rem;
+}
+
+li.sorting_option a,
+li.sorting_option span,
+div.facetValueExtender a {
+  padding: 0.2rem 0.8rem;
+}
+
+.publish .form-item label[for="fileupload"] {
+  min-width: auto;
+  cursor: pointer;
+}
+
+label[for="fileupload"]::before {
+  content: "\f093";
+  padding-right: 0.5rem;
+}
+
+#fileupload {
+  align-self: center;
+  line-height: normal;
+  font-family: var(--font-fam-default);
+  font-size: 0.875rem;
+}
+
+input[type="submit"] {
+  border: none;
+}
+
+li.sorting_option a::after,
+li.sorting_option span::after {
+  padding-left: 0.3rem;
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+li.sorting_option.sort_asc a::after,
+li.sorting_option.sort_asc span::after {
+  content: "\f0d8";
+}
+
+li.sorting_option.sort_desc a::after,
+li.sorting_option.sort_desc span::after {
+  content: "\f0d7";
+}
+
+div.dropdown {
+  position: relative;
+}
+
+div.dropdown ul,
+#content div.dropdown ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  right: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+div.option-links.dropdown ul {
+  text-align: right;
+}
+
+div.dropdown ul>li {
+  padding: 0;
+}
+
+div.dropdown ul>li>a {
+  display: block;
+  padding: 0.5rem 0.8rem;
+  text-decoration: none;
+}
+
+div.dropdown:hover>ul,
+#content div.dropdown:hover>ul {
+  height: auto;
+  z-index: 100;
+}
+
+div.dropdown button.dropdown-button {
+  border: none;
+  background-color: transparent;
+  font-size: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+}
+
+button.dropdown-button::after {
+  content: "\f0d7";
+  font-size: 1.125rem;
+  padding-left: 0.5rem;
+}

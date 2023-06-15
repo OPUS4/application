@@ -1,0 +1,72 @@
+#container {
+  padding: 0 var(--page--padding);
+}
+
+#top-header,
+#header {
+  margin-left: calc(-1*var(--page--padding));
+  margin-right: calc(-1*var(--page--padding));
+  padding-left: var(--page--padding);
+  padding-right: var(--page--padding);
+
+}
+
+#content>.wrapper>div.intro {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem calc(2 * var(--page--padding));
+}
+
+#content>.wrapper>.intro>.col-left {
+  flex: 3 1 10%;
+}
+
+#content>.wrapper>.intro>.col-right {
+  flex: 1 1 10%;
+}
+
+#content>.wrapper>.intro>div[class*="col"] {
+  min-width: 20rem;
+}
+
+#content>.wrapper>div.intro,
+#content>.wrapper>div.content,
+#content>.wrapper>div.form-wrapper,
+#content>.wrapper>div.frontdoor,
+#content[class*="auth_login"]>.wrapper>form,
+#content>.wrapper>h2+div.form-hint {
+  margin-left: calc(-1*var(--page--padding));
+  margin-right: calc(-1*var(--page--padding));
+  max-width: var(--content--max-width);
+}
+
+#content>.wrapper>p,
+#content>.wrapper>div.invalidsearchterm {
+  max-width: var(--content--max-width);
+}
+
+@media screen and (min-width: 768px) {
+
+  #top-header>.wrapper,
+  #header>.wrapper,
+  #content>.wrapper,
+  #page-footer>.wrapper {
+    margin: auto;
+    max-width: 80%;
+  }
+
+  #content>.wrapper>div.intro,
+  #content>.wrapper>div.content,
+  #content>.wrapper>div.form-wrapper,
+  #content>.wrapper>p,
+  #content>.wrapper>div.invalidsearchterm,
+  #content>.wrapper>div.frontdoor,
+  #content[class*="auth_login"]>.wrapper>h2+form,
+  #content>.wrapper>h2+div.form-hint {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+}

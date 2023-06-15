@@ -1,0 +1,367 @@
+#content[class*="solrsearch solrsearch"]>.wrapper>h2::before,
+#content[class*="solrsearch_search"]>.wrapper>h2::before {
+  content: "\f002";
+}
+
+#fieldset-search {
+  margin: 3rem auto;
+}
+
+#fieldset-search>fieldset {
+  display: flex;
+  align-items: center;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+#fieldset-search #edit-search-wrapper {
+  flex: 1 1 auto;
+}
+
+#fieldset-search #edit-search {
+  width: 100%;
+  border: 2px solid;
+  border-radius: 50px;
+  padding: 1rem 3.75rem 1rem 1rem;
+  line-height: normal;
+  font-weight: 600;
+}
+
+#fieldset-search .form-submit-wrapper {
+  position: relative;
+  display: block;
+  width: 4.75rem;
+  height: 50px;
+}
+
+#fieldset-search .form-submit-wrapper::before {
+  content: "\f002";
+  font-size: 1.625rem;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  line-height: 50px;
+  text-align: center;
+}
+
+#fieldset-search input.form-submit {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  color: transparent;
+  border: none;
+}
+
+#fieldset-search .footer-link {
+  margin: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+}
+
+#fieldset-search .footer-link>a {
+  display: block;
+}
+
+#fieldset-search .footer-link>a.link {
+  font-weight: 600;
+}
+
+/* search all */
+.solrsearch_search:not(.latest)>.wrapper>.content:nth-last-of-type(1) {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem calc(1.5 * var(--page--padding));
+}
+
+.solrsearch_search:not(.latest)>.wrapper>.content>#facets {
+  flex: 1 1 10%;
+  min-width: 10rem;
+}
+
+.solrsearch_search:not(.latest)>.wrapper>.content>#searchbar {
+  flex: 6 1 10%;
+  min-width: 20rem;
+}
+
+#facets>h3,
+#search_options>p.label {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+}
+
+#facets>h3::before,
+#search_options>p.label::before {
+  font-size: 1rem;
+  padding-right: 0.4rem;
+}
+
+#facets>h3::before {
+  content: "\f0b0";
+}
+
+#search_options>p.label::before {
+  content: "\f0dc";
+}
+
+.results_facets .facet {
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.8rem 0;
+}
+
+.results_facets .facet:nth-last-child(n+2) {
+  border-bottom: 1px solid black;
+}
+
+.facet h4 {
+  text-transform: uppercase;
+  font-style: italic;
+  line-height: normal;
+  margin: 0 0 0.4rem;
+}
+
+#content>.wrapper>div.content .facet ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#content>.wrapper>div.content .facet li {
+  padding-left: 0;
+}
+
+li.activeFacet {
+  position: relative;
+  padding-right: 1.65rem;
+}
+
+#content>.wrapper>div.content li.activeFacet .removeFacetLink>a {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  line-height: 1.5rem;
+  color: transparent;
+  text-align: right;
+}
+
+.removeFacetLink>a::after {
+  content: "\f057";
+  font-size: var(--round-button--size);
+}
+
+div.facetValueExtender {
+  margin: 0.5rem 0;
+}
+
+#searchbar {
+  display: flex;
+  flex-direction: column;
+}
+
+#search_results {
+  margin: 0.4rem 0;
+}
+
+#search_options {
+  order: -1;
+}
+
+#content #search_options ul.sorting_options {
+  margin: 0.8rem 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+#content #search_options ul.sorting_options li {
+  padding: 0;
+}
+
+#searchbar .breadcrumb_results {
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.8rem 0;
+}
+
+.latest .breadcrumb_results .option-links.dropdown {
+  margin-left: auto;
+}
+
+#search_results+.breadcrumb_results {
+  justify-content: center;
+}
+
+.breadcrumb_results h3 {
+  font-size: inherit;
+  margin: 0;
+}
+
+.result_box {
+  padding: 0.5rem calc(0.5*var(--page--padding));
+  position: relative;
+  min-height: 2.5em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.result_box .fulltext::before {
+  content: "\f15c";
+  font-size: 1.375rem;
+  position: absolute;
+  top: 0.8em;
+  right: calc(1.2rem + var(--page--padding));
+}
+
+.result_box .results_seriesnumber {
+  font-size: 1rem;
+  position: absolute;
+  top: 1.1em;
+  right: calc(3.2rem + var(--page--padding));
+}
+
+.result_box .results_title,
+.result_box .results_author {
+  padding-right: 4.5rem;
+}
+
+.result_box .results_seriesnumber~.results_title,
+.result_box .results_seriesnumber~.results_author {
+  padding-right: 7.5rem;
+}
+
+.result_box .results_title {
+  font-size: 1rem;
+  word-break: break-all;
+}
+
+.result_box .results_title a {
+  font-weight: 600;
+}
+
+.result_box .results_author {
+  font-size: 0.875rem;
+}
+
+.results_author::before {
+  content: "\40";
+}
+
+.abstractText {
+  font-size: 0.875rem;
+  padding: 0.5rem 0 0;
+  margin-top: 0.5rem;
+  border-top: 1px dashed black;
+}
+
+.abstractText::before {
+  content: "Abstract: ";
+  font-weight: 600;
+}
+
+.result_box .abstract-toggle {
+  position: absolute;
+  top: 0.8em;
+  right: calc(0.5 * var(--page--padding));
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.result_box .abstract-toggle::after {
+  content: "\f0d7";
+  font-size: 1.125rem;
+  line-height: 2rem;
+  width: 1.5rem;
+  display: block;
+  text-align: center;
+}
+
+.result_box .abstract-toggle.expanded::after {
+  content: "\f0d8";
+}
+
+[id*="edit-submit"] {
+  padding-right: 0.5rem;
+}
+
+[id*="edit-submit"],
+[id*="edit-reset"] {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.search-form-table {
+  width: 100%;
+}
+
+.search-form-table tbody>tr {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 0.5rem 0;
+}
+
+.search-form-table tbody>tr>td:first-child,
+.search-form-table tbody>tr>th:first-child {
+  flex: 1 1 100%;
+  line-height: normal;
+}
+
+.search-form-table tbody>tr>td:nth-child(2) {
+  flex: 1 1 5%;
+  line-height: normal;
+  min-width: fit-content;
+}
+
+.search-form-table tbody>tr>td:last-child {
+  flex: 1 1 auto;
+}
+
+.search-form-table input[type="text"],
+.search-form-table select {
+  width: 100%;
+}
+
+@media screen and (min-width: 640px) {
+
+  .solrsearch_advanced .opus_form,
+  .solrsearch_search .opus_form {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .search-form-table {
+    flex: 1 1 100%;
+  }
+
+  [id*="edit-submit"] {
+    margin-left: auto;
+  }
+
+}
+
+@media screen and (min-width: 1024px) {
+  #fieldset-search {
+    max-width: 40rem;
+  }
+
+  .search-form-table tbody>tr>td:first-child,
+  .search-form-table tbody>tr>th:first-child {
+    flex: 1 1 5%;
+  }
+}

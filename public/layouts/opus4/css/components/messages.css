@@ -1,0 +1,41 @@
+/* messages styles */
+#content>.wrapper div.form-hint,
+#content>.wrapper .messages>.notice {
+  padding: 1rem var(--page--padding);
+  margin: 1.5rem 0;
+}
+
+#content>div.wrapper div.form-errors ul,
+ul.errors {
+  padding: 0;
+  margin: 0 0 0.5rem;
+  list-style: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+#content>div.wrapper div.form-errors ul li,
+ul.errors li {
+  padding-left: 0;
+}
+
+fieldset .form-errors {
+  font-size: 0.875rem;
+}
+
+fieldset .form-errors {
+  position: relative;
+  padding-left: 1.75rem;
+}
+
+.left-labels .form-errors {
+  flex: 1 1 100%;
+}
+
+fieldset .form-errors::before {
+  content: "\f071";
+  font-size: var(--round-button--size);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
