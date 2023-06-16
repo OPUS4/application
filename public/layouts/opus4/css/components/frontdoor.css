@@ -21,13 +21,18 @@ h3.titlemain {
 }
 
 .frontdoor #author>p {
-  display: inline-block;
-  margin: 0 0 0 0.3rem;
+  margin: 0;
   font-weight: 600;
+  position: relative;
+  padding-left: 1.3em;
 }
 
-.frontdoor #author::before {
+.frontdoor #author>p:first-child:not(:empty)::before {
   content: "\40";
+  position: absolute;
+  left: 0;
+  top: 0;
+  line-height: inherit;
 }
 
 div#abstract {
