@@ -30,7 +30,6 @@
  */
 
 use Opus\Common\Config;
-use Opus\Common\Log;
 use Opus\Common\LoggingTrait;
 
 /**
