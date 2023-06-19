@@ -3,6 +3,23 @@
   content: "\f002";
 }
 
+div.wrapper div.content #breadcrumb ul{
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+div.wrapper div.content #breadcrumb ul li{
+  padding: 0;
+  font: 600 0.875rem var(--font-fam-xstyle);
+}
+div.wrapper div.content #breadcrumb ul li:nth-last-child(n+2)::after{
+  content: "\f105";
+  padding: 0 0.5rem;
+  font-size: 0.875em;
+}
+
 #fieldset-search {
   margin: 3rem auto;
 }
