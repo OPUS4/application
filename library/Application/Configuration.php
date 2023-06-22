@@ -268,7 +268,7 @@ class Application_Configuration extends Config
      */
     public function getValue($key)
     {
-        return parent::getValueFromConfig($this->getConfig(), $key);
+        return $this->getValueFromConfig($this->getConfig(), $key);
     }
 
     /**
