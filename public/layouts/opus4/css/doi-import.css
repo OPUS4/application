@@ -1,26 +1,13 @@
 /*
-to ensure compatibility with later OPUS 4 releases we recommend to insert custom layout changes here
+CSS settings for doi import. Could be merged into opus.css
 */
 
-
-
-#unsichtbares_formularfeld {
+#invisible_formfield {
     display: none;
 }
 
-#DoiButton {
-    background-color: #26517D; /* Green */
-    border: 2px solid black;
-    color: white;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 15px;
-    border-radius: 4px;
-}
-
-#TitleMain_1, #TitleSub_1, #TitleAbstract_1, #TitleParent_1, #IdentifierUrl, #PublisherName, #EnrichmentConferenceTitle, #EnrichmentConferencePlace, #Enrichmentlocal_crossrefLicence {
+/* These fields are too small in standard layout. Could be merged into opus.css imho */
+#TitleMain_1, #TitleSub_1, #TitleAbstract_1, #TitleParent_1, #IdentifierUrl, #PublisherName, #EnrichmentConferenceTitle, #EnrichmentConferencePlace, #Enrichmentopus_crossrefLicence {
     width: 600px !important;
 }
 
