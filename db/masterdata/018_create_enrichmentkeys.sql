@@ -11,7 +11,7 @@ INSERT INTO `enrichmentkeys` (`name`) VALUES
 ('Relation'),
 ('Audience'),
 ('Coverage'),
-('opus_import_data'),
+('opus_doi_json'),
 ('opus_crossrefDocumentType'),
 ('opus_crossrefLicence'),
 ('opus_doiImportPopulated'),
@@ -21,7 +21,7 @@ INSERT INTO `enrichmentkeys` (`name`) VALUES
 ('ConferenceTitle');
 
 
--- 'opus_import_data': Enthält nach dem DOI-Import die kompletten Metadaten des Dokuments von Crossref. Wird gebraucht, wenn die Page im Browser neu geladen wird (nicht user-relevant).
+-- 'opus_doi_json': Enthält nach dem DOI-Import die kompletten Metadaten des Dokuments von Crossref. Wird gebraucht, wenn die Page im Browser neu geladen wird (nicht user-relevant).
 
 -- 'opus_crossrefDocumentType': Enthält nach dem Import den Dokumenttyp, der in Crossref angegeben ist (kann user-relevant sein, zwecks Nachvollziehbarkeit des Mappings).
 
