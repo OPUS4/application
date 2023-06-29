@@ -42,7 +42,7 @@ class Application_Console_Console_ExecCommand extends Command
     /**
      * Argument for the PHP code snippet file(s) to be executed
      */
-    public const ARGUMENT_SNIPPET_FILES = 'SnippetFiles';
+    public const ARGUMENT_SNIPPET_FILES = 'SnippetFile';
 
     protected function configure()
     {
@@ -58,7 +58,7 @@ EOT;
             ->addArgument(
                 self::ARGUMENT_SNIPPET_FILES,
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-                'Snippet file(s) to be executed'
+                'Snippet file path (or multiple space-separated paths)'
             );
     }
 
@@ -71,8 +71,27 @@ EOT;
     {
         $snippetFiles = $input->getArgument(self::ARGUMENT_SNIPPET_FILES);
 
-        // TODO evaluate & execute snippet files
+        $successfulIncludes = 0;
 
-        return Command::SUCCESS;
+        foreach ($snippetFiles as $snippetFile) {
+            if (false === is_readable($snippetFile)) {
+                $output->writeln('# snippet ' . $snippetFile . ' does not exist');
+                continue;
+            }
+
+            try {
+                $output->writeln('# including snippet ' . $snippetFile);
+                include_once $snippetFile;
+                $successfulIncludes++;
+            } catch (Exception $e) {
+                $output->writeln('# failed including snippet ' . $snippetFile . ':');
+                $output->writeln('Caught exception ' . get_class($e) . ': ' . $e->getMessage());
+                $output->writeln($e->getTraceAsString());
+
+                return Command::FAILURE;
+            }
+        }
+
+        return $successfulIncludes > 0 ? Command::SUCCESS : Command::FAILURE;
     }
 }
