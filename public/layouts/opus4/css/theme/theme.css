@@ -204,7 +204,8 @@ div#abstract>ul>li:nth-child(n+2),
   border-top-color: var(--dark);
 }
 
-.frontdoordata caption {
+.frontdoordata caption,
+.publish fieldset > .form-multiple.even {
   background-color: var(--light);
 }
 
