@@ -67,8 +67,24 @@ form label {
   margin: 1rem 0;
 }
 
+.publish fieldset > .form-multiple.even{
+  margin: 0 calc(-0.75 * var(--page--padding));
+  padding: 0 calc(0.75 * var(--page--padding));
+  border-style: solid;
+  border-color: transparent;
+  border-width: 1px 0;
+}
+
 .button-wrapper {
   text-align: right;
+  margin: 1rem 0;
+}
+
+.button-wrapper.add-delete-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 #rights {
