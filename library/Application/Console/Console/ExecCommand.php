@@ -25,42 +25,54 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Bibtex\Import\Console\BibtexImportCommand;
-use Opus\Bibtex\Import\Console\BibtexListCommand;
-use Opus\Pdf\Console\CoverGenerateCommand;
-use Opus\Search\Console\ExtractCommand;
-use Opus\Search\Console\ExtractFileCommand;
-use Opus\Search\Console\IndexCommand;
-use Opus\Search\Console\RemoveCommand;
-use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command line application for OPUS 4 management tasks.
+ * Console command to execute PHP code snippet files.
  */
-class Application_Console_App extends Application
+class Application_Console_Console_ExecCommand extends Command
 {
-    public function __construct()
+    /**
+     * Argument for the PHP code snippet file(s) to be executed
+     */
+    public const ARGUMENT_SNIPPET_FILES = 'SnippetFiles';
+
+    protected function configure()
     {
-        parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
+        parent::configure();
 
-        $this->add(new IndexCommand());
-        $this->add(new RemoveCommand());
-        $this->add(new ExtractCommand());
-        $this->add(new ExtractFileCommand());
-        // $this->add(new Application_Console_Index_RepairCommand());
-        // $this->add(new Application_Console_Index_CheckCommand());
-        $this->add(new Application_Console_Document_DeleteCommand());
-        $this->add(new BibtexImportCommand());
-        $this->add(new BibtexListCommand());
-        $this->add(new Application_Console_Debug_DocumentXmlCommand());
-        $this->add(new CoverGenerateCommand());
-        $this->add(new Application_Console_Console_ConsoleCommand());
-        $this->add(new Application_Console_Console_ExecCommand());
+        $help = <<<EOT
+The <fg=green>console:exec</> command can be used to execute PHP code snippet file(s).
+EOT;
 
-        $this->setDefaultCommand('list');
+        $this->setName('console:exec')
+            ->setDescription('Executes PHP code snippet file(s)')
+            ->setHelp($help)
+            ->addArgument(
+                self::ARGUMENT_SNIPPET_FILES,
+                InputArgument::IS_ARRAY | InputArgument::REQUIRED,
+                'Snippet file(s) to be executed'
+            );
+    }
+
+    /**
+     * Executes this command to run the PHP code from the passed snippet file(s).
+     *
+     * @return int 0 in case of success, otherwise an exit code
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $snippetFiles = $input->getArgument(self::ARGUMENT_SNIPPET_FILES);
+
+        // TODO evaluate & execute snippet files
+
+        return Command::SUCCESS;
     }
 }
