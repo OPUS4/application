@@ -57,7 +57,7 @@ $config = Config::get();
 
             <input type="button" name="go_import" id="DoiButton" value="Metadaten von Crossref holen" onclick="startCheck()">
 
-            <span id="invisible_formfield">
+            <span id="doi_import_invisible_field">
                 <?= $this->element($this->opus_doi_flag); ?>
                 <?= $this->element($this->opus_import_origin); ?>
                 <?= $this->element($this->opus_doi_json); ?>
@@ -66,46 +66,44 @@ $config = Config::get();
                 <?= $this->element($this->opus_doiImportPopulated); ?>
                 
                 </br></br>
-				OPUS:&nbsp;&nbsp;<input type="text" name="DocumentType" id="DocumentType" value="" />
+                OPUS:&nbsp;&nbsp;<input type="text" name="DocumentType" id="DocumentType" value="" />
                 Crossref:&nbsp;&nbsp;<input type="text" name="CrossrefDocumentType" id="CrossrefDocumentType" size="35" />
-			</span>
+            </span>
 
             <?= $this->group($this->groupPersonSubmitter); ?>
             <?= $this->element($this->Language); ?>         
             <?= $this->element($this->CompletedYear); ?>
-            <span id="no_delete">
-                <?= $this->group($this->groupPersonAuthor); ?>
-            </span> 
-			<?= $this->group($this->groupPersonEditor); ?>
+            <?= $this->group($this->groupPersonAuthor); ?>
+            <?= $this->group($this->groupPersonEditor); ?>
             <?= $this->group($this->groupPersonTranslator); ?>
             <?= $this->group($this->groupTitleMain); ?>
             <?= $this->group($this->groupTitleAbstract); ?>
             <?= $this->group($this->groupTitleSub); ?>
             <?= $this->group($this->groupTitleAdditional); ?>
             <?= $this->group($this->groupTitleParent); ?>
-			<?= $this->element($this->Volume); ?>
+            <?= $this->element($this->Volume); ?>
             <?= $this->element($this->Issue); ?>
             <?= $this->element($this->Edition); ?>
-			<?= $this->element($this->PageNumber); ?>
+            <?= $this->element($this->PageNumber); ?>
             <?= $this->element($this->PageFirst); ?>
             <?= $this->element($this->PageLast); ?>
-		    <?= $this->element($this->ArticleNumber); ?>
-			<?= $this->element($this->IdentifierUrl); ?>
-			<?= $this->element($this->IdentifierIsbn); ?>
+            <?= $this->element($this->ArticleNumber); ?>
+            <?= $this->element($this->IdentifierUrl); ?>
+            <?= $this->element($this->IdentifierIsbn); ?>
             <?= $this->element($this->IdentifierIssn); ?>
-			<?= $this->element($this->ContributingCorporation); ?>
+            <?= $this->element($this->ContributingCorporation); ?>
             <?= $this->element($this->ConferenceTitle); ?>
             <?= $this->element($this->ConferencePlace); ?>
-			<?= $this->element($this->ThesisDateAccepted); ?>
-            <?= $this->element($this->ThesisYearAccepted); ?>   			
-			<?= $this->element($this->PublisherName); ?>
-            <?= $this->element($this->PublisherPlace); ?>            
+            <?= $this->element($this->ThesisDateAccepted); ?>
+            <?= $this->element($this->ThesisYearAccepted); ?>
+            <?= $this->element($this->PublisherName); ?>
+            <?= $this->element($this->PublisherPlace); ?>
             <?= $this->group($this->groupSubjectUncontrolled); ?>
             <hr><br />
-            
-		   
-			
-                
+
+
+
+
 
 <div class="button-wrapper">
         <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
@@ -120,7 +118,7 @@ $config = Config::get();
 <?php endif; ?>
 </div>
 
-<!-- Nach Reload nochmal parsen, falls local_doiJson schon gefüllt ist. Anderenfalls würden alle Felder wieder geleert, sobald ein Feld hinzugefügt wird. -->
+<!-- Nach Reload nochmal parsen, falls opus_doi_json schon gefüllt ist. Anderenfalls würden alle Felder wieder geleert, sobald ein Feld hinzugefügt wird. -->
 <script language="javascript" type="text/javascript">
 
     let opusConfig = {
@@ -128,8 +126,8 @@ $config = Config::get();
         "crossrefMailTo": '<?= $config->crossref->mailTo ?>'
     }
 
-	 var doiJson = document.getElementById("Enrichmentopus_doi_json").value;
- if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "false"){
+    var doiJson = document.getElementById("Enrichmentopus_doi_json").value;
+    if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "false"){
     parseJson(doiJson);
     } else if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true"){
     let fields = document.getElementById("Enrichmentopus_doiImportPopulated").value;
@@ -148,7 +146,7 @@ $config = Config::get();
             }
         }
     
-    }    
+    }
 
 
 </script>

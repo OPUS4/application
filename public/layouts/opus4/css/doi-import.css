@@ -2,7 +2,7 @@
 CSS settings for doi import. Could be merged into opus.css
 */
 
-#invisible_formfield {
+#doi_import_invisible_field {
     display: none;
 }
 

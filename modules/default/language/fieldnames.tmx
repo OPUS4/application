@@ -7,14 +7,14 @@
 
     <body>
 
-		<tu tuid="Language">
-		  <tuv xml:lang="en">
-			<seg>Language</seg>
-		  </tuv>
-		  <tuv xml:lang="de">
-			<seg>Sprache</seg>
-		  </tuv>
-		</tu>
+        <tu tuid="Language">
+            <tuv xml:lang="en">
+                <seg>Language</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sprache</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="Licence">
             <tuv xml:lang="en">
@@ -457,7 +457,7 @@
             </tuv>
         </tu>
 
-		<tu tuid="ddc_dnb">
+        <tu tuid="ddc_dnb">
             <tuv xml:lang="en">
                 <seg>DDC subject group</seg>
             </tuv>
@@ -466,23 +466,23 @@
             </tuv>
         </tu>
 
-		<tu tuid="SubjectPACS">
-			<tuv xml:lang="en">
-				<seg>PACS Keyword</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>PACS Klasse</seg>
-			</tuv>
-		</tu>
+        <tu tuid="SubjectPACS">
+            <tuv xml:lang="en">
+                <seg>PACS Keyword</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>PACS Klasse</seg>
+            </tuv>
+        </tu>
 
-		<tu tuid="SubjectCCS">
-			<tuv xml:lang="en">
-				<seg>CCS Keyword</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>CCS Klasse</seg>
-			</tuv>
-		</tu>
+        <tu tuid="SubjectCCS">
+            <tuv xml:lang="en">
+                <seg>CCS Keyword</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>CCS Klasse</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="SubjectJEL">
             <tuv xml:lang="en">
@@ -493,7 +493,7 @@
             </tuv>
         </tu>
 
-		<tu tuid="SubjectBKL">
+        <tu tuid="SubjectBKL">
             <tuv xml:lang="en">
                 <seg>BKL Term</seg>
             </tuv>
@@ -2301,7 +2301,7 @@
                 <seg>Veröffentlichend</seg>
             </tuv>
         </tu>
-        
+
         <tu tuid="EnrichmentConferenceTitle">
             <tuv xml:lang="en">
                 <seg>Conference Name</seg>
