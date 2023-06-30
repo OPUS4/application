@@ -920,7 +920,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
             $this->assertEquals($label, $elements->item(0)->nodeValue);
 
             $elements = $xpath->query('//dc:type[@xsi:type="dini:PublType"]');
-            $this->assertEquals('masterThesis', $elements->item(0)->nodeValue);
+            $this->assertEquals('MasterThesis', $elements->item(0)->nodeValue);
         }
     }
 
@@ -1900,7 +1900,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $values  = $this->nodeListToArray($docType);
 
         $this->assertContains('doctoralthesis', $values);
-        $this->assertContains('doc-type:doctoralThesis', $values);
+        $this->assertContains('doc-type:Habilitation', $values);
     }
 
     /**
