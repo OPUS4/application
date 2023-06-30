@@ -298,8 +298,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         // Test "valid" set specs: Non-empty sets in test data
         $assertSets = [
-            'doc-type:article',
-            'doc-type:preprint',
+            'doc-type:Article',
+            'doc-type:Preprint',
             'bibliography:true',
             'bibliography:true',
             'ddc:62',
