@@ -59,5 +59,3 @@ $xmlModel->setStrategy(new Version1());
 $xmlModel->excludeEmptyFields();
 
 echo $xmlModel->getDomDocument()->saveXML();
-
-exit();
