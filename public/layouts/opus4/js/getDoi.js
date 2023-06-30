@@ -44,8 +44,8 @@ function readDoi(doi)
 
     if (doi.trim() != '') {
 
-        var getUrl        = window.location;
-            const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+        var getUrl         = window.location;
+            const baseUrl  = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
             const finalUrl = baseUrl + '/api/crossref?doi=' + doi;
         get(
             finalUrl,
@@ -56,7 +56,7 @@ function readDoi(doi)
                     colorOrange("IdentifierDoi")
                 } else {
                     document.getElementById("Enrichmentopus_doi_json").value = jsonraw;
-                    document.getElementById("Enrichmentopus_doi_flag").value    = "false";
+                    document.getElementById("Enrichmentopus_doi_flag").value = "false";
                     parseJson(jsonraw);
                 }
             }
@@ -79,11 +79,11 @@ function parseJson(jsonraw)
     getDoctypes(data);
     document.getElementById("EnrichmentConferenceTitle").value = getConferenceTitle(data);
     document.getElementById("EnrichmentConferencePlace").value = getConferencePlace(data);
-    document.getElementById("ContributingCorporation").value    = getContributingCorporation(data);    //json.author.name;
-    document.getElementById("PublisherName").value              = getPublisherName(data);    //json.message.publisher;
-    document.getElementById("PublisherPlace").value             = getPublisherPlace(data);  //json.message.publisher-location;
-    document.getElementById("TitleMain_1").value                = getTitleMain(data);//json.message.title[0];
-    document.getElementById("TitleSub_1").value                 = getTitleSub(data);    //json.message.title[1];
+    document.getElementById("ContributingCorporation").value   = getContributingCorporation(data);    //json.author.name;
+    document.getElementById("PublisherName").value             = getPublisherName(data);    //json.message.publisher;
+    document.getElementById("PublisherPlace").value            = getPublisherPlace(data);  //json.message.publisher-location;
+    document.getElementById("TitleMain_1").value               = getTitleMain(data);//json.message.title[0];
+    document.getElementById("TitleSub_1").value                = getTitleSub(data);    //json.message.title[1];
 
     var language = getLanguage(data);
     expandLanguage(language);
@@ -142,11 +142,11 @@ function expandCompletedDate(dates)
     if (dates != '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
 
         date = dates.join();
-        
+
         if ((date.split(',')[0].length) = 4) {
             document.getElementById("CompletedYear").value = date.split(',')[0];
             finalize("CompletedYear");
-        }         
+        }
     }
 }
 
@@ -395,13 +395,13 @@ var crossrefTypeMapping = {
  */
 async function getDoctypes(data)
 {
-    var getUrl    = window.location;
-    const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+    var getUrl     = window.location;
+    const baseUrl  = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
     const finalUrl = baseUrl + '/api/doctypes';
     get(
         finalUrl,
         function () {
-            var existingDoctypes = this.responseText;
+            var existingDoctypes                                  = this.responseText;
             document.getElementById("CrossrefDocumentType").value = getType(data);
             var crossrefType                                      = document.getElementById("CrossrefDocumentType").value;
             document.getElementById("Enrichmentopus_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "opus_crossrefDocumentType"
@@ -444,7 +444,7 @@ async function getDoctypes(data)
                 }
             }
 
-            document.getElementById('DocumentType').value = opusType;            
+            document.getElementById('DocumentType').value = opusType;
             return;
         }
     );
