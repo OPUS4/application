@@ -30,7 +30,6 @@
  */
 
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -39,11 +38,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Application_Console_Console_ConsoleCommand extends Command
 {
-    /**
-     * Argument for the PHP code to be executed
-     */
-    public const ARGUMENT_PHP_CODE = 'PhpCode';
-
     protected function configure()
     {
         parent::configure();
@@ -54,12 +48,7 @@ EOT;
 
         $this->setName('console:console')
             ->setDescription('Interactively executes PHP code')
-            ->setHelp($help)
-            ->addArgument(
-                self::ARGUMENT_PHP_CODE,
-                InputArgument::REQUIRED,
-                'PHP code to be executed'
-            );
+            ->setHelp($help);
     }
 
     /**
@@ -69,9 +58,19 @@ EOT;
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $phpCode = $input->getArgument(self::ARGUMENT_PHP_CODE);
+        while ($input !== false) {
+            $input = readline('opus> ');
+            readline_add_history($input);
+            try {
+                eval($input);
+            } catch (Exception $e) {
+                $output->writeln('# failed executing code:');
+                $output->writeln('Caught exception ' . get_class($e) . ': ' . $e->getMessage());
+                $output->writeln($e->getTraceAsString());
 
-        // TODO evaluate & execute code
+                return Command::FAILURE;
+            }
+        }
 
         return Command::SUCCESS;
     }
