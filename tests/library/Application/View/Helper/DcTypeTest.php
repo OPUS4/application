@@ -43,7 +43,7 @@ class Application_View_Helper_DcTypeTest extends ControllerTestCase
 
     public function testDcType()
     {
-        $this->assertEquals('article', $this->helper->dcType('article'));
+        $this->assertEquals('Article', $this->helper->dcType('article'));
     }
 
     public function testDcTypeForUnknownDocumentType()
