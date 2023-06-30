@@ -35,16 +35,16 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:php="http://php.net/xsl"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
-	xmlns:ext="http://exslt.org/common"
+    xmlns:ext="http://exslt.org/common"
     exclude-result-prefixes="php ext">
 
     <xsl:output method="text" encoding="UTF-8" omit-xml-declaration="yes"/>
     
     <xsl:include href="utils/csv_utils.xslt"/>        
     
-	<xsl:template match="*" />
+    <xsl:template match="*" />
 
-	<xsl:template match="/">
+    <xsl:template match="/">
     
     <!-- Translations for column header -->
     <xsl:variable name="label_personAuthor" select="php:functionString('Application_Xslt::translate', 'PersonAuthor')"></xsl:variable>
@@ -57,29 +57,29 @@
     
     <!-- Count necessary columns for Enrichments and Collections -->
     <xsl:variable name="collections_in_config" select="php:functionString('Application_Xslt::optionValue', 'export.csv.collections')"></xsl:variable>
-	<xsl:variable name="enrichments_in_config" select="php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments')"></xsl:variable>
+    <xsl:variable name="enrichments_in_config" select="php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments')"></xsl:variable>
     
-	<xsl:variable name="anzahl_collections">
-	<xsl:choose>
-		<xsl:when test="string-length($collections_in_config) > 0">
-			<xsl:value-of select="string-length(php:functionString('Application_Xslt::optionValue', 'export.csv.collections'))-string-length(translate(php:functionString('Application_Xslt::optionValue', 'export.csv.collections'),',','')) + 1"/>
-		</xsl:when>
-		<xsl:otherwise>
-			0
-		</xsl:otherwise>
-	</xsl:choose>
-	</xsl:variable>
+    <xsl:variable name="anzahl_collections">
+    <xsl:choose>
+        <xsl:when test="string-length($collections_in_config) > 0">
+            <xsl:value-of select="string-length(php:functionString('Application_Xslt::optionValue', 'export.csv.collections'))-string-length(translate(php:functionString('Application_Xslt::optionValue', 'export.csv.collections'),',','')) + 1"/>
+        </xsl:when>
+        <xsl:otherwise>
+            0
+        </xsl:otherwise>
+    </xsl:choose>
+    </xsl:variable>
 
-	<xsl:variable name="anzahl_enrichments">
-	<xsl:choose>
-		<xsl:when test="string-length($enrichments_in_config)>0">
-			<xsl:value-of select="string-length(php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments'))-string-length(translate(php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments'),',','')) + 1"/>
-		</xsl:when>
-		<xsl:otherwise>
-			0
-		</xsl:otherwise>
-	</xsl:choose>
-	</xsl:variable>
+    <xsl:variable name="anzahl_enrichments">
+    <xsl:choose>
+        <xsl:when test="string-length($enrichments_in_config)>0">
+            <xsl:value-of select="string-length(php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments'))-string-length(translate(php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments'),',','')) + 1"/>
+        </xsl:when>
+        <xsl:otherwise>
+            0
+        </xsl:otherwise>
+    </xsl:choose>
+    </xsl:variable>
 
     <xsl:text>OPUS4-ID	Dokumenttyp	Status	Sprache	</xsl:text>
     <xsl:value-of select="$label_personAuthor"/>
@@ -96,36 +96,37 @@
     <xsl:text>	Erste Seite	Letzte Seite	Aufsatznummer	</xsl:text>
     <xsl:value-of select="$label_seriesTitle"/>
     <xsl:text>	Nummer	ISBN	ISSN	Urheb. K&#246;rperschaft	Beteiligte K&#246;rperschaft	Konferenzname	Konferenzort	Ausgabe / Heft	URN	DOI	Schlagw&#246;rter	Fakult&#228;t/Institut/Abteilung	Lizenz	Bemerkung	</xsl:text>
-	<xsl:if test="php:function('Application_Xslt::accessAllowed', 'documents') != 0">
-			<xsl:text>Interne Bemerkung	</xsl:text>
-	</xsl:if>
+    <xsl:if test="php:function('Application_Xslt::accessAllowed', 'documents') != 0">
+            <xsl:text>Interne Bemerkung	</xsl:text>
+    </xsl:if>
     <xsl:if test="$anzahl_collections > 0">
-		<xsl:call-template name="column_collection">
-			<xsl:with-param name="i" select="1"/>
-			<xsl:with-param name="anzahl" select="$anzahl_collections"/>
-		</xsl:call-template>
-	</xsl:if>    
-	<xsl:if test="$anzahl_enrichments > 0">
-		<xsl:call-template name="column_enrichment">
-			<xsl:with-param name="i" select="1"/>
-			<xsl:with-param name="anzahl" select="$anzahl_enrichments"/>
-		</xsl:call-template>
-	</xsl:if>
-	<xsl:text>
-</xsl:text>					
-	  
+        <xsl:call-template name="column_collection">
+            <xsl:with-param name="i" select="1"/>
+            <xsl:with-param name="anzahl" select="$anzahl_collections"/>
+        </xsl:call-template>
+    </xsl:if>    
+    <xsl:if test="$anzahl_enrichments > 0">
+        <xsl:call-template name="column_enrichment">
+            <xsl:with-param name="i" select="1"/>
+            <xsl:with-param name="anzahl" select="$anzahl_enrichments"/>
+        </xsl:call-template>
+    </xsl:if>
+    <xsl:text>
+</xsl:text>
+      
     <xsl:apply-templates select="Documents" />
-	</xsl:template>
-	
-	<xsl:template match="Documents">
-		<xsl:apply-templates select="Opus_Document" />
-	</xsl:template>
+    </xsl:template>
+    
+    <xsl:template match="Documents">
+        <xsl:apply-templates select="Opus_Document" />
+    </xsl:template>
 
-	<xsl:template match="Opus_Document">
+    <xsl:template match="Opus_Document">
         <xsl:if test="@ServerState = 'published'"> <!-- Only published documents are processed -->
 
-            <!--  Preprocessing: some variables must be defined -->            
+            <!--  Preprocessing: some variables must be defined -->
             <xsl:variable name="identifier">
+                <xsl:text>OPUS4-</xsl:text>
                 <xsl:value-of select="@Id" />
             </xsl:variable> 
 
@@ -134,7 +135,7 @@
             </xsl:variable> 
 
             <xsl:variable name="doctype">         
-                <xsl:value-of select="php:functionString('Application_Xslt::translate', @Type)" />        
+                <xsl:value-of select="php:functionString('Application_Xslt::translate', @Type)" />
             </xsl:variable>
 
             <xsl:variable name="author">
@@ -292,8 +293,8 @@
             </xsl:variable>
             
             <xsl:variable name="keywords">
-                <xsl:for-each select="Subject[@Type='uncontrolled']">                   
-                    <xsl:value-of select="@Value" />                
+                <xsl:for-each select="Subject[@Type='uncontrolled']">
+                    <xsl:value-of select="@Value" />
                         <xsl:if test="not(position()=last())">
                             <xsl:text>; </xsl:text>
                         </xsl:if>
@@ -302,31 +303,31 @@
 
             <!-- Column "Bemerkung (public)" -->
             <xsl:variable name="note_public">
-		        <xsl:for-each select="Note[@Visibility='public']" >			        
+                <xsl:for-each select="Note[@Visibility='public']" >
                         <xsl:if test="position()=1">
-                            <xsl:value-of select ="translate(@Message, '&#13;&#10;', ' ')" />                        
+                            <xsl:value-of select ="translate(@Message, '&#13;&#10;', ' ')" />
                         </xsl:if>
                         <xsl:if test="position()>1">
                             <xsl:text> / </xsl:text>
                             <xsl:value-of select ="translate(@Message, '&#13;&#10;', ' ')" />
-                        </xsl:if>			        
+                        </xsl:if>
                 </xsl:for-each>
             </xsl:variable>
 
             <!-- Column "Bemerkung (private)" -->
             <xsl:variable name="note_private">
             <xsl:if test="php:function('Application_Xslt::accessAllowed', 'documents') != 0">
-		        <xsl:for-each select="Note[@Visibility='private']" >			        
-				        <xsl:if test="position()=1">
-                            <xsl:value-of select ="translate(@Message, '&#13;&#10;', ' ')" />                        
+                <xsl:for-each select="Note[@Visibility='private']" >
+                        <xsl:if test="position()=1">
+                            <xsl:value-of select ="translate(@Message, '&#13;&#10;', ' ')" />
                         </xsl:if>
                         <xsl:if test="position()>1">
                             <xsl:text> / </xsl:text>
                             <xsl:value-of select ="translate(@Message, '&#13;&#10;', ' ')" />
-                        </xsl:if>			        
+                        </xsl:if>
                 </xsl:for-each>
             </xsl:if>
-            </xsl:variable>		
+            </xsl:variable>
             
             <!-- Output -->
 
