@@ -556,7 +556,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         Application_Xslt::registerViewHelper($this->proc, [
             'accessAllowed',
             'isAuthenticated',
-            'translate'
+            'translate',
         ]);
     }
 }
