@@ -60,6 +60,9 @@ class Application_Console_App extends Application
         $this->add(new CoverGenerateCommand());
         $this->add(new Application_Console_Console_ConsoleCommand());
         $this->add(new Application_Console_Console_ExecCommand());
+        $this->add(new Application_Console_Collection_CopyCommand());
+        $this->add(new Application_Console_Collection_MoveCommand());
+        $this->add(new Application_Console_Collection_RemoveCommand());
 
         $this->setDefaultCommand('list');
     }
