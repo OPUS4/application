@@ -6,7 +6,15 @@
            xmlns="http://purl.org/dc/terms/"
            elementFormDefault="qualified"
            attributeFormDefault="unqualified">
-
+  <xs:annotation>
+    <xs:documentation>
+    2017-12-01: 
+    1. CHANGED alle schemaLocation-Attribute verweisen auf eine DNB eigene URL, 
+    auch wenn sie zuvor auf DNB-fremde URLs verwiesen haben.
+    (dcmitype: schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcmitype.xsd,
+    dcterms: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd,
+    xml: http://www.w3.org/2001/03/)-->
+  </xs:documentation></xs:annotation>
   <xs:annotation>
     <xs:documentation xml:lang="en">
       DCterms XML Schema
@@ -57,14 +65,13 @@
 
 
   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
-             schemaLocation="http://www.w3.org/2001/03/xml.xsd">
+             schemaLocation="xml.xsd">
   </xs:import>
 
    <xs:import namespace="http://purl.org/dc/elements/1.1/"
               schemaLocation="dc.xsd"/>
 
-   <xs:import namespace="http://purl.org/dc/dcmitype/"
-              schemaLocation="dcmitype.xsd"/>
+  <xs:import namespace="http://purl.org/dc/dcmitype/" schemaLocation="dcmitype.xsd"/>
 
    <xs:element name="alternative" substitutionGroup="dc:title"/>
 

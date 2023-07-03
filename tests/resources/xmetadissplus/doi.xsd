@@ -1,13 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- DOI: complexType zu The Digital Object Identifier System siehe https://doi.org-->
-<!-- Copyright 2010  Deutsche Nationalbibliothek -->
-<!-- Version xMetaDissPlus 2.1 -->
+<!-- DOI: complexType zu The Digital Object Identifier System siehe http://www.doi.org-->
+<!-- Copyright 2023  Deutsche Nationalbibliothek -->
+<!-- Version xMetaDissPlus 2.5 -->
 <xs:schema targetNamespace="http://www.d-nb.de/standards/doi/" elementFormDefault="qualified"
 	attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:doi="http://www.d-nb.de/standards/doi/">
 	<!-- Folgende Importe werden benoetigt, da Elemente aus den zugehoerigen Namespaces benutzt werden. -->
-	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
-	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd"/>
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+	<xs:annotation>
+		<xs:documentation>
+			2023-02-27:
+			CHANGED by DNB: 
+			keine Änderungen. Version auf 2.5 hochgesetzt für Einheitlichkeit.
+			
+			2017-12-01:
+			CHANGED alle schemaLocation-Attribute verweisen auf eine DNB eigene URL, 
+			auch wenn sie zuvor auf DNB-fremde URLs verwiesen haben 
+			(dc: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd,
+			xml: http://www.w3.org/2001/03/xml.xsd).
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="dc.xsd"/>
 	<xs:complexType name="doi">
 		<xs:simpleContent>
 			<xs:restriction base="dc:SimpleLiteral">

@@ -128,12 +128,12 @@ class Oai_Format_DcTest extends ControllerTestCase
 
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
-        // Regression test for OPUSVIER-2379 (show doc-type:report)
-        $elements = $xpath->query('//oai_dc:dc/dc:type[text()="doc-type:report"]');
+        // Regression test for OPUSVIER-2379 (show doc-type:Report)
+        $elements = $xpath->query('//oai_dc:dc/dc:type[text()="doc-type:Report"]');
         $this->assertEquals(
             1,
             $elements->length,
-            "Unexpected count for doc-type:report"
+            "Unexpected count for doc-type:Report"
         );
     }
 

@@ -3,7 +3,8 @@
            xmlns="http://purl.org/dc/elements/1.1/"
            targetNamespace="http://purl.org/dc/elements/1.1/"
            elementFormDefault="qualified"
-           attributeFormDefault="unqualified">
+           attributeFormDefault="unqualified"
+           xmlns:ddb="http://www.d-nb.de/standards/ddb/">
 
   <xs:annotation>
     <xs:documentation xml:lang="en">
@@ -39,9 +40,23 @@
 
 
   <xs:import namespace="http://www.w3.org/XML/1998/namespace"
-             schemaLocation="http://www.w3.org/2001/03/xml.xsd">
+             schemaLocation="xml.xsd">
   </xs:import>
-
+  <xs:annotation>
+    <xs:documentation xml:lang="en">
+      2017-12-01
+      1. ADD Import des Schemas ddb.xsd
+      2. ADD Referenz zu dem Attribut ddb:GDN-Nr
+      3. CHANGED alle schemaLocation-Attribute verweisen auf eine DNB eigene URL, 
+      auch wenn sie zuvor auf DNB-fremde URLs verwiesen haben 
+      (xml: http://www.w3.org/2001/03/xml.xsd).
+    </xs:documentation>    
+  </xs:annotation>
+  
+  
+  <xs:import namespace="http://www.d-nb.de/standards/ddb/" schemaLocation="ddb.xsd" />
+  
+  
   <xs:complexType name="SimpleLiteral">
         <xs:annotation>
         <xs:documentation xml:lang="en">
@@ -63,9 +78,11 @@
       <xs:any processContents="lax" minOccurs="0" maxOccurs="0"/>
      </xs:sequence>
      <xs:attribute ref="xml:lang" use="optional"/>
+      <xs:attribute ref="ddb:GND-Nr" use="optional"></xs:attribute>
     </xs:restriction>
    </xs:complexContent>
   </xs:complexType>
+  
 
   <xs:element name="any" type="SimpleLiteral" abstract="true"/>
 
