@@ -1,8 +1,6 @@
 
 let populatedFields = [];
 
-// TODO Englische Funktionsnamen fuer Einheitlichkeit im Code bitte
-
 function startCheck()
 {
     var doi = document.getElementById("IdentifierDoi").value.trim();
@@ -11,13 +9,13 @@ function startCheck()
         alert("Bitte zuerst eine DOI eingeben...")
     } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value != "true") {
         // OK, starte Import
-        leseDoi(doi)
+        readDoi(doi)
     } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true") {
         // Import wurde bereits durchgeführt -> Bestätigung
         if (confirm("Achtung, alle Felder des Formulars werden gelöscht und ein neuer Import gestartet! Fortfahren?")) {
             cleanup();
             document.getElementById("IdentifierDoi").value = doi;
-            leseDoi(doi);
+            readDoi(doi);
         } else {
             return
         }
@@ -26,7 +24,7 @@ function startCheck()
 
 function cleanup()
 {
-    let fields = document.getElementById("Enrichmentlocal_doiImportPopulated").value;
+    let fields = document.getElementById("Enrichmentopus_doiImportPopulated").value;
     document.getElementById("Alles").reset(); // Alle Felder leeren
     document.getElementById("PersonAuthorLastName_1").value        = ""; // Explizites reset(), weil die Felder sonst stehen bleiben
     document.getElementById("PersonAuthorFirstName_1").value       = "";
@@ -40,15 +38,14 @@ function cleanup()
     }
 }
 
-function leseDoi(doi)
+function readDoi(doi)
 {
  // Diese Funktion wird beim Klick auf den Button "DOI-Daten übernehmen" aufgerufen und steuert alles Weitere
 
     if (doi.trim() != '') {
 
-        var getUrl        = window.location;
-            const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-            //alert("URL: "+getUrl.pathname);
+        var getUrl         = window.location;
+            const baseUrl  = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
             const finalUrl = baseUrl + '/api/crossref?doi=' + doi;
         get(
             finalUrl,
@@ -58,9 +55,8 @@ function leseDoi(doi)
                     alert("DOI wurde nicht in Crossref gefunden.");
                     colorOrange("IdentifierDoi")
                 } else {
-                    // document.getElementById("Enrichmentlocal_doiJson").value = jsonraw;
-                    document.getElementById("Enrichmentopus_import_data").value = jsonraw;
-                    document.getElementById("Enrichmentopus_doi_flag").value    = "false";
+                    document.getElementById("Enrichmentopus_doi_json").value = jsonraw;
+                    document.getElementById("Enrichmentopus_doi_flag").value = "false";
                     parseJson(jsonraw);
                 }
             }
@@ -81,13 +77,13 @@ function parseJson(jsonraw)
 // Ende mehrfach belegbare Felder
 
     getDoctypes(data);
-    document.getElementById("Enrichmentconference_title").value = getConferenceTitle(data);
-    document.getElementById("Enrichmentconference_place").value = getConferencePlace(data);
-    document.getElementById("ContributingCorporation").value    = getContributingCorporation(data);    //json.author.name;
-    document.getElementById("PublisherName").value              = getPublisherName(data);    //json.message.publisher;
-    document.getElementById("PublisherPlace").value             = getPublisherPlace(data);  //json.message.publisher-location;
-    document.getElementById("TitleMain_1").value                = getTitleMain(data);//json.message.title[0];
-    document.getElementById("TitleSub_1").value                 = getTitleSub(data);    //json.message.title[1];
+    document.getElementById("EnrichmentConferenceTitle").value = getConferenceTitle(data);
+    document.getElementById("EnrichmentConferencePlace").value = getConferencePlace(data);
+    document.getElementById("ContributingCorporation").value   = getContributingCorporation(data);    //json.author.name;
+    document.getElementById("PublisherName").value             = getPublisherName(data);    //json.message.publisher;
+    document.getElementById("PublisherPlace").value            = getPublisherPlace(data);  //json.message.publisher-location;
+    document.getElementById("TitleMain_1").value               = getTitleMain(data);//json.message.title[0];
+    document.getElementById("TitleSub_1").value                = getTitleSub(data);    //json.message.title[1];
 
     var language = getLanguage(data);
     expandLanguage(language);
@@ -113,9 +109,9 @@ function parseJson(jsonraw)
     document.getElementById("IdentifierIsbn").value = getIsbn(data);    //json.message.isbn-type[0].value;
     document.getElementById("IdentifierIssn").value = getIssn(data);    //json.message.issn-type[0].value;
     //document.getElementById("IdentifierUrl").value = getUrl(data);    //json.message.link[0].url -> Soll laut aw raus
-    document.getElementById("Enrichmentlocal_crossrefLicence").value    = getLicence(data);
-    document.getElementById("Enrichmentlocal_import_origin").value      = "crossref";
-    document.getElementById("Enrichmentlocal_doiImportPopulated").value = populatedFields;
+    document.getElementById("Enrichmentopus_crossrefLicence").value    = getLicence(data);
+    document.getElementById("Enrichmentopus_import_origin").value      = "crossref";
+    document.getElementById("Enrichmentopus_doiImportPopulated").value = populatedFields;
 }
 
 function expandLanguage(language)
@@ -141,28 +137,16 @@ function expandLanguage(language)
 
 function expandCompletedDate(dates)
 {
- // Für CompletedYear und CompletedDate
+ // Für CompletedYear
 
     if (dates != '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
 
         date = dates.join();
 
-        //if (date.includes('-')){
         if ((date.split(',')[0].length) = 4) {
             document.getElementById("CompletedYear").value = date.split(',')[0];
             finalize("CompletedYear");
         }
-         // Das else wird nur gebraucht, wenn CompletedDate befüllt werden soll.
-         /* else {
-             document.getElementById("CompletedYear").value = date.split(',')[0];
-             colorGreen("CompletedYear");
-             var month = date.split(',')[1];
-             if (month.length == 1){month = '0'+month;}
-             var day = date.split(',')[2];
-             if (day.length == 1){day = '0'+day;}
-             document.getElementById("CompletedDate").value = day+'.'+month+'.'+date.split(',')[0];
-             colorGreen("CompletedDate");
-         } */
     }
 }
 
@@ -411,19 +395,16 @@ var crossrefTypeMapping = {
  */
 async function getDoctypes(data)
 {
-    var getUrl    = window.location;
-    const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-    //alert("URL: "+getUrl.pathname);
+    var getUrl     = window.location;
+    const baseUrl  = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
     const finalUrl = baseUrl + '/api/doctypes';
     get(
         finalUrl,
         function () {
-            var existingDoctypes = this.responseText;
-            //alert("Doctypes: " + existingDoctypes);
-
+            var existingDoctypes                                  = this.responseText;
             document.getElementById("CrossrefDocumentType").value = getType(data);
             var crossrefType                                      = document.getElementById("CrossrefDocumentType").value;
-            document.getElementById("Enrichmentlocal_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "local_crossrefDocumentType"
+            document.getElementById("Enrichmentopus_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "opus_crossrefDocumentType"
 
             // Map Crossref document type to OPUS type
             var opusType = crossrefTypeMapping[crossrefType];
@@ -464,9 +445,6 @@ async function getDoctypes(data)
             }
 
             document.getElementById('DocumentType').value = opusType;
-
-            //alert("OpusDoctype: " + document.getElementById('DocumentType').value);
-            document.getElementById("OpusDocumentType").value = document.getElementById("DocumentType").value;
             return;
         }
     );
