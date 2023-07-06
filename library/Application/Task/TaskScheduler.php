@@ -40,29 +40,31 @@ class Application_Task_TaskScheduler
     use LoggingTrait;
 
     /**
+     * Name of the default configuration file where all tasks to be run are defined.
+     */
+    const INI_FILE = 'tasks.ini';
+
+    /**
      * @return Schedule
      */
     public function run()
     {
-        $log    = $this->getLogger();
-        $config = $this->getConfig();
+        $log              = $this->getLogger();
+        $schedule         = new Schedule();
+        $tasksConfig      = $this->getConfiguration();
+        $taskRunnerScript = $this->getTaskRunnerPath();
 
-        $schedule = new Schedule();
-
-        $cronScript = APPLICATION_PATH . "/" . $config->cron->taskRunner;
-
-        if (isset($config->cron->jobs)) {
-            foreach ($config->cron->jobs as $job => $options) {
+        if ($this->isEnabled()) {
+            foreach ($tasksConfig as $taskConfig) {
                 if (
-                    isset($options->class)
-                    && isset($options->schedule)
-                    && filter_var($options->enabled, FILTER_VALIDATE_BOOLEAN)
+                    isset($taskConfig->class)
+                    && isset($taskConfig->schedule)
+                    && filter_var($taskConfig->enabled, FILTER_VALIDATE_BOOLEAN)
                 ) {
-                    // $log->debug("Adding job " . $options->class);
-                    $task = $schedule->run(PHP_BINARY . " " . $cronScript, ['--taskclass' => $options->class]);
+                    $task = $schedule->run(PHP_BINARY . " " . $taskRunnerScript, ['--taskclass' => $taskConfig->class]);
                     $task
-                        ->cron($options->schedule)
-                        ->description($options->class);
+                        ->cron($taskConfig->schedule)
+                        ->description($taskConfig->class);
 
                     $schedule
                         ->onError(function (Event $evt) use (&$error) {
@@ -70,13 +72,83 @@ class Application_Task_TaskScheduler
                             throw new Exception($error);
                         });
                 } else {
-                    $log->err("Cron job class name or schedule not configured");
+                    $log->err("Cron task class name or schedule not configured");
                 }
             }
         } else {
-            $log->err("Couldn't access jobs from configuration file");
+            $log->err("Couldn't access task configuration from ini file");
         }
 
         return $schedule;
     }
+
+
+    /**
+     * Returns the cron task configuration from the ini file.
+     * Name of the INI file to be used for configuration, if not set, the default configuration file will be used
+     *
+     * @return array|mixed
+     */
+    private function getConfiguration()
+    {
+        $config = $this->getConfig();
+
+        $fileName = isset($config->cron->configFile) && $config->cron->configFile ? $config->cron->configFile : self::INI_FILE;
+
+        if (strpos($fileName, '/') === false) {
+            $fileName =  __DIR__ . '/../../../application/configs/' . $fileName;
+        }
+
+        if (! is_readable($fileName)) {
+            throw new Application_Task_TaskConfigException("could not find or read ini file '$fileName'");
+        } else {
+            $tasksConfig = new Zend_Config_Ini($fileName);
+            if ($tasksConfig === false) {
+                throw new Application_Task_TaskConfigException("could not parse ini file '$fileName'");
+            }
+        }
+
+        if (! isset($tasksConfig->crontasks)) {
+            throw new Application_Task_TaskConfigException("could not find configuration key 'crontasks' in ini file '$fileName'");
+        }
+
+        return $tasksConfig->crontasks;
+    }
+
+    /**
+     * Gets the full path of the task runner script from the main configuration.
+     *
+     * @return string
+     * @throws Application_Task_TaskConfigException If the taskRunner is not configured
+     */
+    private function getTaskRunnerPath()
+    {
+        $config = $this->getConfig();
+
+        if (!isset($config->cron->taskRunner)) {
+            throw new Application_Task_TaskConfigException(
+                "could not read the task runner path from 'application.ini'"
+            );
+        }
+
+        if (! is_readable($config->cron->taskRunner)) {
+            throw new Application_Task_TaskConfigException(
+                "could not find or read task runner file '" . $config->cron->taskRunner . "'"
+            );
+        }
+
+        return $config->cron->taskRunner;
+    }
+
+    /**
+     * Checks if task scheduling is enabled in the main configuration
+     *
+     * @return bool
+     */
+    private function isEnabled()
+    {
+        $config = $this->getConfig();
+        return filter_var($config->cron->enabled, FILTER_VALIDATE_BOOLEAN) && $this->getTaskRunnerPath();
+    }
+
 }
