@@ -22,7 +22,7 @@
     "ext-sockets": "*",
     "opus4/zf1-future": "1.21.*",
     "jpgraph/jpgraph": "dev-master",
-    "opus4-repo/opus4-common": "^4.8",
+    "opus4-repo/opus4-common": "dev-master as 4.8",
     "opus4-repo/framework": "dev-master as 4.8.1",
     "opus4-repo/search": "^4.7.2",
     "opus4-repo/opus4-bibtex": "^4.8",
@@ -57,8 +57,7 @@
     "allow-plugins": {
       "composer/installers": true,
       "oomphinc/composer-installers-extender": true,
-      "dealerdirect/phpcodesniffer-composer-installer": true,
-      "kylekatarnls/update-helper": true
+      "dealerdirect/phpcodesniffer-composer-installer": true
     }
   },
   "scripts": {
