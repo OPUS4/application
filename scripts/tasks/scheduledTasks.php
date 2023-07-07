@@ -29,6 +29,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+// This file defines a Crunz task file.
+// There can be multiple task files, but in our case we only need one
+// to start a task scheduler in which all configured opus tasks will be executed by the crunz scheduler
+// according to the schedule times specified in the task.ini configuration.
+
 define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';

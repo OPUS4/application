@@ -29,11 +29,18 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+// This script is called by the TaskScheduler to have Opus tasks run by the Crunz scheduler.
+// Since the Crunz scheduler cannot execute classes directly, we need this intermediate step via a script
+// to instantiate and execute the desired Opus Task object.
+
 define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$class = getopt(null, ["taskclass:"]);
+// Get the name of the desired opus task class
+$option = getopt(null, ["taskclass:"]);
+$taskClass = $option['taskclass'];
 
-$task = new $class['taskclass']();
+// Run the opus task
+$task = new $taskClass();
 $task->run();
