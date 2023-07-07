@@ -71,8 +71,8 @@ class Application_Task_TaskScheduler
                     $task = $schedule->run(
                         PHP_BINARY . " " . $taskRunnerScript,
                         [
-                            '--taskclass' => $taskConfig->class,
-                            '--taskoptions' => serialize($taskOptions)
+                            '--taskclass'   => $taskConfig->class,
+                            '--taskoptions' => serialize($taskOptions),
                         ]
                     );
 

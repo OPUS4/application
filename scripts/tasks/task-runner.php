@@ -37,22 +37,8 @@ define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-// Get the name of the desired opus task class
-$option = getopt(null, ["taskclass:", "taskoptions:"]);
-$taskClass = $option['taskclass'];
-$taskOptions = unserialize($option['taskoptions']);
+$options = getopt(null, ["taskclass:", "taskoptions:"]);
 
-// Run the opus task
-$task = new $taskClass();
-
-// Set option values if configured in the ini file.
-if (is_array($taskOptions)) {
-    foreach ($taskOptions as $optionName => $optionValue) {
-        $setterName = 'set' . ucfirst($optionName);
-        if (method_exists($taskClass, $setterName)) {
-            $task->$setterName($optionValue);
-        }
-    }
-}
-
-$task->run();
+$taskRunner = new Application_Task_TaskRunner();
+$taskRunner->setTaskConfig($options);
+$taskRunner->runTask();
