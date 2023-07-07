@@ -82,12 +82,12 @@ class Application_Task_TaskScheduler
         return $schedule;
     }
 
-
     /**
      * Returns the cron task configuration from the ini file.
      * Name of the INI file to be used for configuration, if not set, the default configuration file will be used
      *
      * @return array|mixed
+     * @throws Application_Task_TaskConfigException If the task config does not exist or is invalid.
      */
     private function getConfiguration()
     {
@@ -96,7 +96,7 @@ class Application_Task_TaskScheduler
         $fileName = isset($config->cron->configFile) && $config->cron->configFile ? $config->cron->configFile : self::INI_FILE;
 
         if (strpos($fileName, '/') === false) {
-            $fileName =  __DIR__ . '/../../../application/configs/' . $fileName;
+            $fileName = __DIR__ . '/../../../application/configs/' . $fileName;
         }
 
         if (! is_readable($fileName)) {
@@ -119,13 +119,13 @@ class Application_Task_TaskScheduler
      * Gets the full path of the task runner script from the main configuration.
      *
      * @return string
-     * @throws Application_Task_TaskConfigException If the taskRunner is not configured
+     * @throws Application_Task_TaskConfigException If the taskRunner is not configured.
      */
     private function getTaskRunnerPath()
     {
         $config = $this->getConfig();
 
-        if (!isset($config->cron->taskRunner)) {
+        if (! isset($config->cron->taskRunner)) {
             throw new Application_Task_TaskConfigException(
                 "could not read the task runner path from 'application.ini'"
             );
@@ -150,5 +150,4 @@ class Application_Task_TaskScheduler
         $config = $this->getConfig();
         return filter_var($config->cron->enabled, FILTER_VALIDATE_BOOLEAN) && $this->getTaskRunnerPath();
     }
-
 }

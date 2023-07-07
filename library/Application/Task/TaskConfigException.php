@@ -30,6 +30,7 @@
  */
 
 use Exception;
+
 class Application_Task_TaskConfigException extends Exception
 {
 }
