@@ -61,7 +61,21 @@ class Application_Task_TaskScheduler
                     && isset($taskConfig->schedule)
                     && filter_var($taskConfig->enabled, FILTER_VALIDATE_BOOLEAN)
                 ) {
-                    $task = $schedule->run(PHP_BINARY . " " . $taskRunnerScript, ['--taskclass' => $taskConfig->class]);
+                    $taskOptions = [];
+                    if (isset($taskConfig->options)) {
+                        foreach ($taskConfig->options as $optionName => $optionValue) {
+                            $taskOptions[$optionName] = $optionValue;
+                        }
+                    }
+
+                    $task = $schedule->run(
+                        PHP_BINARY . " " . $taskRunnerScript,
+                        [
+                            '--taskclass' => $taskConfig->class,
+                            '--taskoptions' => serialize($taskOptions)
+                        ]
+                    );
+
                     $task
                         ->cron($taskConfig->schedule)
                         ->description($taskConfig->class);
