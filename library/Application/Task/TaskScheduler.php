@@ -129,11 +129,7 @@ class Application_Task_TaskScheduler
             }
         }
 
-        if (! isset($tasksConfig->crontasks)) {
-            throw new Application_Task_TaskConfigException("could not find configuration key 'crontasks' in ini file '$fileName'");
-        }
-
-        return $tasksConfig->crontasks;
+        return $tasksConfig;
     }
 
     /**
