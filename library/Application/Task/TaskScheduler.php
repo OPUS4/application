@@ -80,6 +80,13 @@ class Application_Task_TaskScheduler
                         ->cron($taskConfig->schedule)
                         ->description($taskConfig->class);
 
+                    if (
+                        isset($taskConfig->preventOverlapping) &&
+                        filter_var($taskConfig->preventOverlapping, FILTER_VALIDATE_BOOLEAN)
+                    ) {
+                        $task->preventOverlapping();
+                    }
+
                     $schedule
                         ->onError(function (Event $evt) use (&$error) {
                             $error .= $evt->getExpression() . ' ' . $evt->buildCommand() . PHP_EOL;
