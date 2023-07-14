@@ -37,8 +37,8 @@ define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$options = getopt(null, ["taskclass:", "taskoptions:"]);
+$options = getopt(null, ["taskname:"]);
 
 $taskRunner = new Application_Task_TaskRunner();
-$taskRunner->setTaskConfig($options);
+$taskRunner->setOptions($options);
 $taskRunner->runTask();

@@ -34,102 +34,50 @@ use Crunz\Schedule;
 use Opus\Common\ConfigTrait;
 use Opus\Common\LoggingTrait;
 
+/*
+ * The scheduler class to run all configured active opus tasks.
+ * Used by the scheduledTask script which will be by a single cron job,
+ * to be configured in the crontab: * * * * * cd /your-opus-directory && vendor/bin/crunz schedule:run
+ */
 class Application_Task_TaskScheduler
 {
     use ConfigTrait;
     use LoggingTrait;
 
     /**
-     * Name of the default configuration file where all tasks to be run are defined.
-     */
-    const INI_FILE = 'tasks.ini';
-
-    /**
      * @return Schedule
      */
     public function run()
     {
-        $log              = $this->getLogger();
-        $schedule         = new Schedule();
-        $tasksConfig      = $this->getConfiguration();
-        $taskRunnerScript = $this->getTaskRunnerPath();
+        $log      = $this->getLogger();
+        $schedule = new Schedule();
 
         if ($this->isEnabled()) {
-            foreach ($tasksConfig as $taskConfig) {
-                if (
-                    isset($taskConfig->class)
-                    && isset($taskConfig->schedule)
-                    && filter_var($taskConfig->enabled, FILTER_VALIDATE_BOOLEAN)
-                ) {
-                    $taskOptions = [];
-                    if (isset($taskConfig->options)) {
-                        foreach ($taskConfig->options as $optionName => $optionValue) {
-                            $taskOptions[$optionName] = $optionValue;
-                        }
-                    }
+            foreach ($this->getActiveTaskConfigurations() as $taskConfig) {
+                $crunzTask = $schedule->run(
+                    PHP_BINARY . " " . $this->getTaskRunnerScriptPath(),
+                    ['--taskname' => $taskConfig->getName()]
+                );
 
-                    $task = $schedule->run(
-                        PHP_BINARY . " " . $taskRunnerScript,
-                        [
-                            '--taskclass'   => $taskConfig->class,
-                            '--taskoptions' => serialize($taskOptions),
-                        ]
-                    );
-
-                    $task
-                        ->cron($taskConfig->schedule)
-                        ->description($taskConfig->class);
-
-                    if (
-                        isset($taskConfig->preventOverlapping) &&
-                        filter_var($taskConfig->preventOverlapping, FILTER_VALIDATE_BOOLEAN)
-                    ) {
-                        $task->preventOverlapping();
-                    }
-
-                    $schedule
-                        ->onError(function (Event $evt) use (&$error) {
-                            $error .= $evt->getExpression() . ' ' . $evt->buildCommand() . PHP_EOL;
-                            throw new Exception($error);
-                        });
-                } else {
-                    $log->err("Cron task class name or schedule not configured");
+                if ($taskConfig->isPreventOverlapping()) {
+                    $crunzTask->preventOverlapping();
                 }
+
+                $crunzTask
+                    ->cron($taskConfig->getSchedule())
+                    ->description($taskConfig->getName());
+
+                $schedule
+                    ->onError(function (Event $evt) use (&$error) {
+                        $error .= $evt->getExpression() . ' ' . $evt->buildCommand() . PHP_EOL;
+                        throw new Exception($error);
+                    });
             }
         } else {
-            $log->err("Couldn't access task configuration from ini file");
+            $log->err("Couldn't access task scheduler configuration from ini file");
         }
 
         return $schedule;
-    }
-
-    /**
-     * Returns the cron task configuration from the ini file.
-     * Name of the INI file to be used for configuration, if not set, the default configuration file will be used
-     *
-     * @return array|mixed
-     * @throws Application_Task_TaskConfigException If the task config does not exist or is invalid.
-     */
-    private function getConfiguration()
-    {
-        $config = $this->getConfig();
-
-        $fileName = isset($config->cron->configFile) && $config->cron->configFile ? $config->cron->configFile : self::INI_FILE;
-
-        if (strpos($fileName, '/') === false) {
-            $fileName = __DIR__ . '/../../../application/configs/' . $fileName;
-        }
-
-        if (! is_readable($fileName)) {
-            throw new Application_Task_TaskConfigException("could not find or read ini file '$fileName'");
-        } else {
-            $tasksConfig = new Zend_Config_Ini($fileName);
-            if ($tasksConfig === false) {
-                throw new Application_Task_TaskConfigException("could not parse ini file '$fileName'");
-            }
-        }
-
-        return $tasksConfig;
     }
 
     /**
@@ -138,7 +86,7 @@ class Application_Task_TaskScheduler
      * @return string
      * @throws Application_Task_TaskConfigException If the taskRunner is not configured.
      */
-    private function getTaskRunnerPath()
+    private function getTaskRunnerScriptPath()
     {
         $config = $this->getConfig();
 
@@ -165,6 +113,18 @@ class Application_Task_TaskScheduler
     private function isEnabled()
     {
         $config = $this->getConfig();
-        return filter_var($config->cron->enabled, FILTER_VALIDATE_BOOLEAN) && $this->getTaskRunnerPath();
+        return filter_var($config->cron->enabled, FILTER_VALIDATE_BOOLEAN) &&
+            $this->getTaskRunnerScriptPath();
+    }
+
+    /**
+     * Gets the configurations of the active tasks.
+     *
+     * @return array
+     */
+    public function getActiveTaskConfigurations()
+    {
+        $taskConfigReader = new Application_Task_TaskConfigReader();
+        return $taskConfigReader->getActiveTaskConfigurations();
     }
 }

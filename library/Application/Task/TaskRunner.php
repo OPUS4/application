@@ -38,26 +38,31 @@ class Application_Task_TaskRunner
 {
     use LoggingTrait;
 
-    /** @var string */
-    private $taskClass = "";
-
-    /** @var array */
-    private $taskOptions = [];
+    /**
+     * Options from the task runner script.
+     *
+     * @var array
+     */
+    protected $options;
 
     /**
-     * Sets the options for the desired task class
+     * To set the options of the desired task, received from the task runner script
      *
      * @param array $options
      */
-    public function setTaskConfig($options)
+    public function setOptions($options)
     {
-        // Get the name of the desired opus task class
-        $this->taskClass = $options['taskclass'];
+        $this->options = $options;
+    }
 
-        // Get task option values if configured in the ini file.
-        if (isset($options['taskoptions'])) {
-            $this->taskOptions = unserialize($options['taskoptions']);
-        }
+    /**
+     * Gets the name desired task
+     *
+     * @return string
+     */
+    public function getTaskName()
+    {
+        return $this->options['taskname'];
     }
 
     /**
@@ -65,18 +70,21 @@ class Application_Task_TaskRunner
      */
     public function runTask()
     {
+        $taskConfigReader = new Application_Task_TaskConfigReader();
+        $taskConfig       = $taskConfigReader->getTaskConfig($this->getTaskName());
+
         // Run the opus task if the task class is defined
-        if (class_exists($this->taskClass)) {
+        if ($taskConfig && class_exists($taskConfig->getClass())) {
+            $taskClass = $taskConfig->getClass();
+
             // Get an instance of the desired opus task
-            $task = new $this->taskClass();
+            $task = new $taskClass();
 
             // Set option values if configured in the ini file.
-            if (is_array($this->taskOptions)) {
-                foreach ($this->taskOptions as $optionName => $optionValue) {
-                    $setterName = 'set' . ucfirst($optionName);
-                    if (method_exists($this->taskClass, $setterName)) {
-                        $task->$setterName($optionValue);
-                    }
+            foreach ($taskConfig->getOptions() as $optionName => $optionValue) {
+                $setterName = 'set' . ucfirst($optionName);
+                if (method_exists($this->taskClass, $setterName)) {
+                    $task->$setterName($optionValue);
                 }
             }
 
