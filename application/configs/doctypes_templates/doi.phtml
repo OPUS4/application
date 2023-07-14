@@ -45,7 +45,7 @@ $config = Config::get();
 <?php if (isset($this->errorCaseMessage)) : ?>
     <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
 <?php endif; ?>
-<form id="Alles" enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
+<form id="doi-form" enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
     <div class="form-items-wrapper">
         <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
         
@@ -58,6 +58,7 @@ $config = Config::get();
             <input type="button" name="go_import" id="DoiButton" value="Metadaten von Crossref holen" onclick="startCheck()">
 
             <span id="doi_import_invisible_field">
+                
                 <?= $this->element($this->opus_doi_flag); ?>
                 <?= $this->element($this->opus_import_origin); ?>
                 <?= $this->element($this->opus_doi_json); ?>
@@ -139,14 +140,11 @@ $config = Config::get();
         }        
         }
 
-    const mandatory_fields = ['PersonSubmitterLastName_1','PersonSubmitterFirstName_1','Language','TitleMain_1'];
+    const mandatory_fields = ['PersonSubmitterLastName_1','PersonSubmitterEmail_1','Language','TitleMain_1'];
     for (const mandatory of mandatory_fields) { //Pflichtfelder Rot färben, wenn leer 
         if (document.getElementById(mandatory).value == "") {
             colorPink(mandatory);
             }
-        }
-    
+        }    
     }
-
-
 </script>

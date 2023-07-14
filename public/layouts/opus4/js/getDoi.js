@@ -1,59 +1,61 @@
 
 let populatedFields = [];
+const baseUrl       = window.location.href.split('/publish')[0];
+var doi             = null;
 
+// Diese Funktion wird beim Klick auf den Button "DOI-Daten übernehmen" aufgerufen und steuert alles Weitere
 function startCheck()
 {
-    var doi = document.getElementById("IdentifierDoi").value.trim();
+    doi = document.getElementById("IdentifierDoi").value.trim();
     if (doi.trim() == '') {
         // Feld "IdentifierDoi" ist leer
-        alert("Bitte zuerst eine DOI eingeben...")
+        openDialog("Hinweis", "Bitte zuerst eine DOI eingeben...");
     } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value != "true") {
-        // OK, starte Import
-        readDoi(doi)
+        const checkUrl = baseUrl + '/api/doicheck?doi=' + doi;
+        get(
+            checkUrl,
+            function () {
+                var checkdoiData = JSON.parse(this.responseText);
+                if (checkdoiData['doiExists'] == true) { // DOI existiert bereits
+                    checkdoiId = checkdoiData['docId'];
+                    if (typeof checkdoiId !== 'undefined') { // DOI existiert bereits und ist veröffentlicht
+                        openDialog("Hinweis", "Es ist bereits ein Datensatz mit dieser DOI im Repositorium vorhanden (ID " + checkdoiId + ").", checkdoiId);
+                    } else { // DOI existiert bereits und ist unveröffentlicht
+                        openDialog("Hinweis", "Es ist bereits ein Datensatz mit dieser DOI im Repositorium vorhanden (unveröffentlicht).");
+                    }} else {
+                    readDoi(doi)} // DOI existiert noch nicht, starte Import
+            }
+        )
     } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true") {
         // Import wurde bereits durchgeführt -> Bestätigung
-        if (confirm("Achtung, alle Felder des Formulars werden gelöscht und ein neuer Import gestartet! Fortfahren?")) {
-            cleanup();
-            document.getElementById("IdentifierDoi").value = doi;
-            readDoi(doi);
-        } else {
-            return
-        }
+        openDialog("Achtung", "Achtung, alle Felder des Formulars werden gelöscht und ein neuer Import gestartet! Fortfahren?");
     }
 }
 
 function cleanup()
 {
     let fields = document.getElementById("Enrichmentopus_doiImportPopulated").value;
-    document.getElementById("Alles").reset(); // Alle Felder leeren
-    document.getElementById("PersonAuthorLastName_1").value        = ""; // Explizites reset(), weil die Felder sonst stehen bleiben
-    document.getElementById("PersonAuthorFirstName_1").value       = "";
-    document.getElementById("PersonAuthorIdentifierOrcid_1").value = "";
-
+    document.getElementById("doi-form").reset(); // Alle Felder leeren
     const usedFields = fields.split(',');
     for (const element of usedFields) { // Hier wird der grüne Hintergrund entfernt
         if (document.getElementById(element)) {
             document.getElementById(element).style.backgroundColor = null;
+            document.getElementById(element).value                 = "";
         }
     }
 }
 
 function readDoi(doi)
 {
- // Diese Funktion wird beim Klick auf den Button "DOI-Daten übernehmen" aufgerufen und steuert alles Weitere
-
     if (doi.trim() != '') {
-
-        var getUrl         = window.location;
-            const baseUrl  = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-            const finalUrl = baseUrl + '/api/crossref?doi=' + doi;
+        const finalUrl = baseUrl + '/api/crossref?doi=' + doi;
         get(
             finalUrl,
             function () {
                 var jsonraw = this.responseText;
                 if (jsonraw == "Resource not found.") {
-                    alert("DOI wurde nicht in Crossref gefunden.");
-                    colorOrange("IdentifierDoi")
+                    openDialog("Hinweis", "DOI wurde nicht in Crossref gefunden. Bitte prüfen Sie die Eingabe.");
+                    colorPink("IdentifierDoi");
                 } else {
                     document.getElementById("Enrichmentopus_doi_json").value = jsonraw;
                     document.getElementById("Enrichmentopus_doi_flag").value = "false";
@@ -395,8 +397,6 @@ var crossrefTypeMapping = {
  */
 async function getDoctypes(data)
 {
-    var getUrl     = window.location;
-    const baseUrl  = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
     const finalUrl = baseUrl + '/api/doctypes';
     get(
         finalUrl,
@@ -451,5 +451,39 @@ async function getDoctypes(data)
 }
 
 
+function openDialog(title, text, id = null)
+{
+    var dialogButtons = {
+        OK: function () {
+            $(this).dialog("close");
+        }
+    };
 
+    var dialogContent         = document.createElement("div");
+    dialogContent.textContent = text;
+    if (id) {
+        dialogButtons['ID ' + id + ' ansehen'] = function () {
+            var checkLink = baseUrl + "/" + id;
+            window.open(checkLink, '_blank');
+        }}
+    if (title == "Achtung") {
+        dialogButtons['OK'] = function () {
+            $(this).dialog("close");
+            cleanup();
+            document.getElementById("IdentifierDoi").value = doi;
+            startCheck();
+        };
 
+            dialogButtons['Abbruch'] = function () {
+                $(this).dialog("close");
+            };
+    }
+
+    $(function () {
+        $(dialogContent).dialog({
+            title: title,
+            modal: true,
+            buttons: dialogButtons
+        });
+    });
+}
