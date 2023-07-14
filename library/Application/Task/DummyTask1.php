@@ -36,8 +36,6 @@ class Application_Task_DummyTask1 implements Application_Task_TaskInterface
 {
     public function run()
     {
-        echo "Vagrant: DummyTask 1 running \n";
-        sleep(90);
-        echo "Vagrant: DummyTask 1 finished \n";
+        echo "DummyTask 1 running \n";
     }
 }
