@@ -45,41 +45,46 @@ class Application_Task_TaskConfigReader
      */
     const INI_FILE = 'tasks.ini';
 
-    /** @var Zend_Config_Ini */
+    /** @var Zend_Config */
     protected $tasksConfig;
 
     public function __construct()
     {
-        $this->tasksConfig = $this->getConfiguration();
+        $this->tasksConfig = $this->init();
     }
 
     /**
      * Returns the task configuration from the task ini file.
-     * Name of the INI file to be used for configuration, if not set, the default configuration file will be used
+     * Name of the INI file to be used for configuration, if not set, the global configuration file will be used to
+     * determine a configuration as a fallback.
      *
-     * @return Zend_Config_Ini
-     * @throws Application_Task_TaskConfigException If the task config does not exist or is invalid.
+     * @return Zend_Config|Zend_Config_Ini|null
      */
-    private function getConfiguration()
+    protected function init()
     {
         $config = $this->getConfig();
+        $logger = $this->getLogger();
 
-        $fileName = isset($config->cron->configFile) && $config->cron->configFile ? $config->cron->configFile : self::INI_FILE;
+        $fileName = isset($config->cron->configFile) && $config->cron->configFile ? $config->cron->configFile : '';
 
-        if (strpos($fileName, '/') === false) {
-            $fileName = __DIR__ . '/../../../application/configs/' . $fileName;
-        }
-
-        if (! is_readable($fileName)) {
-            throw new Application_Task_TaskConfigException("could not find or read ini file '$fileName'");
+        if ($fileName) {
+            if (! is_readable($fileName)) {
+                $logger->err("Could not find or read task ini file: '$fileName'");
+            } else {
+                $tasksConfig = new Zend_Config_Ini($fileName);
+                if ($tasksConfig === false) {
+                    $logger->err("Could not parse task ini file: '$fileName'");
+                } else {
+                    return $tasksConfig;
+                }
+            }
         } else {
-            $tasksConfig = new Zend_Config_Ini($fileName);
-            if ($tasksConfig === false) {
-                throw new Application_Task_TaskConfigException("could not parse ini file '$fileName'");
+            if (isset($config->cron->tasks)) {
+                return $config->cron->tasks;
             }
         }
 
-        return $tasksConfig;
+        return null;
     }
 
     /**

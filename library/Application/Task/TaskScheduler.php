@@ -83,22 +83,19 @@ class Application_Task_TaskScheduler
     /**
      * Gets the full path of the task runner script from the main configuration.
      *
-     * @return string
-     * @throws Application_Task_TaskConfigException If the taskRunner is not configured.
+     * @return string|null
      */
     private function getTaskRunnerScriptPath()
     {
         $config = $this->getConfig();
+        $log    = $this->getLogger();
 
         if (! isset($config->cron->taskRunner)) {
-            throw new Application_Task_TaskConfigException(
-                "could not read the task runner path from 'application.ini'"
-            );
+            $log->err("Could not read the task runner path from 'application.ini'");
         }
 
         if (! is_readable($config->cron->taskRunner)) {
-            throw new Application_Task_TaskConfigException(
-                "could not find or read task runner file '" . $config->cron->taskRunner . "'"
+            $log->err("Could not find or read task runner file: '" . $config->cron->taskRunner . "'"
             );
         }
 
