@@ -96,10 +96,7 @@ class Application_Task_TaskConfigReader
     {
         $tasks = [];
         foreach ($this->tasksConfig as $name => $config) {
-            if (
-                isset($config->class)
-                && class_exists($config->class)
-            ) {
+            if (isset($config->class)) {
                 $tasks[$name] = $this->createTaskConfig($name, $config);
             }
         }
@@ -132,7 +129,7 @@ class Application_Task_TaskConfigReader
         if (isset($this->tasksConfig->$name)) {
             $taskConfig = $this->tasksConfig->$name;
 
-            if (isset($taskConfig->class) && class_exists($taskConfig->class)) {
+            if (isset($taskConfig->class)) {
                 return $this->createTaskConfig($name, $taskConfig);
             }
         }
