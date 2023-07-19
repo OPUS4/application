@@ -157,10 +157,14 @@ class Application_Task_TaskConfigReader
             $config->schedule ?? Application_Task_TaskConfig::SCHEDULE_DEFAULT
         );
 
-        $taskConfig->setPreventOverlapping(
+        if (
             isset($config->preventOverlapping) &&
-            filter_var($config->preventOverlapping, FILTER_VALIDATE_BOOLEAN)
-        );
+            false === filter_var($config->preventOverlapping, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)
+        ) {
+            $taskConfig->setPreventOverlapping(false);
+        } else {
+            $taskConfig->setPreventOverlapping(true);
+        }
 
         $taskConfig->setEnabled(
             isset($config->enabled) &&
