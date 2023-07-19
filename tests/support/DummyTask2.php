@@ -30,12 +30,13 @@
  */
 
 /**
- * Class to check consistency
+ * Dummy task for development purposes
  */
-class Application_Task_DummyTask1 implements Application_Task_TaskInterface
+
+class DummyTask2 implements Application_Task_TaskInterface
 {
     public function run()
     {
-        echo "DummyTask 1 running \n";
+        echo "DummyTask 2 running \n";
     }
 }
