@@ -36,5 +36,5 @@
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$taskScheduler = new Application_Task_TaskScheduler();
+$taskScheduler = new Application_Task_TaskManager();
 return $taskScheduler->getCrunzSchedule();

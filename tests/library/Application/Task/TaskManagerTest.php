@@ -31,6 +31,22 @@
 
 class Application_Task_TaskManagerTest extends ControllerTestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->makeConfigurationModifiable();
+
+        $this->adjustConfiguration(
+            [
+                'cron' => [
+                    'enabled'    => 'true',
+                    'taskRunner' => 'scripts/tasks/task-runner.php',
+                    'configFile' => 'tests/resources/task/taskmanagertest-tasks.ini',
+                ],
+            ]
+        );
+    }
+
     public function testGetTaskConfigurations()
     {
         $taskManager        = new Application_Task_TaskManager();
@@ -101,5 +117,26 @@ class Application_Task_TaskManagerTest extends ControllerTestCase
     {
         $taskManager = new Application_Task_TaskManager();
         $this->assertFalse($taskManager->isValidTaskClass(Application_Configuration_MaxUploadSize::class));
+    }
+
+    public function testGetTaskRunnerScriptPath()
+    {
+        $taskManager = new Application_Task_TaskManager();
+        $this->assertEquals("scripts/tasks/task-runner.php", $taskManager->getTaskRunnerScriptPath());
+    }
+
+    public function testIsCrunzSchedulerEnabled()
+    {
+        $this->adjustConfiguration(['cron' => ['enabled' => 'true']]);
+        $taskManager = new Application_Task_TaskManager();
+        $this->assertTrue($taskManager->isCrunzSchedulerEnabled());
+
+        $this->adjustConfiguration(['cron' => ['enabled' => 'false']]);
+        $taskManager = new Application_Task_TaskManager();
+        $this->assertFalse($taskManager->isCrunzSchedulerEnabled());
+
+        $this->adjustConfiguration(['cron' => ['enabled' => 'unknown']]);
+        $taskManager = new Application_Task_TaskManager();
+        $this->assertFalse($taskManager->isCrunzSchedulerEnabled());
     }
 }

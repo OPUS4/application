@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Crunz\Event;
+use Crunz\Schedule;
 use Opus\Common\ConfigTrait;
 use Opus\Common\LoggingTrait;
 
@@ -59,6 +61,8 @@ class Application_Task_TaskManager
         $logger = $this->getLogger();
 
         $fileName = $config->cron->configFile ?? '';
+
+        $this->tasksConfig = [];
 
         if ($fileName) {
             if (! is_readable($fileName)) {
@@ -192,5 +196,78 @@ class Application_Task_TaskManager
         }
 
         return true;
+    }
+
+    /**
+     * Gets a Crunz scheduler initialized with all active tasks by adding them to the Crunz scheduler.
+     *
+     * @return Schedule
+     */
+    public function getCrunzSchedule()
+    {
+        $log      = $this->getLogger();
+        $schedule = new Schedule();
+
+        if ($this->isCrunzSchedulerEnabled()) {
+            foreach ($this->getActiveTaskConfigurations() as $taskConfig) {
+                $crunzTask = $schedule->run(
+                    PHP_BINARY . " " . $this->getTaskRunnerScriptPath(),
+                    ['--taskname' => $taskConfig->getName()]
+                );
+
+                if ($taskConfig->isPreventOverlapping()) {
+                    $crunzTask->preventOverlapping();
+                }
+
+                $crunzTask
+                    ->cron($taskConfig->getSchedule())
+                    ->description($taskConfig->getName());
+
+                $schedule
+                    ->onError(function (Event $evt) use (&$error) {
+                        $error .= $evt->getExpression() . ' ' . $evt->buildCommand() . PHP_EOL;
+                        throw new Exception($error);
+                    });
+            }
+        } else {
+            $log->err("Couldn't access task scheduler configuration from ini file");
+        }
+
+        return $schedule;
+    }
+
+    /**
+     * Gets the full path of the task runner script from the main configuration.
+     *
+     * @return string|null
+     */
+    public function getTaskRunnerScriptPath()
+    {
+        $config = $this->getConfig();
+        $log    = $this->getLogger();
+
+        $taskRunner = $config->cron->taskRunner;
+
+        if (! isset($taskRunner)) {
+            $log->err("Could not read the task runner path from configuration");
+        }
+
+        if (! is_readable($taskRunner)) {
+            $log->err("Could not find or read task runner file: '" . $taskRunner . "'");
+        }
+
+        return $taskRunner;
+    }
+
+    /**
+     * Checks if task scheduling is enabled in the main configuration
+     *
+     * @return bool
+     */
+    public function isCrunzSchedulerEnabled()
+    {
+        $config = $this->getConfig();
+        return filter_var($config->cron->enabled, FILTER_VALIDATE_BOOLEAN) &&
+            $this->getTaskRunnerScriptPath();
     }
 }
