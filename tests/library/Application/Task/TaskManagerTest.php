@@ -39,28 +39,27 @@ class Application_Task_TaskManagerTest extends ControllerTestCase
         $this->assertEquals(2, count($taskConfigurations));
 
         $taskConfig = new Application_Task_TaskConfig();
-        $taskConfig->setEnabled(true);
-        $taskConfig->setName('testTask1');
-        $taskConfig->setSchedule('*/1 * * * *');
-        $taskConfig->setClass("Application_Job_CleanTemporariesJob");
-        $taskConfig->setPreventOverlapping(true);
-
-        $taskConfig->setOptions(
-            [
-                'optionName1' => 'option1Value',
-                'optionName2' => 'option2Value',
-            ]
-        );
+        $taskConfig->setEnabled(true)
+            ->setName('testTask1')
+            ->setSchedule('*/1 * * * *')
+            ->setClass("Application_Job_CleanTemporariesJob")
+            ->setPreventOverlapping(true)
+            ->setOptions(
+                [
+                    'optionName1' => 'option1Value',
+                    'optionName2' => 'option2Value',
+                ]
+            );
 
         $this->assertEquals($taskConfig, $taskConfigurations['testTask1']);
 
         $taskConfig = new Application_Task_TaskConfig();
-        $taskConfig->setEnabled(false);
-        $taskConfig->setName('testTask2');
-        $taskConfig->setSchedule('*/2 * * * *');
-        $taskConfig->setClass("Application_Job_SendNotificationJob");
-        $taskConfig->setPreventOverlapping(false);
-        $taskConfig->setOptions([]);
+        $taskConfig->setEnabled(false)
+            ->setName('testTask2')
+            ->setSchedule('*/2 * * * *')
+            ->setClass("Application_Job_SendNotificationJob")
+            ->setPreventOverlapping(false)
+            ->setOptions([]);
 
         $this->assertEquals($taskConfig, $taskConfigurations['testTask2']);
     }
@@ -77,12 +76,12 @@ class Application_Task_TaskManagerTest extends ControllerTestCase
     public function testGetTaskConfig()
     {
         $taskConfig = new Application_Task_TaskConfig();
-        $taskConfig->setEnabled(false);
-        $taskConfig->setName('testTask2');
-        $taskConfig->setSchedule('*/2 * * * *');
-        $taskConfig->setClass("Application_Job_SendNotificationJob");
-        $taskConfig->setPreventOverlapping(false);
-        $taskConfig->setOptions([]);
+        $taskConfig->setEnabled(false)
+            ->setName('testTask2')
+            ->setSchedule('*/2 * * * *')
+            ->setClass("Application_Job_SendNotificationJob")
+            ->setPreventOverlapping(false)
+            ->setOptions([]);
 
         $taskManager       = new Application_Task_TaskManager();
         $taskConfiguration = $taskManager->getTaskConfig('unknownTask');

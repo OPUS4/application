@@ -137,13 +137,11 @@ class Application_Task_TaskManager
     {
         $taskConfig = new Application_Task_TaskConfig();
 
-        $taskConfig->setName($name);
-
-        $taskConfig->setClass($config->class ?? '');
-
-        $taskConfig->setSchedule(
-            $config->schedule ?? Application_Task_TaskConfig::SCHEDULE_DEFAULT
-        );
+        $taskConfig->setName($name)
+            ->setClass($config->class ?? '')
+            ->setSchedule(
+                $config->schedule ?? Application_Task_TaskConfig::SCHEDULE_DEFAULT
+            );
 
         if (
             isset($config->preventOverlapping) &&

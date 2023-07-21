@@ -64,10 +64,12 @@ class Application_Task_TaskConfig
 
     /**
      * @param string $name
+     * @return $this
      */
     public function setName($name)
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -80,10 +82,12 @@ class Application_Task_TaskConfig
 
     /**
      * @param string $class
+     * @return $this
      */
     public function setClass($class)
     {
         $this->class = $class;
+        return $this;
     }
 
     /**
@@ -96,10 +100,12 @@ class Application_Task_TaskConfig
 
     /**
      * @param bool $enabled
+     * @return $this
      */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
+        return $this;
     }
 
     /**
@@ -112,10 +118,12 @@ class Application_Task_TaskConfig
 
     /**
      * @param string $schedule
+     * @return $this
      */
     public function setSchedule($schedule)
     {
         $this->schedule = $schedule;
+        return $this;
     }
 
     /**
@@ -128,10 +136,12 @@ class Application_Task_TaskConfig
 
     /**
      * @param bool $preventOverlapping
+     * @return $this
      */
     public function setPreventOverlapping($preventOverlapping)
     {
         $this->preventOverlapping = $preventOverlapping;
+        return $this;
     }
 
     /**
@@ -144,9 +154,11 @@ class Application_Task_TaskConfig
 
     /**
      * @param array $options
+     * @return $this
      */
     public function setOptions($options)
     {
         $this->options = $options;
+        return $this;
     }
 }
