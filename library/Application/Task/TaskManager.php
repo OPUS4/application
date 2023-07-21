@@ -52,8 +52,6 @@ class Application_Task_TaskManager
      * Initializes the task configuration from the task ini file.
      * The name/path of the INI file to be used should be configured in the global configuration,
      * if not set, the global configuration file will be used to determine a configuration as a fallback.
-     *
-     * @return Zend_Config|Zend_Config_Ini|null
      */
     protected function init()
     {

@@ -87,20 +87,22 @@ class Application_Task_TaskScheduler
      *
      * @return string|null
      */
-    private function getTaskRunnerScriptPath()
+    public function getTaskRunnerScriptPath()
     {
         $config = $this->getConfig();
         $log    = $this->getLogger();
 
-        if (! isset($config->cron->taskRunner)) {
+        $taskRunner = $config->cron->taskRunner;
+
+        if (! isset($taskRunner)) {
             $log->err("Could not read the task runner path from configuration");
         }
 
-        if (! is_readable($config->cron->taskRunner)) {
-            $log->err("Could not find or read task runner file: '" . $config->cron->taskRunner . "'");
+        if (! is_readable($taskRunner)) {
+            $log->err("Could not find or read task runner file: '" . $taskRunner . "'");
         }
 
-        return $config->cron->taskRunner;
+        return $taskRunner;
     }
 
     /**
