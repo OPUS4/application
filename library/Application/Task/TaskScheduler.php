@@ -49,7 +49,7 @@ class Application_Task_TaskScheduler
      *
      * @return Schedule The Crunz scheduler instance required by our single Crunz task
      */
-    public function init()
+    public function getCrunzSchedule()
     {
         $log      = $this->getLogger();
         $schedule = new Schedule();

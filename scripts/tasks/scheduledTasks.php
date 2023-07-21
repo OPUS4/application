@@ -39,4 +39,4 @@ define('APPLICATION_ENV', 'production');
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 $taskScheduler = new Application_Task_TaskScheduler();
-return $taskScheduler->init();
+return $taskScheduler->getCrunzSchedule();
