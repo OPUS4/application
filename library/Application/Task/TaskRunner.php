@@ -75,7 +75,7 @@ class Application_Task_TaskRunner
 
         // Run the opus task
         if ($taskConfig) {
-            if ($this->isValidTaskClass($taskConfig->getClass())) {
+            if ($taskConfigReader->isValidTaskClass($taskConfig->getClass())) {
                 $taskClass = $taskConfig->getClass();
 
                 // Get an instance of the desired opus task
@@ -96,29 +96,5 @@ class Application_Task_TaskRunner
                 'No configuration found for task name: ' . $this->getTaskName()
             );
         }
-    }
-
-    /**
-     * Check if a task class exists and implements the correct task interface.
-     *
-     * @param string $className
-     * @return bool
-     */
-    protected function isValidTaskClass($className)
-    {
-        if (! class_exists($className)) {
-            $this->getLogger()->err('Task class unknown: ' . $className);
-            return false;
-        }
-
-        $class = new ReflectionClass($className);
-        if (! $class->implementsInterface(Application_Task_TaskInterface::class)) {
-            $this->getLogger()->err(
-                'Task class does not implement interface: ' . Application_Task_TaskInterface::class
-            );
-            return false;
-        }
-
-        return true;
     }
 }

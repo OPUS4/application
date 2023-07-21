@@ -179,4 +179,35 @@ class Application_Task_TaskConfigReader
 
         return $taskConfig;
     }
+
+    /**
+     * Check if a task class exists and implements the correct task interface.
+     *
+     * @param string $className
+     * @return bool
+     */
+    public function isValidTaskClass($className)
+    {
+        if (! class_exists($className)) {
+            $this->getLogger()->err('Task class unknown: ' . $className);
+            return false;
+        }
+
+        $class = new ReflectionClass($className);
+        if (
+            ! (
+                $class->implementsInterface(Application_Task_TaskInterface::class) ||
+                $class->implementsInterface(Application_Job_JobInterface::class)
+            )
+        ) {
+            $this->getLogger()->err(
+                'Task class does not implement interface: '
+                . Application_Task_TaskInterface::class . 'or' . Application_Job_JobInterface::class
+            );
+
+            return false;
+        }
+
+        return true;
+    }
 }

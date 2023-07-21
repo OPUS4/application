@@ -95,8 +95,7 @@ class Application_Task_TaskScheduler
         }
 
         if (! is_readable($config->cron->taskRunner)) {
-            $log->err("Could not find or read task runner file: '" . $config->cron->taskRunner . "'"
-            );
+            $log->err("Could not find or read task runner file: '" . $config->cron->taskRunner . "'");
         }
 
         return $config->cron->taskRunner;
