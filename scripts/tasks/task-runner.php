@@ -33,8 +33,6 @@
 // Since the Crunz scheduler cannot execute classes directly, we need this intermediate step via a script
 // to instantiate and execute the desired Opus Task object.
 
-define('APPLICATION_ENV', 'production');
-
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 $options = getopt(null, ["taskname:"]);

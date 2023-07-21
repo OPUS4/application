@@ -34,8 +34,6 @@
 // to start a task scheduler in which all configured opus tasks will be executed by the crunz scheduler
 // according to the schedule times specified in the task.ini configuration.
 
-define('APPLICATION_ENV', 'production');
-
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 $taskScheduler = new Application_Task_TaskScheduler();
