@@ -35,15 +35,10 @@ use Opus\Common\LoggingTrait;
 /**
  * Class to read configuration data for tasks
  */
-class Application_Task_TaskConfigReader
+class Application_Task_TaskManager
 {
     use ConfigTrait;
     use LoggingTrait;
-
-    /**
-     * Name of the default configuration file where all tasks to be run are defined.
-     */
-    const INI_FILE = 'tasks.ini';
 
     /** @var Zend_Config */
     protected $tasksConfig;

@@ -29,14 +29,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Task_TaskConfigReaderTest extends ControllerTestCase
+class Application_Task_TaskManagerTest extends ControllerTestCase
 {
     public function testGetTaskConfigurations()
     {
-        $taskConfigReader = new Application_Task_TaskConfigReader();
-        $taskConfigurations = $taskConfigReader->getTaskConfigurations();
+        $taskManager        = new Application_Task_TaskManager();
+        $taskConfigurations = $taskManager->getTaskConfigurations();
         $this->assertNotEmpty($taskConfigurations);
-        $this->assertEquals(2, sizeof($taskConfigurations));
+        $this->assertEquals(2, count($taskConfigurations));
 
         $taskConfig = new Application_Task_TaskConfig();
         $taskConfig->setEnabled(true);
@@ -48,7 +48,7 @@ class Application_Task_TaskConfigReaderTest extends ControllerTestCase
         $taskConfig->setOptions(
             [
                 'optionName1' => 'option1Value',
-                'optionName2' => 'option2Value'
+                'optionName2' => 'option2Value',
             ]
         );
 
@@ -67,10 +67,10 @@ class Application_Task_TaskConfigReaderTest extends ControllerTestCase
 
     public function testGetActiveTaskConfigurations()
     {
-        $taskConfigReader = new Application_Task_TaskConfigReader();
-        $taskConfigurations = $taskConfigReader->getActiveTaskConfigurations();
+        $taskManager        = new Application_Task_TaskManager();
+        $taskConfigurations = $taskManager->getActiveTaskConfigurations();
         $this->assertNotEmpty($taskConfigurations);
-        $this->assertEquals(1, sizeof($taskConfigurations));
+        $this->assertEquals(1, count($taskConfigurations));
         $this->assertTrue(array_pop($taskConfigurations)->isEnabled());
     }
 
@@ -84,23 +84,23 @@ class Application_Task_TaskConfigReaderTest extends ControllerTestCase
         $taskConfig->setPreventOverlapping(false);
         $taskConfig->setOptions([]);
 
-        $taskConfigReader = new Application_Task_TaskConfigReader();
-        $taskConfiguration = $taskConfigReader->getTaskConfig('unknownTask');
+        $taskManager       = new Application_Task_TaskManager();
+        $taskConfiguration = $taskManager->getTaskConfig('unknownTask');
         $this->assertFalse($taskConfiguration);
 
-        $taskConfiguration = $taskConfigReader->getTaskConfig('testTask2');
+        $taskConfiguration = $taskManager->getTaskConfig('testTask2');
         $this->assertEquals('Application_Job_SendNotificationJob', $taskConfiguration->getClass());
     }
 
     public function testNotExistingTaskClass()
     {
-        $taskConfigReader = new Application_Task_TaskConfigReader();
-        $this->assertFalse($taskConfigReader->isValidTaskClass('UnknownClass'));
+        $taskManager = new Application_Task_TaskManager();
+        $this->assertFalse($taskManager->isValidTaskClass('UnknownClass'));
     }
 
     public function testTaskClassWithNotImplementingTaskInterface()
     {
-        $taskConfigReader = new Application_Task_TaskConfigReader();
-        $this->assertFalse($taskConfigReader->isValidTaskClass('Application_Configuration_MaxUploadSize'));
+        $taskManager = new Application_Task_TaskManager();
+        $this->assertFalse($taskManager->isValidTaskClass('Application_Configuration_MaxUploadSize'));
     }
 }

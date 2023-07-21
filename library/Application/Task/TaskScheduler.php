@@ -120,7 +120,7 @@ class Application_Task_TaskScheduler
      */
     public function getActiveTaskConfigurations()
     {
-        $taskConfigReader = new Application_Task_TaskConfigReader();
-        return $taskConfigReader->getActiveTaskConfigurations();
+        $taskManager = new Application_Task_TaskManager();
+        return $taskManager->getActiveTaskConfigurations();
     }
 }

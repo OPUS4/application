@@ -70,12 +70,12 @@ class Application_Task_TaskRunner
      */
     public function runTask()
     {
-        $taskConfigReader = new Application_Task_TaskConfigReader();
-        $taskConfig       = $taskConfigReader->getTaskConfig($this->getTaskName());
+        $taskManager = new Application_Task_TaskManager();
+        $taskConfig  = $taskManager->getTaskConfig($this->getTaskName());
 
         // Run the opus task
         if ($taskConfig) {
-            if ($taskConfigReader->isValidTaskClass($taskConfig->getClass())) {
+            if ($taskManager->isValidTaskClass($taskConfig->getClass())) {
                 $taskClass = $taskConfig->getClass();
 
                 // Get an instance of the desired opus task
