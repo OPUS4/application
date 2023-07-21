@@ -45,9 +45,11 @@ class Application_Task_TaskScheduler
     use LoggingTrait;
 
     /**
-     * @return Schedule
+     * Initializes the scheduler with all active tasks by adding them to a Crunz scheduler.
+     *
+     * @return Schedule The Crunz scheduler instance required by our single Crunz task
      */
-    public function run()
+    public function init()
     {
         $log      = $this->getLogger();
         $schedule = new Schedule();
@@ -91,7 +93,7 @@ class Application_Task_TaskScheduler
         $log    = $this->getLogger();
 
         if (! isset($config->cron->taskRunner)) {
-            $log->err("Could not read the task runner path from 'application.ini'");
+            $log->err("Could not read the task runner path from configuration");
         }
 
         if (! is_readable($config->cron->taskRunner)) {
