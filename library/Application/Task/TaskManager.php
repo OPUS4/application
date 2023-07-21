@@ -45,13 +45,13 @@ class Application_Task_TaskManager
 
     public function __construct()
     {
-        $this->tasksConfig = $this->init();
+        $this->init();
     }
 
     /**
-     * Returns the task configuration from the task ini file.
-     * Name of the INI file to be used for configuration, if not set, the global configuration file will be used to
-     * determine a configuration as a fallback.
+     * Initializes the task configuration from the task ini file.
+     * The name/path of the INI file to be used should be configured in the global configuration,
+     * if not set, the global configuration file will be used to determine a configuration as a fallback.
      *
      * @return Zend_Config|Zend_Config_Ini|null
      */
@@ -70,16 +70,14 @@ class Application_Task_TaskManager
                 if ($tasksConfig === false) {
                     $logger->err("Could not parse task ini file: '$fileName'");
                 } else {
-                    return $tasksConfig;
+                    $this->tasksConfig = $tasksConfig;
                 }
             }
         } else {
             if (isset($config->cron->tasks)) {
-                return $config->cron->tasks;
+                $this->tasksConfig = $config->cron->tasks;
             }
         }
-
-        return null;
     }
 
     /**
