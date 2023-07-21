@@ -40,7 +40,7 @@ use Opus\Model\Xml\Version1;
  * Since the metadata of documents are stored in multiple tables,
  * the cache stores the metadata in one place for faster access.
  */
-class Application_Job_UpdateDocumentCacheJob implements Application_Job_JobInterface
+class Application_Job_UpdateDocumentCacheJob implements Application_Task_TaskInterface
 {
     public function run()
     {

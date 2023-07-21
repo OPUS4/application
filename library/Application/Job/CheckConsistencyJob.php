@@ -36,7 +36,7 @@ use Opus\Search\Task\ConsistencyCheck;
 /**
  * Class to check consistency
  */
-class Application_Job_CheckConsistencyJob implements Application_Job_JobInterface
+class Application_Job_CheckConsistencyJob implements Application_Task_TaskInterface
 {
     use LoggingTrait;
 

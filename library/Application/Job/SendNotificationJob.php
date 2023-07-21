@@ -36,7 +36,7 @@ use Opus\Job\Runner;
 /**
  * Class for sending notification
  */
-class Application_Job_SendNotificationJob implements Application_Job_JobInterface
+class Application_Job_SendNotificationJob implements Application_Task_TaskInterface
 {
     use LoggingTrait;
 

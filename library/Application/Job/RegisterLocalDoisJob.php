@@ -39,7 +39,7 @@ use Opus\Doi\DoiManager;
  * Für die ermittelten DOIs wird die Registrierung bei DataCite versucht.
  *
  */
-class Application_Job_RegisterLocalDoisJob implements Application_Job_JobInterface
+class Application_Job_RegisterLocalDoisJob implements Application_Task_TaskInterface
 {
     /** @var bool */
     private $printErrors = false;

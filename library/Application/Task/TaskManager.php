@@ -183,15 +183,9 @@ class Application_Task_TaskManager
         }
 
         $class = new ReflectionClass($className);
-        if (
-            ! (
-                $class->implementsInterface(Application_Task_TaskInterface::class) ||
-                $class->implementsInterface(Application_Job_JobInterface::class)
-            )
-        ) {
+        if (! $class->implementsInterface(Application_Task_TaskInterface::class)) {
             $this->getLogger()->err(
-                'Task class does not implement interface: '
-                . Application_Task_TaskInterface::class . 'or' . Application_Job_JobInterface::class
+                'Task class does not implement interface: ' . Application_Task_TaskInterface::class
             );
 
             return false;

@@ -36,7 +36,7 @@ use Opus\Job\Runner;
 /**
  * Class to import metadata.
  */
-class Application_Job_ImportMetadataJob implements Application_Job_JobInterface
+class Application_Job_ImportMetadataJob implements Application_Task_TaskInterface
 {
     use LoggingTrait;
 

@@ -48,7 +48,7 @@ use Opus\Common\Repository;
  *
  * TODO document policies of EmbargoDate - is it '<' or '<=' ?
  */
-class Application_Job_EmbargoUpdateJob implements Application_Job_JobInterface
+class Application_Job_EmbargoUpdateJob implements Application_Task_TaskInterface
 {
     public function run()
     {

@@ -35,7 +35,7 @@ use Opus\Common\Repository;
 /**
  * Class for cleaning temporary documents.
  */
-class Application_Job_CleanTemporariesJob implements Application_Job_JobInterface
+class Application_Job_CleanTemporariesJob implements Application_Task_TaskInterface
 {
     /** @var string Duration of the temporary document */
     private $duration;

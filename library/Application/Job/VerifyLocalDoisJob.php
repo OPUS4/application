@@ -41,7 +41,7 @@ use Opus\Doi\DoiManager;
  * gesetzt, wenn sie über das Handle-System tatsächlich auflösbar ist.
  *
  */
-class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
+class Application_Job_VerifyLocalDoisJob implements Application_Task_TaskInterface
 {
     /** @var bool */
     private $printErrors = false;
