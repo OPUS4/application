@@ -58,7 +58,7 @@ class Application_Task_TaskManager
         $config = $this->getConfig();
         $logger = $this->getLogger();
 
-        $fileName = isset($config->cron->configFile) && $config->cron->configFile ? $config->cron->configFile : '';
+        $fileName = $config->cron->configFile ?? '';
 
         if ($fileName) {
             if (! is_readable($fileName)) {
