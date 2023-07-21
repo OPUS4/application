@@ -42,7 +42,7 @@ class Application_Task_TaskManagerTest extends ControllerTestCase
         $taskConfig->setEnabled(true)
             ->setName('testTask1')
             ->setSchedule('*/1 * * * *')
-            ->setClass("Application_Job_CleanTemporariesJob")
+            ->setClass(Application_Job_CleanTemporariesJob::class)
             ->setPreventOverlapping(true)
             ->setOptions(
                 [
@@ -57,7 +57,7 @@ class Application_Task_TaskManagerTest extends ControllerTestCase
         $taskConfig->setEnabled(false)
             ->setName('testTask2')
             ->setSchedule('*/2 * * * *')
-            ->setClass("Application_Job_SendNotificationJob")
+            ->setClass(Application_Job_SendNotificationJob::class)
             ->setPreventOverlapping(false)
             ->setOptions([]);
 
@@ -79,7 +79,7 @@ class Application_Task_TaskManagerTest extends ControllerTestCase
         $taskConfig->setEnabled(false)
             ->setName('testTask2')
             ->setSchedule('*/2 * * * *')
-            ->setClass("Application_Job_SendNotificationJob")
+            ->setClass(Application_Job_SendNotificationJob::class)
             ->setPreventOverlapping(false)
             ->setOptions([]);
 
@@ -88,7 +88,7 @@ class Application_Task_TaskManagerTest extends ControllerTestCase
         $this->assertFalse($taskConfiguration);
 
         $taskConfiguration = $taskManager->getTaskConfig('testTask2');
-        $this->assertEquals('Application_Job_SendNotificationJob', $taskConfiguration->getClass());
+        $this->assertEquals(Application_Job_SendNotificationJob::class, $taskConfiguration->getClass());
     }
 
     public function testNotExistingTaskClass()
@@ -100,6 +100,6 @@ class Application_Task_TaskManagerTest extends ControllerTestCase
     public function testTaskClassWithNotImplementingTaskInterface()
     {
         $taskManager = new Application_Task_TaskManager();
-        $this->assertFalse($taskManager->isValidTaskClass('Application_Configuration_MaxUploadSize'));
+        $this->assertFalse($taskManager->isValidTaskClass(Application_Configuration_MaxUploadSize::class));
     }
 }
