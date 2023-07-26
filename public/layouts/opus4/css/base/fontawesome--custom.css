@@ -70,7 +70,8 @@ a[class*="pagination-"]::after,
 #pagination-link-hitlist::before,
 .results_author::before,
 .frontdoor #author>p:first-child::before,
-.abstract-toggle,
+.abstract-toggle::after,
+.frontdoor .abstractThreeDots::after,
 fieldset .description.hint::before,
 label[for="fileupload"]::before,
 .form-errors::before,
@@ -81,7 +82,8 @@ ul.nav.browsing>li>a[href*="solrsearch"]::before,
 div#additional-services a[href*="mail/toauthor"]::before,
 div#additional-services a[href*="javascript:void"]::before,
 div.accessible-file::before,
-div.protected-file::before {
+div.protected-file::before,
+.fulltext-logo.fulltext.openaccess::after {
   font-weight: 900;
 }
 
@@ -117,7 +119,8 @@ a[class*="pagination-"]::after,
 .results_author::before,
 .frontdoor #author>p:first-child::before,
 .fulltext-logo.fulltext::before,
-.abstract-toggle,
+.abstract-toggle::after,
+.frontdoor .abstractThreeDots::after,
 fieldset .description.hint::before,
 label[for="fileupload"]::before,
 .form-errors::before,
@@ -129,7 +132,8 @@ ul.nav.browsing>li>a[href*="solrsearch"]::before,
 div#additional-services a[href*="mail/toauthor"]::before,
 div#additional-services a[href*="javascript:void"]::before,
 div.accessible-file::before,
-div.protected-file::before {
+div.protected-file::before,
+.fulltext-logo.fulltext.openaccess::after {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   display: var(--fa-display, inline-block);
@@ -162,7 +166,8 @@ a[class*="pagination-"]::after,
 .results_author::before,
 .frontdoor #author>p:first-child::before,
 .fulltext-logo.fulltext::before,
-.abstract-toggle,
+.abstract-toggle::after,
+.frontdoor .abstractThreeDots::after,
 fieldset .description.hint::before,
 label[for="fileupload"]::before,
 .form-errors::before,
@@ -173,6 +178,7 @@ ul.nav.browsing>li>a[href*="solrsearch"]::before,
 div#additional-services a[href*="mail/toauthor"]::before,
 div#additional-services a[href*="javascript:void"]::before,
 div.accessible-file::before,
-div.protected-file::before {
+div.protected-file::before,
+.fulltext-logo.fulltext.openaccess::after {
   font-family: 'Font Awesome 6 Free';
 }
