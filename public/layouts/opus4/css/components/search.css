@@ -131,6 +131,7 @@ div.wrapper div.content #breadcrumb ul li:nth-last-child(n+2)::after{
   font-weight: 600;
   font-size: 0.875rem;
   padding: 0.8rem 0;
+  overflow-wrap: break-word;
 }
 
 .results_facets .facet:nth-last-child(n+2) {
@@ -241,29 +242,36 @@ div.facetValueExtender {
   font-size: 1.375rem;
   position: absolute;
   top: 0.8em;
-  right: calc(1.2rem + var(--page--padding));
+  right: calc(2.2rem + var(--page--padding));
+}
+.result_box .fulltext.openaccess::after {
+  content: "\f3c1";
+  font-size: 1rem;
+  position: absolute;
+  top: 1.6em;
+  right: calc(1.5rem + var(--page--padding));
 }
 
 .result_box .results_seriesnumber {
   font-size: 1rem;
   position: absolute;
   top: 1.1em;
-  right: calc(3.2rem + var(--page--padding));
+  right: calc(3.9rem + var(--page--padding));
 }
 
 .result_box .results_title,
 .result_box .results_author {
-  padding-right: 4.5rem;
+  padding-right: 5rem;
 }
 
 .result_box .results_seriesnumber~.results_title,
 .result_box .results_seriesnumber~.results_author {
-  padding-right: 7.5rem;
+  padding-right: 8rem;
 }
 
 .result_box .results_title {
   font-size: 1rem;
-  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 .result_box .results_title a {
@@ -275,7 +283,10 @@ div.facetValueExtender {
 }
 
 .results_author::before {
-  content: "\40";
+  content: "\f52d";
+  display: inline-block;
+  margin-right: 0.1rem;
+  font-size: 0.9em;
 }
 
 .abstractText {
