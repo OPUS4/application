@@ -2,6 +2,10 @@
   content: "\f093";
 }
 
+.publish select{
+  width: auto !important;
+}
+
 .publish .form-items-wrapper fieldset {
   border-style: solid;
   border-width: 4px 0 0;
