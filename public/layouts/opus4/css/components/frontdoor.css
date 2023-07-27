@@ -28,7 +28,7 @@ h3.titlemain {
 }
 
 .frontdoor #author>p:first-child:not(:empty)::before {
-  content: "\40";
+  content: "\f52d";
   position: absolute;
   left: 0;
   top: 0;
@@ -61,7 +61,7 @@ div#abstract>ul>li {
 
 li.abstract,
 .services-menu .services {
-  word-break: break-all;
+  overflow-wrap: break-word;
 }
 
 .preserve-spaces {
@@ -124,6 +124,11 @@ div#abstract>ul>li::before {
 
 #download-fulltext>ul>li a {
   font-weight: bold;
+}
+
+#download-fulltext>ul>li a,
+#download-fulltext .protected-file{
+ overflow-wrap: break-word;
 }
 
 #download-fulltext>ul>li img[class*="file-language"] {
@@ -255,6 +260,28 @@ table.frontdoordata {
 }
 
 @media screen and (min-width: 768px) {
+  .frontdoordata tr {
+    display: table-row;
+  }
+
+  .frontdoordata tbody tr:last-child th,
+  .frontdoordata tbody tr:last-child td {
+    border-bottom: 1px solid;
+  }
+
+  .frontdoordata tbody th,
+  .frontdoordata tbody td {
+    border-style: solid;
+    border-width: 1px 0 0;
+  }
+
+  .frontdoordata tbody tr th:empty {
+    border-top: none;
+    display: table-cell;
+  }
+}
+
+@media print {
   .frontdoordata tr {
     display: table-row;
   }
