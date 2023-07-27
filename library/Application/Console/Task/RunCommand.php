@@ -73,7 +73,7 @@ EOT;
     {
         $taskName = $input->getArgument(self::ARGUMENT_TASK_NAME);
 
-        $taskManager = new Application_Task_TaskManager();
+        $taskManager        = new Application_Task_TaskManager();
         $taskConfigurations = $taskManager->getTaskConfigurations();
 
         if (empty($taskConfigurations)) {
@@ -101,16 +101,16 @@ EOT;
             $taskName = $askHelper->ask($input, $output, $question);
         }
 
-        $taskConfig  = $taskManager->getTaskConfig($taskName);
-        if (!$taskConfig) {
+        $taskConfig = $taskManager->getTaskConfig($taskName);
+        if (! $taskConfig) {
             $output->writeln('Task not found: <fg=red>' . $taskName . '</>');
             return Command::FAILURE;
         }
 
-        if (!$taskManager->isValidTaskClass($taskConfig->getClass())) {
+        if (! $taskManager->isValidTaskClass($taskConfig->getClass())) {
             $output->writeln(
-                'Invalid task class <fg=red>' . $taskConfig->getClass() .
-                '</> for task <fg=red>' . $taskName . '</>'
+                'Invalid task class <fg=red>' . $taskConfig->getClass()
+                . '</> for task <fg=red>' . $taskName . '</>'
             );
             return Command::FAILURE;
         }
