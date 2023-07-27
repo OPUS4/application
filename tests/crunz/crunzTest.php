@@ -29,26 +29,23 @@
  */
 
 /*
-This script is for development purposes to simulate a configured cronjob for
-the crunz scheduler. The simulated cron runs every minute, just like the real one should,
-and echos the tasks output.
-
-The tasks to be run are configured in dummytasks.ini,
-The default dummytask.ini defines 2 dummy tasks. DummyTask1 runs every minute
-and DummyTask2 every 2 minutes or as configured in the ini.
-
-Before running this script, the dummtasks.ini has to be activated in tests/tests.ini
-After that it can be started with:  php tests/crunz/crunzTest.php
-*/
-
-/*
-   TODO Should use the testing environment and use the dummy tasks in tests/support directory.
-   At the moment the production environment is still used.
-   The reason for this is that crunz:list calls the task script in the scripts directory
-   and scripts there need their own bootstrapping. Which in this case always uses the production environment
-   As a workaround could be to configure the path to the dummytask.ini in the produktion appplication.ini
-   before running this script, but then the dummy task classes are not found.
-*/
+ * This script is for development purposes to simulate a configured cronjob for
+ * the crunz scheduler. The simulated cron runs every minute, just like the real one should,
+ * and echos the tasks output.
+ * The tasks to be run are configured in dummytasks.ini,
+ * The default dummytask.ini defines 2 dummy tasks. DummyTask1 runs every minute
+ * and DummyTask2 every 2 minutes or as configured in the ini.
+ *
+ * Before running this script, the dummtasks.ini has to be activated in tests/tests.ini
+ * After that it can be started with:  php tests/crunz/crunzTest.php
+ *
+ * TODO Should use the testing environment and use the dummy tasks in tests/support directory.
+ * At the moment the production environment is still used.
+ * The reason for this is that crunz:list calls the task script in the scripts directory
+ * and scripts need their own bootstrapping. Which in this case always uses the production environment
+ * As a workaround could be to configure the path to the dummytask.ini in the produktion appplication.ini
+ * before running this script, but then the dummy task classes are not found.
+ */
 
 // Show the active tasks.
 echo passthru("vendor/bin/crunz schedule:list");

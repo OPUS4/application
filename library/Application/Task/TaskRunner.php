@@ -33,45 +33,24 @@ use Opus\Common\LoggingTrait;
 
 /**
  * This class is a helper class for scripts/task/task-runner.php to run the configured task classes
+ *
+ * TODO Do we need an extra class for that or can it easily be done by the TaskManger?
+ * The only responsibility of this class is to instantiate a task, based on its configuration, and then running it.
  */
 class Application_Task_TaskRunner
 {
     use LoggingTrait;
 
     /**
-     * Options from the task runner script.
+     * Runs the task of the specified name (as received from the task runner script).
      *
-     * @var array
+     * @param string $taskName
+     * @return void
      */
-    protected $options;
-
-    /**
-     * To set the options of the desired task, received from the task runner script
-     *
-     * @param array $options
-     */
-    public function setOptions($options)
-    {
-        $this->options = $options;
-    }
-
-    /**
-     * Gets the name desired task
-     *
-     * @return string
-     */
-    public function getTaskName()
-    {
-        return $this->options['taskname'];
-    }
-
-    /**
-     * Runs the task
-     */
-    public function runTask()
+    public function runTask($taskName)
     {
         $taskManager = new Application_Task_TaskManager();
-        $taskConfig  = $taskManager->getTaskConfig($this->getTaskName());
+        $taskConfig  = $taskManager->getTaskConfig($taskName);
 
         // Run the opus task
         if ($taskConfig) {
@@ -93,7 +72,7 @@ class Application_Task_TaskRunner
             }
         } else {
             $this->getLogger()->err(
-                'No configuration found for task name: ' . $this->getTaskName()
+                'No configuration found for task name: ' . $taskName
             );
         }
     }

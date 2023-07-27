@@ -29,12 +29,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// This file defines a Crunz task file.
-// There can be multiple task files, but in our case we only need one
-// to start a task scheduler in which all configured opus tasks will be executed by the crunz scheduler
-// according to the schedule times specified in the task.ini configuration.
+/*
+ * This file is a Crunz task file.
+ * There can be multiple task files, but in our case we only need one
+ * to start a task scheduler in which all configured opus tasks will be executed by the crunz scheduler
+ * according to the schedule times specified in the tasks.ini configuration. What ini file to be used for the task
+ * configurations is defined in application.ini: cron.configFile = APPLICATION_PATH "/application/configs/tasks.ini"
+ */
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$taskScheduler = new Application_Task_TaskManager();
-return $taskScheduler->getCrunzSchedule();
+$taskManager = new Application_Task_TaskManager();
+return $taskManager->getCrunzSchedule();

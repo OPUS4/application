@@ -29,14 +29,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// This script is called by the TaskScheduler to have Opus tasks run by the Crunz scheduler.
-// Since the Crunz scheduler cannot execute classes directly, we need this intermediate step via a script
-// to instantiate and execute the desired Opus Task object.
+/*
+ * This script is called by the TaskScheduler to have Opus tasks run by the Crunz scheduler.
+ * Since the Crunz scheduler cannot execute classes directly, we need this intermediate step via a script
+ * to instantiate and execute the desired Opus Task object.
+ */
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$options = getopt(null, ["taskname:"]);
+$scriptOptions = getopt(null, ["taskname:"]);
+$taskName = $scriptOptions['taskname'];
 
 $taskRunner = new Application_Task_TaskRunner();
-$taskRunner->setOptions($options);
-$taskRunner->runTask();
+$taskRunner->runTask($taskName);

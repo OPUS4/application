@@ -116,7 +116,7 @@ class Application_Task_TaskManager
     /**
      * Gets task configuration by name
      *
-     * @param array $name
+     * @param string $name
      * @return Application_Task_TaskConfig|false
      */
     public function getTaskConfig($name)
