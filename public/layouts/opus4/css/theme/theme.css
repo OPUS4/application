@@ -222,3 +222,10 @@ div#abstract>ul>li:nth-child(n+2),
 .frontdoordata tbody tr:last-child td {
   border-bottom-color: var(--light);
 }
+
+.frontdoor .abstractFull[style*="none"] + span.abstractThreeDots{
+  color: var(--maxdark);
+}
+.frontdoor span.abstractThreeDots::after{
+  color: var(--maxdark);
+}
