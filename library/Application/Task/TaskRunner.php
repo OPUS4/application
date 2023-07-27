@@ -63,7 +63,7 @@ class Application_Task_TaskRunner
                 // Set option values if configured in the ini file.
                 foreach ($taskConfig->getOptions() as $optionName => $optionValue) {
                     $setterName = 'set' . ucfirst($optionName);
-                    if (method_exists($this->taskClass, $setterName)) {
+                    if (method_exists($taskClass, $setterName)) {
                         $task->$setterName($optionValue);
                     }
                 }
