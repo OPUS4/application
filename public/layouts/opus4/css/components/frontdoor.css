@@ -259,6 +259,31 @@ table.frontdoordata {
   display: none;
 }
 
+.frontdoor .abstractButton{
+  display: none !important;
+}
+.frontdoor span.abstractThreeDots{
+  display: inline-block !important;
+  position: relative;
+}
+.frontdoor .abstractFull + span.abstractThreeDots{
+  color: transparent;
+}
+.frontdoor span.abstractThreeDots::after{
+  font-size: 1.125rem;
+  width: 1.5rem;
+  display: inline-block;
+  text-align: center;
+}
+.frontdoor .abstractFull[style*="none"] + span.abstractThreeDots::after{
+  content: "\f0d7";
+  margin-left: 0;
+}
+.frontdoor .abstractFull + .abstractThreeDots::after{
+  content: "\f0d8";
+  margin-left: -0.5rem;
+}
+
 @media screen and (min-width: 768px) {
   .frontdoordata tr {
     display: table-row;
