@@ -29,11 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -63,18 +61,17 @@ EOT;
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $taskManager = new Application_Task_TaskManager();
+        $taskManager        = new Application_Task_TaskManager();
         $taskConfigurations = $taskManager->getTaskConfigurations();
 
         $taskList = [];
 
         /** @var Application_Task_TaskConfig $taskConfig */
         foreach ($taskConfigurations as $taskConfig) {
-
             $taskInfo = [
                 $taskConfig->getName(),
-                ($taskConfig->isEnabled() ? 'yes' : 'no'),
-                $taskConfig->getSchedule()
+                $taskConfig->isEnabled() ? 'yes' : 'no',
+                $taskConfig->getSchedule(),
             ];
 
             foreach ($taskInfo as $key => $value) {
@@ -90,7 +87,7 @@ EOT;
 
         $table
             ->setHeaders(['Name', 'Enabled', 'Schedule'])
-            ->setRows( $taskList);
+            ->setRows($taskList);
 
         $table->setStyle('compact');
 
