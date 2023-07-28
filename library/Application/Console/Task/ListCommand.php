@@ -29,7 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,8 +36,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Lists all tasks from the configuration ini.
- *
- * TODO unit testing
  */
 class Application_Console_Task_ListCommand extends Command
 {
@@ -47,17 +44,16 @@ class Application_Console_Task_ListCommand extends Command
         parent::configure();
 
         $help = <<<EOT
-The <fg=green>task:list</> command lists all configured tasks with enabled state (yes/no) and the schedule of each task.
+The <fg=green>task:list</> command lists all configured background tasks with their enabled state (yes/no) and schedule.
 EOT;
 
         $this->setName('task:list')
-            ->setDescription('Lists all configured tasks.')
+            ->setDescription('Lists all configured background tasks.')
             ->setHelp($help);
     }
 
     /**
      * @return int
-     * @throws NotFoundException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -86,10 +82,12 @@ EOT;
         $table = new Table($output);
 
         $table
-            ->setHeaders(['Name', 'Enabled', 'Schedule'])
+            ->setHeaders(['Name', 'Active', 'Schedule'])
             ->setRows($taskList);
 
         $table->setStyle('compact');
+
+        $output->writeln(count($taskList) . " tasks are configured:");
 
         $table->render();
 
