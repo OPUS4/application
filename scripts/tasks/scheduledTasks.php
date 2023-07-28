@@ -37,7 +37,9 @@
  * configurations is defined in application.ini: cron.configFile = APPLICATION_PATH "/application/configs/tasks.ini"
  */
 
+use Opus\Job\TaskManager;
+
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$taskManager = new Application_Task_TaskManager();
+$taskManager = new TaskManager();
 return $taskManager->getCrunzSchedule();

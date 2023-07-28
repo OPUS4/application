@@ -32,11 +32,12 @@
 use Opus\Common\LoggingTrait;
 use Opus\Import\Worker\MetadataImportWorker;
 use Opus\Job\Runner;
+use Opus\Job\TaskInterface;
 
 /**
  * Class to import metadata.
  */
-class Application_Job_ImportMetadataJob implements Application_Task_TaskInterface
+class Application_Job_ImportMetadataJob implements TaskInterface
 {
     use LoggingTrait;
 

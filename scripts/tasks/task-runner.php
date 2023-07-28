@@ -35,10 +35,12 @@
  * to instantiate and execute the desired Opus Task object.
  */
 
+use Opus\Job\TaskRunner;
+
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 $scriptOptions = getopt(null, ["taskname:"]);
 $taskName      = $scriptOptions['taskname'];
 
-$taskRunner = new Application_Task_TaskRunner();
+$taskRunner = new TaskRunner();
 $taskRunner->runTask($taskName);

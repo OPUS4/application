@@ -32,8 +32,9 @@
 use Opus\Common\LoggingTrait;
 use Opus\Job\MailNotification;
 use Opus\Job\Runner;
+use Opus\Job\TaskInterface;
 
-class Application_Job_SendReviewRequestJob implements Application_Task_TaskInterface
+class Application_Job_SendReviewRequestJob implements TaskInterface
 {
     use LoggingTrait;
 

@@ -31,9 +31,10 @@
 
 use Opus\Common\LoggingTrait;
 use Opus\Job\Runner;
+use Opus\Job\TaskInterface;
 use Opus\Search\Task\IndexOpusDocument;
 
-class Application_Job_SolrUpdateJob implements Application_Task_TaskInterface
+class Application_Job_SolrUpdateJob implements TaskInterface
 {
     use LoggingTrait;
 

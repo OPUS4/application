@@ -31,12 +31,13 @@
 
 use Opus\Common\LoggingTrait;
 use Opus\Job\Runner;
+use Opus\Job\TaskInterface;
 use Opus\Search\Task\ConsistencyCheck;
 
 /**
  * Class to check consistency
  */
-class Application_Job_CheckConsistencyJob implements Application_Task_TaskInterface
+class Application_Job_CheckConsistencyJob implements TaskInterface
 {
     use LoggingTrait;
 

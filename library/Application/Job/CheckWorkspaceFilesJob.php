@@ -32,6 +32,7 @@
 use Opus\Common\ConfigTrait;
 use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
+use Opus\Job\TaskInterface;
 
 /**
  * Class for checking workspace files.
@@ -39,7 +40,7 @@ use Opus\Common\Model\NotFoundException;
  * This class checks if all the items in workspace/files directory are a directory and throws an exception for the items
  * which are not.
  */
-class Application_Job_CheckWorkspaceFilesJob implements Application_Task_TaskInterface
+class Application_Job_CheckWorkspaceFilesJob implements TaskInterface
 {
     use ConfigTrait;
 

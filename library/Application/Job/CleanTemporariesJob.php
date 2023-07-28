@@ -31,11 +31,12 @@
 
 use Opus\Common\Document;
 use Opus\Common\Repository;
+use Opus\Job\TaskInterface;
 
 /**
  * Class for cleaning temporary documents.
  */
-class Application_Job_CleanTemporariesJob implements Application_Task_TaskInterface
+class Application_Job_CleanTemporariesJob implements TaskInterface
 {
     /** @var string Duration of the temporary document */
     private $duration;

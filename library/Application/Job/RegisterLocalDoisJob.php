@@ -30,6 +30,7 @@
  */
 
 use Opus\Doi\DoiManager;
+use Opus\Job\TaskInterface;
 
 /*
  * Dieses Script sucht nach Dokumenten im ServerState 'published',
@@ -39,7 +40,7 @@ use Opus\Doi\DoiManager;
  * Für die ermittelten DOIs wird die Registrierung bei DataCite versucht.
  *
  */
-class Application_Job_RegisterLocalDoisJob implements Application_Task_TaskInterface
+class Application_Job_RegisterLocalDoisJob implements TaskInterface
 {
     /** @var bool */
     private $printErrors = false;
