@@ -29,7 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Model\NotFoundException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,13 +49,13 @@ class Application_Console_Task_RunCommand extends Command
         parent::configure();
 
         $help = <<<EOT
-With the <fg=green>task:run</> command a single task can be run directly. 
-The task name can be given directly via the optional <fg=green>TaskName</> argument or
+The <fg=green>task:run</> command can be used to run a single background task directly. 
+The name of the task can be given via the optional <fg=green>TaskName</> argument or
 be chosen from a list of available tasks.
 EOT;
 
         $this->setName('task:run')
-            ->setDescription('Runs a single task.')
+            ->setDescription('Runs a single background task.')
             ->setHelp($help)
             ->addArgument(
                 self::ARGUMENT_TASK_NAME,
@@ -67,7 +66,6 @@ EOT;
 
     /**
      * @return int
-     * @throws NotFoundException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
