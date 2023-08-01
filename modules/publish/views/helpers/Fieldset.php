@@ -105,7 +105,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
     public function renderHtmlSelect($field, $options)
     {
         // TODO move style to CSS
-        $fieldset  = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id']
+        $fieldset  = "\n\t\t\t\t" . '<select name="' . $field['id']
             . '" class="form-selectfield"  id="' . $field['id'] . '"';
         $fieldset .= ' title="' . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . '"';
         if ($field['disabled'] === true) {
