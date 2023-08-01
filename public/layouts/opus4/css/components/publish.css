@@ -3,7 +3,7 @@
 }
 
 .publish select{
-  width: auto !important;
+  max-width: 18.75rem; /* 300px */
 }
 
 .publish .form-items-wrapper fieldset {
