@@ -1635,3 +1635,7 @@ ul.list-style-none {
     list-style: none;
     padding-left: 2em;
 }
+
+.publish select {
+    max-width: 18.75rem; /* 300px */
+}
