@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Job\TaskManager;
+use Opus\Job\TaskRunner;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -71,7 +73,7 @@ EOT;
     {
         $taskName = $input->getArgument(self::ARGUMENT_TASK_NAME);
 
-        $taskManager        = new Application_Task_TaskManager();
+        $taskManager        = new TaskManager();
         $taskConfigurations = $taskManager->getTaskConfigurations();
 
         if (empty($taskConfigurations)) {
@@ -113,7 +115,7 @@ EOT;
             return Command::FAILURE;
         }
 
-        $taskRunner = new Application_Task_TaskRunner();
+        $taskRunner = new TaskRunner();
         $taskRunner->runTask($taskName);
 
         return Command::SUCCESS;
