@@ -63,6 +63,7 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Collection_CopyCommand());
         $this->add(new Application_Console_Collection_MoveCommand());
         $this->add(new Application_Console_Collection_RemoveCommand());
+        $this->add(new Application_Console_Task_InfoCommand());
 
         $this->setDefaultCommand('list');
     }
