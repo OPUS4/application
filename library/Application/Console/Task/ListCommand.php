@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Job\TaskConfig;
+use Opus\Job\TaskManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,12 +59,12 @@ EOT;
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $taskManager        = new Application_Task_TaskManager();
+        $taskManager        = new TaskManager();
         $taskConfigurations = $taskManager->getTaskConfigurations();
 
         $taskList = [];
 
-        /** @var Application_Task_TaskConfig $taskConfig */
+        /** @var TaskConfig $taskConfig */
         foreach ($taskConfigurations as $taskConfig) {
             $taskInfo = [
                 $taskConfig->getName(),
