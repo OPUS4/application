@@ -31,7 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\Repository;
-use Opus\Job\TaskAbstract;
+use Opus\Job\AbstractTask;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
 
@@ -41,7 +41,7 @@ use Opus\Model\Xml\Version1;
  * Since the metadata of documents are stored in multiple tables,
  * the cache stores the metadata in one place for faster access.
  */
-class Application_Job_UpdateDocumentCacheJob extends TaskAbstract
+class Application_Job_UpdateDocumentCacheJob extends AbstractTask
 {
     /**
      * @return int

@@ -32,12 +32,12 @@
 use Opus\Common\LoggingTrait;
 use Opus\Job\MailNotification;
 use Opus\Job\Runner;
-use Opus\Job\TaskAbstract;
+use Opus\Job\AbstractTask;
 
 /**
  * Class for sending notification
  */
-class Application_Job_SendNotificationJob extends TaskAbstract
+class Application_Job_SendNotificationJob extends AbstractTask
 {
     use LoggingTrait;
 

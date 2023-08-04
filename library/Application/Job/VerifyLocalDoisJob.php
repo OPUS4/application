@@ -30,7 +30,7 @@
  */
 
 use Opus\Doi\DoiManager;
-use Opus\Job\TaskAbstract;
+use Opus\Job\AbstractTask;
 
 /*
  * Dieses Script sucht nach Dokumenten, die lokale DOIs im Status 'registered'
@@ -42,7 +42,7 @@ use Opus\Job\TaskAbstract;
  * gesetzt, wenn sie über das Handle-System tatsächlich auflösbar ist.
  *
  */
-class Application_Job_VerifyLocalDoisJob extends TaskAbstract
+class Application_Job_VerifyLocalDoisJob extends AbstractTask
 {
     /** @var bool */
     private $printErrors = false;

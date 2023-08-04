@@ -32,7 +32,7 @@
 use Opus\Common\ConfigTrait;
 use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
-use Opus\Job\TaskAbstract;
+use Opus\Job\AbstractTask;
 
 /**
  * Class for checking workspace files.
@@ -42,7 +42,7 @@ use Opus\Job\TaskAbstract;
  *
  * TODO BUG Was soll der Quatsch?
  */
-class Application_Job_CheckWorkspaceFilesJob extends TaskAbstract
+class Application_Job_CheckWorkspaceFilesJob extends AbstractTask
 {
     use ConfigTrait;
 

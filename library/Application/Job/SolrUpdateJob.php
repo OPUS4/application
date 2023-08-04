@@ -31,10 +31,10 @@
 
 use Opus\Common\LoggingTrait;
 use Opus\Job\Runner;
-use Opus\Job\TaskAbstract;
+use Opus\Job\AbstractTask;
 use Opus\Search\Task\IndexOpusDocument;
 
-class Application_Job_SolrUpdateJob extends TaskAbstract
+class Application_Job_SolrUpdateJob extends AbstractTask
 {
     use LoggingTrait;
 
