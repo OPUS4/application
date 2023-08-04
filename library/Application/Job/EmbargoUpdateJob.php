@@ -32,7 +32,7 @@
 use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\Common\Repository;
-use Opus\Job\TaskInterface;
+use Opus\Job\TaskAbstract;
 
 /*
  * This cron job must be used if embargo dates are used in repository.
@@ -49,8 +49,11 @@ use Opus\Job\TaskInterface;
  *
  * TODO document policies of EmbargoDate - is it '<' or '<=' ?
  */
-class Application_Job_EmbargoUpdateJob implements TaskInterface
+class Application_Job_EmbargoUpdateJob extends TaskAbstract
 {
+    /**
+     * @return int
+     */
     public function run()
     {
         $finder = Repository::getInstance()->getDocumentFinder();

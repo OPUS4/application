@@ -31,13 +31,16 @@
 
 use Opus\Common\LoggingTrait;
 use Opus\Job\Runner;
-use Opus\Job\TaskInterface;
+use Opus\Job\TaskAbstract;
 use Opus\Search\Task\IndexOpusDocument;
 
-class Application_Job_SolrUpdateJob implements TaskInterface
+class Application_Job_SolrUpdateJob extends TaskAbstract
 {
     use LoggingTrait;
 
+    /**
+     * @return int
+     */
     public function run()
     {
         $jobrunner = new Runner();

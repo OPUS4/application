@@ -31,12 +31,12 @@
 
 use Opus\Common\Document;
 use Opus\Common\Repository;
-use Opus\Job\TaskInterface;
+use Opus\Job\TaskAbstract;
 
 /**
  * Class for cleaning temporary documents.
  */
-class Application_Job_CleanTemporariesJob implements TaskInterface
+class Application_Job_CleanTemporariesJob extends TaskAbstract
 {
     /** @var string Duration of the temporary document */
     private $duration;
@@ -49,8 +49,12 @@ class Application_Job_CleanTemporariesJob implements TaskInterface
         $this->duration = $duration;
     }
 
+    /**
+     * @return int
+     */
     public function run()
     {
+        $output     = $this->getOutput();
         $dateString = $this->getPreviousDate();
         $finder     = Repository::getInstance()->getDocumentFinder();
         $finder->setServerState('temporary')
@@ -59,10 +63,10 @@ class Application_Job_CleanTemporariesJob implements TaskInterface
         foreach ($finder->getIds() as $id) {
             $doc = Document::get($id);
             if ($doc->getServerState() === 'temporary') {
-                echo "deleting document: $id\n";
+                $output->writeln("deleting document: $id");
                 $doc->delete();
             } else {
-                echo "NOT deleting document: $id because it has server state " . $doc->getServerState();
+                $output->writeln("NOT deleting document: $id because it has server state " . $doc->getServerState());
             }
         }
 

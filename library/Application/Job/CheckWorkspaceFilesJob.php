@@ -32,7 +32,7 @@
 use Opus\Common\ConfigTrait;
 use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
-use Opus\Job\TaskInterface;
+use Opus\Job\TaskAbstract;
 
 /**
  * Class for checking workspace files.
@@ -42,7 +42,7 @@ use Opus\Job\TaskInterface;
  *
  * TODO BUG Was soll der Quatsch?
  */
-class Application_Job_CheckWorkspaceFilesJob implements TaskInterface
+class Application_Job_CheckWorkspaceFilesJob extends TaskAbstract
 {
     use ConfigTrait;
 
@@ -64,7 +64,9 @@ class Application_Job_CheckWorkspaceFilesJob implements TaskInterface
 
         $filesPath = $this->getFilesPath();
 
-        echo "INFO: Scanning directory '$filesPath'...\n";
+        $output = $this->getOutput();
+
+        $output->writeln("INFO: Scanning directory '$filesPath'...");
 
         // Iterate over all files
         $count  = 0;
@@ -72,7 +74,7 @@ class Application_Job_CheckWorkspaceFilesJob implements TaskInterface
 
         foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
             if ($count > 0 && $count % 100 === 0) {
-                echo "INFO: checked $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.\n";
+                $output->writeln("INFO: checked $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.");
             }
             $count++;
 
@@ -82,7 +84,7 @@ class Application_Job_CheckWorkspaceFilesJob implements TaskInterface
             }
 
             if (! is_dir($file)) {
-                echo "ERROR: expected directory: $file\n";
+                $output->writeln("ERROR: expected directory: $file");
                 $errors++;
                 continue;
             }
@@ -92,12 +94,12 @@ class Application_Job_CheckWorkspaceFilesJob implements TaskInterface
             try {
                 Document::get($id);
             } catch (NotFoundException $e) {
-                echo "ERROR: No document $id found for workspace path '$file'!\n";
+                $output->writeln("ERROR: No document $id found for workspace path '$file'!");
                 $errors++;
             }
         }
 
-        echo "INFO: Checked a total of $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.\n";
+        $output->writeln("INFO: Checked a total of $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.");
 
         if ($errors !== 0) {
             throw new Exception("Found $errors ERRORs in workspace files directory '$filesPath'!\n");

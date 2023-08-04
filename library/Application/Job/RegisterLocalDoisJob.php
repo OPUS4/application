@@ -30,7 +30,7 @@
  */
 
 use Opus\Doi\DoiManager;
-use Opus\Job\TaskInterface;
+use Opus\Job\TaskAbstract;
 
 /*
  * Dieses Script sucht nach Dokumenten im ServerState 'published',
@@ -40,7 +40,7 @@ use Opus\Job\TaskInterface;
  * Für die ermittelten DOIs wird die Registrierung bei DataCite versucht.
  *
  */
-class Application_Job_RegisterLocalDoisJob implements TaskInterface
+class Application_Job_RegisterLocalDoisJob extends TaskAbstract
 {
     /** @var bool */
     private $printErrors = false;
@@ -53,20 +53,24 @@ class Application_Job_RegisterLocalDoisJob implements TaskInterface
         $this->printErrors = true;
     }
 
+    /**
+     * @return int
+     */
     public function run()
     {
+        $output     = $this->getOutput();
         $doiManager = new DoiManager();
         $status     = $doiManager->registerPending();
 
         if ($status->isNoDocsToProcess()) {
-            echo "could not find matching documents for DOI registration\n";
+            $output->writeln("could not find matching documents for DOI registration");
         } else {
-            echo count($status->getDocsWithDoiStatus()) . " documents have been processed\n";
+            $output->writeln(count($status->getDocsWithDoiStatus()) . " documents have been processed");
 
             if ($this->printErrors) {
                 foreach ($status->getDocsWithDoiStatus() as $docId => $docWithStatus) {
                     if ($docWithStatus['error']) {
-                        echo "document $docId could not registered successfully: " . $docWithStatus['msg'] . "\n";
+                        $output->writeln("document $docId could not registered successfully: " . $docWithStatus['msg']);
                     }
                 }
             }

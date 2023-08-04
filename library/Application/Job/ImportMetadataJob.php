@@ -32,15 +32,18 @@
 use Opus\Common\LoggingTrait;
 use Opus\Import\Worker\MetadataImportWorker;
 use Opus\Job\Runner;
-use Opus\Job\TaskInterface;
+use Opus\Job\TaskAbstract;
 
 /**
  * Class to import metadata.
  */
-class Application_Job_ImportMetadataJob implements TaskInterface
+class Application_Job_ImportMetadataJob extends TaskAbstract
 {
     use LoggingTrait;
 
+    /**
+     * @return int
+     */
     public function run()
     {
         $jobrunner = new Runner();

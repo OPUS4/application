@@ -32,15 +32,18 @@
 use Opus\Common\LoggingTrait;
 use Opus\Job\MailNotification;
 use Opus\Job\Runner;
-use Opus\Job\TaskInterface;
+use Opus\Job\TaskAbstract;
 
 /**
  * Class for sending notification
  */
-class Application_Job_SendNotificationJob implements TaskInterface
+class Application_Job_SendNotificationJob extends TaskAbstract
 {
     use LoggingTrait;
 
+    /**
+     * @return int
+     */
     public function run()
     {
         $jobrunner = new Runner();

@@ -31,16 +31,19 @@
 
 use Opus\Common\LoggingTrait;
 use Opus\Job\Runner;
-use Opus\Job\TaskInterface;
+use Opus\Job\TaskAbstract;
 use Opus\Search\Task\ConsistencyCheck;
 
 /**
  * Class to check consistency
  */
-class Application_Job_CheckConsistencyJob implements TaskInterface
+class Application_Job_CheckConsistencyJob extends TaskAbstract
 {
     use LoggingTrait;
 
+    /**
+     * @return int
+     */
     public function run()
     {
         $jobrunner = new Runner();
