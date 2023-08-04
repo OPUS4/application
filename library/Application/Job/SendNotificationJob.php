@@ -29,9 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Job\AbstractTask;
 use Opus\Job\MailNotification;
 use Opus\Job\Runner;
-use Opus\Job\AbstractTask;
 
 /**
  * Class for sending notification

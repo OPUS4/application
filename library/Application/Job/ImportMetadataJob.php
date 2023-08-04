@@ -30,8 +30,8 @@
  */
 
 use Opus\Import\Worker\MetadataImportWorker;
-use Opus\Job\Runner;
 use Opus\Job\AbstractTask;
+use Opus\Job\Runner;
 
 /**
  * Class to import metadata.
