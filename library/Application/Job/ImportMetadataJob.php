@@ -29,7 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\LoggingTrait;
 use Opus\Import\Worker\MetadataImportWorker;
 use Opus\Job\Runner;
 use Opus\Job\AbstractTask;
@@ -39,8 +38,6 @@ use Opus\Job\AbstractTask;
  */
 class Application_Job_ImportMetadataJob extends AbstractTask
 {
-    use LoggingTrait;
-
     /**
      * @return int
      */

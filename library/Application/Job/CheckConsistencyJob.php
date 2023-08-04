@@ -29,7 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\LoggingTrait;
 use Opus\Job\Runner;
 use Opus\Job\AbstractTask;
 use Opus\Search\Task\ConsistencyCheck;
@@ -39,8 +38,6 @@ use Opus\Search\Task\ConsistencyCheck;
  */
 class Application_Job_CheckConsistencyJob extends AbstractTask
 {
-    use LoggingTrait;
-
     /**
      * @return int
      */
