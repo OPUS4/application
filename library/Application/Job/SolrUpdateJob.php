@@ -54,5 +54,7 @@ class Application_Job_SolrUpdateJob implements TaskInterface
 
         // run processing
         $jobrunner->run();
+
+        return 0;
     }
 }

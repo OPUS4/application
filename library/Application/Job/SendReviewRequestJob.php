@@ -55,5 +55,7 @@ class Application_Job_SendReviewRequestJob implements TaskInterface
         $jobrunner->registerWorker($mailWorker);
 
         $jobrunner->run();
+
+        return 0;
     }
 }

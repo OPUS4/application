@@ -69,5 +69,7 @@ class Application_Job_EmbargoUpdateJob implements TaskInterface
         $documents = Repository::getInstance()->getModelRepository(Document::class);
 
         $documents->setServerDateModifiedForDocuments($now, $foundIds);
+
+        return 0;
     }
 }

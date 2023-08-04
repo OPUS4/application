@@ -65,6 +65,8 @@ class Application_Job_CleanTemporariesJob implements TaskInterface
                 echo "NOT deleting document: $id because it has server state " . $doc->getServerState();
             }
         }
+
+        return 0;
     }
 
     /**

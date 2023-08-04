@@ -56,5 +56,7 @@ class Application_Job_SendNotificationJob implements TaskInterface
         $jobrunner->registerWorker($mailWorker);
 
         $jobrunner->run();
+
+        return 0;
     }
 }

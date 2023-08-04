@@ -90,5 +90,7 @@ class Application_Job_VerifyLocalDoisJob implements TaskInterface
                 }
             }
         }
+
+        return 0;
     }
 }

@@ -56,5 +56,7 @@ class Application_Job_ImportMetadataJob implements TaskInterface
         $jobrunner->registerWorker($importWorker);
 
         $jobrunner->run();
+
+        return 0;
     }
 }

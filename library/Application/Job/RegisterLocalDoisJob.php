@@ -71,5 +71,7 @@ class Application_Job_RegisterLocalDoisJob implements TaskInterface
                 }
             }
         }
+
+        return 0;
     }
 }

@@ -58,7 +58,8 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
         $job->setFilesPath($path);
 
         $expectedCount = count(glob($path . DIRECTORY_SEPARATOR . "*"));
-        $count         = $job->run();
+        $job->run();
+        $count = $job->getCount();
 
         $this->assertEquals($expectedCount, $count);
     }

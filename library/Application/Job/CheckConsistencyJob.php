@@ -53,5 +53,7 @@ class Application_Job_CheckConsistencyJob implements TaskInterface
         $worker = new ConsistencyCheck();
         $jobrunner->registerWorker($worker);
         $jobrunner->run();
+
+        return 0;
     }
 }

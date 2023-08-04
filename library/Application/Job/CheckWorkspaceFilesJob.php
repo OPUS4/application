@@ -39,6 +39,8 @@ use Opus\Job\TaskInterface;
  *
  * This class checks if all the items in workspace/files directory are a directory and throws an exception for the items
  * which are not.
+ *
+ * TODO BUG Was soll der Quatsch?
  */
 class Application_Job_CheckWorkspaceFilesJob implements TaskInterface
 {
@@ -49,6 +51,9 @@ class Application_Job_CheckWorkspaceFilesJob implements TaskInterface
 
     /** @var string */
     private $filesPath;
+
+    /** @var int */
+    private $count = 0;
 
     /**
      * @return int
@@ -98,7 +103,9 @@ class Application_Job_CheckWorkspaceFilesJob implements TaskInterface
             throw new Exception("Found $errors ERRORs in workspace files directory '$filesPath'!\n");
         }
 
-        return $count;
+        $this->count = $count;
+
+        return 0;
     }
 
     /**
@@ -132,5 +139,15 @@ class Application_Job_CheckWorkspaceFilesJob implements TaskInterface
     public function setFilesPath($path)
     {
         $this->filesPath = $path;
+    }
+
+    /**
+     * Gets the count of checked entries
+     *
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->count;
     }
 }

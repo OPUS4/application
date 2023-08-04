@@ -69,5 +69,7 @@ class Application_Job_UpdateDocumentCacheJob implements TaskInterface
 
             echo "Cache refreshed for document #$docId\n";
         }
+
+        return 0;
     }
 }
