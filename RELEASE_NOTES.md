@@ -7,11 +7,22 @@ unter Umständen nicht mehr angezeigt wurden.
 
 https://github.com/OPUS4/application/issues/1068
 
+### BibTeX-Import
+
 Außerdem wurde der BibTeX-Import erweitert. Beim Mapping von Titeln
 kann jetzt die Sprache angegeben werden und es kann auf alle Titel-Typen
-gemappt werden.
+gemappt werden. 
 
 https://github.com/OPUS4/opus4-bibtex/issues/67
+
+In Personen-Feldern können nun Identifier mit angegeben werden.
+
+https://github.com/OPUS4/opus4-bibtex/issues/69
+
+Die Personen-Rolle in OPUS 4 kann jetzt im Mapping konfiguriert werden,
+damit der BibTeX-Feldname nicht mehr mit der Rolle übereinstimmen muss.
+
+https://github.com/OPUS4/opus4-bibtex/issues/70
 
 ## Release 4.8 - 2023-04-25
 
