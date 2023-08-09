@@ -37,8 +37,8 @@ use Opus\Common\Config;
 use Opus\Common\Document;
 use Opus\Common\FileInterface;
 use Opus\Common\Security\Realm;
-use Opus\Pdf\Cover\CoverGeneratorFactory;
-use Opus\Pdf\Cover\CoverGeneratorInterface;
+use Opus\Common\Cover\CoverGeneratorFactory;
+use Opus\Common\Cover\CoverGeneratorInterface;
 
 class Frontdoor_DeliverController extends Application_Controller_Action
 {
