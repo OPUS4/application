@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Job\TaskManager;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -50,6 +51,10 @@ class Application_Console_Task_InfoCommandTest extends ControllerTestCase
 
     public function testTaskInfoOutput()
     {
+        if (! class_exists(TaskManager::class)) {
+            $this->markTestSkipped('No tests to be done due to lack of crunz support.');
+        }
+
         $app = new Application();
 
         $command = new Application_Console_Task_InfoCommand();
