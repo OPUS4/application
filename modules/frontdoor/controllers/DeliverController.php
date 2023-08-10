@@ -217,7 +217,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
             return null;
         }
 
-        $generator = CoverGeneratorFactory::create();
+        $generator = CoverGeneratorFactory::getInstance()->create();
 
         if ($generator === null) {
             return null;
