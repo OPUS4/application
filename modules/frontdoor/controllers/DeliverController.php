@@ -229,9 +229,6 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         $filecacheDir = $appConfig->getFilecachePath();
         $generator->setFilecacheDir($filecacheDir);
 
-        $tempDir = $appConfig->getTempPath();
-        $generator->setTempDir($tempDir);
-
         return $generator;
     }
 
