@@ -115,7 +115,9 @@ EOT;
             return Command::FAILURE;
         }
 
-        $taskRunner = new TaskRunner();
+        $taskRunner       = new TaskRunner();
+        $taskRunnerLogger = $taskRunner->getTaskLogger();
+        $taskRunnerLogger->info('CLI triggered run: "' . $taskName . '"');
         $taskRunner->runTask($taskName);
 
         return Command::SUCCESS;
