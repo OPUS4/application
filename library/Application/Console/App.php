@@ -63,7 +63,14 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Collection_CopyCommand());
         $this->add(new Application_Console_Collection_MoveCommand());
         $this->add(new Application_Console_Collection_RemoveCommand());
-        $this->add(new Application_Console_Task_RunCommand());
+
+        if (class_exists(TaskManager::class)) {
+            /*
+                Tasks commands do not work without the TaskManager. If the current PHP version is less than 7.4
+                there will be no TaskManager due to lack of crunz support.
+            */
+            $this->add(new Application_Console_Task_RunCommand());
+        }
 
         $this->setDefaultCommand('list');
     }
