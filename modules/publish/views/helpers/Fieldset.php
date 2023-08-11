@@ -135,16 +135,15 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
         }
 
         foreach ($field['options'] as $key => $option) {
-            $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="'
-                . htmlspecialchars($option, ENT_QUOTES) . '"';
+            $key         = strval($key);
+            $optionValue = htmlspecialchars($key, ENT_QUOTES);
+            $optionLabel = htmlspecialchars($option, ENT_QUOTES);
 
             // $key can be int or string, $field['value'] is always a string
-            if ($option === $field['value'] || strval($key) === $field['value']) {
-                $fieldset .= ' selected="selected"';
-            }
+            $selected = $option === $field['value'] || $key === $field['value'] ? ' selected="selected"' : '';
 
-            $fieldset .= '>';
-            $fieldset .= htmlspecialchars($option, ENT_QUOTES) . '</option>' . "\n\t\t\t\t\t";
+            $fieldset .= "<option value=\"$optionValue\" title=\"$optionLabel\"$selected>$optionLabel</option>";
+            $fieldset .= "\n\t\t\t\t\t";
         }
         $fieldset .= '</select>' . "\n";
 
