@@ -1140,3 +1140,8 @@ dl.result_box {
     font-size:120%;
     text-align: center
 }
+
+#doi_import_invisible_field {
+    display: none;
+}
+

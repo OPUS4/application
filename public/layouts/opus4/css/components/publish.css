@@ -94,3 +94,7 @@ form label {
 #rights {
   order: -1;
 }
+
+#doi_import_invisible_field {
+  display: none;
+}
