@@ -63,6 +63,10 @@ form label {
   min-width: 25%;
 }
 
+.textfield-max-width {
+  min-width: calc(75% - 2rem);
+}
+
 .left-labels .form-item>textarea {
   min-width: calc(75% - 2rem);
 }

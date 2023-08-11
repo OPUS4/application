@@ -47,7 +47,21 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
     {
         $fieldset = "";
         if (! isset($field['isLeaf'])) {
-            $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field['id'] . "' id='"
+            // TODO hack for changing the width of some fields
+            $maxWidthClass = '';
+
+            if ($field['datatype'] === 'Title'
+                || in_array($field['id'], [
+                    'IdentifierUrl',
+                    'PublisherName',
+                    'EnrichmentConferenceTitle',
+                    'EnrichmentConferencePlace',
+                    'Enrichmentopus_crossrefLicence' // TODO still used?
+                ])) {
+                $maxWidthClass = ' textfield-max-width';
+            }
+
+            $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield$maxWidthClass' name='" . $field['id'] . "' id='"
                 . $field['id'] . "' ";
             if ($options !== null) {
                 $fieldset .= $options . " ";
