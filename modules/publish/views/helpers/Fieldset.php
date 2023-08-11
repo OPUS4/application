@@ -50,14 +50,16 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
             // TODO hack for changing the width of some fields
             $maxWidthClass = '';
 
-            if ($field['datatype'] === 'Title'
+            if (
+                $field['datatype'] === 'Title'
                 || in_array($field['id'], [
                     'IdentifierUrl',
                     'PublisherName',
                     'EnrichmentConferenceTitle',
                     'EnrichmentConferencePlace',
-                    'Enrichmentopus_crossrefLicence' // TODO still used?
-                ])) {
+                    'Enrichmentopus_crossrefLicence', // TODO still used?
+                ])
+            ) {
                 $maxWidthClass = ' textfield-max-width';
             }
 
