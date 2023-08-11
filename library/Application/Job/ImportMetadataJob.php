@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -8,12 +8,11 @@
  *
  * OPUS 4 is a complete rewrite of the original OPUS software and was developed
  * by the Stuttgart University Library, the Library Service Center
- * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
- * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
- * and State Library, the Saxon State Library - Dresden State and University
- * Library, the Bielefeld University Library and the University Library of
- * Hamburg University of Technology with funding from the German Research
- * Foundation and the European Regional Development Fund.
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
  *
  * LICENCE
  * OPUS is free software; you can redistribute it and/or modify it under the
@@ -26,30 +25,35 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2021, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
--->
 
-<xsl:stylesheet version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:php="http://php.net/xsl"
-    xmlns:xml="http://www.w3.org/XML/1998/namespace"
-    exclude-result-prefixes="php">
+use Opus\Common\LoggingTrait;
+use Opus\Import\Worker\MetadataImportWorker;
+use Opus\Job\Runner;
 
-    <xsl:output method="text" omit-xml-declaration="yes" />
+/**
+ * Class to import metadata.
+ */
+class Application_Job_ImportMetadataJob implements Application_Job_JobInterface
+{
+    use LoggingTrait;
 
-    <!-- bibtex-style for institutions  -->
-    <xsl:template match="Collection[@RoleName='institutes']">
-      <xsl:value-of select="@Name" />
-      <xsl:choose>
-         <xsl:when test="position()=last()">
-            <xsl:text></xsl:text>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:text>; </xsl:text>
-         </xsl:otherwise>
-      </xsl:choose>
-    </xsl:template>
+    public function run()
+    {
+        $jobrunner = new Runner();
+        $jobrunner->setLogger($this->getLogger());
+        // no waiting between jobs
+        $jobrunner->setDelay(0);
+        // set a limit of 100 index jobs per run
+        $jobrunner->setLimit(100);
 
-</xsl:stylesheet>
+        $importWorker = new MetadataImportWorker(null);
+        $importWorker->setLogger($this->getLogger());
+
+        $jobrunner->registerWorker($importWorker);
+
+        $jobrunner->run();
+    }
+}

@@ -63,5 +63,3 @@ foreach ($docFinder->getIds() as $id) {
 }
 
 echo "done.\n";
-
-exit();

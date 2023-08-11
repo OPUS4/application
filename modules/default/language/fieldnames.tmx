@@ -8,13 +8,13 @@
     <body>
 
         <tu tuid="Language">
-      <tuv xml:lang="en">
-        <seg>Language</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sprache</seg>
-      </tuv>
-    </tu>
+            <tuv xml:lang="en">
+                <seg>Language</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sprache</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="Licence">
             <tuv xml:lang="en">
@@ -457,7 +457,7 @@
             </tuv>
         </tu>
 
-		<tu tuid="ddc_dnb">
+        <tu tuid="ddc_dnb">
             <tuv xml:lang="en">
                 <seg>DDC subject group</seg>
             </tuv>
@@ -466,23 +466,23 @@
             </tuv>
         </tu>
 
-		<tu tuid="SubjectPACS">
-			<tuv xml:lang="en">
-				<seg>PACS Keyword</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>PACS Klasse</seg>
-			</tuv>
-		</tu>
+        <tu tuid="SubjectPACS">
+            <tuv xml:lang="en">
+                <seg>PACS Keyword</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>PACS Klasse</seg>
+            </tuv>
+        </tu>
 
-		<tu tuid="SubjectCCS">
-			<tuv xml:lang="en">
-				<seg>CCS Keyword</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>CCS Klasse</seg>
-			</tuv>
-		</tu>
+        <tu tuid="SubjectCCS">
+            <tuv xml:lang="en">
+                <seg>CCS Keyword</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>CCS Klasse</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="SubjectJEL">
             <tuv xml:lang="en">
@@ -493,7 +493,7 @@
             </tuv>
         </tu>
 
-		<tu tuid="SubjectBKL">
+        <tu tuid="SubjectBKL">
             <tuv xml:lang="en">
                 <seg>BKL Term</seg>
             </tuv>
@@ -2301,8 +2301,8 @@
                 <seg>Veröffentlichend</seg>
             </tuv>
         </tu>
-        
-        <tu tuid="Enrichmentconference_title">
+
+        <tu tuid="EnrichmentConferenceTitle">
             <tuv xml:lang="en">
                 <seg>Conference Name</seg>
             </tuv>
@@ -2311,7 +2311,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Enrichmentconference_place">
+        <tu tuid="EnrichmentConferencePlace">
             <tuv xml:lang="en">
                 <seg>Conference Location</seg>
             </tuv>
@@ -2320,7 +2320,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Enrichmentopus_import_data">
+        <tu tuid="Enrichmentopus_doi_json">
             <tuv xml:lang="en">
                 <seg>JSON-Data</seg>
             </tuv>
@@ -2338,7 +2338,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Enrichmentlocal_crossrefDocumentType">
+        <tu tuid="Enrichmentopus_crossrefDocumentType">
             <tuv xml:lang="en">
                 <seg>Document Type (Crossref original)</seg>
             </tuv>
@@ -2347,7 +2347,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Enrichmentlocal_crossrefLicence">
+        <tu tuid="Enrichmentopus_crossrefLicence">
             <tuv xml:lang="en">
                 <seg>Licence (Crossref)</seg>
             </tuv>
@@ -2356,7 +2356,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Enrichmentlocal_doiImportPopulated">
+        <tu tuid="Enrichmentopus_doiImportPopulated">
             <tuv xml:lang="en">
                 <seg>imported_fields</seg>
             </tuv>
@@ -2365,7 +2365,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Enrichmentlocal_import_origin">
+        <tu tuid="Enrichmentopus_import_origin">
             <tuv xml:lang="en">
                 <seg>import_origin</seg>
             </tuv>
