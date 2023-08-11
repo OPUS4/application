@@ -1639,3 +1639,12 @@ ul.list-style-none {
 .publish select {
     max-width: 18.75rem; /* 300px */
 }
+
+#doi_import_invisible_field {
+    display: none;
+}
+
+.textfield-max-width {
+    min-width: calc(75% - 2rem);
+}
+
