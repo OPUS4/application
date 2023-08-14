@@ -24,6 +24,9 @@ damit der BibTeX-Feldname nicht mehr mit der Rolle übereinstimmen muss.
 
 https://github.com/OPUS4/opus4-bibtex/issues/70
 
+Für weitere Änderungen am OPUS4-BibTeX Package, siehe hier: 
+https://github.com/OPUS4/opus4-bibtex/releases/tag/4.8.0.1
+
 ## Release 4.8 - 2023-04-25
 
 Für diesen Release wurden sehr viele Änderungen am Code von OPUS 4 
