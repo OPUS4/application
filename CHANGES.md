@@ -2,6 +2,9 @@
 
 ## Release 4.8.0.1 - 2023-08-15
 
+OPUS 4.8.0.1 Project on GitHub
+https://github.com/orgs/OPUS4/projects/55
+
 ## Release 4.8 - 2023-04-25
 
 OPUS 4.8 Project on GitHub
