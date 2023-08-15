@@ -29,17 +29,18 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\LoggingTrait;
 use Opus\Import\Worker\MetadataImportWorker;
+use Opus\Job\AbstractTask;
 use Opus\Job\Runner;
 
 /**
  * Class to import metadata.
  */
-class Application_Job_ImportMetadataJob implements Application_Job_JobInterface
+class Application_Job_ImportMetadataJob extends AbstractTask
 {
-    use LoggingTrait;
-
+    /**
+     * @return int
+     */
     public function run()
     {
         $jobrunner = new Runner();
@@ -55,5 +56,7 @@ class Application_Job_ImportMetadataJob implements Application_Job_JobInterface
         $jobrunner->registerWorker($importWorker);
 
         $jobrunner->run();
+
+        return 0;
     }
 }

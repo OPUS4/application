@@ -25,20 +25,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2022, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
- /**
-  * Basic process interface as required to define
-  * jobs for background processes
-  */
-interface Application_Job_JobInterface
-{
-    /**
-     * Perform job.
-     *
-     * @return mixed
-     */
-    public function run();
-}
+/*
+ * This script is called by the TaskScheduler to have Opus tasks run by the Crunz scheduler.
+ * Since the Crunz scheduler cannot execute classes directly, we need this intermediate step via a script
+ * to instantiate and execute the desired Opus Task object.
+ */
+
+use Opus\Job\TaskRunner;
+
+require_once dirname(__FILE__) . '/../common/bootstrap.php';
+
+$scriptOptions = getopt(null, ["taskname:"]);
+$taskName      = $scriptOptions['taskname'];
+
+$taskRunner = new TaskRunner();
+$taskRunner->runTask($taskName);

@@ -32,14 +32,17 @@
 use Opus\Common\ConfigTrait;
 use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
+use Opus\Job\AbstractTask;
 
 /**
  * Class for checking workspace files.
  *
  * This class checks if all the items in workspace/files directory are a directory and throws an exception for the items
  * which are not.
+ *
+ * TODO BUG Was soll der Quatsch?
  */
-class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInterface
+class Application_Job_CheckWorkspaceFilesJob extends AbstractTask
 {
     use ConfigTrait;
 
@@ -48,6 +51,9 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
 
     /** @var string */
     private $filesPath;
+
+    /** @var int */
+    private $count = 0;
 
     /**
      * @return int
@@ -58,7 +64,9 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
 
         $filesPath = $this->getFilesPath();
 
-        echo "INFO: Scanning directory '$filesPath'...\n";
+        $output = $this->getOutput();
+
+        $output->writeln("INFO: Scanning directory '$filesPath'...");
 
         // Iterate over all files
         $count  = 0;
@@ -66,7 +74,7 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
 
         foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
             if ($count > 0 && $count % 100 === 0) {
-                echo "INFO: checked $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.\n";
+                $output->writeln("INFO: checked $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.");
             }
             $count++;
 
@@ -76,7 +84,7 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
             }
 
             if (! is_dir($file)) {
-                echo "ERROR: expected directory: $file\n";
+                $output->writeln("ERROR: expected directory: $file");
                 $errors++;
                 continue;
             }
@@ -86,18 +94,20 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
             try {
                 Document::get($id);
             } catch (NotFoundException $e) {
-                echo "ERROR: No document $id found for workspace path '$file'!\n";
+                $output->writeln("ERROR: No document $id found for workspace path '$file'!");
                 $errors++;
             }
         }
 
-        echo "INFO: Checked a total of $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.\n";
+        $output->writeln("INFO: Checked a total of $count entries with " . round($count / (microtime(true) - $this->startTime)) . " entries/seconds.");
 
         if ($errors !== 0) {
             throw new Exception("Found $errors ERRORs in workspace files directory '$filesPath'!\n");
         }
 
-        return $count;
+        $this->count = $count;
+
+        return 0;
     }
 
     /**
@@ -131,5 +141,15 @@ class Application_Job_CheckWorkspaceFilesJob implements Application_Job_JobInter
     public function setFilesPath($path)
     {
         $this->filesPath = $path;
+    }
+
+    /**
+     * Gets the count of checked entries
+     *
+     * @return int
+     */
+    public function getCount()
+    {
+        return $this->count;
     }
 }

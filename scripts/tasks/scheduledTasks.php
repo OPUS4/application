@@ -25,37 +25,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Job\AbstractTask;
-use Opus\Job\MailNotification;
-use Opus\Job\Runner;
+/*
+ * This file is a Crunz task file.
+ * There can be multiple task files, but in our case we only need one
+ * to start a task scheduler in which all configured opus tasks will be executed by the crunz scheduler
+ * according to the schedule times specified in the tasks.ini configuration. What ini file to be used for the task
+ * configurations is defined in application.ini: cron.configFile = APPLICATION_PATH "/application/configs/tasks.ini"
+ */
 
-class Application_Job_SendReviewRequestJob extends AbstractTask
-{
-    /**
-     * @return int
-     */
-    public function run()
-    {
-        $jobrunner = new Runner();
-        $jobrunner->setLogger($this->getLogger());
+use Opus\Job\TaskManager;
 
-        // no waiting between jobs
-        $jobrunner->setDelay(0);
+require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-        // set a limit of 100 index jobs per run
-        $jobrunner->setLimit(100);
-
-        $mailWorker = new MailNotification();
-        $mailWorker->setLogger($this->getLogger());
-
-        $jobrunner->registerWorker($mailWorker);
-
-        $jobrunner->run();
-
-        return 0;
-    }
-}
+$taskManager = new TaskManager();
+return $taskManager->getCrunzSchedule();
