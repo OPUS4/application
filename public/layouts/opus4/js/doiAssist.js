@@ -279,7 +279,7 @@ function getEditor(json)
                 if (json.message.editor[_z].ORCID != null) {
                     if (json.message.editor[_z].ORCID.includes("/")) {
                         var orcid_raw = json.message.editor[_z].ORCID;
-                        let re        = orcid_raw.match(/([\d\-]+)/g);
+                        let re        = orcid_raw.match(/([\d\-X]+)/g);
                         if (re != null) {
                             orcid = re[0];} else {
                             orcid = ''}
@@ -337,7 +337,7 @@ function getAuthor(json)
                     if (json.message.author[_z].ORCID != null) {
                         if (json.message.author[_z].ORCID.includes("/")) {
                             var orcid_raw = json.message.author[_z].ORCID;
-                            let re        = orcid_raw.match(/([\d\-]+)/g);
+                            let re        = orcid_raw.match(/([\d\-X]+)/g);
                             if (re != null) {
                                 orcid = re[0];
                             } else {
