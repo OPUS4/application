@@ -31,6 +31,7 @@
 
 use Opus\Bibtex\Import\Console\BibtexImportCommand;
 use Opus\Bibtex\Import\Console\BibtexListCommand;
+use Opus\Job\TaskManager;
 use Opus\Pdf\Console\CoverGenerateCommand;
 use Opus\Search\Console\ExtractCommand;
 use Opus\Search\Console\ExtractFileCommand;
