@@ -30,7 +30,7 @@ function getLicence(json)
     if (json['message']['license'] != undefined) {
         var result = json['message']['license'][0]['URL'];
         if (result != undefined) {
-            finalize("Enrichmentlocal_crossrefLicence")
+            finalize("Enrichmentopus_crossrefLicence")
         }
     }
     return result ? result : ''
@@ -63,7 +63,7 @@ function getConferenceTitle(json)
     if (json['message']['event'] != undefined) {
         var result = json['message']['event']['name'];
         if (result != undefined) {
-            finalize("Enrichmentconference_title")
+            finalize("EnrichmentConferenceTitle")
         }
     }
     return result ? result : ''
@@ -75,7 +75,7 @@ function getConferencePlace(json)
     if (json['message']['event'] != undefined) {
         var result = json['message']['event']['location'];
         if (result != undefined) {
-            finalize("Enrichmentconference_place")
+            finalize("EnrichmentConferencePlace")
         }
     }
     return result ? result : ''

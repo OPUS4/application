@@ -298,8 +298,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         // Test "valid" set specs: Non-empty sets in test data
         $assertSets = [
-            'doc-type:article',
-            'doc-type:preprint',
+            'doc-type:Article',
+            'doc-type:Preprint',
             'bibliography:true',
             'bibliography:true',
             'ddc:62',
@@ -920,7 +920,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
             $this->assertEquals($label, $elements->item(0)->nodeValue);
 
             $elements = $xpath->query('//dc:type[@xsi:type="dini:PublType"]');
-            $this->assertEquals('masterThesis', $elements->item(0)->nodeValue);
+            $this->assertEquals('MasterThesis', $elements->item(0)->nodeValue);
         }
     }
 
@@ -1900,7 +1900,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $values  = $this->nodeListToArray($docType);
 
         $this->assertContains('doctoralthesis', $values);
-        $this->assertContains('doc-type:doctoralThesis', $values);
+        $this->assertContains('doc-type:Habilitation', $values);
     }
 
     /**

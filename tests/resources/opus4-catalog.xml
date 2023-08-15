@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <!-- Catalog file taken from https://github.com/tklein23/validate-oai-xmetadissplus, written by Thoralf Klein, 2012-2013 -->
+<!-- XMetaDissPlus XSDs and uri names updated by Alexander Weimar, BSZ, 2023 -->
 <!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
         "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
@@ -7,41 +8,20 @@
     <uri name="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd" uri="xmetadissplus/dc.xsd"/>
     <uri name="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcmitype.xsd" uri="xmetadissplus/dcmitype.xsd"/>
 
-    <uri name="http://purl.org/info:eu-repo/schemas/xmls/2010/05/07/versionTypes.xsd"
-         uri="xmetadissplus/versionTypes.xsd"/>
-    <uri name="http://purl.org/info:eu-repo/schemas/xmls/2010/04/15/publicationTypes.xsd"
-         uri="xmetadissplus/publicationTypes.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadiss/iso639-2.xsd" uri="xmetadissplus/iso639-2.xsd"/>
-
-    <uri name="http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd" uri="xmetadissplus/xmetadissplus.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadiss/cc.xsd" uri="xmetadissplus/cc.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadissplus/xmetadissplustype.xsd"
-         uri="xmetadissplus/xmetadissplustype.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadiss/ddb.xsd" uri="xmetadissplus/ddb.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadissplus/hdl.xsd" uri="xmetadissplus/hdl.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadissplus/doi.xsd" uri="xmetadissplus/doi.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadiss/thesis.xsd" uri="xmetadissplus/thesis.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadiss/pc.xsd" uri="xmetadissplus/pc.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadiss/urn.xsd" uri="xmetadissplus/urn.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadiss/subject.xsd" uri="xmetadissplus/subject.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadiss/iso3166.xsd" uri="xmetadissplus/iso3166.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadiss/mime.xsd" uri="xmetadissplus/mime.xsd"/>
-    <uri name="http://files.dnb.de/standards/xmetadiss/iso639-2.xsd" uri="xmetadissplus/iso639-2.xsd"/>
-
-    <uri name="http://www.d-nb.de/standards/xmetadissplus/xmetadissplus.xsd" uri="xmetadissplus/xmetadissplus.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadiss/cc.xsd" uri="xmetadissplus/cc.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadissplus/xmetadissplustype.xsd"
-         uri="xmetadissplus/xmetadissplustype.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadiss/ddb.xsd" uri="xmetadissplus/ddb.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadissplus/hdl.xsd" uri="xmetadissplus/hdl.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadissplus/doi.xsd" uri="xmetadissplus/doi.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadiss/thesis.xsd" uri="xmetadissplus/thesis.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadiss/pc.xsd" uri="xmetadissplus/pc.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadiss/urn.xsd" uri="xmetadissplus/urn.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadiss/subject.xsd" uri="xmetadissplus/subject.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadiss/iso3166.xsd" uri="xmetadissplus/iso3166.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadiss/mime.xsd" uri="xmetadissplus/mime.new.xsd"/>
-    <uri name="http://www.d-nb.de/standards/xmetadiss/iso639-2.xsd" uri="xmetadissplus/iso639-2.new.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/versionTypes.xsd" uri="xmetadissplus/versionTypes.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/xmetadissplus.xsd" uri="xmetadissplus/xmetadissplus.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/cc.xsd" uri="xmetadissplus/cc.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/xmetadissplustype.xsd" uri="xmetadissplus/xmetadissplustype.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/ddb.xsd" uri="xmetadissplus/ddb.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/hdl.xsd" uri="xmetadissplus/hdl.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/doi.xsd" uri="xmetadissplus/doi.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/thesis.xsd" uri="xmetadissplus/thesis.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/pc.xsd" uri="xmetadissplus/pc.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/urn.xsd" uri="xmetadissplus/urn.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/subject.xsd" uri="xmetadissplus/subject.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/iso3166.xsd" uri="xmetadissplus/iso3166.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/mime.xsd" uri="xmetadissplus/mime.xsd"/>
+    <uri name="https://d-nb.info/standards/schema/iso639-2.xsd" uri="xmetadissplus/iso639-2.xsd"/>
 
     <uri name="http://www.w3.org/2001/03/xml.xsd" uri="xmetadissplus/xml.xsd"/>
     <uri name="http://www.w3.org/2009/01/xml.xsd" uri="xml/xml2009.xsd"/>

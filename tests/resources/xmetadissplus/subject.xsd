@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Definition von complexTypes verschiedener Thesauri und Klassifikationen, die nicht in dcterms.xsd enthalten sind -->
-<!-- Copyright 2006 Deutsche Nationalbibliothek -->
-<!-- Version 1.3 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1/">
-	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
-	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd"/>
+<!-- Copyright 2023 Deutsche Nationalbibliothek -->
+<!-- Version xMetaDissPlus 2.5 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:ddb="http://www.d-nb.de/standards/ddb/">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd"/>
+	<xs:annotation>
+		<xs:documentation>
+			2023-02-27:
+			CHANGED by DNB: 
+			ADD neuer complexType 'MSC2020'
+			ADD neuer complexType 'CCS2012'
+			Die vorliegende Version 2.5 ist abwärtskompatibel zu den Vorgängerversionen.
+						
+			2017-12-01: 
+			1. ADD Import of ddb.xsd.
+			2. CHANGED alle schemaLocation-Attribute verweisen auf eine DNB eigene URL, 
+			auch wenn sie zuvor auf DNB-fremde URLs verwiesen haben 
+			(dc: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd,
+			xml: http://www.w3.org/2001/03/xml.xsd).
+			3. ADD neuer complexType 'PACS2010'
+			4. ADD neuer complexType 'MSC2010'
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="dc.xsd"/>    
+	<xs:import namespace="http://www.d-nb.de/standards/ddb/" schemaLocation="ddb.xsd" />
 	<xs:complexType name="BK">
 		<xs:simpleContent>
 			<xs:restriction base="dc:SimpleLiteral">
@@ -36,6 +55,17 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="CCS1998">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<!-- https://dl.acm.org/ccs -->
+	<xs:complexType name="CCS2012">
 		<xs:simpleContent>
 			<xs:restriction base="dc:SimpleLiteral">
 				<xs:simpleType>
@@ -91,7 +121,19 @@
 				<xs:simpleType>
 					<xs:restriction base="xs:string"/>
 				</xs:simpleType>
-				<xs:attribute ref="xml:lang" use="prohibited"/>
+				<xs:attribute ref="xml:lang" use="prohibited"/>				
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="GND">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>	
+				<!--<xs:attribute name="GND-Nr" type="xs:string"></xs:attribute>-->
+				<xs:attribute ref="ddb:GND-Nr" use="optional"/>
 			</xs:restriction>
 		</xs:simpleContent>
 	</xs:complexType>
@@ -116,6 +158,37 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="noScheme">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	
+	<xs:complexType name="PACS2010">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="MSC2010">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="MSC2020">
 		<xs:simpleContent>
 			<xs:restriction base="dc:SimpleLiteral">
 				<xs:simpleType>

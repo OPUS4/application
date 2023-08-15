@@ -25,41 +25,53 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Repository;
-use Opus\Search\QueryFactory;
-use Opus\Search\Service;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Dieses Skript gibt alle IDs der Dokumente zurück, die im Server State
- * published sind, aber aufgrund eines Fehlers nicht im Index repräsentiert sind.
- *
- * Siehe dazu auch die Story OPUSVIER-2368.
- *
- * TODO convert to command for index analysis
+ * Console command to interactively execute PHP code.
  */
+class Application_Console_Console_ConsoleCommand extends Command
+{
+    protected function configure()
+    {
+        parent::configure();
 
-$numOfErrors = 0;
+        $help = <<<EOT
+The <fg=green>console:console</> command can be used to interactively execute PHP code.
+EOT;
 
-$finder = Repository::getInstance()->getDocumentFinder();
-$finder->setServerState('published');
-
-foreach ($finder->getIds() as $docId) {
-    // check if document with id $docId is already persisted in search index
-    $search = Service::selectSearchingService();
-    $query  = QueryFactory::selectDocumentById($search, $docId);
-
-    if ($search->customSearch($query)->getAllMatchesCount() !== 1) {
-        echo "document # $docId is not stored in search index\n";
-        $numOfErrors++;
+        $this->setName('console:console')
+            ->setDescription('Interactively executes PHP code')
+            ->setHelp($help);
     }
-}
 
-if ($numOfErrors > 0) {
-    echo "$numOfErrors missing documents were found\n";
-} else {
-    echo "no errors were found\n";
+    /**
+     * Executes this command to run the passed PHP code.
+     *
+     * @return int 0 in case of success, otherwise an exit code
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        while ($input !== false) {
+            $input = readline('opus> ');
+            readline_add_history($input);
+            try {
+                eval($input);
+            } catch (Exception $e) {
+                $output->writeln('# failed executing code:');
+                $output->writeln('Caught exception ' . get_class($e) . ': ' . $e->getMessage());
+                $output->writeln($e->getTraceAsString());
+
+                return Command::FAILURE;
+            }
+        }
+
+        return Command::SUCCESS;
+    }
 }
