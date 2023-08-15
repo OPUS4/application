@@ -7,10 +7,10 @@ redevelopment that was created as part of a DFG ([Deutsche Forschungsgemeinschaf
 Since then the development has been continued at KOBV ([Kooperativer Bibliotheksverbund Berlin-Brandenburg][KOBV])
 mostly.
 
-## OPUS 4.8 (current version)
+## OPUS 4.8.0.1 (current version)
 
-The current version of OPUS 4 is __4.8__. It is available on the [master][MASTER] branch and compatible with PHP 7.1
-to 8.1. 
+The current version of OPUS 4 is __4.8.0.1__. It is available on the [master][MASTER] branch and compatible with 
+PHP 7.1 to 8.1. 
 
 [Documentation][DOC]
 : Information on setting up a repository, for users and administrators.

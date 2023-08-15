@@ -1,5 +1,32 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.1 - 2023-08-15
+
+Es wurde ein Fehler behoben, bei dem Personen im Metadaten-Formular 
+unter Umständen nicht mehr angezeigt wurden.
+
+https://github.com/OPUS4/application/issues/1068
+
+### BibTeX-Import
+
+Außerdem wurde der BibTeX-Import erweitert. Beim Mapping von Titeln
+kann jetzt die Sprache angegeben werden und es kann auf alle Titel-Typen
+gemappt werden. 
+
+https://github.com/OPUS4/opus4-bibtex/issues/67
+
+In Personen-Feldern können nun Identifier mit angegeben werden.
+
+https://github.com/OPUS4/opus4-bibtex/issues/69
+
+Die Personen-Rolle in OPUS 4 kann jetzt im Mapping konfiguriert werden,
+damit der BibTeX-Feldname nicht mehr mit der Rolle übereinstimmen muss.
+
+https://github.com/OPUS4/opus4-bibtex/issues/70
+
+Für weitere Änderungen am OPUS4-BibTeX Package, siehe hier: 
+https://github.com/OPUS4/opus4-bibtex/releases/tag/4.8.0.1
+
 ## Release 4.8 - 2023-04-25
 
 Für diesen Release wurden sehr viele Änderungen am Code von OPUS 4 

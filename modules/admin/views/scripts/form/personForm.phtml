@@ -41,7 +41,8 @@ use Opus\Common\Person;
 $personId = $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getValue();
 $person   = $this->element->getModel();
 if ($person === null && $personId !== null) {
-    $person = Person::new($personId);
+    // TODO TEST Bug #1068 new() was used instead of get() - How to write a unit test for that?
+    $person = Person::get($personId);
 }
 // TODO ELSE err output
 
