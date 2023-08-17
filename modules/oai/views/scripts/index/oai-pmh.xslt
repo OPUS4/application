@@ -43,13 +43,6 @@
 
     <!-- add include here for each new metadata format    -->
 
-    <xsl:include href="prefixes/oai_dc.xslt"/>
-    <xsl:include href="prefixes/oai_pp.xslt"/>
-    <xsl:include href="prefixes/epicur.xslt"/>
-    <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
-    <xsl:include href="prefixes/copy_xml.xslt"/>
-    <xsl:include href="prefixes/marc21.xslt"/>
-
     <xsl:output method="xml" indent="yes" encoding="utf-8" />
 
     <xsl:param name="dateTime" />

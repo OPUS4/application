@@ -163,9 +163,6 @@ class Oai_Model_Server extends Application_Model_Abstract
     {
         $this->init();
 
-        // Setup stylesheet
-        $this->loadStyleSheet($this->getScriptPath() . '/oai-pmh.xslt');
-
         $this->setupProcessor();
 
         $metadataPrefixPath = $this->getScriptPath() . DIRECTORY_SEPARATOR . 'prefixes';
@@ -231,12 +228,17 @@ class Oai_Model_Server extends Application_Model_Abstract
                 throw new Exception('The verb provided in the request is illegal.', Oai_Model_Error::BADVERB);
         }
 
-        $doc = $this->proc->transformToDoc($this->xml);
-
         // Requests with resumptionToken do not provide metadataPrefix in the URL
         if ($metadataPrefix === null && isset($oaiRequest['metadataPrefixMode'])) {
             $metadataPrefix = $oaiRequest['metadataPrefixMode'];
         }
+
+        // Setup stylesheet
+        $this->loadStyleSheet(
+            $this->getScriptPath() . '/prefixes/' . $this->configuration->getPrefixStyleSheetName($metadataPrefix)
+        );
+
+        $doc = $this->proc->transformToDoc($this->xml);
 
         // TODO is this something that should happen for all metadataPrefixes (OPUSVIER-4531)
         $metadataPrefixTags = [

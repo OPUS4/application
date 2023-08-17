@@ -93,6 +93,13 @@ class Oai_Model_Configuration
     private $oaiBaseUrl = '';
 
     /**
+     * Holds the configuration for the formats
+     *
+     * @var mixed
+     */
+    private $oaiFormat;
+
+    /**
      * Collect configuration information from Zend_Config instance.
      *
      * @throws Exception Thrown if no oai section is set.
@@ -130,6 +137,10 @@ class Oai_Model_Configuration
 
         if (true === isset($config->mail->opus->address)) {
             $this->emailContact = $config->mail->opus->address;
+        }
+
+        if (true === isset($config->oai->format)) {
+            $this->oaiFormat = $config->oai->format;
         }
     }
 
@@ -211,5 +222,35 @@ class Oai_Model_Configuration
     public function getMaxListRecords()
     {
         return $this->maxListRecs;
+    }
+
+    /**
+     * Reads the custom oai server class from the configuration if exists.
+     *
+     * @param string $metadataPrefix
+     * @return string
+     */
+    public function getCustomServerClassName($metadataPrefix)
+    {
+        if (isset($this->oaiFormat->$metadataPrefix->class)) {
+            return $this->oaiFormat->$metadataPrefix->class;
+        }
+
+        return '';
+    }
+
+    /**
+     * Gets the name of the format style sheet file for the given metadata prefix
+     *
+     * @param string $metadataPrefix
+     * @return string
+     */
+    public function getPrefixStyleSheetName($metadataPrefix)
+    {
+        if (isset($this->oaiFormat->$metadataPrefix->xsltFile)) {
+            return $this->oaiFormat->$metadataPrefix->xsltFile;
+        }
+
+        return '';
     }
 }

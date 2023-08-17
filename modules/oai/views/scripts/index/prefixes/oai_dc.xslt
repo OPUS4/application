@@ -46,6 +46,8 @@
 
     <xsl:output method="xml" indent="yes" />
 
+    <xsl:include href="../oai-pmh.xslt"/>
+
     <xsl:template match="Opus_Document" mode="oai_dc">
         <oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
             <!-- dc:title -->
