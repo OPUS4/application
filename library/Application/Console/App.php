@@ -70,6 +70,7 @@ class Application_Console_App extends Application
                 Tasks commands do not work without the TaskManager. If the current PHP version is less than 7.4
                 there will be no TaskManager due to lack of crunz support.
             */
+            $this->add(new Application_Console_Task_ListCommand());
             $this->add(new Application_Console_Task_RunCommand());
         }
 
