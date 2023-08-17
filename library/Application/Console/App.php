@@ -71,6 +71,7 @@ class Application_Console_App extends Application
                 there will be no TaskManager due to lack of crunz support.
             */
             $this->add(new Application_Console_Task_ListCommand());
+            $this->add(new Application_Console_Task_RunCommand());
         }
 
         $this->setDefaultCommand('list');
