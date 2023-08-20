@@ -47,24 +47,19 @@ class Oai_Model_ServerFactory
      */
     public function create($metaDataPrefix = '')
     {
-        if (empty($metaDataPrefix)) {
-            return new Oai_Model_Server();
-        }
-
         $configuration = new Oai_Model_Configuration($this->getConfig());
-        $serverClass   = $configuration->getCustomServerClassName(strtolower($metaDataPrefix));
+        $serverClass   = $configuration->getFormatClassName($metaDataPrefix);
+        $formatOptions = $configuration->getFormatOptions($metaDataPrefix);
 
-        if (empty($serverClass)) {
-            return new Oai_Model_Server();
+        if (empty($serverClass) || ! ClassLoaderHelper::classExists($serverClass)) {
+            $server = new Oai_Model_Server();
+        } else {
+            $server = new $serverClass();
         }
 
-        $classExists = ClassLoaderHelper::classExists($serverClass);
+        $server->setOptions($formatOptions);
 
-        if (! $classExists) {
-            return new Oai_Model_Server();
-        }
-
-        return new $serverClass();
+        return $server;
     }
 
     /**

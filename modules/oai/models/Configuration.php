@@ -230,27 +230,41 @@ class Oai_Model_Configuration
      * @param string $metadataPrefix
      * @return string
      */
-    public function getCustomServerClassName($metadataPrefix)
+    public function getFormatClassName($metadataPrefix)
     {
-        if (isset($this->oaiFormat->$metadataPrefix->class)) {
+        $metadataPrefix = strtolower($metadataPrefix);
+
+        if ($metadataPrefix && isset($this->oaiFormat->$metadataPrefix->class)) {
             return $this->oaiFormat->$metadataPrefix->class;
+        }
+
+        if (isset($this->oaiFormat->default->class)) {
+            return $this->oaiFormat->default->class;
         }
 
         return '';
     }
 
     /**
-     * Gets the name of the format style sheet file for the given metadata prefix
+     * Gets the options for the oai format.
      *
      * @param string $metadataPrefix
-     * @return string
+     * @return array
      */
-    public function getPrefixStyleSheetName($metadataPrefix)
+    public function getFormatOptions($metadataPrefix)
     {
-        if (isset($this->oaiFormat->$metadataPrefix->xsltFile)) {
-            return $this->oaiFormat->$metadataPrefix->xsltFile;
+        $metadataPrefix = strtolower($metadataPrefix);
+
+        $options = [];
+
+        if (isset($this->oaiFormat->$metadataPrefix)) {
+            foreach ($this->oaiFormat->$metadataPrefix as $key => $value) {
+                if (strtolower($key) !== 'class') {
+                    $options[$key] = $value;
+                }
+            }
         }
 
-        return '';
+        return $options;
     }
 }

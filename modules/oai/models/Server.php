@@ -98,6 +98,13 @@ class Oai_Model_Server extends Application_Model_Abstract
     private $response; // TODO temporary hack
 
     /**
+     * Hold oai format options.
+     *
+     * @var array
+     */
+    protected $options;
+
+    /**
      * Gather configuration before action handling.
      */
     public function init()
@@ -162,6 +169,19 @@ class Oai_Model_Server extends Application_Model_Abstract
     protected function handleRequestIntern($oaiRequest, $requestUri)
     {
         $this->init();
+
+        // Setup stylesheet
+        $sheetFile = $this->getOption('xsltFile');
+        if ($sheetFile) {
+            $this->loadStyleSheet(
+                $this->getScriptPath() . '/prefixes/' . $sheetFile
+            );
+        } else {
+            // Setup stylesheet
+            $this->loadStyleSheet(
+                $this->getScriptPath() . '/oai-pmh.xslt'
+            );
+        }
 
         $this->setupProcessor();
 
@@ -228,17 +248,12 @@ class Oai_Model_Server extends Application_Model_Abstract
                 throw new Exception('The verb provided in the request is illegal.', Oai_Model_Error::BADVERB);
         }
 
+        $doc = $this->proc->transformToDoc($this->xml);
+
         // Requests with resumptionToken do not provide metadataPrefix in the URL
         if ($metadataPrefix === null && isset($oaiRequest['metadataPrefixMode'])) {
             $metadataPrefix = $oaiRequest['metadataPrefixMode'];
         }
-
-        // Setup stylesheet
-        $this->loadStyleSheet(
-            $this->getScriptPath() . '/prefixes/' . $this->configuration->getPrefixStyleSheetName($metadataPrefix)
-        );
-
-        $doc = $this->proc->transformToDoc($this->xml);
 
         // TODO is this something that should happen for all metadataPrefixes (OPUSVIER-4531)
         $metadataPrefixTags = [
@@ -876,5 +891,24 @@ class Oai_Model_Server extends Application_Model_Abstract
     public function getResponse()
     {
         return $this->response;
+    }
+
+    /**
+     * @param array $options
+     */
+    public function setOptions($options)
+    {
+        $this->options = $options;
+    }
+
+    /**
+     * Gets a single format option by its key
+     *
+     * @param string $key
+     * @return bool|string
+     */
+    protected function getOption($key)
+    {
+        return $this->options[$key] ?? '';
     }
 }
