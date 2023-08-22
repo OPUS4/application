@@ -38,12 +38,15 @@ class Application_Console_Task_ListCommandTest extends ControllerTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->makeConfigurationModifiable();
+
+        if (! class_exists(TaskManager::class)) {
+            $this->markTestSkipped('TaskManager class not present');
+        }
 
         $this->adjustConfiguration(
             [
                 'cron' => [
-                    'configFile' => 'tests/resources/task/commandtest-tasks.ini',
+                    'configFile' => APPLICATION_PATH . '/tests/resources/task/commandtest-tasks.ini',
                 ],
             ]
         );
@@ -51,10 +54,6 @@ class Application_Console_Task_ListCommandTest extends ControllerTestCase
 
     public function testListTaskOutput()
     {
-        if (! class_exists(TaskManager::class)) {
-            $this->markTestSkipped('No tests to be done due to lack of crunz support.');
-        }
-
         $app = new Application();
 
         $command = new Application_Console_Task_ListCommand();
@@ -79,10 +78,5 @@ class Application_Console_Task_ListCommandTest extends ControllerTestCase
         );
 
         $this->assertEquals($expected, $displayed);
-    }
-
-    public function testMoreTestsMayNeeded()
-    {
-        $this->markTestIncomplete('We may need more tests for the list command.');
     }
 }
