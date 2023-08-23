@@ -45,8 +45,6 @@
 
     <xsl:output method="xml" indent="yes" />
 
-    <xsl:include href="../oai-pmh.xslt"/>
-
     <xsl:template match="Opus_Document" mode="epicur">
         <epicur
             xsi:schemaLocation="urn:nbn:de:1111-2004033116 http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd"

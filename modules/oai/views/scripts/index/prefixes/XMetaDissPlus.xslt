@@ -59,8 +59,6 @@
 
     <xsl:output method="xml" indent="yes" />
 
-    <xsl:include href="../oai-pmh.xslt"/>
-
     <xsl:template match="Opus_Document" mode="xmetadissplus">
         <xMetaDiss:xMetaDiss
             xmlns:xMetaDiss="http://www.d-nb.de/standards/xmetadissplus/"

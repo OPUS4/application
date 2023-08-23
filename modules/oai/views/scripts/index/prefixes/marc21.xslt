@@ -38,8 +38,6 @@
 >
     <xsl:output method="xml" indent="yes"/>
 
-    <xsl:include href="../oai-pmh.xslt"/>
-
     <xsl:template match="Opus_Document" mode="marc21">
         <marc:collection xmlns:marc="http://www.loc.gov/MARC21/slim"
                          xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">

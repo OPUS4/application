@@ -169,20 +169,7 @@ class Oai_Model_Server extends Application_Model_Abstract
     protected function handleRequestIntern($oaiRequest, $requestUri)
     {
         $this->init();
-
-        // Setup stylesheet
-        $sheetFile = $this->getOption('xsltFile');
-        if ($sheetFile) {
-            $this->loadStyleSheet(
-                $this->getScriptPath() . '/prefixes/' . $sheetFile
-            );
-        } else {
-            // Setup stylesheet
-            $this->loadStyleSheet(
-                $this->getScriptPath() . '/oai-pmh.xslt'
-            );
-        }
-
+        $this->loadStyleSheet();
         $this->setupProcessor();
 
         $metadataPrefixPath = $this->getScriptPath() . DIRECTORY_SEPARATOR . 'prefixes';
@@ -815,13 +802,25 @@ class Oai_Model_Server extends Application_Model_Abstract
 
     /**
      * Load an xslt stylesheet.
-     *
-     * @param string $stylesheet
      */
-    protected function loadStyleSheet($stylesheet)
+    protected function loadStyleSheet()
     {
         $this->xslt = new DOMDocument();
-        $this->xslt->load($stylesheet);
+        $this->xslt->load($this->getScriptPath() . '/oai-pmh.xslt');
+
+        // Replace import comment with prefix import
+        $prefixXsltFile = $this->getOption('xsltFile');
+        if ($prefixXsltFile) {
+            $xsltXml = $this->xslt->saveXML();
+            $xsltXml = preg_replace(
+                '/<!-- add include here for each new metadata format    -->/u',
+                '<xsl:include href="' . $this->getScriptPath() . '/prefixes/' . $prefixXsltFile . '"/>',
+                $xsltXml
+            );
+
+            $this->xslt->loadXML($xsltXml);
+        }
+
         $this->proc->importStyleSheet($this->xslt);
         if (isset($_SERVER['HTTP_HOST'])) {
             $this->proc->setParameter('', 'host', $_SERVER['HTTP_HOST']);
