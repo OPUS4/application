@@ -31,6 +31,7 @@
 
 class Oai_Model_ServerFactoryTest extends ControllerTestCase
 {
+    /** @var Oai_Model_ServerFactory */
     private $serverFactory;
 
     public function setUp(): void
@@ -40,30 +41,30 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $config = new Zend_Config(
             [
                 'workspacePath' => '/vagrant/tests/workspace',
-                'mail' => [
+                'mail'          => [
                     'opus' => [
-                        'address' => 'opus4ci@example.org'
+                        'address' => 'opus4ci@example.org',
                     ],
                 ],
-                'oai' => [
-                    'max' => [
-                        'listrecords' => 10,
+                'oai'           => [
+                    'max'    => [
+                        'listrecords'     => 10,
                         'listidentifiers' => 10,
                     ],
                     'format' => [
                         'default' => [
-                            'class' => 'DefaultServerClass'
+                            'class' => 'DefaultServerClass',
                         ],
-                        'epicur' => [
+                        'epicur'  => [
                             'class'    => 'UnknownEpicurClass',
                             'xsltFile' => 'epicurFile.xslt',
                         ],
-                        'oai_dc' => [
+                        'oai_dc'  => [
                             'class' => 'OaiDcServer',
                         ],
-                        'oai_pp' => null,
+                        'oai_pp'  => null,
                     ],
-                ]
+                ],
             ]
         );
 
@@ -129,12 +130,12 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
     public function testGetFormatOptions()
     {
         $expectedOptions = [
-            'xsltFile' => 'epicurFile.xslt',
-            'maxListIdentifiers' => 10,
-            'maxListRecords' => 10,
+            'xsltFile'            => 'epicurFile.xslt',
+            'maxListIdentifiers'  => 10,
+            'maxListRecords'      => 10,
             'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
-            'emailContact' => 'opus4ci@example.org',
-            'class' => 'UnknownEpicurClass',
+            'emailContact'        => 'opus4ci@example.org',
+            'class'               => 'UnknownEpicurClass',
         ];
 
         $metadDataPrefix = 'epicur';

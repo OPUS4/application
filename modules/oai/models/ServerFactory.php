@@ -49,7 +49,7 @@ class Oai_Model_ServerFactory
     {
         $serverClass = $this->getFormatClassName($metaDataPrefix);
 
-        if (empty($serverClass) || !ClassLoaderHelper::classExists($serverClass)) {
+        if (empty($serverClass) || ! ClassLoaderHelper::classExists($serverClass)) {
             $server = new Oai_Model_BaseServer();
         } else {
             $server = new $serverClass();
@@ -142,11 +142,11 @@ class Oai_Model_ServerFactory
             $options['sampleIdentifier'] = $config->oai->sample->identifier;
         }
         if (true === isset($config->oai->max->listidentifiers)) {
-            $options['maxListIdentifiers'] = (int)$config->oai->max->listidentifiers;
+            $options['maxListIdentifiers'] = (int) $config->oai->max->listidentifiers;
         }
 
         if (true === isset($config->oai->max->listrecords)) {
-            $options['maxListRecords'] = (int)$config->oai->max->listrecords;
+            $options['maxListRecords'] = (int) $config->oai->max->listrecords;
         }
         if (true === isset($config->oai->baseurl)) {
             $options['oaiBaseUrl'] = $config->oai->baseurl;

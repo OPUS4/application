@@ -99,9 +99,9 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     {
         $config = $this->getConfig();
 
-        $this->xml           = new DOMDocument();
-        $this->proc          = new XSLTProcessor();
-        $this->xmlFactory    = new Oai_Model_XmlFactory();
+        $this->xml        = new DOMDocument();
+        $this->proc       = new XSLTProcessor();
+        $this->xmlFactory = new Oai_Model_XmlFactory();
     }
 
     /**
@@ -1049,7 +1049,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     /**
      * Sets the xlst file name / file path.
      *
-     * @param string
+     * @param string $file
      */
     public function setXsltFile($file)
     {
