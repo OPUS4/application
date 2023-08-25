@@ -43,21 +43,20 @@ class Oai_Model_ServerFactory
      * Creates an oai server model by metaDataPrefix
      *
      * @param string $metaDataPrefix
-     * @return Oai_Model_Server
+     * @return Oai_Model_BaseServer
      */
     public function create($metaDataPrefix = '')
     {
-        $configuration = new Oai_Model_Configuration($this->getConfig());
-        $serverClass   = $configuration->getFormatClassName($metaDataPrefix);
-        $formatOptions = $configuration->getFormatOptions($metaDataPrefix);
+        $serverClass = $this->getFormatClassName($metaDataPrefix);
 
-        if (empty($serverClass) || ! ClassLoaderHelper::classExists($serverClass)) {
-            $server = new Oai_Model_Server();
+        if (empty($serverClass) || !ClassLoaderHelper::classExists($serverClass)) {
+            $server = new Oai_Model_BaseServer();
         } else {
             $server = new $serverClass();
         }
 
-        $server->setOptions($formatOptions);
+        $options = $this->getFormatOptions($metaDataPrefix);
+        $server->setOptions($options);
 
         return $server;
     }
@@ -66,13 +65,13 @@ class Oai_Model_ServerFactory
      * Creates an oai server model by resumption token
      *
      * @param string $resumptionToken
-     * @return Oai_Model_Server
+     * @return Oai_Model_BaseServer
      */
     public function createByResumptionToken($resumptionToken)
     {
         $config = $this->getConfig();
 
-        if (true === isset($config->workspacePath)) {
+        if (isset($config->workspacePath)) {
             $tempPath = $config->workspacePath
                 . DIRECTORY_SEPARATOR . 'tmp'
                 . DIRECTORY_SEPARATOR . 'resumption';
@@ -86,5 +85,89 @@ class Oai_Model_ServerFactory
         }
 
         return $this->create($token->getMetadataPrefix());
+    }
+
+    /**
+     * Reads the custom oai server class from the configuration if exists.
+     *
+     * @param string $metadataPrefix
+     * @return string
+     */
+    public function getFormatClassName($metadataPrefix)
+    {
+        $config = $this->getConfig();
+
+        if (! isset($config->oai)) {
+            throw new Exception('No configuration for module oai.');
+        }
+
+        $metadataPrefix = strtolower($metadataPrefix);
+
+        if ($metadataPrefix && isset($config->oai->format->$metadataPrefix->class)) {
+            return $config->oai->format->$metadataPrefix->class;
+        }
+
+        if (isset($config->oai->format->default->class)) {
+            return $config->oai->format->default->class;
+        }
+
+        return '';
+    }
+
+    /**
+     * Gets all options for the oai server
+     *
+     * @param string $metadataPrefix
+     * @return array
+     */
+    public function getFormatOptions($metadataPrefix = '')
+    {
+        $metadataPrefix = strtolower($metadataPrefix);
+
+        $config = $this->getConfig();
+
+        if (! isset($config->oai)) {
+            throw new Exception('No configuration for module oai.');
+        }
+
+        $options = [];
+
+        if (isset($config->oai->repository->name)) {
+            $options['repositoryName'] = $config->oai->repository->name;
+        }
+        if (isset($config->oai->repository->identifier)) {
+            $options['repositoryIdentifier'] = $config->oai->repository->identifier;
+        }
+        if (true === isset($config->oai->sample->identifier)) {
+            $options['sampleIdentifier'] = $config->oai->sample->identifier;
+        }
+        if (true === isset($config->oai->max->listidentifiers)) {
+            $options['maxListIdentifiers'] = (int)$config->oai->max->listidentifiers;
+        }
+
+        if (true === isset($config->oai->max->listrecords)) {
+            $options['maxListRecords'] = (int)$config->oai->max->listrecords;
+        }
+        if (true === isset($config->oai->baseurl)) {
+            $options['oaiBaseUrl'] = $config->oai->baseurl;
+        }
+
+        if (true === isset($config->workspacePath)) {
+            $options['resumptionTokenPath'] = $config->workspacePath
+                . DIRECTORY_SEPARATOR . 'tmp'
+                . DIRECTORY_SEPARATOR . 'resumption';
+        }
+
+        if (isset($config->mail->opus->address)) {
+            $options['emailContact'] = $config->mail->opus->address;
+        }
+
+        $formatOptions = [];
+        if (isset($config->oai->format->$metadataPrefix)) {
+            $formatOptions = $config->oai->format->$metadataPrefix->toArray();
+            unset($options['class']);
+        }
+
+        return $formatOptions ? array_merge($options, $formatOptions) : $options;
     }
 }

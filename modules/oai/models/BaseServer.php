@@ -37,8 +37,10 @@ use Opus\Common\Repository;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
 
-class Oai_Model_Server extends Application_Model_Abstract
+class Oai_Model_BaseServer extends Application_Model_Abstract
 {
+    use Oai_Model_OptionsTrait;
+
     /**
      * Holds xml representation of document information to be processed.
      *
@@ -75,13 +77,6 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     private $xMetaDissRestriction = ['doctoralthesis', 'habilitation'];
 
-    /**
-     * Hold oai module configuration model.
-     *
-     * @var Oai_Model_Configuration
-     */
-    protected $configuration;
-
     /** @var Oai_Model_XmlFactory */
     private $xmlFactory;
 
@@ -98,13 +93,6 @@ class Oai_Model_Server extends Application_Model_Abstract
     private $response; // TODO temporary hack
 
     /**
-     * Hold oai format options.
-     *
-     * @var array
-     */
-    protected $options;
-
-    /**
      * Gather configuration before action handling.
      */
     public function init()
@@ -113,7 +101,6 @@ class Oai_Model_Server extends Application_Model_Abstract
 
         $this->xml           = new DOMDocument();
         $this->proc          = new XSLTProcessor();
-        $this->configuration = new Oai_Model_Configuration($config);
         $this->xmlFactory    = new Oai_Model_XmlFactory();
     }
 
@@ -127,7 +114,7 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     public function handleRequest($parameters, $requestUri)
     {
-        // TODO move error handling into Oai_Model_Server
+        // TODO move error handling into Oai_Model_BaseServer
         try {
             // handle request
             return $this->handleRequestIntern($parameters, $requestUri);
@@ -173,7 +160,7 @@ class Oai_Model_Server extends Application_Model_Abstract
         $this->setupProcessor();
 
         $metadataPrefixPath = $this->getScriptPath() . DIRECTORY_SEPARATOR . 'prefixes';
-        $resumptionPath     = $this->configuration->getResumptionTokenPath();
+        $resumptionPath     = $this->getResumptionTokenPath();
 
         $request = new Oai_Model_Request();
         $request->setPathToMetadataPrefixFiles($metadataPrefixPath);
@@ -354,10 +341,10 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     protected function handleIdentify()
     {
-        $email            = $this->configuration->getEmailContact();
-        $repName          = $this->configuration->getRepositoryName();
-        $repIdentifier    = $this->configuration->getRepositoryIdentifier();
-        $sampleIdentifier = $this->configuration->getSampleIdentifier();
+        $email            = $this->getEmailContact();
+        $repName          = $this->getRepositoryName();
+        $repIdentifier    = $this->getRepositoryIdentifier();
+        $sampleIdentifier = $this->getSampleIdentifier();
 
         // Set backup date if database query does not return a date.
         $earliestDate = DateTime::createFromFormat("Y-m-d", '1970-01-01');
@@ -389,7 +376,7 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     protected function handleListIdentifiers(array &$oaiRequest)
     {
-        $maxIdentifier = $this->configuration->getMaxListIdentifiers();
+        $maxIdentifier = $this->getMaxListIdentifiers();
         $this->handlingOfLists($oaiRequest, $maxIdentifier);
     }
 
@@ -428,7 +415,7 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     protected function handleListRecords(array &$oaiRequest)
     {
-        $maxRecords = $this->configuration->getMaxListRecords();
+        $maxRecords = $this->getMaxListRecords();
         $this->handlingOfLists($oaiRequest, $maxRecords);
     }
 
@@ -437,7 +424,7 @@ class Oai_Model_Server extends Application_Model_Abstract
      */
     protected function handleListSets()
     {
-        $repIdentifier = $this->configuration->getRepositoryIdentifier();
+        $repIdentifier = $this->getRepositoryIdentifier();
 
         $this->proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->xml->appendChild($this->xml->createElement('Documents'));
@@ -471,8 +458,8 @@ class Oai_Model_Server extends Application_Model_Abstract
             $maxRecords = 100;
         }
 
-        $repIdentifier = $this->configuration->getRepositoryIdentifier();
-        $tempPath      = $this->configuration->getResumptionTokenPath();
+        $repIdentifier = $this->getRepositoryIdentifier();
+        $tempPath      = $this->getResumptionTokenPath();
 
         $this->proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->xml->appendChild($this->xml->createElement('Documents'));
@@ -786,21 +773,6 @@ class Oai_Model_Server extends Application_Model_Abstract
     }
 
     /**
-     * @return string
-     */
-    private function getOaiBaseUrl()
-    {
-        $oaiBaseUrl = $this->configuration->getOaiBaseUrl();
-
-        // if no OAI base url is set, use local information as base url
-        if (true === empty($oaiBaseUrl)) {
-            $oaiBaseUrl = $this->getBaseUrl() . '/oai'; // TODO . $module;
-        }
-
-        return $oaiBaseUrl;
-    }
-
-    /**
      * Load an xslt stylesheet.
      */
     protected function loadStyleSheet()
@@ -809,12 +781,16 @@ class Oai_Model_Server extends Application_Model_Abstract
         $this->xslt->load($this->getScriptPath() . '/oai-pmh.xslt');
 
         // Replace import comment with prefix import
-        $prefixXsltFile = $this->getOption('xsltFile');
+        $prefixXsltFile = $this->getXsltFile();
+
         if ($prefixXsltFile) {
+            if (! file_exists($prefixXsltFile)) {
+                $prefixXsltFile = $this->getScriptPath() . '/prefixes/' . $prefixXsltFile;
+            }
             $xsltXml = $this->xslt->saveXML();
             $xsltXml = preg_replace(
                 '/<!-- add include here for each new metadata format    -->/u',
-                '<xsl:include href="' . $this->getScriptPath() . '/prefixes/' . $prefixXsltFile . '"/>',
+                '<xsl:include href="' . $prefixXsltFile . '"/>',
                 $xsltXml
             );
 
@@ -893,21 +869,190 @@ class Oai_Model_Server extends Application_Model_Abstract
     }
 
     /**
-     * @param array $options
+     * Return temporary path for resumption tokens.
+     *
+     * @return string Path.
      */
-    public function setOptions($options)
+    public function getResumptionTokenPath()
     {
-        $this->options = $options;
+        return $this->options['resumptionTokenPath'] ?? '';
     }
 
     /**
-     * Gets a single format option by its key
+     * Sets the temporary path for resumption tokens.
      *
-     * @param string $key
-     * @return bool|string
+     * @param string $path
      */
-    protected function getOption($key)
+    public function setResumptionTokenPath($path)
     {
-        return $this->options[$key] ?? '';
+        $this->options['resumptionTokenPath'] = $path;
+    }
+
+    /**
+     * Return contact email address.
+     *
+     * @return string Email address.
+     */
+    public function getEmailContact()
+    {
+        return $this->options['emailContact'] ?? '';
+    }
+
+    /**
+     * Sets the contact email address.
+     *
+     * @param string $email
+     */
+    public function setEmailContact($email)
+    {
+        $this->options['emailContact'] = $email;
+    }
+
+    /**
+     * Return OAI base url.
+     *
+     * @return string Oai base url.
+     */
+    private function getOaiBaseUrl()
+    {
+        $oaiBaseUrl = $this->options['oaiBaseUrl'] ?? '';
+
+        // if no OAI base url is set, use local information as base url
+        if (true === empty($oaiBaseUrl)) {
+            $oaiBaseUrl = $this->getBaseUrl() . '/oai'; // TODO . $module;
+        }
+
+        return $oaiBaseUrl;
+    }
+
+    /**
+     * Sets the OAI base url.
+     *
+     * @param string $url
+     */
+    public function setOaiBaseUrl($url)
+    {
+        $this->options['oaiBaseUrl'] = $url;
+    }
+
+    /**
+     * Return repository name.
+     *
+     * @return string Repository name.
+     */
+    private function getRepositoryName()
+    {
+        return $this->options['repositoryName'] ?? '';
+    }
+
+    /**
+     * Sets the repository name.
+     *
+     * @param string $repoName
+     */
+    public function setRepositoryName($repoName)
+    {
+        $this->options['repositoryName'] = $repoName;
+    }
+
+    /**
+     * Return repository identifier.
+     *
+     * @return string Repository identifier.
+     */
+    private function getRepositoryIdentifier()
+    {
+        return $this->options['repositoryIdentifier'] ?? '';
+    }
+
+    /**
+     * Sets the repository identifier.
+     *
+     * @param string $repoId
+     * @return void
+     */
+    public function setRepositoryIdentifier($repoId)
+    {
+        $this->options['repositoryIdentifier'] = $repoId;
+    }
+
+    /**
+     * Return sample identifier.
+     *
+     * @return string Sample identifier.
+     */
+    private function getSampleIdentifier()
+    {
+        return $this->options['sampleIdentifier'] ?? '';
+    }
+
+    /**
+     * Sets the sample identifier.
+     *
+     * @param string $sampleId
+     */
+    public function setSampleIdentifier($sampleId)
+    {
+        $this->options['sampleIdentifier'] = $sampleId;
+    }
+
+    /**
+     * Return maximum number of listable identifiers per request.
+     *
+     * @return int Maximum number of listable identifiers per request.
+     */
+    private function getMaxListIdentifiers()
+    {
+        return $this->options['maxListIdentifiers'] ?? '';
+    }
+
+    /**
+     * Sets the maximum number of listable identifiers per request.
+     *
+     * @param int $maxListIds
+     */
+    public function setMaxListIdentifiers($maxListIds)
+    {
+        $this->options['maxListIdentifiers'] = $maxListIds;
+    }
+
+    /**
+     * Return maximum number of listable records per request.
+     *
+     * @return int Maximum number of listable records per request.
+     */
+    private function getMaxListRecords()
+    {
+        return $this->options['maxListRecords'] ?? '';
+    }
+
+    /**
+     * Sets the maximum number of listable records per request.
+     *
+     * @param int $maxListRecs
+     */
+    public function setMaxListRecords($maxListRecs)
+    {
+        $this->options['maxListRecords'] = $maxListRecs;
+    }
+
+    /**
+     * Return xlst file name / file path.
+     *
+     * @return string
+     */
+    protected function getXsltFile()
+    {
+        return $this->options['xsltFile'] ?? '';
+    }
+
+    /**
+     * Sets the xlst file name / file path.
+     *
+     * @param string
+     */
+    public function setXsltFile($file)
+    {
+        $this->options['xsltFile'] = $file;
     }
 }

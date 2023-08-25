@@ -25,9 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class OaiDcServer extends Oai_Model_BaseServer
+
+trait Oai_Model_OptionsTrait
 {
+    /** @var array */
+    private $options;
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return is_array($this->options) ? $this->options : [];
+    }
+
+    /**
+     * @param array $options
+     */
+    public function setOptions($options)
+    {
+        // TODO How to react if a setter does not exist?
+        foreach ($options as $key => $value) {
+            $method = 'set' . ucfirst($key);
+            if (method_exists($this, $method) && $value) {
+                $this->$method($value);
+            }
+        }
+    }
 }
