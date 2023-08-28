@@ -969,7 +969,6 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      * Sets the repository identifier.
      *
      * @param string $repoId
-     * @return void
      */
     public function setRepositoryIdentifier($repoId)
     {
