@@ -31,79 +31,79 @@
 
 class Oai_Model_ServerFactoryTest extends ControllerTestCase
 {
-    /** @var Oai_Model_ServerFactory */
-    private $serverFactory;
-
-    public function setUp(): void
+    /**
+     * @return array
+     */
+    protected function getConfigurationArray()
     {
-        parent::setUp();
-
-        $config = new Zend_Config(
-            [
-                'workspacePath' => '/vagrant/tests/workspace',
-                'mail'          => [
-                    'opus' => [
-                        'address' => 'opus4ci@example.org',
-                    ],
+        return [
+            'workspacePath' => '/vagrant/tests/workspace',
+            'mail'          => [
+                'opus' => [
+                    'address' => 'opus4ci@example.org',
                 ],
-                'oai'           => [
-                    'max'    => [
-                        'listrecords'     => 10,
-                        'listidentifiers' => 10,
-                    ],
-                    'format' => [
-                        'default' => [
-                            'class' => 'DefaultServerClass',
-                        ],
-                        'epicur'  => [
-                            'class'    => 'UnknownEpicurClass',
-                            'xsltFile' => 'epicurFile.xslt',
-                        ],
-                        'oai_dc'  => [
-                            'class' => 'OaiDcServer',
-                        ],
-                        'oai_pp'  => null,
-                    ],
+            ],
+            'oai'           => [
+                'max'    => [
+                    'listrecords'     => 10,
+                    'listidentifiers' => 10,
                 ],
-            ]
-        );
-
-        $this->serverFactory = new Oai_Model_ServerFactory();
-        $this->serverFactory->setConfig($config);
+                'format' => [
+                    'default' => [
+                        'class' => DefaultOaiServer::class,
+                    ],
+                    'oai_dc'  => [
+                        'class'    => OaiDcServer::class,
+                        'xsltFile' => 'oaiFile.xslt',
+                    ],
+                    'oai_pp'  => null,
+                ],
+            ],
+        ];
     }
 
-    public function testCreate()
+    /**
+     * @param array|null $configurationArray
+     * @return Oai_Model_ServerFactory
+     */
+    protected function createServerFactory($configurationArray = null)
     {
-        $server         = $this->serverFactory->create();
-        $expectedServer = new Oai_Model_BaseServer();
-        $expectedServer->setMaxListIdentifiers(10);
-        $expectedServer->setMaxListRecords(10);
-        $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
-        $expectedServer->setEmailContact('opus4ci@example.org');
-        $this->assertEquals(Oai_Model_BaseServer::class, get_class($server));
-        $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+        if ($configurationArray === null) {
+            $config = new Zend_Config($this->getConfigurationArray());
+        } else {
+            $config = new Zend_Config($configurationArray);
+        }
 
-        $server         = $this->serverFactory->create('epicur');
-        $expectedServer = new Oai_Model_BaseServer();
-        $expectedServer->setXsltFile('epicurFile.xslt');
-        $expectedServer->setMaxListIdentifiers(10);
-        $expectedServer->setMaxListRecords(10);
-        $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
-        $expectedServer->setEmailContact('opus4ci@example.org');
-        $this->assertEquals(Oai_Model_BaseServer::class, get_class($server));
-        $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+        $serverFactory = new Oai_Model_ServerFactory();
+        $serverFactory->setConfig($config);
+        return $serverFactory;
+    }
 
-        $server         = $this->serverFactory->create('oai_dc');
+    public function testCreateWithValidMetadataPrefix()
+    {
+        $serverFactory  = $this->createServerFactory();
+        $server         = $serverFactory->create('oai_dc');
         $expectedServer = new OaiDcServer();
         $expectedServer->setMaxListIdentifiers(10);
         $expectedServer->setMaxListRecords(10);
         $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
         $expectedServer->setEmailContact('opus4ci@example.org');
+        $expectedServer->setXsltFile('oaiFile.xslt');
         $this->assertEquals(OaiDcServer::class, get_class($server));
         $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+    }
 
-        $server         = $this->serverFactory->create('oai_pp');
+    public function testCreateWithNoneExistingFormatServerClass()
+    {
+        $configArray = $this->getConfigurationArray();
+
+        $configArray['oai']['format']['oai_dc']['class'] = 'UnknownOaiDcServerClass';
+
+        $serverFactory = $this->createServerFactory($configArray);
+
+        $server         = $serverFactory->create('oai_dc');
         $expectedServer = new Oai_Model_BaseServer();
+        $expectedServer->setXsltFile('oaiFile.xslt');
         $expectedServer->setMaxListIdentifiers(10);
         $expectedServer->setMaxListRecords(10);
         $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
@@ -112,42 +112,112 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
     }
 
+    public function testCreateWithNoneExistingDefaultServerClass()
+    {
+        $configArray = $this->getConfigurationArray();
+        unset($configArray['oai']['format']['oai_dc']['class']);
+        $configArray['oai']['format']['default']['class'] = 'UnknownDefaultServerClass';
+
+        $serverFactory = $this->createServerFactory($configArray);
+
+        $server         = $serverFactory->create('oai_dc');
+        $expectedServer = new Oai_Model_BaseServer();
+        $expectedServer->setXsltFile('oaiFile.xslt');
+        $expectedServer->setMaxListIdentifiers(10);
+        $expectedServer->setMaxListRecords(10);
+        $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
+        $expectedServer->setEmailContact('opus4ci@example.org');
+        $this->assertEquals(Oai_Model_BaseServer::class, get_class($server));
+        $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+    }
+
+    public function testCreateWithNoPrefix()
+    {
+        $serverFactory  = $this->createServerFactory();
+        $server         = $serverFactory->create();
+        $expectedServer = new DefaultOaiServer();
+        $expectedServer->setMaxListIdentifiers(10);
+        $expectedServer->setMaxListRecords(10);
+        $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
+        $expectedServer->setEmailContact('opus4ci@example.org');
+        $this->assertEquals(DefaultOaiServer::class, get_class($server));
+        $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+    }
+
+    public function testCreateWithPrefixNotConfigured()
+    {
+        $serverFactory  = $this->createServerFactory();
+        $server         = $serverFactory->create('oai_pp');
+        $expectedServer = new DefaultOaiServer();
+        $expectedServer->setMaxListIdentifiers(10);
+        $expectedServer->setMaxListRecords(10);
+        $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
+        $expectedServer->setEmailContact('opus4ci@example.org');
+        $this->assertEquals(DefaultOaiServer::class, get_class($server));
+        $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+    }
+
     public function testGetFormatClassName()
     {
-        $metadDataPrefix = 'epicur';
-        $serverClass     = $this->serverFactory->getFormatClassName($metadDataPrefix);
-        $this->assertEquals('UnknownEpicurClass', $serverClass);
+        $serverFactory = $this->createServerFactory();
 
-        $metadDataPrefix = 'EpiCur';
-        $serverClass     = $this->serverFactory->getFormatClassName($metadDataPrefix);
-        $this->assertEquals('UnknownEpicurClass', $serverClass);
+        $metaDataPrefix = 'oai_dc';
+        $serverClass     = $serverFactory->getFormatClassName($metaDataPrefix);
+        $this->assertEquals(OaiDcServer::class, $serverClass);
 
-        $metadDataPrefix = 'unknown';
-        $serverClass     = $this->serverFactory->getFormatClassName($metadDataPrefix);
-        $this->assertEquals('DefaultServerClass', $serverClass);
+        $metaDataPrefix = 'oai_Dc';
+        $serverClass     = $serverFactory->getFormatClassName($metaDataPrefix);
+        $this->assertEquals(OaiDcServer::class, $serverClass);
+    }
+
+    public function testGetFormatClassNameWithUnknownPrefix()
+    {
+        $configArray = $this->getConfigurationArray();
+
+        $serverFactory = $this->createServerFactory($configArray);
+
+        $metaDataPrefix = 'unknown';
+        $serverClass     = $serverFactory->getFormatClassName($metaDataPrefix);
+        $this->assertEquals(DefaultOaiServer::class, $serverClass);
     }
 
     public function testGetFormatOptions()
     {
+        $serverFactory = $this->createServerFactory();
+
         $expectedOptions = [
-            'xsltFile'            => 'epicurFile.xslt',
+            'xsltFile'            => 'oaiFile.xslt',
             'maxListIdentifiers'  => 10,
             'maxListRecords'      => 10,
             'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
             'emailContact'        => 'opus4ci@example.org',
-            'class'               => 'UnknownEpicurClass',
+            'class'               => OaiDcServer::class,
         ];
 
-        $metadDataPrefix = 'epicur';
-        $options         = $this->serverFactory->getFormatOptions($metadDataPrefix);
+        $metaDataPrefix = 'oai_dc';
+        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
         $this->assertEquals($expectedOptions, $options);
 
-        $metadDataPrefix = 'EpiCur';
-        $options         = $this->serverFactory->getFormatOptions($metadDataPrefix);
+        $metaDataPrefix = 'oai_Dc';
+        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
         $this->assertEquals($expectedOptions, $options);
+    }
 
-        $metadDataPrefix = 'unknown';
-        $options         = $this->serverFactory->getFormatOptions($metadDataPrefix);
+    public function testGetFormatOptionsWithUnknownMetaDataPrefix()
+    {
+        $serverFactory = $this->createServerFactory();
+
+        $expectedOptions = [
+            'xsltFile'            => 'oaiFile.xslt',
+            'maxListIdentifiers'  => 10,
+            'maxListRecords'      => 10,
+            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'        => 'opus4ci@example.org',
+            'class'               => OaiDcServer::class,
+        ];
+
+        $metaDataPrefix = 'unknown';
+        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
         unset($expectedOptions['xsltFile']);
         unset($expectedOptions['class']);
         $this->assertEquals($expectedOptions, $options);
