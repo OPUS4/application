@@ -35,7 +35,7 @@ class Oai_Model_Prefix_MarcXml_MarcXmlServer extends Oai_Model_BaseServer
      *
      * @return string
      */
-    protected function getXsltFile()
+    public function getXsltFile()
     {
         return "marc21.xslt";
     }
