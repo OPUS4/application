@@ -1,5 +1,10 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.2 - 2023-08-29
+
+Es wurde ein Fehler bei der Javascript-Validierung von ISSNs behoben. 
+https://github.com/OPUS4/application/issues/1098
+
 ## Patch Release 4.8.0.1 - 2023-08-15
 
 Es wurde ein Fehler behoben, bei dem Personen im Metadaten-Formular 
