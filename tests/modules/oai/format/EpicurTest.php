@@ -88,7 +88,7 @@ class Oai_Format_EpicurTest extends ControllerTestCase
                 'oai' => [
                     'format' => [
                         'epicur' => [
-                            'xsltFile' => getcwd() . '/modules/oai/views/scripts/index/prefixes/epicur.xslt',
+                            'xsltFile' => APPLICATION_PATH . '/modules/oai/views/scripts/index/prefixes/epicur.xslt',
                         ],
                     ],
                 ],
