@@ -918,7 +918,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
         $oaiBaseUrl = $this->options['oaiBaseUrl'] ?? '';
 
         // if no OAI base url is set, use local information as base url
-        if (true === empty($oaiBaseUrl)) {
+        if (empty($oaiBaseUrl)) {
             $oaiBaseUrl = $this->getBaseUrl() . '/oai'; // TODO . $module;
         }
 
