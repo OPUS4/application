@@ -913,7 +913,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      *
      * @return string Oai base url.
      */
-    private function getOaiBaseUrl()
+    public function getOaiBaseUrl()
     {
         $oaiBaseUrl = $this->options['oaiBaseUrl'] ?? '';
 
@@ -940,7 +940,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      *
      * @return string Repository name.
      */
-    private function getRepositoryName()
+    public function getRepositoryName()
     {
         return $this->options['repositoryName'] ?? '';
     }
@@ -960,7 +960,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      *
      * @return string Repository identifier.
      */
-    private function getRepositoryIdentifier()
+    public function getRepositoryIdentifier()
     {
         return $this->options['repositoryIdentifier'] ?? '';
     }
@@ -980,7 +980,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      *
      * @return string Sample identifier.
      */
-    private function getSampleIdentifier()
+    public function getSampleIdentifier()
     {
         return $this->options['sampleIdentifier'] ?? '';
     }
@@ -1000,7 +1000,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      *
      * @return int Maximum number of listable identifiers per request.
      */
-    private function getMaxListIdentifiers()
+    public function getMaxListIdentifiers()
     {
         return $this->options['maxListIdentifiers'] ?? '';
     }
@@ -1020,7 +1020,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      *
      * @return int Maximum number of listable records per request.
      */
-    private function getMaxListRecords()
+    public function getMaxListRecords()
     {
         return $this->options['maxListRecords'] ?? '';
     }
@@ -1040,7 +1040,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      *
      * @return string
      */
-    protected function getXsltFile()
+    public function getXsltFile()
     {
         return $this->options['xsltFile'] ?? '';
     }
