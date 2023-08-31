@@ -30,13 +30,9 @@
  */
 class Oai_Model_Prefix_MarcXml_MarcXmlServer extends Oai_Model_BaseServer
 {
-    /**
-     * Return xlst file name / file path.
-     *
-     * @return string
-     */
-    public function getXsltFile()
+    public function __construct()
     {
-        return "marc21.xslt";
+        // Default value for the xsltFile, may be overwritten later by the configuration (using the setOptions method).
+        $this->setXsltFile('marc21.xslt');
     }
 }

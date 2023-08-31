@@ -220,4 +220,35 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
 
         $this->assertEquals($expectedOptions, $options);
     }
+
+    public function testConfigurationOverwritesXsltFileValueFromPrefixClass()
+    {
+        $configArray = $this->getConfigurationArray();
+
+        $configArray['oai']['format']['xmetadissplus'] = [
+            'class' => Oai_Model_Prefix_MarcXml_MarcXmlServer::class,
+            'xsltFile' => 'XMetaDissPlus.xslt'
+        ];
+
+        $serverFactory = $this->createServerFactory($configArray);
+
+        $server = $serverFactory->create('xmetadissplus');
+
+        $this->assertEquals('XMetaDissPlus.xslt', $server->getXsltFile());
+    }
+
+    public function testXsltFileNotConfiguredButSetInPrefixClass()
+    {
+        $configArray = $this->getConfigurationArray();
+
+        $configArray['oai']['format']['xmetadissplus'] = [
+            'class' => Oai_Model_Prefix_MarcXml_MarcXmlServer::class,
+        ];
+
+        $serverFactory = $this->createServerFactory($configArray);
+
+        $server = $serverFactory->create('xmetadissplus');
+
+        $this->assertEquals('marc21.xslt', $server->getXsltFile());
+    }
 }
