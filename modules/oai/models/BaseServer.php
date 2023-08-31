@@ -92,6 +92,14 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     /** @var Zend_Controller_Response_Http */
     private $response; // TODO temporary hack
 
+    public function __construct()
+    {
+        // Set default values for some options
+        $this->setViewHelper(
+            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
+        );
+    }
+
     /**
      * Gather configuration before action handling.
      */
@@ -259,18 +267,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     protected function setupProcessor()
     {
         $this->proc->registerPHPFunctions('Opus\Common\Language::getLanguageCode');
-        Application_Xslt::registerViewHelper(
-            $this->proc,
-            [
-                'optionValue',
-                'fileUrl',
-                'frontdoorUrl',
-                'transferUrl',
-                'dcmiType',
-                'dcType',
-                'openAireType',
-            ]
-        );
+        Application_Xslt::registerViewHelper($this->proc, $this->getViewHelper());
         $this->proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
         $this->proc->setParameter('', 'doiResolverUrl', $this->getConfig()->doi->resolverUrl);
 
@@ -1053,5 +1050,25 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     public function setXsltFile($file)
     {
         $this->options['xsltFile'] = $file;
+    }
+
+    /**
+     * Gets the viewHelper
+     *
+     * @return array
+     */
+    public function getViewHelper()
+    {
+        return $this->options['viewHelper'] ?? [];
+    }
+
+    /**
+     * Sets the viewHelper
+     *
+     * @param array $viewHelper
+     */
+    public function setViewHelper($viewHelper)
+    {
+        $this->options['viewHelper'] = $viewHelper;
     }
 }

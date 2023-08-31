@@ -89,6 +89,9 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
         $expectedServer->setEmailContact('opus4ci@example.org');
         $expectedServer->setXsltFile('oaiFile.xslt');
+        $expectedServer->setViewHelper(
+            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
+        );
         $this->assertEquals(OaiDcServer::class, get_class($server));
         $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
     }
@@ -108,6 +111,9 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $expectedServer->setMaxListRecords(10);
         $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
         $expectedServer->setEmailContact('opus4ci@example.org');
+        $expectedServer->setViewHelper(
+            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
+        );
         $this->assertEquals(Oai_Model_BaseServer::class, get_class($server));
         $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
     }
@@ -127,6 +133,9 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $expectedServer->setMaxListRecords(10);
         $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
         $expectedServer->setEmailContact('opus4ci@example.org');
+        $expectedServer->setViewHelper(
+            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
+        );
         $this->assertEquals(Oai_Model_BaseServer::class, get_class($server));
         $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
     }
@@ -140,6 +149,9 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $expectedServer->setMaxListRecords(10);
         $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
         $expectedServer->setEmailContact('opus4ci@example.org');
+        $expectedServer->setViewHelper(
+            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
+        );
         $this->assertEquals(DefaultOaiServer::class, get_class($server));
         $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
     }
@@ -153,6 +165,9 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $expectedServer->setMaxListRecords(10);
         $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
         $expectedServer->setEmailContact('opus4ci@example.org');
+        $expectedServer->setViewHelper(
+            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
+        );
         $this->assertEquals(DefaultOaiServer::class, get_class($server));
         $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
     }
@@ -226,8 +241,8 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $configArray = $this->getConfigurationArray();
 
         $configArray['oai']['format']['xmetadissplus'] = [
-            'class' => Oai_Model_Prefix_MarcXml_MarcXmlServer::class,
-            'xsltFile' => 'XMetaDissPlus.xslt'
+            'class'    => Oai_Model_Prefix_MarcXml_MarcXmlServer::class,
+            'xsltFile' => 'XMetaDissPlus.xslt',
         ];
 
         $serverFactory = $this->createServerFactory($configArray);
@@ -250,5 +265,118 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $server = $serverFactory->create('xmetadissplus');
 
         $this->assertEquals('marc21.xslt', $server->getXsltFile());
+    }
+
+    public function testViewHelperNotConfigured()
+    {
+        $configArray = $this->getConfigurationArray();
+
+        unset($configArray['oai']['format']['default']['viewHelper']);
+
+        $serverFactory = $this->createServerFactory($configArray);
+
+        $expectedOptions = [
+            'xsltFile'            => 'oaiFile.xslt',
+            'maxListIdentifiers'  => 10,
+            'maxListRecords'      => 10,
+            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'        => 'opus4ci@example.org',
+            'viewHelper'          => [
+                'optionValue',
+                'fileUrl',
+                'frontdoorUrl',
+                'transferUrl',
+                'dcmiType',
+                'dcType',
+                'openAireType',
+            ],
+        ];
+
+        $server = $serverFactory->create('oai_dc');
+
+        $this->assertEquals($expectedOptions, $server->getOptions());
+    }
+
+    public function testViewHelperConfiguredAsArray()
+    {
+        $configArray = $this->getConfigurationArray();
+
+        $configArray['oai']['format']['default'] = [
+            'viewHelper' => [
+                'optionValue',
+                'fileUrl',
+                'frontdoorUrl',
+                'transferUrl',
+                'dcmiType',
+                'dcType',
+                'openAireType',
+            ],
+        ];
+
+        $serverFactory = $this->createServerFactory($configArray);
+
+        $expectedViewHelpers = [
+            'optionValue',
+            'fileUrl',
+            'frontdoorUrl',
+            'transferUrl',
+            'dcmiType',
+            'dcType',
+            'openAireType',
+        ];
+
+        $options = $serverFactory->getFormatOptions();
+
+        $this->assertEquals($expectedViewHelpers, $options['viewHelper']);
+    }
+
+    public function testViewHelperConfiguredAsCommaSeparatedList()
+    {
+        $configArray = $this->getConfigurationArray();
+
+        $configArray['oai']['format']['default'] = [
+            'viewHelper' => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
+        ];
+
+        $serverFactory = $this->createServerFactory($configArray);
+
+        $expectedViewHelpers = [
+            'optionValue',
+            'fileUrl',
+            'frontdoorUrl',
+            'transferUrl',
+            'dcmiType',
+            'dcType',
+            'openAireType',
+        ];
+
+        $options = $serverFactory->getFormatOptions();
+
+        $this->assertEquals($expectedViewHelpers, $options['viewHelper']);
+    }
+
+    public function testViewHelpersConfiguredForMetadaPrefix()
+    {
+        $configArray = $this->getConfigurationArray();
+
+        $configArray['oai']['format']['default'] = [
+            'viewHelper' => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
+        ];
+
+        $configArray['oai']['format']['oai_dc'] = [
+            'viewHelper' => 'optionValue, fileUrl, frontdoorUrl',
+        ];
+
+        $serverFactory = $this->createServerFactory($configArray);
+
+        $expectedProcessors = [
+            'optionValue',
+            'fileUrl',
+            'frontdoorUrl',
+        ];
+
+        $options = $serverFactory->getFormatOptions('oai_dc');
+
+        $this->assertEquals($expectedProcessors, $options['viewHelper']);
     }
 }

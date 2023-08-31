@@ -47,7 +47,6 @@ trait Oai_Model_OptionsTrait
      */
     public function setOptions($options)
     {
-        // TODO How to react if a setter does not exist?
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($key);
             if (method_exists($this, $method) && $value) {

@@ -101,6 +101,7 @@ class Oai_Model_ServerFactory
         $config = $this->getConfig();
 
         $generalOptions = $this->getGeneralOaiOptions();
+
         $defaultOptions = [];
         if (isset($config->oai->format->default)) {
             $defaultOptions = $config->oai->format->default->toArray();
@@ -111,7 +112,16 @@ class Oai_Model_ServerFactory
             $formatOptions = $config->oai->format->$metadataPrefix->toArray();
         }
 
-        return array_merge($generalOptions, $defaultOptions, $formatOptions);
+        $options = array_merge($generalOptions, $defaultOptions, $formatOptions);
+
+        if (isset($options['viewHelper'])) {
+            $viewHelper = $options['viewHelper'];
+            if (is_string($viewHelper)) {
+                $options['viewHelper'] = array_map('trim', explode(',', $viewHelper));
+            }
+        }
+
+        return $options;
     }
 
     /**
