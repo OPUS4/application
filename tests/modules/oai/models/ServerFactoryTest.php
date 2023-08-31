@@ -162,12 +162,12 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $serverFactory = $this->createServerFactory();
 
         $metaDataPrefix = 'oai_dc';
-        $serverClass     = $serverFactory->getFormatClassName($metaDataPrefix);
-        $this->assertEquals(OaiDcServer::class, $serverClass);
+        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
+        $this->assertEquals(OaiDcServer::class, $options['class']);
 
         $metaDataPrefix = 'oai_Dc';
-        $serverClass     = $serverFactory->getFormatClassName($metaDataPrefix);
-        $this->assertEquals(OaiDcServer::class, $serverClass);
+        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
+        $this->assertEquals(OaiDcServer::class, $options['class']);
     }
 
     public function testGetFormatClassNameWithUnknownPrefix()
@@ -177,8 +177,8 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $serverFactory = $this->createServerFactory($configArray);
 
         $metaDataPrefix = 'unknown';
-        $serverClass     = $serverFactory->getFormatClassName($metaDataPrefix);
-        $this->assertEquals(DefaultOaiServer::class, $serverClass);
+        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
+        $this->assertEquals(DefaultOaiServer::class, $options['class']);
     }
 
     public function testGetFormatOptions()
@@ -208,18 +208,16 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $serverFactory = $this->createServerFactory();
 
         $expectedOptions = [
-            'xsltFile'            => 'oaiFile.xslt',
             'maxListIdentifiers'  => 10,
             'maxListRecords'      => 10,
             'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
             'emailContact'        => 'opus4ci@example.org',
-            'class'               => OaiDcServer::class,
+            'class'               => DefaultOaiServer::class,
         ];
 
         $metaDataPrefix = 'unknown';
         $options        = $serverFactory->getFormatOptions($metaDataPrefix);
-        unset($expectedOptions['xsltFile']);
-        unset($expectedOptions['class']);
+
         $this->assertEquals($expectedOptions, $options);
     }
 }

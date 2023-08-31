@@ -47,7 +47,9 @@ class Oai_Model_ServerFactory
      */
     public function create($metaDataPrefix = '')
     {
-        $serverClass = $this->getFormatClassName($metaDataPrefix);
+        $options = $this->getFormatOptions($metaDataPrefix);
+
+        $serverClass = $options['class'] ?? Oai_Model_BaseServer::class;
 
         if (empty($serverClass) || ! ClassLoaderHelper::classExists($serverClass)) {
             $server = new Oai_Model_BaseServer();
@@ -55,7 +57,6 @@ class Oai_Model_ServerFactory
             $server = new $serverClass();
         }
 
-        $options = $this->getFormatOptions($metaDataPrefix);
         $server->setOptions($options);
 
         return $server;
@@ -88,33 +89,6 @@ class Oai_Model_ServerFactory
     }
 
     /**
-     * Reads the custom oai server class from the configuration if exists.
-     *
-     * @param string $metadataPrefix
-     * @return string
-     */
-    public function getFormatClassName($metadataPrefix)
-    {
-        $config = $this->getConfig();
-
-        if (! isset($config->oai)) {
-            throw new Exception('No configuration for module oai.');
-        }
-
-        $metadataPrefix = strtolower($metadataPrefix);
-
-        if ($metadataPrefix && isset($config->oai->format->$metadataPrefix->class)) {
-            return $config->oai->format->$metadataPrefix->class;
-        }
-
-        if (isset($config->oai->format->default->class)) {
-            return $config->oai->format->default->class;
-        }
-
-        return '';
-    }
-
-    /**
      * Gets all options for the oai server
      *
      * @param string $metadataPrefix
@@ -124,6 +98,30 @@ class Oai_Model_ServerFactory
     {
         $metadataPrefix = strtolower($metadataPrefix);
 
+        $config = $this->getConfig();
+
+        if (! isset($config->oai)) {
+            throw new Exception('No configuration for module oai.');
+        }
+
+        $generalOptions = $this->getGeneralOaiOptions();
+        $defaultOptions = isset($config->oai->format->default) ? $config->oai->format->default->toArray() : [];
+
+        $formatOptions = [];
+        if (isset($config->oai->format->$metadataPrefix)) {
+            $formatOptions = $config->oai->format->$metadataPrefix->toArray();
+        }
+
+        return array_merge($generalOptions, $defaultOptions, $formatOptions);
+    }
+
+    /**
+     * Gets the general oai options from the configuration
+     *
+     * @return array
+     */
+    public function getGeneralOaiOptions()
+    {
         $config = $this->getConfig();
 
         if (! isset($config->oai)) {
@@ -162,12 +160,6 @@ class Oai_Model_ServerFactory
             $options['emailContact'] = $config->mail->opus->address;
         }
 
-        $formatOptions = [];
-        if (isset($config->oai->format->$metadataPrefix)) {
-            $formatOptions = $config->oai->format->$metadataPrefix->toArray();
-            unset($options['class']);
-        }
-
-        return $formatOptions ? array_merge($options, $formatOptions) : $options;
+        return $options;
     }
 }
