@@ -100,12 +100,11 @@ class Oai_Model_ServerFactory
 
         $config = $this->getConfig();
 
-        if (! isset($config->oai)) {
-            throw new Exception('No configuration for module oai.');
-        }
-
         $generalOptions = $this->getGeneralOaiOptions();
-        $defaultOptions = isset($config->oai->format->default) ? $config->oai->format->default->toArray() : [];
+        $defaultOptions = [];
+        if (isset($config->oai->format->default)) {
+            $defaultOptions = $config->oai->format->default->toArray();
+        }
 
         $formatOptions = [];
         if (isset($config->oai->format->$metadataPrefix)) {
