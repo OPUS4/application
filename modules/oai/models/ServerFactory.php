@@ -136,21 +136,21 @@ class Oai_Model_ServerFactory
         if (isset($config->oai->repository->identifier)) {
             $options['repositoryIdentifier'] = $config->oai->repository->identifier;
         }
-        if (true === isset($config->oai->sample->identifier)) {
+        if (isset($config->oai->sample->identifier)) {
             $options['sampleIdentifier'] = $config->oai->sample->identifier;
         }
-        if (true === isset($config->oai->max->listidentifiers)) {
+        if (isset($config->oai->max->listidentifiers)) {
             $options['maxListIdentifiers'] = (int) $config->oai->max->listidentifiers;
         }
 
-        if (true === isset($config->oai->max->listrecords)) {
+        if (isset($config->oai->max->listrecords)) {
             $options['maxListRecords'] = (int) $config->oai->max->listrecords;
         }
-        if (true === isset($config->oai->baseurl)) {
+        if (isset($config->oai->baseurl)) {
             $options['oaiBaseUrl'] = $config->oai->baseurl;
         }
 
-        if (true === isset($config->workspacePath)) {
+        if (isset($config->workspacePath)) {
             $options['resumptionTokenPath'] = $config->workspacePath
                 . DIRECTORY_SEPARATOR . 'tmp'
                 . DIRECTORY_SEPARATOR . 'resumption';
