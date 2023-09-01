@@ -92,34 +92,34 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     /** @var Zend_Controller_Response_Http */
     private $response; // TODO temporary hack
 
-    /** @var  string */
+    /** @var string */
     private $oaiBaseUrl;
 
-    /** @var  string */
+    /** @var string */
     private $resumptionTokenPath;
 
-    /** @var  string */
+    /** @var string */
     private $emailContact;
 
-    /** @var  string */
+    /** @var string */
     private $repositoryName;
 
-    /** @var  string */
+    /** @var string */
     private $repositoryIdentifier;
 
-    /** @var  string */
+    /** @var string */
     private $sampleIdentifier;
 
-    /** @var  string */
+    /** @var string */
     private $maxListIdentifiers;
 
-    /** @var  string */
+    /** @var string */
     private $maxListRecords;
 
-    /** @var  string */
+    /** @var string */
     private $xsltFile;
 
-    /** @var  string */
+    /** @var string */
     private $viewHelper;
 
     /**
