@@ -31,6 +31,9 @@
 
 class Oai_Model_ServerFactoryTest extends ControllerTestCase
 {
+    /** @var string[] */
+    protected $additionalResources = ['database', 'view'];
+
     /**
      * @return array
      */
@@ -218,7 +221,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $this->assertEquals($expectedOptions, $options);
     }
 
-    public function testGetFormatOptionsWithUnknownMetaDataPrefix()
+    public function testGetFormatOptionsWithUnknownMetadataPrefix()
     {
         $serverFactory = $this->createServerFactory();
 
@@ -382,5 +385,21 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
 
         $options = $serverFactory->getFormatOptions('oai_dc');
         $this->assertEquals($expectedProcessors, $options['viewHelper']);
+    }
+
+    public function testDoViewHelpersExist()
+    {
+        $viewHelpers         = ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType'];
+        $viewHelpersNotFound = [];
+
+        foreach ($viewHelpers as $viewHelper) {
+            try {
+                Zend_Registry::get('Opus_View')->getHelper($viewHelper);
+            } catch (Zend_Loader_PluginLoader_Exception $e) {
+                $viewHelpersNotFound[] = $viewHelper;
+            }
+        }
+
+        $this->assertEquals([], $viewHelpersNotFound);
     }
 }
