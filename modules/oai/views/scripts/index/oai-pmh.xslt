@@ -148,7 +148,6 @@
         </OAI-PMH>
     </xsl:template>
 
-
     <!-- template for Identiy  -->
     <xsl:template match="Documents" mode="Identify">
         <Identify>
@@ -233,7 +232,6 @@
            </description>
         </Identify>
     </xsl:template>
-
 
     <!-- template for ListMetadataFormats  -->
     <xsl:template match="Documents" mode="ListMetadataFormats">
@@ -341,7 +339,6 @@
          </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
-
 
     <xsl:template name="Opus_Document_Data">
         <header>
