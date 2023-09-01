@@ -115,10 +115,18 @@ class Oai_Model_ServerFactory
         $options = array_merge($generalOptions, $defaultOptions, $formatOptions);
 
         if (isset($options['viewHelper'])) {
-            $viewHelper = $options['viewHelper'];
-            if (is_string($viewHelper)) {
-                $options['viewHelper'] = array_map('trim', explode(',', $viewHelper));
+            $defaultViewHelper = $defaultOptions['viewHelper'] ?? [];
+            $formatViewHelper  = $formatOptions['viewHelper'] ?? [];
+
+            if (is_string($defaultViewHelper)) {
+                $defaultViewHelper = array_map('trim', explode(',', $defaultViewHelper));
             }
+
+            if (is_string($formatViewHelper)) {
+                $formatViewHelper = array_map('trim', explode(',', $formatViewHelper));
+            }
+
+            $options['viewHelper'] = array_unique(array_merge($defaultViewHelper, $formatViewHelper));
         }
 
         return $options;

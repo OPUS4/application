@@ -267,7 +267,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $this->assertEquals('marc21.xslt', $server->getXsltFile());
     }
 
-    public function testViewHelperConfiguredAsArray()
+    public function testViewHelpersConfiguredAsArray()
     {
         $configArray = $this->getConfigurationArray();
 
@@ -300,7 +300,37 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $this->assertEquals($expectedViewHelpers, $options['viewHelper']);
     }
 
-    public function testViewHelperConfiguredAsCommaSeparatedList()
+    public function testViewHelpersDefaultConfiguredAsArrayAndFormatAsString()
+    {
+        $configArray = $this->getConfigurationArray();
+
+        $configArray['oai']['format']['default'] = [
+            'viewHelper' => ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType'],
+        ];
+
+        $configArray['oai']['format']['oai_dc'] = [
+            'viewHelper' => 'firstNewViewHelper, secondNewViewHelper',
+        ];
+
+        $serverFactory = $this->createServerFactory($configArray);
+
+        $expectedProcessors = [
+            'optionValue',
+            'fileUrl',
+            'frontdoorUrl',
+            'transferUrl',
+            'dcmiType',
+            'dcType',
+            'openAireType',
+            'firstNewViewHelper',
+            'secondNewViewHelper',
+        ];
+
+        $options = $serverFactory->getFormatOptions('oai_dc');
+        $this->assertEquals($expectedProcessors, $options['viewHelper']);
+    }
+
+    public function testViewHelpersConfiguredAsCommaSeparatedList()
     {
         $configArray = $this->getConfigurationArray();
 
@@ -334,7 +364,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         ];
 
         $configArray['oai']['format']['oai_dc'] = [
-            'viewHelper' => 'optionValue, fileUrl, frontdoorUrl',
+            'viewHelper' => 'newViewHelper',
         ];
 
         $serverFactory = $this->createServerFactory($configArray);
@@ -343,10 +373,14 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'optionValue',
             'fileUrl',
             'frontdoorUrl',
+            'transferUrl',
+            'dcmiType',
+            'dcType',
+            'openAireType',
+            'newViewHelper',
         ];
 
         $options = $serverFactory->getFormatOptions('oai_dc');
-
         $this->assertEquals($expectedProcessors, $options['viewHelper']);
     }
 }
