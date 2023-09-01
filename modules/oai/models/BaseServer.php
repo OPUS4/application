@@ -92,13 +92,35 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     /** @var Zend_Controller_Response_Http */
     private $response; // TODO temporary hack
 
-    public function __construct()
-    {
-        // Set default values for some options
-        $this->setViewHelper(
-            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
-        );
-    }
+    /** @var  string */
+    private $oaiBaseUrl;
+
+    /** @var  string */
+    private $resumptionTokenPath;
+
+    /** @var  string */
+    private $emailContact;
+
+    /** @var  string */
+    private $repositoryName;
+
+    /** @var  string */
+    private $repositoryIdentifier;
+
+    /** @var  string */
+    private $sampleIdentifier;
+
+    /** @var  string */
+    private $maxListIdentifiers;
+
+    /** @var  string */
+    private $maxListRecords;
+
+    /** @var  string */
+    private $xsltFile;
+
+    /** @var  string */
+    private $viewHelper;
 
     /**
      * Gather configuration before action handling.
@@ -872,7 +894,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getResumptionTokenPath()
     {
-        return $this->options['resumptionTokenPath'] ?? '';
+        return $this->resumptionTokenPath ?? '';
     }
 
     /**
@@ -882,7 +904,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function setResumptionTokenPath($path)
     {
-        $this->options['resumptionTokenPath'] = $path;
+        $this->resumptionTokenPath = $path;
     }
 
     /**
@@ -892,7 +914,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getEmailContact()
     {
-        return $this->options['emailContact'] ?? '';
+        return $this->emailContact ?? '';
     }
 
     /**
@@ -902,7 +924,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function setEmailContact($email)
     {
-        $this->options['emailContact'] = $email;
+        $this->emailContact = $email;
     }
 
     /**
@@ -912,7 +934,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getOaiBaseUrl()
     {
-        $oaiBaseUrl = $this->options['oaiBaseUrl'] ?? '';
+        $oaiBaseUrl = $this->oaiBaseUrl ?? '';
 
         // if no OAI base url is set, use local information as base url
         if (empty($oaiBaseUrl)) {
@@ -929,7 +951,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function setOaiBaseUrl($url)
     {
-        $this->options['oaiBaseUrl'] = $url;
+        $this->oaiBaseUrl = $url;
     }
 
     /**
@@ -939,7 +961,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getRepositoryName()
     {
-        return $this->options['repositoryName'] ?? '';
+        return $this->repositoryName ?? '';
     }
 
     /**
@@ -949,7 +971,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function setRepositoryName($repoName)
     {
-        $this->options['repositoryName'] = $repoName;
+        $this->repositoryName = $repoName;
     }
 
     /**
@@ -959,7 +981,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getRepositoryIdentifier()
     {
-        return $this->options['repositoryIdentifier'] ?? '';
+        return $this->repositoryIdentifier ?? '';
     }
 
     /**
@@ -969,7 +991,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function setRepositoryIdentifier($repoId)
     {
-        $this->options['repositoryIdentifier'] = $repoId;
+        $this->repositoryIdentifier = $repoId;
     }
 
     /**
@@ -979,7 +1001,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getSampleIdentifier()
     {
-        return $this->options['sampleIdentifier'] ?? '';
+        return $this->sampleIdentifier ?? '';
     }
 
     /**
@@ -989,7 +1011,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function setSampleIdentifier($sampleId)
     {
-        $this->options['sampleIdentifier'] = $sampleId;
+        $this->sampleIdentifier = $sampleId;
     }
 
     /**
@@ -999,7 +1021,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getMaxListIdentifiers()
     {
-        return $this->options['maxListIdentifiers'] ?? '';
+        return $this->maxListIdentifiers ?? '';
     }
 
     /**
@@ -1009,7 +1031,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function setMaxListIdentifiers($maxListIds)
     {
-        $this->options['maxListIdentifiers'] = $maxListIds;
+        $this->maxListIdentifiers = $maxListIds;
     }
 
     /**
@@ -1019,7 +1041,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getMaxListRecords()
     {
-        return $this->options['maxListRecords'] ?? '';
+        return $this->maxListRecords ?? '';
     }
 
     /**
@@ -1029,7 +1051,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function setMaxListRecords($maxListRecs)
     {
-        $this->options['maxListRecords'] = $maxListRecs;
+        $this->maxListRecords = $maxListRecs;
     }
 
     /**
@@ -1039,7 +1061,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getXsltFile()
     {
-        return $this->options['xsltFile'] ?? '';
+        return $this->xsltFile ?? '';
     }
 
     /**
@@ -1049,7 +1071,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function setXsltFile($file)
     {
-        $this->options['xsltFile'] = $file;
+        $this->xsltFile = $file;
     }
 
     /**
@@ -1059,7 +1081,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getViewHelper()
     {
-        return $this->options['viewHelper'] ?? [];
+        return $this->viewHelper ?? [];
     }
 
     /**
@@ -1069,6 +1091,6 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function setViewHelper($viewHelper)
     {
-        $this->options['viewHelper'] = $viewHelper;
+        $this->viewHelper = $viewHelper;
     }
 }

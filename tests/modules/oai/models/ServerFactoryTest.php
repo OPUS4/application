@@ -81,19 +81,19 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
 
     public function testCreateWithValidMetadataPrefix()
     {
-        $serverFactory  = $this->createServerFactory();
-        $server         = $serverFactory->create('oai_dc');
-        $expectedServer = new OaiDcServer();
-        $expectedServer->setMaxListIdentifiers(10);
-        $expectedServer->setMaxListRecords(10);
-        $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
-        $expectedServer->setEmailContact('opus4ci@example.org');
-        $expectedServer->setXsltFile('oaiFile.xslt');
-        $expectedServer->setViewHelper(
-            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
-        );
+        $serverFactory = $this->createServerFactory();
+        $server        = $serverFactory->create('oai_dc');
+
+        $expectedOptions = [
+            'maxListIdentifiers'  => 10,
+            'maxListRecords'      => 10,
+            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'        => 'opus4ci@example.org',
+            'xsltFile'            => 'oaiFile.xslt',
+        ];
+
         $this->assertEquals(OaiDcServer::class, get_class($server));
-        $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
     public function testCreateWithNoneExistingFormatServerClass()
@@ -104,18 +104,18 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
 
         $serverFactory = $this->createServerFactory($configArray);
 
-        $server         = $serverFactory->create('oai_dc');
-        $expectedServer = new Oai_Model_BaseServer();
-        $expectedServer->setXsltFile('oaiFile.xslt');
-        $expectedServer->setMaxListIdentifiers(10);
-        $expectedServer->setMaxListRecords(10);
-        $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
-        $expectedServer->setEmailContact('opus4ci@example.org');
-        $expectedServer->setViewHelper(
-            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
-        );
+        $server = $serverFactory->create('oai_dc');
+
+        $expectedOptions = [
+            'maxListIdentifiers'  => 10,
+            'maxListRecords'      => 10,
+            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'        => 'opus4ci@example.org',
+            'xsltFile'            => 'oaiFile.xslt',
+        ];
+
         $this->assertEquals(Oai_Model_BaseServer::class, get_class($server));
-        $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
     public function testCreateWithNoneExistingDefaultServerClass()
@@ -126,50 +126,50 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
 
         $serverFactory = $this->createServerFactory($configArray);
 
-        $server         = $serverFactory->create('oai_dc');
-        $expectedServer = new Oai_Model_BaseServer();
-        $expectedServer->setXsltFile('oaiFile.xslt');
-        $expectedServer->setMaxListIdentifiers(10);
-        $expectedServer->setMaxListRecords(10);
-        $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
-        $expectedServer->setEmailContact('opus4ci@example.org');
-        $expectedServer->setViewHelper(
-            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
-        );
+        $server = $serverFactory->create('oai_dc');
+
+        $expectedOptions = [
+            'maxListIdentifiers'  => 10,
+            'maxListRecords'      => 10,
+            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'        => 'opus4ci@example.org',
+            'xsltFile'            => 'oaiFile.xslt',
+        ];
+
         $this->assertEquals(Oai_Model_BaseServer::class, get_class($server));
-        $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
     public function testCreateWithNoPrefix()
     {
-        $serverFactory  = $this->createServerFactory();
-        $server         = $serverFactory->create();
-        $expectedServer = new DefaultOaiServer();
-        $expectedServer->setMaxListIdentifiers(10);
-        $expectedServer->setMaxListRecords(10);
-        $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
-        $expectedServer->setEmailContact('opus4ci@example.org');
-        $expectedServer->setViewHelper(
-            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
-        );
+        $serverFactory = $this->createServerFactory();
+        $server        = $serverFactory->create();
+
+        $expectedOptions = [
+            'maxListIdentifiers'  => 10,
+            'maxListRecords'      => 10,
+            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'        => 'opus4ci@example.org',
+        ];
+
         $this->assertEquals(DefaultOaiServer::class, get_class($server));
-        $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
     public function testCreateWithPrefixNotConfigured()
     {
-        $serverFactory  = $this->createServerFactory();
-        $server         = $serverFactory->create('oai_pp');
-        $expectedServer = new DefaultOaiServer();
-        $expectedServer->setMaxListIdentifiers(10);
-        $expectedServer->setMaxListRecords(10);
-        $expectedServer->setResumptionTokenPath('/vagrant/tests/workspace/tmp/resumption');
-        $expectedServer->setEmailContact('opus4ci@example.org');
-        $expectedServer->setViewHelper(
-            ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType']
-        );
+        $serverFactory = $this->createServerFactory();
+        $server        = $serverFactory->create('oai_pp');
+
+        $expectedOptions = [
+            'maxListIdentifiers'  => 10,
+            'maxListRecords'      => 10,
+            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'        => 'opus4ci@example.org',
+        ];
+
         $this->assertEquals(DefaultOaiServer::class, get_class($server));
-        $this->assertEquals($expectedServer->getOptions(), $server->getOptions());
+        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
     public function testGetFormatClassName()
@@ -265,36 +265,6 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $server = $serverFactory->create('xmetadissplus');
 
         $this->assertEquals('marc21.xslt', $server->getXsltFile());
-    }
-
-    public function testViewHelperNotConfigured()
-    {
-        $configArray = $this->getConfigurationArray();
-
-        unset($configArray['oai']['format']['default']['viewHelper']);
-
-        $serverFactory = $this->createServerFactory($configArray);
-
-        $expectedOptions = [
-            'xsltFile'            => 'oaiFile.xslt',
-            'maxListIdentifiers'  => 10,
-            'maxListRecords'      => 10,
-            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
-            'emailContact'        => 'opus4ci@example.org',
-            'viewHelper'          => [
-                'optionValue',
-                'fileUrl',
-                'frontdoorUrl',
-                'transferUrl',
-                'dcmiType',
-                'dcType',
-                'openAireType',
-            ],
-        ];
-
-        $server = $serverFactory->create('oai_dc');
-
-        $this->assertEquals($expectedOptions, $server->getOptions());
     }
 
     public function testViewHelperConfiguredAsArray()

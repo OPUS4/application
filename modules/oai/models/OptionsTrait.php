@@ -35,11 +35,21 @@ trait Oai_Model_OptionsTrait
     private $options;
 
     /**
+     * @param array $optionNames
      * @return array
      */
-    public function getOptions()
+    public function getOptions($optionNames)
     {
-        return is_array($this->options) ? $this->options : [];
+        $options = [];
+
+        foreach ($optionNames as $optionName) {
+            $method = 'get' . ucfirst($optionName);
+            if (method_exists($this, $method)) {
+                $options[$optionName] = $this->$method();
+            }
+        }
+
+        return $options;
     }
 
     /**
