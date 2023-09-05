@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\ConfigTrait;
+use Opus\Common\Security\Realm;
 use Opus\Common\Util\ClassLoaderHelper;
 
 /**
@@ -115,18 +116,19 @@ class Oai_Model_ServerFactory
         $options = array_merge($generalOptions, $defaultOptions, $formatOptions);
 
         if (isset($options['viewHelper'])) {
-            $defaultViewHelper = $defaultOptions['viewHelper'] ?? [];
-            $formatViewHelper  = $formatOptions['viewHelper'] ?? [];
+            $options['viewHelper'] = $this->mergeMultiValueOption(
+                'viewHelper',
+                $defaultOptions,
+                $formatOptions
+            );
+        }
 
-            if (is_string($defaultViewHelper)) {
-                $defaultViewHelper = array_map('trim', explode(',', $defaultViewHelper));
-            }
-
-            if (is_string($formatViewHelper)) {
-                $formatViewHelper = array_map('trim', explode(',', $formatViewHelper));
-            }
-
-            $options['viewHelper'] = array_unique(array_merge($defaultViewHelper, $formatViewHelper));
+        if (isset($options['documentTypeRestriction'])) {
+            $options['documentTypeRestriction'] = $this->mergeMultiValueOption(
+                'documentTypeRestriction',
+                $defaultOptions,
+                $formatOptions
+            );
         }
 
         return $options;
@@ -178,5 +180,72 @@ class Oai_Model_ServerFactory
         }
 
         return $options;
+    }
+
+    /**
+     * Merges the default and format specific configuration for an option
+     * containing multiple values as an array or comma separated list
+     *
+     * @param string $optionName
+     * @param array $defaultOptions
+     * @param array $formatOptions
+     * @return array
+     */
+    protected function mergeMultiValueOption($optionName, $defaultOptions, $formatOptions)
+    {
+        $default = $defaultOptions[$optionName] ?? [];
+        $format  = $formatOptions[$optionName] ?? [];
+
+        if (is_string($default)) {
+            $default = array_map('trim', explode(',', $default));
+        }
+
+        if (is_string($format)) {
+            $format = array_map('trim', explode(',', $format));
+        }
+
+        return array_unique(array_merge($default, $format));
+    }
+
+    /**
+     * Gets all configured format prefixes
+     *
+     * @return array
+     */
+    public function getFormats()
+    {
+        $config = $this->getConfig();
+
+        $prefixes = [];
+
+        if (isset($config->oai->format)) {
+            $formats = $config->oai->format->toArray();
+
+            foreach ($formats as $formatIdentifier => $format) {
+                if (isset($format['prefixLabel'])) {
+                    $prefixLabels = $format['prefixLabel'];
+                    if (is_string($prefixLabels)) {
+                        $prefixLabels = array_map('trim', explode(',', $prefixLabels));
+                    }
+
+                    foreach ($prefixLabels as $prefixLabel) {
+                        if ($prefixLabel) {
+                            $prefixes[] = $prefixLabel;
+                        }
+                    }
+                } else {
+                    $prefixes[] = $formatIdentifier;
+                }
+            }
+        }
+
+        $prefixes = array_diff($prefixes, ['default']);
+
+        // only administrators can request copy_xml format
+        if (! Realm::getInstance()->checkModule('admin')) {
+            $prefixes = array_diff($prefixes, ['copy_xml']);
+        }
+
+        return $prefixes;
     }
 }

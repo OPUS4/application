@@ -29,7 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Config\ConfigException;
 use Opus\Common\Document;
+use Opus\Common\DocumentFinderInterface;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Log;
 use Opus\Common\Model\NotFoundException;
@@ -61,21 +63,6 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      * @var XSLTProcessor Defaults to null.
      */
     protected $proc;
-
-    /**
-     * Holds information about which document state aka server_state
-     * are delivered out
-     *
-     * @var array
-     */
-    private $deliveringDocumentStates = ['published', 'deleted'];  // maybe deleted documents too
-
-    /**
-     * Holds restriction types for xMetaDiss
-     *
-     * @var array
-     */
-    private $xMetaDissRestriction = ['doctoralthesis', 'habilitation'];
 
     /** @var Oai_Model_XmlFactory */
     private $xmlFactory;
@@ -121,6 +108,24 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
 
     /** @var string */
     private $viewHelper;
+
+    /** @var bool */
+    private $checkEmbargo = false;
+
+    /** @var array */
+    private $documentTypesAllowed;
+
+    /** @var array Holds information about which document state aka server_state are delivered out. */
+    private $documentStatesAllowed = ['published', 'deleted'];  // maybe deleted documents too
+
+    /** @var bool */
+    private $notEmbargoedOn = false;
+
+    /** @var string */
+    private $identifierExists = '';
+
+    /** @var bool */
+    private $hasFilesVisibleInOai = false;
 
     /**
      * Gather configuration before action handling.
@@ -329,27 +334,8 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
 
         $metadataPrefix = $oaiRequest['metadataPrefix'];
 
-        // do not deliver documents which are restricted by document state
-        if (
-            $document === null
-            || (false === in_array($document->getServerState(), $this->deliveringDocumentStates))
-            || (false === $document->hasEmbargoPassed() && stripos($metadataPrefix, 'xmetadiss') === 0)
-        ) {
-            throw new Oai_Model_Exception('Document is not available for OAI export!', Oai_Model_Error::NORECORDSMATCH);
-        }
+        $this->checkExportAllowed($document, $metadataPrefix);
 
-        // for xMetaDiss it must be habilitation-thesis or doctoral-thesis
-        if ('xMetaDiss' === $metadataPrefix) {
-            $type       = $document->getType();
-            $isHabOrDoc = in_array($type, $this->xMetaDissRestriction);
-            if (false === $isHabOrDoc) {
-                throw new Oai_Model_Exception(
-                    "The combination of the given values results in an empty list (xMetaDiss only for habilitation"
-                    . " and doctoralthesis).",
-                    Oai_Model_Error::NORECORDSMATCH
-                );
-            }
-        }
         $this->xml->appendChild($this->xml->createElement('Documents'));
 
         $this->createXmlRecord($document);
@@ -521,11 +507,9 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
             $resumed = true;
         } else {
             // no resumptionToken is given
-            $docListModel                           = new Oai_Model_DocumentList();
-            $docListModel->deliveringDocumentStates = $this->deliveringDocumentStates;
-            $docListModel->xMetaDissRestriction     = $this->xMetaDissRestriction;
-            $restIds                                = $docListModel->query($oaiRequest);
-            $totalIds                               = count($restIds);
+            $docListModel = new Oai_Model_DocumentList($this);
+            $restIds      = $docListModel->query($oaiRequest);
+            $totalIds     = count($restIds);
         }
 
         // handling of document ids
@@ -743,7 +727,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
             case 'urn':
                 $finder = Repository::getInstance()->getDocumentFinder();
                 $finder->setIdentifierValue('urn', $oaiIdentifier);
-                $finder->setServerState($this->deliveringDocumentStates);
+                $finder->setServerState($this->getDocumentStatesAllowed());
                 $docIds = $finder->getIds();
                 $docId  = $docIds[0];
                 break;
@@ -777,7 +761,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     private function getDocumentXmlDomNode($document)
     {
-        if (! in_array($document->getServerState(), $this->deliveringDocumentStates)) {
+        if (! in_array($document->getServerState(), $this->getDocumentStatesAllowed())) {
             $message = 'Trying to get a document in server state "' . $document->getServerState() . '"';
              Log::get()->err($message);
             throw new Exception($message);
@@ -1092,5 +1076,189 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     public function setViewHelper($viewHelper)
     {
         $this->viewHelper = $viewHelper;
+    }
+
+    /**
+     * Gets the checkEmbargo option.
+     *
+     * @return bool
+     */
+    public function isCheckEmbargo()
+    {
+        return $this->checkEmbargo;
+    }
+
+    /**
+     * Sets the checkEmbargo option.
+     *
+     * @param mixed $checkEmbargo
+     */
+    public function setCheckEmbargo($checkEmbargo)
+    {
+        $this->checkEmbargo = filter_var($checkEmbargo, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Gets the allowed document types.
+     *
+     * @return array
+     */
+    public function getDocumentTypesAllowed()
+    {
+        return $this->documentTypesAllowed;
+    }
+
+    /**
+     * Sets the allowed document types.
+     *
+     * @param array|string $documentTypesAllowed
+     */
+    public function setdocumentTypesAllowed($documentTypesAllowed)
+    {
+        if (is_string($documentTypesAllowed)) {
+            $this->documentTypesAllowed = [$documentTypesAllowed];
+        } else {
+            $this->documentTypesAllowed = $documentTypesAllowed;
+        }
+    }
+
+    /**
+     * Gets the allowed document states.
+     *
+     * @return array
+     */
+    public function getDocumentStatesAllowed()
+    {
+        return $this->documentStatesAllowed;
+    }
+
+    /**
+     * Sets the allowed document states
+     *
+     * @param array|string $documentStatesAllowed
+     */
+    public function setDocumentStatesAllowed($documentStatesAllowed)
+    {
+        if (is_string($documentStatesAllowed)) {
+            $this->documentStatesAllowed = [$documentStatesAllowed];
+        } else {
+            $this->documentStatesAllowed = $documentStatesAllowed;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNotEmbargoedOn()
+    {
+        return $this->notEmbargoedOn;
+    }
+
+    /**
+     * @param bool|string $notEmbargoedOn
+     */
+    public function setNotEmbargoedOn($notEmbargoedOn)
+    {
+        $this->notEmbargoedOn = filter_var($notEmbargoedOn, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdentifierExists()
+    {
+        return $this->identifierExists;
+    }
+
+    /**
+     * @param string $identifierExists
+     */
+    public function setIdentifierExists($identifierExists)
+    {
+        $this->identifierExists = $identifierExists;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHasFilesVisibleInOai()
+    {
+        return $this->hasFilesVisibleInOai;
+    }
+
+    /**
+     * @param bool|string $hasFilesVisibleInOai
+     */
+    public function setHasFilesVisibleInOai($hasFilesVisibleInOai)
+    {
+        $this->hasFilesVisibleInOai = filter_var($hasFilesVisibleInOai, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * Checks if exporting a document is allowed, if not an exception will be thrown.
+     *
+     * @param Document $document
+     * @param string $metadataPrefix
+     * @return void
+     * @throws Oai_Model_Exception
+     */
+    protected function checkExportAllowed($document, $metadataPrefix)
+    {
+        // do not deliver documents which are restricted by document state
+        if (
+            $document === null
+            || (! in_array($document->getServerState(), $this->getDocumentStatesAllowed()))
+            || (! $document->hasEmbargoPassed() && $this->isCheckEmbargo())
+        ) {
+            throw new Oai_Model_Exception('Document is not available for OAI export!', Oai_Model_Error::NORECORDSMATCH);
+        }
+
+        $documentTypeRestriction = $this->getDocumentTypesAllowed();
+        if ($documentTypeRestriction) {
+            $type = $document->getType();
+            if (! in_array($type, $documentTypeRestriction)) {
+                throw new Oai_Model_Exception(
+                    'The combination of the given values results in an empty list (' . $metadataPrefix
+                    . ' only for' . implode(', ', $documentTypeRestriction) . ')',
+                    Oai_Model_Error::NORECORDSMATCH
+                );
+            }
+        }
+    }
+
+    /**
+     * Get the initialized finder for the given metadata prefix
+     *
+     * @param string $metadataPrefix
+     * @return DocumentFinderInterface
+     * @throws ConfigException
+     */
+    public function getFinder($metadataPrefix)
+    {
+        $today = date('Y-m-d', time());
+
+        $finder = Repository::getInstance()->getDocumentFinder();
+
+        // add server state restrictions
+        $finder->setServerState($this->getDocumentStatesAllowed());
+
+        if ($this->isHasFilesVisibleInOai()) {
+            $finder->setHasFilesVisibleInOai();
+        }
+
+        $documentTypesAllowed = $this->getDocumentTypesAllowed();
+        if ($documentTypesAllowed) {
+            $finder->setDocumentType($documentTypesAllowed);
+        }
+
+        if ($this->isNotEmbargoedOn()) {
+            $finder->setNotEmbargoedOn($today);
+        }
+
+        if ($this->getIdentifierExists()) {
+            $finder->setIdentifierExists($this->getIdentifierExists());
+        }
+
+        return $finder;
     }
 }

@@ -31,28 +31,19 @@
  */
 
 use Opus\Common\CollectionRole;
-use Opus\Common\Repository;
 
 class Oai_Model_DocumentList
 {
-    /**
-     * Holds information about which document state aka server_state
-     * are delivered out
-     *
-     * @var array
-     *
-     * TODO should be private
-     */
-    public $deliveringDocumentStates;
+    /** @var Oai_Model_BaseServer */
+    protected $server;
 
     /**
-     * Holds restriction types for xMetaDiss
-     *
-     * @var array
-     *
-     * TODO should be private
+     * @param Oai_Model_BaseServer $server
      */
-    public $xMetaDissRestriction;
+    public function __construct($server)
+    {
+            $this->server = $server;
+    }
 
     /**
      * Retrieve all document ids for a valid oai request.
@@ -64,29 +55,9 @@ class Oai_Model_DocumentList
      */
     public function query(array $oaiRequest)
     {
-        $today = date('Y-m-d', time());
-
-        $finder = Repository::getInstance()->getDocumentFinder();
-
-        // add server state restrictions
-        $finder->setServerState($this->deliveringDocumentStates);
-
         $metadataPrefix = strtolower($oaiRequest['metadataPrefix']);
 
-        if (
-            strcmp('xmetadissplus', $metadataPrefix) === 0
-            || 'xmetadiss' === $metadataPrefix
-        ) {
-            $finder->setHasFilesVisibleInOai();
-            $finder->setNotEmbargoedOn($today);
-        }
-        if ('xmetadiss' === $metadataPrefix) {
-            $finder->setDocumentType($this->xMetaDissRestriction);
-            $finder->setNotEmbargoedOn($today);
-        }
-        if ('epicur' === $metadataPrefix) {
-            $finder->setIdentifierExists('urn');
-        }
+        $finder = $this->server->getFinder($metadataPrefix);
 
         if (array_key_exists('set', $oaiRequest)) {
             $setarray = explode(':', $oaiRequest['set']);

@@ -31,7 +31,6 @@
  */
 
 use Opus\Common\Log;
-use Opus\Common\Security\Realm;
 
 /**
  * TODO BUG documentation is not existent - especially the fact that 'validate' functions are called dynamically
@@ -139,23 +138,11 @@ class Oai_Model_Request
      */
     public function validateMetadataPrefix($oaiMetadataPrefix)
     {
-        // we assuming that a metadata prefix file ends with xslt
-        $possibleFiles = glob($this->pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
+        $serverFactory             = new Oai_Model_ServerFactory();
+        $availableMetadataPrefixes = array_map('strtolower', $serverFactory->getFormats());
+        $result                    = in_array(strtolower($oaiMetadataPrefix), $availableMetadataPrefixes);
 
-        // we support both spellings, xMetaDissPlus and XMetaDissPlus TODO really?
-        $availableMetadataPrefixes = ['xMetaDissPlus'];
-        foreach ($possibleFiles as $prefixFile) {
-            $availableMetadataPrefixes[] = strtolower(basename($prefixFile, '.xslt'));
-        }
-
-        // only administrators can request copy_xml format
-        if (! Realm::getInstance()->checkModule('admin')) {
-            $availableMetadataPrefixes = array_diff($availableMetadataPrefixes, ['copy_xml']);
-        }
-
-        $result = in_array(strtolower($oaiMetadataPrefix), $availableMetadataPrefixes);
-
-        if (false === $result) {
+        if (! $result) {
             // MetadataPrefix not available.
             $this->setErrorCode(Oai_Model_Error::CANNOTDISSEMINATEFORMAT);
             $this->setErrorMessage(
