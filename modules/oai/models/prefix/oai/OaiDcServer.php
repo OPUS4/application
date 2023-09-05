@@ -33,5 +33,7 @@ class Oai_Model_Prefix_Oai_OaiDcServer extends Oai_Model_BaseServer
     public function __construct()
     {
         $this->setXsltFile('oai_dc.xslt');
+        $this->setSchemaUrl('http://www.openarchives.org/OAI/2.0/oai_dc.xsd');
+        $this->setMetadataNamespaceUrl('http://www.openarchives.org/OAI/2.0/oai_dc/');
     }
 }

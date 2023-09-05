@@ -236,31 +236,7 @@
     <!-- template for ListMetadataFormats  -->
     <xsl:template match="Documents" mode="ListMetadataFormats">
         <ListMetadataFormats>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>oai_dc</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc/</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>epicur</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>XMetaDissPlus</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>xMetaDissPlus</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
-          </metadataFormat>
-            <metadataFormat>
-                <metadataPrefix><xsl:text>MARC21</xsl:text></metadataPrefix>
-                <schema><xsl:text>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</xsl:text></schema>
-                <metadataNamespace><xsl:text>http://www.loc.gov/MARC21/slim</xsl:text></metadataNamespace>
-            </metadataFormat>
+            <xsl:value-of disable-output-escaping="yes" select="php:function('Application_Xslt::listMetadataFormats')" />
         </ListMetadataFormats>
     </xsl:template>
 

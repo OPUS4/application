@@ -36,5 +36,8 @@ class Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusServer extends Oai_Model_BaseS
         $this->setCheckEmbargo(true);
         $this->setNotEmbargoedOn(true);
         $this->setXsltFile('XMetaDissPlus.xslt');
+        $this->setPrefixLabel(['xMetaDissPlus']);
+        $this->setSchemaUrl('http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd');
+        $this->setMetadataNamespaceUrl('http://www.d-nb.de/standards/xmetadissplus/');
     }
 }

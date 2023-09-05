@@ -127,6 +127,21 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     /** @var bool */
     private $hasFilesVisibleInOai = false;
 
+    /** @var array */
+    private $prefixLabel;
+
+    /** @var string */
+    private $schemaUrl;
+
+    /** @var string */
+    private $metadataNamespaceUrl;
+
+    /** @var bool */
+    private $adminOnly = false;
+
+    /** @var bool */
+    private $visible = true;
+
     /**
      * Gather configuration before action handling.
      */
@@ -1065,7 +1080,11 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function getViewHelper()
     {
-        return $this->viewHelper ?? [];
+        $viewHelper = $this->viewHelper ?? [];
+
+        $viewHelper[] = 'listMetadataFormats';
+
+        return $viewHelper;
     }
 
     /**
@@ -1192,6 +1211,90 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     public function setHasFilesVisibleInOai($hasFilesVisibleInOai)
     {
         $this->hasFilesVisibleInOai = filter_var($hasFilesVisibleInOai, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * @return array
+     */
+    public function getPrefixLabel()
+    {
+        return $this->prefixLabel;
+    }
+
+    /**
+     * @param array|string $prefixLabel
+     */
+    public function setPrefixLabel($prefixLabel)
+    {
+        if (is_string($prefixLabel)) {
+            $this->prefixLabel = [$prefixLabel];
+        } else {
+            $this->prefixLabel = $prefixLabel;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getSchemaUrl()
+    {
+        return $this->schemaUrl;
+    }
+
+    /**
+     * @param string $schemaUrl
+     */
+    public function setSchemaUrl($schemaUrl)
+    {
+        $this->schemaUrl = $schemaUrl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetadataNamespaceUrl()
+    {
+        return $this->metadataNamespaceUrl;
+    }
+
+    /**
+     * @param string $metadataNamespaceUrl
+     */
+    public function setMetadataNamespaceUrl($metadataNamespaceUrl)
+    {
+        $this->metadataNamespaceUrl = $metadataNamespaceUrl;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAdminOnly()
+    {
+        return $this->adminOnly;
+    }
+
+    /**
+     * @param mixed $adminOnly
+     */
+    public function setAdminOnly($adminOnly)
+    {
+        $this->adminOnly = filter_var($adminOnly, FILTER_VALIDATE_BOOLEAN);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisible()
+    {
+        return $this->visible;
+    }
+
+    /**
+     * @param bool|string $visible
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = filter_var($visible, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**

@@ -47,6 +47,11 @@ trait Oai_Model_OptionsTrait
             if (method_exists($this, $method)) {
                 $options[$optionName] = $this->$method();
             }
+
+            $method = 'is' . ucfirst($optionName);
+            if (method_exists($this, $method)) {
+                $options[$optionName] = $this->$method();
+            }
         }
 
         return $options;
@@ -59,7 +64,7 @@ trait Oai_Model_OptionsTrait
     {
         foreach ($options as $key => $value) {
             $method = 'set' . ucfirst($key);
-            if (method_exists($this, $method) && $value) {
+            if (method_exists($this, $method)) {
                 $this->$method($value);
             }
         }

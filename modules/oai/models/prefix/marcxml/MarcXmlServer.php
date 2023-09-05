@@ -32,7 +32,9 @@ class Oai_Model_Prefix_MarcXml_MarcXmlServer extends Oai_Model_BaseServer
 {
     public function __construct()
     {
-        // Default value for the xsltFile, may be overwritten later by the configuration (using the setOptions method).
         $this->setXsltFile('marc21.xslt');
+        $this->setPrefixLabel('MARC21');
+        $this->setSchemaUrl('https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd');
+        $this->setMetadataNamespaceUrl('http://www.loc.gov/MARC21/slim');
     }
 }

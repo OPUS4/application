@@ -31,6 +31,7 @@
  */
 
 use Opus\Common\Log;
+use Opus\Common\Security\Realm;
 
 /**
  * TODO BUG documentation is not existent - especially the fact that 'validate' functions are called dynamically
@@ -139,8 +140,11 @@ class Oai_Model_Request
     public function validateMetadataPrefix($oaiMetadataPrefix)
     {
         $serverFactory             = new Oai_Model_ServerFactory();
+        $server                    = $serverFactory->create(strtolower($oaiMetadataPrefix));
         $availableMetadataPrefixes = array_map('strtolower', $serverFactory->getFormats());
-        $result                    = in_array(strtolower($oaiMetadataPrefix), $availableMetadataPrefixes);
+
+        $result = in_array(strtolower($oaiMetadataPrefix), $availableMetadataPrefixes)
+            && (! $server->isAdminOnly() || Realm::getInstance()->checkModule('admin'));
 
         if (! $result) {
             // MetadataPrefix not available.

@@ -280,6 +280,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
+
+        $this->assertEquals('', $response->getBody());
+
         $this->checkForBadStringsInHtml($response->getBody());
     }
 

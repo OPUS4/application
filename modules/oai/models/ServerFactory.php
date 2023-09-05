@@ -30,7 +30,6 @@
  */
 
 use Opus\Common\ConfigTrait;
-use Opus\Common\Security\Realm;
 use Opus\Common\Util\ClassLoaderHelper;
 
 /**
@@ -131,6 +130,14 @@ class Oai_Model_ServerFactory
             );
         }
 
+        if (isset($options['prefixLabel'])) {
+            $options['prefixLabel'] = $this->mergeMultiValueOption(
+                'prefixLabel',
+                $defaultOptions,
+                $formatOptions
+            );
+        }
+
         return $options;
     }
 
@@ -222,29 +229,11 @@ class Oai_Model_ServerFactory
             $formats = $config->oai->format->toArray();
 
             foreach ($formats as $formatIdentifier => $format) {
-                if (isset($format['prefixLabel'])) {
-                    $prefixLabels = $format['prefixLabel'];
-                    if (is_string($prefixLabels)) {
-                        $prefixLabels = array_map('trim', explode(',', $prefixLabels));
-                    }
-
-                    foreach ($prefixLabels as $prefixLabel) {
-                        if ($prefixLabel) {
-                            $prefixes[] = $prefixLabel;
-                        }
-                    }
-                } else {
-                    $prefixes[] = $formatIdentifier;
-                }
+                $prefixes[] = $formatIdentifier;
             }
         }
 
         $prefixes = array_diff($prefixes, ['default']);
-
-        // only administrators can request copy_xml format
-        if (! Realm::getInstance()->checkModule('admin')) {
-            $prefixes = array_diff($prefixes, ['copy_xml']);
-        }
 
         return $prefixes;
     }

@@ -34,5 +34,7 @@ class Oai_Model_Prefix_Epicur_EpicurServer extends Oai_Model_BaseServer
     {
         $this->setIdentifierExists('urn');
         $this->setXsltFile('epicur.xslt');
+        $this->setSchemaUrl('http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd');
+        $this->setMetadataNamespaceUrl('urn:nbn:de:1111-2004033116');
     }
 }

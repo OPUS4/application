@@ -33,5 +33,6 @@ class Oai_Model_Prefix_Oai_OaiPpServer extends Oai_Model_BaseServer
     public function __construct()
     {
         $this->setXsltFile('oai_pp.xslt');
+        $this->setVisible(false);
     }
 }
