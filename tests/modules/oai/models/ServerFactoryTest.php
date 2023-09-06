@@ -34,6 +34,11 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
     /** @var string[] */
     protected $additionalResources = ['database', 'view'];
 
+    public function setUp(): void
+    {
+        parent::setUp();
+    }
+
     /**
      * @return array
      */
@@ -52,14 +57,28 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
                     'listidentifiers' => 10,
                 ],
                 'format' => [
-                    'default' => [
-                        'class' => DefaultOaiServer::class,
+                    'default'       => [
+                        'class'                => DefaultOaiServer::class,
+                        'viewHelper'           => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
+                        'xsltFile'             => 'oaiFile.xslt',
+                        'hasFilesVisibleInOai' => 1,
                     ],
-                    'oai_dc'  => [
-                        'class'    => OaiDcServer::class,
-                        'xsltFile' => 'oaiFile.xslt',
+                    'copy_xml'      => [
+                        'xsltFile'  => 'copy_xml.xslt',
+                        'adminOnly' => 1,
+                        'visible'   => 0,
                     ],
-                    'oai_pp'  => null,
+                    'xmetadissplus' => [
+                        'class'                   => Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusServer::class,
+                        'xsltFile'                => 'XMetaDissPlus.xslt',
+                        'prefixLabel'             => 'xMetaDissPlus',
+                        'hasFilesVisibleInOai'    => 1,
+                        'checkEmbargo'            => 1,
+                        'notEmbargoedOn'          => 1,
+                        'schemaUrl'               => 'http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd',
+                        'setMetadataNamespaceUrl' => 'http://www.d-nb.de/standards/xmetadissplus/',
+                    ],
+                    'oai_pp'        => null,
                 ],
             ],
         ];
@@ -71,320 +90,210 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
      */
     protected function createServerFactory($configurationArray = null)
     {
+        $serverFactory = new Oai_Model_ServerFactory();
+
         if ($configurationArray === null) {
             $config = new Zend_Config($this->getConfigurationArray());
         } else {
             $config = new Zend_Config($configurationArray);
         }
 
-        $serverFactory = new Oai_Model_ServerFactory();
         $serverFactory->setConfig($config);
+
         return $serverFactory;
     }
 
-    public function testCreateWithValidMetadataPrefix()
+    public function testGetFormats()
     {
-        $serverFactory = $this->createServerFactory();
-        $server        = $serverFactory->create('oai_dc');
-
-        $expectedOptions = [
-            'maxListIdentifiers'  => 10,
-            'maxListRecords'      => 10,
-            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
-            'emailContact'        => 'opus4ci@example.org',
-            'xsltFile'            => 'oaiFile.xslt',
-        ];
-
-        $this->assertEquals(OaiDcServer::class, get_class($server));
-        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
-    }
-
-    public function testCreateWithNoneExistingFormatServerClass()
-    {
-        $configArray = $this->getConfigurationArray();
-
-        $configArray['oai']['format']['oai_dc']['class'] = 'UnknownOaiDcServerClass';
-
-        $serverFactory = $this->createServerFactory($configArray);
-
-        $server = $serverFactory->create('oai_dc');
-
-        $expectedOptions = [
-            'maxListIdentifiers'  => 10,
-            'maxListRecords'      => 10,
-            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
-            'emailContact'        => 'opus4ci@example.org',
-            'xsltFile'            => 'oaiFile.xslt',
-        ];
-
-        $this->assertEquals(Oai_Model_BaseServer::class, get_class($server));
-        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
-    }
-
-    public function testCreateWithNoneExistingDefaultServerClass()
-    {
-        $configArray = $this->getConfigurationArray();
-        unset($configArray['oai']['format']['oai_dc']['class']);
-        $configArray['oai']['format']['default']['class'] = 'UnknownDefaultServerClass';
-
-        $serverFactory = $this->createServerFactory($configArray);
-
-        $server = $serverFactory->create('oai_dc');
-
-        $expectedOptions = [
-            'maxListIdentifiers'  => 10,
-            'maxListRecords'      => 10,
-            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
-            'emailContact'        => 'opus4ci@example.org',
-            'xsltFile'            => 'oaiFile.xslt',
-        ];
-
-        $this->assertEquals(Oai_Model_BaseServer::class, get_class($server));
-        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
-    }
-
-    public function testCreateWithNoPrefix()
-    {
-        $serverFactory = $this->createServerFactory();
-        $server        = $serverFactory->create();
-
-        $expectedOptions = [
-            'maxListIdentifiers'  => 10,
-            'maxListRecords'      => 10,
-            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
-            'emailContact'        => 'opus4ci@example.org',
-        ];
-
-        $this->assertEquals(DefaultOaiServer::class, get_class($server));
-        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
-    }
-
-    public function testCreateWithPrefixNotConfigured()
-    {
-        $serverFactory = $this->createServerFactory();
-        $server        = $serverFactory->create('oai_pp');
-
-        $expectedOptions = [
-            'maxListIdentifiers'  => 10,
-            'maxListRecords'      => 10,
-            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
-            'emailContact'        => 'opus4ci@example.org',
-        ];
-
-        $this->assertEquals(DefaultOaiServer::class, get_class($server));
-        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
-    }
-
-    public function testGetFormatClassName()
-    {
-        $serverFactory = $this->createServerFactory();
-
-        $metaDataPrefix = 'oai_dc';
-        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
-        $this->assertEquals(OaiDcServer::class, $options['class']);
-
-        $metaDataPrefix = 'oai_Dc';
-        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
-        $this->assertEquals(OaiDcServer::class, $options['class']);
-    }
-
-    public function testGetFormatClassNameWithUnknownPrefix()
-    {
-        $configArray = $this->getConfigurationArray();
-
-        $serverFactory = $this->createServerFactory($configArray);
-
-        $metaDataPrefix = 'unknown';
-        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
-        $this->assertEquals(DefaultOaiServer::class, $options['class']);
-    }
-
-    public function testGetFormatOptions()
-    {
-        $serverFactory = $this->createServerFactory();
-
-        $expectedOptions = [
-            'xsltFile'            => 'oaiFile.xslt',
-            'maxListIdentifiers'  => 10,
-            'maxListRecords'      => 10,
-            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
-            'emailContact'        => 'opus4ci@example.org',
-            'class'               => OaiDcServer::class,
-        ];
-
-        $metaDataPrefix = 'oai_dc';
-        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
-        $this->assertEquals($expectedOptions, $options);
-
-        $metaDataPrefix = 'oai_Dc';
-        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
-        $this->assertEquals($expectedOptions, $options);
-    }
-
-    public function testGetFormatOptionsWithUnknownMetadataPrefix()
-    {
-        $serverFactory = $this->createServerFactory();
-
-        $expectedOptions = [
-            'maxListIdentifiers'  => 10,
-            'maxListRecords'      => 10,
-            'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
-            'emailContact'        => 'opus4ci@example.org',
-            'class'               => DefaultOaiServer::class,
-        ];
-
-        $metaDataPrefix = 'unknown';
-        $options        = $serverFactory->getFormatOptions($metaDataPrefix);
-
-        $this->assertEquals($expectedOptions, $options);
-    }
-
-    public function testConfigurationOverwritesXsltFileValueFromPrefixClass()
-    {
-        $configArray = $this->getConfigurationArray();
-
-        $configArray['oai']['format']['xmetadissplus'] = [
-            'class'    => Oai_Model_Prefix_MarcXml_MarcXmlServer::class,
-            'xsltFile' => 'XMetaDissPlus.xslt',
-        ];
-
-        $serverFactory = $this->createServerFactory($configArray);
-
-        $server = $serverFactory->create('xmetadissplus');
-
-        $this->assertEquals('XMetaDissPlus.xslt', $server->getXsltFile());
-    }
-
-    public function testXsltFileNotConfiguredButSetInPrefixClass()
-    {
-        $configArray = $this->getConfigurationArray();
-
-        $configArray['oai']['format']['xmetadissplus'] = [
-            'class' => Oai_Model_Prefix_MarcXml_MarcXmlServer::class,
-        ];
-
-        $serverFactory = $this->createServerFactory($configArray);
-
-        $server = $serverFactory->create('xmetadissplus');
-
-        $this->assertEquals('marc21.xslt', $server->getXsltFile());
-    }
-
-    public function testViewHelpersConfiguredAsArray()
-    {
-        $configArray = $this->getConfigurationArray();
-
-        $configArray['oai']['format']['default'] = [
-            'viewHelper' => [
-                'optionValue',
-                'fileUrl',
-                'frontdoorUrl',
-                'transferUrl',
-                'dcmiType',
-                'dcType',
-                'openAireType',
+        $configArray = [
+            'oai' => [
+                'format' => [
+                    'Default'        => [
+                        'class' => Oai_Model_DefaultServer::class,
+                    ],
+                    'copy_xml'       => [
+                        'xsltFile' => 'copy_xml.xslt',
+                    ],
+                    'oai_dc'         => [
+                        'class' => Oai_Model_DefaultServer::class,
+                    ],
+                    'epicur'         => [
+                        'class' => Oai_Model_DefaultServer::class,
+                    ],
+                    'xMetaDissPluss' => [
+                        'class' => Oai_Model_DefaultServer::class,
+                    ],
+                ],
             ],
         ];
 
         $serverFactory = $this->createServerFactory($configArray);
 
-        $expectedViewHelpers = [
-            'optionValue',
-            'fileUrl',
-            'frontdoorUrl',
-            'transferUrl',
-            'dcmiType',
-            'dcType',
-            'openAireType',
-        ];
+        $formats = $serverFactory->getFormats();
 
-        $options = $serverFactory->getFormatOptions();
-
-        $this->assertEquals($expectedViewHelpers, $options['viewHelper']);
+        $expectedFormats = ['copy_xml', 'oai_dc', 'epicur', 'xmetadisspluss'];
+        $this->assertEquals($expectedFormats, $formats);
     }
 
-    public function testViewHelpersDefaultConfiguredAsArrayAndFormatAsString()
+    public function testCreate()
+    {
+        $serverFactory = $this->createServerFactory();
+        $server        = $serverFactory->create();
+        $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
+    }
+
+    public function testCreateWithMetadataPrefix()
+    {
+        $serverFactory = $this->createServerFactory();
+        $server        = $serverFactory->create('xMetaDissPlus');
+        $this->assertEquals(Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusServer::class, get_class($server));
+    }
+
+    public function testCreateWithUnknownMetadataPrefix()
+    {
+        $serverFactory = $this->createServerFactory();
+        $server        = $serverFactory->create('unknownPrefix');
+        $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
+    }
+
+    public function testCreateWithNoFormatConfiguration()
+    {
+        $configArray = $this->getConfigurationArray();
+        unset($configArray['oai']['format']);
+        $serverFactory = $this->createServerFactory($configArray);
+        $server        = $serverFactory->create('xMetaDissPlus');
+        $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
+    }
+
+    public function testCreateWithUnkownFormatClass()
+    {
+        $configArray                                            = $this->getConfigurationArray();
+        $configArray['oai']['format']['xmetadissplus']['class'] = 'UnknownClass';
+        $serverFactory                                          = $this->createServerFactory($configArray);
+        $server                                                 = $serverFactory->create('xMetaDissPlus');
+        $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
+    }
+
+    public function testDefaultServerOptionsNoDefaultConfiguration()
     {
         $configArray = $this->getConfigurationArray();
 
-        $configArray['oai']['format']['default'] = [
-            'viewHelper' => ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType'],
-        ];
-
-        $configArray['oai']['format']['oai_dc'] = [
-            'viewHelper' => 'firstNewViewHelper, secondNewViewHelper',
-        ];
+        unset($configArray['oai']['format']['default']);
 
         $serverFactory = $this->createServerFactory($configArray);
+        $server        = $serverFactory->create();
 
-        $expectedProcessors = [
-            'optionValue',
-            'fileUrl',
-            'frontdoorUrl',
-            'transferUrl',
-            'dcmiType',
-            'dcType',
-            'openAireType',
-            'firstNewViewHelper',
-            'secondNewViewHelper',
+        $expectedOptions = [
+            'maxListIdentifiers'    => 10,
+            'maxListRecords'        => 10,
+            'resumptionTokenPath'   => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'          => 'opus4ci@example.org',
+            'xsltFile'              => '',
+            'documentStatesAllowed' => ['published', 'deleted'],
+            'viewHelper'            => ['listMetadataFormats'],
+            'notEmbargoedOn'        => false,
+            'hasFilesVisibleInOai'  => false,
+            'adminOnly'             => false,
+            'visible'               => true,
+            'checkEmbargo'          => false,
         ];
 
-        $options = $serverFactory->getFormatOptions('oai_dc');
-        $this->assertEquals($expectedProcessors, $options['viewHelper']);
+        $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
+        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
-    public function testViewHelpersConfiguredAsCommaSeparatedList()
+    public function testDefaultServerOptionsWithDefaultConfiguration()
+    {
+        $configArray   = $this->getConfigurationArray();
+        $serverFactory = $this->createServerFactory($configArray);
+        $server        = $serverFactory->create();
+
+        $expectedOptions = [
+            'maxListIdentifiers'    => 10,
+            'maxListRecords'        => 10,
+            'resumptionTokenPath'   => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'          => 'opus4ci@example.org',
+            'xsltFile'              => 'oaiFile.xslt',
+            'documentStatesAllowed' => ['published', 'deleted'],
+            'viewHelper'            => ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType', 'listMetadataFormats'],
+            'notEmbargoedOn'        => false,
+            'hasFilesVisibleInOai'  => true,
+            'adminOnly'             => false,
+            'visible'               => true,
+            'checkEmbargo'          => false,
+        ];
+
+        $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
+        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
+    }
+
+    public function testFormatServerClassOverwritesDefaults()
     {
         $configArray = $this->getConfigurationArray();
 
-        $configArray['oai']['format']['default'] = [
-            'viewHelper' => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
+        $configArray['oai']['format']['xmetadissplus'] = [
+            'class' => XMetaDissPlusServer::class,
         ];
 
         $serverFactory = $this->createServerFactory($configArray);
+        $server        = $serverFactory->create('xmetadissplus');
 
-        $expectedViewHelpers = [
-            'optionValue',
-            'fileUrl',
-            'frontdoorUrl',
-            'transferUrl',
-            'dcmiType',
-            'dcType',
-            'openAireType',
+        $expectedOptions = [
+            'maxListIdentifiers'    => 10,
+            'maxListRecords'        => 10,
+            'resumptionTokenPath'   => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'          => 'opus4ci@example.org',
+            'xsltFile'              => 'XMetaDissPlus.xslt',
+            'documentStatesAllowed' => ['published', 'deleted'],
+            'viewHelper'            => ['optionValue', 'fileUrl', 'frontdoorUrl', 'listMetadataFormats'],
+            'notEmbargoedOn'        => true,
+            'hasFilesVisibleInOai'  => true,
+            'adminOnly'             => false,
+            'visible'               => true,
+            'checkEmbargo'          => true,
+            'prefixLabel'           => 'xMetaDissPlus',
+            'schemaUrl'             => 'http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd',
+            'metadataNamespaceUrl'  => 'http://www.d-nb.de/standards/xmetadissplus/',
         ];
 
-        $options = $serverFactory->getFormatOptions();
-
-        $this->assertEquals($expectedViewHelpers, $options['viewHelper']);
+        $this->assertEquals(XMetaDissPlusServer::class, get_class($server));
+        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
-    public function testViewHelpersConfiguredForMetadaPrefix()
+    public function testFormatServerClassOptionsOverwrittenByFormatConfiguration()
     {
         $configArray = $this->getConfigurationArray();
 
-        $configArray['oai']['format']['default'] = [
-            'viewHelper' => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
-        ];
-
-        $configArray['oai']['format']['oai_dc'] = [
-            'viewHelper' => 'newViewHelper',
+        $configArray['oai']['format']['xmetadissplus'] = [
+            'class'        => XMetaDissPlusServer::class,
+            'viewHelper'   => 'additionalViewHelper1, additionalViewHelper2',
+            'xsltFile'     => 'configuredXMetaDissPlus.xslt',
+            'checkEmbargo' => 0,
         ];
 
         $serverFactory = $this->createServerFactory($configArray);
+        $server        = $serverFactory->create('xmetadissplus');
 
-        $expectedProcessors = [
-            'optionValue',
-            'fileUrl',
-            'frontdoorUrl',
-            'transferUrl',
-            'dcmiType',
-            'dcType',
-            'openAireType',
-            'newViewHelper',
+        $expectedOptions = [
+            'maxListIdentifiers'    => 10,
+            'maxListRecords'        => 10,
+            'resumptionTokenPath'   => '/vagrant/tests/workspace/tmp/resumption',
+            'emailContact'          => 'opus4ci@example.org',
+            'xsltFile'              => 'configuredXMetaDissPlus.xslt',
+            'documentStatesAllowed' => ['published', 'deleted'],
+            'viewHelper'            => ['optionValue', 'fileUrl', 'frontdoorUrl', 'additionalViewHelper1', 'additionalViewHelper2', 'listMetadataFormats'],
+            'notEmbargoedOn'        => true,
+            'hasFilesVisibleInOai'  => true,
+            'adminOnly'             => false,
+            'visible'               => true,
+            'checkEmbargo'          => false,
+            'prefixLabel'           => 'xMetaDissPlus',
+            'schemaUrl'             => 'http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd',
+            'metadataNamespaceUrl'  => 'http://www.d-nb.de/standards/xmetadissplus/',
         ];
 
-        $options = $serverFactory->getFormatOptions('oai_dc');
-        $this->assertEquals($expectedProcessors, $options['viewHelper']);
+        $this->assertEquals(XMetaDissPlusServer::class, get_class($server));
+        $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
     public function testDoViewHelpersExist()

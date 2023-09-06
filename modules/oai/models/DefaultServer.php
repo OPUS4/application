@@ -39,7 +39,7 @@ use Opus\Common\Repository;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
 
-class Oai_Model_BaseServer extends Application_Model_Abstract
+class Oai_Model_DefaultServer extends Application_Model_Abstract
 {
     use Oai_Model_OptionsTrait;
 
@@ -143,6 +143,35 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     private $visible = true;
 
     /**
+     * @param Zend_Config $config
+     */
+    public function __construct($config = null)
+    {
+        $oaiConfig = Oai_Model_OAIConfig::getInstance();
+
+        if ($config) {
+            $oaiConfig->setConfig($config);
+        }
+
+        $defaults = $oaiConfig->getDefaults();
+
+        $this->setOptions($defaults);
+
+        $this->initDefaults();
+    }
+
+    /**
+     * Initializes server options with default values
+     */
+    protected function initDefaults()
+    {
+        /*
+            This function is used by derived classes to set their own values for options by overwriting the method
+            and using setters, in order to overwrite default values.
+        */
+    }
+
+    /**
      * Gather configuration before action handling.
      */
     public function init()
@@ -164,7 +193,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
      */
     public function handleRequest($parameters, $requestUri)
     {
-        // TODO move error handling into Oai_Model_BaseServer
+        // TODO move error handling into Oai_Model_DefaultServer
         try {
             // handle request
             return $this->handleRequestIntern($parameters, $requestUri);
@@ -1082,6 +1111,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     {
         $viewHelper = $this->viewHelper ?? [];
 
+        // listMetadataFormats ist part of basic OAI functionality.
         $viewHelper[] = 'listMetadataFormats';
 
         return $viewHelper;
@@ -1090,10 +1120,17 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     /**
      * Sets the viewHelper
      *
-     * @param array $viewHelper
+     * @param array|string $viewHelper
      */
     public function setViewHelper($viewHelper)
     {
+        if (is_string($viewHelper)) {
+            $viewHelper = array_map('trim', explode(',', $viewHelper));
+        }
+
+        // listMetadataFormats ist part of basic OAI functionality.
+        $viewHelper = array_values(array_diff($viewHelper, ['listMetadataFormats']));
+
         $this->viewHelper = $viewHelper;
     }
 
@@ -1214,7 +1251,7 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     }
 
     /**
-     * @return array
+     * @return string
      */
     public function getPrefixLabel()
     {
@@ -1222,15 +1259,11 @@ class Oai_Model_BaseServer extends Application_Model_Abstract
     }
 
     /**
-     * @param array|string $prefixLabel
+     * @param string $prefixLabel
      */
     public function setPrefixLabel($prefixLabel)
     {
-        if (is_string($prefixLabel)) {
-            $this->prefixLabel = [$prefixLabel];
-        } else {
-            $this->prefixLabel = $prefixLabel;
-        }
+        $this->prefixLabel = $prefixLabel;
     }
 
     /**

@@ -39,25 +39,71 @@ class Oai_Model_ServerFactory
 {
     use ConfigTrait;
 
+    /** @var Oai_Model_OAIConfig */
+    private $oaiConfig;
+
+    public function __constructor()
+    {
+        $this->oaiConfig = Oai_Model_OAIConfig::getInstance();
+    }
+
+    /**
+     * Gets the oai configuration
+     *
+     * @return Oai_Model_OAIConfig
+     */
+    public function getOaiConfig()
+    {
+        if ($this->oaiConfig === null) {
+            $this->oaiConfig = Oai_Model_OAIConfig::getInstance();
+            $this->oaiConfig->setConfig($this->getConfig());
+        }
+
+        return $this->oaiConfig;
+    }
+
+    /**
+     * Sets the oai configuration
+     *
+     * @param Oai_Model_OAIConfig $oaiConfig
+     */
+    public function setOaiConfig($oaiConfig)
+    {
+        $this->oaiConfig = $oaiConfig;
+    }
+
     /**
      * Creates an oai server model by metaDataPrefix
      *
      * @param string $metaDataPrefix
-     * @return Oai_Model_BaseServer
+     * @return Oai_Model_DefaultServer
      */
     public function create($metaDataPrefix = '')
     {
-        $options = $this->getFormatOptions($metaDataPrefix);
+        $options = $this->getOaiConfig()->getFormatOptions($metaDataPrefix);
 
-        $serverClass = $options['class'] ?? Oai_Model_BaseServer::class;
+        $serverClass = $options['class'] ?? Oai_Model_DefaultServer::class;
 
         if (empty($serverClass) || ! ClassLoaderHelper::classExists($serverClass)) {
-            $server = new Oai_Model_BaseServer();
+            $server = new Oai_Model_DefaultServer($this->getConfig());
         } else {
-            $server = new $serverClass();
+            $server = new $serverClass($this->getConfig());
         }
 
-        $server->setOptions($options);
+        if ($options) {
+            if (isset($options['viewHelper'])) {
+                $previousViewHelper = $server->getViewHelper() ?: [];
+                $viewHelper         = $options['viewHelper'];
+
+                if (is_string($viewHelper)) {
+                    $viewHelper = array_map('trim', explode(',', $viewHelper));
+                }
+
+                $options['viewHelper'] = array_unique(array_merge($previousViewHelper, $viewHelper));
+            }
+
+            $server->setOptions($options);
+        }
 
         return $server;
     }
@@ -66,7 +112,7 @@ class Oai_Model_ServerFactory
      * Creates an oai server model by resumption token
      *
      * @param string $resumptionToken
-     * @return Oai_Model_BaseServer
+     * @return Oai_Model_DefaultServer
      */
     public function createByResumptionToken($resumptionToken)
     {
@@ -89,132 +135,6 @@ class Oai_Model_ServerFactory
     }
 
     /**
-     * Gets all options for the oai server
-     *
-     * @param string $metadataPrefix
-     * @return array
-     */
-    public function getFormatOptions($metadataPrefix = '')
-    {
-        $metadataPrefix = strtolower($metadataPrefix);
-
-        $config = $this->getConfig();
-
-        $generalOptions = $this->getGeneralOaiOptions();
-
-        $defaultOptions = [];
-        if (isset($config->oai->format->default)) {
-            $defaultOptions = $config->oai->format->default->toArray();
-        }
-
-        $formatOptions = [];
-        if (isset($config->oai->format->$metadataPrefix)) {
-            $formatOptions = $config->oai->format->$metadataPrefix->toArray();
-        }
-
-        $options = array_merge($generalOptions, $defaultOptions, $formatOptions);
-
-        if (isset($options['viewHelper'])) {
-            $options['viewHelper'] = $this->mergeMultiValueOption(
-                'viewHelper',
-                $defaultOptions,
-                $formatOptions
-            );
-        }
-
-        if (isset($options['documentTypeRestriction'])) {
-            $options['documentTypeRestriction'] = $this->mergeMultiValueOption(
-                'documentTypeRestriction',
-                $defaultOptions,
-                $formatOptions
-            );
-        }
-
-        if (isset($options['prefixLabel'])) {
-            $options['prefixLabel'] = $this->mergeMultiValueOption(
-                'prefixLabel',
-                $defaultOptions,
-                $formatOptions
-            );
-        }
-
-        return $options;
-    }
-
-    /**
-     * Gets the general oai options from the configuration
-     *
-     * @return array
-     */
-    public function getGeneralOaiOptions()
-    {
-        $config = $this->getConfig();
-
-        if (! isset($config->oai)) {
-            throw new Exception('No configuration for module oai.');
-        }
-
-        $options = [];
-
-        if (isset($config->oai->repository->name)) {
-            $options['repositoryName'] = $config->oai->repository->name;
-        }
-        if (isset($config->oai->repository->identifier)) {
-            $options['repositoryIdentifier'] = $config->oai->repository->identifier;
-        }
-        if (isset($config->oai->sample->identifier)) {
-            $options['sampleIdentifier'] = $config->oai->sample->identifier;
-        }
-        if (isset($config->oai->max->listidentifiers)) {
-            $options['maxListIdentifiers'] = (int) $config->oai->max->listidentifiers;
-        }
-
-        if (isset($config->oai->max->listrecords)) {
-            $options['maxListRecords'] = (int) $config->oai->max->listrecords;
-        }
-        if (isset($config->oai->baseurl)) {
-            $options['oaiBaseUrl'] = $config->oai->baseurl;
-        }
-
-        if (isset($config->workspacePath)) {
-            $options['resumptionTokenPath'] = $config->workspacePath
-                . DIRECTORY_SEPARATOR . 'tmp'
-                . DIRECTORY_SEPARATOR . 'resumption';
-        }
-
-        if (isset($config->mail->opus->address)) {
-            $options['emailContact'] = $config->mail->opus->address;
-        }
-
-        return $options;
-    }
-
-    /**
-     * Merges the default and format specific configuration for an option
-     * containing multiple values as an array or comma separated list
-     *
-     * @param string $optionName
-     * @param array $defaultOptions
-     * @param array $formatOptions
-     * @return array
-     */
-    protected function mergeMultiValueOption($optionName, $defaultOptions, $formatOptions)
-    {
-        $default = $defaultOptions[$optionName] ?? [];
-        $format  = $formatOptions[$optionName] ?? [];
-
-        if (is_string($default)) {
-            $default = array_map('trim', explode(',', $default));
-        }
-
-        if (is_string($format)) {
-            $format = array_map('trim', explode(',', $format));
-        }
-
-        return array_unique(array_merge($default, $format));
-    }
-
-    /**
      * Gets all configured format prefixes
      *
      * @return array
@@ -226,14 +146,11 @@ class Oai_Model_ServerFactory
         $prefixes = [];
 
         if (isset($config->oai->format)) {
-            $formats = $config->oai->format->toArray();
-
-            foreach ($formats as $formatIdentifier => $format) {
-                $prefixes[] = $formatIdentifier;
-            }
+            $formats  = $config->oai->format->toArray();
+            $prefixes = array_keys($formats);
+            $prefixes = array_map('strtolower', $prefixes);
+            $prefixes = array_values(array_diff($prefixes, ['default']));
         }
-
-        $prefixes = array_diff($prefixes, ['default']);
 
         return $prefixes;
     }

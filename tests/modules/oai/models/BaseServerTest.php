@@ -29,11 +29,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Oai_Model_BaseServerTest extends ControllerTestCase
+class Oai_Model_DefaultServerTest extends ControllerTestCase
 {
     public function testGetOaiBaseUrl()
     {
-        $baseServer = new Oai_Model_BaseServer();
+        $baseServer = new Oai_Model_DefaultServer();
 
         $baseServer->setBaseUrl('http://baseUrlPath');
         $baseServer->setOaiBaseUrl('http://oaiBaseUrlPath');
@@ -43,7 +43,7 @@ class Oai_Model_BaseServerTest extends ControllerTestCase
 
     public function testGetOaiBaseUrlNotSet()
     {
-        $baseServer = new Oai_Model_BaseServer();
+        $baseServer = new Oai_Model_DefaultServer();
 
         $baseServer->setBaseUrl('http://baseUrlPath');
 
@@ -52,7 +52,7 @@ class Oai_Model_BaseServerTest extends ControllerTestCase
 
     public function testGetOptionNotInOptionsArray()
     {
-        $baseServer = new Oai_Model_BaseServer();
+        $baseServer = new Oai_Model_DefaultServer();
 
         $baseServer->setOptions([]);
         $this->assertEquals('', $baseServer->getRepositoryIdentifier());

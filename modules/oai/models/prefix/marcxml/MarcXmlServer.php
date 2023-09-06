@@ -28,9 +28,9 @@
  * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Oai_Model_Prefix_MarcXml_MarcXmlServer extends Oai_Model_BaseServer
+class Oai_Model_Prefix_MarcXml_MarcXmlServer extends Oai_Model_DefaultServer
 {
-    public function __construct()
+    protected function initDefaults()
     {
         $this->setXsltFile('marc21.xslt');
         $this->setPrefixLabel('MARC21');

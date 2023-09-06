@@ -53,13 +53,12 @@ class Oai_View_Helper_ListMetaDataFormats extends Application_View_Helper_Abstra
         if ($formats) {
             foreach ($formats as $formatPrefix) {
                 $server               = $serverFactory->create($formatPrefix);
-                $prefixLabel          = $server->getPrefixLabel();
-                $prefixes             = $prefixLabel ?? [$formatPrefix];
+                $prefix               = $server->getPrefixLabel() ?: $formatPrefix;
                 $schemaUrl            = $server->getSchemaUrl();
                 $metadataNamespaceUrl = $server->getMetadataNamespaceUrl();
 
                 if ($server->isVisible() && (! $server->isAdminOnly() || Realm::getInstance()->checkModule('admin'))) {
-                    foreach ($prefixes as $prefix) {
+                    if ($prefix) {
                         $output .= '<metadataFormat>'
                             . "<metadataPrefix><xsl:text>$prefix</xsl:text></metadataPrefix>"
                             . "<schema><xsl:text>$schemaUrl</xsl:text></schema>"

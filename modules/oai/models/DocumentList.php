@@ -34,11 +34,11 @@ use Opus\Common\CollectionRole;
 
 class Oai_Model_DocumentList
 {
-    /** @var Oai_Model_BaseServer */
+    /** @var Oai_Model_DefaultServer */
     protected $server;
 
     /**
-     * @param Oai_Model_BaseServer $server
+     * @param Oai_Model_DefaultServer $server
      */
     public function __construct($server)
     {
