@@ -47,9 +47,6 @@ class Oai_Model_Request
     private $errorMessage;
 
     /** @var string */
-    private $pathToMetadataPrefixFiles;
-
-    /** @var string */
     private $resumptionPath;
 
     /** @var string[] */
@@ -294,27 +291,6 @@ class Oai_Model_Request
     protected function setErrorMessage($message)
     {
         $this->errorMessage = $message;
-    }
-
-    /**
-     * Set path to meta data prefix files.
-     * Returns false if given path is not a directory.
-     * There is no check if files are inside given directory!
-     *
-     * @param mixed $path
-     * @return bool
-     */
-    public function setPathToMetadataPrefixFiles($path)
-    {
-        $realpathToFiles = realpath($path);
-
-        $result = is_dir($realpathToFiles);
-
-        if (true === $result) {
-            $this->pathToMetadataPrefixFiles = $realpathToFiles;
-        }
-
-        return $result;
     }
 
     /**

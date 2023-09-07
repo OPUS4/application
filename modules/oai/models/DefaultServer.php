@@ -235,7 +235,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         $resumptionPath     = $this->getResumptionTokenPath();
 
         $request = new Oai_Model_Request();
-        $request->setPathToMetadataPrefixFiles($metadataPrefixPath);
+
         $request->setResumptionPath($resumptionPath);
 
         // check for duplicate parameters
