@@ -34,6 +34,9 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
     /** @var string */
     protected $additionalResources = 'database';
 
+    /**
+     * @return string
+     */
     protected function getExpectedMetadaFormats()
     {
         return '<metadataFormat>'
@@ -58,6 +61,9 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
             . '</metadataFormat>';
     }
 
+    /**
+     * @return string
+     */
     protected function getExpectedMetadaFormatsWithoutOaiDc()
     {
         return '<metadataFormat>'
