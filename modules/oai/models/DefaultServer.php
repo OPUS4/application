@@ -1351,7 +1351,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      * Checks if exporting a document is allowed, if not an exception will be thrown.
      *
      * @param Document $document
-     * @param string $metadataPrefix
+     * @param string   $metadataPrefix
      * @throws Oai_Model_Exception
      */
     protected function checkExportAllowed($document, $metadataPrefix)
