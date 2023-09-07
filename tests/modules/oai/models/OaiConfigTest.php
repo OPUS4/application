@@ -34,7 +34,7 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
     /**
      * @return array
      */
-    protected function getConfigurationArray()
+    protected function getTestConfiguration()
     {
         return [
             'workspacePath' => '/vagrant/tests/workspace',
@@ -77,8 +77,8 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
 
     public function testGetDefaults()
     {
-        $oaiConfig = Oai_Model_OAIConfig::getInstance();
-        $oaiConfig->setConfig(new Zend_Config($this->getConfigurationArray()));
+        $oaiConfig = Oai_Model_OaiConfig::getInstance();
+        $oaiConfig->setConfig(new Zend_Config($this->getTestConfiguration()));
 
         $defaults = $oaiConfig->getDefaults();
 
@@ -97,13 +97,13 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
 
     public function testGetDefaultsNoFormatDefaults()
     {
-        $oaiConfig = Oai_Model_OAIConfig::getInstance();
+        $oaiConfig = Oai_Model_OaiConfig::getInstance();
 
-        $configArray = $this->getConfigurationArray();
+        $testConfiguration = $this->getTestConfiguration();
 
-        unset($configArray['oai']['format']['default']);
+        unset($testConfiguration['oai']['format']['default']);
 
-        $oaiConfig->setConfig(new Zend_Config($configArray));
+        $oaiConfig->setConfig(new Zend_Config($testConfiguration));
 
         $expectedDefaults = [
             'maxListIdentifiers'  => 10,
@@ -118,13 +118,13 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
 
     public function testGetDefaultsNoOaiConfiguration()
     {
-        $oaiConfig = Oai_Model_OAIConfig::getInstance();
+        $oaiConfig = Oai_Model_OaiConfig::getInstance();
 
-        $configArray = $this->getConfigurationArray();
+        $testConfiguration = $this->getTestConfiguration();
 
-        unset($configArray['oai']);
+        unset($testConfiguration['oai']);
 
-        $oaiConfig->setConfig(new Zend_Config($configArray));
+        $oaiConfig->setConfig(new Zend_Config($testConfiguration));
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('No configuration for module oai.');
@@ -134,8 +134,8 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
 
     public function testGetFormatOptions()
     {
-        $oaiConfig = Oai_Model_OAIConfig::getInstance();
-        $oaiConfig->setConfig(new Zend_Config($this->getConfigurationArray()));
+        $oaiConfig = Oai_Model_OaiConfig::getInstance();
+        $oaiConfig->setConfig(new Zend_Config($this->getTestConfiguration()));
 
         $expectedFormatOptions = [
             'class'                   => Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusServer::class,
@@ -154,8 +154,8 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
 
     public function testGetFormatOptionsUnknownPrefix()
     {
-        $oaiConfig = Oai_Model_OAIConfig::getInstance();
-        $oaiConfig->setConfig(new Zend_Config($this->getConfigurationArray()));
+        $oaiConfig = Oai_Model_OaiConfig::getInstance();
+        $oaiConfig->setConfig(new Zend_Config($this->getTestConfiguration()));
 
         $formatOptions = $oaiConfig->getFormatOptions('unknownPrefix');
         $this->assertEquals([], $formatOptions);
@@ -163,12 +163,12 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
 
     public function testGetFormatOptionsNoFormatConfiguration()
     {
-        $oaiConfig = Oai_Model_OAIConfig::getInstance();
+        $oaiConfig = Oai_Model_OaiConfig::getInstance();
 
-        $configArray = $this->getConfigurationArray();
-        unset($configArray['oai']['format']);
+        $testConfiguration = $this->getTestConfiguration();
+        unset($testConfiguration['oai']['format']);
 
-        $oaiConfig->setConfig(new Zend_Config($configArray));
+        $oaiConfig->setConfig(new Zend_Config($testConfiguration));
 
         $formatOptions = $oaiConfig->getFormatOptions('xMetaDissPlus');
         $this->assertEquals([], $formatOptions);
@@ -176,14 +176,14 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
 
     public function testGetFormatOptionsWithWrongPrefixCaseInConfiguration()
     {
-        $oaiConfig = Oai_Model_OAIConfig::getInstance();
+        $oaiConfig = Oai_Model_OaiConfig::getInstance();
 
-        $configArray                            = $this->getConfigurationArray();
-        $configArray['oai']['format']['EPICUR'] = [
+        $testConfiguration                            = $this->getTestConfiguration();
+        $testConfiguration['oai']['format']['EPICUR'] = [
             'class' => Oai_Model_Prefix_Epicur_EpicurServer::class,
         ];
 
-        $oaiConfig->setConfig(new Zend_Config($configArray));
+        $oaiConfig->setConfig(new Zend_Config($testConfiguration));
 
         $expectedFormatOptions = [
             'class' => Oai_Model_Prefix_Epicur_EpicurServer::class,
@@ -191,5 +191,50 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
 
         $formatOptions = $oaiConfig->getFormatOptions('epicur');
         $this->assertEquals($expectedFormatOptions, $formatOptions);
+    }
+
+    public function testGetFormats()
+    {
+        $oaiConfig = Oai_Model_OaiConfig::getInstance();
+
+        $testConfiguration = [
+            'oai' => [
+                'format' => [
+                    'Default'        => [
+                        'class' => Oai_Model_DefaultServer::class,
+                    ],
+                    'copy_xml'       => [
+                        'xsltFile' => 'copy_xml.xslt',
+                    ],
+                    'oai_dc'         => [
+                        'class' => Oai_Model_DefaultServer::class,
+                    ],
+                    'epicur'         => [
+                        'class' => Oai_Model_DefaultServer::class,
+                    ],
+                    'xMetaDissPluss' => [
+                        'class' => Oai_Model_DefaultServer::class,
+                    ],
+                ],
+            ],
+        ];
+
+        $oaiConfig->setConfig(new Zend_Config($testConfiguration));
+
+        $formats = $oaiConfig->getFormats();
+
+        $expectedFormats = ['copy_xml', 'oai_dc', 'epicur', 'xmetadisspluss'];
+        $this->assertEquals($expectedFormats, $formats);
+    }
+
+    public function testGetResumptionTokenPath()
+    {
+        $oaiConfig = Oai_Model_OaiConfig::getInstance();
+        $oaiConfig->setConfig(new Zend_Config($this->getTestConfiguration()));
+
+        $resumptionTokenPath = $oaiConfig->getResumptionTokenPath();
+
+        $expectedResumptionTokenPath = '/vagrant/tests/workspace/tmp/resumption';
+        $this->assertEquals($expectedResumptionTokenPath, $resumptionTokenPath);
     }
 }

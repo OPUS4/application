@@ -30,7 +30,7 @@
  */
 class Oai_Model_Prefix_Oai_OaiDcServer extends Oai_Model_DefaultServer
 {
-    protected function initDefaults()
+    protected function initFormatDefaults()
     {
         $this->setXsltFile('oai_dc.xslt');
         $this->setSchemaUrl('http://www.openarchives.org/OAI/2.0/oai_dc.xsd');

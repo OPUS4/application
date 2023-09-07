@@ -79,6 +79,9 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /** @var Zend_Controller_Response_Http */
     private $response; // TODO temporary hack
 
+    /** @var Oai_Model_OaiConfig */
+    private $oaiConfig;
+
     /** @var string */
     private $oaiBaseUrl;
 
@@ -143,32 +146,22 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     private $visible = true;
 
     /**
-     * @param Zend_Config $config
+     * Initializes the server options with default values.
      */
-    public function __construct($config = null)
+    public function initDefaults()
     {
-        $oaiConfig = Oai_Model_OAIConfig::getInstance();
-
-        if ($config) {
-            $oaiConfig->setConfig($config);
-        }
-
-        $defaults = $oaiConfig->getDefaults();
-
+        $defaults = $this->getOaiConfig()->getDefaults();
         $this->setOptions($defaults);
-
-        $this->initDefaults();
+        $this->initFormatDefaults();
     }
 
     /**
      * Initializes server options with default values
+     * This function is used by derived classes to set their own values for options by overwriting the method
+     * and using setters, in order to overwrite default values.
      */
-    protected function initDefaults()
+    protected function initFormatDefaults()
     {
-        /*
-            This function is used by derived classes to set their own values for options by overwriting the method
-            and using setters, in order to overwrite default values.
-        */
     }
 
     /**
@@ -852,6 +845,30 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
+     * Gets the oai configuration
+     *
+     * @return Oai_Model_OaiConfig
+     */
+    public function getOaiConfig()
+    {
+        if ($this->oaiConfig === null) {
+            $this->oaiConfig = Oai_Model_OaiConfig::getInstance();
+        }
+
+        return $this->oaiConfig;
+    }
+
+    /**
+     * Sets the oai configuration
+     *
+     * @param Oai_Model_OaiConfig $oaiConfig
+     */
+    public function setOaiConfig($oaiConfig)
+    {
+        $this->oaiConfig = $oaiConfig;
+    }
+
+    /**
      * @return string
      */
     public function getScriptPath()
@@ -1335,7 +1352,6 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      *
      * @param Document $document
      * @param string $metadataPrefix
-     * @return void
      * @throws Oai_Model_Exception
      */
     protected function checkExportAllowed($document, $metadataPrefix)

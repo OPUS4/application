@@ -34,18 +34,18 @@ use Opus\Common\ConfigTrait;
 /**
  * Class to read configuration options for the oai server.
  */
-class Oai_Model_OAIConfig
+class Oai_Model_OaiConfig
 {
     use ConfigTrait;
 
     /**
      * Factory method
      *
-     * @return Oai_Model_OAIConfig
+     * @return self
      */
     public static function getInstance()
     {
-        return new Oai_Model_OAIConfig();
+        return new self();
     }
 
     /**
@@ -128,16 +128,53 @@ class Oai_Model_OAIConfig
             $options['oaiBaseUrl'] = $config->oai->baseurl;
         }
 
-        if (isset($config->workspacePath)) {
-            $options['resumptionTokenPath'] = $config->workspacePath
-                . DIRECTORY_SEPARATOR . 'tmp'
-                . DIRECTORY_SEPARATOR . 'resumption';
-        }
+        $options['resumptionTokenPath'] = $this->getResumptionTokenPath();
 
         if (isset($config->mail->opus->address)) {
             $options['emailContact'] = $config->mail->opus->address;
         }
 
         return $options;
+    }
+
+    /**
+     * Gets all configured format prefixes
+     *
+     * @return string[]
+     */
+    public function getFormats()
+    {
+        $config = $this->getConfig();
+
+        $prefixes = [];
+
+        if (isset($config->oai->format)) {
+            $formats  = $config->oai->format->toArray();
+            $prefixes = array_keys($formats);
+            $prefixes = array_map('strtolower', $prefixes);
+            $prefixes = array_values(array_diff($prefixes, ['default']));
+        }
+
+        return $prefixes;
+    }
+
+    /**
+     * Gets the path for resumption tokens
+     *
+     * @return string
+     */
+    public function getResumptionTokenPath()
+    {
+        $config = $this->getConfig();
+
+        $resumptionTokenPath = '';
+
+        if (isset($config->workspacePath)) {
+            $resumptionTokenPath = $config->workspacePath
+                . DIRECTORY_SEPARATOR . 'tmp'
+                . DIRECTORY_SEPARATOR . 'resumption';
+        }
+
+        return $resumptionTokenPath;
     }
 }

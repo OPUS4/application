@@ -139,9 +139,11 @@ class Oai_Model_Request
      */
     public function validateMetadataPrefix($oaiMetadataPrefix)
     {
-        $serverFactory             = new Oai_Model_ServerFactory();
-        $server                    = $serverFactory->create(strtolower($oaiMetadataPrefix));
-        $availableMetadataPrefixes = array_map('strtolower', $serverFactory->getFormats());
+        $serverFactory = new Oai_Model_ServerFactory();
+        $server        = $serverFactory->create(strtolower($oaiMetadataPrefix));
+        $oaiConfig     = Oai_Model_OaiConfig::getInstance();
+
+        $availableMetadataPrefixes = array_map('strtolower', $oaiConfig->getFormats());
 
         $result = in_array(strtolower($oaiMetadataPrefix), $availableMetadataPrefixes)
             && (! $server->isAdminOnly() || Realm::getInstance()->checkModule('admin'));

@@ -48,7 +48,8 @@ class Oai_View_Helper_ListMetaDataFormats extends Application_View_Helper_Abstra
         $output = '';
 
         $serverFactory = new Oai_Model_ServerFactory();
-        $formats       = $serverFactory->getFormats();
+        $oaiConfig     = Oai_Model_OaiConfig::getInstance();
+        $formats       = $oaiConfig->getFormats();
 
         if ($formats) {
             foreach ($formats as $formatPrefix) {

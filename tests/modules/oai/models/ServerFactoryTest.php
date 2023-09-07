@@ -34,15 +34,10 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
     /** @var string[] */
     protected $additionalResources = ['database', 'view'];
 
-    public function setUp(): void
-    {
-        parent::setUp();
-    }
-
     /**
      * @return array
      */
-    protected function getConfigurationArray()
+    protected function getTestConfiguration()
     {
         return [
             'workspacePath' => '/vagrant/tests/workspace',
@@ -85,103 +80,79 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
     }
 
     /**
-     * @param array|null $configurationArray
-     * @return Oai_Model_ServerFactory
+     * @param array|null $configuration
+     * @return Oai_Model_OaiConfig
      */
-    protected function createServerFactory($configurationArray = null)
+    protected function getOaiConfig($configuration = null)
     {
-        $serverFactory = new Oai_Model_ServerFactory();
-
-        if ($configurationArray === null) {
-            $config = new Zend_Config($this->getConfigurationArray());
+        if ($configuration === null) {
+            $config = new Zend_Config($this->getTestConfiguration());
         } else {
-            $config = new Zend_Config($configurationArray);
+            $config = new Zend_Config($configuration);
         }
 
-        $serverFactory->setConfig($config);
+        $oaiCongig = Oai_Model_OaiConfig::getInstance();
+        $oaiCongig->setConfig($config);
 
-        return $serverFactory;
-    }
-
-    public function testGetFormats()
-    {
-        $configArray = [
-            'oai' => [
-                'format' => [
-                    'Default'        => [
-                        'class' => Oai_Model_DefaultServer::class,
-                    ],
-                    'copy_xml'       => [
-                        'xsltFile' => 'copy_xml.xslt',
-                    ],
-                    'oai_dc'         => [
-                        'class' => Oai_Model_DefaultServer::class,
-                    ],
-                    'epicur'         => [
-                        'class' => Oai_Model_DefaultServer::class,
-                    ],
-                    'xMetaDissPluss' => [
-                        'class' => Oai_Model_DefaultServer::class,
-                    ],
-                ],
-            ],
-        ];
-
-        $serverFactory = $this->createServerFactory($configArray);
-
-        $formats = $serverFactory->getFormats();
-
-        $expectedFormats = ['copy_xml', 'oai_dc', 'epicur', 'xmetadisspluss'];
-        $this->assertEquals($expectedFormats, $formats);
+        return $oaiCongig;
     }
 
     public function testCreate()
     {
-        $serverFactory = $this->createServerFactory();
-        $server        = $serverFactory->create();
-        $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
+        $serverFactory = new Oai_Model_ServerFactory();
+        $serverFactory->setOaiConfig($this->getOaiConfig());
+        $server = $serverFactory->create();
+        $this->assertEquals(DefaultOaiServer::class, get_class($server));
     }
 
     public function testCreateWithMetadataPrefix()
     {
-        $serverFactory = $this->createServerFactory();
-        $server        = $serverFactory->create('xMetaDissPlus');
+        $serverFactory = new Oai_Model_ServerFactory();
+        $serverFactory->setOaiConfig($this->getOaiConfig());
+        $server = $serverFactory->create('xMetaDissPlus');
         $this->assertEquals(Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusServer::class, get_class($server));
     }
 
     public function testCreateWithUnknownMetadataPrefix()
     {
-        $serverFactory = $this->createServerFactory();
-        $server        = $serverFactory->create('unknownPrefix');
-        $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
+        $serverFactory = new Oai_Model_ServerFactory();
+        $serverFactory->setOaiConfig($this->getOaiConfig());
+        $server = $serverFactory->create('unknownPrefix');
+        $this->assertEquals(DefaultOaiServer::class, get_class($server));
     }
 
     public function testCreateWithNoFormatConfiguration()
     {
-        $configArray = $this->getConfigurationArray();
-        unset($configArray['oai']['format']);
-        $serverFactory = $this->createServerFactory($configArray);
-        $server        = $serverFactory->create('xMetaDissPlus');
+        $testConfiguration = $this->getTestConfiguration();
+        unset($testConfiguration['oai']['format']);
+        $oaiConfig = $this->getOaiConfig($testConfiguration);
+
+        $serverFactory = new Oai_Model_ServerFactory();
+        $serverFactory->setOaiConfig($oaiConfig);
+        $server = $serverFactory->create('xMetaDissPlus');
+
         $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
     }
 
-    public function testCreateWithUnkownFormatClass()
+    public function testCreateWithUnknownFormatClass()
     {
-        $configArray                                            = $this->getConfigurationArray();
-        $configArray['oai']['format']['xmetadissplus']['class'] = 'UnknownClass';
-        $serverFactory                                          = $this->createServerFactory($configArray);
-        $server                                                 = $serverFactory->create('xMetaDissPlus');
+        $testConfiguration                                            = $this->getTestConfiguration();
+        $testConfiguration['oai']['format']['xmetadissplus']['class'] = 'UnknownClass';
+        $oaiConfig     = $this->getOaiConfig($testConfiguration);
+        $serverFactory = new Oai_Model_ServerFactory();
+        $serverFactory->setOaiConfig($oaiConfig);
+        $server = $serverFactory->create('xMetaDissPlus');
         $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
     }
 
     public function testDefaultServerOptionsNoDefaultConfiguration()
     {
-        $configArray = $this->getConfigurationArray();
-
-        unset($configArray['oai']['format']['default']);
-
-        $serverFactory = $this->createServerFactory($configArray);
-        $server        = $serverFactory->create();
+        $testConfiguration = $this->getTestConfiguration();
+        unset($testConfiguration['oai']['format']['default']);
+        $oaiConfig     = $this->getOaiConfig($testConfiguration);
+        $serverFactory = new Oai_Model_ServerFactory();
+        $serverFactory->setOaiConfig($oaiConfig);
+        $server = $serverFactory->create();
 
         $expectedOptions = [
             'maxListIdentifiers'    => 10,
@@ -204,9 +175,9 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
 
     public function testDefaultServerOptionsWithDefaultConfiguration()
     {
-        $configArray   = $this->getConfigurationArray();
-        $serverFactory = $this->createServerFactory($configArray);
-        $server        = $serverFactory->create();
+        $serverFactory = new Oai_Model_ServerFactory();
+        $serverFactory->setOaiConfig($this->getOaiConfig());
+        $server = $serverFactory->create();
 
         $expectedOptions = [
             'maxListIdentifiers'    => 10,
@@ -223,20 +194,20 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'checkEmbargo'          => false,
         ];
 
-        $this->assertEquals(Oai_Model_DefaultServer::class, get_class($server));
+        $this->assertEquals(DefaultOaiServer::class, get_class($server));
         $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
     public function testFormatServerClassOverwritesDefaults()
     {
-        $configArray = $this->getConfigurationArray();
-
-        $configArray['oai']['format']['xmetadissplus'] = [
+        $testConfiguration                                   = $this->getTestConfiguration();
+        $testConfiguration['oai']['format']['xmetadissplus'] = [
             'class' => XMetaDissPlusServer::class,
         ];
-
-        $serverFactory = $this->createServerFactory($configArray);
-        $server        = $serverFactory->create('xmetadissplus');
+        $oaiConfig                                           = $this->getOaiConfig($testConfiguration);
+        $serverFactory                                       = new Oai_Model_ServerFactory();
+        $serverFactory->setOaiConfig($oaiConfig);
+        $server = $serverFactory->create('xmetadissplus');
 
         $expectedOptions = [
             'maxListIdentifiers'    => 10,
@@ -262,17 +233,17 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
 
     public function testFormatServerClassOptionsOverwrittenByFormatConfiguration()
     {
-        $configArray = $this->getConfigurationArray();
-
-        $configArray['oai']['format']['xmetadissplus'] = [
+        $testConfiguration                                   = $this->getTestConfiguration();
+        $testConfiguration['oai']['format']['xmetadissplus'] = [
             'class'        => XMetaDissPlusServer::class,
             'viewHelper'   => 'additionalViewHelper1, additionalViewHelper2',
             'xsltFile'     => 'configuredXMetaDissPlus.xslt',
             'checkEmbargo' => 0,
         ];
-
-        $serverFactory = $this->createServerFactory($configArray);
-        $server        = $serverFactory->create('xmetadissplus');
+        $oaiConfig                                           = $this->getOaiConfig($testConfiguration);
+        $serverFactory                                       = new Oai_Model_ServerFactory();
+        $serverFactory->setOaiConfig($oaiConfig);
+        $server = $serverFactory->create('xmetadissplus');
 
         $expectedOptions = [
             'maxListIdentifiers'    => 10,

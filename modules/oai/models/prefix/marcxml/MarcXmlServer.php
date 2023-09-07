@@ -30,7 +30,7 @@
  */
 class Oai_Model_Prefix_MarcXml_MarcXmlServer extends Oai_Model_DefaultServer
 {
-    protected function initDefaults()
+    protected function initFormatDefaults()
     {
         $this->setXsltFile('marc21.xslt');
         $this->setPrefixLabel('MARC21');

@@ -30,7 +30,7 @@
  */
 class Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusServer extends Oai_Model_DefaultServer
 {
-    protected function initDefaults()
+    protected function initFormatDefaults()
     {
         $this->setHasFilesVisibleInOai(true);
         $this->setCheckEmbargo(true);

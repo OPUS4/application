@@ -28,17 +28,11 @@
  * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class XMetaDissPlusServer extends Oai_Model_DefaultServer
+class XMetaDissPlusServer extends Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusServer
 {
-    protected function initDefaults()
+    protected function initFormatDefaults()
     {
-        $this->setHasFilesVisibleInOai(true);
-        $this->setCheckEmbargo(true);
-        $this->setNotEmbargoedOn(true);
-        $this->setXsltFile('XMetaDissPlus.xslt');
-        $this->setPrefixLabel('xMetaDissPlus');
-        $this->setSchemaUrl('http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd');
-        $this->setMetadataNamespaceUrl('http://www.d-nb.de/standards/xmetadissplus/');
+        parent::initFormatDefaults();
         $this->setViewHelper('optionValue, fileUrl, frontdoorUrl');
     }
 }

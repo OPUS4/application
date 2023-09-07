@@ -39,24 +39,18 @@ class Oai_Model_ServerFactory
 {
     use ConfigTrait;
 
-    /** @var Oai_Model_OAIConfig */
+    /** @var Oai_Model_OaiConfig */
     private $oaiConfig;
-
-    public function __constructor()
-    {
-        $this->oaiConfig = Oai_Model_OAIConfig::getInstance();
-    }
 
     /**
      * Gets the oai configuration
      *
-     * @return Oai_Model_OAIConfig
+     * @return Oai_Model_OaiConfig
      */
     public function getOaiConfig()
     {
         if ($this->oaiConfig === null) {
-            $this->oaiConfig = Oai_Model_OAIConfig::getInstance();
-            $this->oaiConfig->setConfig($this->getConfig());
+            $this->oaiConfig = Oai_Model_OaiConfig::getInstance();
         }
 
         return $this->oaiConfig;
@@ -65,7 +59,7 @@ class Oai_Model_ServerFactory
     /**
      * Sets the oai configuration
      *
-     * @param Oai_Model_OAIConfig $oaiConfig
+     * @param Oai_Model_OaiConfig $oaiConfig
      */
     public function setOaiConfig($oaiConfig)
     {
@@ -75,20 +69,32 @@ class Oai_Model_ServerFactory
     /**
      * Creates an oai server model by metaDataPrefix
      *
-     * @param string $metaDataPrefix
+     * @param string|null $metaDataPrefix
      * @return Oai_Model_DefaultServer
      */
-    public function create($metaDataPrefix = '')
+    public function create($metaDataPrefix = null)
     {
-        $options = $this->getOaiConfig()->getFormatOptions($metaDataPrefix);
+        $oaiConfig = $this->getOaiConfig();
 
-        $serverClass = $options['class'] ?? Oai_Model_DefaultServer::class;
+        $defaults = $oaiConfig->getDefaults();
+        $options  = $metaDataPrefix ? $oaiConfig->getFormatOptions($metaDataPrefix) : null;
+
+        if (isset($options['class'])) {
+            $serverClass = $options['class'];
+        } elseif (isset($defaults['class'])) {
+            $serverClass = $defaults['class'];
+        } else {
+            $serverClass = Oai_Model_DefaultServer::class;
+        }
 
         if (empty($serverClass) || ! ClassLoaderHelper::classExists($serverClass)) {
-            $server = new Oai_Model_DefaultServer($this->getConfig());
+            $server = new Oai_Model_DefaultServer();
         } else {
-            $server = new $serverClass($this->getConfig());
+            $server = new $serverClass();
         }
+
+        $server->setOaiConfig($this->getOaiConfig());
+        $server->initDefaults();
 
         if ($options) {
             if (isset($options['viewHelper'])) {
@@ -116,15 +122,9 @@ class Oai_Model_ServerFactory
      */
     public function createByResumptionToken($resumptionToken)
     {
-        $config = $this->getConfig();
-
-        if (isset($config->workspacePath)) {
-            $tempPath = $config->workspacePath
-                . DIRECTORY_SEPARATOR . 'tmp'
-                . DIRECTORY_SEPARATOR . 'resumption';
-        }
-        $tokenWorker = new Oai_Model_Resumptiontokens();
-        $tokenWorker->setResumptionPath($tempPath);
+        $resumptionTokenPath = $this->getOaiConfig()->getResumptionTokenPath();
+        $tokenWorker         = new Oai_Model_Resumptiontokens();
+        $tokenWorker->setResumptionPath($resumptionTokenPath);
         $token = $tokenWorker->getResumptionToken($resumptionToken);
 
         if ($token === null) {
@@ -137,21 +137,10 @@ class Oai_Model_ServerFactory
     /**
      * Gets all configured format prefixes
      *
-     * @return array
+     * @return string[]
      */
     public function getFormats()
     {
-        $config = $this->getConfig();
-
-        $prefixes = [];
-
-        if (isset($config->oai->format)) {
-            $formats  = $config->oai->format->toArray();
-            $prefixes = array_keys($formats);
-            $prefixes = array_map('strtolower', $prefixes);
-            $prefixes = array_values(array_diff($prefixes, ['default']));
-        }
-
-        return $prefixes;
+        return $this->getOaiConfig()->getFormats();
     }
 }

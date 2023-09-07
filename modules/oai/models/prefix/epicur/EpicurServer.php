@@ -30,7 +30,7 @@
  */
 class Oai_Model_Prefix_Epicur_EpicurServer extends Oai_Model_DefaultServer
 {
-    protected function initDefaults()
+    protected function initFormatDefaults()
     {
         $this->setIdentifierExists('urn');
         $this->setXsltFile('epicur.xslt');
