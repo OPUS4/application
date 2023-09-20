@@ -58,6 +58,14 @@ a.rss img[src*="feed_small.png"],
     padding-top: 1rem;
 }
 
+#top-header .testing, .staging, .development {
+  color: white;
+  background: #FB5454;
+  font-weight: bold;
+  font-size: 120%;
+  text-align: center;
+}
+
 #lang-switch {
     margin: 0;
     padding: 0;
