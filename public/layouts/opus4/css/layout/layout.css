@@ -8,7 +8,6 @@
   margin-right: calc(-1*var(--page--padding));
   padding-left: var(--page--padding);
   padding-right: var(--page--padding);
-
 }
 
 #content>.wrapper>div.intro {
@@ -67,6 +66,5 @@
     margin-left: auto;
     margin-right: auto;
   }
-
 
 }

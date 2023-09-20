@@ -59,11 +59,16 @@ a.rss img[src*="feed_small.png"],
 }
 
 #top-header .testing, .staging, .development {
-  color: white;
-  background: #FB5454;
-  font-weight: bold;
-  font-size: 120%;
-  text-align: center;
+    color: white;
+    background: #FB5454;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+#top-header {
+    padding-bottom: 0.1rem;
 }
 
 #lang-switch {
@@ -378,11 +383,12 @@ ul#secondary-nav {
 }
 
 @media print {
-  html,
-  body {
-    font: 10pt/1.3 Georgia, serif !important;
-  }
+    html,
+    body {
+        font: 10pt/1.3 Georgia, serif !important;
+    }
 
-  #cookiePolicy {
-    display: none;
-  }
+    #cookiePolicy {
+        display: none;
+    }
+}
