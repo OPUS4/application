@@ -23,6 +23,30 @@ a:active {
   background-color: transparent;
 }
 
+/* GND-Logo bei Personen */
+a.gnd-link {
+  display: inline-block;
+  box-sizing: border-box;
+  height: 16px;
+  width: 16px;
+  margin-left: 3px;
+  vertical-align: center;
+  background: url(../../../../img/gnd/Logo_GND.svg) no-repeat 0 0;
+  text-indent: -9999px;
+}
+
+/* ORCID-Logo bei Personen */
+a.orcid-link {
+  display: inline-block;
+  box-sizing: border-box;
+  height: 16px;
+  width: 16px;
+  margin-left: 3px;
+  vertical-align: center;
+  background: url(../../../../img/orcid/Logo_ORCID.svg) no-repeat 0 0;
+  text-indent: -9999px;
+}
+
 #top-header,
 #header,
 #content>.wrapper>h2 {
