@@ -70,11 +70,11 @@
     background: #F3F6F8 url(../img/theme/icon-title-frontdoor.gif) no-repeat 4px 6px;
 }
 #titlemain-wrapper h2{
-    font-size: 16px;
+    font-size: 1.3em;
     padding: 7px 10px 7px 26px;
 }
 #titlemain-wrapper h3{
-    font-size: 14px;
+    font-size: 1.1em;
     padding: 0 10px 7px 26px;
 }
 #titlemain-wrapper h2,
@@ -1635,3 +1635,16 @@ ul.list-style-none {
     list-style: none;
     padding-left: 2em;
 }
+
+.publish select {
+    max-width: 18.75rem; /* 300px */
+}
+
+#doi_import_invisible_field {
+    display: none;
+}
+
+.textfield-max-width {
+    min-width: calc(75% - 2rem);
+}
+

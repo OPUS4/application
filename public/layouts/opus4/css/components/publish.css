@@ -2,6 +2,10 @@
   content: "\f093";
 }
 
+.publish select {
+  max-width: 18.75rem; /* 300px */
+}
+
 .publish .form-items-wrapper fieldset {
   border-style: solid;
   border-width: 4px 0 0;
@@ -59,6 +63,10 @@ form label {
   min-width: 25%;
 }
 
+.textfield-max-width {
+  min-width: calc(75% - 2rem);
+}
+
 .left-labels .form-item>textarea {
   min-width: calc(75% - 2rem);
 }
@@ -67,10 +75,30 @@ form label {
   margin: 1rem 0;
 }
 
+.publish fieldset > .form-multiple.even{
+  margin: 0 calc(-0.75 * var(--page--padding));
+  padding: 0 calc(0.75 * var(--page--padding));
+  border-style: solid;
+  border-color: transparent;
+  border-width: 1px 0;
+}
+
 .button-wrapper {
   text-align: right;
+  margin: 1rem 0;
+}
+
+.button-wrapper.add-delete-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 #rights {
   order: -1;
+}
+
+#doi_import_invisible_field {
+  display: none;
 }

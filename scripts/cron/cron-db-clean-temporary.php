@@ -33,21 +33,6 @@
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Common\Document;
-use Opus\Common\Repository;
-
-$date       = new DateTime();
-$dateString = $date->sub(new DateInterval('P2D'))->format('Y-m-d');
-$finder     = Repository::getInstance()->getDocumentFinder();
-$finder->setServerState('temporary')
-  ->setServerDateModifiedBefore($dateString);
-
-foreach ($finder->getIds() as $id) {
-    $doc = Document::get($id);
-    if ($doc->getServerState() === 'temporary') {
-        echo "deleting document: $id\n";
-        $doc->delete();
-    } else {
-        echo "NOT deleting document: $id because it has server state " . $doc->getServerState();
-    }
-}
+$job = new Application_Job_CleanTemporariesJob();
+$job->setDuration('P2D');
+$job->run();

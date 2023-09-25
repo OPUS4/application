@@ -34,18 +34,17 @@
               xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">
 
 
-    <!-- <field name="local_doiJson" required="no" formelement="textarea" datatype="Enrichment" multiplicity="1"/> -->
     <field name="opus_doi_flag" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
-    <field name="opus_import_data" required="no" formelement="text" datatype="Enrichment" multiplicity="1"/>
-    <field name="local_crossrefDocumentType" required="no" formelement="text" datatype="Enrichment" multiplicity="1"/>
-    <field name="local_crossrefLicence" required="no" formelement="text" datatype="Enrichment" multiplicity="1"/>
-    <field name="local_import_origin" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
-    <field name="local_doiImportPopulated" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
+    <field name="opus_doi_json" required="no" formelement="text" datatype="Enrichment" multiplicity="1"/>
+    <field name="opus_crossrefDocumentType" required="no" formelement="text" datatype="Enrichment" multiplicity="1"/>
+    <field name="opus_crossrefLicence" required="no" formelement="text" datatype="Enrichment" multiplicity="1"/>
+    <field name="opus_import_origin" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
+    <field name="opus_doiImportPopulated" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
 
 
-    <field name="PersonSubmitter" required="no" formelement="Text" datatype="Person" multiplicity="1">
+    <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1">
         <subfield name="FirstName" required="no" formelement="text" datatype="Text"/>
-        <subfield name="Email" required="no" formelement="text" datatype="Email"/>
+        <subfield name="Email" required="yes" formelement="text" datatype="Email"/>
     </field>
 
     <field name="Language" required="yes" formelement="select" datatype="Language" multiplicity="1">
@@ -103,7 +102,7 @@
     <field name="IdentifierUrl" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
 
 
-    <field name="conference_title" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
-    <field name="conference_place" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
+    <field name="ConferenceTitle" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
+    <field name="ConferencePlace" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
 
 </documenttype>

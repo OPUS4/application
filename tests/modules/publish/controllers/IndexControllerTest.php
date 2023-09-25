@@ -148,10 +148,10 @@ class Publish_IndexControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $doctypeAllPos       = strpos($body, '<option value="all" label="Alle Felder (Testdokumenttyp)">Alle Felder (Testdokumenttyp)</option>');
-        $doctypeArticlePos   = strpos($body, '<option value="article" label="Wissenschaftlicher Artikel">Wissenschaftlicher Artikel</option>');
-        $doctypeWorkingpaper = strpos($body, '<option value="workingpaper" label="Arbeitspapier">Arbeitspapier</option>');
-        $doctypeDemodemo     = strpos($body, '<option value="demodemo" label="demodemo">demodemo</option>');
+        $doctypeAllPos       = strpos($body, '<option value="all" title="Alle Felder (Testdokumenttyp)">Alle Felder (Testdokumenttyp)</option>');
+        $doctypeArticlePos   = strpos($body, '<option value="article" title="Wissenschaftlicher Artikel">Wissenschaftlicher Artikel</option>');
+        $doctypeWorkingpaper = strpos($body, '<option value="workingpaper" title="Arbeitspapier">Arbeitspapier</option>');
+        $doctypeDemodemo     = strpos($body, '<option value="demodemo" title="demodemo">demodemo</option>');
 
         $this->assertTrue($doctypeAllPos < $doctypeWorkingpaper);
         $this->assertTrue($doctypeWorkingpaper < $doctypeArticlePos);

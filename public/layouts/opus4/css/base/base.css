@@ -1,10 +1,12 @@
-:root {
+@media screen {
+  :root {
     --font-fam-default: "Open Sans", sans-serif;
     --font-fam-xstyle: Poppins, sans-serif;
     --font-headline: 700 1.75rem/normal Lato, sans-serif;
     --page--padding: 1rem;
     --content--max-width: 65rem;
     --round-button--size: 1.25rem;
+  }
 }
 
 html {
@@ -54,6 +56,19 @@ a.rss img[src*="feed_small.png"],
 
 #top-header>div.wrapper {
     padding-top: 1rem;
+}
+
+#top-header .testing, .staging, .development {
+    color: white;
+    background: #FB5454;
+    font-weight: bold;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+#top-header {
+    padding-bottom: 0.1rem;
 }
 
 #lang-switch {
@@ -234,9 +249,12 @@ h1#logo>a {
 #content>.wrapper>div.form-wrapper,
 #content>.wrapper>div.invalidsearchterm,
 #content>.wrapper>div.frontdoor,
-#content>.wrapper>form /*,
-#content[class*="auth_login"]>.wrapper>h2+form*/ {
-    padding: 2.816rem var(--page--padding);
+#content>.wrapper>form
+
+/*,
+#content[class*="auth_login"]>.wrapper>h2+form*/
+  {
+  padding: 2.816rem var(--page--padding);
 }
 .intro *:first-child,
 .content *:first-child {
@@ -361,5 +379,16 @@ ul#secondary-nav {
     }
     #primary-nav>li>a {
         font-size: 1.125rem;
+    }
+}
+
+@media print {
+    html,
+    body {
+        font: 10pt/1.3 Georgia, serif !important;
+    }
+
+    #cookiePolicy {
+        display: none;
     }
 }
