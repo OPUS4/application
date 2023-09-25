@@ -26,11 +26,12 @@ a:active {
 /* GND-Logo bei Personen */
 a.gnd-link {
   display: inline-block;
-  box-sizing: border-box;
-  height: 16px;
-  width: 16px;
-  margin-left: 3px;
-  vertical-align: center;
+  box-sizing: content-box;
+  height: 1.1em;
+  width: 1.1em;
+  margin-left: 0.2em;
+  margin-bottom: 0.2em;
+  vertical-align: bottom;
   background: url(../../../../img/gnd/Logo_GND.svg) no-repeat 0 0;
   text-indent: -9999px;
 }
@@ -38,11 +39,12 @@ a.gnd-link {
 /* ORCID-Logo bei Personen */
 a.orcid-link {
   display: inline-block;
-  box-sizing: border-box;
-  height: 16px;
-  width: 16px;
-  margin-left: 3px;
-  vertical-align: center;
+  box-sizing: content-box;
+  height: 1.1em;
+  width: 1.1em;
+  margin-left: 0.2em;
+  margin-bottom: 0.2em;
+  vertical-align: bottom;
   background: url(../../../../img/orcid/Logo_ORCID.svg) no-repeat 0 0;
   text-indent: -9999px;
 }
