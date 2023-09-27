@@ -198,7 +198,7 @@ div#additional-services a[href*="mail/toauthor"]::before {
 }
 
 div#additional-services a[href*="twitter.com"]::before {
-  content: "\f099";
+  content: "\e61b";
 }
 
 div#additional-services a[href*="javascript:void"]::before {
