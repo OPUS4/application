@@ -1100,7 +1100,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * Return xlst file name / file path.
+     * Return xslt file name / file path.
      *
      * @return string
      */
@@ -1110,7 +1110,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * Sets the xlst file name / file path.
+     * Sets the xslt file name / file path.
      *
      * @param string $file
      */
@@ -1186,7 +1186,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      *
      * @param array|string $documentTypesAllowed
      */
-    public function setdocumentTypesAllowed($documentTypesAllowed)
+    public function setDocumentTypesAllowed($documentTypesAllowed)
     {
         if (is_string($documentTypesAllowed)) {
             $this->documentTypesAllowed = [$documentTypesAllowed];
