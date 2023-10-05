@@ -1190,7 +1190,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     {
         if (is_string($documentTypesAllowed)) {
             $this->documentTypesAllowed = [$documentTypesAllowed];
-        } else {
+        } elseif (is_array($documentTypesAllowed)) {
             $this->documentTypesAllowed = $documentTypesAllowed;
         }
     }
@@ -1214,7 +1214,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     {
         if (is_string($documentStatesAllowed)) {
             $this->documentStatesAllowed = [$documentStatesAllowed];
-        } else {
+        } elseif (is_array($documentStatesAllowed)) {
             $this->documentStatesAllowed = $documentStatesAllowed;
         }
     }
