@@ -100,10 +100,10 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /** @var string */
     private $sampleIdentifier;
 
-    /** @var string */
+    /** @var int */
     private $maxListIdentifiers;
 
-    /** @var string */
+    /** @var int */
     private $maxListRecords;
 
     /** @var string */
@@ -492,12 +492,12 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Helper method for handling lists.
      *
-     * @param mixed $maxRecords
+     * @param int $maxItems
      */
-    private function handlingOfLists(array &$oaiRequest, $maxRecords)
+    private function handlingOfLists(array &$oaiRequest, $maxItems)
     {
-        if (true === empty($maxRecords)) {
-            $maxRecords = 100;
+        if (empty($maxItems)) {
+            $maxItems = 100;
         }
 
         $repIdentifier = $this->getRepositoryIdentifier();
@@ -509,7 +509,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         // do some initialisation
         $cursor   = 0;
         $totalIds = 0;
-        $start    = $maxRecords + 1;
+        $start    = $maxItems + 1;
         $restIds  = [];
 
         $metadataPrefix = null;
@@ -532,7 +532,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
             }
 
             $cursor         = $token->getStartPosition() - 1;
-            $start          = $token->getStartPosition() + $maxRecords;
+            $start          = $token->getStartPosition() + $maxItems;
             $totalIds       = $token->getTotalIds();
             $restIds        = $token->getDocumentIds();
             $metadataPrefix = $token->getMetadataPrefix();
@@ -550,7 +550,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         }
 
         // handling of document ids
-        $workIds = array_splice($restIds, 0, $maxRecords);
+        $workIds = array_splice($restIds, 0, $maxItems);
 
         foreach ($workIds as $docId) {
             $document = Document::get($docId);
@@ -1066,7 +1066,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      */
     public function getMaxListIdentifiers()
     {
-        return $this->maxListIdentifiers ?? '';
+        return $this->maxListIdentifiers ?? 0;
     }
 
     /**
@@ -1086,7 +1086,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      */
     public function getMaxListRecords()
     {
-        return $this->maxListRecords ?? '';
+        return $this->maxListRecords ?? 0;
     }
 
     /**
