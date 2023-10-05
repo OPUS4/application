@@ -39,6 +39,12 @@ use Opus\Common\Repository;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
 
+/**
+ * Implements the default behaviour neede for all metadata formats.
+ * For each concrete metadata format the behaviour can be configured
+ * via application.ini or instead an own format class be used
+ * to extend this default class (like in oai/models/prefix).
+ */
 class Oai_Model_DefaultServer extends Application_Model_Abstract
 {
     use Oai_Model_OptionsTrait;
