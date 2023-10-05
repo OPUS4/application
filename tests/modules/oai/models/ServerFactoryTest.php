@@ -54,7 +54,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
                 'format' => [
                     'default'       => [
                         'class'                => DefaultOaiServer::class,
-                        'viewHelper'           => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
+                        'viewHelpers'          => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
                         'xsltFile'             => 'oaiFile.xslt',
                         'hasFilesVisibleInOai' => 1,
                     ],
@@ -161,7 +161,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'emailContact'          => 'opus4ci@example.org',
             'xsltFile'              => '',
             'documentStatesAllowed' => ['published', 'deleted'],
-            'viewHelper'            => ['listMetadataFormats'],
+            'viewHelpers'           => ['listMetadataFormats'],
             'notEmbargoedOn'        => false,
             'hasFilesVisibleInOai'  => false,
             'adminOnly'             => false,
@@ -186,7 +186,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'emailContact'          => 'opus4ci@example.org',
             'xsltFile'              => 'oaiFile.xslt',
             'documentStatesAllowed' => ['published', 'deleted'],
-            'viewHelper'            => ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType', 'listMetadataFormats'],
+            'viewHelpers'           => ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType', 'listMetadataFormats'],
             'notEmbargoedOn'        => false,
             'hasFilesVisibleInOai'  => true,
             'adminOnly'             => false,
@@ -216,7 +216,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'emailContact'          => 'opus4ci@example.org',
             'xsltFile'              => 'XMetaDissPlus.xslt',
             'documentStatesAllowed' => ['published', 'deleted'],
-            'viewHelper'            => ['optionValue', 'fileUrl', 'frontdoorUrl', 'listMetadataFormats'],
+            'viewHelpers'           => ['optionValue', 'fileUrl', 'frontdoorUrl', 'listMetadataFormats'],
             'notEmbargoedOn'        => true,
             'hasFilesVisibleInOai'  => true,
             'adminOnly'             => false,
@@ -236,7 +236,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $testConfiguration                                   = $this->getTestConfiguration();
         $testConfiguration['oai']['format']['xmetadissplus'] = [
             'class'        => XMetaDissPlusServer::class,
-            'viewHelper'   => 'additionalViewHelper1, additionalViewHelper2',
+            'viewHelpers'  => 'additionalViewHelper1, additionalViewHelper2',
             'xsltFile'     => 'configuredXMetaDissPlus.xslt',
             'checkEmbargo' => 0,
         ];
@@ -252,7 +252,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'emailContact'          => 'opus4ci@example.org',
             'xsltFile'              => 'configuredXMetaDissPlus.xslt',
             'documentStatesAllowed' => ['published', 'deleted'],
-            'viewHelper'            => ['optionValue', 'fileUrl', 'frontdoorUrl', 'additionalViewHelper1', 'additionalViewHelper2', 'listMetadataFormats'],
+            'viewHelpers'           => ['optionValue', 'fileUrl', 'frontdoorUrl', 'additionalViewHelper1', 'additionalViewHelper2', 'listMetadataFormats'],
             'notEmbargoedOn'        => true,
             'hasFilesVisibleInOai'  => true,
             'adminOnly'             => false,

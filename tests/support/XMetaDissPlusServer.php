@@ -33,6 +33,6 @@ class XMetaDissPlusServer extends Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusSe
     protected function initFormatDefaults()
     {
         parent::initFormatDefaults();
-        $this->setViewHelper('optionValue, fileUrl, frontdoorUrl');
+        $this->setViewHelpers('optionValue, fileUrl, frontdoorUrl');
     }
 }

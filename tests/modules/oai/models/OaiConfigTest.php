@@ -50,9 +50,9 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
                 ],
                 'format' => [
                     'default'       => [
-                        'class'      => DefaultOaiServer::class,
-                        'viewHelper' => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
-                        'xsltFile'   => 'oaiFile.xslt',
+                        'class'       => DefaultOaiServer::class,
+                        'viewHelpers' => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
+                        'xsltFile'    => 'oaiFile.xslt',
                     ],
                     'copy_xml'      => [
                         'xsltFile'  => 'copy_xml.xslt',
@@ -89,7 +89,7 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
             'emailContact'        => 'opus4ci@example.org',
             'xsltFile'            => 'oaiFile.xslt',
             'class'               => DefaultOaiServer::class,
-            'viewHelper'          => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
+            'viewHelpers'         => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
         ];
 
         $this->assertEquals($expectedDefaults, $defaults);

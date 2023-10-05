@@ -97,15 +97,15 @@ class Oai_Model_ServerFactory
         $server->initDefaults();
 
         if ($options) {
-            if (isset($options['viewHelper'])) {
-                $previousViewHelper = $server->getViewHelper() ?: [];
-                $viewHelper         = $options['viewHelper'];
+            if (isset($options['viewHelpers'])) {
+                $previousViewHelpers = $server->getViewHelpers() ?: [];
+                $viewHelpers         = $options['viewHelpers'];
 
-                if (is_string($viewHelper)) {
-                    $viewHelper = array_map('trim', explode(',', $viewHelper));
+                if (is_string($viewHelpers)) {
+                    $viewHelpers = array_map('trim', explode(',', $viewHelpers));
                 }
 
-                $options['viewHelper'] = array_unique(array_merge($previousViewHelper, $viewHelper));
+                $options['viewHelpers'] = array_unique(array_merge($previousViewHelpers, $viewHelpers));
             }
 
             $server->setOptions($options);

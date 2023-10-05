@@ -109,8 +109,8 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /** @var string */
     private $xsltFile;
 
-    /** @var string */
-    private $viewHelper;
+    /** @var array */
+    private $viewHelpers;
 
     /** @var bool */
     private $checkEmbargo = false;
@@ -331,7 +331,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     protected function setupProcessor()
     {
         $this->proc->registerPHPFunctions('Opus\Common\Language::getLanguageCode');
-        Application_Xslt::registerViewHelper($this->proc, $this->getViewHelper());
+        Application_Xslt::registerViewHelper($this->proc, $this->getViewHelpers());
         $this->proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
         $this->proc->setParameter('', 'doiResolverUrl', $this->getConfig()->doi->resolverUrl);
 
@@ -1120,35 +1120,35 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * Gets the viewHelper
+     * Gets the viewHelpers
      *
      * @return array
      */
-    public function getViewHelper()
+    public function getViewHelpers()
     {
-        $viewHelper = $this->viewHelper ?? [];
+        $viewHelpers = $this->viewHelpers ?? [];
 
         // listMetadataFormats ist part of basic OAI functionality.
-        $viewHelper[] = 'listMetadataFormats';
+        $viewHelpers[] = 'listMetadataFormats';
 
-        return $viewHelper;
+        return $viewHelpers;
     }
 
     /**
-     * Sets the viewHelper
+     * Sets the viewHelpers
      *
-     * @param array|string $viewHelper
+     * @param array|string $viewHelpers
      */
-    public function setViewHelper($viewHelper)
+    public function setViewHelpers($viewHelpers)
     {
-        if (is_string($viewHelper)) {
-            $viewHelper = array_map('trim', explode(',', $viewHelper));
+        if (is_string($viewHelpers)) {
+            $viewHelpers = array_map('trim', explode(',', $viewHelpers));
         }
 
         // listMetadataFormats ist part of basic OAI functionality.
-        $viewHelper = array_values(array_diff($viewHelper, ['listMetadataFormats']));
+        $viewHelpers = array_values(array_diff($viewHelpers, ['listMetadataFormats']));
 
-        $this->viewHelper = $viewHelper;
+        $this->viewHelpers = $viewHelpers;
     }
 
     /**
