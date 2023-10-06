@@ -41,7 +41,8 @@
     <xsl:param name="urnResolverUrl" />
     <xsl:param name="doiResolverUrl" />
 
-    <!-- INCLUDE_METADATA_FORMAT_MARKER -->
+    <!-- The following comment may not be removed. It will be automatically replaced -->
+    <!-- INCLUDE_METADATA_FORMAT_XSLT -->
 
     <xsl:output method="xml" indent="yes" encoding="utf-8" />
 

@@ -842,7 +842,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
             }
             $xsltXml = $this->xslt->saveXML();
             $xsltXml = preg_replace(
-                '/<!-- INCLUDE_METADATA_FORMAT_MARKER -->/u',
+                '/<!-- INCLUDE_METADATA_FORMAT_XSLT -->/u',
                 '<xsl:include href="' . $prefixXsltFile . '"/>',
                 $xsltXml
             );
