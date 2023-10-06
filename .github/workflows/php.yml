@@ -44,8 +44,7 @@ jobs:
       - name: Install Solr 9-compatible opus4-search package
         if: ${{ matrix.solr9-compatibility }}
         run: |
-          composer remove --dev "opus4-repo/search"
-          composer require --dev "opus4-repo/search":"dev-upgradeSolr35 as 4.8.1"
+          composer require "opus4-repo/search":"dev-upgradeSolr35 as 4.8.1"
 
       - name: Fix for issue 502
         run: sudo apt-get --fix-broken install
