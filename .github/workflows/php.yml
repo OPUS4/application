@@ -16,7 +16,16 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['7.1','8.1']
+        php-versions: ['7.1', '8.1']
+        solr-versions: ['7.7.3', '9.3.0']
+        include:
+          - solr-versions: '9.3.0'
+            solr9-compatibility: true
+        exclude:
+          - php-versions: '7.1'
+            solr-versions: '9.3.0'
+          - php-versions: '8.1'
+            solr-versions: '7.7.3'
       fail-fast: false
 
     name: PHP ${{ matrix.php-versions }} Test
@@ -32,6 +41,12 @@ jobs:
       - name: Install Composer and Dependencies
         run: sudo apt-get update && curl -s http://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar install
 
+      - name: Install Solr 9-compatible opus4-search package
+        if: ${{ matrix.solr9-compatibility }}
+        run: |
+          composer remove --dev "opus4-repo/search"
+          composer require --dev "opus4-repo/search":"dev-upgradeSolr35 as 4.8.1"
+
       - name: Fix for issue 502
         run: sudo apt-get --fix-broken install
 
@@ -39,7 +54,7 @@ jobs:
         run: sudo apt-get install libxml2-utils
 
       - name: Solr
-        run: sudo bash bin/install_solr_docker.sh
+        run: sudo bash bin/install_solr_docker.sh --version ${{ matrix.solr-versions }}
 
       - name: Start MySQL
         run: sudo systemctl start mysql.service

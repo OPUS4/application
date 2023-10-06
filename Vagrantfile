@@ -58,15 +58,16 @@ php bin/composer update
 SCRIPT
 
 $solr = <<SCRIPT
+SOLR_VERSION="9.3.0"
 cd /home/vagrant
 mkdir -p "downloads"
 cd downloads
-SOLR_TAR="solr-7.7.2.tgz"
+SOLR_TAR="solr-$SOLR_VERSION.tgz"
 if test ! -f "$SOLR_TAR"; then
-  wget "https://archive.apache.org/dist/lucene/solr/7.7.2/$SOLR_TAR"
+  wget -q "https://archive.apache.org/dist/solr/solr/$SOLR_VERSION/$SOLR_TAR"
 fi
 tar xfz "$SOLR_TAR" -C /home/vagrant
-cd /home/vagrant/solr-7.7.2
+cd /home/vagrant/solr-$SOLR_VERSION
 mkdir -p server/solr/opus4/conf
 echo name=opus4 > server/solr/opus4/core.properties
 cd server/solr/opus4/conf/
@@ -122,6 +123,7 @@ fi
 if ! grep "PATH=/vagrant/bin" /home/vagrant/.bashrc > /dev/null; then
   echo "export PATH=/vagrant/bin:$PATH" >> /home/vagrant/.bashrc
 fi
+# Increase limits for Apache Solr
 if ! grep "vagrant hard" /etc/security/limits.conf > /dev/null; then
   echo "vagrant hard nofile 65535" >> /etc/security/limits.conf
   echo "vagrant soft nofile 65535" >> /etc/security/limits.conf
@@ -132,7 +134,8 @@ SCRIPT
 
 $start = <<SCRIPT
 sudo service apache2 reload
-cd /home/vagrant/solr-7.7.2
+SOLR_VERSION="9.3.0"
+cd /home/vagrant/solr-$SOLR_VERSION
 ./bin/solr start
 SCRIPT
 
