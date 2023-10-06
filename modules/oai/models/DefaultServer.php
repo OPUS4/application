@@ -163,7 +163,8 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * Initializes server options with default values
+     * Initializes server options with default values.
+     *
      * This function is used by derived classes to set their own values for options by overwriting the method
      * and using setters, in order to overwrite default values.
      */

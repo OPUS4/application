@@ -28,6 +28,7 @@
  * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
 class Oai_Model_Prefix_Epicur_EpicurServer extends Oai_Model_DefaultServer
 {
     protected function initFormatDefaults()
