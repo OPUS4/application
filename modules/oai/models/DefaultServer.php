@@ -1384,11 +1384,8 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         if ($documentTypeRestriction) {
             $type = $document->getType();
             if (! in_array($type, $documentTypeRestriction)) {
-                throw new Oai_Model_Exception(
-                    'The combination of the given values results in an empty list (' . $metadataPrefix
-                    . ' only for' . implode(', ', $documentTypeRestriction) . ')',
-                    Oai_Model_Error::NORECORDSMATCH
-                );
+                throw new Oai_Model_Exception('Document is not available for OAI export, '
+                    . "Illegal document type ($type)!"  , Oai_Model_Error::NORECORDSMATCH);
             }
         }
     }
