@@ -238,8 +238,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         $this->loadStyleSheet();
         $this->setupProcessor();
 
-        $metadataPrefixPath = $this->getScriptPath() . DIRECTORY_SEPARATOR . 'prefixes';
-        $resumptionPath     = $this->getResumptionTokenPath();
+        $resumptionPath = $this->getResumptionTokenPath();
 
         $request = new Oai_Model_Request();
 
@@ -703,6 +702,8 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      */
     private function addFrontdoorUrlAttribute(DOMNode $document, $docid)
     {
+        $this->checkBaseUrl();
+
         $url = $this->getBaseUrl() . '/frontdoor/index/index/docId/' . $docid;
 
         $owner = $document->ownerDocument;
@@ -720,6 +721,8 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      */
     private function addFileUrlAttribute($file, $docid, $filename)
     {
+        $this->checkBaseUrl();
+
         $url = $this->getBaseUrl() . '/files/' . $docid . '/' . rawurlencode($filename);
 
         $owner = $file->ownerDocument;
@@ -736,6 +739,8 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      */
     private function addDdbTransferElement(DOMNode $document, $docid)
     {
+        $this->checkBaseUrl();
+
         $url = $this->getBaseUrl() . '/oai/container/index/docId/' . $docid;
 
         $fileElement = $document->ownerDocument->createElement('TransferUrl');
@@ -876,7 +881,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @return string
+     * @return string|false
      */
     public function getScriptPath()
     {
@@ -884,7 +889,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @param string $scriptPath
+     * @param string|false $scriptPath
      */
     public function setScriptPath($scriptPath)
     {
@@ -892,7 +897,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBaseUrl()
     {
@@ -900,7 +905,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @param string $baseUrl
+     * @param string|null $baseUrl
      */
     public function setBaseUrl($baseUrl)
     {
@@ -908,7 +913,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getBaseUri()
     {
@@ -916,7 +921,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @param string $baseUri
+     * @param string|null $baseUri
      */
     public function setBaseUri($baseUri)
     {
@@ -952,7 +957,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Sets the temporary path for resumption tokens.
      *
-     * @param string $path
+     * @param string|null $path
      */
     public function setResumptionTokenPath($path)
     {
@@ -972,7 +977,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Sets the contact email address.
      *
-     * @param string $email
+     * @param string|null $email
      */
     public function setEmailContact($email)
     {
@@ -999,7 +1004,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Sets the OAI base url.
      *
-     * @param string $url
+     * @param string|null $url
      */
     public function setOaiBaseUrl($url)
     {
@@ -1019,7 +1024,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Sets the repository name.
      *
-     * @param string $repoName
+     * @param string|null $repoName
      */
     public function setRepositoryName($repoName)
     {
@@ -1039,7 +1044,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Sets the repository identifier.
      *
-     * @param string $repoId
+     * @param string|null $repoId
      */
     public function setRepositoryIdentifier($repoId)
     {
@@ -1059,7 +1064,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Sets the sample identifier.
      *
-     * @param string $sampleId
+     * @param string|null $sampleId
      */
     public function setSampleIdentifier($sampleId)
     {
@@ -1073,7 +1078,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      */
     public function getMaxListIdentifiers()
     {
-        return $this->maxListIdentifiers ?? 0;
+        return $this->maxListIdentifiers;
     }
 
     /**
@@ -1093,7 +1098,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      */
     public function getMaxListRecords()
     {
-        return $this->maxListRecords ?? 0;
+        return $this->maxListRecords;
     }
 
     /**
@@ -1109,17 +1114,17 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Return xslt file name / file path.
      *
-     * @return string
+     * @return string|null
      */
     public function getXsltFile()
     {
-        return $this->xsltFile ?? '';
+        return $this->xsltFile;
     }
 
     /**
      * Sets the xslt file name / file path.
      *
-     * @param string $file
+     * @param string|null $file
      */
     public function setXsltFile($file)
     {
@@ -1144,16 +1149,18 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Sets the viewHelpers
      *
-     * @param array|string $viewHelpers
+     * @param array|string|null $viewHelpers
      */
     public function setViewHelpers($viewHelpers)
     {
         if (is_string($viewHelpers)) {
-            $viewHelpers = array_map('trim', explode(',', $viewHelpers));
+            $viewHelpers = $viewHelpers !== '' ? array_map('trim', explode(',', $viewHelpers)) : [];
         }
 
-        // listMetadataFormats ist part of basic OAI functionality.
-        $viewHelpers = array_values(array_diff($viewHelpers, ['listMetadataFormats']));
+        if (is_array($viewHelpers)) {
+            // listMetadataFormats ist part of basic OAI functionality.
+            $viewHelpers = array_values(array_diff($viewHelpers, ['listMetadataFormats']));
+        }
 
         $this->viewHelpers = $viewHelpers;
     }
@@ -1185,19 +1192,19 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      */
     public function getDocumentTypesAllowed()
     {
-        return $this->documentTypesAllowed;
+        return $this->documentTypesAllowed ?? [];
     }
 
     /**
      * Sets the allowed document types.
      *
-     * @param array|string $documentTypesAllowed
+     * @param array|string|null $documentTypesAllowed
      */
     public function setDocumentTypesAllowed($documentTypesAllowed)
     {
         if (is_string($documentTypesAllowed)) {
-            $this->documentTypesAllowed = [$documentTypesAllowed];
-        } elseif (is_array($documentTypesAllowed)) {
+            $this->documentTypesAllowed = $documentTypesAllowed !== '' ? [$documentTypesAllowed] : [];
+        } elseif (is_array($documentTypesAllowed) || $documentTypesAllowed === null) {
             $this->documentTypesAllowed = $documentTypesAllowed;
         }
     }
@@ -1209,19 +1216,19 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      */
     public function getDocumentStatesAllowed()
     {
-        return $this->documentStatesAllowed;
+        return $this->documentStatesAllowed ?? [];
     }
 
     /**
      * Sets the allowed document states
      *
-     * @param array|string $documentStatesAllowed
+     * @param array|string|null $documentStatesAllowed
      */
     public function setDocumentStatesAllowed($documentStatesAllowed)
     {
         if (is_string($documentStatesAllowed)) {
-            $this->documentStatesAllowed = [$documentStatesAllowed];
-        } elseif (is_array($documentStatesAllowed)) {
+            $this->documentStatesAllowed = $documentStatesAllowed !== '' ? [$documentStatesAllowed] : [];
+        } elseif (is_array($documentStatesAllowed) || $documentStatesAllowed === null) {
             $this->documentStatesAllowed = $documentStatesAllowed;
         }
     }
@@ -1243,7 +1250,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getIdentifierExists()
     {
@@ -1251,7 +1258,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @param string $identifierExists
+     * @param string|null $identifierExists
      */
     public function setIdentifierExists($identifierExists)
     {
@@ -1275,7 +1282,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPrefixLabel()
     {
@@ -1283,7 +1290,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @param string $prefixLabel
+     * @param string|null $prefixLabel
      */
     public function setPrefixLabel($prefixLabel)
     {
@@ -1291,7 +1298,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getSchemaUrl()
     {
@@ -1299,7 +1306,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @param string $schemaUrl
+     * @param string|null $schemaUrl
      */
     public function setSchemaUrl($schemaUrl)
     {
@@ -1307,7 +1314,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getMetadataNamespaceUrl()
     {
@@ -1315,7 +1322,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @param string $metadataNamespaceUrl
+     * @param string|null $metadataNamespaceUrl
      */
     public function setMetadataNamespaceUrl($metadataNamespaceUrl)
     {
@@ -1331,7 +1338,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @param mixed $adminOnly
+     * @param bool|string $adminOnly
      */
     public function setAdminOnly($adminOnly)
     {
@@ -1419,5 +1426,22 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         }
 
         return $finder;
+    }
+
+    /**
+     * Checks if a base url has been set.
+     *
+     * @return void
+     * @throws Zend_Exception
+     */
+    private function checkBaseUrl()
+    {
+        $baseUrl = $this->getBaseUrl();
+
+        if (empty($baseUrl)) {
+            $message = 'No base url set.';
+            Log::get()->err($message);
+            throw new Exception($message);
+        }
     }
 }

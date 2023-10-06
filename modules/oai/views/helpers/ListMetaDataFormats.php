@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Log;
 use Opus\Common\Security\Realm;
 
 /**
@@ -60,6 +61,18 @@ class Oai_View_Helper_ListMetaDataFormats extends Application_View_Helper_Abstra
 
                 if ($server->isVisible() && (! $server->isAdminOnly() || Realm::getInstance()->checkModule('admin'))) {
                     if ($prefix) {
+                        if (empty($schemaUrl)) {
+                            $message = 'No schema url set.';
+                            Log::get()->err($message);
+                            throw new Exception($message);
+                        }
+
+                        if (empty($metadataNamespaceUrl)) {
+                            $message = 'No metadata namespace url set.';
+                            Log::get()->err($message);
+                            throw new Exception($message);
+                        }
+
                         $output .= '<metadataFormat>'
                             . "<metadataPrefix><xsl:text>$prefix</xsl:text></metadataPrefix>"
                             . "<schema><xsl:text>$schemaUrl</xsl:text></schema>"

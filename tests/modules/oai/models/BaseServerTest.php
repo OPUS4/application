@@ -63,4 +63,46 @@ class Oai_Model_DefaultServerTest extends ControllerTestCase
         $baseServer->setOptions(['repositoryIdentifier' => '']);
         $this->assertEquals('', $baseServer->getRepositoryIdentifier());
     }
+
+    public function testSetViewHelpersWithNull()
+    {
+        $baseServer = new Oai_Model_DefaultServer();
+        $baseServer->setViewHelpers(null);
+        $this->assertEquals(['listMetadataFormats'], $baseServer->getViewHelpers());
+    }
+
+    public function testSetViewHelpersWithEmptyString()
+    {
+        $baseServer = new Oai_Model_DefaultServer();
+        $baseServer->setViewHelpers('');
+        $this->assertEquals(['listMetadataFormats'], $baseServer->getViewHelpers());
+    }
+
+    public function testSetDocumentStatesAllowedWithNull()
+    {
+        $baseServer = new Oai_Model_DefaultServer();
+        $baseServer->setDocumentStatesAllowed(null);
+        $this->assertEquals([], $baseServer->getDocumentStatesAllowed());
+    }
+
+    public function testSetDocumentStatesAllowedWithEmptyString()
+    {
+        $baseServer = new Oai_Model_DefaultServer();
+        $baseServer->setDocumentStatesAllowed('');
+        $this->assertEquals([], $baseServer->getDocumentStatesAllowed());
+    }
+
+    public function testSetDocumentTypesAllowedWithNull()
+    {
+        $baseServer = new Oai_Model_DefaultServer();
+        $baseServer->setDocumentTypesAllowed(null);
+        $this->assertEquals([], $baseServer->getDocumentTypesAllowed());
+    }
+
+    public function testSetDocumentTypesAllowedWithEmptyString()
+    {
+        $baseServer = new Oai_Model_DefaultServer();
+        $baseServer->setDocumentTypesAllowed('');
+        $this->assertEquals([], $baseServer->getDocumentTypesAllowed());
+    }
 }
