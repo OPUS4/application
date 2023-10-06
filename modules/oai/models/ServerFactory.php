@@ -98,7 +98,7 @@ class Oai_Model_ServerFactory
 
         if ($options) {
             if (isset($options['viewHelpers'])) {
-                $previousViewHelpers = $server->getViewHelpers() ?: [];
+                $previousViewHelpers = $server->getViewHelpers();
                 $viewHelpers         = $options['viewHelpers'];
 
                 if (is_string($viewHelpers)) {
