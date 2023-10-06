@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-ant download-solr -DsolrVersion=7.7.2 -DdownloadDir=./downloads
-cd solr-7.7.2
+SOLR_VERSION="9.3.0"
+wget -q "https://dlcdn.apache.org/solr/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz" -O - | tar -xz
+cd solr-$SOLR_VERSION
 ./bin/solr start -force
 ./bin/solr create -c opus4 -force
 cd server/solr/opus4/conf/
