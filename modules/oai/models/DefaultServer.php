@@ -1198,14 +1198,14 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Sets the allowed document types.
      *
-     * @param array|string|null $documentTypesAllowed
+     * @param array|string|null $documentTypes
      */
-    public function setDocumentTypesAllowed($documentTypesAllowed)
+    public function setDocumentTypesAllowed($documentTypes)
     {
-        if (is_string($documentTypesAllowed)) {
-            $this->documentTypesAllowed = $documentTypesAllowed !== '' ? [$documentTypesAllowed] : [];
-        } elseif (is_array($documentTypesAllowed) || $documentTypesAllowed === null) {
-            $this->documentTypesAllowed = $documentTypesAllowed;
+        if (is_string($documentTypes)) {
+            $this->documentTypesAllowed = $documentTypes !== '' ? [$documentTypes] : [];
+        } elseif (is_array($documentTypes) || $documentTypes === null) {
+            $this->documentTypesAllowed = $documentTypes;
         }
     }
 
@@ -1222,14 +1222,14 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Sets the allowed document states
      *
-     * @param array|string|null $documentStatesAllowed
+     * @param array|string|null $documentStates
      */
-    public function setDocumentStatesAllowed($documentStatesAllowed)
+    public function setDocumentStatesAllowed($documentStates)
     {
-        if (is_string($documentStatesAllowed)) {
-            $this->documentStatesAllowed = $documentStatesAllowed !== '' ? [$documentStatesAllowed] : [];
-        } elseif (is_array($documentStatesAllowed) || $documentStatesAllowed === null) {
-            $this->documentStatesAllowed = $documentStatesAllowed;
+        if (is_string($documentStates)) {
+            $this->documentStatesAllowed = $documentStates !== '' ? [$documentStates] : [];
+        } elseif (is_array($documentStates) || $documentStates === null) {
+            $this->documentStatesAllowed = $documentStates;
         }
     }
 
