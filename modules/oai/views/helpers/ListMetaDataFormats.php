@@ -34,8 +34,6 @@ use Opus\Common\Security\Realm;
 
 /**
  * View helper for rendering metadata formats list.
- *
- * TODO render link only if user has access to module
  */
 class Oai_View_Helper_ListMetaDataFormats extends Application_View_Helper_Abstract
 {
