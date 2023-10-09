@@ -882,7 +882,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @return string|false
+     * @return string|null
      */
     public function getScriptPath()
     {
@@ -890,7 +890,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * @param string|false $scriptPath
+     * @param string|null $scriptPath
      */
     public function setScriptPath($scriptPath)
     {
@@ -1385,7 +1385,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
             $type = $document->getType();
             if (! in_array($type, $documentTypeRestriction)) {
                 throw new Oai_Model_Exception('Document is not available for OAI export, '
-                    . "Illegal document type ($type)!"  , Oai_Model_Error::NORECORDSMATCH);
+                    . "Illegal document type ($type)!", Oai_Model_Error::NORECORDSMATCH);
             }
         }
     }
@@ -1429,7 +1429,6 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /**
      * Checks if a base url has been set.
      *
-     * @return void
      * @throws Zend_Exception
      */
     private function checkBaseUrl()
