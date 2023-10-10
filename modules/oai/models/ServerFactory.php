@@ -139,14 +139,4 @@ class Oai_Model_ServerFactory
 
         return $this->create($token->getMetadataPrefix());
     }
-
-    /**
-     * Gets all configured format prefixes
-     *
-     * @return string[]
-     */
-    public function getFormats()
-    {
-        return $this->getOaiConfig()->getFormats();
-    }
 }
