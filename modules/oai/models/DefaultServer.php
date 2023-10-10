@@ -1143,7 +1143,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     public function setViewHelpers($viewHelpers)
     {
         if (is_string($viewHelpers)) {
-            $viewHelpers = $viewHelpers !== '' ? array_map('trim', explode(',', $viewHelpers)) : [];
+            $viewHelpers = trim($viewHelpers) !== '' ? array_map('trim', explode(',', $viewHelpers)) : [];
         }
 
         if (is_array($viewHelpers)) {
@@ -1152,6 +1152,24 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         }
 
         $this->viewHelpers = $viewHelpers;
+    }
+
+    /**
+     * Adds viewHelpers
+     *
+     * @param array|string $viewHelpers
+     */
+    public function addViewHelpers($viewHelpers)
+    {
+        if (is_string($viewHelpers)) {
+            $viewHelpers = trim($viewHelpers) !== '' ? array_map('trim', explode(',', $viewHelpers)) : [];
+        }
+
+        if (is_array($viewHelpers)) {
+            $previousViewHelpers = $this->viewHelpers ?? [];
+            $viewHelpers         = array_unique(array_merge($previousViewHelpers, $viewHelpers));
+            $this->viewHelpers   = $viewHelpers;
+        }
     }
 
     /**

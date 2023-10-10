@@ -105,4 +105,28 @@ class Oai_Model_DefaultServerTest extends ControllerTestCase
         $baseServer->setDocumentTypesAllowed('');
         $this->assertEquals([], $baseServer->getDocumentTypesAllowed());
     }
+
+    public function testAddViewHelpers()
+    {
+        $baseServer = new Oai_Model_DefaultServer();
+        $baseServer->setViewHelpers('viewhelper1, viewhelper2');
+        $this->assertEquals(['viewhelper1', 'viewhelper2', 'listMetadataFormats'], $baseServer->getViewHelpers());
+
+        $baseServer->addViewHelpers('viewhelper3, viewhelper4');
+        $this->assertEquals(
+            ['viewhelper1', 'viewhelper2', 'viewhelper3', 'viewhelper4', 'listMetadataFormats'],
+            $baseServer->getViewHelpers()
+        );
+    }
+
+    public function testAddViewHelpersWithEmptyString()
+    {
+        $baseServer = new Oai_Model_DefaultServer();
+        $baseServer->setViewHelpers('viewhelper1, viewhelper2');
+        $baseServer->addViewHelpers('');
+        $this->assertEquals(
+            ['viewhelper1', 'viewhelper2', 'listMetadataFormats'],
+            $baseServer->getViewHelpers()
+        );
+    }
 }
