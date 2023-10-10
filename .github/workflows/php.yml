@@ -19,7 +19,7 @@ jobs:
         versions: [{php: '7.1', solr: '7.7.3'}, {php: '8.1', solr: '9.3.0'}]
       fail-fast: false
 
-    name: PHP ${{ matrix.php-versions }} Test
+    name: PHP ${{ matrix.versions.php }} Test
 
     steps:
       - uses: actions/checkout@v3
