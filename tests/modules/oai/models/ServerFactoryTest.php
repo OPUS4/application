@@ -53,9 +53,8 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
                 ],
                 'format' => [
                     'default'       => [
-                        'class'                => MockDefaultOaiServer::class,
+                        'class'                => Oai_Model_Prefix_Oai_OaiDcServer::class,
                         'viewHelpers'          => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
-                        'xsltFile'             => 'oaiFile.xslt',
                         'hasFilesVisibleInOai' => 1,
                     ],
                     'copy_xml'      => [
@@ -102,7 +101,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $serverFactory = new Oai_Model_ServerFactory();
         $serverFactory->setOaiConfig($this->getOaiConfig());
         $server = $serverFactory->create();
-        $this->assertEquals(MockDefaultOaiServer::class, get_class($server));
+        $this->assertEquals(Oai_Model_Prefix_Oai_OaiDcServer::class, get_class($server));
     }
 
     public function testCreateWithMetadataPrefix()
@@ -118,7 +117,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $serverFactory = new Oai_Model_ServerFactory();
         $serverFactory->setOaiConfig($this->getOaiConfig());
         $server = $serverFactory->create('unknownPrefix');
-        $this->assertEquals(MockDefaultOaiServer::class, get_class($server));
+        $this->assertEquals(Oai_Model_Prefix_Oai_OaiDcServer::class, get_class($server));
     }
 
     public function testCreateWithNoFormatConfiguration()
@@ -184,7 +183,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'maxListRecords'        => 10,
             'resumptionTokenPath'   => '/vagrant/tests/workspace/tmp/resumption',
             'emailContact'          => 'opus4ci@example.org',
-            'xsltFile'              => 'oaiFile.xslt',
+            'xsltFile'              => 'oai_dc.xslt',
             'documentStatesAllowed' => ['published', 'deleted'],
             'viewHelpers'           => ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType', 'listMetadataFormats'],
             'notEmbargoedOn'        => false,
@@ -194,7 +193,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'checkEmbargo'          => false,
         ];
 
-        $this->assertEquals(MockDefaultOaiServer::class, get_class($server));
+        $this->assertEquals(Oai_Model_Prefix_Oai_OaiDcServer::class, get_class($server));
         $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
