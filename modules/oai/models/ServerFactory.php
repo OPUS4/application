@@ -97,11 +97,10 @@ class Oai_Model_ServerFactory
         if ($options) {
             if (isset($options['viewHelpers'])) {
                 /*
-                In order to prevent required view helpers (configured in the default configuration or directly
-                in a derived server class) from being unintentionally removed by configuring a specific format,
-                they will be always just appended to the existing ones.
-                */
-
+                 * View helpers configured for a specific format are added to the list of default view helpers used by
+                 * the main OAI-PMH XSLT. The default view helpers cannot be replaced or removed for a specific OAI
+                 * format.
+                 */
                 $previousViewHelpers = $server->getViewHelpers();
                 $viewHelpers         = $options['viewHelpers'];
 
