@@ -83,15 +83,13 @@ class Oai_Model_ServerFactory
             $serverClass = $options['class'];
         } elseif (isset($defaults['class'])) {
             $serverClass = $defaults['class'];
-        } else {
-            $serverClass = Oai_Model_DefaultServer::class;
         }
 
         if (empty($serverClass) || ! ClassLoaderHelper::classExists($serverClass)) {
-            $server = new Oai_Model_DefaultServer();
-        } else {
-            $server = new $serverClass();
+            $serverClass = Oai_Model_DefaultServer::class;
         }
+
+        $server = new $serverClass();
 
         $server->setOaiConfig($this->getOaiConfig());
         $server->initDefaults();
