@@ -50,25 +50,13 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
 {
     use Oai_Model_OptionsTrait;
 
-    /**
-     * Holds xml representation of document information to be processed.
-     *
-     * @var DOMDocument Defaults to null.
-     */
+    /** @var DOMDocument Document data. */
     protected $xml;
 
-    /**
-     * Holds the stylesheet for the transformation.
-     *
-     * @var DOMDocument Defaults to null.
-     */
+    /** @var DOMDocument Transformation stylesheet. */
     protected $xslt;
 
-    /**
-     * Holds the xslt processor.
-     *
-     * @var XSLTProcessor Defaults to null.
-     */
+    /** @var XSLTProcessor */
     protected $proc;
 
     /** @var Oai_Model_XmlFactory */
@@ -125,7 +113,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /** @var array */
     private $documentTypesAllowed;
 
-    /** @var array Holds information about which document state aka server_state are delivered out. */
+    /** @var array Document states aka server_states to be delivered out. */
     private $documentStatesAllowed = ['published', 'deleted'];  // maybe deleted documents too
 
     /** @var bool */
