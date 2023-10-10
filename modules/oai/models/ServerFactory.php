@@ -98,6 +98,12 @@ class Oai_Model_ServerFactory
 
         if ($options) {
             if (isset($options['viewHelpers'])) {
+                /*
+                In order to prevent required view helpers (configured in the default configuration or directly
+                in a derived server class) from being unintentionally removed by configuring a specific format,
+                they will be always just appended to the existing ones.
+                */
+
                 $previousViewHelpers = $server->getViewHelpers();
                 $viewHelpers         = $options['viewHelpers'];
 
