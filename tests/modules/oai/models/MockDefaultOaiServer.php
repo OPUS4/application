@@ -25,15 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2023, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class XMetaDissPlusServer extends Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusServer
+class MockDefaultOaiServer extends Oai_Model_DefaultServer
 {
-    protected function initFormatDefaults()
-    {
-        parent::initFormatDefaults();
-        $this->setViewHelpers('optionValue, fileUrl, frontdoorUrl');
-    }
 }

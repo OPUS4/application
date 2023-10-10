@@ -42,6 +42,7 @@ defined('APPLICATION_ENV')
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, [
+    APPLICATION_PATH . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'oai'. DIRECTORY_SEPARATOR . 'models',
     APPLICATION_PATH . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'support', // Support-Klassen fuer Tests
     APPLICATION_PATH . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'library', // tests/library
     APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library', // Server library

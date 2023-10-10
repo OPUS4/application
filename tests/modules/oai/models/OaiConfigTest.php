@@ -50,7 +50,7 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
                 ],
                 'format' => [
                     'default'       => [
-                        'class'       => DefaultOaiServer::class,
+                        'class'       => MockDefaultOaiServer::class,
                         'viewHelpers' => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
                         'xsltFile'    => 'oaiFile.xslt',
                     ],
@@ -88,7 +88,7 @@ class Oai_Model_OaiConfigTest extends ControllerTestCase
             'resumptionTokenPath' => '/vagrant/tests/workspace/tmp/resumption',
             'emailContact'        => 'opus4ci@example.org',
             'xsltFile'            => 'oaiFile.xslt',
-            'class'               => DefaultOaiServer::class,
+            'class'               => MockDefaultOaiServer::class,
             'viewHelpers'         => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
         ];
 

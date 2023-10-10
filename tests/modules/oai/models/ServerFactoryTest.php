@@ -53,7 +53,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
                 ],
                 'format' => [
                     'default'       => [
-                        'class'                => DefaultOaiServer::class,
+                        'class'                => MockDefaultOaiServer::class,
                         'viewHelpers'          => 'optionValue, fileUrl, frontdoorUrl, transferUrl, dcmiType, dcType, openAireType',
                         'xsltFile'             => 'oaiFile.xslt',
                         'hasFilesVisibleInOai' => 1,
@@ -102,7 +102,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $serverFactory = new Oai_Model_ServerFactory();
         $serverFactory->setOaiConfig($this->getOaiConfig());
         $server = $serverFactory->create();
-        $this->assertEquals(DefaultOaiServer::class, get_class($server));
+        $this->assertEquals(MockDefaultOaiServer::class, get_class($server));
     }
 
     public function testCreateWithMetadataPrefix()
@@ -118,7 +118,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
         $serverFactory = new Oai_Model_ServerFactory();
         $serverFactory->setOaiConfig($this->getOaiConfig());
         $server = $serverFactory->create('unknownPrefix');
-        $this->assertEquals(DefaultOaiServer::class, get_class($server));
+        $this->assertEquals(MockDefaultOaiServer::class, get_class($server));
     }
 
     public function testCreateWithNoFormatConfiguration()
@@ -194,7 +194,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'checkEmbargo'          => false,
         ];
 
-        $this->assertEquals(DefaultOaiServer::class, get_class($server));
+        $this->assertEquals(MockDefaultOaiServer::class, get_class($server));
         $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
@@ -202,7 +202,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
     {
         $testConfiguration                                   = $this->getTestConfiguration();
         $testConfiguration['oai']['format']['xmetadissplus'] = [
-            'class' => XMetaDissPlusServer::class,
+            'class' => MockXMetaDissPlusServer::class,
         ];
         $oaiConfig                                           = $this->getOaiConfig($testConfiguration);
         $serverFactory                                       = new Oai_Model_ServerFactory();
@@ -227,7 +227,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'metadataNamespaceUrl'  => 'http://www.d-nb.de/standards/xmetadissplus/',
         ];
 
-        $this->assertEquals(XMetaDissPlusServer::class, get_class($server));
+        $this->assertEquals(MockXMetaDissPlusServer::class, get_class($server));
         $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
@@ -235,7 +235,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
     {
         $testConfiguration                                   = $this->getTestConfiguration();
         $testConfiguration['oai']['format']['xmetadissplus'] = [
-            'class'        => XMetaDissPlusServer::class,
+            'class'        => MockXMetaDissPlusServer::class,
             'viewHelpers'  => 'additionalViewHelper1, additionalViewHelper2',
             'xsltFile'     => 'configuredXMetaDissPlus.xslt',
             'checkEmbargo' => 0,
@@ -263,7 +263,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
             'metadataNamespaceUrl'  => 'http://www.d-nb.de/standards/xmetadissplus/',
         ];
 
-        $this->assertEquals(XMetaDissPlusServer::class, get_class($server));
+        $this->assertEquals(MockXMetaDissPlusServer::class, get_class($server));
         $this->assertEquals($expectedOptions, $server->getOptions(array_keys($expectedOptions)));
     }
 
