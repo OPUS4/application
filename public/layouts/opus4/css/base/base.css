@@ -110,10 +110,12 @@ a.rss img[src*="feed_small.png"],
 #lang-switch a[title="Deutsch"]::before {
     content: "DE";
 }
+
 #login-bar{
     display: flex;
     gap: 1rem;
 }
+
 #login-bar a[href*="login"i]::before {
     content: "\f2f6";
 }
@@ -121,11 +123,17 @@ a.rss img[src*="feed_small.png"],
 #login-bar a[href*="logout"i]::before {
     content: "\f2f5";
 }
+
 #login-bar a[href*="extern/account"i]::before {
     content: "\f007";
 }
+
 #login-bar a[href*="extern/account"i]{
     padding-right: 0 !important;
+}
+
+#login-bar a[href*="account" i]::before {
+    content: "\f2bd"; 
 }
 /* @section header */
 
