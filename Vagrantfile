@@ -63,7 +63,9 @@ mkdir -p "downloads"
 cd downloads
 SOLR_TAR="solr-$SOLR_VERSION.tgz"
 if test ! -f "$SOLR_TAR"; then
-  wget -q "https://archive.apache.org/dist/solr/solr/$SOLR_VERSION/$SOLR_TAR"
+  SOLR_URL="https://archive.apache.org/dist/solr/solr/$SOLR_VERSION/$SOLR_TAR"
+  echo "Getting: $SOLR_URL"
+  wget -q --show-progress --progress=bar:force $SOLR_URL
 fi
 tar xfz "$SOLR_TAR" -C /home/vagrant
 cd /home/vagrant/solr-$SOLR_VERSION
