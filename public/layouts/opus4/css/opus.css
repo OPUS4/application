@@ -1418,6 +1418,10 @@ a.gnd-link {
 
 /* MIME type icons */
 
+h2.titlemain {
+  word-break: break-all;
+}
+
 #download-fulltext li {
     margin-bottom: 1em;
 }
