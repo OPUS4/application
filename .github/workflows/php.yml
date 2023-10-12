@@ -39,7 +39,7 @@ jobs:
         run: sudo apt-get install libxml2-utils
 
       - name: Install Solr ${{ matrix.versions.solr }}
-        run: sudo bash bin/install_solr_docker.sh --version ${{ matrix.versions.solr }}
+        run: sudo bash tests/bin/install_solr_docker.sh --version ${{ matrix.versions.solr }}
 
       - name: Start MySQL
         run: sudo systemctl start mysql.service
