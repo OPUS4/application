@@ -39,7 +39,6 @@ class Oai_Model_RequestTest extends ControllerTestCase
         parent::setUp();
 
         $this->requestObj = new Oai_Model_Request();
-        $this->requestObj->setPathToMetadataPrefixFiles(APPLICATION_PATH . '/modules/oai/views/scripts/index/prefixes');
     }
 
     /**
