@@ -25,84 +25,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\CollectionRole;
-use Opus\Common\Repository;
 
-class Oai_Model_Sets extends Application_Model_Abstract
+/**
+ * Class for the "collection" set type
+ */
+class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
 {
-    public const SET_SPEC_PATTERN = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
-
-    /**
-     * Returns all oai sets.
-     *
-     * @return array
-     */
-    public function getSets()
-    {
-        $sets = [
-            'bibliography:true'  => 'Set for bibliographic entries',
-            'bibliography:false' => 'Set for non-bibliographic entries',
-        ];
-
-        $sets = array_merge(
-            $sets,
-            $this->getSetsForDocumentTypes(),
-            $this->getSetsForCollections()
-        );
-
-        return $sets;
-    }
-
-    /**
-     * Returns oai sets for document types.
-     *
-     * @return array
-     */
-    public function getSetsForDocumentTypes()
-    {
-        $logger         = $this->getLogger();
-        $setSpecPattern = self::SET_SPEC_PATTERN;
-
-        $sets = [];
-
-        $dcTypeHelper = new Application_View_Helper_DcType();
-
-        $finder = Repository::getInstance()->getDocumentFinder();
-        $finder->setServerState('published');
-
-        foreach ($finder->getDocumentTypes() as $doctype) {
-            if (0 === preg_match("/^$setSpecPattern$/", $doctype)) {
-                $msg = "Invalid SetSpec (doctype='" . $doctype . "')."
-                    . " Allowed characters are [$setSpecPattern].";
-                $logger->err("OAI-PMH: $msg");
-                continue;
-            }
-
-            $dcType = $dcTypeHelper->dcType($doctype);
-
-            $setSpec        = "doc-type:$dcType";
-            $sets[$setSpec] = ucfirst($dcType);
-        }
-
-        return $sets;
-    }
-
     /**
      * Returns oai sets for collections.
      *
      * @return array
      */
-    public function getSetsForCollections()
+    public function getSets()
     {
         $sets = [];
 
         $logger = $this->getLogger();
 
-        $setSpecPattern = self::SET_SPEC_PATTERN;
+        $setSpecPattern = Oai_Model_Set_SetSpec::SET_SPEC_PATTERN;
 
         $oaiRolesSets = CollectionRole::fetchAllOaiEnabledRoles();
 
@@ -130,19 +75,72 @@ class Oai_Model_Sets extends Application_Model_Abstract
     }
 
     /**
+     * Returns the document ids of this set type.
+     *
+     * @param DocumentFinderInterface $finder
+     * @param string $set
+     * @return array|int[]
+     */
+    public function getDocuments($finder, $set)
+    {
+        $setArray = explode(':', $set);
+
+        // Trying to locate collection role and filter documents.
+        $role = CollectionRole::fetchByOaiName($setArray[0]);
+        if ($role === null) {
+            $msg = "Invalid SetSpec: Top level set does not exist.";
+            throw new Oai_Model_Exception($msg);
+        }
+        $finder->setCollectionRoleId($role->getId());
+
+        // Trying to locate given collection and filter documents.
+        if (count($setArray) === 2) {
+            $subsetName   = $setArray[1];
+            $foundSubsets = array_filter(
+                $role->getOaiSetNames(),
+                function ($s) use ($subsetName) {
+                    return $s['oai_subset'] === $subsetName;
+                }
+            );
+
+            if (count($foundSubsets) < 1) {
+                $emptySubsets = array_filter($role->getAllOaiSetNames(), function ($s) use ($subsetName) {
+                    return $s['oai_subset'] === $subsetName;
+                });
+
+                if (count($emptySubsets) === 1) {
+                    return [];
+                } else {
+                    $msg = "Invalid SetSpec: Subset does not exist.";
+                    throw new Oai_Model_Exception($msg);
+                }
+            }
+
+            foreach ($foundSubsets as $subset) {
+                if ($subset['oai_subset'] !== $subsetName) {
+                    $msg = "Invalid SetSpec: Internal error.";
+                    throw new Oai_Model_Exception($msg);
+                }
+                $finder->setCollectionId($subset['id']);
+            }
+        }
+        return $finder->getIds();
+    }
+
+    /**
      * Returns sets for collections of a collection role.
      *
      * @param string $setSpec OAI name for collection role
      * @param int    $roleId int Database ID of role
      * @return array
      */
-    public function getSetsForCollectionRole($setSpec, $roleId)
+    private function getSetsForCollectionRole($setSpec, $roleId)
     {
         $logger = $this->getLogger();
 
         $sets = [];
 
-        $setSpecPattern = self::SET_SPEC_PATTERN;
+        $setSpecPattern = Oai_Model_Set_SetSpec::SET_SPEC_PATTERN;
 
         $role = CollectionRole::get($roleId);
         foreach ($role->getOaiSetNames() as $subset) {

@@ -25,46 +25,68 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2017, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\CollectionInterface;
+use Opus\Common\Repository;
 
-class Oai_Model_SetSpec
+/**
+ * Class for the "document type" set type
+ */
+class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
 {
     /**
-     * @param CollectionInterface[] $collections
+     * Returns oai sets for document types.
+     *
      * @return array
      */
-    public static function getSetSpecsFromCollections($collections)
+    public function getSets()
     {
+        $logger         = $this->getLogger();
+        $setSpecPattern = Oai_Model_Set_SetSpec::SET_SPEC_PATTERN;
+
         $sets = [];
 
-        foreach ($collections as $collection) {
-            if (! $collection->getVisible()) {
+        $dcTypeHelper = new Application_View_Helper_DcType();
+
+        $finder = Repository::getInstance()->getDocumentFinder();
+        $finder->setServerState('published');
+
+        foreach ($finder->getDocumentTypes() as $doctype) {
+            if (0 === preg_match("/^$setSpecPattern$/", $doctype)) {
+                $msg = "Invalid SetSpec (doctype='" . $doctype . "')."
+                    . " Allowed characters are [$setSpecPattern].";
+                $logger->err("OAI-PMH: $msg");
                 continue;
             }
 
-            $oaiSubsetName = $collection->getOaiSubset();
-            if (empty($oaiSubsetName)) {
-                continue;
-            }
+            $dcType = $dcTypeHelper->dcType($doctype);
 
-            $role = $collection->getRole();
-            if (! $role->getVisibleOai() || ! $role->getVisible()) {
-                continue;
-            }
-
-            $oaiSetName = $role->getOaiName();
-            if (empty($oaiSetName)) {
-                continue;
-            }
-
-            $sets[] = urlencode($oaiSetName);
-            $sets[] = urlencode($oaiSetName) . ':' . urlencode($oaiSubsetName);
+            $setSpec        = "doc-type:$dcType";
+            $sets[$setSpec] = ucfirst($dcType);
         }
 
-        return array_unique($sets);
+        return $sets;
+    }
+
+    /**
+     * Returns the document ids of this set type.
+     *
+     * @param DocumentFinderInterface $finder
+     * @param string $set
+     * @return array|int[]
+     */
+    public function getDocuments($finder, $set)
+    {
+        $setArray = explode(':', $set);
+
+        if (count($setArray) !== 2 || empty($setArray[1])) {
+            return [];
+        }
+
+        $finder->setDocumentType($setArray[1]);
+
+        return $finder->getIds();
     }
 }

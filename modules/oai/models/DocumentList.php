@@ -30,8 +30,6 @@
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\CollectionRole;
-
 class Oai_Model_DocumentList
 {
     /** @var Oai_Model_DefaultServer */
@@ -55,85 +53,11 @@ class Oai_Model_DocumentList
      */
     public function query(array $oaiRequest)
     {
+        $oaiConfig = Oai_Model_OaiConfig::getInstance();
+
         $metadataPrefix = strtolower($oaiRequest['metadataPrefix']);
 
         $finder = $this->server->getFinder($metadataPrefix);
-
-        if (array_key_exists('set', $oaiRequest)) {
-            $setarray = explode(':', $oaiRequest['set']);
-            if (! isset($setarray[0])) {
-                return [];
-            }
-
-            if ($setarray[0] === 'doc-type') {
-                if (count($setarray) === 2 && ! empty($setarray[1])) {
-                    $finder->setDocumentType($setarray[1]);
-                } else {
-                    return [];
-                }
-            } elseif ($setarray[0] === 'bibliography') {
-                if (count($setarray) !== 2 || empty($setarray[1])) {
-                    return [];
-                }
-                $setValue = $setarray[1];
-
-                // TODO why this complicated mapping?
-                $bibliographyMap = [
-                    "true"  => 1,
-                    "false" => 0,
-                ];
-                if (false === isset($setValue, $bibliographyMap[$setValue])) {
-                    return [];
-                }
-
-                $finder->setBelongsToBibliography($bibliographyMap[$setValue]);
-            } else {
-                if (count($setarray) < 1 || count($setarray) > 2) {
-                    $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
-                    throw new Oai_Model_Exception($msg);
-                }
-
-                // Trying to locate collection role and filter documents.
-                $role = CollectionRole::fetchByOaiName($setarray[0]);
-                if ($role === null) {
-                    $msg = "Invalid SetSpec: Top level set does not exist.";
-                    throw new Oai_Model_Exception($msg);
-                }
-                $finder->setCollectionRoleId($role->getId());
-
-                // Trying to locate given collection and filter documents.
-                if (count($setarray) === 2) {
-                    $subsetName   = $setarray[1];
-                    $foundSubsets = array_filter(
-                        $role->getOaiSetNames(),
-                        function ($s) use ($subsetName) {
-                                return $s['oai_subset'] === $subsetName;
-                        }
-                    );
-
-                    if (count($foundSubsets) < 1) {
-                        $emptySubsets = array_filter($role->getAllOaiSetNames(), function ($s) use ($subsetName) {
-                            return $s['oai_subset'] === $subsetName;
-                        });
-
-                        if (count($emptySubsets) === 1) {
-                            return [];
-                        } else {
-                            $msg = "Invalid SetSpec: Subset does not exist.";
-                            throw new Oai_Model_Exception($msg);
-                        }
-                    }
-
-                    foreach ($foundSubsets as $subset) {
-                        if ($subset['oai_subset'] !== $subsetName) {
-                            $msg = "Invalid SetSpec: Internal error.";
-                            throw new Oai_Model_Exception($msg);
-                        }
-                        $finder->setCollectionId($subset['id']);
-                    }
-                }
-            }
-        }
 
         if (array_key_exists('from', $oaiRequest) && ! empty($oaiRequest['from'])) {
             $from = DateTime::createFromFormat('Y-m-d', $oaiRequest['from']);
@@ -146,6 +70,40 @@ class Oai_Model_DocumentList
             $finder->setServerDateModifiedBefore($until->format('Y-m-d'));
         }
 
-        return $finder->getIds();
+        $documentIds = [];
+
+        if (array_key_exists('set', $oaiRequest)) {
+            $setArray = explode(':', $oaiRequest['set']);
+            if (! isset($setArray[0])) {
+                return [];
+            }
+
+            if (count($setArray) < 1 || count($setArray) > 2) {
+                $msg = "Invalid SetSpec: Must be in format 'set' or 'set:subset'.";
+                throw new Oai_Model_Exception($msg);
+            }
+
+            $setTypes = $oaiConfig->getSetTypes();
+
+            if (array_key_exists($setArray[0], $setTypes) && $setArray[0] !== 'collection') {
+                if (isset($setType[$setArray[0]]['class'])) {
+                    $setTypeClass = $setType[$setArray[0]]['class'];
+                }
+            } else {
+                // Since no other set type has been detected it must be the collection set type
+                if (isset($setTypes['collection']['class'])) {
+                    $setTypeClass = $setTypes['collection']['class'];
+                }
+            }
+
+            if (isset($setTypeClass) && class_exists($setTypeClass)) {
+                $setTypeSets = new $setTypeClass();
+                $documentIds = $setTypeSets->getDocuments($finder, $oaiRequest['set']);
+            }
+
+            return $documentIds;
+        } else {
+            return $finder->getIds();
+        }
     }
 }

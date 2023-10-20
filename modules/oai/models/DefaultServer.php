@@ -466,7 +466,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         $this->proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->xml->appendChild($this->xml->createElement('Documents'));
 
-        $oaiSets = new Oai_Model_Sets();
+        $oaiSets = new Oai_Model_Set_Sets();
 
         $sets = $oaiSets->getSets();
 
@@ -655,7 +655,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         $this->addSpecInformation($node, 'bibliography:' . $bibliography);
 
         $logger   = $this->getLogger();
-        $setSpecs = Oai_Model_SetSpec::getSetSpecsFromCollections($document->getCollection());
+        $setSpecs = Oai_Model_Set_SetSpec::getSetSpecsFromCollections($document->getCollection());
         foreach ($setSpecs as $setSpec) {
             if (preg_match("/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/", $setSpec)) {
                 $this->addSpecInformation($node, $setSpec);

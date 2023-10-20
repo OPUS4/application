@@ -177,4 +177,22 @@ class Oai_Model_OaiConfig
 
         return $resumptionTokenPath;
     }
+
+    /**
+     * Returns the set type configuration.
+     *
+     * @return array
+     */
+    public function getSetTypes()
+    {
+        $config = $this->getConfig();
+
+        $setTypes = [];
+
+        if (isset($config->oai->set)) {
+            return array_change_key_case($config->oai->set->toArray());
+        }
+
+        return $setTypes;
+    }
 }
