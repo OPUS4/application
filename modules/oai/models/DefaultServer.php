@@ -62,6 +62,9 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /** @var Oai_Model_XmlFactory */
     private $xmlFactory;
 
+    /** @var Oai_Model_Set_SetsManager */
+    private $setsManager;
+
     /** @var string */
     private $scriptPath;
 
@@ -466,9 +469,8 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         $this->proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->xml->appendChild($this->xml->createElement('Documents'));
 
-        $oaiSets = new Oai_Model_Set_Sets();
-
-        $sets = $oaiSets->getSets();
+        $oaiSetsManager = $this->getSetsManager();
+        $sets           = $oaiSetsManager->getSets();
 
         foreach ($sets as $type => $name) {
             $opusDoc   = $this->xml->createElement('Opus_Sets');
@@ -1397,13 +1399,12 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * Get the initialized finder for the given metadata prefix
+     * Returns the initialized finder.
      *
-     * @param string $metadataPrefix
      * @return DocumentFinderInterface
      * @throws ConfigException
      */
-    public function getFinder($metadataPrefix)
+    public function getFinder()
     {
         $today = date('Y-m-d', time());
 
@@ -1446,5 +1447,19 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
             Log::get()->err($message);
             throw new Exception($message);
         }
+    }
+
+    /**
+     * Returns an instance of the sets manager.
+     *
+     * @return Oai_Model_Set_SetsManager
+     */
+    public function getSetsManager()
+    {
+        if ($this->setsManager === null) {
+            $this->setsManager = new Oai_Model_Set_SetsManager();
+        }
+
+        return $this->setsManager;
     }
 }

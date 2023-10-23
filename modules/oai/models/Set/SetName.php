@@ -25,47 +25,76 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2023 OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Class for the "bibliography" set type
+ * Class to represent an oai set name.
  */
-class Oai_Model_Set_BibliographySets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
+class Oai_Model_Set_SetName
 {
+    /** @var string */
+    private $setTypeName;
+
+    /** @var string */
+    private $subsetName;
+
     /**
-     * Returns sets from set type bibliography.
-     *
-     * @return array
+     * @param string $set The full set name (setType:subSet)
+     * @return Oai_Model_Set_SetName
      */
-    public function getSets()
+    public static function createSetName($set)
     {
-        return [
-            'bibliography:true'  => 'Set for bibliographic entries',
-            'bibliography:false' => 'Set for non-bibliographic entries',
-        ];
+        $setArray = explode(':', $set);
+        if (! isset($setArray[0])) {
+            throw new Oai_Model_Set_SetException('Missing set type name.');
+        }
+
+        if (count($setArray) < 1 || count($setArray) > 2) {
+            $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
+            throw new Oai_Model_Exception($msg);
+        }
+
+        $setName = new self();
+
+        $setName->setSetTypeName($setArray[0]);
+
+        if (count($setArray) === 2) {
+            $setName->setSubsetName($setArray[1]);
+        }
+        return $setName;
     }
 
     /**
-     * Configures the passed Finder according to the specified set.
-     *
-     * @param DocumentFinderInterface $finder
-     * @param Oai_Model_Set_SetName $setName
-     * @throws Oai_Model_Exception
+     * @return string|null
      */
-    public function configureFinder($finder, $setName)
+    public function getSetTypeName()
     {
-        $setValue = $setName->getSubsetName();
+        return $this->setTypeName;
+    }
 
-        if (empty($setValue)) {
-            throw new Oai_Model_Set_SetException('Missing subset name.');
-        }
+    /**
+     * @param string|null $name
+     */
+    public function setSetTypeName($name)
+    {
+        $this->setTypeName = $name;
+    }
 
-        if (! in_array($setValue, ['true', 'false'])) {
-            throw new Oai_Model_Set_SetException('Unknown subset: ' . $setValue);
-        }
+    /**
+     * @return string|null
+     */
+    public function getSubsetName()
+    {
+        return $this->subsetName;
+    }
 
-        $finder->setBelongsToBibliography((int) filter_var($setValue, FILTER_VALIDATE_BOOLEAN));
+    /**
+     * @param string|null $name
+     */
+    public function setSubsetName($name)
+    {
+        $this->subsetName = $name;
     }
 }

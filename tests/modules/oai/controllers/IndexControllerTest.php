@@ -3370,6 +3370,25 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume');
     }
 
+    public function testDocTypeSetWithNoSubset()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=doc-type');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testInvalidCollectionSet()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ddc:62:100');
+
+        $this->assertResponseCode(500);
+        $body = $this->getResponse()->getBody();
+
+        $this->assertContains('Unknown oai error code 0', $body);
+    }
+
     /**
      * Helper function for adding title parent to given document.
      *

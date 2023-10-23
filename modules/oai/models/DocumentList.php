@@ -47,17 +47,10 @@ class Oai_Model_DocumentList
      * Retrieve all document ids for a valid oai request.
      *
      * @return array
-     *
-     * TODO function contains metadataPrefix specific criteria for generating document list (refactor!)
-     * TODO simplify function
      */
     public function query(array $oaiRequest)
     {
-        $oaiConfig = Oai_Model_OaiConfig::getInstance();
-
-        $metadataPrefix = strtolower($oaiRequest['metadataPrefix']);
-
-        $finder = $this->server->getFinder($metadataPrefix);
+        $finder = $this->server->getFinder();
 
         if (array_key_exists('from', $oaiRequest) && ! empty($oaiRequest['from'])) {
             $from = DateTime::createFromFormat('Y-m-d', $oaiRequest['from']);
@@ -70,40 +63,22 @@ class Oai_Model_DocumentList
             $finder->setServerDateModifiedBefore($until->format('Y-m-d'));
         }
 
-        $documentIds = [];
-
         if (array_key_exists('set', $oaiRequest)) {
-            $setArray = explode(':', $oaiRequest['set']);
-            if (! isset($setArray[0])) {
+            try {
+                $setsManager = $this->server->getSetsManager();
+                $setName     = Oai_Model_Set_SetName::createSetName($oaiRequest['set']);
+                $setType     = $setsManager->getSetType($setName);
+
+                if ($setType) {
+                    $setType->configureFinder($finder, $setName);
+                } else {
+                    return [];
+                }
+            } catch (Oai_Model_Set_SetException $e) {
                 return [];
             }
-
-            if (count($setArray) < 1 || count($setArray) > 2) {
-                $msg = "Invalid SetSpec: Must be in format 'set' or 'set:subset'.";
-                throw new Oai_Model_Exception($msg);
-            }
-
-            $setTypes = $oaiConfig->getSetTypes();
-
-            if (array_key_exists($setArray[0], $setTypes) && $setArray[0] !== 'collection') {
-                if (isset($setType[$setArray[0]]['class'])) {
-                    $setTypeClass = $setType[$setArray[0]]['class'];
-                }
-            } else {
-                // Since no other set type has been detected it must be the collection set type
-                if (isset($setTypes['collection']['class'])) {
-                    $setTypeClass = $setTypes['collection']['class'];
-                }
-            }
-
-            if (isset($setTypeClass) && class_exists($setTypeClass)) {
-                $setTypeSets = new $setTypeClass();
-                $documentIds = $setTypeSets->getDocuments($finder, $oaiRequest['set']);
-            }
-
-            return $documentIds;
-        } else {
-            return $finder->getIds();
         }
+
+        return $finder->getIds();
     }
 }

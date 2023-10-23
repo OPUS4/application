@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -42,11 +42,11 @@ interface Oai_Model_Set_SetTypeInterface
     public function getSets();
 
     /**
-     * Returns the document ids of a specific set.
+     * Configures the passed Finder according to the specified set.
      *
      * @param DocumentFinderInterface $finder
-     * @param string $set
-     * @return array|int[]
+     * @param Oai_Model_Set_SetName $setName
+     * @throws Oai_Model_Exception
      */
-    public function getDocuments($finder, $set);
+    public function configureFinder($finder, $setName);
 }

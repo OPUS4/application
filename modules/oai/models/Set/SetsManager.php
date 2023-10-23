@@ -25,47 +25,73 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Class for the "bibliography" set type
- */
-class Oai_Model_Set_BibliographySets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
+class Oai_Model_Set_SetsManager extends Application_Model_Abstract
 {
+    /** @var Oai_Model_Set_SetTypeInterface[] The configured set type objects */
+    private $setTypeObjects;
+
     /**
-     * Returns sets from set type bibliography.
+     * Returns all oai sets.
      *
      * @return array
      */
     public function getSets()
     {
-        return [
-            'bibliography:true'  => 'Set for bibliographic entries',
-            'bibliography:false' => 'Set for non-bibliographic entries',
-        ];
+        $sets = [];
+
+        foreach ($this->getSetTypeObjects() as $setTypeSets) {
+            $sets = array_merge($sets, $setTypeSets->getSets());
+        }
+
+        return $sets;
     }
 
     /**
-     * Configures the passed Finder according to the specified set.
-     *
-     * @param DocumentFinderInterface $finder
      * @param Oai_Model_Set_SetName $setName
-     * @throws Oai_Model_Exception
+     * @return Oai_Model_Set_SetTypeInterface|null
      */
-    public function configureFinder($finder, $setName)
+    public function getSetType($setName)
     {
-        $setValue = $setName->getSubsetName();
+        $setTypes    = $this->getSetTypeObjects();
+        $setTypeName = $setName->getSetTypeName();
 
-        if (empty($setValue)) {
-            throw new Oai_Model_Set_SetException('Missing subset name.');
+        if (array_key_exists($setTypeName, $setTypes) && $setTypeName !== 'collection') {
+            return $setTypes[$setTypeName];
+        } elseif (array_key_exists('collection', $setTypes)) {
+            return $setTypes['collection'];
         }
 
-        if (! in_array($setValue, ['true', 'false'])) {
-            throw new Oai_Model_Set_SetException('Unknown subset: ' . $setValue);
+        return null;
+    }
+
+    /**
+     * Returns the configured set type objects.
+     *
+     * @return array|Oai_Model_Set_SetTypeInterfaceet[]
+     */
+    private function getSetTypeObjects()
+    {
+        if ($this->setTypeObjects === null) {
+            $this->setTypeObjects = [];
+            $oaiConfig            = Oai_Model_OaiConfig::getInstance();
+            $setTypes             = $oaiConfig->getSetTypes();
+
+            $setTypeObjects = [];
+
+            foreach ($setTypes as $setTypeName => $setTypeConfig) {
+                $setTypeClass = $setTypeConfig['class'] ?? '';
+                if (class_exists($setTypeClass)) {
+                    $setTypeObjects[$setTypeName] = new $setTypeClass();
+                }
+            }
+
+            $this->setTypeObjects = $setTypeObjects;
         }
 
-        $finder->setBelongsToBibliography((int) filter_var($setValue, FILTER_VALIDATE_BOOLEAN));
+        return $this->setTypeObjects;
     }
 }

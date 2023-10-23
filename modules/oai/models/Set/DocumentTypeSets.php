@@ -71,22 +71,20 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
     }
 
     /**
-     * Returns the document ids of this set type.
+     * Configures the passed Finder according to the specified set.
      *
      * @param DocumentFinderInterface $finder
-     * @param string $set
-     * @return array|int[]
+     * @param Oai_Model_Set_SetName $setName
+     * @throws Oai_Model_Exception
      */
-    public function getDocuments($finder, $set)
+    public function configureFinder($finder, $setName)
     {
-        $setArray = explode(':', $set);
+        $subsetName = $setName->getSubsetName();
 
-        if (count($setArray) !== 2 || empty($setArray[1])) {
-            return [];
+        if (empty($subsetName)) {
+            throw new Oai_Model_Set_SetException('Missing subset name.');
         }
 
-        $finder->setDocumentType($setArray[1]);
-
-        return $finder->getIds();
+        $finder->setDocumentType($subsetName);
     }
 }

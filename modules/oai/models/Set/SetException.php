@@ -25,55 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Oai_Model_Set_Sets extends Application_Model_Abstract
+class Oai_Model_Set_SetException extends Oai_Model_Exception
 {
-    /** @var Oai_Model_Set_AbstractSetType[] The configured set type objects */
-    private $setTypeObjects;
-
-    /**
-     * Returns all oai sets.
-     *
-     * @return array
-     */
-    public function getSets()
-    {
-        $sets = [];
-
-        foreach ($this->getSetTypeObjects() as $setTypeSets) {
-            $sets = array_merge($sets, $setTypeSets->getSets());
-        }
-
-        return $sets;
-    }
-
-    /**
-     * Returns the configured set type objects.
-     *
-     * @return array|Oai_Model_Set_AbstractSetType[]
-     */
-    private function getSetTypeObjects()
-    {
-        if ($this->setTypeObjects === null) {
-            $this->setTypeObjects = [];
-            $oaiConfig            = Oai_Model_OaiConfig::getInstance();
-            $setTypes             = $oaiConfig->getSetTypes();
-
-            $setTypeObjects = [];
-
-            foreach ($setTypes as $setTypeConfig) {
-                $setTypeClass = $setTypeConfig['class'] ?? '';
-                if (class_exists($setTypeClass)) {
-                    $setTypeObjects[] = new $setTypeClass();
-                }
-            }
-
-            $this->setTypeObjects = $setTypeObjects;
-        }
-
-        return $this->setTypeObjects;
-    }
 }

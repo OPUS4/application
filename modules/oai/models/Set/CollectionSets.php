@@ -75,18 +75,19 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
     }
 
     /**
-     * Returns the document ids of this set type.
+     * Configures the passed Finder according to the specified set.
      *
      * @param DocumentFinderInterface $finder
-     * @param string $set
-     * @return array|int[]
+     * @param Oai_Model_Set_SetName $setName
+     * @throws Oai_Model_Exception
      */
-    public function getDocuments($finder, $set)
+    public function configureFinder($finder, $setName)
     {
-        $setArray = explode(':', $set);
+        $setTypeName = $setName->getSetTypeName();
+        $subsetName  = $setName->getSubsetName();
 
         // Trying to locate collection role and filter documents.
-        $role = CollectionRole::fetchByOaiName($setArray[0]);
+        $role = CollectionRole::fetchByOaiName($setTypeName);
         if ($role === null) {
             $msg = "Invalid SetSpec: Top level set does not exist.";
             throw new Oai_Model_Exception($msg);
@@ -94,8 +95,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
         $finder->setCollectionRoleId($role->getId());
 
         // Trying to locate given collection and filter documents.
-        if (count($setArray) === 2) {
-            $subsetName   = $setArray[1];
+        if ($subsetName !== null) {
             $foundSubsets = array_filter(
                 $role->getOaiSetNames(),
                 function ($s) use ($subsetName) {
@@ -109,7 +109,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
                 });
 
                 if (count($emptySubsets) === 1) {
-                    return [];
+                    throw new Oai_Model_Set_SetException('Empty subset: ' . $subsetName);
                 } else {
                     $msg = "Invalid SetSpec: Subset does not exist.";
                     throw new Oai_Model_Exception($msg);
@@ -124,7 +124,6 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
                 $finder->setCollectionId($subset['id']);
             }
         }
-        return $finder->getIds();
     }
 
     /**
