@@ -38,12 +38,15 @@ class Application_Console_Task_InfoCommandTest extends ControllerTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->makeConfigurationModifiable();
+
+        if (! class_exists(TaskManager::class)) {
+            $this->markTestSkipped('TaskManager class not installed - Skipping tests');
+        }
 
         $this->adjustConfiguration(
             [
                 'cron' => [
-                    'configFile' => 'tests/resources/task/commandtest-task-info.ini',
+                    'configFile' => APPLICATION_PATH . '/tests/resources/task/commandtest-task-info.ini',
                 ],
             ]
         );
@@ -51,10 +54,6 @@ class Application_Console_Task_InfoCommandTest extends ControllerTestCase
 
     public function testTaskInfoOutput()
     {
-        if (! class_exists(TaskManager::class)) {
-            $this->markTestSkipped('No tests to be done due to lack of crunz support.');
-        }
-
         $app = new Application();
 
         $command = new Application_Console_Task_InfoCommand();
@@ -85,8 +84,8 @@ class Application_Console_Task_InfoCommandTest extends ControllerTestCase
         $this->assertEquals($expected, $displayed);
     }
 
-    public function testMoreTestsMayNeeded()
+    public function testUnknownTaskName()
     {
-        $this->markTestIncomplete('We may need more tests for the info command.');
+        $this->markTestIncomplete('not tested yet');
     }
 }

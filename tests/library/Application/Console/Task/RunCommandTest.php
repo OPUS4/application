@@ -31,8 +31,8 @@
 
 class Application_Console_Task_RunCommandTest extends ControllerTestCase
 {
-    public function testMoreTestsMayNeeded()
+    public function testMoreTests()
     {
-        $this->markTestIncomplete('We may need more tests for the run command.');
+        $this->markTestIncomplete('TODO unit testing');
     }
 }
