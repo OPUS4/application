@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DocumentInterface;
+
 /**
  * Abstract class for oai set types
  */
@@ -37,9 +39,10 @@ interface Oai_Model_Set_SetTypeInterface
     /**
      * Returns all sets of the set type.
      *
+     * @param DocumentInterface $document
      * @return array
      */
-    public function getSets();
+    public function getSets($document = null);
 
     /**
      * Configures the passed Finder according to the specified set.

@@ -1,5 +1,7 @@
 <?php
 
+use Opus\Common\DocumentInterface;
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -37,14 +39,15 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
     /**
      * Returns all oai sets.
      *
+     * @param DocumentInterface $document
      * @return array
      */
-    public function getSets()
+    public function getSets($document = null)
     {
         $sets = [];
 
         foreach ($this->getSetTypeObjects() as $setTypeSets) {
-            $sets = array_merge($sets, $setTypeSets->getSets());
+            $sets = array_merge($sets, $setTypeSets->getSets($document));
         }
 
         return $sets;

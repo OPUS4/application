@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\CollectionRole;
+use Opus\Common\DocumentInterface;
 
 /**
  * Class for the "collection" set type
@@ -39,36 +40,46 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
     /**
      * Returns oai sets for collections.
      *
+     * @param DocumentInterface $document
      * @return array
      */
-    public function getSets()
+    public function getSets($document = null)
     {
-        $sets = [];
-
+        $sets   = [];
         $logger = $this->getLogger();
 
-        $setSpecPattern = Oai_Model_Set_SetSpec::SET_SPEC_PATTERN;
-
-        $oaiRolesSets = CollectionRole::fetchAllOaiEnabledRoles();
-
-        foreach ($oaiRolesSets as $result) {
-            if ($result['oai_name'] === 'doc-type') {
-                continue;
+        if ($document) {
+            $setSpecs = $this->getSetsFromCollections($document->getCollection());
+            foreach ($setSpecs as $setSpec => $name) {
+                if (preg_match("/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/", $setSpec)) {
+                    $sets[$setSpec] = $name;
+                    continue;
+                }
+                $logger->info("skipping invalid setspec: " . $setSpec);
             }
+        } else {
+            $setSpecPattern = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
+            $oaiRolesSets   = CollectionRole::fetchAllOaiEnabledRoles();
 
-            if (0 === preg_match("/^$setSpecPattern$/", $result['oai_name'])) {
-                $msg = "Invalid SetSpec (oai_name='" . $result['oai_name'] . "'). "
-                    . " Please check collection role " . $result['id'] . ". "
-                    . " Allowed characters are $setSpecPattern.";
-                $logger->err("OAI-PMH: $msg");
-                continue;
+            foreach ($oaiRolesSets as $result) {
+                if ($result['oai_name'] === 'doc-type') {
+                    continue;
+                }
+
+                if (0 === preg_match("/^$setSpecPattern$/", $result['oai_name'])) {
+                    $msg = "Invalid SetSpec (oai_name='" . $result['oai_name'] . "'). "
+                        . " Please check collection role " . $result['id'] . ". "
+                        . " Allowed characters are $setSpecPattern.";
+                    $logger->err("OAI-PMH: $msg");
+                    continue;
+                }
+
+                $setSpec = $result['oai_name'];
+                // $count = $result['count'];
+                $sets[$setSpec] = "Set for collection '" . $result['oai_name'] . "'";
+
+                $sets = array_merge($sets, $this->getSetsForCollectionRole($setSpec, $result['id']));
             }
-
-            $setSpec = $result['oai_name'];
-            // $count = $result['count'];
-            $sets[$setSpec] = "Set for collection '" . $result['oai_name'] . "'";
-
-            $sets = array_merge($sets, $this->getSetsForCollectionRole($setSpec, $result['id']));
         }
 
         return $sets;
@@ -139,7 +150,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
 
         $sets = [];
 
-        $setSpecPattern = Oai_Model_Set_SetSpec::SET_SPEC_PATTERN;
+        $setSpecPattern = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
 
         $role = CollectionRole::get($roleId);
         foreach ($role->getOaiSetNames() as $subset) {
@@ -157,6 +168,46 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
             $sets[$subSetSpec] = "Subset '" . $subset['oai_subset'] . "'"
                 . " for collection '" . $setSpec . "'"
                 . ': "' . trim($subset['name']) . '"';
+        }
+
+        return $sets;
+    }
+
+    /**
+     * @param CollectionInterface[] $collections
+     * @return array
+     */
+    private function getSetsFromCollections($collections)
+    {
+        $sets = [];
+
+        foreach ($collections as $collection) {
+            if (! $collection->getVisible()) {
+                continue;
+            }
+
+            $oaiSubsetName = $collection->getOaiSubset();
+            if (empty($oaiSubsetName)) {
+                continue;
+            }
+
+            /** @var CollectionRole $role */
+            $role = $collection->getRole();
+
+            if (! $role->getVisibleOai() || ! $role->getVisible()) {
+                continue;
+            }
+
+            $oaiSetName = $role->getOaiName();
+            if (empty($oaiSetName)) {
+                continue;
+            }
+
+            $sets[urlencode($oaiSetName)] = "Set for collection '" . trim($role->getName()) . "'";
+
+            $sets[urlencode($oaiSetName) . ':' . urlencode($oaiSubsetName)] = "Subset '" . $oaiSubsetName . "'"
+                . " for collection '" . $oaiSetName . "'"
+                . ': "' . trim($collection->getName()) . '"';
         }
 
         return $sets;

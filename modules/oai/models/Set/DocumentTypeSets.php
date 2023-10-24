@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DocumentInterface;
 use Opus\Common\Repository;
 
 /**
@@ -39,32 +40,38 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
     /**
      * Returns oai sets for document types.
      *
+     * @param DocumentInterface $document
      * @return array
      */
-    public function getSets()
+    public function getSets($document = null)
     {
         $logger         = $this->getLogger();
-        $setSpecPattern = Oai_Model_Set_SetSpec::SET_SPEC_PATTERN;
+        $dcTypeHelper   = new Application_View_Helper_DcType();
+        $sets           = [];
+        $setSpecPattern = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
 
-        $sets = [];
-
-        $dcTypeHelper = new Application_View_Helper_DcType();
-
-        $finder = Repository::getInstance()->getDocumentFinder();
-        $finder->setServerState('published');
-
-        foreach ($finder->getDocumentTypes() as $doctype) {
-            if (0 === preg_match("/^$setSpecPattern$/", $doctype)) {
-                $msg = "Invalid SetSpec (doctype='" . $doctype . "')."
-                    . " Allowed characters are [$setSpecPattern].";
-                $logger->err("OAI-PMH: $msg");
-                continue;
-            }
-
-            $dcType = $dcTypeHelper->dcType($doctype);
-
+        if ($document) {
+            $type           = $document->getType();
+            $dcType         = $dcTypeHelper->dcType($type);
             $setSpec        = "doc-type:$dcType";
             $sets[$setSpec] = ucfirst($dcType);
+        } else {
+            $finder = Repository::getInstance()->getDocumentFinder();
+            $finder->setServerState('published');
+
+            foreach ($finder->getDocumentTypes() as $doctype) {
+                if (0 === preg_match("/^$setSpecPattern$/", $doctype)) {
+                    $msg = "Invalid SetSpec (doctype='" . $doctype . "')."
+                        . " Allowed characters are [$setSpecPattern].";
+                    $logger->err("OAI-PMH: $msg");
+                    continue;
+                }
+
+                $dcType = $dcTypeHelper->dcType($doctype);
+
+                $setSpec        = "doc-type:$dcType";
+                $sets[$setSpec] = ucfirst($dcType);
+            }
         }
 
         return $sets;

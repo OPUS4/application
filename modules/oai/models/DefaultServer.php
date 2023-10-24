@@ -648,22 +648,11 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
 
         $node = $this->xml->importNode($domNode, true);
 
-        $dcTypeHelper = new Application_View_Helper_DcType();
+        $setsManager = $this->getSetsManager();
+        $sets        = $setsManager->getSets($document);
 
-        $type = $document->getType();
-        $this->addSpecInformation($node, 'doc-type:' . $dcTypeHelper->dcType($type));
-
-        $bibliography = $document->getBelongsToBibliography() === 1 ? 'true' : 'false';
-        $this->addSpecInformation($node, 'bibliography:' . $bibliography);
-
-        $logger   = $this->getLogger();
-        $setSpecs = Oai_Model_Set_SetSpec::getSetSpecsFromCollections($document->getCollection());
-        foreach ($setSpecs as $setSpec) {
-            if (preg_match("/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/", $setSpec)) {
-                $this->addSpecInformation($node, $setSpec);
-                continue;
-            }
-            $logger->info("skipping invalid setspec: " . $setSpec);
+        foreach ($sets as $setSpec => $set) {
+            $this->addSpecInformation($node, $setSpec);
         }
 
         $this->xml->documentElement->appendChild($node);

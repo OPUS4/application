@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DocumentInterface;
+
 /**
  * Class for the "bibliography" set type
  */
@@ -37,14 +39,22 @@ class Oai_Model_Set_BibliographySets extends Application_Model_Abstract implemen
     /**
      * Returns sets from set type bibliography.
      *
+     * @param DocumentInterface $document
      * @return array
      */
-    public function getSets()
+    public function getSets($document = null)
     {
-        return [
+        $bibliographySets = [
             'bibliography:true'  => 'Set for bibliographic entries',
             'bibliography:false' => 'Set for non-bibliographic entries',
         ];
+
+        if ($document) {
+            $setSpec = $document->getBelongsToBibliography() === 1 ? 'bibliography:true' : 'bibliography:false';
+            return [$setSpec => $bibliographySets[$setSpec]];
+        }
+
+        return $bibliographySets;
     }
 
     /**
