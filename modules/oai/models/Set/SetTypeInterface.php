@@ -45,7 +45,7 @@ interface Oai_Model_Set_SetTypeInterface
      * Configures the passed Finder according to the specified set.
      *
      * @param DocumentFinderInterface $finder
-     * @param Oai_Model_Set_SetName $setName
+     * @param Oai_Model_Set_SetName   $setName
      * @throws Oai_Model_Exception
      */
     public function configureFinder($finder, $setName);

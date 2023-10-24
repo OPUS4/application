@@ -42,7 +42,7 @@ class Oai_Model_Set_SetName
 
     /**
      * @param string $set The full set name (setType:subSet)
-     * @return Oai_Model_Set_SetName
+     * @return self
      */
     public static function createSetName($set)
     {
