@@ -39,7 +39,7 @@ interface Oai_Model_Set_SetTypeInterface
     /**
      * Returns all sets of the set type.
      *
-     * @param DocumentInterface $document
+     * @param DocumentInterface|null $document
      * @return array
      */
     public function getSets($document = null);

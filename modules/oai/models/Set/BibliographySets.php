@@ -39,7 +39,7 @@ class Oai_Model_Set_BibliographySets extends Application_Model_Abstract implemen
     /**
      * Returns sets from set type bibliography.
      *
-     * @param DocumentInterface $document
+     * @param DocumentInterface|null $document
      * @return array
      */
     public function getSets($document = null)

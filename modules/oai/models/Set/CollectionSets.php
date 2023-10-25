@@ -40,7 +40,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
     /**
      * Returns oai sets for collections.
      *
-     * @param DocumentInterface $document
+     * @param DocumentInterface|null $document
      * @return array
      */
     public function getSets($document = null)

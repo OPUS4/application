@@ -40,7 +40,7 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
     /**
      * Returns oai sets for document types.
      *
-     * @param DocumentInterface $document
+     * @param DocumentInterface|null $document
      * @return array
      */
     public function getSets($document = null)
