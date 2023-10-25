@@ -53,5 +53,11 @@ interface Oai_Model_Set_SetTypeInterface
      */
     public function configureFinder($finder, $setName);
 
-    //public function supports($setName);
+    /**
+     * Returns if the set type class supports the handling of given set name.
+     *
+     * @param Oai_Model_Set_SetName $setName
+     * @return bool
+     */
+    public function supports($setName);
 }

@@ -96,4 +96,15 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
 
         $finder->setDocumentType($subsetName);
     }
+
+    /**
+     * Returns if the set type class supports the handling of given set name.
+     *
+     * @param Oai_Model_Set_SetName $setName
+     * @return bool
+     */
+    public function supports($setName)
+    {
+        return $setName->getSetName() === 'doc-type';
+    }
 }

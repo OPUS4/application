@@ -94,21 +94,20 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
      */
     public function configureFinder($finder, $setName)
     {
-        $setTypeName = $setName->getSetName();
-        $subsetName  = $setName->getSubsetName();
-
         if ($setName->getSetPartsCount() < 1 || $setName->getSetPartsCount() > 2) {
             $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
             throw new Oai_Model_Exception($msg);
         }
 
         // Trying to locate collection role and filter documents.
-        $role = CollectionRole::fetchByOaiName($setTypeName);
+        $role = CollectionRole::fetchByOaiName($setName->getSetName());
         if ($role === null) {
             $msg = "Invalid SetSpec: Top level set does not exist.";
             throw new Oai_Model_Exception($msg);
         }
         $finder->setCollectionRoleId($role->getId());
+
+        $subsetName = $setName->getSubsetName();
 
         // Trying to locate given collection and filter documents.
         if ($subsetName !== null) {
@@ -216,5 +215,17 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
         }
 
         return $sets;
+    }
+
+    /**
+     * Returns if the set type class supports the handling of given set name.
+     *
+     * @param Oai_Model_Set_SetName $setName
+     * @return bool
+     */
+    public function supports($setName)
+    {
+        // TODO Assumes collection set type was configured last in the order.
+        return true;
     }
 }

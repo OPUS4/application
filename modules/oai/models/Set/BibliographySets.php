@@ -80,4 +80,15 @@ class Oai_Model_Set_BibliographySets extends Application_Model_Abstract implemen
 
         $finder->setBelongsToBibliography((int) filter_var($setValue, FILTER_VALIDATE_BOOLEAN));
     }
+
+    /**
+     * Returns if the set type class supports the handling of given set name.
+     *
+     * @param Oai_Model_Set_SetName $setName
+     * @return bool
+     */
+    public function supports($setName)
+    {
+        return $setName->getSetName() === 'bibliography';
+    }
 }

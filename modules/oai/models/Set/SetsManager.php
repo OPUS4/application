@@ -54,18 +54,19 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
     }
 
     /**
+     * Returns the matching set type class for the given set name.
+     *
      * @param Oai_Model_Set_SetName $setName
      * @return Oai_Model_Set_SetTypeInterface|null
      */
     public function getSetType($setName)
     {
-        $setTypes    = $this->getSetTypeObjects();
-        $setTypeName = $setName->getSetName();
+        $setTypes = $this->getSetTypeObjects();
 
-        if (array_key_exists($setTypeName, $setTypes) && $setTypeName !== 'collection') {
-            return $setTypes[$setTypeName];
-        } elseif (array_key_exists('collection', $setTypes)) {
-            return $setTypes['collection'];
+        foreach ($setTypes as $setType) {
+            if ($setType->supports($setName)) {
+                return $setType;
+            }
         }
 
         return null;
