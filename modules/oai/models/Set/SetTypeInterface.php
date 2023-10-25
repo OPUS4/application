@@ -52,4 +52,6 @@ interface Oai_Model_Set_SetTypeInterface
      * @throws Oai_Model_Exception
      */
     public function configureFinder($finder, $setName);
+
+    //public function supports($setName);
 }

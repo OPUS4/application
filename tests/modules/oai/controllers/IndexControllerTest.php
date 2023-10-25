@@ -3379,7 +3379,34 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertContains('<error code="noRecordsMatch">', $body);
     }
 
-    public function testInvalidCollectionSet()
+    public function testDocTypeSetWithExtraPart()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=doc-type:Article:ExtraSubSet');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testBliographySetWithNoSubset()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=bibliography');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testBibliographySetWithExtraPart()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=bibliography:true:ExtraSubSet');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testInvalidCollectionSetWithExtraPart()
     {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ddc:62:100');
 

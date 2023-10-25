@@ -88,8 +88,10 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
     {
         $subsetName = $setName->getSubsetName();
 
-        if (empty($subsetName)) {
-            throw new Oai_Model_Set_SetException('Missing subset name.');
+        if ($setName->getSetPartsCount() !== 2) {
+            throw new Oai_Model_Set_SetException(
+                'Invalid set name: ' . implode(':', $setName->getSetParts())
+            );
         }
 
         $finder->setDocumentType($subsetName);

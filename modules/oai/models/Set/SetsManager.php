@@ -60,7 +60,7 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
     public function getSetType($setName)
     {
         $setTypes    = $this->getSetTypeObjects();
-        $setTypeName = $setName->getSetTypeName();
+        $setTypeName = $setName->getSetName();
 
         if (array_key_exists($setTypeName, $setTypes) && $setTypeName !== 'collection') {
             return $setTypes[$setTypeName];

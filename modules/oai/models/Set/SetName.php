@@ -34,67 +34,57 @@
  */
 class Oai_Model_Set_SetName
 {
-    /** @var string */
-    private $setTypeName;
-
-    /** @var string */
-    private $subsetName;
+    /** @var array */
+    private $setParts;
 
     /**
-     * @param string $set The full set name (setType:subSet)
-     * @return self
+     * @param string $set The full set name (set:subset)
      */
-    public static function createSetName($set)
+    public function __construct($set)
     {
-        $setArray = explode(':', $set);
-        if (! isset($setArray[0])) {
+        $this->setParts = explode(':', $set);
+        if (! isset($this->setParts[0]) || empty($this->setParts[0])) {
             throw new Oai_Model_Set_SetException('Missing set type name.');
         }
-
-        if (count($setArray) < 1 || count($setArray) > 2) {
-            $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
-            throw new Oai_Model_Exception($msg);
-        }
-
-        $setName = new self();
-
-        $setName->setSetTypeName($setArray[0]);
-
-        if (count($setArray) === 2) {
-            $setName->setSubsetName($setArray[1]);
-        }
-        return $setName;
     }
 
     /**
+     * Returns set name.
+     *
      * @return string|null
      */
-    public function getSetTypeName()
+    public function getSetName()
     {
-        return $this->setTypeName;
+        return $this->setParts[0] ?? null;
     }
 
     /**
-     * @param string|null $name
-     */
-    public function setSetTypeName($name)
-    {
-        $this->setTypeName = $name;
-    }
-
-    /**
+     * Returns the subset name.
+     *
      * @return string|null
      */
     public function getSubsetName()
     {
-        return $this->subsetName;
+        return $this->setParts[1] ?? null;
     }
 
     /**
-     * @param string|null $name
+     * Returns all set parts.
+     *
+     * @return array
      */
-    public function setSubsetName($name)
+    public function getSetParts()
     {
-        $this->subsetName = $name;
+        return $this->setParts;
+    }
+
+    /**
+     * Returns the number of set parts
+     *
+     * @return int
+     */
+    public function getSetPartsCount()
+    {
+        return count($this->setParts);
     }
 }

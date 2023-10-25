@@ -94,8 +94,13 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
      */
     public function configureFinder($finder, $setName)
     {
-        $setTypeName = $setName->getSetTypeName();
+        $setTypeName = $setName->getSetName();
         $subsetName  = $setName->getSubsetName();
+
+        if ($setName->getSetPartsCount() < 1 || $setName->getSetPartsCount() > 2) {
+            $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
+            throw new Oai_Model_Exception($msg);
+        }
 
         // Trying to locate collection role and filter documents.
         $role = CollectionRole::fetchByOaiName($setTypeName);

@@ -66,7 +66,7 @@ class Oai_Model_DocumentList
         if (array_key_exists('set', $oaiRequest)) {
             try {
                 $setsManager = $this->server->getSetsManager();
-                $setName     = Oai_Model_Set_SetName::createSetName($oaiRequest['set']);
+                $setName     = new Oai_Model_Set_SetName($oaiRequest['set']);
                 $setType     = $setsManager->getSetType($setName);
 
                 if ($setType) {
