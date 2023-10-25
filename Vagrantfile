@@ -155,7 +155,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 8983, host: 9983, host_ip: "127.0.0.1"
 
-  ENV['SOLR_VERSION']="9.3.0"
+  ENV['SOLR_VERSION']="9.4.0"
 
   config.vm.provision "Install required software...", type: "shell", inline: $software
   config.vm.provision "Install pandoc...", type: "shell", inline: $pandoc
