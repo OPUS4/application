@@ -39,7 +39,9 @@ SCRIPT
 
 $composer = <<SCRIPT
 cd /vagrant/bin
-curl -s http://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar update
+curl -s http://getcomposer.org/installer | php && php composer.phar self-update
+cd /vagrant
+php bin/composer.phar update
 SCRIPT
 
 $solr = <<SCRIPT
