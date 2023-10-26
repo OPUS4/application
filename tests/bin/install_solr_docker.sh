@@ -32,7 +32,7 @@ if [[ "$version" =~ ^[1-8]\.[0-9]+\.[0-9]+$ ]]; then
   ant download-solr -DsolrVersion=$SOLR_VERSION -DdownloadDir=./downloads
 elif [[ "$version" =~ ^(9|[1-9][0-9]+)\.[0-9]+\.[0-9]+$ ]]; then # new archive URL for versions >9.0.0
   SOLR_VERSION="$version"
-  SOLR_URL="https://archive.apache.org/dist/solr/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz"
+  SOLR_URL="https://www.apache.org/dyn/closer.lua/solr/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz?action=download"
   echo "Getting: $SOLR_URL"
   wget -q $SOLR_URL -O - | tar -xz
 else
