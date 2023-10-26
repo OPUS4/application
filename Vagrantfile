@@ -38,9 +38,8 @@ dpkg -i pandoc-2.17.1.1-1-amd64.deb
 SCRIPT
 
 $composer = <<SCRIPT
-cd /vagrant
-bin/install-composer.sh
-php bin/composer update
+cd /vagrant/bin
+curl -s http://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar update
 SCRIPT
 
 $solr = <<SCRIPT
