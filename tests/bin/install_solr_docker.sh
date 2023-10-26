@@ -26,20 +26,21 @@ while [ $# -gt 0 ]; do
     shift
 done
 
+SOLR_VERSION="$version"
+
 # Download Solr version
 if [[ "$version" =~ ^[1-8]\.[0-9]+\.[0-9]+$ ]]; then
-  SOLR_VERSION="$version"
-  ant download-solr -DsolrVersion=$SOLR_VERSION -DdownloadDir=./downloads
+  SOLR_URL="https://archive.apache.org/dist/lucene/solr/${solrVersion}/solr-${solrVersion}.tgz"
 elif [[ "$version" =~ ^(9|[1-9][0-9]+)\.[0-9]+\.[0-9]+$ ]]; then # new archive URL for versions >9.0.0
-  SOLR_VERSION="$version"
   SOLR_URL="https://www.apache.org/dyn/closer.lua/solr/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz?action=download"
-  echo "Getting: $SOLR_URL"
-  wget -q $SOLR_URL -O - | tar -xz
 else
   echo "Unrecognized version number"
   echo -e "The --version option requires a 3-digit version number, e.g.: 9.4.0"
   exit 1
 fi
+
+echo "Getting: $SOLR_URL"
+wget -q $SOLR_URL -O - | tar -xz
 
 # Configure & start Solr
 cd solr-$SOLR_VERSION
