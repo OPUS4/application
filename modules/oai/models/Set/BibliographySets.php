@@ -66,6 +66,7 @@ class Oai_Model_Set_BibliographySets extends Application_Model_Abstract implemen
      */
     public function configureFinder($finder, $setName)
     {
+        // TODO Behavior with invalid set names should be reconsidered.
         if ($setName->getSetPartsCount() !== 2) {
             throw new Oai_Model_Set_SetException(
                 'Invalid set name: ' . implode(':', $setName->getSetParts())

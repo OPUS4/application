@@ -37,6 +37,12 @@ use Opus\Common\DocumentInterface;
  */
 class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
 {
+    /** Regexp pattern to check if a full set name is valid. */
+    private const SET_PATTERN = "/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/";
+
+    /** Regexp pattern to check if a set name or subset name is valid. */
+    private const SET_PART_PATTERN = '/^[A-Za-z0-9\-_\.!~\*\'\(\)]+$/';
+
     /**
      * Returns oai sets for collections.
      *
@@ -51,25 +57,24 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
         if ($document) {
             $setSpecs = $this->getSetsFromCollections($document->getCollection());
             foreach ($setSpecs as $setSpec => $name) {
-                if (preg_match("/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/", $setSpec)) {
+                if (preg_match(self::SET_PATTERN, $setSpec)) {
                     $sets[$setSpec] = $name;
                     continue;
                 }
                 $logger->info("skipping invalid setspec: " . $setSpec);
             }
         } else {
-            $setSpecPattern = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
-            $oaiRolesSets   = CollectionRole::fetchAllOaiEnabledRoles();
+            $oaiRolesSets = CollectionRole::fetchAllOaiEnabledRoles();
 
             foreach ($oaiRolesSets as $result) {
                 if ($result['oai_name'] === 'doc-type') {
                     continue;
                 }
 
-                if (0 === preg_match("/^$setSpecPattern$/", $result['oai_name'])) {
+                if (0 === preg_match(self::SET_PART_PATTERN, $result['oai_name'])) {
                     $msg = "Invalid SetSpec (oai_name='" . $result['oai_name'] . "'). "
                         . " Please check collection role " . $result['id'] . ". "
-                        . " Allowed characters are $setSpecPattern.";
+                        . " Allowed characters are " . self::SET_PART_PATTERN . ".";
                     $logger->err("OAI-PMH: $msg");
                     continue;
                 }
@@ -94,6 +99,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
      */
     public function configureFinder($finder, $setName)
     {
+        // TODO Behavior with invalid set names should be reconsidered.
         if ($setName->getSetPartsCount() < 1 || $setName->getSetPartsCount() > 2) {
             $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
             throw new Oai_Model_Exception($msg);
@@ -154,17 +160,15 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
 
         $sets = [];
 
-        $setSpecPattern = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
-
         $role = CollectionRole::get($roleId);
         foreach ($role->getOaiSetNames() as $subset) {
             $subSetSpec = "$setSpec:" . $subset['oai_subset'];
             // $subSetCount = $subset['count'];
 
-            if (0 === preg_match("/^$setSpecPattern$/", $subset['oai_subset'])) {
+            if (0 === preg_match(self::SET_PART_PATTERN, $subset['oai_subset'])) {
                 $msg = "Invalid SetSpec (oai_name='" . $subset['oai_subset'] . "')."
                     . " Please check collection " . $subset['id'] . ". "
-                    . " Allowed characters are [$setSpecPattern].";
+                    . " Allowed characters are [" . self::SET_PART_PATTERN . "].";
                 $logger->err("OAI-PMH: $msg");
                 continue;
             }
@@ -181,7 +185,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
      * @param CollectionInterface[] $collections
      * @return array
      */
-    private function getSetsFromCollections($collections)
+    protected function getSetsFromCollections($collections)
     {
         $sets = [];
 
@@ -195,7 +199,6 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
                 continue;
             }
 
-            /** @var CollectionRole $role */
             $role = $collection->getRole();
 
             if (! $role->getVisibleOai() || ! $role->getVisible()) {
@@ -225,7 +228,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
      */
     public function supports($setName)
     {
-        // TODO Assumes collection set type was configured last in the order.
-        return true;
+        $role = ! empty($setName->getSetName()) ? CollectionRole::fetchByOaiName($setName->getSetName()) : null;
+        return $role !== null && $role->getVisibleOai() && $role->getVisible();
     }
 }
