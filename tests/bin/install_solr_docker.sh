@@ -30,7 +30,7 @@ SOLR_VERSION="$version"
 
 # Download Solr version
 if [[ "$version" =~ ^[1-8]\.[0-9]+\.[0-9]+$ ]]; then
-  SOLR_URL="https://archive.apache.org/dist/lucene/solr/${solrVersion}/solr-${solrVersion}.tgz"
+  SOLR_URL="https://archive.apache.org/dist/lucene/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz"
 elif [[ "$version" =~ ^(9|[1-9][0-9]+)\.[0-9]+\.[0-9]+$ ]]; then # new archive URL for versions >9.0.0
   SOLR_URL="https://www.apache.org/dyn/closer.lua/solr/solr/$SOLR_VERSION/solr-$SOLR_VERSION.tgz?action=download"
 else
