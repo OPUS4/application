@@ -63,7 +63,7 @@ mkdir -p "downloads"
 cd downloads
 SOLR_TAR="solr-$SOLR_VERSION.tgz"
 if test ! -f "$SOLR_TAR"; then
-  SOLR_URL="https://archive.apache.org/dist/solr/solr/$SOLR_VERSION/$SOLR_TAR"
+  SOLR_URL="https://www.apache.org/dyn/closer.lua/solr/solr/$SOLR_VERSION/$SOLR_TAR?action=download"
   echo "Getting: $SOLR_URL"
   wget -q --show-progress --progress=bar:force $SOLR_URL
 fi
