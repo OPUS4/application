@@ -57,7 +57,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action
         $this->view->showSeriesBrowsing = $this->seriesUtil->hasDisplayableSeries();
 
         $config = $this->getConfig();
-        // TODO there are no unit tests for showing/hiding the following sections
+
         if (isset($config->browsing->showLatestDocuments)) {
             $this->view->showLatestDocuments = filter_var($config->browsing->showLatestDocuments, FILTER_VALIDATE_BOOLEAN);
         }
