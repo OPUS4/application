@@ -74,8 +74,10 @@ class Solrsearch_BrowseController extends Application_Controller_Action
     {
         $config = $this->getConfig();
 
-        if (isset($config->browsing->showDocumentTypes) &&
-            ! filter_var($config->browsing->showDocumentTypes, FILTER_VALIDATE_BOOLEAN)) {
+        if (
+            isset($config->browsing->showDocumentTypes) &&
+            ! filter_var($config->browsing->showDocumentTypes, FILTER_VALIDATE_BOOLEAN)
+        ) {
             $this->_helper->Redirector->redirectTo(
                 'index'
             );
@@ -107,8 +109,10 @@ class Solrsearch_BrowseController extends Application_Controller_Action
     {
         $config = $this->getConfig();
 
-        if (isset($config->browsing->showYears) &&
-            ! filter_var($config->browsing->showYears, FILTER_VALIDATE_BOOLEAN)) {
+        if (
+            isset($config->browsing->showYears) &&
+            ! filter_var($config->browsing->showYears, FILTER_VALIDATE_BOOLEAN)
+        ) {
             $this->_helper->Redirector->redirectTo(
                 'index'
             );
