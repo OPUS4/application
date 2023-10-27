@@ -56,10 +56,31 @@ class Solrsearch_BrowseController extends Application_Controller_Action
         $collectionRoles                = new Solrsearch_Model_CollectionRoles();
         $this->view->collectionRoles    = $collectionRoles->getAllVisible();
         $this->view->showSeriesBrowsing = $this->seriesUtil->hasDisplayableSeries();
+
+        $config = $this->getConfig();
+        // TODO there are no unit tests for showing/hiding the following sections
+        if (isset($config->browsing->showLatestDocuments)) {
+            $this->view->showLatestDocuments = filter_var($config->browsing->showLatestDocuments, FILTER_VALIDATE_BOOLEAN);
+        }
+        if (isset($config->browsing->showDocumentTypes)) {
+            $this->view->showDocumentTypes = filter_var($config->browsing->showDocumentTypes, FILTER_VALIDATE_BOOLEAN);
+        }
+        if (isset($config->browsing->showYears)) {
+            $this->view->showYears = filter_var($config->browsing->showYears, FILTER_VALIDATE_BOOLEAN);
+        }
     }
 
     public function doctypesAction()
     {
+        $config = $this->getConfig();
+
+        if (isset($config->browsing->showDocumentTypes) &&
+            ! filter_var($config->browsing->showDocumentTypes, FILTER_VALIDATE_BOOLEAN)) {
+            $this->_helper->Redirector->redirectTo(
+                'index'
+            );
+        }
+
         $facetname = 'doctype';
         $query     = new Query(Query::FACET_ONLY);
         $query->setFacetField($facetname);
@@ -84,6 +105,15 @@ class Solrsearch_BrowseController extends Application_Controller_Action
 
     public function yearsAction()
     {
+        $config = $this->getConfig();
+
+        if (isset($config->browsing->showYears) &&
+            ! filter_var($config->browsing->showYears, FILTER_VALIDATE_BOOLEAN)) {
+            $this->_helper->Redirector->redirectTo(
+                'index'
+            );
+        }
+
         $facetname = 'year';
 
         $query = new Query(Query::FACET_ONLY);
