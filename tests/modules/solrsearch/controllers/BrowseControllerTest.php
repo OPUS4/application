@@ -59,7 +59,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     public function testShowDoctypesDisabled()
     {
         $this->adjustConfiguration([
-            'browsing' => ['showDocumentTypes' => 0]
+            'browsing' => ['showDocumentTypes' => 0],
         ]);
 
         $this->dispatch('/solrsearch/browse');
@@ -81,7 +81,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     public function testDoctypesActionDisabled()
     {
         $this->adjustConfiguration([
-            'browsing' => ['showDocumentTypes' => 0]
+            'browsing' => ['showDocumentTypes' => 0],
         ]);
 
         $this->dispatch('/solrsearch/browse/doctypes');
@@ -319,7 +319,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     public function testYearsActionDisabled()
     {
         $this->adjustConfiguration([
-            'browsing' => ['showYears' => 0]
+            'browsing' => ['showYears' => 0],
         ]);
 
         $this->dispatch('/solrsearch/browse/years');
@@ -334,7 +334,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     public function testShowYearsDisabled()
     {
         $this->adjustConfiguration([
-            'browsing' => ['showYears' => 0]
+            'browsing' => ['showYears' => 0],
         ]);
 
         $this->dispatch('/solrsearch/browse');
@@ -348,7 +348,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     public function testShowLatestDocumentsDisabled()
     {
         $this->adjustConfiguration([
-            'browsing' => ['showLatestDocuments' => 0]
+            'browsing' => ['showLatestDocuments' => 0],
         ]);
 
         $this->dispatch('/solrsearch/browse');
