@@ -423,7 +423,7 @@
     </xsl:template>
 
     <xsl:template match="SetSpec">
-				<setSpec><xsl:value-of select="@Value"/></setSpec>
+                <setSpec><xsl:value-of select="@Value"/></setSpec>
     </xsl:template>
 
 </xsl:stylesheet>
