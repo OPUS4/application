@@ -280,7 +280,14 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
+
         $this->checkForBadStringsInHtml($response->getBody());
+
+        $this->assertNotContains(
+            'copy_xml',
+            $response->getBody(),
+            "Response must not contain format 'copy_xml'"
+        );
     }
 
     /**

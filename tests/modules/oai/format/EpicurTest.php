@@ -80,4 +80,25 @@ class Oai_Format_EpicurTest extends ControllerTestCase
             $this->fail('element \'epicur\' not found');
         }
     }
+
+    public function testConfigurationWithAbsolutXsltFilePath()
+    {
+        $this->adjustConfiguration(
+            [
+                'oai' => [
+                    'format' => [
+                        'epicur' => [
+                            'xsltFile' => APPLICATION_PATH . '/modules/oai/views/scripts/index/prefixes/epicur.xslt',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=epicur&identifier=oai::146');
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpath('//oai:metadata');
+    }
 }

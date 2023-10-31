@@ -61,12 +61,14 @@ $solr = <<SCRIPT
 cd /home/vagrant
 mkdir -p "downloads"
 cd downloads
-SOLR_TAR="solr-7.7.2.tgz"
+SOLR_TAR="solr-$SOLR_VERSION.tgz"
 if test ! -f "$SOLR_TAR"; then
-  wget "https://archive.apache.org/dist/lucene/solr/7.7.2/$SOLR_TAR"
+  SOLR_URL="https://www.apache.org/dyn/closer.lua/solr/solr/$SOLR_VERSION/$SOLR_TAR?action=download"
+  echo "Getting: $SOLR_URL"
+  wget -q --show-progress --progress=bar:force $SOLR_URL -O $SOLR_TAR
 fi
 tar xfz "$SOLR_TAR" -C /home/vagrant
-cd /home/vagrant/solr-7.7.2
+cd /home/vagrant/solr-$SOLR_VERSION
 mkdir -p server/solr/opus4/conf
 echo name=opus4 > server/solr/opus4/core.properties
 cd server/solr/opus4/conf/
@@ -122,6 +124,7 @@ fi
 if ! grep "PATH=/vagrant/bin" /home/vagrant/.bashrc > /dev/null; then
   echo "export PATH=/vagrant/bin:$PATH" >> /home/vagrant/.bashrc
 fi
+# Increase limits for Apache Solr
 if ! grep "vagrant hard" /etc/security/limits.conf > /dev/null; then
   echo "vagrant hard nofile 65535" >> /etc/security/limits.conf
   echo "vagrant soft nofile 65535" >> /etc/security/limits.conf
@@ -132,7 +135,7 @@ SCRIPT
 
 $start = <<SCRIPT
 sudo service apache2 reload
-cd /home/vagrant/solr-7.7.2
+cd /home/vagrant/solr-$SOLR_VERSION
 ./bin/solr start
 SCRIPT
 
@@ -152,17 +155,19 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 8983, host: 9983, host_ip: "127.0.0.1"
 
+  ENV['SOLR_VERSION']="9.4.0"
+
   config.vm.provision "Install required software...", type: "shell", inline: $software
   config.vm.provision "Install pandoc...", type: "shell", inline: $pandoc
   config.vm.provision "Install fonts...", type: "shell", inline: $fonts
   config.vm.provision "Install Composer dependencies...", type: "shell", privileged: false, inline: $composer
-  config.vm.provision "Install Apache Solr...", type: "shell", privileged: false, inline: $solr
+  config.vm.provision "Install Apache Solr...", type: "shell", privileged: false, inline: $solr, env: {"SOLR_VERSION" => ENV['SOLR_VERSION']}
   config.vm.provision "Create database...", type: "shell", inline: $database
   config.vm.provision "Configure OPUS 4...", type: "shell", privileged: false, inline: $opus
   config.vm.provision "Setup site in Apache2...", type: "shell", inline: $apache
   config.vm.provision "Fix permissions...", type: "shell", inline: $fix
   config.vm.provision "Setup environment...", type: "shell", inline: $environment
-  config.vm.provision "Start services...", type: "shell", privileged: false, run: "always", inline: $start
+  config.vm.provision "Start services...", type: "shell", privileged: false, run: "always", inline: $start, env: {"SOLR_VERSION" => ENV['SOLR_VERSION']}
   config.vm.provision "Initialize test data...", type: "shell", privileged: false, inline: $testdata
   config.vm.provision "Information", type: "shell", privileged: false, run: "always", inline: $help
 end
