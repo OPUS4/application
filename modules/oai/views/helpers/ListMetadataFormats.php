@@ -75,7 +75,7 @@ class Oai_View_Helper_ListMetadataFormats extends Application_View_Helper_Abstra
                         $output .= '    <metadataFormat>' . PHP_EOL;
                         $output .= "      <metadataPrefix>$prefix</metadataPrefix>" . PHP_EOL;
                         $output .= "      <schema>$schemaUrl</schema>" . PHP_EOL;
-                        $output .= "      <metadataNamespace>$metadataNamespaceUrl</metadataNamespace>"  . PHP_EOL;
+                        $output .= "      <metadataNamespace>$metadataNamespaceUrl</metadataNamespace>" . PHP_EOL;
                         $output .= '    </metadataFormat>';
                     }
                 }
