@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
+class Oai_View_Helper_ListMetadataFormatsTest extends ControllerTestCase
 {
     /** @var string */
     protected $additionalResources = 'database';
@@ -39,26 +39,30 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
      */
     protected function getExpectedMetadaFormats()
     {
-        return '<metadataFormat>'
-            . '<metadataPrefix><xsl:text>oai_dc</xsl:text></metadataPrefix>'
-            . '<schema><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</xsl:text></schema>'
-            . '<metadataNamespace><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc/</xsl:text></metadataNamespace>'
-            . '</metadataFormat>'
-            . '<metadataFormat>'
-            . '<metadataPrefix><xsl:text>epicur</xsl:text></metadataPrefix>'
-            . '<schema><xsl:text>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text></schema>'
-            . '<metadataNamespace><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></metadataNamespace>'
-            . '</metadataFormat>'
-            . '<metadataFormat>'
-            . '<metadataPrefix><xsl:text>xMetaDissPlus</xsl:text></metadataPrefix>'
-            . '<schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>'
-            . '<metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>'
-            . '</metadataFormat>'
-            . '<metadataFormat>'
-            . '<metadataPrefix><xsl:text>MARC21</xsl:text></metadataPrefix><schema>'
-            . '<xsl:text>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</xsl:text></schema><metadataNamespace>'
-            . '<xsl:text>http://www.loc.gov/MARC21/slim</xsl:text></metadataNamespace>'
-            . '</metadataFormat>';
+        return <<<TEXT
+
+    <metadataFormat>
+      <metadataPrefix>oai_dc</metadataPrefix>
+      <schema>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</schema>
+      <metadataNamespace>http://www.openarchives.org/OAI/2.0/oai_dc/</metadataNamespace>
+    </metadataFormat>
+    <metadataFormat>
+      <metadataPrefix>epicur</metadataPrefix>
+      <schema>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</schema>
+      <metadataNamespace>urn:nbn:de:1111-2004033116</metadataNamespace>
+    </metadataFormat>
+    <metadataFormat>
+      <metadataPrefix>xMetaDissPlus</metadataPrefix>
+      <schema>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</schema>
+      <metadataNamespace>http://www.d-nb.de/standards/xmetadissplus/</metadataNamespace>
+    </metadataFormat>
+    <metadataFormat>
+      <metadataPrefix>MARC21</metadataPrefix>
+      <schema>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</schema>
+      <metadataNamespace>http://www.loc.gov/MARC21/slim</metadataNamespace>
+    </metadataFormat>
+  
+TEXT;
     }
 
     /**
@@ -66,26 +70,30 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
      */
     protected function getExpectedMetadaFormatsWithoutOaiDc()
     {
-        return '<metadataFormat>'
-            . '<metadataPrefix><xsl:text>epicur</xsl:text></metadataPrefix>'
-            . '<schema><xsl:text>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text></schema>'
-            . '<metadataNamespace><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></metadataNamespace>'
-            . '</metadataFormat>'
-            . '<metadataFormat>'
-            . '<metadataPrefix><xsl:text>xMetaDissPlus</xsl:text></metadataPrefix>'
-            . '<schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>'
-            . '<metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>'
-            . '</metadataFormat>'
-            . '<metadataFormat>'
-            . '<metadataPrefix><xsl:text>MARC21</xsl:text></metadataPrefix><schema>'
-            . '<xsl:text>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</xsl:text></schema><metadataNamespace>'
-            . '<xsl:text>http://www.loc.gov/MARC21/slim</xsl:text></metadataNamespace>'
-            . '</metadataFormat>';
+        return <<<TEXT
+
+    <metadataFormat>
+      <metadataPrefix>epicur</metadataPrefix>
+      <schema>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</schema>
+      <metadataNamespace>urn:nbn:de:1111-2004033116</metadataNamespace>
+    </metadataFormat>
+    <metadataFormat>
+      <metadataPrefix>xMetaDissPlus</metadataPrefix>
+      <schema>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</schema>
+      <metadataNamespace>http://www.d-nb.de/standards/xmetadissplus/</metadataNamespace>
+    </metadataFormat>
+    <metadataFormat>
+      <metadataPrefix>MARC21</metadataPrefix>
+      <schema>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</schema>
+      <metadataNamespace>http://www.loc.gov/MARC21/slim</metadataNamespace>
+    </metadataFormat>
+  
+TEXT;
     }
 
     public function testListMetadataFormats()
     {
-        $listMetaDataFormats = new Oai_View_Helper_ListMetaDataFormats();
+        $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
         $this->assertEquals($this->getExpectedMetadaFormats(), $listMetaDataFormats->listMetadataFormats());
     }
 
@@ -104,7 +112,7 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
             ],
         ]);
 
-        $listMetaDataFormats = new Oai_View_Helper_ListMetaDataFormats();
+        $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
         $this->assertEquals($this->getExpectedMetadaFormatsWithoutOaiDc(), $listMetaDataFormats->listMetadataFormats());
     }
 
@@ -123,7 +131,7 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
             ],
         ]);
 
-        $listMetaDataFormats = new Oai_View_Helper_ListMetaDataFormats();
+        $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
         $this->assertEquals($this->getExpectedMetadaFormatsWithoutOaiDc(), $listMetaDataFormats->listMetadataFormats());
     }
 
@@ -142,7 +150,7 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
             ],
         ]);
 
-        $listMetaDataFormats = new Oai_View_Helper_ListMetaDataFormats();
+        $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
         $this->assertEquals($this->getExpectedMetadaFormats(), $listMetaDataFormats->listMetadataFormats());
     }
 
@@ -161,7 +169,7 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
             ],
         ]);
 
-        $listMetaDataFormats = new Oai_View_Helper_ListMetaDataFormats();
+        $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
         $this->assertEquals($this->getExpectedMetadaFormatsWithoutOaiDc(), $listMetaDataFormats->listMetadataFormats());
     }
 
@@ -181,7 +189,7 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
             ],
         ]);
 
-        $listMetaDataFormats = new Oai_View_Helper_ListMetaDataFormats();
+        $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
         $formatList          = $listMetaDataFormats->listMetadataFormats();
         $this->assertEquals($this->getExpectedMetadaFormatsWithoutOaiDc(), $listMetaDataFormats->listMetadataFormats());
     }
@@ -202,7 +210,7 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
             ],
         ]);
 
-        $listMetaDataFormats = new Oai_View_Helper_ListMetaDataFormats();
+        $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
         $this->assertEquals($this->getExpectedMetadaFormatsWithoutOaiDc(), $listMetaDataFormats->listMetadataFormats());
     }
 
@@ -222,7 +230,7 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
             ],
         ]);
 
-        $listMetaDataFormats = new Oai_View_Helper_ListMetaDataFormats();
+        $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
         $this->assertEquals($this->getExpectedMetadaFormats(), $listMetaDataFormats->listMetadataFormats());
     }
 
@@ -242,7 +250,7 @@ class Oai_View_Helper_ListMetaDataFormatsTest extends ControllerTestCase
             ],
         ]);
 
-        $listMetaDataFormats = new Oai_View_Helper_ListMetaDataFormats();
+        $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
         $this->assertEquals($this->getExpectedMetadaFormats(), $listMetaDataFormats->listMetadataFormats());
     }
 }

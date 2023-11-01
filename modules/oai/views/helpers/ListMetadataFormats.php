@@ -35,7 +35,7 @@ use Opus\Common\Security\Realm;
 /**
  * View helper for rendering metadata formats list.
  */
-class Oai_View_Helper_ListMetaDataFormats extends Application_View_Helper_Abstract
+class Oai_View_Helper_ListMetadataFormats extends Application_View_Helper_Abstract
 {
     /**
      * Returns XML for rendering the metadata formats list.
@@ -71,14 +71,16 @@ class Oai_View_Helper_ListMetaDataFormats extends Application_View_Helper_Abstra
                             throw new Exception($message);
                         }
 
-                        $output .= '<metadataFormat>'
-                            . "<metadataPrefix><xsl:text>$prefix</xsl:text></metadataPrefix>"
-                            . "<schema><xsl:text>$schemaUrl</xsl:text></schema>"
-                            . "<metadataNamespace><xsl:text>$metadataNamespaceUrl</xsl:text></metadataNamespace>"
-                            . '</metadataFormat>';
+                        $output .= PHP_EOL;
+                        $output .= '    <metadataFormat>' . PHP_EOL;
+                        $output .= "      <metadataPrefix>$prefix</metadataPrefix>" . PHP_EOL;
+                        $output .= "      <schema>$schemaUrl</schema>" . PHP_EOL;
+                        $output .= "      <metadataNamespace>$metadataNamespaceUrl</metadataNamespace>"  . PHP_EOL;
+                        $output .= '    </metadataFormat>';
                     }
                 }
             }
+            $output .= PHP_EOL . '  ';
         }
 
         return $output;
