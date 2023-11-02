@@ -236,9 +236,7 @@
 
     <!-- template for ListMetadataFormats  -->
     <xsl:template match="Documents" mode="ListMetadataFormats">
-        <ListMetadataFormats>
-            <xsl:value-of disable-output-escaping="yes" select="php:function('Application_Xslt::listMetadataFormats')" />
-        </ListMetadataFormats>
+        <xsl:value-of disable-output-escaping="yes" select="php:function('Application_Xslt::listMetadataFormats')" />
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListIdentifiers">

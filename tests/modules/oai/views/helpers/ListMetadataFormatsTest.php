@@ -39,30 +39,32 @@ class Oai_View_Helper_ListMetadataFormatsTest extends ControllerTestCase
      */
     protected function getExpectedMetadaFormats()
     {
-        return <<<TEXT
+        return <<<XML
 
-    <metadataFormat>
-      <metadataPrefix>oai_dc</metadataPrefix>
-      <schema>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</schema>
-      <metadataNamespace>http://www.openarchives.org/OAI/2.0/oai_dc/</metadataNamespace>
-    </metadataFormat>
-    <metadataFormat>
-      <metadataPrefix>epicur</metadataPrefix>
-      <schema>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</schema>
-      <metadataNamespace>urn:nbn:de:1111-2004033116</metadataNamespace>
-    </metadataFormat>
-    <metadataFormat>
-      <metadataPrefix>xMetaDissPlus</metadataPrefix>
-      <schema>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</schema>
-      <metadataNamespace>http://www.d-nb.de/standards/xmetadissplus/</metadataNamespace>
-    </metadataFormat>
-    <metadataFormat>
-      <metadataPrefix>MARC21</metadataPrefix>
-      <schema>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</schema>
-      <metadataNamespace>http://www.loc.gov/MARC21/slim</metadataNamespace>
-    </metadataFormat>
+    <ListMetadataFormats>
+      <metadataFormat>
+        <metadataPrefix>oai_dc</metadataPrefix>
+        <schema>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</schema>
+        <metadataNamespace>http://www.openarchives.org/OAI/2.0/oai_dc/</metadataNamespace>
+      </metadataFormat>
+      <metadataFormat>
+        <metadataPrefix>epicur</metadataPrefix>
+        <schema>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</schema>
+        <metadataNamespace>urn:nbn:de:1111-2004033116</metadataNamespace>
+      </metadataFormat>
+      <metadataFormat>
+        <metadataPrefix>xMetaDissPlus</metadataPrefix>
+        <schema>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</schema>
+        <metadataNamespace>http://www.d-nb.de/standards/xmetadissplus/</metadataNamespace>
+      </metadataFormat>
+      <metadataFormat>
+        <metadataPrefix>MARC21</metadataPrefix>
+        <schema>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</schema>
+        <metadataNamespace>http://www.loc.gov/MARC21/slim</metadataNamespace>
+      </metadataFormat>
+    </ListMetadataFormats>
   
-TEXT;
+XML;
     }
 
     /**
@@ -70,25 +72,27 @@ TEXT;
      */
     protected function getExpectedMetadaFormatsWithoutOaiDc()
     {
-        return <<<TEXT
+        return <<<XML
 
-    <metadataFormat>
-      <metadataPrefix>epicur</metadataPrefix>
-      <schema>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</schema>
-      <metadataNamespace>urn:nbn:de:1111-2004033116</metadataNamespace>
-    </metadataFormat>
-    <metadataFormat>
-      <metadataPrefix>xMetaDissPlus</metadataPrefix>
-      <schema>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</schema>
-      <metadataNamespace>http://www.d-nb.de/standards/xmetadissplus/</metadataNamespace>
-    </metadataFormat>
-    <metadataFormat>
-      <metadataPrefix>MARC21</metadataPrefix>
-      <schema>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</schema>
-      <metadataNamespace>http://www.loc.gov/MARC21/slim</metadataNamespace>
-    </metadataFormat>
+    <ListMetadataFormats>
+      <metadataFormat>
+        <metadataPrefix>epicur</metadataPrefix>
+        <schema>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</schema>
+        <metadataNamespace>urn:nbn:de:1111-2004033116</metadataNamespace>
+      </metadataFormat>
+      <metadataFormat>
+        <metadataPrefix>xMetaDissPlus</metadataPrefix>
+        <schema>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</schema>
+        <metadataNamespace>http://www.d-nb.de/standards/xmetadissplus/</metadataNamespace>
+      </metadataFormat>
+      <metadataFormat>
+        <metadataPrefix>MARC21</metadataPrefix>
+        <schema>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</schema>
+        <metadataNamespace>http://www.loc.gov/MARC21/slim</metadataNamespace>
+      </metadataFormat>
+    </ListMetadataFormats>
   
-TEXT;
+XML;
     }
 
     public function testListMetadataFormats()
