@@ -401,7 +401,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Opus_Identifier_Type_Value_UnionCat">
+        <tu tuid="Opus_Identifier_Type_Value_Union-cat">
             <tuv xml:lang="en">
                 <seg>Union-Catalog-ID</seg>
             </tuv>
