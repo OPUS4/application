@@ -315,6 +315,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         }
 
         $doc->formatOutput = true;
+
         $xml = $doc->saveXML();
 
         // TODO including ListMetadataFormats output as DOM using php:function results in an empty xmlns="" attribute
@@ -322,7 +323,6 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         $xml = str_replace(' xmlns=""', '', $xml);
 
         return $xml;
-
     }
 
     /**
