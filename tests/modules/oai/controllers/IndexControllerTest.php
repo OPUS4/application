@@ -1252,7 +1252,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::' . $id);
 
         $response = $this->getResponse()->getBody();
-        $this->assertContains('<Opus_Document xmlns="" Id="' . $id . '"', $response);
+        $this->assertContains('<Opus_Document Id="' . $id . '"', $response);
         $this->assertNotContains('<File', $response);
     }
 
