@@ -51,7 +51,7 @@ class Oai_View_Helper_ListMetadataFormats extends Application_View_Helper_Abstra
         $formats       = $oaiConfig->getFormats();
 
         if ($formats) {
-            $output = PHP_EOL . '    <ListMetadataFormats>';
+            $output = PHP_EOL . '  <ListMetadataFormats>';
             foreach ($formats as $formatPrefix) {
                 $server               = $serverFactory->create($formatPrefix);
                 $prefix               = $server->getPrefixLabel() ?: $formatPrefix;
@@ -73,18 +73,18 @@ class Oai_View_Helper_ListMetadataFormats extends Application_View_Helper_Abstra
                         }
 
                         $output .= PHP_EOL;
-                        $output .= '      <metadataFormat>' . PHP_EOL;
-                        $output .= "        <metadataPrefix>$prefix</metadataPrefix>" . PHP_EOL;
-                        $output .= "        <schema>$schemaUrl</schema>" . PHP_EOL;
-                        $output .= "        <metadataNamespace>$metadataNamespaceUrl</metadataNamespace>" . PHP_EOL;
-                        $output .= '      </metadataFormat>';
+                        $output .= '    <metadataFormat>' . PHP_EOL;
+                        $output .= "      <metadataPrefix>$prefix</metadataPrefix>" . PHP_EOL;
+                        $output .= "      <schema>$schemaUrl</schema>" . PHP_EOL;
+                        $output .= "      <metadataNamespace>$metadataNamespaceUrl</metadataNamespace>" . PHP_EOL;
+                        $output .= '    </metadataFormat>';
                     }
                 }
             }
 
             $output .= PHP_EOL;
-            $output .= '    </ListMetadataFormats>';
-            $output .= PHP_EOL . '  ';
+            $output .= '  </ListMetadataFormats>';
+            $output .= PHP_EOL;
         }
 
         return $output;
