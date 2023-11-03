@@ -1091,6 +1091,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="IdentifierUnionCat">
+            <tuv xml:lang="en">
+                <seg>Union-Catalog-ID</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Verbund-ID</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="SubjectSwdValue">
             <tuv xml:lang="en">
                 <seg>GND Keywords</seg>
