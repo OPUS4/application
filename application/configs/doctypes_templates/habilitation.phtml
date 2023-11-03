@@ -1,5 +1,4 @@
 ﻿<?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,54 +24,60 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-
 ?>
 
 <h2><?= $this->translate($this->title) ?></h2>
 <div class="content">
-    <h3 class="document-type" title="<?= $this->translate('selecttype'); ?>"><?= $this->subtitle ?></h3>
+    <h3 class="document-type" title="<?= $this->translate('selecttype'); ?>"><?= $this->subtitle?></h3>
 
     <?php if (isset($this->errorCaseMessage)) : ?>
         <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
     <?php endif; ?>
 
-        <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
-            <div class="form-items-wrapper">
-                <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
+    <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
+        <div class="form-items-wrapper">
+            <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
-                <?php $this->count = 0; ?>
+            <?php $this->count = 0; ?>
             <?= $this->group($this->groupPersonSubmitter); ?>
-            <?= $this->group($this->groupTitleMain); ?>
-            <?= $this->group($this->groupTitleAbstract); ?>
+            <?= $this->element($this->Language); ?>
             <?= $this->group($this->groupPersonAuthor); ?>
+            <?= $this->group($this->groupTitleMain); ?>
+            <?= $this->group($this->groupTitleSub); ?>
+            <?= $this->group($this->groupTitleAbstract); ?>
+            <?= $this->group($this->groupTitleParent); ?>
+            <?= $this->element($this->PageNumber); ?> 
+            
             <?= $this->element($this->CompletedYear); ?>
             <?= $this->element($this->CompletedDate); ?>
+            <?= $this->element($this->PublishedDate); ?>
             <?= $this->element($this->ThesisDateAccepted); ?>
-            <?= $this->group($this->groupPersonAdvisor); ?>
+            
             <?= $this->group($this->groupPersonReferee); ?>
+            <?= $this->group($this->groupPersonAdvisor); ?>
+            <?= $this->element($this->ContributingCorporation); ?>
             <?= $this->element($this->ThesisGrantor); ?>
             <?= $this->group($this->groupThesisPublisher); ?>
-            <?= $this->group($this->groupInstitute); ?>
-            <?= $this->element($this->PublisherName); ?>
+
             <?= $this->element($this->PublisherPlace); ?>
-            <?= $this->element($this->PublishedDate); ?>
-            <?= $this->element($this->IdentifierIsbn); ?>
-            <?= $this->element($this->PageNumber); ?>
-            <?= $this->group($this->groupPersonEditor); ?>
-            <?= $this->group($this->groupPersonTranslator); ?>
-            <?= $this->group($this->groupPersonContributor); ?>
-            <?= $this->element($this->CreatingCorporation); ?>
-            <?= $this->element($this->ContributingCorporation); ?>           
+            <?= $this->element($this->PublisherName); ?>
+
+            <?= $this->group($this->groupSeries); ?>
+            
             <?= $this->group($this->groupSubjectDDC); ?>
             <?= $this->group($this->groupSubjectSwd); ?>
             <?= $this->group($this->groupSubjectUncontrolled); ?>
-            <?= $this->element($this->Note); ?>
-            <?= $this->element($this->Language); ?>
+            
+            <?= $this->element($this->IdentifierIsbn); ?>
+            <?= $this->element($this->IdentifierDoi); ?>
+            
+            <?= $this->group($this->groupInstitute); ?>
             <?= $this->element($this->Licence); ?>
-            <?= $this->group($this->groupSeries); ?>
+            <?= $this->element($this->open_access); ?>
+            <?= $this->element($this->Note); ?>
 
             <div class="button-wrapper">
                 <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
@@ -82,8 +87,8 @@
         </div>
     </form>
 
-<?php if ($this->endTemplate($this->form, $this->count) !== "") : ?>
-          <div class="form-hint form-errors"><?= $this->endTemplate($this->form, $this->count); ?></div>
-<?php endif; ?>
+    <?php if ($this->endTemplate($this->form, $this->count) !== "") : ?>
+        <div class="form-hint form-errors"><?= $this->endTemplate($this->form, $this->count); ?></div>
+    <?php endif; ?>
 
 </div>
