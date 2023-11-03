@@ -37,6 +37,8 @@ use Opus\Common\Repository;
  */
 class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
 {
+    private const SET_NAME = 'doc-type';
+
     /**
      * Returns oai sets for document types.
      *
@@ -53,7 +55,7 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
         if ($document) {
             $type           = $document->getType();
             $dcType         = $dcTypeHelper->dcType($type);
-            $setSpec        = "doc-type:$dcType";
+            $setSpec        = self::SET_NAME . ':' . $dcType;
             $sets[$setSpec] = ucfirst($dcType);
         } else {
             $finder = Repository::getInstance()->getDocumentFinder();
@@ -69,7 +71,7 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
 
                 $dcType = $dcTypeHelper->dcType($doctype);
 
-                $setSpec        = "doc-type:$dcType";
+                $setSpec        = self::SET_NAME . ':' . $dcType;
                 $sets[$setSpec] = ucfirst($dcType);
             }
         }
@@ -106,6 +108,6 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
      */
     public function supports($setName)
     {
-        return $setName->getSetName() === 'doc-type';
+        return $setName->getSetName() === self::SET_NAME;
     }
 }

@@ -36,6 +36,8 @@ use Opus\Common\DocumentInterface;
  */
 class Oai_Model_Set_BibliographySets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
 {
+    private const SET_NAME = 'bibliography';
+
     /**
      * Returns sets from set type bibliography.
      *
@@ -45,12 +47,12 @@ class Oai_Model_Set_BibliographySets extends Application_Model_Abstract implemen
     public function getSets($document = null)
     {
         $bibliographySets = [
-            'bibliography:true'  => 'Set for bibliographic entries',
-            'bibliography:false' => 'Set for non-bibliographic entries',
+            self::SET_NAME . ':true'  => 'Set for bibliographic entries',
+            self::SET_NAME . ':false' => 'Set for non-bibliographic entries',
         ];
 
         if ($document) {
-            $setSpec = $document->getBelongsToBibliography() === 1 ? 'bibliography:true' : 'bibliography:false';
+            $setSpec = $document->getBelongsToBibliography() ? self::SET_NAME . ':true' : self::SET_NAME . ':false';
             return [$setSpec => $bibliographySets[$setSpec]];
         }
 
@@ -90,6 +92,6 @@ class Oai_Model_Set_BibliographySets extends Application_Model_Abstract implemen
      */
     public function supports($setName)
     {
-        return $setName->getSetName() === 'bibliography';
+        return $setName->getSetName() === self::SET_NAME;
     }
 }
