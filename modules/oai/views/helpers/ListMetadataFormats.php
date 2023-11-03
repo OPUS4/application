@@ -87,6 +87,9 @@ class Oai_View_Helper_ListMetadataFormats extends Application_View_Helper_Abstra
             $output .= PHP_EOL;
         }
 
-        return $output;
+        $dom = new DOMDocument();
+        $dom->loadXML($output);
+
+        return $dom;
     }
 }

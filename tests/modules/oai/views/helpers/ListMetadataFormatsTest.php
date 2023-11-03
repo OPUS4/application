@@ -40,7 +40,6 @@ class Oai_View_Helper_ListMetadataFormatsTest extends ControllerTestCase
     protected function getExpectedMetadaFormats()
     {
         return <<<XML
-
   <ListMetadataFormats>
     <metadataFormat>
       <metadataPrefix>oai_dc</metadataPrefix>
@@ -63,7 +62,6 @@ class Oai_View_Helper_ListMetadataFormatsTest extends ControllerTestCase
       <metadataNamespace>http://www.loc.gov/MARC21/slim</metadataNamespace>
     </metadataFormat>
   </ListMetadataFormats>
-
 XML;
     }
 
@@ -73,7 +71,6 @@ XML;
     protected function getExpectedMetadaFormatsWithoutOaiDc()
     {
         return <<<XML
-
   <ListMetadataFormats>
     <metadataFormat>
       <metadataPrefix>epicur</metadataPrefix>
@@ -91,14 +88,17 @@ XML;
       <metadataNamespace>http://www.loc.gov/MARC21/slim</metadataNamespace>
     </metadataFormat>
   </ListMetadataFormats>
-
 XML;
     }
 
     public function testListMetadataFormats()
     {
         $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
-        $this->assertEquals($this->getExpectedMetadaFormats(), $listMetaDataFormats->listMetadataFormats());
+
+        $dom = new DOMDocument();
+        $dom->loadXML($this->getExpectedMetadaFormats());
+
+        $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
     public function testListMetadataFormatsFormatNotVisible()
@@ -117,7 +117,11 @@ XML;
         ]);
 
         $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
-        $this->assertEquals($this->getExpectedMetadaFormatsWithoutOaiDc(), $listMetaDataFormats->listMetadataFormats());
+
+        $dom = new DOMDocument();
+        $dom->loadXML($this->getExpectedMetadaFormatsWithoutOaiDc());
+
+        $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
     public function testListMetadataFormatsFormatNotVisibleAndAdminOnly()
@@ -136,7 +140,11 @@ XML;
         ]);
 
         $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
-        $this->assertEquals($this->getExpectedMetadaFormatsWithoutOaiDc(), $listMetaDataFormats->listMetadataFormats());
+
+        $dom = new DOMDocument();
+        $dom->loadXML($this->getExpectedMetadaFormatsWithoutOaiDc());
+
+        $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
     public function testListMetadataFormatsFormatVisible()
@@ -155,7 +163,11 @@ XML;
         ]);
 
         $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
-        $this->assertEquals($this->getExpectedMetadaFormats(), $listMetaDataFormats->listMetadataFormats());
+
+        $dom = new DOMDocument();
+        $dom->loadXML($this->getExpectedMetadaFormats());
+
+        $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
     public function testListMetadataFormatsFormatVisibleAndAdminOnly()
@@ -174,7 +186,11 @@ XML;
         ]);
 
         $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
-        $this->assertEquals($this->getExpectedMetadaFormatsWithoutOaiDc(), $listMetaDataFormats->listMetadataFormats());
+
+        $dom = new DOMDocument();
+        $dom->loadXML($this->getExpectedMetadaFormatsWithoutOaiDc());
+
+        $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
     public function testListMetadataFormatsAsAdminWithFormatNotVisible()
@@ -194,8 +210,11 @@ XML;
         ]);
 
         $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
-        $formatList          = $listMetaDataFormats->listMetadataFormats();
-        $this->assertEquals($this->getExpectedMetadaFormatsWithoutOaiDc(), $listMetaDataFormats->listMetadataFormats());
+
+        $dom = new DOMDocument();
+        $dom->loadXML($this->getExpectedMetadaFormatsWithoutOaiDc());
+
+        $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
     public function testListMetadataFormatsAsAdminWithFormatNotVisibleAndAdminOnly()
@@ -215,7 +234,11 @@ XML;
         ]);
 
         $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
-        $this->assertEquals($this->getExpectedMetadaFormatsWithoutOaiDc(), $listMetaDataFormats->listMetadataFormats());
+
+        $dom = new DOMDocument();
+        $dom->loadXML($this->getExpectedMetadaFormatsWithoutOaiDc());
+
+        $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
     public function testListMetadataFormatsAsAdminWithFormatVisible()
@@ -235,7 +258,11 @@ XML;
         ]);
 
         $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
-        $this->assertEquals($this->getExpectedMetadaFormats(), $listMetaDataFormats->listMetadataFormats());
+
+        $dom = new DOMDocument();
+        $dom->loadXML($this->getExpectedMetadaFormats());
+
+        $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
     public function testListMetadataFormatsAsAdminWithFormatVisibleAndAdminOnly()
@@ -255,6 +282,10 @@ XML;
         ]);
 
         $listMetaDataFormats = new Oai_View_Helper_ListMetadataFormats();
-        $this->assertEquals($this->getExpectedMetadaFormats(), $listMetaDataFormats->listMetadataFormats());
+
+        $dom = new DOMDocument();
+        $dom->loadXML($this->getExpectedMetadaFormats());
+
+        $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 }
