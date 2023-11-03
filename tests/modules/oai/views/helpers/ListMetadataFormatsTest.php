@@ -101,7 +101,7 @@ XML;
         $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
-    public function testListMetadataFormatsFormatNotVisible()
+    public function testFormatNotVisible()
     {
         $this->enableSecurity();
 
@@ -124,7 +124,7 @@ XML;
         $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
-    public function testListMetadataFormatsFormatNotVisibleAndAdminOnly()
+    public function testFormatNotVisibleAndAdminOnly()
     {
         $this->enableSecurity();
 
@@ -147,7 +147,7 @@ XML;
         $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
-    public function testListMetadataFormatsFormatVisible()
+    public function testFormatVisible()
     {
         $this->enableSecurity();
 
@@ -170,7 +170,7 @@ XML;
         $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
-    public function testListMetadataFormatsFormatVisibleAndAdminOnly()
+    public function testFormatVisibleAndAdminOnly()
     {
         $this->enableSecurity();
 
@@ -193,7 +193,7 @@ XML;
         $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
-    public function testListMetadataFormatsAsAdminWithFormatNotVisible()
+    public function testAsAdminWithFormatNotVisible()
     {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
@@ -217,7 +217,7 @@ XML;
         $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
-    public function testListMetadataFormatsAsAdminWithFormatNotVisibleAndAdminOnly()
+    public function testAsAdminWithFormatNotVisibleAndAdminOnly()
     {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
@@ -241,7 +241,7 @@ XML;
         $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
-    public function testListMetadataFormatsAsAdminWithFormatVisible()
+    public function testAsAdminWithFormatVisible()
     {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
@@ -265,7 +265,7 @@ XML;
         $this->assertEquals($dom, $listMetaDataFormats->listMetadataFormats());
     }
 
-    public function testListMetadataFormatsAsAdminWithFormatVisibleAndAdminOnly()
+    public function testAsAdminWithFormatVisibleAndAdminOnly()
     {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
