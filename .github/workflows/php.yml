@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        versions: [{php: '7.1', solr: '7.7.3'}, {php: '8.1', solr: '9.3.0'}]
+        versions: [{php: '7.1', solr: '7.7.3'}, {php: '8.1', solr: '9.4.0'}]
       fail-fast: false
 
     name: PHP ${{ matrix.versions.php }} Test
@@ -37,6 +37,13 @@ jobs:
 
       - name: Install additional Software
         run: sudo apt-get install libxml2-utils
+
+      - name: Get Solr ${{ matrix.versions.solr }} from Cache
+        id: cache-solr
+        uses: actions/cache@v3
+        with:
+          path: downloads
+          key: solr-${{ matrix.versions.solr }}
 
       - name: Install Solr ${{ matrix.versions.solr }}
         run: sudo bash tests/bin/install_solr_docker.sh --version ${{ matrix.versions.solr }}

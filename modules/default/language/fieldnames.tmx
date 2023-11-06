@@ -1000,6 +1000,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="IdentifierIsmn">
+            <tuv xml:lang="en">
+                <seg>ISMN</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ISMN</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="IdentifierUuid">
             <tuv xml:lang="en">
                 <seg>Uuid</seg>
@@ -1079,6 +1088,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>SplashURL</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="IdentifierUnionCat">
+            <tuv xml:lang="en">
+                <seg>Union-Catalog-ID</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Verbund-ID</seg>
             </tuv>
         </tu>
 

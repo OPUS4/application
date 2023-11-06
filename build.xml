@@ -8,7 +8,7 @@
     <property name="adminPassword" value="AdminAdmin" />
     <property name="bindir" value="${basedir}/vendor/bin" />
     <property name="verbose" value="" />
-    <property name="solrVersion" value="5.5.5" />
+    <property name="solrVersion" value="9.4.0" />
     <property name="downloadDir" value="${basedir}/downloads" />
 
     <!-- Properties for configuration files (config.ini, console.ini, tests/config.ini) used for testing. -->
@@ -341,7 +341,7 @@
 
     <target name="download-solr">
         <mkdir dir="${downloadDir}" />
-        <get src="https://archive.apache.org/dist/lucene/solr/${solrVersion}/solr-${solrVersion}.tgz"
+        <get src="https://www.apache.org/dyn/closer.lua/solr/solr/${solrVersion}/solr-${solrVersion}.tgz?action=download"
              dest="${downloadDir}/solr-${solrVersion}.tgz"
              skipexisting="true" />
         <exec executable="tar" dir="${downloadDir}">
