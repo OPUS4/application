@@ -1887,10 +1887,10 @@
 
         <tu tuid="IdentifierOrcid">
             <tuv xml:lang="en">
-                <seg>ORCID</seg>
+                <seg>ORCID iD</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>ORCID</seg>
+                <seg>ORCID iD</seg>
             </tuv>
         </tu>
 
@@ -2223,10 +2223,10 @@
 
         <tu tuid="Opus_Person_Author_Identifier_Orcid">
             <tuv xml:lang="en">
-                <seg>Orcid Identifier</seg>
+                <seg>ORCID iD</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Orcid-Id</seg>
+                <seg>ORCID iD</seg>
             </tuv>
         </tu>
 
