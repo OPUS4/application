@@ -37,7 +37,7 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
     private $setTypeObjects;
 
     /**
-     * Returns all oai sets.
+     * Returns all OAI sets.
      *
      * @param DocumentInterface|null $document
      * @return array

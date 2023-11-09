@@ -37,12 +37,6 @@ use Opus\Common\DocumentInterface;
  */
 class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
 {
-    /** Regexp pattern to check if a full set name is valid. */
-    private const SET_PATTERN = "/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/";
-
-    /** Regexp pattern to check if a set name or subset name is valid. */
-    private const SET_PART_PATTERN = '/^[A-Za-z0-9\-_\.!~\*\'\(\)]+$/';
-
     /**
      * Returns oai sets for collections.
      *
@@ -57,7 +51,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
         if ($document) {
             $setSpecs = $this->getSetsFromCollections($document->getCollection());
             foreach ($setSpecs as $setSpec => $name) {
-                if (preg_match(self::SET_PATTERN, $setSpec)) {
+                if (Oai_Model_Set_SetName::isValidSetName($setSpec)) {
                     $sets[$setSpec] = $name;
                     continue;
                 }
@@ -71,10 +65,10 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
                     continue;
                 }
 
-                if (0 === preg_match(self::SET_PART_PATTERN, $result['oai_name'])) {
+                if (! Oai_Model_Set_SetName::isValidSubsetName($result['oai_name'])) {
                     $msg = "Invalid SetSpec (oai_name='" . $result['oai_name'] . "'). "
                         . " Please check collection role " . $result['id'] . ". "
-                        . " Allowed characters are " . self::SET_PART_PATTERN . ".";
+                        . " Allowed characters are " . Oai_Model_Set_SetName::SET_PART_PATTERN . ".";
                     $logger->err("OAI-PMH: $msg");
                     continue;
                 }
@@ -165,10 +159,10 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
             $subSetSpec = "$setSpec:" . $subset['oai_subset'];
             // $subSetCount = $subset['count'];
 
-            if (0 === preg_match(self::SET_PART_PATTERN, $subset['oai_subset'])) {
+            if (! Oai_Model_Set_SetName::isValidSubsetName($subset['oai_subset'])) {
                 $msg = "Invalid SetSpec (oai_name='" . $subset['oai_subset'] . "')."
                     . " Please check collection " . $subset['id'] . ". "
-                    . " Allowed characters are [" . self::SET_PART_PATTERN . "].";
+                    . " Allowed characters are [" . Oai_Model_Set_SetName::SET_PART_PATTERN . "].";
                 $logger->err("OAI-PMH: $msg");
                 continue;
             }

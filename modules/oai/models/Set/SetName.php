@@ -34,6 +34,12 @@
  */
 class Oai_Model_Set_SetName
 {
+    /** Regexp pattern to check if a full set name is valid. */
+    const SET_PATTERN = "/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/";
+
+    /** Regexp pattern to check if a set name or subset name is valid. */
+    const SET_PART_PATTERN = '/^[A-Za-z0-9\-_\.!~\*\'\(\)]+$/';
+
     /** @var array */
     private $setParts;
 
@@ -69,13 +75,13 @@ class Oai_Model_Set_SetName
     }
 
     /**
-     * Returns all set parts.
+     * Returns the full set name
      *
-     * @return array
+     * @return string|null
      */
-    public function getSetParts()
+    public function getFullSetName()
     {
-        return $this->setParts;
+        return implode(':', $this->setParts);
     }
 
     /**
@@ -86,5 +92,27 @@ class Oai_Model_Set_SetName
     public function getSetPartsCount()
     {
         return count($this->setParts);
+    }
+
+    /**
+     * Checks a set name
+     *
+     * @param string $set Set name (set:subset or set)
+     * @return bool
+     */
+    public static function isValidSetName($set)
+    {
+        return preg_match(self::SET_PATTERN, $set) === 1;
+    }
+
+    /**
+     * Checks a subset name
+     *
+     * @param string $subset Subset name
+     * @return bool
+     */
+    public static function isValidSubsetName($subset)
+    {
+        return preg_match(self::SET_PART_PATTERN, $subset) === 1;
     }
 }

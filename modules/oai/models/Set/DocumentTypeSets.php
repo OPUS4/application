@@ -47,10 +47,9 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
      */
     public function getSets($document = null)
     {
-        $logger         = $this->getLogger();
-        $dcTypeHelper   = new Application_View_Helper_DcType();
-        $sets           = [];
-        $setSpecPattern = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
+        $logger       = $this->getLogger();
+        $dcTypeHelper = new Application_View_Helper_DcType();
+        $sets         = [];
 
         if ($document) {
             $type           = $document->getType();
@@ -62,9 +61,9 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
             $finder->setServerState('published');
 
             foreach ($finder->getDocumentTypes() as $doctype) {
-                if (0 === preg_match("/^$setSpecPattern$/", $doctype)) {
+                if (! Oai_Model_Set_SetName::isValidSubsetName($doctype)) {
                     $msg = "Invalid SetSpec (doctype='" . $doctype . "')."
-                        . " Allowed characters are [$setSpecPattern].";
+                        . " Allowed characters are [" . Oai_Model_Set_SetName::SET_PART_PATTERN . "].";
                     $logger->err("OAI-PMH: $msg");
                     continue;
                 }
@@ -92,9 +91,7 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
 
         // TODO Behavior with invalid set names should be reconsidered.
         if ($setName->getSetPartsCount() !== 2) {
-            throw new Oai_Model_Set_SetException(
-                'Invalid set name: ' . implode(':', $setName->getSetParts())
-            );
+            throw new Oai_Model_Set_SetException('Invalid set name: ' . $setName->getFullSetName());
         }
 
         $finder->setDocumentType($subsetName);
