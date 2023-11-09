@@ -59,7 +59,7 @@
 
     <xsl:output method="xml" indent="yes" />
 
-    <xsl:template match="Opus_Document" mode="metadata_prefix_mode">
+    <xsl:template match="Opus_Document">
         <xMetaDiss:xMetaDiss
             xmlns:xMetaDiss="http://www.d-nb.de/standards/xmetadissplus/"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

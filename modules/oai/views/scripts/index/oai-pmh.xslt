@@ -241,7 +241,7 @@
     <xsl:template match="Documents" mode="ListIdentifiers">
         <xsl:if test="count(Opus_Document) > 0">
             <ListIdentifiers>
-                <xsl:apply-templates select="Opus_Document" />
+                <xsl:apply-templates select="Opus_Document" mode="oai-pmh"/>
                 <xsl:choose>
                     <xsl:when test="$totalIds > 0 and $res != ''">
                         <resumptionToken>
@@ -269,7 +269,7 @@
     <xsl:template match="Documents" mode="ListRecords">
         <xsl:if test="count(Opus_Document) > 0">
             <ListRecords>
-            <xsl:apply-templates select="Opus_Document" />
+            <xsl:apply-templates select="Opus_Document" mode="oai-pmh"/>
                 <xsl:choose>
                     <xsl:when test="$totalIds > 0 and $res != ''">
                         <resumptionToken>
@@ -290,7 +290,7 @@
 
     <xsl:template match="Documents" mode="GetRecord">
         <GetRecord>
-            <xsl:apply-templates select="Opus_Document" />
+            <xsl:apply-templates select="Opus_Document" mode="oai-pmh"/>
         </GetRecord>
     </xsl:template>
 
@@ -301,14 +301,14 @@
         </set>
     </xsl:template>
 
-    <xsl:template match="Opus_Document">
+    <xsl:template match="Opus_Document" mode="oai-pmh">
       <xsl:choose>
          <xsl:when test="$oai_verb='ListIdentifiers'">
            <xsl:call-template name="Opus_Document_Data"/>
          </xsl:when>
          <xsl:otherwise>
            <record>
-             <xsl:call-template name="Opus_Document_Data"/>
+             <xsl:call-template name="Opus_Document_Data" />
            </record>
          </xsl:otherwise>
       </xsl:choose>
