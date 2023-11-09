@@ -62,7 +62,6 @@
     <xsl:param name="oai_until" />
     <xsl:param name="oai_set" />
     <xsl:param name="oai_metadataPrefix" />
-    <xsl:param name="oai_metadataPrefixMode" /><!-- strtolower version of oai_metadataPrefix TODO temp. hack -->
     <xsl:param name="oai_resumptionToken" />
     <xsl:param name="oai_identifier" />
     <xsl:param name="oai_error_code" />
@@ -362,26 +361,7 @@
             <xsl:choose>
                  <xsl:when test="$oai_verb!='ListIdentifiers' and @ServerState!='deleted'">
                  <metadata>
-                 <xsl:choose>
-                    <xsl:when test="$oai_metadataPrefixMode='xmetadissplus'">
-                       <xsl:apply-templates select="." mode="xmetadissplus" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefixMode='epicur'">
-                       <xsl:apply-templates select="." mode="epicur" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefixMode='oai_dc'">
-                       <xsl:apply-templates select="." mode="oai_dc" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefixMode='oai_pp'">
-                       <xsl:apply-templates select="." mode="oai_pp" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefixMode='copy_xml'">
-                       <xsl:apply-templates select="." mode="copy_xml" />
-                    </xsl:when>
-                     <xsl:when test="$oai_metadataPrefixMode='marc21'">
-                         <xsl:apply-templates select="." mode="marc21" />
-                     </xsl:when>
-                 </xsl:choose>
+                     <xsl:apply-templates select="." mode="metadata_prefix_mode" />
                  </metadata>
             </xsl:when>
         </xsl:choose>

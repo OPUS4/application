@@ -45,7 +45,7 @@
 
     <xsl:output method="xml" indent="yes" />
 
-    <xsl:template match="Opus_Document" mode="epicur">
+    <xsl:template match="Opus_Document" mode="metadata_prefix_mode">
         <epicur
             xsi:schemaLocation="urn:nbn:de:1111-2004033116 http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd"
             xmlns="urn:nbn:de:1111-2004033116"
@@ -59,7 +59,7 @@
 
             <record>
                <!-- Identifier URN -->
-               <xsl:apply-templates select="Identifier[@Type = 'urn']" mode="epicur" />
+               <xsl:apply-templates select="Identifier[@Type = 'urn']" mode="metadata_prefix_mode" />
 
                <resource>
                     <identifier scheme="url" role="primary">
@@ -71,7 +71,7 @@
                     </format>
                </resource>
 
-               <xsl:apply-templates select="File" mode="epicur"/>
+               <xsl:apply-templates select="File" mode="metadata_prefix_mode"/>
 
             </record>
 
@@ -79,16 +79,16 @@
     </xsl:template>
 
 
-    <xsl:template match="Identifier[@Type = 'urn']" mode="epicur">
+    <xsl:template match="Identifier[@Type = 'urn']" mode="metadata_prefix_mode">
         <identifier scheme="urn:nbn:de">
             <xsl:value-of select="@Value" />
         </identifier>
     </xsl:template>
 
     <!-- skip container file -->
-    <xsl:template match="File[@DnbContainer='1']" mode="epicur" />
+    <xsl:template match="File[@DnbContainer='1']" mode="metadata_prefix_mode" />
 
-    <xsl:template match="File" mode="epicur">
+    <xsl:template match="File" mode="metadata_prefix_mode">
         <resource>
             <identifier scheme="url">
                 <xsl:value-of select="@url"/>

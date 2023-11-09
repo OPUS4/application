@@ -38,7 +38,7 @@
 >
     <xsl:output method="xml" indent="yes"/>
 
-    <xsl:template match="Opus_Document" mode="marc21">
+    <xsl:template match="Opus_Document" mode="metadata_prefix_mode">
         <marc:collection xmlns:marc="http://www.loc.gov/MARC21/slim"
                          xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
             <marc:record>
@@ -232,7 +232,7 @@
                 </xsl:for-each>
 
                 <!-- PersonAutor, nur der erste Autor -->
-                <xsl:apply-templates select="./PersonAuthor[position() = 1]" mode="marc21">
+                <xsl:apply-templates select="./PersonAuthor[position() = 1]" mode="metadata_prefix_mode">
                     <xsl:with-param name="tag">100</xsl:with-param>
                     <xsl:with-param name="role">aut</xsl:with-param>
                 </xsl:apply-templates>
@@ -436,25 +436,25 @@
                 </marc:datafield>
 
                 <!-- Sonstige Autoren -->
-                <xsl:apply-templates select="./PersonAuthor[position() &gt; 1]" mode="marc21">
+                <xsl:apply-templates select="./PersonAuthor[position() &gt; 1]" mode="metadata_prefix_mode">
                     <xsl:with-param name="tag">700</xsl:with-param>
                     <xsl:with-param name="role">aut</xsl:with-param>
                 </xsl:apply-templates>
 
                 <!-- PersonEditor -->
-                <xsl:apply-templates select="./PersonEditor" mode="marc21">
+                <xsl:apply-templates select="./PersonEditor" mode="metadata_prefix_mode">
                     <xsl:with-param name="tag">700</xsl:with-param>
                     <xsl:with-param name="role">edt</xsl:with-param>
                 </xsl:apply-templates>
 
                 <!-- PersonAdvisor -->
-                <xsl:apply-templates select="./PersonAdvisor" mode="marc21">
+                <xsl:apply-templates select="./PersonAdvisor" mode="metadata_prefix_mode">
                     <xsl:with-param name="tag">700</xsl:with-param>
                     <xsl:with-param name="role">dgs</xsl:with-param>
                 </xsl:apply-templates>
 
                 <!-- PersonContributor -->
-                <xsl:apply-templates select="./PersonContributor" mode="marc21">
+                <xsl:apply-templates select="./PersonContributor" mode="metadata_prefix_mode">
                     <xsl:with-param name="tag">700</xsl:with-param>
                     <xsl:with-param name="role">ctb</xsl:with-param>
                 </xsl:apply-templates>
@@ -590,7 +590,7 @@
         </marc:collection>
     </xsl:template>
 
-    <xsl:template match="PersonAuthor|PersonEditor|PersonAdvisor|PersonContributor" mode="marc21">
+    <xsl:template match="PersonAuthor|PersonEditor|PersonAdvisor|PersonContributor" mode="metadata_prefix_mode">
         <xsl:param name="tag"/>
         <xsl:param name="role"/>
         <marc:datafield ind1="1" ind2=" " tag='{$tag}'>

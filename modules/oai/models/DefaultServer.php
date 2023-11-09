@@ -544,7 +544,6 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
             $oaiRequest['metadataPrefix']     = $metadataPrefix;
             $oaiRequest['metadataPrefixMode'] = strtolower($metadataPrefix);
             $this->proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
-            $this->proc->setParameter('', 'oai_metadataPrefixMode', strtolower($metadataPrefix));
             $resumed = true;
         } else {
             // no resumptionToken is given
