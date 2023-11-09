@@ -33,7 +33,9 @@ use Opus\Common\DocumentInterface;
 use Opus\Common\Repository;
 
 /**
- * Class for the "document type" set type
+ * Document type based OAI sets.
+ *
+ * Only document types actually used by documents are taken into account, for the document types the DC-Type is used.
  */
 class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
 {
