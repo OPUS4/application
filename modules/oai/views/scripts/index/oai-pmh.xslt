@@ -361,7 +361,7 @@
             <xsl:choose>
                  <xsl:when test="$oai_verb!='ListIdentifiers' and @ServerState!='deleted'">
                  <metadata>
-                     <xsl:apply-templates select="." mode="metadata_prefix_mode" />
+                     <xsl:apply-templates select="." />
                  </metadata>
             </xsl:when>
         </xsl:choose>
