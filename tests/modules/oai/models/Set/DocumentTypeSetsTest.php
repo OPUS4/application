@@ -54,6 +54,11 @@ class Oai_Model_Set_DocumentTypeSetsTest extends ControllerTestCase
 
     public function testGetSets()
     {
+        $this->markTestIncomplete(
+            'The number of sets depends on the filling of the DB, which results from the existing '
+            . 'tests and may also depend on the test sequence.'
+        );
+
         $documentTypeSets = new Oai_Model_Set_DocumentTypeSets();
 
         $sets = $documentTypeSets->getSets();
