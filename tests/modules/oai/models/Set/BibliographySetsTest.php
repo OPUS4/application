@@ -80,4 +80,9 @@ class Oai_Model_Set_BibliographySetsTest extends ControllerTestCase
         $sets = $bibliographySets->getSets($document);
         $this->assertEquals(['bibliography:true'], array_keys($sets));
     }
+
+    public function testConfigureFinder()
+    {
+        $this->markTestIncomplete('Actual search results should be checked.');
+    }
 }

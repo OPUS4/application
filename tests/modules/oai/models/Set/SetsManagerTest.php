@@ -83,4 +83,9 @@ class Oai_Model_Set_SetsManagerTest extends ControllerTestCase
 
         $this->assertNull($setType);
     }
+
+    public function testConfigureFinder()
+    {
+        $this->markTestIncomplete('Actual search results should be checked.');
+    }
 }

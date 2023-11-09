@@ -75,4 +75,9 @@ class Oai_Model_Set_DocumentTypeSetsTest extends ControllerTestCase
         $sets = $documentTypeSets->getSets($document);
         $this->assertEquals(['doc-type:Other'], array_keys($sets));
     }
+
+    public function testConfigureFinder()
+    {
+        $this->markTestIncomplete('Actual search results should be checked.');
+    }
 }

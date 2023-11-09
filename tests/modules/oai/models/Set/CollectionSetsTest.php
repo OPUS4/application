@@ -72,4 +72,9 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
     {
         $this->markTestIncomplete('do more testing');
     }
+
+    public function testConfigureFinder()
+    {
+        $this->markTestIncomplete('Actual search results should be checked.');
+    }
 }
