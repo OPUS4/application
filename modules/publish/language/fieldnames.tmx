@@ -126,10 +126,10 @@
 
     <tu tuid="PersonAuthorIdentifierOrcid">
       <tuv xml:lang="en">
-        <seg>ORCID</seg>
+        <seg>ORCID iD</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>ORCID</seg>
+        <seg>ORCID iD</seg>
       </tuv>
     </tu>
 
