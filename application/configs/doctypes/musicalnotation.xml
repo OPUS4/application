@@ -31,7 +31,6 @@
  -->
 <documenttype name="musicalnotation"
     xmlns="http://www.opus-repository.org/schema/documenttype"
-
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">
 
@@ -65,7 +64,9 @@
     <field name="PersonContributor" required="no" formelement="text" datatype="Person" multiplicity="*"/>
     <field name="ContributingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
     
-    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*">
+        <required-if-fulltext/>
+    </field>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 

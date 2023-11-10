@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--/**
+<!--
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2023, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
  -->
@@ -53,7 +54,9 @@
     <field name="PersonContributor" required="no" formelement="text" datatype="Person" multiplicity="*"/>
     <field name="CreatingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
     
-    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*">
+        <required-if-fulltext/>
+    </field>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 

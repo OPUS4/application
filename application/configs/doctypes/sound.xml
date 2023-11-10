@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2023, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
  -->
@@ -61,7 +61,9 @@
     <field name="ContributingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
     <field name="PersonContributor" required="no" formelement="text" datatype="Person" multiplicity="*"/>
 
-    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*">
+        <required-if-fulltext/>
+    </field>
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/> 
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 

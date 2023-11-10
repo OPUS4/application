@@ -62,7 +62,9 @@
     <field name="CreatingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
     <field name="ContributingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
     
-    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*">
+        <required-if-fulltext/>
+    </field>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     

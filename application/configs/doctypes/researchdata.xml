@@ -31,7 +31,6 @@
  -->
 <documenttype name="researchdata"
     xmlns="http://www.opus-repository.org/schema/documenttype"
-
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">
 
@@ -41,7 +40,7 @@
     <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1">
         <default value="deu" edit="yes" public="yes" />
     </field>
-    <field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*" >
+    <field name="PersonAuthor" required="yes" formelement="Text" datatype="Person" multiplicity="*" >
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
         <subfield name="IdentifierOrcid" required="no" formelement="text" datatype="Identifier" />
         <!--<subfield name="Email" required="no" formelement="text" datatype="Email" />
@@ -61,7 +60,9 @@
     </field>
         
     <field name="ContributingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
-    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*">
+        <required-if-fulltext/>
+    </field>
      
     <field name="SubjectSwd" required="no" formelement="Text" datatype="Subject" multiplicity="5" />
     <field name="SubjectDDC" required="no" formelement="Select" datatype="CollectionLeaf" root="ddc" multiplicity="*"/>

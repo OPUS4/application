@@ -66,7 +66,9 @@
     <field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonContributor" required="no" formelement="text" datatype="Person" multiplicity="*"/>
 
-    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*">
+        <required-if-fulltext/>
+    </field>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Series" required="no" formelement="Select" datatype="Series" multiplicity="1"/>

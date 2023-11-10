@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2023, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
  -->
@@ -71,7 +71,9 @@
     <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     
-    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*">
+        <required-if-fulltext/>
+    </field>
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Series" required="no" formelement="Select" datatype="Series" multiplicity="1"/>  
@@ -85,7 +87,7 @@
     <field name="IdentifierDoi" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
-    <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1">
+    <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1">
         <required-if-fulltext/>
     </field>
     <field name="open_access" required="no" formelement="Select" datatype="CollectionLeaf" root="open_access" multiplicity="1" />

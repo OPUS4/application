@@ -25,16 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2023, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
  -->
 <documenttype name="annotation"
     xmlns="http://www.opus-repository.org/schema/documenttype"
-
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">
-
 
     <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1">
         <subfield name="Email" required="yes" formelement="text" datatype="Email" />
@@ -56,6 +54,7 @@
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" />
         
     <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1" />
+    <field name="Series" required="no" formelement="Select" datatype="Series" multiplicity="1"/>
     <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     
@@ -71,7 +70,9 @@
     <field name="EmbargoDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
     <field name="Edition" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
         
-    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*">
+        <required-if-fulltext/>
+    </field>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
  

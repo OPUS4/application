@@ -40,7 +40,7 @@
     <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1">
         <default value="deu" edit="yes" public="yes" />
     </field>
-    <field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*" >
+    <field name="PersonAuthor" required="yes" formelement="Text" datatype="Person" multiplicity="*" >
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
         <subfield name="IdentifierOrcid" required="no" formelement="text" datatype="Identifier" />
         <!--<subfield name="Email" required="no" formelement="text" datatype="Email" />
@@ -52,7 +52,9 @@
     <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4" />
     <field name="TitleSub" required="no" formelement="text" datatype="Title" multiplicity="1"/>
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" />
+    
     <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
+    <field name="Series" required="no" formelement="Select" datatype="Series" multiplicity="1"/>
     <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
         
@@ -68,7 +70,9 @@
     <field name="PublishedDate" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
     
     <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*">
+        <required-if-fulltext/>
+    </field>
     
     <field name="SubjectSwd" required="no" formelement="Text" datatype="Subject" multiplicity="5" />
     <field name="SubjectDDC" required="no" formelement="Select" datatype="CollectionLeaf" root="ddc" multiplicity="*"/>
@@ -77,7 +81,7 @@
     <field name="IdentifierDoi" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
-    <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1">
+    <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1">
         <required-if-fulltext/>
     </field>
     <field name="open_access" required="no" formelement="Select" datatype="CollectionLeaf" root="open_access" multiplicity="1" />

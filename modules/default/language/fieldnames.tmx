@@ -1093,7 +1093,7 @@
 
         <tu tuid="IdentifierUnionCat">
             <tuv xml:lang="en">
-                <seg>Union-Catalog-ID</seg>
+                <seg>Union Catalog ID</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Verbund-ID</seg>
@@ -2389,6 +2389,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>import_origin</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="open_access">
+            <tuv xml:lang="en">
+                <seg>Accessibility</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Zugänglichkeit</seg>
             </tuv>
         </tu>
 

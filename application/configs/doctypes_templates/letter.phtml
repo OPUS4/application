@@ -28,6 +28,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 ?>
+
 <h2><?= $this->translate($this->title) ?></h2>
 <div class="content">
     <h3 class="document-type" title="<?= $this->translate('selecttype'); ?>"><?= $this->subtitle?></h3>
@@ -49,11 +50,12 @@
             <?= $this->group($this->groupTitleAbstract); ?>
             
             <?= $this->group($this->groupTitleParent); ?>
+            <?= $this->group($this->groupSeries); ?>
             <?= $this->element($this->Volume); ?>
             <?= $this->element($this->Issue); ?>
             
             <?= $this->element($this->ArticleNumber); ?>
-			<?= $this->element($this->PageNumber); ?>
+            <?= $this->element($this->PageNumber); ?>
             <?= $this->element($this->PageFirst); ?>
             <?= $this->element($this->PageLast); ?>
             
