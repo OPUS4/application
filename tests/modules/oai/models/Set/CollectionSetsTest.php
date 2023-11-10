@@ -38,7 +38,16 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
     {
         $collectionSets = new Oai_Model_Set_CollectionSets();
 
-        $setName = new Oai_Model_Set_SetName('ddc:28');
+        $setName = new Oai_Model_Set_SetName('ddc');
+
+        $this->assertTrue($collectionSets->supports($setName));
+    }
+
+    public function testSupportsWithSubset()
+    {
+        $collectionSets = new Oai_Model_Set_CollectionSets();
+
+        $setName = new Oai_Model_Set_SetName('ddc:02');
 
         $this->assertTrue($collectionSets->supports($setName));
     }
@@ -47,8 +56,10 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
     {
         $collectionSets = new Oai_Model_Set_CollectionSets();
 
-        $setName = new Oai_Model_Set_SetName('unknownCollectionRole:28');
+        $setName = new Oai_Model_Set_SetName('unknownCollectionRole:02');
+        $this->assertFalse($collectionSets->supports($setName));
 
+        $setName = new Oai_Model_Set_SetName('ddc:unknownCollection');
         $this->assertFalse($collectionSets->supports($setName));
     }
 

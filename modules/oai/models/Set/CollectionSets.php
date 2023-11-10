@@ -214,15 +214,15 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
     /**
      * Returns if the set type class supports the handling of given set name.
      *
-     * Set type class is always responsible for an entire collection role, therefore only the set name and not
-     * the subset name is checked.
+     * The Set type class is only responsible for a set of collection sets
+     * defined by Oai_Model_Set_CollectionSets::getSets().
      *
      * @param Oai_Model_Set_SetName $setName
      * @return bool
      */
     public function supports($setName)
     {
-        $roleOaiNames = array_column(CollectionRole::fetchAllOaiEnabledRoles(), 'oai_name');
-        return in_array($setName->getSetName(), $roleOaiNames);
+        $sets = $this->getSets();
+        return in_array($setName->getFullSetName(), array_keys($sets));
     }
 }
