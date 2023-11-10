@@ -68,18 +68,16 @@ class Oai_Model_Set_BibliographySets extends Application_Model_Abstract implemen
      */
     public function configureFinder($finder, $setName)
     {
-        // TODO Behavior with invalid set names should be reconsidered.
-        if ($setName->getSetPartsCount() !== 2) {
-            throw new Oai_Model_Set_SetException('Invalid set name: ' . $setName->getFullSetName());
+        $subsetName = $setName->getSubsetName();
+
+        if ($setName->getSetPartsCount() !== 2 || ! in_array($subsetName, ['true', 'false'])) {
+            throw new Oai_Model_Exception(
+                'The given set results in an empty list: ' . $setName->getFullSetName(),
+                Oai_Model_Error::NORECORDSMATCH
+            );
         }
 
-        $setValue = $setName->getSubsetName();
-
-        if (! in_array($setValue, ['true', 'false'])) {
-            throw new Oai_Model_Set_SetException('Unknown subset: ' . $setValue);
-        }
-
-        $finder->setBelongsToBibliography((int) filter_var($setValue, FILTER_VALIDATE_BOOLEAN));
+        $finder->setBelongsToBibliography((int) filter_var($subsetName, FILTER_VALIDATE_BOOLEAN));
     }
 
     /**

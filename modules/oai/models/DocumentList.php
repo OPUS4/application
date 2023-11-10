@@ -64,17 +64,13 @@ class Oai_Model_DocumentList
         }
 
         if (array_key_exists('set', $oaiRequest)) {
-            try {
-                $setsManager = $this->server->getSetsManager();
-                $setName     = new Oai_Model_Set_SetName($oaiRequest['set']);
-                $setType     = $setsManager->getSetType($setName);
+            $setsManager = $this->server->getSetsManager();
+            $setName     = new Oai_Model_Set_SetName($oaiRequest['set']);
+            $setType     = $setsManager->getSetType($setName);
 
-                if ($setType) {
-                    $setType->configureFinder($finder, $setName);
-                } else {
-                    return [];
-                }
-            } catch (Oai_Model_Set_SetException $e) {
+            if ($setType) {
+                $setType->configureFinder($finder, $setName);
+            } else {
                 return [];
             }
         }

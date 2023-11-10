@@ -33,19 +33,19 @@ class Oai_Model_Set_SetNameTest extends ControllerTestCase
 {
     public function testConstructorNoSet()
     {
-        $this->expectException(Oai_Model_Set_SetException::class);
+        $this->expectException(Oai_Model_Exception::class);
         $setName = new Oai_Model_Set_SetName('');
     }
 
     public function testConstructorNoSetButSubset()
     {
-        $this->expectException(Oai_Model_Set_SetException::class);
+        $this->expectException(Oai_Model_Exception::class);
         $setName = new Oai_Model_Set_SetName(':Article');
     }
 
     public function testConstructorNoSetAndNoSubset()
     {
-        $this->expectException(Oai_Model_Set_SetException::class);
+        $this->expectException(Oai_Model_Exception::class);
         $setName = new Oai_Model_Set_SetName(':');
     }
 

@@ -3429,10 +3429,18 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ddc:62:100');
 
-        $this->assertResponseCode(500);
+        $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
 
-        $this->assertContains('Unknown oai error code 0', $body);
+    public function testInvalidCollectionSetWithUnknownSubset()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ddc:9999999999');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="badArgument">', $body);
     }
 
     /**

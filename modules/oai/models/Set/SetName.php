@@ -45,13 +45,18 @@ class Oai_Model_Set_SetName
 
     /**
      * @param string $set The full set name (set:subset)
+     * @throws Oai_Model_Exception
      */
     public function __construct($set)
     {
-        $this->setParts = explode(':', $set);
-        if (! isset($this->setParts[0]) || empty($this->setParts[0])) {
-            throw new Oai_Model_Set_SetException('Missing set type name.');
+        if (! self::isValidSetName($set)) {
+            throw new Oai_Model_Exception(
+                "Invalid SetSpec ($set): Must be in format 'set:subset'.",
+                Oai_Model_Error::BADARGUMENT
+            );
         }
+
+        $this->setParts = explode(':', $set);
     }
 
     /**

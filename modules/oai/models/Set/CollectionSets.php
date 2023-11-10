@@ -93,17 +93,18 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
      */
     public function configureFinder($finder, $setName)
     {
-        // TODO Behavior with invalid set names should be reconsidered.
-        if ($setName->getSetPartsCount() < 1 || $setName->getSetPartsCount() > 2) {
-            $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
-            throw new Oai_Model_Exception($msg);
+        if ($setName->getSetPartsCount() > 2) {
+            throw new Oai_Model_Exception(
+                'The given set results in an empty list: ' . $setName->getFullSetName(),
+                Oai_Model_Error::NORECORDSMATCH
+            );
         }
 
         // Trying to locate collection role and filter documents.
         $role = CollectionRole::fetchByOaiName($setName->getSetName());
         if ($role === null) {
             $msg = "Invalid SetSpec: Top level set does not exist.";
-            throw new Oai_Model_Exception($msg);
+            throw new Oai_Model_Exception($msg, Oai_Model_Error::BADARGUMENT);
         }
         $finder->setCollectionRoleId($role->getId());
 
@@ -124,17 +125,20 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
                 });
 
                 if (count($emptySubsets) === 1) {
-                    throw new Oai_Model_Set_SetException('Empty subset: ' . $subsetName);
+                    throw new Oai_Model_Exception(
+                        'The given set results in an empty list: ' . $setName->getFullSetName(),
+                        Oai_Model_Error::NORECORDSMATCH
+                    );
                 } else {
                     $msg = "Invalid SetSpec: Subset does not exist.";
-                    throw new Oai_Model_Exception($msg);
+                    throw new Oai_Model_Exception($msg, Oai_Model_Error::BADARGUMENT);
                 }
             }
 
             foreach ($foundSubsets as $subset) {
                 if ($subset['oai_subset'] !== $subsetName) {
                     $msg = "Invalid SetSpec: Internal error.";
-                    throw new Oai_Model_Exception($msg);
+                    throw new Oai_Model_Exception($msg, Oai_Model_Error::BADARGUMENT);
                 }
                 $finder->setCollectionId($subset['id']);
             }
