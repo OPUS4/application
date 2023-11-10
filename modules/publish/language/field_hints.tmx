@@ -1316,6 +1316,15 @@ Beispieleingabe: "17.08" (für Semiotik)]]></seg>
             </tuv>
         </tu>
 
+        <tu tuid="hint_IdentifierIsmn">
+            <tuv xml:lang="en">
+                <seg>Please enter the ISMN.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Tragen Sie bitte die ISMN ein.</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="hint_IdentifierIsbn">
             <tuv xml:lang="en">
                 <seg>Please enter the ISBN.</seg>

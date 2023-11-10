@@ -76,7 +76,8 @@
     <field name="SubjectDDC" required="no" formelement="Select" datatype="CollectionLeaf" root="ddc" multiplicity="*"/>
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Subject" multiplicity="5"/>
     
-    <field name="IdentifierIssn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>  
+    <field name="IdentifierIsmn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
+    <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>  
     <field name="IdentifierDoi" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
