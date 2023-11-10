@@ -120,19 +120,10 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
             );
 
             if (count($foundSubsets) < 1) {
-                $emptySubsets = array_filter($role->getAllOaiSetNames(), function ($s) use ($subsetName) {
-                    return $s['oai_subset'] === $subsetName;
-                });
-
-                if (count($emptySubsets) === 1) {
-                    throw new Oai_Model_Exception(
-                        'The given set results in an empty list: ' . $setName->getFullSetName(),
-                        Oai_Model_Error::NORECORDSMATCH
-                    );
-                } else {
-                    $msg = "Invalid SetSpec: Subset does not exist.";
-                    throw new Oai_Model_Exception($msg, Oai_Model_Error::BADARGUMENT);
-                }
+                throw new Oai_Model_Exception(
+                    'The given set results in an empty list: ' . $setName->getFullSetName(),
+                    Oai_Model_Error::NORECORDSMATCH
+                );
             }
 
             foreach ($foundSubsets as $subset) {

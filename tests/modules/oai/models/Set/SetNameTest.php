@@ -69,8 +69,15 @@ class Oai_Model_Set_SetNameTest extends ControllerTestCase
 
     public function testGetSetPartsCount()
     {
+        $setName = new Oai_Model_Set_SetName('doc-type:Article');
+        $this->assertEquals(2, $setName->getSetPartsCount());
+
         $setName = new Oai_Model_Set_SetName('doc-type:Article:extra');
         $this->assertEquals(3, $setName->getSetPartsCount());
+
+        $setName = new Oai_Model_Set_SetName('doc-type');
+        $this->assertEquals(1, $setName->getSetPartsCount());
+        $this->assertNull($setName->getSubsetName());
     }
 
     public function testIsValidSetName()
