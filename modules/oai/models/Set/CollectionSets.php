@@ -103,8 +103,10 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
         // Trying to locate collection role and filter documents.
         $role = CollectionRole::fetchByOaiName($setName->getSetName());
         if ($role === null) {
-            $msg = "Invalid SetSpec: Top level set does not exist.";
-            throw new Oai_Model_Exception($msg, Oai_Model_Error::BADARGUMENT);
+            throw new Oai_Model_Exception(
+                'The given set results in an empty list: ' . $setName->getFullSetName(),
+                Oai_Model_Error::NORECORDSMATCH
+            );
         }
         $finder->setCollectionRoleId($role->getId());
 
