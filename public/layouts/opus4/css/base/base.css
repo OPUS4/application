@@ -133,7 +133,7 @@ a.rss img[src*="feed_small.png"],
 }
 
 #login-bar a[href*="account" i]::before {
-    content: "\f2bd"; 
+    content: "\f2bd";
 }
 /* @section header */
 
