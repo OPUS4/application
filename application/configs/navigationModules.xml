@@ -868,6 +868,7 @@
                             <module>setup</module>
                             <controller>appearance</controller>
                             <action>index</action>
+                            <resource>setup</resource>
                         </appearance>
                     </pages>
                 </setup>
