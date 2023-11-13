@@ -47,9 +47,6 @@ class Oai_Model_Request
     private $errorMessage;
 
     /** @var string */
-    private $pathToMetadataPrefixFiles;
-
-    /** @var string */
     private $resumptionPath;
 
     /** @var string[] */
@@ -139,23 +136,16 @@ class Oai_Model_Request
      */
     public function validateMetadataPrefix($oaiMetadataPrefix)
     {
-        // we assuming that a metadata prefix file ends with xslt
-        $possibleFiles = glob($this->pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
+        $serverFactory = new Oai_Model_ServerFactory();
+        $server        = $serverFactory->create(strtolower($oaiMetadataPrefix));
+        $oaiConfig     = Oai_Model_OaiConfig::getInstance();
 
-        // we support both spellings, xMetaDissPlus and XMetaDissPlus TODO really?
-        $availableMetadataPrefixes = ['xMetaDissPlus'];
-        foreach ($possibleFiles as $prefixFile) {
-            $availableMetadataPrefixes[] = strtolower(basename($prefixFile, '.xslt'));
-        }
+        $availableMetadataPrefixes = array_map('strtolower', $oaiConfig->getFormats());
 
-        // only administrators can request copy_xml format
-        if (! Realm::getInstance()->checkModule('admin')) {
-            $availableMetadataPrefixes = array_diff($availableMetadataPrefixes, ['copy_xml']);
-        }
+        $result = in_array(strtolower($oaiMetadataPrefix), $availableMetadataPrefixes)
+            && (! $server->isAdminOnly() || Realm::getInstance()->checkModule('admin'));
 
-        $result = in_array(strtolower($oaiMetadataPrefix), $availableMetadataPrefixes);
-
-        if (false === $result) {
+        if (! $result) {
             // MetadataPrefix not available.
             $this->setErrorCode(Oai_Model_Error::CANNOTDISSEMINATEFORMAT);
             $this->setErrorMessage(
@@ -301,27 +291,6 @@ class Oai_Model_Request
     protected function setErrorMessage($message)
     {
         $this->errorMessage = $message;
-    }
-
-    /**
-     * Set path to meta data prefix files.
-     * Returns false if given path is not a directory.
-     * There is no check if files are inside given directory!
-     *
-     * @param mixed $path
-     * @return bool
-     */
-    public function setPathToMetadataPrefixFiles($path)
-    {
-        $realpathToFiles = realpath($path);
-
-        $result = is_dir($realpathToFiles);
-
-        if (true === $result) {
-            $this->pathToMetadataPrefixFiles = $realpathToFiles;
-        }
-
-        return $result;
     }
 
     /**

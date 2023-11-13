@@ -29,14 +29,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\LoggingTrait;
+use Opus\Job\AbstractTask;
 use Opus\Job\MailNotification;
 use Opus\Job\Runner;
 
-class Application_Job_SendReviewRequestJob implements Application_Job_JobInterface
+class Application_Job_SendReviewRequestJob extends AbstractTask
 {
-    use LoggingTrait;
-
+    /**
+     * @return int
+     */
     public function run()
     {
         $jobrunner = new Runner();
@@ -54,5 +55,7 @@ class Application_Job_SendReviewRequestJob implements Application_Job_JobInterfa
         $jobrunner->registerWorker($mailWorker);
 
         $jobrunner->run();
+
+        return 0;
     }
 }

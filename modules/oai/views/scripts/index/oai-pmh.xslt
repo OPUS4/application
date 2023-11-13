@@ -41,14 +41,8 @@
     <xsl:param name="urnResolverUrl" />
     <xsl:param name="doiResolverUrl" />
 
-    <!-- add include here for each new metadata format    -->
-
-    <xsl:include href="prefixes/oai_dc.xslt"/>
-    <xsl:include href="prefixes/oai_pp.xslt"/>
-    <xsl:include href="prefixes/epicur.xslt"/>
-    <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
-    <xsl:include href="prefixes/copy_xml.xslt"/>
-    <xsl:include href="prefixes/marc21.xslt"/>
+    <!-- The following comment may not be removed. It will be automatically replaced -->
+    <!-- INCLUDE_METADATA_FORMAT_XSLT -->
 
     <xsl:output method="xml" indent="yes" encoding="utf-8" />
 
@@ -155,7 +149,6 @@
         </OAI-PMH>
     </xsl:template>
 
-
     <!-- template for Identiy  -->
     <xsl:template match="Documents" mode="Identify">
         <Identify>
@@ -241,36 +234,9 @@
         </Identify>
     </xsl:template>
 
-
     <!-- template for ListMetadataFormats  -->
     <xsl:template match="Documents" mode="ListMetadataFormats">
-        <ListMetadataFormats>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>oai_dc</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc/</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>epicur</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>XMetaDissPlus</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>xMetaDissPlus</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
-          </metadataFormat>
-            <metadataFormat>
-                <metadataPrefix><xsl:text>MARC21</xsl:text></metadataPrefix>
-                <schema><xsl:text>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</xsl:text></schema>
-                <metadataNamespace><xsl:text>http://www.loc.gov/MARC21/slim</xsl:text></metadataNamespace>
-            </metadataFormat>
-        </ListMetadataFormats>
+        <xsl:copy-of select="php:function('Application_Xslt::listMetadataFormats')" />
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListIdentifiers">
@@ -348,7 +314,6 @@
          </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
-
 
     <xsl:template name="Opus_Document_Data">
         <header>

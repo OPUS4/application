@@ -278,9 +278,35 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/oai?verb=ListMetadataFormats');
         $this->assertResponseCode(200);
+        $this->registerXpathNamespaces($this->xpathNamespaces);
 
-        $response = $this->getResponse();
-        $this->checkForBadStringsInHtml($response->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->checkForBadStringsInHtml($body);
+
+        $this->assertNotContains(
+            'copy_xml',
+            $body,
+            "Response must not contain format 'copy_xml'"
+        );
+
+        $this->assertNotContains(
+            'xsl:text',
+            $body,
+            "Response must not contain 'xsl:text'"
+        );
+
+        $this->assertXpathContentContains('//oai:metadataFormat/oai:metadataPrefix', 'oai_dc');
+
+        $this->assertXpathContentContains(
+            "//oai:metadataFormat[oai:metadataPrefix = 'oai_dc']/oai:schema",
+            'http://www.openarchives.org/OAI/2.0/oai_dc.xsd'
+        );
+
+        $this->assertXpathContentContains(
+            "//oai:metadataFormat[oai:metadataPrefix = 'oai_dc']/oai:metadataNamespace",
+            'http://www.openarchives.org/OAI/2.0/oai_dc/'
+        );
     }
 
     /**
@@ -1226,7 +1252,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::' . $id);
 
         $response = $this->getResponse()->getBody();
-        $this->assertContains('<Opus_Document xmlns="" Id="' . $id . '"', $response);
+        $this->assertContains('<Opus_Document Id="' . $id . '"', $response);
         $this->assertNotContains('<File', $response);
     }
 

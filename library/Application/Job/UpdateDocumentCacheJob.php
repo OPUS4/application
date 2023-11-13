@@ -31,6 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\Repository;
+use Opus\Job\AbstractTask;
 use Opus\Model\Xml;
 use Opus\Model\Xml\Version1;
 
@@ -40,10 +41,15 @@ use Opus\Model\Xml\Version1;
  * Since the metadata of documents are stored in multiple tables,
  * the cache stores the metadata in one place for faster access.
  */
-class Application_Job_UpdateDocumentCacheJob implements Application_Job_JobInterface
+class Application_Job_UpdateDocumentCacheJob extends AbstractTask
 {
+    /**
+     * @return int
+     */
     public function run()
     {
+        $output = $this->getOutput();
+
         $repository = Repository::getInstance();
 
         $finder = $repository->getDocumentFinder();
@@ -51,7 +57,7 @@ class Application_Job_UpdateDocumentCacheJob implements Application_Job_JobInter
 
         $docIds = $finder->setNotInXmlCache()->getIds();
 
-        echo 'Processing ' . count($docIds) . ' documents' . PHP_EOL;
+        $output->writeln('Processing ' . count($docIds) . ' documents' . PHP_EOL);
 
         foreach ($docIds as $docId) {
             $document = Document::get($docId);
@@ -66,7 +72,9 @@ class Application_Job_UpdateDocumentCacheJob implements Application_Job_JobInter
             // TODO cache is updated as a side effect (that is not ideal and might not always be true)
             $omx->getDomDocument();
 
-            echo "Cache refreshed for document #$docId\n";
+            $output->writeln("Cache refreshed for document #$docId");
         }
+
+        return 0;
     }
 }

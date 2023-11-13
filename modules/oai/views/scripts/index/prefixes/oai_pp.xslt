@@ -44,7 +44,6 @@
 
     <xsl:output method="xml" indent="yes" />
 
-
     <xsl:template match="Opus_Document" mode="oai_pp">
         <PP:ProPrint
             xsi:schemaLocation="http://www.proprint-service.de/xml/schemes/v1/ http://www.proprint-service.de/xml/schemes/v1/PROPRINT_METADATA_SET.xsd">

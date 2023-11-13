@@ -29,17 +29,18 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\LoggingTrait;
+use Opus\Job\AbstractTask;
 use Opus\Job\Runner;
 use Opus\Search\Task\ConsistencyCheck;
 
 /**
  * Class to check consistency
  */
-class Application_Job_CheckConsistencyJob implements Application_Job_JobInterface
+class Application_Job_CheckConsistencyJob extends AbstractTask
 {
-    use LoggingTrait;
-
+    /**
+     * @return int
+     */
     public function run()
     {
         $jobrunner = new Runner();
@@ -52,5 +53,7 @@ class Application_Job_CheckConsistencyJob implements Application_Job_JobInterfac
         $worker = new ConsistencyCheck();
         $jobrunner->registerWorker($worker);
         $jobrunner->run();
+
+        return 0;
     }
 }

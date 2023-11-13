@@ -392,6 +392,24 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_Identifier_Type_Value_Ismn">
+            <tuv xml:lang="en">
+                <seg>ISMN</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ISMN</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Union-cat">
+            <tuv xml:lang="en">
+                <seg>Union-Catalog-ID</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Verbund-ID</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="Opus_Reference_Relation_Value_Updates">
             <tuv xml:lang="en">
                 <seg>Updates</seg>

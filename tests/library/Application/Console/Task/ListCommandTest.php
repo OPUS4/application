@@ -25,20 +25,58 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2021, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
- /**
-  * Basic process interface as required to define
-  * jobs for background processes
-  */
-interface Application_Job_JobInterface
+use Opus\Job\TaskManager;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
+
+class Application_Console_Task_ListCommandTest extends ControllerTestCase
 {
-    /**
-     * Perform job.
-     *
-     * @return mixed
-     */
-    public function run();
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        if (! class_exists(TaskManager::class)) {
+            $this->markTestSkipped('TaskManager class not present');
+        }
+
+        $this->adjustConfiguration(
+            [
+                'cron' => [
+                    'configFile' => APPLICATION_PATH . '/tests/resources/task/commandtest-tasks.ini',
+                ],
+            ]
+        );
+    }
+
+    public function testListTaskOutput()
+    {
+        $app = new Application();
+
+        $command = new Application_Console_Task_ListCommand();
+        $command->setApplication($app);
+
+        $tester = new CommandTester($command);
+
+        $tester->execute([
+            '--no-interaction' => true,
+        ], [
+            'interactive' => false,
+        ]);
+
+        // Normalized strings for expected and displayed output because we are not interested in spaces and line breaks.
+        $expected  = '2 tasks are configured: Name Active Schedule testTask1 yes */1 * * * * testTask2 no */2 * * * *';
+        $displayed = trim(
+            preg_replace(
+                '/\s+/',
+                ' ',
+                str_replace(PHP_EOL, ' ', $tester->getDisplay())
+            )
+        );
+
+        $this->assertEquals($expected, $displayed);
+    }
 }

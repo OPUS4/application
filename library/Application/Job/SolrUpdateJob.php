@@ -29,14 +29,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\LoggingTrait;
+use Opus\Job\AbstractTask;
 use Opus\Job\Runner;
 use Opus\Search\Task\IndexOpusDocument;
 
-class Application_Job_SolrUpdateJob implements Application_Job_JobInterface
+class Application_Job_SolrUpdateJob extends AbstractTask
 {
-    use LoggingTrait;
-
+    /**
+     * @return int
+     */
     public function run()
     {
         $jobrunner = new Runner();
@@ -53,5 +54,7 @@ class Application_Job_SolrUpdateJob implements Application_Job_JobInterface
 
         // run processing
         $jobrunner->run();
+
+        return 0;
     }
 }

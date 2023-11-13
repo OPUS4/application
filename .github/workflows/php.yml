@@ -16,18 +16,18 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['7.1','8.1']
+        versions: [{php: '7.1', solr: '7.7.3'}, {php: '8.1', solr: '9.4.0'}]
       fail-fast: false
 
-    name: PHP ${{ matrix.php-versions }} Test
+    name: PHP ${{ matrix.versions.php }} Test
 
     steps:
       - uses: actions/checkout@v3
 
-      - name: Setup PHP ${{ matrix.php-versions }}
+      - name: Setup PHP ${{ matrix.versions.php }}
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-versions }}
+          php-version: ${{ matrix.versions.php }}
 
       - name: Install Composer and Dependencies
         run: sudo apt-get update && curl -s http://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar install
@@ -38,8 +38,15 @@ jobs:
       - name: Install additional Software
         run: sudo apt-get install libxml2-utils
 
-      - name: Solr
-        run: sudo bash bin/install_solr_docker.sh
+      - name: Get Solr ${{ matrix.versions.solr }} from Cache
+        id: cache-solr
+        uses: actions/cache@v3
+        with:
+          path: downloads
+          key: solr-${{ matrix.versions.solr }}
+
+      - name: Install Solr ${{ matrix.versions.solr }}
+        run: sudo bash tests/bin/install_solr_docker.sh --version ${{ matrix.versions.solr }}
 
       - name: Start MySQL
         run: sudo systemctl start mysql.service
@@ -54,7 +61,7 @@ jobs:
         run: ant prepare-workspace prepare-test-workspace
 
       - name: Setup config
-        run: ant prepare-config lint -DdbUserPassword=root -DdbAdminPassword=root -DphpVersion=${{ matrix.php-versions }}
+        run: ant prepare-config lint -DdbUserPassword=root -DdbAdminPassword=root -DphpVersion=${{ matrix.versions.php }}
 
       - name: Setup testdata
         run: ant reset-testdata

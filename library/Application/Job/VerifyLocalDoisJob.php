@@ -30,6 +30,7 @@
  */
 
 use Opus\Doi\DoiManager;
+use Opus\Job\AbstractTask;
 
 /*
  * Dieses Script sucht nach Dokumenten, die lokale DOIs im Status 'registered'
@@ -41,7 +42,7 @@ use Opus\Doi\DoiManager;
  * gesetzt, wenn sie über das Handle-System tatsächlich auflösbar ist.
  *
  */
-class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
+class Application_Job_VerifyLocalDoisJob extends AbstractTask
 {
     /** @var bool */
     private $printErrors = false;
@@ -66,8 +67,13 @@ class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
         $this->printErrors = true;
     }
 
+    /**
+     * @return int
+     */
     public function run()
     {
+        $output = $this->getOutput();
+
         $beforeDate = null;
         if ($this->delayInHours !== null) {
             $beforeDate = date("Y-m-d H:i:s", strtotime("- $this->delayInHours hours"));
@@ -77,17 +83,19 @@ class Application_Job_VerifyLocalDoisJob implements Application_Job_JobInterface
         $status     = $doiManager->verifyRegisteredBefore($beforeDate);
 
         if ($status->isNoDocsToProcess()) {
-            echo "could not find matching documents for DOI verification\n";
+            $output->writeln("could not find matching documents for DOI verification");
         } else {
-            echo count($status->getDocsWithDoiStatus()) . " documents have been processed\n";
+            $output->writeln(count($status->getDocsWithDoiStatus()) . " documents have been processed");
 
             if ($this->printErrors) {
                 foreach ($status->getDocsWithDoiStatus() as $docId => $docWithStatus) {
                     if ($docWithStatus['error']) {
-                        echo "document $docId could not verified successfully: " . $docWithStatus['msg'] . "\n";
+                        $output->writeln("document $docId could not verified successfully: " . $docWithStatus['msg']);
                     }
                 }
             }
         }
+
+        return 0;
     }
 }
