@@ -14,6 +14,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="setup_appearance_index">
+        <tuv xml:lang="en">
+            <seg>Appearance</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Darstellung</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="setup_infopages_index">
         <tuv xml:lang="en">
             <seg>Static Pages</seg>

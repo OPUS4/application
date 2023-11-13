@@ -859,7 +859,16 @@
                             </pages>
                             <resource>translations</resource>
                         </translation>
--->
+
+                        <appearance>
+                            <type>mvc</type>
+                            <label>setup_title_appearance</label>
+                            <description>setup_title_appearance_description</description>
+                            <group>group-cafelatte</group>
+                            <module>setup</module>
+                            <controller>appearance</controller>
+                            <action>index</action>
+                        </appearance>
                     </pages>
                 </setup>
 
