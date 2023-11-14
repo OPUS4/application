@@ -71,8 +71,6 @@ $this->headLink()->prependStylesheet($this->layoutPath() . '/css/custom.css');
 $this->moduleCss();
 $this->headLink()->prependStylesheet($this->layoutPath() . '/css/print.css', 'print');
 
-$themeCss = 'theme-vars--default.css';
-
 if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account']) || filter_var($config->themes->legacyCss, FILTER_VALIDATE_BOOLEAN)) {
     $this->headLink()
         ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
@@ -83,7 +81,7 @@ if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account']) || filt
     $this->headLink()
         ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
         ->prependStylesheet($this->layoutPath() . '/css/theme/theme.css', 'screen')
-        ->prependStylesheet($this->layoutPath() . "/css/theme/$themeCss", 'screen')
+        ->prependStylesheet($this->layoutPath() . "/css/theme/{$this->selectedThemeCss()}", 'screen')
         ->prependStylesheet($this->layoutPath() . '/css/layout/layout.css', 'screen')
         ->prependStylesheet($this->layoutPath() . '/css/components/admin--overrides.css', 'screen')
         ->prependStylesheet($this->layoutPath() . '/css/components/login.css', 'screen')
