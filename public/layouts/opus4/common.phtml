@@ -68,7 +68,7 @@ if (isset($this->title)) {
 }
 
 $this->headLink()->prependStylesheet($this->layoutPath() . '/css/custom.css');
-$this->moduleCss();
+$this->moduleCss(); // TODO currently not used - still useful for the future?
 $this->headLink()->prependStylesheet($this->layoutPath() . '/css/print.css', 'print');
 
 if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account']) || filter_var($config->themes->legacyCss, FILTER_VALIDATE_BOOLEAN)) {
