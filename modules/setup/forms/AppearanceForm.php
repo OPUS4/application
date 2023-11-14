@@ -62,12 +62,14 @@ class Setup_Form_AppearanceForm extends Application_Form_Abstract
      * Verarbeitet POST und stellt fest welcher Button geklickt wurde.
      *
      * @param array $post POST data
-     * @return string
+     * @return string|null
      */
     public function processPost($post)
     {
         if (array_key_exists(self::ELEMENT_APPLY, $post)) {
-            return 0;
+            return 'save';
         }
+
+        return null;
     }
 }
