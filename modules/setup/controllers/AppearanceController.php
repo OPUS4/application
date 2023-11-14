@@ -51,6 +51,5 @@ class Setup_AppearanceController extends Application_Controller_Action
      */
     public function indexAction()
     {
-
     }
 }
