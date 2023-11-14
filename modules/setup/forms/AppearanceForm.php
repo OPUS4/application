@@ -25,10 +25,49 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2023, OPUS 4 development team
+ * @copyright   Copyright (c) 2020, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-?>
+/**
+ * Formular für Bestätigungsabfragen an den Nutzer, z.B. beim Löschen von Modellen.
+ */
+class Setup_Form_AppearanceForm extends Application_Form_Abstract
+{
+    /** @var string Name of element for selecting theme. */
+    public const ELEMENT_THEME = 'Theme';
 
-<h1><?= $this->translate('setup_appearance_index') ?></h1>
+    /** @var string Name of apply/save button. */
+    public const ELEMENT_APPLY = 'Apply';
+
+    /**
+     * Initialisiert die Formularelement.
+     */
+    public function init()
+    {
+        parent::init();
+
+        $this->addElement('themeSelect', self::ELEMENT_THEME);
+        $this->addElement('submit', self::ELEMENT_APPLY, ['label' => 'button_apply']);
+
+        $this->setDecorators(
+            [
+                'FormElements',
+                'Form',
+            ]
+        );
+    }
+
+    /**
+     * Verarbeitet POST und stellt fest welcher Button geklickt wurde.
+     *
+     * @param array $post POST data
+     * @return string
+     */
+    public function processPost($post)
+    {
+        if (array_key_exists(self::ELEMENT_APPLY, $post)) {
+            return 0;
+        }
+    }
+}

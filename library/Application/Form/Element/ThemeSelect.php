@@ -29,38 +29,52 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Config;
+
 /**
- * Setup CSS theme.
- *
- * TODO expand with more user interface related options, like the site logo
+ * Form element for selecting theme (color scheme) for OPUS 4.
  */
-class Setup_AppearanceController extends Application_Controller_Action
+class Application_Form_Element_ThemeSelect extends Application_Form_Element_Select
 {
     public function init()
     {
         parent::init();
 
-        $this->getHelper('MainMenu')->setActive('admin');
-        $this->view->headLink()->appendStylesheet($this->view->layoutPath() . '/css/setup.css');
+        $themes = $this->getThemes();
+
+        if ($themes !== null) {
+            foreach ($themes as $name => $label) {
+                $this->addMultiOption($name, $label);
+            }
+        }
     }
 
     /**
-     * TODO form element for selecting theme
-     * TODO form should have "apply" button
-     * TODO after apply there should be a "confirm" button and a timer, UI reverts after timer runs out
+     * @param string $value
+     * @return $this
      */
-    public function indexAction()
+    public function setValue($value)
     {
-        $form = $this->getForm();
-
-        $this->_helper->renderForm($form);
+        if (! array_key_exists($value, $this->getMultiOptions())) {
+            return parent::setValue('default');
+        } else {
+            return parent::setValue($value);
+        }
     }
 
     /**
-     * @return Setup_Form_AppearanceForm
+     * @return string[]
      */
-    protected function getForm()
+    protected function getThemes()
     {
-        return new Setup_Form_AppearanceForm();
+        $config = Config::get();
+
+        $themes = null;
+
+        if (isset($config->themes->theme)) {
+            $themes = $config->themes->theme->toArray();
+        }
+
+        return $themes;
     }
 }
