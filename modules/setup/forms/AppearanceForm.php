@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Config;
+
 /**
  * Formular für Bestätigungsabfragen an den Nutzer, z.B. beim Löschen von Modellen.
  */
@@ -59,6 +61,26 @@ class Setup_Form_AppearanceForm extends Application_Form_Abstract
     }
 
     /**
+     * @param array $data
+     */
+    public function populate($data)
+    {
+        $config = Config::get();
+
+        // TODO encapsulate in separate class (perhaps ThemeManager)
+        //      similar code already exists in the ThemeSelect form element
+        $selectedTheme = 'default';
+
+        if (isset($data[self::ELEMENT_THEME])) {
+            $selectedTheme = $data[self::ELEMENT_THEME];
+        } else if (isset($config->themes->selectedTheme)) {
+            $selectedTheme = $config->themes->selectedTheme;
+        }
+
+        $this->getElement(self::ELEMENT_THEME)->setValue($selectedTheme);
+    }
+
+    /**
      * Verarbeitet POST und stellt fest welcher Button geklickt wurde.
      *
      * @param array $post POST data
@@ -67,7 +89,9 @@ class Setup_Form_AppearanceForm extends Application_Form_Abstract
     public function processPost($post)
     {
         if (array_key_exists(self::ELEMENT_APPLY, $post)) {
-            return 'save';
+            $selectedTheme = $this->getElementValue(self::ELEMENT_THEME);
+            $config        = ['themes' => ['selectedTheme' => $selectedTheme]];
+            Application_Configuration::save(new Zend_Config($config));
         }
 
         return null;

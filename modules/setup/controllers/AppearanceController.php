@@ -51,7 +51,17 @@ class Setup_AppearanceController extends Application_Controller_Action
      */
     public function indexAction()
     {
+        $request = $this->getRequest();
+
         $form = $this->getForm();
+
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $form->populate($post);
+            $form->processPost($post);
+        } else {
+            $form->populate([]);
+        }
 
         $this->_helper->renderForm($form);
     }
