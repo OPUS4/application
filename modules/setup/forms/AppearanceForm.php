@@ -61,9 +61,9 @@ class Setup_Form_AppearanceForm extends Application_Form_Abstract
     }
 
     /**
-     * @param array $data
+     * Sets the form element values based on post or configuration.
      */
-    public function populate($data)
+    public function populate(array $data)
     {
         $config = Config::get();
 
