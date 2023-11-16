@@ -1,0 +1,104 @@
+#content[class*="publish"]>.wrapper>h2::before {
+  content: "\f093";
+}
+
+.publish select {
+  max-width: 18.75rem; /* 300px */
+}
+
+.publish .form-items-wrapper fieldset {
+  border-style: solid;
+  border-width: 4px 0 0;
+  margin: 2.5rem 0 3rem;
+  padding: calc(0.75 * var(--page--padding));
+  position: relative;
+}
+
+fieldset .description {
+  font-size: 0.875rem;
+}
+
+fieldset .description.hint {
+  position: relative;
+  padding-left: 1.75rem;
+}
+
+fieldset .description.hint::before {
+  content: "\f05a";
+  font-size: var(--round-button--size);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+fieldset .description.hint::before {
+  content: "\f05a";
+}
+
+fieldset .description.hint p {
+  margin: 0;
+}
+
+legend {
+  font-size: 1rem;
+  text-transform: uppercase;
+  position: absolute;
+  bottom: calc(100% + 0.2rem);
+  left: 0;
+  line-height: normal;
+}
+
+form label {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.left-labels .form-item {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem 1rem;
+}
+
+.left-labels .form-item>label {
+  min-width: 25%;
+}
+
+.textfield-max-width {
+  min-width: calc(75% - 2rem);
+}
+
+.left-labels .form-item>textarea {
+  min-width: calc(75% - 2rem);
+}
+
+.publish div.form-item {
+  margin: 1rem 0;
+}
+
+.publish fieldset > .form-multiple.even{
+  margin: 0 calc(-0.75 * var(--page--padding));
+  padding: 0 calc(0.75 * var(--page--padding));
+  border-style: solid;
+  border-color: transparent;
+  border-width: 1px 0;
+}
+
+.button-wrapper {
+  text-align: right;
+  margin: 1rem 0;
+}
+
+.button-wrapper.add-delete-wrapper{
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+#rights {
+  order: -1;
+}
+
+#doi_import_invisible_field {
+  display: none;
+}
