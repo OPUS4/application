@@ -490,6 +490,15 @@ END OF COMMENT -->
                 <seg>URL des Dokuments</seg>
             </tuv>
         </tu>
+        
+        <tu tuid="header_IdentifierIsmn">
+            <tuv xml:lang="en">
+                <seg>ISMN of document</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ISMN des Dokuments</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="header_IdentifierIsbn">
             <tuv xml:lang="en">
