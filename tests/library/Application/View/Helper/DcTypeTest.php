@@ -110,7 +110,7 @@ class Application_View_Helper_DcTypeTest extends ControllerTestCase
             ['diplthesis', 'MasterThesis'],
             ['examen', 'MasterThesis'],
             ['magister', 'MasterThesis'],
-            ['masterthesis', 'MasterThesis']
+            ['masterthesis', 'MasterThesis'],
         ];
     }
 }
