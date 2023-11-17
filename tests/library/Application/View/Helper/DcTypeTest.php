@@ -101,7 +101,7 @@ class Application_View_Helper_DcTypeTest extends ControllerTestCase
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function opusTypeToMasterThesisDataProvider()
     {
