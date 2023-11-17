@@ -71,4 +71,47 @@ class Application_View_Helper_DcTypeTest extends ControllerTestCase
     {
         $this->assertEquals('Other', $this->helper->dcType(''));
     }
+
+    public function testDcTypeForDiplom()
+    {
+        $this->assertEquals('MasterThesis', $this->helper->dcType('diplom'));
+    }
+
+    public function testDcTypeForDiplthesis()
+    {
+        $this->assertEquals('MasterThesis', $this->helper->dcType('diplthesis'));
+    }
+
+    public function testDcTypeForExamen()
+    {
+        $this->assertEquals('MasterThesis', $this->helper->dcType('examen'));
+    }
+
+    public function testDcTypeForMagister()
+    {
+        $this->assertEquals('MasterThesis', $this->helper->dcType('magister'));
+    }
+
+    public function testDcTypeForMasterthesis()
+    {
+        $this->assertEquals('MasterThesis', $this->helper->dcType('masterthesis'));
+    }
+
+    public function testDocumentTypesForMasterThesis()
+    {
+        $this->assertEqualsCanonicalizing(
+            ['diplom', 'diplthesis', 'examen', 'magister', 'masterthesis'],
+            $this->helper->documentTypes('MasterThesis')
+        );
+    }
+
+    public function testDocumentTypesForEmpty()
+    {
+        $this->assertEquals([], $this->helper->documentTypes(''));
+    }
+
+    public function testDocumentTypesForUnknown()
+    {
+        $this->assertEquals([], $this->helper->documentTypes('UnknownDcType'));
+    }
 }

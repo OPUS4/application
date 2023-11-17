@@ -98,8 +98,10 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
             );
         }
 
-        // TODO Mapping to OPUS type.
-        $finder->setDocumentType($subsetName);
+        $dcTypeHelper  = new Application_View_Helper_DcType();
+        $documentTypes = $dcTypeHelper->documentTypes($subsetName);
+
+        $finder->setDocumentType($documentTypes);
     }
 
     /**
