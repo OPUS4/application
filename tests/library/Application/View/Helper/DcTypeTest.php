@@ -72,29 +72,14 @@ class Application_View_Helper_DcTypeTest extends ControllerTestCase
         $this->assertEquals('Other', $this->helper->dcType(''));
     }
 
-    public function testDcTypeForDiplom()
+    /**
+     * @dataProvider opusTypeToMasterThesisDataProvider
+     * @param string $opusType
+     * @param string $dcType
+     */
+    public function testDcTypeToMasterThesis($opusType, $dcType)
     {
-        $this->assertEquals('MasterThesis', $this->helper->dcType('diplom'));
-    }
-
-    public function testDcTypeForDiplthesis()
-    {
-        $this->assertEquals('MasterThesis', $this->helper->dcType('diplthesis'));
-    }
-
-    public function testDcTypeForExamen()
-    {
-        $this->assertEquals('MasterThesis', $this->helper->dcType('examen'));
-    }
-
-    public function testDcTypeForMagister()
-    {
-        $this->assertEquals('MasterThesis', $this->helper->dcType('magister'));
-    }
-
-    public function testDcTypeForMasterthesis()
-    {
-        $this->assertEquals('MasterThesis', $this->helper->dcType('masterthesis'));
+        $this->assertEquals($dcType, $this->helper->dcType($opusType));
     }
 
     public function testDocumentTypesForMasterThesis()
@@ -113,5 +98,19 @@ class Application_View_Helper_DcTypeTest extends ControllerTestCase
     public function testDocumentTypesForUnknown()
     {
         $this->assertEquals([], $this->helper->documentTypes('UnknownDcType'));
+    }
+
+    /**
+     * @return string
+     */
+    public function opusTypeToMasterThesisDataProvider()
+    {
+        return [
+            ['diplom', 'MasterThesis'],
+            ['diplthesis', 'MasterThesis'],
+            ['examen', 'MasterThesis'],
+            ['magister', 'MasterThesis'],
+            ['masterthesis', 'MasterThesis']
+        ];
     }
 }
