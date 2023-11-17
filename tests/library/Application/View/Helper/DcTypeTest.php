@@ -73,11 +73,11 @@ class Application_View_Helper_DcTypeTest extends ControllerTestCase
     }
 
     /**
-     * @dataProvider opusTypeToMasterThesisDataProvider
+     * @dataProvider opusTypeToDcTypeDataProvider
      * @param string $opusType
      * @param string $dcType
      */
-    public function testDcTypeToMasterThesis($opusType, $dcType)
+    public function testOpusTypeToDcTypeMapping($opusType, $dcType)
     {
         $this->assertEquals($dcType, $this->helper->dcType($opusType));
     }
@@ -103,7 +103,7 @@ class Application_View_Helper_DcTypeTest extends ControllerTestCase
     /**
      * @return array
      */
-    public function opusTypeToMasterThesisDataProvider()
+    public function opusTypeToDcTypeDataProvider()
     {
         return [
             ['diplom', 'MasterThesis'],
