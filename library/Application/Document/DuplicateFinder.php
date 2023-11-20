@@ -218,4 +218,42 @@ class Application_Document_DuplicateFinder
     {
         return $this->verbose;
     }
+
+    /**
+     * @param string $fromDate
+     * @return $this
+     */
+    public function setFromDate($fromDate)
+    {
+        $this->fromDate = $fromDate;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFromDate()
+    {
+        return $this->fromDate;
+    }
+
+    /**
+     * @param string $untilDate
+     * @return $this
+     */
+    public function setUntilDate($untilDate)
+    {
+        $this->untilDate = $untilDate;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUntilDate()
+    {
+        return $this->untilDate;
+    }
 }
