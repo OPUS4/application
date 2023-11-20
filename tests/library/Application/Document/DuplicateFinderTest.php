@@ -37,7 +37,7 @@ use Opus\Common\Model\NotFoundException;
  *      additionally an array with data could be provided to be used for creating
  *      the test documents
  */
-class Application_Util_RemoveDocumentsByDoiTest extends ControllerTestCase
+class Application_Document_DuplicateFinderTest extends ControllerTestCase
 {
     /** @var int */
     private $docId1;
@@ -48,7 +48,7 @@ class Application_Util_RemoveDocumentsByDoiTest extends ControllerTestCase
     /** @var int */
     private $docId3;
 
-    /** @var Application_Util_RemoveDocumentsByDoi */
+    /** @var Application_Document_DuplicateFinder */
     private $helper;
 
     /** @var string[] */
@@ -58,7 +58,7 @@ class Application_Util_RemoveDocumentsByDoiTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->helper = new Application_Util_RemoveDocumentsByDoi();
+        $this->helper = new Application_Document_DuplicateFinder();
 
         $this->setupTestDocuments();
     }
