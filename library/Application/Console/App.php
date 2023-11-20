@@ -40,6 +40,8 @@ use Symfony\Component\Console\Application;
 
 /**
  * Command line application for OPUS 4 management tasks.
+ *
+ * TODO get list of Commands from configuration/registration (allow modules to add commands, decentralize the code)
  */
 class Application_Console_App extends Application
 {
@@ -54,6 +56,7 @@ class Application_Console_App extends Application
         // $this->add(new Application_Console_Index_RepairCommand());
         // $this->add(new Application_Console_Index_CheckCommand());
         $this->add(new Application_Console_Document_DeleteCommand());
+        $this->add(new Application_Console_Document_DuplicatesCommand());
         $this->add(new BibtexImportCommand());
         $this->add(new BibtexListCommand());
         $this->add(new Application_Console_Debug_DocumentXmlCommand());

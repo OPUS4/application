@@ -32,6 +32,7 @@
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Repository;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Removes duplicate documents identified by DOI.
@@ -39,13 +40,22 @@ use Opus\Common\Repository;
  * TODO logging
  * TODO dry-run -> need to generate a report
  */
-class Application_Util_RemoveDocumentsByDoi
+class Application_Document_DuplicateFinder
 {
-    /** @var Zend_Log */
-    private $logger;
+    /** @var OutputInterface */
+    private $output;
 
     /** @var bool */
     private $dryRun;
+
+    /** @var bool */
+    private $verbose;
+
+    /** @var string */
+    private $fromDate;
+
+    /** @var string */
+    private $untilDate;
 
     /**
      * @param string[] $listOfDoi
@@ -62,24 +72,43 @@ class Application_Util_RemoveDocumentsByDoi
      */
     public function removeDuplicateDocument($doi)
     {
+        $output  = $this->getOutput();
+        $verbose = $this->isVerboseEnabled();
+
+        if ($verbose) {
+            $output->write("Checking $doi ... ");
+        }
+
         $docIds = $this->findDocuments($doi);
 
+        $docCount = count($docIds);
+
+        if ($verbose) {
+            $output->write("found {$docCount}");
+        }
+
         if (count($docIds) > 1) {
+            if ($verbose) {
+                $output->write(' - ' . implode(', ', $docIds));
+            }
+
             // TODO log if more than 2 documents were found
             $doc = $this->getNewestDocument($docIds);
 
             if ($doc->getServerState() === Document::STATE_UNPUBLISHED) {
-                if (! $this->isDryRunEnabled()) {
-                    $doc->delete();
+                if ($verbose) {
+                    $output->write("REMOVE {$doc->getId}");
                 }
-                // TODO log deletion
+                $this->performAction($doc);
             } else {
-                // TODO log document not UNPUBLISHED
-                $this->logger->info('TODO');
+                if ($verbose) {
+                    $output->write('');
+                }
             }
-        } else {
-            // TODO log that there wasn't a duplicate OR the DOI wasn't found at all
-            $this->logger->info('TODO');
+        }
+
+        if ($verbose) {
+            $output->writeln('');
         }
     }
 
@@ -131,6 +160,18 @@ class Application_Util_RemoveDocumentsByDoi
     }
 
     /**
+     * @param DocumentInterface $doc
+     *
+     * TODO move action into separate classes for different actions (report, mark, delete, ...)
+     */
+    protected function performAction($doc)
+    {
+        if (! $this->isDryRunEnabled()) {
+            $doc->delete();
+        }
+    }
+
+    /**
      * @param bool $enabled
      */
     public function setDryRunEnabled($enabled)
@@ -144,5 +185,37 @@ class Application_Util_RemoveDocumentsByDoi
     public function isDryRunEnabled()
     {
         return $this->dryRun;
+    }
+
+    /**
+     * @param OutputInterface $output
+     */
+    public function setOutput($output)
+    {
+        $this->output = $output;
+    }
+
+    /**
+     * @return OutputInterface
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    /**
+     * @param bool $enabled
+     */
+    public function setVerboseEnabled($enabled)
+    {
+        $this->verbose = $enabled;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVerboseEnabled()
+    {
+        return $this->verbose;
     }
 }
