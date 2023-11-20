@@ -89,6 +89,8 @@ class Application_Document_DuplicateFinderTest extends ControllerTestCase
     {
         $this->helper->removeDuplicateDocument('10.1000/182');
 
+        Document::get($this->docId3);
+
         $this->expectException(NotFoundException::class);
 
         Document::get($this->docId2);
@@ -115,6 +117,7 @@ class Application_Document_DuplicateFinderTest extends ControllerTestCase
 
         Document::get($this->docId2);
         Document::get($this->docId1);
+        Document::get($this->docId3);
     }
 
     public function testGetNewestDocument()
