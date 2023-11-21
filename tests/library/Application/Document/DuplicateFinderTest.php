@@ -31,6 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
+use Symfony\Component\Console\Output\NullOutput;
 
 /**
  * TODO create fixture helper class to create N test documents and get their IDs
@@ -59,6 +60,8 @@ class Application_Document_DuplicateFinderTest extends ControllerTestCase
         parent::setUp();
 
         $this->helper = new Application_Document_DuplicateFinder();
+        $this->helper->setOutput(new NullOutput());
+        $this->helper->setRemoveEnabled(true);
 
         $this->setupTestDocuments();
     }
