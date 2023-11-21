@@ -47,7 +47,23 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
     {
         $fieldset = "";
         if (! isset($field['isLeaf'])) {
-            $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field['id'] . "' id='"
+            // TODO hack for changing the width of some fields
+            $maxWidthClass = '';
+
+            if (
+                $field['datatype'] === 'Title'
+                || in_array($field['id'], [
+                    'IdentifierUrl',
+                    'PublisherName',
+                    'EnrichmentConferenceTitle',
+                    'EnrichmentConferencePlace',
+                    'Enrichmentopus_crossrefLicence', // TODO still used?
+                ])
+            ) {
+                $maxWidthClass = ' textfield-max-width';
+            }
+
+            $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield$maxWidthClass' name='" . $field['id'] . "' id='"
                 . $field['id'] . "' ";
             if ($options !== null) {
                 $fieldset .= $options . " ";
@@ -105,7 +121,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
     public function renderHtmlSelect($field, $options)
     {
         // TODO move style to CSS
-        $fieldset  = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id']
+        $fieldset  = "\n\t\t\t\t" . '<select name="' . $field['id']
             . '" class="form-selectfield"  id="' . $field['id'] . '"';
         $fieldset .= ' title="' . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . '"';
         if ($field['disabled'] === true) {
@@ -119,16 +135,15 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
         }
 
         foreach ($field['options'] as $key => $option) {
-            $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="'
-                . htmlspecialchars($option, ENT_QUOTES) . '"';
+            $key         = strval($key);
+            $optionValue = htmlspecialchars($key, ENT_QUOTES);
+            $optionLabel = htmlspecialchars($option, ENT_QUOTES);
 
             // $key can be int or string, $field['value'] is always a string
-            if ($option === $field['value'] || strval($key) === $field['value']) {
-                $fieldset .= ' selected="selected"';
-            }
+            $selected = $option === $field['value'] || $key === $field['value'] ? ' selected="selected"' : '';
 
-            $fieldset .= '>';
-            $fieldset .= htmlspecialchars($option, ENT_QUOTES) . '</option>' . "\n\t\t\t\t\t";
+            $fieldset .= "<option value=\"$optionValue\" title=\"$optionLabel\"$selected>$optionLabel</option>";
+            $fieldset .= "\n\t\t\t\t\t";
         }
         $fieldset .= '</select>' . "\n";
 

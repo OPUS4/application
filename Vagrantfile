@@ -78,8 +78,6 @@ fi
 if test ! -f "solrconfig.xml"; then
   ln -s /vagrant/vendor/opus4-repo/search/conf/solrconfig.xml solrconfig.xml
 fi
-# cd /home/vagrant/solr-7.7.2
-# ./bin/solr start
 SCRIPT
 
 $database = <<SCRIPT
@@ -136,7 +134,7 @@ SCRIPT
 $start = <<SCRIPT
 sudo service apache2 reload
 cd /home/vagrant/solr-$SOLR_VERSION
-./bin/solr start
+./bin/solr start -Dsolr.jetty.host=0.0.0.0
 SCRIPT
 
 $help = <<SCRIPT

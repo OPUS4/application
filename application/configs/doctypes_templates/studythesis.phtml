@@ -1,5 +1,4 @@
-<?php
-
+﻿<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,39 +27,50 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-
 ?>
 
 <h2><?= $this->translate($this->title) ?></h2>
 <div class="content">
-    <h3 class="document-type" title="<?= $this->translate('selecttype'); ?>"><?= $this->subtitle ?></h3>
+    <h3 class="document-type" title="<?= $this->translate('selecttype'); ?>"><?= $this->subtitle?></h3>
 
     <?php if (isset($this->errorCaseMessage)) : ?>
         <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
     <?php endif; ?>
 
-        <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
-            <div class="form-items-wrapper">
-                <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
+    <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
+        <div class="form-items-wrapper">
+            <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
-                <?php $this->count = 0; ?>
+            <?php $this->count = 0; ?>
             <?= $this->group($this->groupPersonSubmitter); ?>
-            <?= $this->group($this->groupTitleMain); ?>
-            <?= $this->group($this->groupTitleAbstract); ?>
+            <?= $this->element($this->Language); ?>
             <?= $this->group($this->groupPersonAuthor); ?>
+            <?= $this->group($this->groupTitleMain); ?>
+            <?= $this->group($this->groupTitleSub); ?>
+            <?= $this->group($this->groupTitleAbstract); ?>
+            <?= $this->group($this->groupTitleParent); ?>
+
+            <?= $this->element($this->PageNumber); ?> 
             <?= $this->element($this->CompletedYear); ?>
             <?= $this->element($this->CompletedDate); ?>
-            <?= $this->group($this->groupThesisPublisher); ?>
+  
             <?= $this->group($this->groupPersonAdvisor); ?>
-            <?= $this->group($this->groupInstitute); ?>
-            <?= $this->element($this->PageNumber); ?>           
-            <?= $this->group($this->groupSubjectDDC); ?>
-            <?= $this->group($this->groupSubjectUncontrolled); ?>
-            <?= $this->element($this->Note); ?>
-            <?= $this->element($this->Language); ?>
-            <?= $this->element($this->Licence); ?>
-            <?= $this->group($this->groupSeries); ?>
+            <?= $this->element($this->ContributingCorporation); ?>
 
+            <?= $this->group($this->groupThesisPublisher); ?>
+            <?= $this->group($this->groupSeries); ?>
+            
+            <?= $this->group($this->groupSubjectDDC); ?>
+            <?= $this->group($this->groupSubjectSwd); ?>
+            <?= $this->group($this->groupSubjectUncontrolled); ?>
+            
+            <?= $this->element($this->IdentifierDoi); ?>
+            
+            <?= $this->group($this->groupInstitute); ?>
+            <?= $this->element($this->Licence); ?>
+            <?= $this->element($this->open_access); ?>
+            <?= $this->element($this->Note); ?>
+    
             <div class="button-wrapper">
                 <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
                 <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
@@ -69,8 +79,8 @@
         </div>
     </form>
 
-<?php if ($this->endTemplate($this->form, $this->count) !== "") : ?>
-          <div class="form-hint form-errors"><?= $this->endTemplate($this->form, $this->count); ?></div>
-<?php endif; ?>
+    <?php if ($this->endTemplate($this->form, $this->count) !== "") : ?>
+        <div class="form-hint form-errors"><?= $this->endTemplate($this->form, $this->count); ?></div>
+    <?php endif; ?>
 
 </div>

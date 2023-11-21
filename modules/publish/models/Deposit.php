@@ -673,42 +673,9 @@ class Publish_Model_Deposit
     {
         $identifier = Identifier::new();
         $identifier->setValue($dataValue);
+        $identifier->setType(Identifier::getTypeForFieldname($dataKey));
         try {
-            if (strstr($dataKey, 'Old')) {
-                $this->document->addIdentifierOld($identifier);
-            } elseif (strstr($dataKey, 'Serial')) {
-                $this->document->addIdentifierSerial($identifier);
-            } elseif (strstr($dataKey, 'Uuid')) {
-                $this->document->addIdentifierUuid($identifier);
-            } elseif (strstr($dataKey, 'Isbn')) {
-                $this->document->addIdentifierIsbn($identifier);
-            } elseif (strstr($dataKey, 'Urn')) {
-                $this->document->addIdentifierUrn($identifier);
-            } elseif (strstr($dataKey, 'StdDoi')) {
-                $this->document->addIdentifierStdDoi($identifier);
-            } elseif (strstr($dataKey, 'Doi')) {
-                $this->document->addIdentifierDoi($identifier);
-            } elseif (strstr($dataKey, 'Handle')) {
-                $this->document->addIdentifierHandle($identifier);
-            } elseif (strstr($dataKey, 'SplashUrl')) {
-                $this->document->addIdentifierSplashUrl($identifier);
-            } elseif (strstr($dataKey, 'Url')) {
-                $this->document->addIdentifierUrl($identifier);
-            } elseif (strstr($dataKey, 'Issn')) {
-                $this->document->addIdentifierIssn($identifier);
-            } elseif (strstr($dataKey, 'CrisLink')) {
-                $this->document->addIdentifierCrisLink($identifier);
-            } elseif (strstr($dataKey, 'SplashUrl')) {
-                $this->document->addIdentifierSplashUrl($identifier);
-            } elseif (strstr($dataKey, 'Opus3')) {
-                $this->document->addIdentifierOpus3($identifier);
-            } elseif (strstr($dataKey, 'Opac')) {
-                $this->document->addIdentifierOpac($identifier);
-            } elseif (strstr($dataKey, 'Arxiv')) {
-                $this->document->addIdentifierArxiv($identifier);
-            } elseif (strstr($dataKey, 'Pubmed')) {
-                $this->document->addIdentifierPubmed($identifier);
-            }
+            $this->document->addIdentifier($identifier);
         } catch (ModelException $e) {
             $this->log->err(
                 "could not add identifier of type $dataKey with value $dataValue to document " . $this->docId . " : "

@@ -207,7 +207,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $doc = $this->createTemporaryDoc();
 
         $session                   = new Zend_Session_Namespace('Publish');
-        $session->documentType     = 'preprint';
+        $session->documentType     = 'all';
         $session->documentId       = $doc->getId();
         $session->fulltext         = '0';
         $session->additionalFields = [];

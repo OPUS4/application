@@ -166,6 +166,7 @@
             <xsl:apply-templates select="Identifier[@Type = 'url']" />
             <xsl:apply-templates select="Identifier[@Type = 'handle']" />
             <xsl:apply-templates select="Identifier[@Type = 'doi']" />
+            <xsl:apply-templates select="Identifier[@Type = 'ismn']" />
             <xsl:apply-templates select="Identifier[@Type = 'isbn']" />
             <xsl:apply-templates select="Identifier[@Type = 'issn']" />
             <xsl:apply-templates select="Identifier[@Type = 'arxiv']" />

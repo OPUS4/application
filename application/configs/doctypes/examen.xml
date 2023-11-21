@@ -73,7 +73,7 @@
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
     <field name="PageNumber" required="no" formelement="Text" datatype="Text" multiplicity="1"/>    
-    <field name="SubjectDDC" required="no" formelement="Select" datatype="CollectionLeaf" root="ddc" multiplicity="*"/>	
+    <field name="SubjectDDC" required="no" formelement="Select" datatype="CollectionLeaf" root="ddc" multiplicity="*"/>    
     <field name="SubjectSwd" required="no" formelement="Text" datatype="Subject" multiplicity="5"/>
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Subject" multiplicity="5"/>
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
