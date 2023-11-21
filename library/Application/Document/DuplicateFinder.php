@@ -32,6 +32,7 @@
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Repository;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -199,6 +200,9 @@ class Application_Document_DuplicateFinder
      */
     public function getOutput()
     {
+        if ($this->output === null) {
+            $this->output = new ConsoleOutput();
+        }
         return $this->output;
     }
 
