@@ -432,7 +432,7 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="Identifier[@Type = 'isbn' or @Type = 'issn' or @Type = 'serial']">
+    <xsl:template match="Identifier[@Type = 'ismn' or @Type = 'isbn' or @Type = 'issn' or @Type = 'serial']">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateIdentifier"/>

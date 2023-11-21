@@ -97,7 +97,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $config                         = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session                        = new Zend_Session_Namespace('Publish');
-        $session->documentType          = 'workingpaper';
+        $session->documentType          = 'all';
         $form                           = new Publish_Form_PublishingSecond($this->logger);
         $data                           = [
             'PersonSubmitterFirstName_1'      => 'John',
@@ -123,7 +123,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase
         $config                         = $this->getConfig();
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session                        = new Zend_Session_Namespace('Publish');
-        $session->documentType          = 'workingpaper';
+        $session->documentType          = 'all';
         $form                           = new Publish_Form_PublishingSecond($this->logger);
         $data                           = [
             'PersonSubmitterFirstName_1'      => 'John',
