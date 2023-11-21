@@ -37,8 +37,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Removes duplicate documents identified by DOI.
  *
+ * TODO rename function to findDuplicateDocuments
+ * TODO make "action" optional (and configurable in the long run)
  * TODO logging
- * TODO dry-run -> need to generate a report
+ * TODO dry-run -> need to generate a report (CSV)
  */
 class Application_Document_DuplicateFinder
 {
@@ -48,14 +50,14 @@ class Application_Document_DuplicateFinder
     /** @var bool */
     private $dryRun;
 
-    /** @var bool */
-    private $verbose;
-
     /** @var string */
     private $fromDate;
 
     /** @var string */
     private $untilDate;
+
+    /** @var bool */
+    private $remove;
 
     /**
      * @param string[] $listOfDoi
@@ -72,44 +74,41 @@ class Application_Document_DuplicateFinder
      */
     public function removeDuplicateDocument($doi)
     {
-        $output  = $this->getOutput();
-        $verbose = $this->isVerboseEnabled();
+        $output = $this->getOutput();
 
-        if ($verbose) {
-            $output->write("Checking $doi ... ");
-        }
+        $output->write("Checking $doi ... ", false, OutputInterface::VERBOSITY_VERBOSE);
 
         $docIds = $this->findDocuments($doi);
 
         $docCount = count($docIds);
 
-        if ($verbose) {
-            $output->write("found {$docCount}");
-        }
+        $output->write("found {$docCount} document(s)", false, OutputInterface::VERBOSITY_VERBOSE);
 
         if (count($docIds) > 1) {
-            if ($verbose) {
+            if ($output->isVerbose()) {
                 $output->write(' - ' . implode(', ', $docIds));
             }
 
             // TODO log if more than 2 documents were found
-            $doc = $this->getNewestDocument($docIds);
+            $doc         = $this->getNewestDocument($docIds);
+            $docId       = $doc->getId();
+            $serverState = $doc->getServerState();
 
             if ($doc->getServerState() === Document::STATE_UNPUBLISHED) {
-                if ($verbose) {
-                    $output->write("REMOVE {$doc->getId}");
+                if ($output->isVerbose()) {
+                    $output->write("REMOVE document <fg=yellow>{$docId}</>");
                 }
                 $this->performAction($doc);
             } else {
-                if ($verbose) {
-                    $output->write('');
-                }
+                $output->write(
+                    "KEEP document <fg=yellow>{$docId}</> in state '{$serverState}'",
+                    false,
+                    OutputInterface::VERBOSITY_VERBOSE
+                );
             }
         }
 
-        if ($verbose) {
-            $output->writeln('');
-        }
+        $output->writeln('', true, OutputInterface::VERBOSITY_VERBOSE);
     }
 
     /**
@@ -166,7 +165,7 @@ class Application_Document_DuplicateFinder
      */
     protected function performAction($doc)
     {
-        if (! $this->isDryRunEnabled()) {
+        if (! $this->isDryRunEnabled() && $this->isRemoveEnabled()) {
             $doc->delete();
         }
     }
@@ -201,22 +200,6 @@ class Application_Document_DuplicateFinder
     public function getOutput()
     {
         return $this->output;
-    }
-
-    /**
-     * @param bool $enabled
-     */
-    public function setVerboseEnabled($enabled)
-    {
-        $this->verbose = $enabled;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isVerboseEnabled()
-    {
-        return $this->verbose;
     }
 
     /**
@@ -255,5 +238,24 @@ class Application_Document_DuplicateFinder
     public function getUntilDate()
     {
         return $this->untilDate;
+    }
+
+    /**
+     * @param bool $enabled
+     * @return $this
+     */
+    public function setRemoveEnabled($enabled)
+    {
+        $this->remove = $enabled;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRemoveEnabled()
+    {
+        return $this->remove;
     }
 }
