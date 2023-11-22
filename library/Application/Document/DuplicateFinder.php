@@ -29,9 +29,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Config;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Repository;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -47,6 +49,12 @@ class Application_Document_DuplicateFinder
 {
     /** @var OutputInterface */
     private $output;
+
+    /** @var ProgressBar */
+    private $progressBar;
+
+    /** @var resource */
+    private $csvFile;
 
     /** @var bool */
     private $dryRun;
@@ -65,8 +73,12 @@ class Application_Document_DuplicateFinder
      */
     public function removeDuplicateDocuments($listOfDoi)
     {
+        $progressBar = $this->getProgressBar();
         foreach ($listOfDoi as $doi) {
             $this->removeDuplicateDocument($doi);
+            if ($progressBar) {
+                $progressBar->advance();
+            }
         }
     }
 
@@ -95,6 +107,8 @@ class Application_Document_DuplicateFinder
             $docId       = $doc->getId();
             $serverState = $doc->getServerState();
 
+            $this->writeCsv($doi, $doc);
+
             if ($doc->getServerState() === Document::STATE_UNPUBLISHED) {
                 if ($output->isVerbose()) {
                     $output->write("REMOVE document <fg=yellow>{$docId}</>");
@@ -107,9 +121,11 @@ class Application_Document_DuplicateFinder
                     OutputInterface::VERBOSITY_VERBOSE
                 );
             }
+        } else {
+            $this->writeCsv($doi);
         }
 
-        $output->writeln('', true, OutputInterface::VERBOSITY_VERBOSE);
+        $output->writeln('', OutputInterface::VERBOSITY_VERBOSE);
     }
 
     /**
@@ -157,6 +173,56 @@ class Application_Document_DuplicateFinder
         }
 
         return $doc;
+    }
+
+    /**
+     * @param string                 $doi
+     * @param DocumentInterface|null $doc
+     */
+    protected function writeCsv($doi, $doc = null)
+    {
+        $csvFile = $this->getCsvFile();
+
+        if ($csvFile !== null) {
+            if ($doc !== null) {
+                $baseLink    = $this->getBaseLink();
+                $docId       = $doc->getId();
+                $dateCreated = $doc->getServerDateCreated()->getDateTime();
+
+                $data = [
+                    $doi,
+                    $docId,
+                    "<$baseLink/$docId>",
+                    $dateCreated->format('Y-m-d'),
+                    $doc->getServerState(),
+                ];
+            } else {
+                $data = [
+                    $doi,
+                    'NOT_FOUND',
+                    '',
+                    '',
+                    '',
+                ];
+            }
+
+            fputcsv($csvFile, $data);
+        }
+    }
+
+    /**
+     * @return string|null
+     */
+    protected function getBaseLink()
+    {
+        $config = Config::get();
+
+        if (isset($config->url)) {
+            $url = $config->url ?? '';
+            return rtrim($url, "/ \n\r\t\v\x00");
+        }
+
+        return null;
     }
 
     /**
@@ -261,5 +327,41 @@ class Application_Document_DuplicateFinder
     public function isRemoveEnabled()
     {
         return $this->remove;
+    }
+
+    /**
+     * @param resource $csvFile
+     * @return $this
+     */
+    public function setCsvFile($csvFile)
+    {
+        $this->csvFile = $csvFile;
+        return $this;
+    }
+
+    /**
+     * @return resource|null
+     */
+    public function getCsvFile()
+    {
+        return $this->csvFile;
+    }
+
+    /**
+     * @param ProgressBar|null $progressBar
+     * @return $this
+     */
+    public function setProgressBar($progressBar)
+    {
+        $this->progressBar = $progressBar;
+        return $this;
+    }
+
+    /**
+     * @return ProgressBar|null
+     */
+    public function getProgressBar()
+    {
+        return $this->progressBar;
     }
 }

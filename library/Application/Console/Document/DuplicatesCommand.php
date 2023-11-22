@@ -30,7 +30,9 @@
  */
 
 use Opus\Common\Model\NotFoundException;
+use Opus\Doi\DoiManager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\StreamableInputInterface;
@@ -39,7 +41,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Reports and removes or tags duplicate documents.
  *
- * TODO support CSV output
  * TODO support --from
  * TODO support --until
  * TODO support checkout all documents (requires additions in Common and Framework)
@@ -69,13 +70,20 @@ class Application_Console_Document_DuplicatesCommand extends Command
         parent::configure();
 
         $help = <<<EOT
-Checks for duplicate documents using DOIs and generates a report.
+Checks for duplicate documents using DOIs and generates a report. 
 
-Duplicate documents can be removed automatically using the <fg=green>--remove</> option.  
+If no DOIs are provided the database is searched for all duplicate DOIs. 
+
+If the <fg=green>--csv-report</> option is used to provide a file name, a CSV formatted
+report is written, containing links to the documents found. The links depend on the 'url'
+option being set in the configuration ('config.ini'). The columns in the CSV file are:
+
+  DOI, Doc-ID, Link, Date Created, Server State
+
+Duplicate documents can be removed automatically using the <fg=green>--remove</> option.   
 <fg=red>
 NOT SUPPORTED YET:
 - Tagging and linking of duplicate documents for review by administrator
-- CSV report containing links to duplicate documents for easy review
 </>
 EOT;
 
@@ -132,18 +140,44 @@ EOT;
         }
 
         $doiValues = $this->getDoiInput($input);
-        // TODO otherwise find all duplicate DOIs in database
+
+        if (count($doiValues) === 0) {
+            $output->writeln('Searching for duplicate DOI values in database ...');
+            $doiValues = $this->getAllDuplicateDoiValues();
+        }
 
         // Processing
 
         $doiCount = count($doiValues);
 
         if ($doiCount > 0) {
-            $output->writeln("Checking {$doiCount} DOIs");
+            $csvPath = $input->getOption(self::OPTION_CSV_REPORT);
+            if ($csvPath !== null) {
+                $csvFile = fopen($csvPath, 'w');
+                $finder->setCsvFile($csvFile);
+            }
+
+            $output->writeln("Checking {$doiCount} DOI values");
+
+            $progressBar = null;
+
+            if ($output->getVerbosity() === $output::VERBOSITY_NORMAL) {
+                $progressBar = new ProgressBar($output, $doiCount);
+                $finder->setProgressBar($progressBar);
+            }
+
             $finder->removeDuplicateDocuments($doiValues);
+
+            if ($csvPath !== null) {
+                fclose($csvFile);
+            }
+
+            if ($progressBar !== null) {
+                $progressBar->finish();
+                $output->writeln('');
+            }
         } else {
-            $output->writeln('<fg=red>NOT SUPPORTED YET: Checking all documents for duplicate DOIs</>');
-            // TODO check all documents
+            $output->writeln('No DOI values found');
         }
 
         return 0;
@@ -184,5 +218,15 @@ EOT;
         } else {
             return [];
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getAllDuplicateDoiValues()
+    {
+        $doiManager = DoiManager::getInstance();
+
+        return $doiManager->getDuplicateDoiValues();
     }
 }
