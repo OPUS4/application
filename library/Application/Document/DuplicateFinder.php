@@ -102,12 +102,15 @@ class Application_Document_DuplicateFinder
                 $output->write(' - ' . implode(', ', $docIds));
             }
 
+            foreach ($docIds as $docId) {
+                $doc = Document::get($docId);
+                $this->writeCsv($doi, $doc);
+            }
+
             // TODO log if more than 2 documents were found
             $doc         = $this->getNewestDocument($docIds);
             $docId       = $doc->getId();
             $serverState = $doc->getServerState();
-
-            $this->writeCsv($doi, $doc);
 
             if ($doc->getServerState() === Document::STATE_UNPUBLISHED) {
                 if ($output->isVerbose()) {
