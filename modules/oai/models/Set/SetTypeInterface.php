@@ -25,58 +25,39 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2019, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DocumentInterface;
+
 /**
- * Converts document type into DC:type value.
+ * Abstract class for oai set types
  */
-class Application_View_Helper_DcType extends Application_View_Helper_Abstract
+interface Oai_Model_Set_SetTypeInterface
 {
     /**
-     * Returns DCMI-Type for document type.
+     * Returns all sets of the set type.
      *
-     * @param string $docType
-     * @return string
-     */
-    public function dcType($docType)
-    {
-        $config = $this->getConfig();
-
-        $dcType = null;
-
-        if (isset($config->documentType->$docType->dcType)) {
-            $dcType = $config->documentType->$docType->dcType;
-        } elseif (isset($config->documentType->default->dcType)) {
-            $dcType = $config->documentType->default->dcType;
-        } else {
-            $dcType = 'Other';
-        }
-
-        return $dcType;
-    }
-
-    /**
-     * Returns the document types for DCMI-Type.
-     *
-     * @param string $dcType
+     * @param DocumentInterface|null $document
      * @return array
      */
-    public function documentTypes($dcType)
-    {
-        $config = $this->getConfig();
+    public function getSets($document = null);
 
-        $documentTypes = [];
+    /**
+     * Configures the passed Finder according to the specified set.
+     *
+     * @param DocumentFinderInterface $finder
+     * @param Oai_Model_Set_SetName   $setName
+     * @throws Oai_Model_Exception
+     */
+    public function configureFinder($finder, $setName);
 
-        if (isset($config->documentType)) {
-            foreach ($config->documentType as $documentTypeName => $documentType) {
-                if (isset($documentType->dcType) && $documentType->dcType === $dcType) {
-                    $documentTypes[] = $documentTypeName;
-                }
-            }
-        }
-
-        return $documentTypes;
-    }
+    /**
+     * Returns if the set type class supports the handling of given set name.
+     *
+     * @param Oai_Model_Set_SetName $setName
+     * @return bool
+     */
+    public function supports($setName);
 }

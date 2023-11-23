@@ -46,18 +46,18 @@
 
     <xsl:output method="xml" indent="yes" />
 
-    <xsl:template match="Opus_Document" mode="oai_dc">
+    <xsl:template match="Opus_Document" >
         <oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
             <!-- dc:title -->
-            <xsl:apply-templates select="TitleMain" mode="oai_dc" />
+            <xsl:apply-templates select="TitleMain"  />
             <!-- dc:creator -->
             <!-- Creator: Autor (falls vorhanden), sonst Herausgeber (falls vorhanden), sonst Urhebende Koerperschaft  -->
             <xsl:choose>
                 <xsl:when test="PersonAuthor">
-                    <xsl:apply-templates select="PersonAuthor" mode="oai_dc" />
+                    <xsl:apply-templates select="PersonAuthor"  />
                 </xsl:when>
                 <xsl:when test="PersonEditor">
-                    <xsl:apply-templates select="PersonEditor" mode="oai_dc" />
+                    <xsl:apply-templates select="PersonEditor"  />
                 </xsl:when>
                 <xsl:when test="@CreatingCorporation">
                     <dc:creator>
@@ -65,51 +65,51 @@
                     </dc:creator>
                 </xsl:when>
             </xsl:choose>
-            <!--<xsl:apply-templates select="PersonAuthor" mode="oai_dc" />-->
+            <!--<xsl:apply-templates select="PersonAuthor"  />-->
             <!-- dc:contributor -->
-            <xsl:apply-templates select="PersonContributor" mode="oai_dc" />
+            <xsl:apply-templates select="PersonContributor"  />
             <!-- dc:subject -->
-            <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_dc" />
-            <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc" />
+            <xsl:apply-templates select="Subject[@Type='swd']"  />
+            <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]"  />
 
             <!-- dc:description -->
-            <xsl:apply-templates select="TitleAbstract" mode="oai_dc" />
+            <xsl:apply-templates select="TitleAbstract"  />
             <!-- dc:publisher -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:contributor -->
-            <xsl:apply-templates select="@ContributingCorporation" mode="oai_dc" />
+            <xsl:apply-templates select="@ContributingCorporation"  />
             <!-- dc:date (call-template, weil die 'Funktion' nur einmal aufgerufen werden soll, nicht einmal für jedes Date-->
             <xsl:call-template name="OpusDate" />
             <!-- dc:date: embargo date -->
-            <xsl:apply-templates select="EmbargoDate" mode="oai_dc" />
+            <xsl:apply-templates select="EmbargoDate"  />
             <!-- dc:type -->
-            <xsl:apply-templates select="@Type" mode="oai_dc" />
+            <xsl:apply-templates select="@Type"  />
             <!-- dc:format -->
-            <xsl:apply-templates select="File/@MimeType" mode="oai_dc" />
+            <xsl:apply-templates select="File/@MimeType"  />
             <!-- dc:identifier -->
             <dc:identifier>
                 <xsl:value-of select="@frontdoorurl"/>
             </dc:identifier>
-            <xsl:apply-templates select="Identifier[@Type = 'urn']" mode="oai_dc" />
-            <xsl:apply-templates select="Identifier[@Type = 'isbn']" mode="oai_dc" />
-            <xsl:apply-templates select="Identifier[@Type = 'doi']" mode="oai_dc" />
-            <xsl:apply-templates select="File" mode="oai_dc" />
+            <xsl:apply-templates select="Identifier[@Type = 'urn']"  />
+            <xsl:apply-templates select="Identifier[@Type = 'isbn']"  />
+            <xsl:apply-templates select="Identifier[@Type = 'doi']"  />
+            <xsl:apply-templates select="File"  />
             <!-- dc:language -->
-            <xsl:apply-templates select="@Language" mode="oai_dc" />
+            <xsl:apply-templates select="@Language"  />
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:coverage -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:rights -->
-            <xsl:apply-templates select="Licence" mode="oai_dc" />
+            <xsl:apply-templates select="Licence"  />
             <!-- open aire  dc:relation -->
-            <xsl:apply-templates select="Enrichment[@KeyName='Relation']" mode="oai_dc" />
-            <xsl:apply-templates select="Rights" mode="oai_dc" />
+            <xsl:apply-templates select="Enrichment[@KeyName='Relation']"  />
+            <xsl:apply-templates select="Rights"  />
             <!-- dc:type -->
             <!-- <dc:type>info:eu-repo/semantics/publishedVersion</dc:type> -->
             <!-- dc:source -->
-            <xsl:apply-templates select="TitleParent" mode="oai_dc" />
+            <xsl:apply-templates select="TitleParent"  />
             <!-- dc:source Enrichment'SourceTitle'-->
-            <!-- <xsl:apply-templates select="Enrichment[@KeyName='SourceTitle']" mode="oai_dc" /> -->
+            <!-- <xsl:apply-templates select="Enrichment[@KeyName='SourceTitle']"  /> -->
             <xsl:call-template name="PublicationVersion" />
         </oai_dc:dc>
     </xsl:template>
@@ -136,7 +136,7 @@
         </dc:date>
     </xsl:template>
 
-    <xsl:template match="TitleMain" mode="oai_dc">
+    <xsl:template match="TitleMain" >
         <dc:title>
             <xsl:attribute name="xml:lang">
                 <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language, 'part1')" />
@@ -149,7 +149,7 @@
         </dc:title>
     </xsl:template>
 
-    <xsl:template match="PersonAuthor|PersonEditor" mode="oai_dc">
+    <xsl:template match="PersonAuthor|PersonEditor" >
         <dc:creator>
             <xsl:value-of select="@LastName" />
             <xsl:if test="@FirstName != ''" >
@@ -164,7 +164,7 @@
         </dc:creator>
     </xsl:template>
 
-    <xsl:template match="PersonContributor" mode="oai_dc">
+    <xsl:template match="PersonContributor" >
         <dc:contributor>
             <xsl:value-of select="@LastName" />
             <xsl:if test="@FirstName != ''" >
@@ -179,7 +179,7 @@
         </dc:contributor>
     </xsl:template>
 
-    <xsl:template match="Subject[@Type='swd']" mode="oai_dc">
+    <xsl:template match="Subject[@Type='swd']" >
         <dc:subject>
             <xsl:if test="@language != ''">
                 <xsl:attribute name="xml:lang">
@@ -190,13 +190,13 @@
         </dc:subject>
     </xsl:template>
 
-    <xsl:template match="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc">
+    <xsl:template match="Collection[@RoleName='ddc' and @Visible=1]" >
         <dc:subject>
             <xsl:text>ddc:</xsl:text><xsl:value-of select="@Number" />
         </dc:subject>
     </xsl:template>
 
-    <xsl:template match="TitleAbstract" mode="oai_dc">
+    <xsl:template match="TitleAbstract" >
         <dc:description>
             <xsl:attribute name="xml:lang">
                 <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language, 'part1')" />
@@ -205,7 +205,7 @@
         </dc:description>
     </xsl:template>
 
-    <xsl:template match="@Type" mode="oai_dc">
+    <xsl:template match="@Type" >
         <xsl:choose>
             <xsl:when test="starts-with($oai_set,'openaire')">
                 <dc:type>
@@ -238,25 +238,25 @@
         <xsl:text>doc-type:</xsl:text><xsl:value-of select="php:functionString('Application_Xslt::dcType', .)" />
     </xsl:template>
 
-    <xsl:template match="@ContributingCorporation" mode="oai_dc">
+    <xsl:template match="@ContributingCorporation" >
         <dc:contributor>
             <xsl:value-of select="." />
         </dc:contributor>
     </xsl:template>
 
-    <xsl:template match="File/@MimeType" mode="oai_dc">
+    <xsl:template match="File/@MimeType" >
         <dc:format>
             <xsl:value-of select="." />
         </dc:format>
     </xsl:template>
 
-    <xsl:template match="File" mode="oai_dc">
+    <xsl:template match="File" >
         <dc:identifier>
             <xsl:value-of select="@url" />
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="Identifier[@Type = 'isbn']" mode="oai_dc">
+    <xsl:template match="Identifier[@Type = 'isbn']" >
         <dc:identifier>
             <xsl:if test="starts-with($oai_set,'openaire')">
                 <xsl:text>urn:isbn:</xsl:text>
@@ -265,7 +265,7 @@
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="Identifier[@Type = 'urn']" mode="oai_dc">
+    <xsl:template match="Identifier[@Type = 'urn']" >
         <dc:identifier>
             <xsl:value-of select="@Value" />
         </dc:identifier>
@@ -275,38 +275,38 @@
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="Identifier[@Type = 'doi']" mode="oai_dc">
+    <xsl:template match="Identifier[@Type = 'doi']" >
         <dc:identifier>
             <xsl:value-of select="$doiResolverUrl" />
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="@Language" mode="oai_dc">
+    <xsl:template match="@Language" >
         <dc:language>
             <xsl:value-of select="." />
         </dc:language>
     </xsl:template>
 
-    <xsl:template match="Licence" mode="oai_dc">
+    <xsl:template match="Licence" >
         <dc:rights>
            <xsl:value-of select="@LinkLicence" />
         </dc:rights>
     </xsl:template>
 
-    <xsl:template match="Enrichment[@KeyName='Relation']" mode="oai_dc">
+    <xsl:template match="Enrichment[@KeyName='Relation']" >
         <dc:relation>
             <xsl:value-of select="@Value" />
         </dc:relation>
     </xsl:template>
 
-    <xsl:template match="Rights" mode="oai_dc">
+    <xsl:template match="Rights" >
         <dc:rights>
             <xsl:value-of select="@Value" />
         </dc:rights>
     </xsl:template>
 
-    <xsl:template match="EmbargoDate" mode="oai_dc">
+    <xsl:template match="EmbargoDate" >
          <xsl:if test="starts-with($oai_set,'openaire')">
             <xsl:choose>
                 <xsl:when test="following-sibling::Rights/@Value='info:eu-repo/semantics/embargoedAccess'">
@@ -319,7 +319,7 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="TitleParent" mode="oai_dc">
+    <xsl:template match="TitleParent" >
          <xsl:if test="starts-with($oai_set,'openaire')">
             <dc:source>
                 <xsl:attribute name="xml:lang">
@@ -331,7 +331,7 @@
     </xsl:template>
 
     <!-- Verwende dieses Template, um das EnrichmentFeld 'SourceTitle' als <dc:source> auszugeben
-    <xsl:template match="Enrichment[@KeyName='SourceTitle']" mode="oai_dc">
+    <xsl:template match="Enrichment[@KeyName='SourceTitle']" >
         <xsl:if test="$oai_set='openaire'">
             <dc:source>
                 <xsl:value-of select="@Value" />

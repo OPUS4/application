@@ -25,46 +25,59 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\CollectionInterface;
-
-class Oai_Model_SetSpec
+class Oai_Model_Set_DocumentTypeSetsTest extends ControllerTestCase
 {
-    /**
-     * @param CollectionInterface[] $collections
-     * @return array
-     */
-    public static function getSetSpecsFromCollections($collections)
+    /** @var string[] */
+    protected $additionalResources = ['database'];
+
+    public function testSupports()
     {
-        $sets = [];
+        $documentTypeSets = new Oai_Model_Set_DocumentTypeSets();
 
-        foreach ($collections as $collection) {
-            if (! $collection->getVisible()) {
-                continue;
-            }
+        $setName = new Oai_Model_Set_SetName('doc-type:article');
 
-            $oaiSubsetName = $collection->getOaiSubset();
-            if (empty($oaiSubsetName)) {
-                continue;
-            }
+        $this->assertTrue($documentTypeSets->supports($setName));
+    }
 
-            $role = $collection->getRole();
-            if (! $role->getVisibleOai() || ! $role->getVisible()) {
-                continue;
-            }
+    public function testDoesNotSupport()
+    {
+        $documentTypeSets = new Oai_Model_Set_DocumentTypeSets();
 
-            $oaiSetName = $role->getOaiName();
-            if (empty($oaiSetName)) {
-                continue;
-            }
+        $setName = new Oai_Model_Set_SetName('ddc:28');
 
-            $sets[] = urlencode($oaiSetName);
-            $sets[] = urlencode($oaiSetName) . ':' . urlencode($oaiSubsetName);
-        }
+        $this->assertFalse($documentTypeSets->supports($setName));
+    }
 
-        return array_unique($sets);
+    public function testGetSets()
+    {
+        $this->markTestIncomplete(
+            'The number of sets depends on the filling of the DB, which results from the existing '
+            . 'tests and may also depend on the test sequence.'
+        );
+
+        $documentTypeSets = new Oai_Model_Set_DocumentTypeSets();
+
+        $sets = $documentTypeSets->getSets();
+        $this->assertEquals(21, count($sets));
+        $this->assertEquals(21, count(preg_grep('/^doc-type:.+$/i', array_keys($sets))));
+    }
+
+    public function testGetSetsWithDocument()
+    {
+        $documentTypeSets = new Oai_Model_Set_DocumentTypeSets();
+
+        $document = $this->createTestDocument();
+
+        $sets = $documentTypeSets->getSets($document);
+        $this->assertEquals(['doc-type:Other'], array_keys($sets));
+    }
+
+    public function testConfigureFinder()
+    {
+        $this->markTestIncomplete('Actual search results should be checked.');
     }
 }

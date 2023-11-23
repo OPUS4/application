@@ -3389,6 +3389,96 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume');
     }
 
+    public function testDocTypeSetWithNoSubset()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=doc-type');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testDocTypeSetWithExtraPart()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=doc-type:Article:ExtraSubSet');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testBliographySetWithNoSubset()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=bibliography');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testBibliographySetWithExtraPart()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=bibliography:true:ExtraSubSet');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testInvalidCollectionSetWithExtraPart()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ddc:62:100');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testInvalidCollectionSetWithUnknownSubset()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ddc:9999999999');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testInvalidCollectionSetWithUnknownSet()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ddc9999:62');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testDCTypeMasterThesisToDocTypeMapping()
+    {
+        foreach (["diplom", "examen", "magister", "masterthesis"] as $docType) {
+            $doc = $this->createTestDocument();
+            $doc->setServerState('published');
+            $doc->setType($docType);
+            $doc->store();
+        }
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=doc-type:MasterThesis');
+        $response = $this->getResponse();
+        $xpath    = $this->prepareXpathFromResultString($response->getBody());
+
+        $oaiIdentifiers      = $xpath->query('//oai:identifier');
+        $oaiIdentifierValues = $this->nodeListToArray($oaiIdentifiers);
+
+        $docTypes = [];
+
+        foreach ($oaiIdentifierValues as $oaiIdentifier) {
+            [$scheme, $namespaceIdentifier, $localIdentifier] = explode(':', $oaiIdentifier);
+            $doc                                              = Document::get($localIdentifier);
+            $docTypes[$doc->getType()]                        = $doc->getType();
+        }
+
+        $this->assertEqualsCanonicalizing(['masterthesis', 'diplom', 'magister', 'examen'], $docTypes);
+    }
+
     /**
      * Helper function for adding title parent to given document.
      *
