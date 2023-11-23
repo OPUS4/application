@@ -139,7 +139,7 @@ EOT;
             $finder->setRemoveEnabled(true);
         }
 
-        $doiValues = $this->getDoiInput($input);
+        $doiValues = $this->getDoiInput($input, $output);
 
         if (count($doiValues) === 0) {
             $output->writeln('Searching for duplicate DOI values in database ...');
@@ -186,10 +186,11 @@ EOT;
     /**
      * Reads DOI values from STDIN or file.
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      * @return string[]
      */
-    protected function getDoiInput($input)
+    protected function getDoiInput($input, $output)
     {
         $doi = $input->getOption(self::OPTION_DOI);
 
@@ -214,8 +215,14 @@ EOT;
         }
 
         if (strlen(trim($doiInput)) > 0) {
-            $doiValues = preg_split("/((\r?\n)|(\r\n?))/", $doiInput);
-            return array_unique($doiValues);
+            $doiValues       = preg_split("/((\r?\n)|(\r\n?))/", $doiInput);
+            $uniqueDoiValues = array_unique($doiValues);
+
+            if (count($doiValues) !== count($uniqueDoiValues)) {
+                $output->writeln('Duplicates entries removed from DOI list.');
+            }
+
+            return $uniqueDoiValues;
         } else {
             return [];
         }
