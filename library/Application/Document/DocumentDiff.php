@@ -128,12 +128,12 @@ class Application_Document_DocumentDiff
     }
 
     /**
-     * @param string $key
+     * @param string      $key
      * @param string|null $valueModelClass
      * @param string|null $linkModelClass
-     * @param mixed $value
-     * @param int $docId
-     * @param int $maxDigits
+     * @param mixed       $value
+     * @param int         $docId
+     * @param int         $maxDigits
      */
     protected function renderModel($key, $valueModelClass, $linkModelClass, $value, $docId, $maxDigits)
     {
