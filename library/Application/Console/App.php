@@ -55,8 +55,11 @@ class Application_Console_App extends Application
         $this->add(new ExtractFileCommand());
         // $this->add(new Application_Console_Index_RepairCommand());
         // $this->add(new Application_Console_Index_CheckCommand());
+
         $this->add(new Application_Console_Document_DeleteCommand());
         $this->add(new Application_Console_Document_DuplicatesCommand());
+        $this->add(new Application_Console_Document_DiffCommand());
+
         $this->add(new BibtexImportCommand());
         $this->add(new BibtexListCommand());
         $this->add(new Application_Console_Debug_DocumentXmlCommand());
