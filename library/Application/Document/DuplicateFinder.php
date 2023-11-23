@@ -99,7 +99,7 @@ class Application_Document_DuplicateFinder
 
         if (count($docIds) > 1) {
             if ($output->isVerbose()) {
-                $output->write(' - ' . implode(', ', $docIds));
+                $output->write(' - ' . implode(', ', $docIds) . ' ');
             }
 
             foreach ($docIds as $docId) {
@@ -114,12 +114,12 @@ class Application_Document_DuplicateFinder
 
             if ($doc->getServerState() === Document::STATE_UNPUBLISHED) {
                 if ($output->isVerbose()) {
-                    $output->write("REMOVE document <fg=yellow>{$docId}</>");
+                    $output->write("- REMOVE document <fg=yellow>{$docId}</>");
                 }
                 $this->performAction($doc);
             } else {
                 $output->write(
-                    "KEEP document <fg=yellow>{$docId}</> in state '{$serverState}'",
+                    "- KEEP document <fg=yellow>{$docId}</> in state '{$serverState}'",
                     false,
                     OutputInterface::VERBOSITY_VERBOSE
                 );

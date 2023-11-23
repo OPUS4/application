@@ -214,7 +214,8 @@ EOT;
         }
 
         if (strlen(trim($doiInput)) > 0) {
-            return $doiValues = preg_split("/((\r?\n)|(\r\n?))/", $doiInput);
+            $doiValues = preg_split("/((\r?\n)|(\r\n?))/", $doiInput);
+            return array_unique($doiValues);
         } else {
             return [];
         }
