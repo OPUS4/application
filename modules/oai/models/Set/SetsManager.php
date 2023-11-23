@@ -1,7 +1,5 @@
 <?php
 
-use Opus\Common\DocumentInterface;
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,6 +28,8 @@ use Opus\Common\DocumentInterface;
  * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\Common\DocumentInterface;
 
 class Oai_Model_Set_SetsManager extends Application_Model_Abstract
 {
