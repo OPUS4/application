@@ -96,15 +96,16 @@ class Application_Document_DocumentDiff
         $output = $this->getOutput();
 
         foreach ($diffKeys as $key) {
-            $output->writeln("<fg=yellow>$key</>");
+            $output->writeln("Field: <fg=yellow;options=bold>$key</>");
             $values          = $differences[$key];
             $field           = $doc->getField($key);
             $valueModelClass = $field->getValueModelClass();
             $linkModelClass  = $field->getLinkModelClass();
 
             foreach ($values as $docId => $value) {
+                $output->writeln('------------------------------------------------------------');
                 if (! is_array($value)) {
-                    $line = sprintf(" %{$maxDigits}d: %s", $docId, $value);
+                    $line = sprintf(" <fg=green>%{$maxDigits}d</>: %s", $docId, $value);
                     $output->writeln($line);
                 } else {
                     if (count($value) > 0) {
@@ -118,11 +119,12 @@ class Application_Document_DocumentDiff
                             }
                         }
                     } else {
-                        $line = sprintf(" %{$maxDigits}d: %s", $docId, '-');
+                        $line = sprintf(" <fg=green>%{$maxDigits}d</>: %s", $docId, '-');
                         $output->writeln($line);
                     }
                 }
             }
+            $output->writeln('------------------------------------------------------------');
             $output->writeln('');
         }
     }
@@ -138,7 +140,11 @@ class Application_Document_DocumentDiff
     protected function renderModel($key, $valueModelClass, $linkModelClass, $value, $docId, $maxDigits)
     {
         if (strpos($key, 'Person') === 0) {
-            unset($value['DateOfBirth']); // TODO field causes problems with fromArray
+            unset($value['DateOfBirth']); // TODO date field causes problems with fromArray
+        }
+
+        if ($key === 'File') {
+            unset($value['ServerDateSubmitted']); // TODO date field causes problems with fromArray
         }
 
         if ($linkModelClass !== null) {
@@ -163,11 +169,11 @@ class Application_Document_DocumentDiff
                 break;
 
             case 'Enrichment':
-                $displayName = $model->getKeyName() . ' => ' . $model->getValue();
+                $displayName = '<fg=magenta>' . $model->getKeyName() . '</>: ' . $model->getValue();
                 break;
 
             case 'Identifier':
-                $displayName = $model->getType() . ' => ' . $model->getValue();
+                $displayName = '<fg=magenta>' . $model->getType() . '</>: ' . $model->getValue();
                 break;
 
             case 'TitleMain':
@@ -175,7 +181,7 @@ class Application_Document_DocumentDiff
             case 'TitleAdditional':
             case 'TitleParent':
             case 'TitleSub':
-                $displayName = '(' . $model->getLanguage() . ') ' . $model->getValue();
+                $displayName = '(<fg=magenta>' . $model->getLanguage() . '</>) ' . $model->getValue();
                 break;
 
             case 'Note':
@@ -187,18 +193,22 @@ class Application_Document_DocumentDiff
                 break;
 
             case 'Subject':
-                $displayName = $model->getValue() . ' (' . $model->getType() . ')';
+                $displayName = $model->getValue() . ' (<fg=magenta>' . $model->getType() . '</>)';
                 break;
 
             case 'Person':
-                $displayName = $model->getDisplayName() . ' (' . $model->getRole() . ')';
+                $displayName = $model->getDisplayName() . ' (<fg=magenta>' . $model->getRole() . '</>)';
+                break;
+
+            case 'File':
+                $displayName = $model->getLabel() . ' (<fg=magenta>' . $model->getMimeType() . '</>)';
                 break;
 
             default:
                 $displayName = $model->getDisplayName();
         }
 
-        $line = sprintf(" %{$maxDigits}d: %s", $docId, $displayName);
+        $line = sprintf(" <fg=green>%{$maxDigits}d</>: %s", $docId, $displayName);
         $this->getOutput()->writeln($line);
     }
 

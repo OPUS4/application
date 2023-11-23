@@ -54,7 +54,20 @@ class Application_Console_Document_DiffCommand extends Command
         parent::configure();
 
         $help = <<<EOT
+Shows the differences between two or more documents.
 
+Multiple document IDs can be provided as argument. The fields of the documents
+are then compared and differences reported.
+
+If a DOI is provided, using the <fg=green>--doi</> Option, the database is
+searched for matching documents. If more than one is found, the differences
+between the documents are reported.
+
+<fg=red>NOTES:
+- Complex values like persons and patents are not shown with all their metadata.
+- For text values, like titles and abstracts, the exact differences are not 
+  highlighted. The report just shows that the values are different.    
+</>
 EOT;
 
         $this->setName('document:diff')
