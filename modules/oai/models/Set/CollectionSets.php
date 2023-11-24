@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,6 +37,13 @@ use Opus\Common\DocumentInterface;
  */
 class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
 {
+    /**
+     * Set to be excluded.
+     *
+     * @var string
+     */
+    private $excludeSet;
+
     /**
      * Returns oai sets for collections.
      *
@@ -62,6 +69,10 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
 
             foreach ($oaiRolesSets as $result) {
                 if ($result['oai_name'] === 'doc-type') {
+                    continue;
+                }
+
+                if ($this->isExcludedSet($result['oai_name'])) {
                     continue;
                 }
 
@@ -93,7 +104,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
      */
     public function configureFinder($finder, $setName)
     {
-        if ($setName->getSetPartsCount() > 2) {
+        if ($setName->getSetPartsCount() > 2 || $this->isExcludedSet($setName->getSetName())) {
             throw new Oai_Model_Exception(
                 'The given set results in an empty list: ' . $setName->getFullSetName(),
                 Oai_Model_Error::NORECORDSMATCH
@@ -102,12 +113,14 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
 
         // Trying to locate collection role and filter documents.
         $role = CollectionRole::fetchByOaiName($setName->getSetName());
+
         if ($role === null) {
             throw new Oai_Model_Exception(
                 'The given set results in an empty list: ' . $setName->getFullSetName(),
                 Oai_Model_Error::NORECORDSMATCH
             );
         }
+
         $finder->setCollectionRoleId($role->getId());
 
         $subsetName = $setName->getSubsetName();
@@ -190,7 +203,9 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
                 continue;
             }
 
-            $role = $collection->getRole();
+            // TODO Why does $collection->getRole() return null for new collections in test methods?
+            // $role = $collection->getRole();
+            $role = CollectionRole::get($collection->getRoleId());
 
             if (! $role->getVisibleOai() || ! $role->getVisible()) {
                 continue;
@@ -198,6 +213,10 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
 
             $oaiSetName = $role->getOaiName();
             if (empty($oaiSetName)) {
+                continue;
+            }
+
+            if ($this->isExcludedSet($oaiSetName)) {
                 continue;
             }
 
@@ -224,5 +243,28 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
     {
         $sets = $this->getSets();
         return in_array($setName->getFullSetName(), array_keys($sets));
+    }
+
+    /**
+     * Sets the set to be excluded.
+     *
+     * @param string $setName
+     * @return void
+     */
+    public function setExcludeSet($setName)
+    {
+        $this->excludeSet = $setName;
+    }
+
+    /**
+     * Checks if a set name has to be excluded.
+     *
+     * @param string $oaiSetName
+     * @return bool
+     */
+    protected function isExcludedSet($oaiSetName)
+    {
+        $excludeSet = $this->excludeSet;
+        return ! empty($excludeSet) && $oaiSetName === $excludeSet;
     }
 }

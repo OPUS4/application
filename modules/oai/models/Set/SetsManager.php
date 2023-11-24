@@ -77,7 +77,7 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
      *
      * @return array|Oai_Model_Set_SetTypeInterfaceet[]
      */
-    private function getSetTypeObjects()
+    public function getSetTypeObjects()
     {
         if ($this->setTypeObjects === null) {
             $this->setTypeObjects = [];
@@ -90,6 +90,13 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
                 $setTypeClass = $setTypeConfig['class'] ?? '';
                 if (class_exists($setTypeClass)) {
                     $setTypeObjects[$setTypeName] = new $setTypeClass();
+
+                    if (
+                        method_exists($setTypeClass, 'setExcludeSet') &&
+                        isset($setTypeConfig['exclude']) && ! empty($setTypeConfig['exclude'])
+                    ) {
+                        $setTypeObjects[$setTypeName]->setExcludeSet($setTypeConfig['exclude']);
+                    }
                 }
             }
 
