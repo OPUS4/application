@@ -566,6 +566,10 @@
                 <xsl:text>, </xsl:text>
                 <xsl:value-of select="../@Issue" />
             </xsl:if>
+            <xsl:if test="(./@ArticleNumber)">
+                <xsl:text>, </xsl:text>
+                <xsl:value-of select="./@ArticleNumber" />
+            </xsl:if>
             <xsl:choose>
                 <xsl:when test="../@PageFirst">
                     <xsl:text>, S. </xsl:text>
