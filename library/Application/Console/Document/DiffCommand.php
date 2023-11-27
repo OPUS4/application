@@ -171,8 +171,6 @@ EOT;
     {
         $validStates = $this->getValidServerStates();
 
-        var_dump($validStates);
-
         if ($input->getOption(self::OPTION_IGNORE_DELETED)) {
             unset($validStates['deleted']);
         }
@@ -199,6 +197,8 @@ EOT;
 
     /**
      * @return string[]
+     *
+     * TODO better way of getting valid states (configurable states in the future?)
      */
     protected function getValidServerStates()
     {
