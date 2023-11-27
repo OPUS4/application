@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\Config\ConfigException;
+use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Repository;
 use Symfony\Component\Console\Command\Command;
@@ -46,6 +47,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Application_Console_Document_DiffCommand extends Command
 {
     public const OPTION_DOI = 'doi';
+
+    public const OPTION_SERVER_STATE = 'server-state';
+
+    public const OPTION_IGNORE_DELETED = 'ignore-deleted';
 
     public const ARGUMENT_DOC_ID = 'DocID';
 
@@ -78,6 +83,18 @@ EOT;
                 null,
                 InputOption::VALUE_REQUIRED,
                 'DOI value'
+            )
+            ->addOption(
+                self::OPTION_SERVER_STATE,
+                's',
+                InputOption::VALUE_REQUIRED,
+                'Include docs in state (DOI) - <fg=yellow>unpublished</>, <fg=yellow>published</>, <fg=yellow>inprogress</>, <fg=yellow>audited</>, <fg=yellow>restricted</>, <fg=yellow>deleted</>'
+            )
+            ->addOption(
+                self::OPTION_IGNORE_DELETED,
+                null,
+                InputOption::VALUE_NONE,
+                'Ignore deleted documents (DOI)'
             )
             ->addArgument(
                 self::ARGUMENT_DOC_ID,
@@ -127,6 +144,13 @@ EOT;
             if ($doi !== null) {
                 $finder = Repository::getInstance()->getDocumentFinder();
                 $finder->setIdentifierValue('doi', $doi);
+
+                $serverStates = $this->getServerStateInput($input, $output);
+
+                if ($serverStates !== null && count($serverStates) < 6) {
+                    $finder->setServerState($serverStates);
+                }
+
                 $docIds = $finder->getIds();
 
                 if (count($docIds) === 0) {
@@ -136,5 +160,50 @@ EOT;
         }
 
         return $docIds;
+    }
+
+    /**
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @return string[]|null
+     */
+    protected function getServerStateInput($input, $output)
+    {
+        $validStates = $this->getValidServerStates();
+
+        var_dump($validStates);
+
+        if ($input->getOption(self::OPTION_IGNORE_DELETED)) {
+            unset($validStates['deleted']);
+        }
+
+        $serverStateOption = $input->getOption(self::OPTION_SERVER_STATE);
+
+        $serverStates = [];
+
+        if ($serverStateOption !== null) {
+            $values = explode(',', $serverStateOption);
+            foreach ($values as $state) {
+                if (in_array(strtolower($state), $validStates)) {
+                    $serverStates[$state] = $state;
+                } else {
+                    $output->writeln("Invalid ServerState value: $state");
+                }
+            }
+        } else {
+            $serverStates = $validStates;
+        }
+
+        return $serverStates;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getValidServerStates()
+    {
+        $doc   = Document::new();
+        $field = $doc->getField('ServerState');
+        return $field->getDefault();
     }
 }
