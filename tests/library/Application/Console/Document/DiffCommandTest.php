@@ -25,46 +25,17 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Bibtex\Import\Console\BibtexImportCommand;
-use Opus\Bibtex\Import\Console\BibtexListCommand;
-use Opus\Pdf\Console\CoverGenerateCommand;
-use Opus\Search\Console\ExtractCommand;
-use Opus\Search\Console\ExtractFileCommand;
-use Opus\Search\Console\IndexCommand;
-use Opus\Search\Console\RemoveCommand;
-use Symfony\Component\Console\Application;
-
-/**
- * Command line application for OPUS 4 management tasks.
- *
- * TODO get list of Commands from configuration/registration (allow modules to add commands, decentralize the code)
- */
-class Application_Console_App extends Application
+class Application_Console_Document_DiffCommandTest extends ControllerTestCase
 {
-    public function __construct()
+    /** @var string[] */
+    protected $additionalResources = ['database'];
+
+    public function testCompareDoiDocuments()
     {
-        parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
-
-        $this->add(new IndexCommand());
-        $this->add(new RemoveCommand());
-        $this->add(new ExtractCommand());
-        $this->add(new ExtractFileCommand());
-        // $this->add(new Application_Console_Index_RepairCommand());
-        // $this->add(new Application_Console_Index_CheckCommand());
-
-        $this->add(new Application_Console_Document_DeleteCommand());
-        $this->add(new Application_Console_Document_DuplicatesCommand());
-        $this->add(new Application_Console_Document_DiffCommand());
-
-        $this->add(new BibtexImportCommand());
-        $this->add(new BibtexListCommand());
-        $this->add(new Application_Console_Debug_DocumentXmlCommand());
-        $this->add(new CoverGenerateCommand());
-
-        $this->setDefaultCommand('list');
+        $this->markTestIncomplete('TODO testing');
     }
 }
