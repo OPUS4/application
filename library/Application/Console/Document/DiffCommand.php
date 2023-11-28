@@ -42,7 +42,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Shows differences between two or more documents.
  *
- * TODO support document IDs as options/arguments
+ * TODO support different levels of detail
  */
 class Application_Console_Document_DiffCommand extends Command
 {

@@ -43,9 +43,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * TODO support --from
  * TODO support --until
- * TODO support checkout all documents (requires additions in Common and Framework)
- * TODO make removable an explicit option like --remove
- * TODO use URL for generating links to found documents in CSV report
+ * TODO add option for base URL for links
  */
 class Application_Console_Document_DuplicatesCommand extends Command
 {

@@ -35,6 +35,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Shows differences between two or more documents.
+ *
+ * TODO more testing
+ * TODO return diff report that can be rendered in different ways (console, HTML)
+ * TODO add detailed diff for text values and multiline texts
+ * TODO add detailed comparison of persons (recognize same persons in different order, changes in person metadata)
+ * TODO ignore order of collections, licences (order shouldn't matter)
  */
 class Application_Document_DocumentDiff
 {
