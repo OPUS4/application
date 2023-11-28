@@ -1,5 +1,31 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.3 - 2023-11-28
+
+Das `bin/opus4` Kommandozeilentool wurde um zwei Kommandos erweitert.
+
+- document:duplicates
+- document:diff
+
+Hilfe zu den Kommandos kann mit `help` angezeigt werden. Die Namen 
+der Kommandos können abgekürzt werden.
+
+    $ bin/opus4 help doc:dup
+
+`Document:duplicates` dient dazu Dokumente zu mehrfach auftauchenden 
+DOI-Werten zu finden. Die zu prüfenden DOIs können angegeben oder die 
+gesamte Datenbank durchsucht werden. Es kann ein Report im CSV Format
+generiert werden, der Links zu den gefundenen Dokumenten enthält.
+
+`Document:diff` zeigt die Unterschiede zwischen Dokumenten. Die IDs 
+von Dokumenten können direkt angegeben werden oder es kann mit einer 
+DOI nach Dokumenten gesucht werden.
+
+Vorschläge und Hinweise zu den Kommandos können gerne auf GitHub oder
+in der OPUS 4 Tester Mailingliste eingebracht werden.
+
+https://github.com/orgs/OPUS4/discussions
+
 ## Patch Release 4.8.0.2 - 2023-08-29
 
 Es wurde ein Fehler bei der Javascript-Validierung von ISSNs behoben. 
