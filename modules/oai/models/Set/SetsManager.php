@@ -92,10 +92,17 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
                     $setTypeObjects[$setTypeName] = new $setTypeClass();
 
                     if (
-                        method_exists($setTypeClass, 'setExcludeSet') &&
+                        $setTypeClass === Oai_Model_Set_CollectionRoleSingleSet::class &&
+                        isset($setTypeConfig['roleOaiName']) && ! empty($setTypeConfig['roleOaiName'])
+                    ) {
+                        $setTypeObjects[$setTypeName]->setRoleOaiName($setTypeConfig['roleOaiName']);
+                    }
+
+                    if (
+                        $setTypeClass === Oai_Model_Set_CollectionSets::class &&
                         isset($setTypeConfig['exclude']) && ! empty($setTypeConfig['exclude'])
                     ) {
-                        $setTypeObjects[$setTypeName]->setExcludeSet($setTypeConfig['exclude']);
+                        $setTypeObjects[$setTypeName]->setExcludedSets($setTypeConfig['exclude']);
                     }
                 }
             }

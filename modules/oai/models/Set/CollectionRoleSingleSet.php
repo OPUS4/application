@@ -32,11 +32,16 @@
 use Opus\Common\CollectionRole;
 
 /**
- * Class for the "open_access" set type.
+ * Class for a single oai set based on a CollectionRole
  */
-class Oai_Model_Set_OpenAccessTypeSet implements Oai_Model_Set_SetTypeInterface
+class Oai_Model_Set_CollectionRoleSingleSet implements Oai_Model_Set_SetTypeInterface
 {
-    private const SET_NAME = 'open_access';
+    /**
+     * The OAI name of the collection role for which the class is responsible.
+     *
+     * @var string
+     */
+    private $roleOaiName;
 
     /**
      * Returns all sets of the set type.
@@ -52,11 +57,11 @@ class Oai_Model_Set_OpenAccessTypeSet implements Oai_Model_Set_SetTypeInterface
             foreach ($document->getCollection() as $collection) {
                 $role = CollectionRole::get($collection->getRoleId());
                 // TODO Why does $collection->getRole() return null for new collections in test methods?
-                //$role          = $collection->getRole();
+                // $role          = $collection->getRole();
                 $oaiSetName = $role->getOaiName();
 
                 if (
-                    $oaiSetName === self::SET_NAME &&
+                    $oaiSetName === $this->getRoleOaiName() &&
                     $collection->getVisible() &&
                     $role->getVisibleOai() &&
                     $role->getVisible() &&
@@ -67,7 +72,8 @@ class Oai_Model_Set_OpenAccessTypeSet implements Oai_Model_Set_SetTypeInterface
                 }
             }
         } else {
-            $sets = [self::SET_NAME => "Set for collection '" . self::SET_NAME . "'"];
+            $setName = $this->getRoleOaiName();
+            $sets    = [$setName => "Set for collection '" . $setName . "'"];
         }
 
         return $sets;
@@ -107,6 +113,26 @@ class Oai_Model_Set_OpenAccessTypeSet implements Oai_Model_Set_SetTypeInterface
      */
     public function supports($setName)
     {
-        return $setName->getSetName() === self::SET_NAME;
+        return $setName->getSetName() === $this->getRoleOaiName();
+    }
+
+    /**
+     * Returns the role oai name.
+     *
+     * @return string
+     */
+    public function getRoleOaiName()
+    {
+        return $this->roleOaiName;
+    }
+
+    /**
+     * Sets the role oai name.
+     *
+     * @param string $roleOaiName
+     */
+    public function setRoleOaiName($roleOaiName)
+    {
+        $this->roleOaiName = $roleOaiName;
     }
 }

@@ -57,7 +57,15 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
 
     public function testDoesNotSupport()
     {
+        $openAccessRole = CollectionRole::fetchByOaiName('open_access');
+        $rootCollection = $openAccessRole->getRootCollection();
+        $document       = $this->createTestDocument();
+        $document->setServerState('published');
+        $document->addCollection($rootCollection);
+        $document->store();
+
         $collectionSets = new Oai_Model_Set_CollectionSets();
+        $collectionSets->setExcludedSets('open_access, ddc');
 
         $setName = new Oai_Model_Set_SetName('unknownCollectionRole:02');
         $this->assertFalse($collectionSets->supports($setName));
@@ -66,6 +74,12 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
         $this->assertFalse($collectionSets->supports($setName));
 
         $setName = new Oai_Model_Set_SetName('open_access');
+        $this->assertFalse($collectionSets->supports($setName));
+
+        $setName = new Oai_Model_Set_SetName('ddc');
+        $this->assertFalse($collectionSets->supports($setName));
+
+        $setName = new Oai_Model_Set_SetName('ddc:02');
         $this->assertFalse($collectionSets->supports($setName));
     }
 
@@ -85,7 +99,7 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
         $this->assertEquals(46, count(preg_grep("/^$setPattern:?.*$/i", array_keys($sets))));
     }
 
-    public function testGetSetsOpenAccess()
+    public function testGetSetsExcludeOpenAccess()
     {
         $openAccessRole = CollectionRole::fetchByOaiName('open_access');
         $rootCollection = $openAccessRole->getRootCollection();
@@ -95,7 +109,7 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
         $document->store();
 
         $collectionSets = new Oai_Model_Set_CollectionSets();
-        $collectionSets->setExcludeSet('open_access');
+        $collectionSets->setExcludedSets('open_access');
         $sets = $collectionSets->getSets();
 
         foreach ($sets as $setSpec => $set) {
@@ -114,7 +128,7 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
         $document->store();
 
         $collectionSets = new Oai_Model_Set_CollectionSets();
-        $collectionSets->setExcludeSet('open_access');
+        $collectionSets->setExcludedSets('open_access');
         $sets = $collectionSets->getSets($document);
 
         foreach ($sets as $setSpec => $set) {
@@ -139,7 +153,7 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
         $document->store();
 
         $collectionSets = new Oai_Model_Set_CollectionSets();
-        $collectionSets->setExcludeSet('open_access');
+        $collectionSets->setExcludedSets('open_access');
         $sets = $collectionSets->getSets($document);
 
         foreach ($sets as $setSpec => $set) {
@@ -158,8 +172,15 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
         $this->markTestIncomplete('Actual search results should be checked.');
     }
 
-    public function testConfigureFinderNotOpenAccess()
+    public function testConfigureFinderExcludeOpenAccess()
     {
+        $openAccessRole = CollectionRole::fetchByOaiName('open_access');
+        $rootCollection = $openAccessRole->getRootCollection();
+        $document       = $this->createTestDocument();
+        $document->setServerState('published');
+        $document->addCollection($rootCollection);
+        $document->store();
+
         $this->expectExceptionMessage('The given set results in an empty list: open_access');
         $this->expectException(Oai_Model_Exception::class);
 
@@ -168,7 +189,7 @@ class Oai_Model_Set_CollectionSetsTest extends ControllerTestCase
         $finder      = new $finderClass();
 
         $collectionSets = new Oai_Model_Set_CollectionSets();
-        $collectionSets->setExcludeSet('open_access');
+        $collectionSets->setExcludedSets('open_access');
         $setName = new Oai_Model_Set_SetName('open_access');
         $collectionSets->configureFinder($finder, $setName);
     }

@@ -33,7 +33,7 @@ use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Document;
 
-class Oai_Model_Set_OpenAccessTypeSetTest extends ControllerTestCase
+class Oai_Model_Set_CollectionRoleSingleSetTest extends ControllerTestCase
 {
     /** @var string[] */
     protected $additionalResources = ['database'];
@@ -67,7 +67,8 @@ class Oai_Model_Set_OpenAccessTypeSetTest extends ControllerTestCase
 
     public function testSupports()
     {
-        $openAccessSet = new Oai_Model_Set_OpenAccessTypeSet();
+        $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
+        $openAccessSet->setRoleOaiName('open_access');
 
         $setName = new Oai_Model_Set_SetName('open_access');
         $this->assertTrue($openAccessSet->supports($setName));
@@ -81,19 +82,22 @@ class Oai_Model_Set_OpenAccessTypeSetTest extends ControllerTestCase
 
     public function testDoesNotSupport()
     {
-        $collectionSets = new Oai_Model_Set_CollectionSets();
+        $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
+        $openAccessSet->setRoleOaiName('open_access');
 
         $setName = new Oai_Model_Set_SetName('unknownCollectionRole:02');
-        $this->assertFalse($collectionSets->supports($setName));
+        $this->assertFalse($openAccessSet->supports($setName));
 
         $setName = new Oai_Model_Set_SetName('ddc:unknownCollection');
-        $this->assertFalse($collectionSets->supports($setName));
+        $this->assertFalse($openAccessSet->supports($setName));
     }
 
     public function testGetSets()
     {
-        $openAccessSets = new Oai_Model_Set_OpenAccessTypeSet();
-        $sets           = $openAccessSets->getSets();
+        $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
+        $openAccessSet->setRoleOaiName('open_access');
+
+        $sets = $openAccessSet->getSets();
         $this->assertEquals(1, count($sets));
 
         $setSpec = array_keys($sets)[0];
@@ -115,8 +119,10 @@ class Oai_Model_Set_OpenAccessTypeSetTest extends ControllerTestCase
         $document->addCollection($rootCollection);
         $document->store();
 
-        $openAccessSets = new Oai_Model_Set_OpenAccessTypeSet();
-        $sets           = $openAccessSets->getSets($document);
+        $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
+        $openAccessSet->setRoleOaiName('open_access');
+
+        $sets = $openAccessSet->getSets($document);
 
         $this->assertEquals(1, count($sets));
         $this->assertEquals(['open_access'], array_keys($sets));
@@ -137,10 +143,14 @@ class Oai_Model_Set_OpenAccessTypeSetTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $document->setServerState('published');
         $document->addCollection($collection);
-        $document->store();
+        $docId = $document->store();
 
-        $openAccessSets = new Oai_Model_Set_OpenAccessTypeSet();
-        $sets           = $openAccessSets->getSets($document);
+        $document = \Opus\Common\Document::get($docId);
+
+        $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
+        $openAccessSet->setRoleOaiName('open_access');
+
+        $sets = $openAccessSet->getSets($document);
 
         $this->assertEquals(1, count($sets));
         $this->assertEquals(['open_access'], array_keys($sets));
@@ -163,8 +173,10 @@ class Oai_Model_Set_OpenAccessTypeSetTest extends ControllerTestCase
         $document->addCollection($collection);
         $document->store();
 
-        $openAccessSets = new Oai_Model_Set_OpenAccessTypeSet();
-        $sets           = $openAccessSets->getSets($document);
+        $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
+        $openAccessSet->setRoleOaiName('open_access');
+
+        $sets = $openAccessSet->getSets($document);
 
         $this->assertEquals(0, count($sets));
     }
@@ -191,8 +203,10 @@ class Oai_Model_Set_OpenAccessTypeSetTest extends ControllerTestCase
         $document->addCollection($collection);
         $document->store();
 
-        $openAccessSets = new Oai_Model_Set_OpenAccessTypeSet();
-        $sets           = $openAccessSets->getSets($document);
+        $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
+        $openAccessSet->setRoleOaiName('open_access');
+
+        $sets = $openAccessSet->getSets($document);
 
         $this->assertEquals(1, count($sets));
         $this->assertEquals(['open_access'], array_keys($sets));
@@ -208,8 +222,10 @@ class Oai_Model_Set_OpenAccessTypeSetTest extends ControllerTestCase
         $document->addCollection($rootCollection);
         $document->store();
 
-        $openAccessSets = new Oai_Model_Set_OpenAccessTypeSet();
-        $sets           = $openAccessSets->getSets($document);
+        $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
+        $openAccessSet->setRoleOaiName('open_access');
+
+        $sets = $openAccessSet->getSets($document);
 
         $this->assertEmpty($sets);
     }
@@ -244,9 +260,11 @@ class Oai_Model_Set_OpenAccessTypeSetTest extends ControllerTestCase
         $finderClass = $config->documentFinderClass;
         $finder      = new $finderClass();
 
-        $openAccessSets = new Oai_Model_Set_OpenAccessTypeSet();
-        $setName        = new Oai_Model_Set_SetName('open_access');
-        $openAccessSets->configureFinder($finder, $setName);
+        $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
+        $openAccessSet->setRoleOaiName('open_access');
+
+        $setName = new Oai_Model_Set_SetName('open_access');
+        $openAccessSet->configureFinder($finder, $setName);
 
         $docIds = $finder->getIds();
 

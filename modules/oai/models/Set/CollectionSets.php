@@ -38,11 +38,11 @@ use Opus\Common\DocumentInterface;
 class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
 {
     /**
-     * Set to be excluded.
+     * Sets to be excluded.
      *
-     * @var string
+     * @var array
      */
-    private $excludeSet;
+    private $excludedSets;
 
     /**
      * Returns oai sets for collections.
@@ -246,24 +246,30 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
     }
 
     /**
-     * Sets the set to be excluded.
+     * Sets the excluded sets.
      *
-     * @param string $setName
+     * @param array|string $sets
      */
-    public function setExcludeSet($setName)
+    public function setExcludedSets($sets)
     {
-        $this->excludeSet = $setName;
+        if (is_string($sets)) {
+            $this->excludedSets = trim($sets) !== '' ? array_map('trim', explode(',', $sets)) : [];
+        } else {
+            $this->excludedSets = $sets;
+        }
     }
 
     /**
-     * Checks if a set name has to be excluded.
+     * Checks if a set name is in the list of excluded sets.
+     *
+     * TODO Excluding subsets are currently not supported.
      *
      * @param string $oaiSetName
      * @return bool
      */
     protected function isExcludedSet($oaiSetName)
     {
-        $excludeSet = $this->excludeSet;
-        return ! empty($excludeSet) && $oaiSetName === $excludeSet;
+        $excludedSets = $this->excludedSets;
+        return ! empty($excludedSets) && in_array($oaiSetName, $excludedSets);
     }
 }
