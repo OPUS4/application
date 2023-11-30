@@ -249,7 +249,6 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
      * Sets the set to be excluded.
      *
      * @param string $setName
-     * @return void
      */
     public function setExcludeSet($setName)
     {
