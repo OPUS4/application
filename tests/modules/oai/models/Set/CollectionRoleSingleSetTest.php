@@ -31,7 +31,7 @@
 
 use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
-use Opus\Document;
+use Opus\Common\Document;
 
 class Oai_Model_Set_CollectionRoleSingleSetTest extends ControllerTestCase
 {
@@ -145,7 +145,7 @@ class Oai_Model_Set_CollectionRoleSingleSetTest extends ControllerTestCase
         $document->addCollection($collection);
         $docId = $document->store();
 
-        $document = \Opus\Common\Document::get($docId);
+        $document = Document::get($docId);
 
         $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
         $openAccessSet->setRoleOaiName('open_access');
