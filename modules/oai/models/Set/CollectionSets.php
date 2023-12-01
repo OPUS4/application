@@ -203,9 +203,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
                 continue;
             }
 
-            // TODO Why does $collection->getRole() return null for new collections in test methods?
-            // $role = $collection->getRole();
-            $role = CollectionRole::get($collection->getRoleId());
+            $role = $collection->getRole();
 
             if (! $role->getVisibleOai() || ! $role->getVisible()) {
                 continue;
