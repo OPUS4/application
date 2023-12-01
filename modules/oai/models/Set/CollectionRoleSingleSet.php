@@ -55,9 +55,7 @@ class Oai_Model_Set_CollectionRoleSingleSet implements Oai_Model_Set_SetTypeInte
 
         if ($document) {
             foreach ($document->getCollection() as $collection) {
-                $role = CollectionRole::get($collection->getRoleId());
-                // TODO Why does $collection->getRole() return null for new collections in test methods?
-                //$role          = $collection->getRole();
+                $role       = $collection->getRole();
                 $oaiSetName = $role->getOaiName();
 
                 if (

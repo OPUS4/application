@@ -201,7 +201,9 @@ class Oai_Model_Set_CollectionRoleSingleSetTest extends ControllerTestCase
         $document = $this->createTestDocument();
         $document->setServerState('published');
         $document->addCollection($collection);
-        $document->store();
+        $docId = $document->store();
+
+        $document = Document::get($docId);
 
         $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
         $openAccessSet->setRoleOaiName('open_access');
