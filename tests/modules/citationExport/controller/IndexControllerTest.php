@@ -69,8 +69,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->assertContains('SN  - 1234-5678', $response->getBody());
         $this->assertContains('SN  - 4321-8765', $response->getBody());
         $urnResolverUrl = $this->getConfig()->urn->resolverUrl;
-        $this->assertContains('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-456', $response->getBody());
-        $this->assertContains('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-789', $response->getBody());
+        $this->assertContains('UN  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-456', $response->getBody());
+        $this->assertContains('UN  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-789', $response->getBody());
         $this->assertContains('UR  - http://www.myexampledomain.de/foo', $response->getBody());
         $this->assertContains('UR  - http://www.myexampledomain.de/bar', $response->getBody());
     }
@@ -83,7 +83,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/146');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('T2  - Parent Title', $response->getBody());
+        $this->assertContains('T3  - Parent Title', $response->getBody());
     }
 
     /**
@@ -94,7 +94,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/146');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('A2  - Doe, Jane', $response->getBody());
+        $this->assertContains('ED  - Doe, Jane', $response->getBody());
     }
 
     /**
@@ -149,7 +149,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     }
 
     public function testIndexActionRis()
-    {
+    {       
+        $this->markTestSkipped('Frontdoor URL is no longer exported');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
         $response = $this->getResponse();
@@ -186,7 +187,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->setDocumentType('conferenceobject');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('CONF');
+        $this->checkRisAssertions('CPAPER');
     }
 
     public function testIndexActionRisDoctypeDoctoralthesis()
@@ -242,21 +243,21 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->setDocumentType('contributiontoperiodical');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('NEWS');
+        $this->checkRisAssertions('MGZN');
     }
 
     public function testIndexActionRisReview()
     {
         $this->setDocumentType('review');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('JOUR');
+        $this->checkRisAssertions('GEN');
     }
 
     public function testIndexActionRisWorkingpaper()
     {
         $this->setDocumentType('workingpaper');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('UNPD');
+        $this->checkRisAssertions('RPRT');
     }
 
     public function testIndexActionRisMovingimage()
@@ -277,7 +278,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->setDocumentType('image');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('GEN');
+        $this->checkRisAssertions('ADVS');
     }
 
     public function testIndexActionRisLecture()
@@ -291,14 +292,14 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->setDocumentType('sound');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('GEN');
+        $this->checkRisAssertions('SOUND');
     }
 
     public function testIndexActionRisStudythesis()
     {
         $this->setDocumentType('studythesis');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('GEN');
+        $this->checkRisAssertions('THES');
     }
 
     public function testIndexActionRisOther()
