@@ -2452,7 +2452,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//marc:datafield[@tag="520"]/marc:subfield[@code="a"]', 'This is a pdf test document');
         $this->assertXpathContentContains('//marc:datafield[@tag="653"]/marc:subfield[@code="a"]', 'Informationssystem');
         $this->assertXpathContentContains('//marc:datafield[@tag="653"]/marc:subfield[@code="a"]', 'eBook');
-        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'report');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'Report');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Zufall, Rainer');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Fall, Klara');
         $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'This is a parent title');
@@ -2642,16 +2642,11 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]');
     }
 
-    public function testGenerationOfField856WithInvisibleInOaiFile()
+    public function testGenerationOfField540Licence()
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setPublisherPlace('publisherPlace');
-
-        $f1 = File::new();
-        $f1->setPathName('invisible-in-oai.pdf');
-        $f1->setVisibleInOai(false);
-        $doc->addFile($f1);
 
         $licencePresent = Licence::get(1);
         $doc->addLicence($licencePresent);
@@ -2667,10 +2662,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $this->registerXpathNamespaces($this->xpathNamespaces);
 
-        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="x"]', 'Transfer-URL');
-        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'invisible-in-oai.pdf');
-        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licenceMissing->getNameLong());
-        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
+        $this->assertXpathContentContains('(//marc:datafield[@tag="540"])/marc:subfield[@code="a"]', $licencePresent->getNameLong());
+        $this->assertNotXpathContentContains('(//marc:datafield[@tag="540"])/marc:subfield[@code="a"]', $licenceMissing->getNameLong());
     }
 
     /**
@@ -2692,12 +2685,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $f2->setVisibleInOai(true);
         $doc->addFile($f2);
 
-        $licencePresent = Licence::get(1);
-        $doc->addLicence($licencePresent);
-
-        $licenceMissing = Licence::get(2);
-        $doc->addLicence($licenceMissing);
-
         $docId = $doc->store();
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
@@ -2707,13 +2694,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->registerXpathNamespaces($this->xpathNamespaces);
 
         $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[3]/marc:subfield[@code="x"]', 'Transfer-URL');
-        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[3]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
         $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[4]/marc:subfield[@code="u"]', 'visible-in-oai.pdf');
-        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[4]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
         $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[5]/marc:subfield[@code="u"]', 'visible-in-oai.txt');
-        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[5]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
-
-        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licenceMissing->getNameLong());
     }
 
     public function testGenerationOfField773WithSingleTitleParent()
