@@ -147,7 +147,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract
         $files = $doc->getFile();
 
         foreach ($files as $index => $file) {
-            if ($file->getId() !== $fileId) {
+            if ($file->getId() !== (int) $fileId) {
                 $keepFiles[] = $file;
             }
         }

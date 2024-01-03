@@ -384,4 +384,9 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase
         $positionFile2 = strpos($body, 'datei mit unüblichem Namen.xhtml');
         $this->assertTrue($positionFile1 < $positionFile2);
     }
+
+    public function testRemovingMultipleFilesWorks()
+    {
+        $this->markTestIncomplete('Test for https://github.com/OPUS4/application/issues/1174');
+    }
 }
