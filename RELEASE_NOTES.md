@@ -1,5 +1,28 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.4 - 2024-01-09
+
+Fehler beim Löschen mehrerer Dateien von einem Dokument behoben.
+https://github.com/OPUS4/application/issues/1174
+
+### Review-Modul
+
+Beim Freischalten im Review-Modul, bekommt die Rolle **guest** automatisch
+Zugriff auf die Dateien, der freigeschalteten Dokumente. Das kann nun mit
+einer neuen Option (`workflow.stateChange.published.addGuestAccess = 0`) 
+abgeschaltet werden. 
+https://github.com/OPUS4/application/issues/1176
+
+In der Standardkonfiguration ist die Option aktiviert, um in einem Patch 
+Release, das Verhalten von OPUS 4 nicht zu verändern. In einer kommenden 
+Version wird sich der Defaultwert vermutlich ändern.
+
+Die Zugriffsrechte auf die Dateien werden beim Freischalten einzelner 
+Dokumente in der Administration nicht verändert, unabhängig von der neuen 
+Option. Das Verhalten der verschiedenen Möglichkeiten zur Freigabe wird in
+Zukunft vereinheitlicht werden.
+https://github.com/OPUS4/application/issues/1177
+
 ## Patch Release 4.8.0.3 - 2023-11-28
 
 Das `bin/opus4` Kommandozeilentool wurde um zwei Kommandos erweitert.
