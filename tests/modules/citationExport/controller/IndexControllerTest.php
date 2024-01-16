@@ -149,7 +149,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     }
 
     public function testIndexActionRis()
-    {       
+    {
         $this->markTestSkipped('Frontdoor URL is no longer exported');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
@@ -695,7 +695,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $doc->setType('masterthesis');
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "{masterthesis}");
+        $this->assertQueryContentContains('//pre', "@mastersthesis");
     }
 
     public function testBibtexTypeDoctoralthesis()
@@ -704,7 +704,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $doc->setType('doctoralthesis');
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "{doctoralthesis}");
+        $this->assertQueryContentContains('//pre', "@phdthesis");
     }
 
     public function testBibtexNoType()

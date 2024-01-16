@@ -2449,13 +2449,13 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', '2010');
         $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]', 'MySeries');
         $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]', '1/5');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]', 'This is a parent title');
         $this->assertXpathContentContains('//marc:datafield[@tag="520"]/marc:subfield[@code="a"]', 'This is a pdf test document');
         $this->assertXpathContentContains('//marc:datafield[@tag="653"]/marc:subfield[@code="a"]', 'Informationssystem');
         $this->assertXpathContentContains('//marc:datafield[@tag="653"]/marc:subfield[@code="a"]', 'eBook');
         $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'Report');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Zufall, Rainer');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Fall, Klara');
-        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'This is a parent title');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/91');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///oai/container/index/docId/91');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///files/91/test.pdf');

@@ -38,7 +38,7 @@
 >
     <xsl:output method="xml" indent="yes"/>
 
-    <xsl:template match="Opus_Document">
+    <xsl:template match="Opus_Document" >
         <marc:collection xmlns:marc="http://www.loc.gov/MARC21/slim"
                          xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd">
             <marc:record>
@@ -152,7 +152,7 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-
+                
                 <xsl:variable name="monographisch">
                     <xsl:choose>
                         <xsl:when test="./@Type='bachelorthesis' or ./@Type='book' or ./@Type='conferenceproceedings' or ./@Type='doctoralthesis' or ./@Type='dynamicwebresource' or ./@Type='editedcollection' or ./@Type='habilitation' or ./@Type='masterthesis' or ./@Type='monograph' or ./@Type='periodical' or ./@Type='preprint' or ./@Type='report' or ./@Type='researchdata' or ./@Type='sourceedition' or ./@Type='studythesis' or ./@Type='workingpaper'">
@@ -163,7 +163,7 @@
                         </xsl:otherwise>
                     </xsl:choose>               
                 </xsl:variable>
-                
+
                 <!-- Reihenfolge Verwendung Jahr:
                     1.  CompletedYear
                     2.  CompletedDate
@@ -242,7 +242,7 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:variable>
-
+                
                 <marc:controlfield tag="008">
                     <!-- Pos. 00-05: Generierungsdatum des Datensatzes -->
                     <xsl:value-of select="substring(./ServerDateCreated/@Year,3,2)"/>
@@ -502,7 +502,7 @@
                         </marc:datafield>
                     </xsl:for-each>                 
                 </xsl:if>
-
+                
                 <!-- Oeffentlich sichtbare Bemerkungen -->
                 <xsl:for-each select="./Note[@Visibility='public']">
                     <marc:datafield ind1=" " ind2=" " tag="500">
@@ -511,10 +511,10 @@
                         </marc:subfield>
                     </marc:datafield>
                 </xsl:for-each>
-
+                
                 <!-- Hochschulschriftenvermerk -->
                 <xsl:variable name="diniType">
-                    <xsl:value-of select="php:functionString('Application_Xslt::dcType', @Type)"/>              
+                    <xsl:value-of select="php:functionString('Application_Xslt::dcType', @Type)" />
                 </xsl:variable>
 
                 <xsl:if test="(contains($diniType, 'Thesis') or $diniType = 'Habilitation') and $diniType != 'StudyThesis'">
@@ -571,7 +571,7 @@
                             </xsl:if>
                         </xsl:for-each>
                     </xsl:if>
-                </xsl:if>
+                </xsl:if>                    
 
                 <!-- TitleAbstract in Dokumentsprache zuerst ausgeben -->
                 <xsl:if test="./TitleAbstract[@Language = ../@Language]">
@@ -590,7 +590,7 @@
                         </marc:subfield>
                     </marc:datafield>
                 </xsl:for-each>
-                
+
                 <!-- Lizenzangabe -->
                 <xsl:if test="./Licence">                                                   
                     <marc:datafield ind1=" " ind2=" " tag="540">
@@ -804,7 +804,7 @@
                             </xsl:if>
                         </marc:datafield>
                     </xsl:if>
-
+                    
                     <!-- Behandlung von TitleParent (mehr als ein TitleParent): jeder TitleParent in ein eigenes 773-Feld -->
                     <xsl:if test="count(./TitleParent) &gt; 1">
                         <xsl:for-each select="./TitleParent">
