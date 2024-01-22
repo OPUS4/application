@@ -380,6 +380,17 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->assertNotContains('N1  - Für den Admin.', $response->getBody());
     }
 
+    public function testIndexActionRisArticleNumber()
+    {
+        $doc = Document::get($this->documentId);
+        $doc->setArticleNumber('MFJ.197136');
+        $doc->store();
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('AR  - MFJ.197136', $response->getBody());
+    }
+
     public function testIndexActionBibtexDoctypeArticle()
     {
         $this->setDocumentType('article');
@@ -488,7 +499,18 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
             $response->getBody()
         );
     }
-
+    
+    public function testIndexActionBibTexArticleNumber()
+    {
+        $doc = Document::get($this->documentId);
+        $doc->setArticleNumber('MFJ.197136');
+        $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('pages     = {MFJ.197136}', $response->getBody());
+    }
+    
     public function testDownloadActionWithMissingDocIdParam()
     {
         $this->dispatch('/citationExport/index/download');
