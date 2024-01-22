@@ -51,7 +51,6 @@
     <xsl:variable name="label_titleParent" select="php:functionString('Application_Xslt::translate', 'TitleParent')"></xsl:variable>
     <xsl:variable name="label_seriesTitle" select="php:functionString('Application_Xslt::translate', 'Series')"></xsl:variable>
     <xsl:variable name="label_titleAdditional" select="php:functionString('Application_Xslt::translate', 'TitleAdditional')"></xsl:variable>
-    <xsl:variable name="label_publishedDate" select="php:functionString('Application_Xslt::translate', 'PublishedDate')"></xsl:variable>
     <xsl:variable name="label_completedYear" select="php:functionString('Application_Xslt::translate', 'CompletedYear')"></xsl:variable>
     <xsl:variable name="label_volume" select="php:functionString('Application_Xslt::translate', 'Volume')"></xsl:variable>
     
@@ -87,15 +86,13 @@
     <xsl:value-of select="$label_titleAdditional"/>
     <xsl:text>	Abstract	Auflage	Verlagsort	Verlag	</xsl:text>
     <xsl:value-of select="$label_completedYear"/>
-    <xsl:text>	</xsl:text>
-    <xsl:value-of select="$label_publishedDate"/>
     <xsl:text>	Seitenzahl	</xsl:text>
     <xsl:value-of select="$label_titleParent"/>
     <xsl:text>	</xsl:text>
     <xsl:value-of select="$label_volume"/>
-    <xsl:text>	Erste Seite	Letzte Seite	Aufsatznummer	</xsl:text>
+    <xsl:text>	Ausgabe / Heft	Aufsatznummer	Erste Seite	Letzte Seite	</xsl:text>
     <xsl:value-of select="$label_seriesTitle"/>
-    <xsl:text>	Nummer	ISBN	ISSN	Urheb. K&#246;rperschaft	Beteiligte K&#246;rperschaft	Konferenzname	Konferenzort	Ausgabe / Heft	URN	DOI	Schlagw&#246;rter	Fakult&#228;t/Institut/Abteilung	Lizenz	Bemerkung	</xsl:text>
+    <xsl:text>	Nummer	ISBN	ISSN	Urheb. K&#246;rperschaft	Beteiligte K&#246;rperschaft	Konferenzname	URN	DOI	Schlagw&#246;rter	Fakult&#228;t/Institut/Abteilung	Lizenz	Bemerkung	</xsl:text>
     <xsl:if test="php:function('Application_Xslt::accessAllowed', 'documents') != 0">
             <xsl:text>Interne Bemerkung	</xsl:text>
     </xsl:if>
@@ -189,18 +186,7 @@
                         <xsl:value-of select="PublishedDate/@Year" />
                     </xsl:when>                
                 </xsl:choose>
-            </xsl:variable>
-
-            <xsl:variable name="published_date">
-                    <xsl:choose>             
-                        <xsl:when test="string-length(normalize-space(PublishedDate/@Year)) > 0">
-                            <xsl:value-of select="PublishedDate/@Day" /><xsl:text>.</xsl:text><xsl:value-of select="PublishedDate/@Month" /><xsl:text>.</xsl:text><xsl:value-of select="PublishedDate/@Year" />
-                        </xsl:when>
-                        <xsl:when test="normalize-space(@PublishedYear) != '0000'">
-                            <xsl:value-of select="@PublishedYear" />
-                        </xsl:when>                
-                </xsl:choose>
-            </xsl:variable>
+            </xsl:variable>            
         
             <xsl:variable name="pages">
                 <xsl:choose>
@@ -266,10 +252,6 @@
 
             <xsl:variable name="conferenceName">
                 <xsl:value-of select ="translate(Enrichment[@KeyName='ConferenceName']/@Value,'&#13;&#10;',' ')" />
-            </xsl:variable>
-
-            <xsl:variable name="conferencePlace">
-                <xsl:value-of select ="Enrichment[@KeyName='ConferencePlace']/@Value" />
             </xsl:variable>
                                     
             <xsl:variable name="issue">
@@ -345,13 +327,13 @@
             <xsl:value-of select="$publisher_place" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$publisher_name" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$completed_year" /><xsl:text>	</xsl:text>
-            <xsl:value-of select="$published_date" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$pages" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$titleParent" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$volume" /><xsl:text>	</xsl:text>
+            <xsl:value-of select="$issue" /><xsl:text>	</xsl:text>
+            <xsl:value-of select="$articleNumber" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$pageFirst" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$pageLast" /><xsl:text>	</xsl:text>
-            <xsl:value-of select="$articleNumber" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$seriesTitle" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$seriesNumber" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$isbn" /><xsl:text>	</xsl:text>
@@ -359,8 +341,6 @@
             <xsl:value-of select="$creatingCorporation" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$contributingCorporation" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$conferenceName" /><xsl:text>	</xsl:text>
-            <xsl:value-of select="$conferencePlace" /><xsl:text>	</xsl:text>
-            <xsl:value-of select="$issue" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$urn" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$doi" /><xsl:text>	</xsl:text>
             <xsl:value-of select="$keywords" /><xsl:text>	</xsl:text>        
