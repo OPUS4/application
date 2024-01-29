@@ -79,13 +79,11 @@ function parseJson(jsonraw)
 // Ende mehrfach belegbare Felder
 
     getDoctypes(data);
-    document.getElementById("EnrichmentConferenceTitle").value = getConferenceTitle(data);
-    document.getElementById("EnrichmentConferencePlace").value = getConferencePlace(data);
-    document.getElementById("ContributingCorporation").value   = getContributingCorporation(data);    //json.author.name;
-    document.getElementById("PublisherName").value             = getPublisherName(data);    //json.message.publisher;
-    document.getElementById("PublisherPlace").value            = getPublisherPlace(data);  //json.message.publisher-location;
-    document.getElementById("TitleMain_1").value               = getTitleMain(data);//json.message.title[0];
-    document.getElementById("TitleSub_1").value                = getTitleSub(data);    //json.message.title[1];
+    document.getElementById("ContributingCorporation").value = getContributingCorporation(data);
+    document.getElementById("PublisherName").value           = getPublisherName(data);    //json.message.publisher;
+    document.getElementById("PublisherPlace").value          = getPublisherPlace(data);  //json.message.publisher-location;
+    document.getElementById("TitleMain_1").value             = getTitleMain(data);//json.message.title[0];
+    document.getElementById("TitleSub_1").value              = getTitleSub(data);    //json.message.title[1];
 
     var language = getLanguage(data);
     expandLanguage(language);
@@ -152,7 +150,6 @@ function expandCompletedDate(dates)
     }
 }
 
-
 function expandSubject(subject)
 {
     if (subject[0] != undefined) {
@@ -175,8 +172,6 @@ function expandSubject(subject)
         }
     }
 }
-
-
 
 function expandThesisAccepted(dates)
 {
@@ -220,7 +215,6 @@ function expandPages(page)
         }
     }
 }
-
 
 function expandAuthor(author)
 {
@@ -343,8 +337,6 @@ function expandTranslator(translator)
     }
 }
 
-
-
 function get(url, callback)
 {
     var xhr = new XMLHttpRequest();
@@ -413,8 +405,6 @@ async function getDoctypes(data)
                 opusType = 'other';
             }
 
-
-
             if (crossrefType.includes("dissertation/")) {
                 // Wenn crossrefType "dissertation" mit Slash: mit Degree
                 const degree            = crossrefType.split('/')[1];
@@ -449,7 +439,6 @@ async function getDoctypes(data)
         }
     );
 }
-
 
 function openDialog(title, text, id = null)
 {
