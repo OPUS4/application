@@ -499,7 +499,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
             $response->getBody()
         );
     }
-    
+
     public function testIndexActionBibTexArticleNumber()
     {
         $doc = Document::get($this->documentId);
@@ -510,7 +510,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $response = $this->getResponse();
         $this->assertContains('pages     = {MFJ.197136}', $response->getBody());
     }
-    
+
     public function testDownloadActionWithMissingDocIdParam()
     {
         $this->dispatch('/citationExport/index/download');
