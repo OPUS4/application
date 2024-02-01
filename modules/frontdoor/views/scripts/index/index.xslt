@@ -171,6 +171,7 @@
             <xsl:apply-templates select="Identifier[@Type = 'issn']" />
             <xsl:apply-templates select="Identifier[@Type = 'arxiv']" />
             <xsl:apply-templates select="Identifier[@Type = 'pmid']" />
+            <xsl:apply-templates select="Identifier[@Type = 'union-cat']" />
             <xsl:apply-templates select="TitleParent" mode="mainLanguage" />
             <xsl:apply-templates select="TitleParent" mode="otherLanguage" />
             <xsl:apply-templates select="TitleSub" mode="mainLanguage" />

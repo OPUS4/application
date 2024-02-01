@@ -442,6 +442,30 @@
             </td>
         </tr>
     </xsl:template>
+    
+    <xsl:template match="Identifier[@Type = 'union-cat']">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateIdentifier"/>
+            </th>
+            <td>
+                <xsl:choose>
+                    <xsl:when test="contains(php:functionString('Application_Xslt::optionValue', 'unionCat.requestUrl'), '://')">
+                        <xsl:element name="a">
+                            <xsl:attribute name="href">
+                                <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'unionCat.requestUrl')"/>
+                                <xsl:value-of select="@Value" />
+                            </xsl:attribute>                            
+                            <xsl:value-of select="@Value" />
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@Value" />
+                    </xsl:otherwise>
+                </xsl:choose>
+            </td>
+        </tr>
+    </xsl:template>
 
     <xsl:template match="ReferenceIsbn|ReferenceIssn|ReferenceHandle">
         <tr>
