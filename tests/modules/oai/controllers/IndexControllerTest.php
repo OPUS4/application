@@ -2666,6 +2666,29 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertNotXpathContentContains('(//marc:datafield[@tag="540"])/marc:subfield[@code="a"]', $licenceMissing->getNameLong());
     }
 
+    public function testGenerationOfField856WithInvisibleInOaiFile()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setPublisherPlace('publisherPlace');
+
+        $f1 = File::new();
+        $f1->setPathName('invisible-in-oai.pdf');
+        $f1->setVisibleInOai(false);
+        $doc->addFile($f1);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="x"]', 'Transfer-URL');
+        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'invisible-in-oai.pdf');
+    }
+
     /**
      * TODO test depends on urn.autoCreate being enabled
      */
