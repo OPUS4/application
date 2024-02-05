@@ -2320,24 +2320,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="EnrichmentConferenceTitle">
-            <tuv xml:lang="en">
-                <seg>Conference Name</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Name der Konferenz</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="EnrichmentConferencePlace">
-            <tuv xml:lang="en">
-                <seg>Conference Location</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Ort der Konferenz</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="Enrichmentopus_doi_json">
             <tuv xml:lang="en">
                 <seg>JSON-Data</seg>

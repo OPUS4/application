@@ -105,7 +105,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $this->assertXpathContentContains('//marc:controlfield[@tag="001"]', 'docId-' . $docId);
         $this->assertXpathContentContains('//marc:controlfield[@tag="007"]', 'cr uuu---uunan');
         $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'eng');
-        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'article');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'Article');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
 
         $this->assertNotXpath('//marc:datafield[@tag="245"]');
@@ -146,7 +146,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $this->assertXpathContentContains('//marc:controlfield[@tag="001"]', 'docId-' . $docId);
         $this->assertXpathContentContains('//marc:controlfield[@tag="007"]', 'cr uuu---uunan');
         $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'eng');
-        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'article');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'Article');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
 
         $this->assertNotXpath('//marc:datafield[@tag="245"]');
@@ -224,7 +224,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $this->assertXpathContentContains('//marc:controlfield[@tag="007"]', 'cr uuu---uunan');
         $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'eng');
         $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', $currentYear);
-        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'article');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'Article');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
         $this->assertNotXpath('//marc:datafield[@tag="245"]');
     }
@@ -266,7 +266,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
         $this->assertXpathContentContains('//marc:controlfield[@tag="007"]', 'cr uuu---uunan');
         $this->assertXpathContentContains('//marc:datafield[@tag="041"]/marc:subfield[@code="a"]', 'eng');
         $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', $currentYear);
-        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'article');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'Article');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/' . $docId);
         $this->assertNotXpath('//marc:datafield[@tag="245"]');
     }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -441,10 +441,10 @@
             <xsl:text>	</xsl:text>
         </xsl:if>
 
-        !-- Column "Dokumenttyp" -->
+        <!-- Column "Dokumenttyp" -->
         <xsl:value-of select="$pubtype" /><xsl:text>	</xsl:text>
 
-        <!-- Column "Fakultät" -->
+        <!-- Column "Fakultaet" -->
         <xsl:call-template name="institutes" /><xsl:text>	</xsl:text>
 
         <!-- Columns "Collections" and "Enrichments" -->

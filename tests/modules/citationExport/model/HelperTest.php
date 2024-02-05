@@ -95,7 +95,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $output = $this->helper->getOutput($request);
 
-        $this->assertContains('school      = {School of Life},', $output);
+        $this->assertContains('school    = {School of Life},', $output);
     }
 
     public function testBibtexAttributeSchoolWithDepartment()
@@ -124,7 +124,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $institute->delete();
 
-        $this->assertContains('school      = {Test Uni, Test Dep},', $output);
+        $this->assertContains('school    = {Test Uni, Test Dep},', $output);
     }
 
     public function testBibtexAttributeSchoolForDoctoralThesis()
@@ -144,7 +144,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $output = $this->helper->getOutput($request);
 
-        $this->assertContains('school      = {School of Life},', $output);
+        $this->assertContains('school    = {School of Life},', $output);
     }
 
     public function testGetExtension()
@@ -163,7 +163,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $document->setType('masterthesis');
         $document->store();
 
-        $this->assertEquals('bibtex_masterthesis.xslt', $this->helper->getTemplateForDocument($document, 'bibtex'));
+        $this->assertEquals('bibtex.xslt', $this->helper->getTemplateForDocument($document, 'bibtex'));
         $this->assertEquals('ris.xslt', $this->helper->getTemplateForDocument($document, 'ris'));
 
         $document->setType('lecture');

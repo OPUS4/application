@@ -1,7 +1,7 @@
 "use strict";
 var exports = new Object;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEdition = exports.getArticleNumber = exports.getLicence = exports.getSubject = exports.getThesisAccepted = exports.getPublisherPlace = exports.getTranslator = exports.getConferencePlace = exports.getConferenceTitle = exports.getUrl = exports.getIssn = exports.getEditor = exports.getIsbn = exports.getCompletedDate = exports.getVolume = exports.getIssue = exports.getPages = exports.getAuthor = exports.getPersonAuthorAcademicTitle = exports.getPersonAuthorIdentifierOrcid = exports.getType = exports.getTitleParent = exports.getAbstract = exports.getPersonAuthorLastName = exports.getPersonAuthorFirstName = exports.getOtherperson = exports.getTranslator = exports.getEditor = exports.getContributor = exports.getIdentifierIsbn = exports.getLanguage = exports.getIdentifierUrl = exports.getContributingCorporation = exports.getNote = exports.getPageCount = exports.getEdition = exports.getTitleSub = exports.getCreatingCorporation = exports.getId = exports.getCompletedYear = exports.getPublisherName = exports.getTitleMain = exports.parseDoi = void 0;
+exports.getEdition = exports.getArticleNumber = exports.getLicence = exports.getSubject = exports.getThesisAccepted = exports.getPublisherPlace = exports.getTranslator = exports.getUrl = exports.getIssn = exports.getEditor = exports.getIsbn = exports.getCompletedDate = exports.getVolume = exports.getIssue = exports.getPages = exports.getAuthor = exports.getPersonAuthorAcademicTitle = exports.getPersonAuthorIdentifierOrcid = exports.getType = exports.getTitleParent = exports.getAbstract = exports.getPersonAuthorLastName = exports.getPersonAuthorFirstName = exports.getOtherperson = exports.getTranslator = exports.getEditor = exports.getContributor = exports.getIdentifierIsbn = exports.getLanguage = exports.getIdentifierUrl = exports.getContributingCorporation = exports.getNote = exports.getPageCount = exports.getEdition = exports.getTitleSub = exports.getCreatingCorporation = exports.getId = exports.getCompletedYear = exports.getPublisherName = exports.getTitleMain = exports.parseDoi = void 0;
 
 
 function finalize(field)
@@ -58,29 +58,25 @@ function getSubject(json)
 exports.getSubject = getSubject;
 
 
-function getConferenceTitle(json)
+function getContributingCorporation(json)
 {
     if (json['message']['event'] != undefined) {
-        var result = json['message']['event']['name'];
-        if (result != undefined) {
-            finalize("EnrichmentConferenceTitle")
-        }
+        var result_name = json['message']['event']['name']; // Name der Konferenz
     }
-    return result ? result : ''
-}
-exports.getConferenceTitle = getConferenceTitle;
+    if (json['message']['event'] != undefined) {
+        var result_location = json['message']['event']['location']; // Ort der Konferenz
+    }
+    if (result_name != undefined && result_location != undefined) {
+        var result = result_name + ' (' + result_location + ')';
+    }
 
-function getConferencePlace(json)
-{
-    if (json['message']['event'] != undefined) {
-        var result = json['message']['event']['location'];
-        if (result != undefined) {
-            finalize("EnrichmentConferencePlace")
-        }
+    if (result != undefined) {
+        finalize("ContributingCorporation")
     }
     return result ? result : ''
 }
-exports.getConferencePlace = getConferencePlace;
+exports.getContributingCorporation = getContributingCorporation;
+
 
 function getUrl(json)
 {
@@ -279,7 +275,7 @@ function getEditor(json)
                 if (json.message.editor[_z].ORCID != null) {
                     if (json.message.editor[_z].ORCID.includes("/")) {
                         var orcid_raw = json.message.editor[_z].ORCID;
-                        let re        = orcid_raw.match(/([\d\-]+)/g);
+                        let re        = orcid_raw.match(/([\d\-X]+)/g);
                         if (re != null) {
                             orcid = re[0];} else {
                             orcid = ''}
@@ -337,7 +333,7 @@ function getAuthor(json)
                     if (json.message.author[_z].ORCID != null) {
                         if (json.message.author[_z].ORCID.includes("/")) {
                             var orcid_raw = json.message.author[_z].ORCID;
-                            let re        = orcid_raw.match(/([\d\-]+)/g);
+                            let re        = orcid_raw.match(/([\d\-X]+)/g);
                             if (re != null) {
                                 orcid = re[0];
                             } else {
@@ -372,7 +368,7 @@ function getTitleMain(json)
 }
 exports.getTitleMain = getTitleMain;
 
-function getContributingCorporation(json)
+/* function getContributingCorporation(json)
 {
     if (json.message.author) {
         var name, _z;
@@ -392,7 +388,7 @@ function getContributingCorporation(json)
         return ''
     }
 }
-exports.ContributingCorporation = getContributingCorporation;
+exports.ContributingCorporation = getContributingCorporation; */
 
 
 function getTitleSub(json)
