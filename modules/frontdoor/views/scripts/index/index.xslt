@@ -287,7 +287,9 @@
             <!-- End Enrichtments -->
 
             <!-- Collection Roles Section: add the collection roles keys that have to be displayed in frontdoor -->
-            <xsl:apply-templates select="Collection[@RoleName='institutes']" />
+            <xsl:apply-templates select="Collection[@RoleName='institutes']">
+                <xsl:sort select="@DisplayFrontdoor" />
+            </xsl:apply-templates>
             <xsl:apply-templates select="Collection[@RoleName='projects']" />
 
             <xsl:apply-templates select="Collection[@RoleName='ccs']" />
