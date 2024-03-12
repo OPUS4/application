@@ -1,6 +1,6 @@
 # OPUS 4 Release Notes
 
-## Patch Release 4.8.0.5 - 2024-03-05
+## Patch Release 4.8.0.5 - 2024-03-12
 
 Problem auf manchen Systemen bei der Anzeige von `BelongsToBibliography` 
 ("Bibl.") in der Dokumentenverwaltung behoben. 
