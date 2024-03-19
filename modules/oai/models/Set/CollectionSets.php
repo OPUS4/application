@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -37,6 +37,13 @@ use Opus\Common\DocumentInterface;
  */
 class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
 {
+    /**
+     * Sets to be excluded.
+     *
+     * @var array
+     */
+    private $excludedSets;
+
     /**
      * Returns oai sets for collections.
      *
@@ -62,6 +69,10 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
 
             foreach ($oaiRolesSets as $result) {
                 if ($result['oai_name'] === 'doc-type') {
+                    continue;
+                }
+
+                if ($this->isExcludedSet($result['oai_name'])) {
                     continue;
                 }
 
@@ -93,7 +104,7 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
      */
     public function configureFinder($finder, $setName)
     {
-        if ($setName->getSetPartsCount() > 2) {
+        if ($setName->getSetPartsCount() > 2 || $this->isExcludedSet($setName->getSetName())) {
             throw new Oai_Model_Exception(
                 'The given set results in an empty list: ' . $setName->getFullSetName(),
                 Oai_Model_Error::NORECORDSMATCH
@@ -102,12 +113,14 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
 
         // Trying to locate collection role and filter documents.
         $role = CollectionRole::fetchByOaiName($setName->getSetName());
+
         if ($role === null) {
             throw new Oai_Model_Exception(
                 'The given set results in an empty list: ' . $setName->getFullSetName(),
                 Oai_Model_Error::NORECORDSMATCH
             );
         }
+
         $finder->setCollectionRoleId($role->getId());
 
         $subsetName = $setName->getSubsetName();
@@ -201,6 +214,10 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
                 continue;
             }
 
+            if ($this->isExcludedSet($oaiSetName)) {
+                continue;
+            }
+
             $sets[urlencode($oaiSetName)] = "Set for collection '" . trim($role->getName()) . "'";
 
             $sets[urlencode($oaiSetName) . ':' . urlencode($oaiSubsetName)] = "Subset '" . $oaiSubsetName . "'"
@@ -224,5 +241,33 @@ class Oai_Model_Set_CollectionSets extends Application_Model_Abstract implements
     {
         $sets = $this->getSets();
         return in_array($setName->getFullSetName(), array_keys($sets));
+    }
+
+    /**
+     * Sets the excluded sets.
+     *
+     * @param array|string $sets
+     */
+    public function setExcludedSets($sets)
+    {
+        if (is_string($sets)) {
+            $this->excludedSets = trim($sets) !== '' ? array_map('trim', explode(',', $sets)) : [];
+        } else {
+            $this->excludedSets = $sets;
+        }
+    }
+
+    /**
+     * Checks if a set name is in the list of excluded sets.
+     *
+     * TODO Excluding subsets are currently not supported.
+     *
+     * @param string $oaiSetName
+     * @return bool
+     */
+    protected function isExcludedSet($oaiSetName)
+    {
+        $excludedSets = $this->excludedSets;
+        return ! empty($excludedSets) && in_array($oaiSetName, $excludedSets);
     }
 }

@@ -77,7 +77,7 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
      *
      * @return array|Oai_Model_Set_SetTypeInterfaceet[]
      */
-    private function getSetTypeObjects()
+    public function getSetTypeObjects()
     {
         if ($this->setTypeObjects === null) {
             $this->setTypeObjects = [];
@@ -90,6 +90,20 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
                 $setTypeClass = $setTypeConfig['class'] ?? '';
                 if (class_exists($setTypeClass)) {
                     $setTypeObjects[$setTypeName] = new $setTypeClass();
+
+                    if (
+                        $setTypeClass === Oai_Model_Set_CollectionRoleSingleSet::class &&
+                        isset($setTypeConfig['roleOaiName']) && ! empty($setTypeConfig['roleOaiName'])
+                    ) {
+                        $setTypeObjects[$setTypeName]->setRoleOaiName($setTypeConfig['roleOaiName']);
+                    }
+
+                    if (
+                        $setTypeClass === Oai_Model_Set_CollectionSets::class &&
+                        isset($setTypeConfig['exclude']) && ! empty($setTypeConfig['exclude'])
+                    ) {
+                        $setTypeObjects[$setTypeName]->setExcludedSets($setTypeConfig['exclude']);
+                    }
                 }
             }
 
