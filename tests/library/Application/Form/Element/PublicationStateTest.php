@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -31,25 +31,36 @@
 
 use Opus\Common\PublicationState;
 
-class Application_Form_Element_PublicationState extends Application_Form_Element_SelectWithNull
+class Application_Form_Element_PublicationStateTest extends FormElementTestCase
 {
-    public function init()
+    /** @var string[] */
+    protected $additionalResources = ['view', 'translation'];
+
+    public function setUp(): void
     {
-        parent::init();
+        $this->formElementClass       = 'Application_Form_Element_DocumentType';
+        $this->expectedDecorators     = [
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'ElementHtmlTag',
+            'LabelNotEmpty',
+            'dataWrapper',
+            'ElementHint',
+        ];
+        $this->expectedDecoratorCount = count($this->expectedDecorators);
+        $this->staticViewHelper       = 'viewFormSelect';
+        parent::setUp();
+    }
 
-        $this->setLabel($this->getView()->translate($this->getName()));
-
-        $this->addMultiOption('Null', '-');
+    public function testOptionsTranslated()
+    {
+        $translator = Application_Translate::getInstance();
 
         $publicationState = new PublicationState();
 
-        $options = $publicationState->getValues();
-
-        $translator = $this->getTranslator();
-
-        foreach ($options as $state) {
-            $translationKey = "Opus_Document_PublicationState_Value_{$state}";
-            $this->addMultiOption($state, $translator->translate($translationKey));
+        foreach ($publicationState->getAllValues() as $state) {
+            $this->assertTrue($translator->isTranslated("Opus_Document_PublicationState_Value_{$state}"));
         }
     }
 }

@@ -116,6 +116,78 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_Document_PublicationState_Value_draft">
+            <tuv xml:lang="en">
+                <seg>Draft</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Entwurf</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_authorsVersion">
+            <tuv xml:lang="en">
+                <seg>Author's Original</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Autorenversion</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_submittedVersion">
+            <tuv xml:lang="en">
+                <seg>Submitted Manuscript under Review</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Eingereichte Version</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_acceptedVersion">
+            <tuv xml:lang="en">
+                <seg>Accepted Manuscript</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Akzeptiertes Manuskript</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_proof">
+            <tuv xml:lang="en">
+                <seg>Proof</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Korrekturfahne</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_publishedVersion">
+            <tuv xml:lang="en">
+                <seg>Version of Record</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Originale Verlagspublikation</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_correctedVersion">
+            <tuv xml:lang="en">
+                <seg>Corrected Version of Record</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Korrigierte Verlagsfassung</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_enhancedVersion">
+            <tuv xml:lang="en">
+                <seg>Enhanced Version of Record</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Erweiterte Verlagsfassung</seg>
+            </tuv>
+        </tu>
+
         <!--
             IMPORTANT: The pattern deviates from default for values of role
             field for class Opus_Model_Dependent_Link_DocumentPerson.
