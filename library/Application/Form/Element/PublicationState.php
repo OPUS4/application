@@ -41,15 +41,44 @@ class Application_Form_Element_PublicationState extends Application_Form_Element
 
         $this->addMultiOption('Null', '-');
 
-        $publicationState = new PublicationState();
-
-        $options = $publicationState->getValues();
-
-        $translator = $this->getTranslator();
+        $options = $this->getAllowedValues();
 
         foreach ($options as $state) {
-            $translationKey = "Opus_Document_PublicationState_Value_{$state}";
-            $this->addMultiOption($state, $translator->translate($translationKey));
+            $this->addMultiOption($state, $this->translateValue($state));
         }
+    }
+
+    public function setValue($value)
+    {
+        $options = $this->getMultiOptions();
+
+        $publicationState = new PublicationState();
+
+        if (! array_key_exists($value, $options) && in_array($value, $publicationState->getAllValues())) {
+            $additionalOption[$value] = $this->translateValue($value);
+
+            $options = array_merge(
+                array_slice($options, 0, 1),
+                $additionalOption,
+                array_slice($options, 1)
+            );
+
+            $this->setMultiOptions($options);
+        }
+
+        parent::setValue($value);
+    }
+
+    public function getAllowedValues()
+    {
+        $publicationState = new PublicationState();
+
+        return $publicationState->getValues();
+    }
+
+    public function translateValue($value)
+    {
+        $translationKey = "Opus_Document_PublicationState_Value_{$value}";
+        return $this->getTranslator()->translate($translationKey);
     }
 }

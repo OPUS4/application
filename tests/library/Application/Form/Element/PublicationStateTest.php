@@ -53,6 +53,60 @@ class Application_Form_Element_PublicationStateTest extends FormElementTestCase
         parent::setUp();
     }
 
+    public function testConfigureExcludedValues()
+    {
+        $this->adjustConfiguration([
+            'model' => [
+                'document' => [
+                    'fields' => [
+                        'PublicationState' => [
+                            'excludeValues' => 'draft,authorsVersion'
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $element = new Application_Form_Element_PublicationState('PublicationState');
+
+        $options = $element->getMultiOptions();
+
+        $this->assertCount(7, $options); // 6 + NULL
+
+        $keys = array_keys($options);
+
+        $this->assertNotContains('draft', $keys);
+        $this->assertNotContains('authorsVersion', $keys);
+    }
+
+    public function testAllowExistingValueEvenIfExcluded()
+    {
+        $this->adjustConfiguration([
+            'model' => [
+                'document' => [
+                    'fields' => [
+                        'PublicationState' => [
+                            'excludeValues' => 'draft,authorsVersion'
+                        ]
+                    ]
+                ]
+            ]
+        ]);
+
+        $element = new Application_Form_Element_PublicationState('PublicationState');
+
+        $element->setValue('draft');
+
+        $options = $element->getMultiOptions();
+
+        $this->assertCount(8, $options); // 7 + NULL
+
+        $keys = array_keys($options);
+
+        $this->assertNotContains('authorsVersion', $keys);
+        $this->assertContains('draft', $keys);
+    }
+
     public function testOptionsTranslated()
     {
         $translator = Application_Translate::getInstance();
