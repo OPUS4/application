@@ -60,11 +60,11 @@ class Application_Form_Element_PublicationStateTest extends FormElementTestCase
                 'document' => [
                     'fields' => [
                         'PublicationState' => [
-                            'excludeValues' => 'draft,authorsVersion'
-                        ]
-                    ]
-                ]
-            ]
+                            'excludeValues' => 'draft,authorsVersion',
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         $element = new Application_Form_Element_PublicationState('PublicationState');
@@ -86,11 +86,11 @@ class Application_Form_Element_PublicationStateTest extends FormElementTestCase
                 'document' => [
                     'fields' => [
                         'PublicationState' => [
-                            'excludeValues' => 'draft,authorsVersion'
-                        ]
-                    ]
-                ]
-            ]
+                            'excludeValues' => 'draft,authorsVersion',
+                        ],
+                    ],
+                ],
+            ],
         ]);
 
         $element = new Application_Form_Element_PublicationState('PublicationState');

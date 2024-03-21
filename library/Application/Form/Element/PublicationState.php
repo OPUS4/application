@@ -48,6 +48,9 @@ class Application_Form_Element_PublicationState extends Application_Form_Element
         }
     }
 
+    /**
+     * @param string|null $value
+     */
     public function setValue($value)
     {
         $options = $this->getMultiOptions();
@@ -69,6 +72,9 @@ class Application_Form_Element_PublicationState extends Application_Form_Element
         parent::setValue($value);
     }
 
+    /**
+     * @return string[]
+     */
     public function getAllowedValues()
     {
         $publicationState = new PublicationState();
@@ -76,6 +82,10 @@ class Application_Form_Element_PublicationState extends Application_Form_Element
         return $publicationState->getValues();
     }
 
+    /**
+     * @param string $value
+     * @return string
+     */
     public function translateValue($value)
     {
         $translationKey = "Opus_Document_PublicationState_Value_{$value}";
