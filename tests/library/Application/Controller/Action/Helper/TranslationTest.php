@@ -79,7 +79,7 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
     public function testGetKeyForValue()
     {
         $this->assertEquals(
-            'Opus_Document_ServerState_Value_Unpublished',
+            'Opus_Document_ServerState_Value_unpublished',
             $this->helper->getKeyForValue(Document::class, 'ServerState', 'unpublished')
         );
     }

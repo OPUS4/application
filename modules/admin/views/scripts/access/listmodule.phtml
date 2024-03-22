@@ -96,8 +96,8 @@
                 <?= in_array($resource, ['default']) ? ' disabled="disabled" ' : '' ?>
             />
             <?PHP $states = explode('_', $resource, 3); ?>
-            <?PHP $state = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[1])); ?>
-            <?PHP $targetState = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[2])); ?>
+            <?PHP $state = $this->translate("Opus_Document_ServerState_Value_{$states[1]}"); ?>
+            <?PHP $targetState = $this->translate("Opus_Document_ServerState_Value_{$states[2]}"); ?>
             <?= $this->translate('acl_resource_workflow_generic', [$state, $targetState]); ?>
             <?PHP if (isset($this->guestModules) && in_array($resource, $this->guestModules)) : ?>
                 <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>

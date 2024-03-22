@@ -37,7 +37,7 @@ use Opus\Common\Log;
 <div id="docstatus">
     <dl>
         <dt id="Document-ServerState"><?= $this->translate('ServerState') ?></dt>
-        <dd id="Document-ServerState"><?= $this->translate('Opus_Document_ServerState_Value_' . ucfirst($this->document->getServerState())) ?></dd>
+        <dd id="Document-ServerState"><?= $this->translate('Opus_Document_ServerState_Value_' . $this->document->getServerState()) ?></dd>
         <dt><?= $this->translate('ServerDatePublished') ?></dt>
         <dd id="Document-ServerDatePublished"><?= $this->formatValue()->formatDate($this->document->getServerDatePublished()) ?></dd>
         <dt><?= $this->translate('ServerDateModified') ?></dt>
