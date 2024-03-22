@@ -52,7 +52,7 @@
         </tu>
 
 
-        <tu tuid="Opus_Document_ServerState_Value_Unpublished">
+        <tu tuid="Opus_Document_ServerState_Value_unpublished">
             <tuv xml:lang="en">
                 <seg>Unpublished</seg>
             </tuv>
@@ -61,7 +61,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Opus_Document_ServerState_Value_Published">
+        <tu tuid="Opus_Document_ServerState_Value_published">
             <tuv xml:lang="en">
                 <seg>Published</seg>
             </tuv>
@@ -70,7 +70,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Opus_Document_ServerState_Value_Deleted">
+        <tu tuid="Opus_Document_ServerState_Value_deleted">
             <tuv xml:lang="en">
                 <seg>Deleted</seg>
             </tuv>
@@ -79,7 +79,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Opus_Document_ServerState_Value_Restricted">
+        <tu tuid="Opus_Document_ServerState_Value_restricted">
             <tuv xml:lang="en">
                 <seg>Restricted</seg>
             </tuv>
@@ -88,7 +88,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Opus_Document_ServerState_Value_Inprogress">
+        <tu tuid="Opus_Document_ServerState_Value_inprogress">
             <tuv xml:lang="en">
                 <seg>In Progress</seg>
             </tuv>
@@ -97,7 +97,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Opus_Document_ServerState_Value_Audited">
+        <tu tuid="Opus_Document_ServerState_Value_audited">
             <tuv xml:lang="en">
                 <seg>Audited</seg>
             </tuv>
@@ -107,7 +107,7 @@
         </tu>
 
         <!-- Übersetzung wird für Workflow Rechte benötigt. -->
-        <tu tuid="Opus_Document_ServerState_Value_Removed">
+        <tu tuid="Opus_Document_ServerState_Value_removed">
             <tuv xml:lang="en">
                 <seg>Permanently Deleted</seg>
             </tuv>
