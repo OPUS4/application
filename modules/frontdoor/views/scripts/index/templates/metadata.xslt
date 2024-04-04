@@ -284,6 +284,9 @@
                         <xsl:with-param name="string">frontdoor_orcid</xsl:with-param>
                     </xsl:call-template>
                 </xsl:attribute>
+                <xsl:attribute name="target">
+                    <xsl:text>_blank</xsl:text>
+                </xsl:attribute>
                 <xsl:text>ORCiD</xsl:text>
             </xsl:element>
         </xsl:if>
@@ -301,6 +304,9 @@
                     <xsl:call-template name="translateString">
                         <xsl:with-param name="string">frontdoor_gnd</xsl:with-param>
                     </xsl:call-template>
+                </xsl:attribute>
+                <xsl:attribute name="target">
+                    <xsl:text>_blank</xsl:text>
                 </xsl:attribute>
                 <xsl:text>GND</xsl:text>
             </xsl:element>
@@ -341,6 +347,9 @@
                         <xsl:with-param name="string">frontdoor_orcid</xsl:with-param>
                     </xsl:call-template>
                 </xsl:attribute>
+                <xsl:attribute name="target">
+                    <xsl:text>_blank</xsl:text>
+                </xsl:attribute>
                 <xsl:text>ORCiD</xsl:text>
             </xsl:element>
         </xsl:if>
@@ -358,6 +367,9 @@
                     <xsl:call-template name="translateString">
                         <xsl:with-param name="string">frontdoor_gnd</xsl:with-param>
                     </xsl:call-template>
+                </xsl:attribute>
+                <xsl:attribute name="target">
+                    <xsl:text>_blank</xsl:text>
                 </xsl:attribute>
                 <xsl:text>GND</xsl:text>
             </xsl:element>
@@ -735,6 +747,9 @@
                 </xsl:attribute>
                 <xsl:attribute name="rel">
                     <xsl:text>nofollow</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="target">
+                    <xsl:text>_blank</xsl:text>
                 </xsl:attribute>
                 <xsl:text>GND</xsl:text>
             </xsl:element>
