@@ -1194,7 +1194,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->addFile($file);
 
         $date = new Date();
-        $date->setYear('2000')->setMonth('00')->setDay('01');
+        $date->setYear('2000')->setMonth('01')->setDay('01');
         $doc->setEmbargoDate($date);
 
         $docId = $doc->store();
@@ -1217,7 +1217,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->addFile($file);
 
         $date = new Date();
-        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $date->setYear('2100')->setMonth('01')->setDay('01');
         $doc->setEmbargoDate($date);
 
         $docId = $doc->store();
