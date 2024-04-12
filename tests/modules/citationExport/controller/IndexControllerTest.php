@@ -150,16 +150,11 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testIndexActionRis()
     {
-        $this->markTestSkipped('Frontdoor URL is no longer exported');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertContains('UR  - ', $response->getBody());
-        $this->assertContains('/frontdoor/index/index/docId/' . $this->documentId, $response->getBody());
-        $this->assertContains(
-            '/citationExport/index/download/output/ris/docId/' . $this->documentId,
-            $response->getBody()
-        );
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('TY  - GEN', $body);
+        $this->assertContains('U1  - Sonstiges', $body);
     }
 
     public function testIndexActionRisDoctypeArticle()
@@ -546,75 +541,42 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
 
     public function testDownloadActionRis()
     {
-        $this->markTestSkipped('Frontdoor URL is no longer exported');
         $this->dispatch('/citationExport/index/download/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertContains('UR  - ', $response->getBody());
-        $this->assertContains('/frontdoor/index/index/docId/' . $this->documentId, $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('TY  - GEN', $body);
+        $this->assertContains('U1  - Sonstiges', $body);
     }
 
-    public function testDownloadActionBibtexDoctypeArticle()
+    /**
+     * @return array[]
+     */
+    public function bibtexDoctypeDataProvider()
     {
-        $this->setDocumentType('article');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@article', false);
+        return [
+            ['article', '@article'],
+            ['book', '@book'],
+            ['bookpart', '@incollection'],
+            ['conferenceobject', '@inproceedings'],
+            ['doctoralthesis', '@phdthesis'],
+            ['masterthesis', '@mastersthesis'],
+            ['preprint', '@unpublished'],
+            ['report', '@techreport'],
+            ['foo', '@misc'],
+        ];
     }
 
-    public function testDownloadActionBibtexDoctypeBook()
+    /**
+     * @param string $docType
+     * @param string $bibtexType
+     * @throws NotFoundException
+     * @dataProvider bibtexDoctypeDataProvider
+     */
+    public function testDownloadActionBibtexDoctype($docType, $bibtexType)
     {
-        $this->setDocumentType('book');
+        $this->setDocumentType($docType);
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@book', false);
-    }
-
-    public function testDownloadActionBibtexDoctypeBookpart()
-    {
-        $this->setDocumentType('bookpart');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@incollection', false);
-    }
-
-    public function testDownloadActionBibtexDoctypeConferenceobject()
-    {
-        $this->setDocumentType('conferenceobject');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@inproceedings', false);
-    }
-
-    public function testDownloadActionBibtexDoctypeDoctoralthesis()
-    {
-        $this->setDocumentType('doctoralthesis');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@phdthesis', false);
-    }
-
-    public function testDownloadActionBibtexDoctypeMasterthesis()
-    {
-        $this->setDocumentType('masterthesis');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@mastersthesis', false);
-    }
-
-    public function testDownloadActionBibtexDoctypePreprint()
-    {
-        $this->setDocumentType('preprint');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@unpublished', false);
-    }
-
-    public function testDownloadActionBibtexDoctypeReport()
-    {
-        $this->setDocumentType('report');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@techreport', false);
-    }
-
-    public function testDownloadActionBibtexMisc()
-    {
-        $this->setDocumentType('foo');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@misc', false);
+        $this->checkBibtexAssertions($bibtexType, false);
     }
 
     /**
