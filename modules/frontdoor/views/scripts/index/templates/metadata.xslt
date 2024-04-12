@@ -270,25 +270,8 @@
             <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
         </xsl:element>
 
-        <xsl:if test="@IdentifierOrcid and php:functionString('Application_Xslt::optionEnabled', 'linkAuthor.frontdoor', 'orcid')">
-            <xsl:call-template name="PersonalIdentifier">
-                <xsl:with-param name="baseUrl">orcid</xsl:with-param>
-                <xsl:with-param name="id"><xsl:value-of select="@IdentifierOrcid"/></xsl:with-param>
-                <xsl:with-param name="cssClass">orcid-link</xsl:with-param>
-                <xsl:with-param name="linkTitle">frontdoor_orcid</xsl:with-param>
-                <xsl:with-param name="linkText">ORCiD</xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-        
-        <xsl:if test="@IdentifierGnd and php:functionString('Application_Xslt::optionEnabled', 'linkAuthor.frontdoor', 'gnd')">
-            <xsl:call-template name="PersonalIdentifier">
-                <xsl:with-param name="baseUrl">gnd</xsl:with-param>
-                <xsl:with-param name="id"><xsl:value-of select="@IdentifierGnd"/></xsl:with-param>
-                <xsl:with-param name="cssClass">gnd-link</xsl:with-param>
-                <xsl:with-param name="linkTitle">frontdoor_gnd</xsl:with-param>
-                <xsl:with-param name="linkText">GND</xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
+        <xsl:call-template name="PersonOrcidLink" />
+        <xsl:call-template name="PersonGndLink" />
 
         <xsl:if test="position() != last()">, </xsl:if>
 
@@ -310,26 +293,9 @@
         </xsl:if>
         <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
         
-        <xsl:if test="@IdentifierOrcid and php:functionString('Application_Xslt::optionEnabled', 'linkAuthor.frontdoor', 'orcid')">
-            <xsl:call-template name="PersonalIdentifier">
-                <xsl:with-param name="baseUrl">orcid</xsl:with-param>
-                <xsl:with-param name="id"><xsl:value-of select="@IdentifierOrcid"/></xsl:with-param>
-                <xsl:with-param name="cssClass">orcid-link</xsl:with-param>
-                <xsl:with-param name="linkTitle">frontdoor_orcid</xsl:with-param>
-                <xsl:with-param name="linkText">ORCiD</xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-        
-        <xsl:if test="@IdentifierGnd and php:functionString('Application_Xslt::optionEnabled', 'linkAuthor.frontdoor', 'gnd')">
-            <xsl:call-template name="PersonalIdentifier">
-                <xsl:with-param name="baseUrl">gnd</xsl:with-param>
-                <xsl:with-param name="id"><xsl:value-of select="@IdentifierGnd"/></xsl:with-param>
-                <xsl:with-param name="cssClass">gnd-link</xsl:with-param>
-                <xsl:with-param name="linkTitle">frontdoor_gnd</xsl:with-param>
-                <xsl:with-param name="linkText">GND</xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-        
+        <xsl:call-template name="PersonOrcidLink" />
+        <xsl:call-template name="PersonGndLink" />
+
         <xsl:if test="position() != last()">, </xsl:if>
         
         <xsl:if test="position() = last()">
@@ -337,8 +303,32 @@
             <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
         </xsl:if>
     </xsl:template>
-    
-    <xsl:template name="PersonalIdentifier">
+
+    <xsl:template name="PersonOrcidLink">
+        <xsl:if test="@IdentifierOrcid and php:functionString('Application_Xslt::optionEnabled', 'linkAuthor.frontdoor', 'orcid')">
+            <xsl:call-template name="PersonIdentifierLink">
+                <xsl:with-param name="baseUrl">orcid</xsl:with-param>
+                <xsl:with-param name="id"><xsl:value-of select="@IdentifierOrcid"/></xsl:with-param>
+                <xsl:with-param name="cssClass">orcid-link</xsl:with-param>
+                <xsl:with-param name="linkTitle">frontdoor_orcid</xsl:with-param>
+                <xsl:with-param name="linkText">ORCiD</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="PersonGndLink">
+        <xsl:if test="@IdentifierGnd and php:functionString('Application_Xslt::optionEnabled', 'linkAuthor.frontdoor', 'gnd')">
+            <xsl:call-template name="PersonIdentifierLink">
+                <xsl:with-param name="baseUrl">gnd</xsl:with-param>
+                <xsl:with-param name="id"><xsl:value-of select="@IdentifierGnd"/></xsl:with-param>
+                <xsl:with-param name="cssClass">gnd-link</xsl:with-param>
+                <xsl:with-param name="linkTitle">frontdoor_gnd</xsl:with-param>
+                <xsl:with-param name="linkText">GND</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="PersonIdentifierLink">
         <xsl:param name="baseUrl"/>
         <xsl:param name="id"/>
         <xsl:param name="cssClass"/>
