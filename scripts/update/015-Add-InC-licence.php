@@ -17,14 +17,16 @@ use Opus\Database;
 
 $helper = new Application_Update_Helper();
 
-$licence = Licence::fetchByName('In Copyright');
+$licenceName = 'In Copyright';
+
+$licence = Licence::fetchByName($licenceName);
 
 if ($licence !== null) {
-    $helper->log('In Copyright licence seems to be present in database.');
+    $helper->log("'{$licenceName}' licence seems to be present in database.");
 }
 
-if ($helper->askYesNo('Add In Copyright licence to database [Y|n]? ')) {
-    $helper->log('Add In Copyright licence ...');
+if ($helper->askYesNo("Add '{$licenceName}' licence to database [Y|n]? ")) {
+    $helper->log("Add '{$licenceName}' licence ...");
 
     $database = new Database();
 
