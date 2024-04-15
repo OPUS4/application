@@ -107,6 +107,10 @@ class Oai_Model_Set_CollectionRoleSingleSetTest extends ControllerTestCase
         $this->assertNotNull($collectionRole);
         $this->assertEquals(1, $collectionRole->getVisibleOai());
         $this->assertEquals(1, $collectionRole->getVisible());
+
+        $documents = $collectionRole->getDocumentsVisibleInOai();
+
+        $this->assertGreaterThan(0, count($documents));
     }
 
     public function testGetSetsWithDocumentRootCollection()
