@@ -589,14 +589,19 @@
             </th>
             <td>
                 <img alt="License Logo">
-                    <xsl:attribute name="src">
-                        <xsl:value-of select="@LinkLogo"/>
+                    <xsl:attribute name="id">
+                        <xsl:text>licence-</xsl:text>
+                        <xsl:value-of select="translate(@Name, ' .', '')"/>
+                        <xsl:text>-logo</xsl:text>
                     </xsl:attribute>
+                    <xsl:attribute name="src">
+                        <xsl:value-of select="@LinkLogo"/>                        
+                    </xsl:attribute>                    
                     <xsl:attribute name="title">
                         <xsl:value-of select="@LinkLicence"/>
                     </xsl:attribute>
                 </img>
-
+                <xsl:text> </xsl:text>
                 <xsl:element name="a">
                     <xsl:attribute name="href">
                         <xsl:value-of select="$baseUrl"/><xsl:text>/default/license/index/licId/</xsl:text><xsl:value-of select="@Id"/>
