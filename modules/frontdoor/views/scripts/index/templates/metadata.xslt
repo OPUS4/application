@@ -590,6 +590,7 @@
             <td>
                 <img alt="License Logo">
                     <xsl:attribute name="id">
+                        <xsl:text>licence-</xsl:text>
                         <xsl:value-of select="translate(@Name, ' .', '')"/>
                         <xsl:text>-logo</xsl:text>
                     </xsl:attribute>
