@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+    <body>
+
+        <tu tuid="doiimport_header_note">
+            <tuv xml:lang="en">
+                <seg>Note</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Hinweis</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_header_warning">
+            <tuv xml:lang="en">
+                <seg>Attention</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Achtung</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_hint_insertDoi">
+            <tuv xml:lang="en">
+                <seg>Please insert a DOI first ...</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte zuerst eine DOI eingeben...</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_hint_doiExistsPublished">
+            <tuv xml:lang="en">
+                <seg>A data set with this DOI already exists in the repository (ID %s).</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Es ist bereits ein Datensatz mit dieser DOI im Repositorium vorhanden (ID %s).</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_hint_doiExistsUnpublished">
+            <tuv xml:lang="en">
+                <seg>A data set with this DOI already exists in the repository (unpublished).</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Es ist bereits ein Datensatz mit dieser DOI im Repositorium vorhanden (unveröffentlicht).</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_hint_allFieldsDeleted">
+            <tuv xml:lang="en">
+                <seg>Attention! All fields of the form will be deleted and a new import will be started! Continue?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Achtung, alle Felder des Formulars werden gelöscht und ein neuer Import gestartet! Fortfahren?</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_hint_doiNotFound">
+            <tuv xml:lang="en">
+                <seg>DOI not found in Crossref.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DOI wurde nicht in Crossref gefunden.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_button_getMetadata">
+            <tuv xml:lang="en">
+                <seg>Get metadata from Crossref</seg>
+            </tuv>
+            <tuv xml:lang="de">                
+                <seg>Metadaten von Crossref holen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_button_cancel">
+            <tuv xml:lang="en">
+                <seg>Cancel</seg>
+            </tuv>
+            <tuv xml:lang="de">                
+                <seg>Abbruch</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_button_showId">
+            <tuv xml:lang="en">
+                <seg>Show ID</seg>
+            </tuv>
+            <tuv xml:lang="de">                
+                <seg>Zeige ID</seg>
+            </tuv>
+        </tu>
+
+    </body>
+</tmx>

@@ -9,7 +9,7 @@ function startCheck()
     doi = document.getElementById("IdentifierDoi").value.trim();
     if (doi.trim() == '') {
         // Feld "IdentifierDoi" ist leer
-        openDialog("Hinweis", "Bitte zuerst eine DOI eingeben...");
+        openDialog(translations.doiimport_header_note, translations.doiimport_hint_insertDoi, "note");
     } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value != "true") {
         const checkUrl = baseUrl + '/api/doicheck?doi=' + doi;
         get(
@@ -19,16 +19,16 @@ function startCheck()
                 if (checkdoiData['doiExists'] == true) { // DOI existiert bereits
                     checkdoiId = checkdoiData['docId'];
                     if (typeof checkdoiId !== 'undefined') { // DOI existiert bereits und ist veröffentlicht
-                        openDialog("Hinweis", "Es ist bereits ein Datensatz mit dieser DOI im Repositorium vorhanden (ID " + checkdoiId + ").", checkdoiId);
+                        openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiExistsPublished.replace('%s', checkdoiId), "note", checkdoiId);
                     } else { // DOI existiert bereits und ist unveröffentlicht
-                        openDialog("Hinweis", "Es ist bereits ein Datensatz mit dieser DOI im Repositorium vorhanden (unveröffentlicht).");
+                        openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiExistsUnpublished, "note");
                     }} else {
                     readDoi(doi)} // DOI existiert noch nicht, starte Import
             }
         )
     } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true") {
         // Import wurde bereits durchgeführt -> Bestätigung
-        openDialog("Achtung", "Achtung, alle Felder des Formulars werden gelöscht und ein neuer Import gestartet! Fortfahren?");
+        openDialog(translations.doiimport_header_warning, translations.doiimport_hint_allFieldsDeleted, "warning");
     }
 }
 
@@ -54,7 +54,7 @@ function readDoi(doi)
             function () {
                 var jsonraw = this.responseText;
                 if (jsonraw == "Resource not found.") {
-                    openDialog("Hinweis", "DOI wurde nicht in Crossref gefunden. Bitte prüfen Sie die Eingabe.");
+                    openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiNotFound, "note");
                     colorPink("IdentifierDoi");
                 } else {
                     document.getElementById("Enrichmentopus_doi_json").value = jsonraw;
@@ -440,7 +440,7 @@ async function getDoctypes(data)
     );
 }
 
-function openDialog(title, text, id = null)
+function openDialog(title, text, type = 'note', id = null)
 {
     var dialogButtons = {
         OK: function () {
@@ -450,24 +450,36 @@ function openDialog(title, text, id = null)
 
     var dialogContent         = document.createElement("div");
     dialogContent.textContent = text;
+
+    // Hinzufügen eines Buttons, wenn DOI schon vorhanden und eine ID verfügbar ist
     if (id) {
-        dialogButtons['ID ' + id + ' ansehen'] = function () {
+        dialogButtons[translations.doiimport_button_showId + ' ' + id] = function () {
             var checkLink = baseUrl + "/" + id;
             window.open(checkLink, '_blank');
-        }}
-    if (title == "Achtung") {
-        dialogButtons['OK'] = function () {
-            $(this).dialog("close");
-            cleanup();
-            document.getElementById("IdentifierDoi").value = doi;
-            startCheck();
         };
-
-            dialogButtons['Abbruch'] = function () {
-                $(this).dialog("close");
-            };
     }
 
+    switch (type) {
+        case 'warning':
+            dialogButtons['OK']                                 = function () {
+                $(this).dialog("close");
+                cleanup();
+                document.getElementById("IdentifierDoi").value = doi;
+                startCheck();
+            };
+            dialogButtons[translations.doiimport_button_cancel] = function () {
+                $(this).dialog("close");
+            };
+            break;
+        case 'note':
+            // Keine speziellen Buttons hinzufügen, nur der Standard-OK-Button
+            break;
+        default:
+            // Weitere Fälle können hier hinzugefügt werden
+            break;
+    }
+
+    // Dialog initialisieren
     $(function () {
         $(dialogContent).dialog({
             title: title,

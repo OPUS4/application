@@ -54,7 +54,7 @@ $config = Config::get();
 
         <?= $this->element($this->IdentifierDoi); ?>
 
-        <input type="button" name="go_import" id="DoiButton" value="Metadaten von Crossref holen" onclick="startCheck()">
+        <input type="button" name="go_import" id="DoiButton" value="<?= $this->translate('doiimport_button_getMetadata'); ?>" onclick="startCheck()">
 
         <span id="doi_import_invisible_field">
                 
@@ -123,10 +123,22 @@ $config = Config::get();
 <!-- Nach Reload nochmal parsen, falls opus_doi_json schon gefüllt ist. Anderenfalls würden alle Felder wieder geleert, sobald ein Feld hinzugefügt wird. -->
 <script language="javascript" type="text/javascript">
 
+    var translations = {
+        doiimport_header_note: "<?= $this->translate('doiimport_header_note'); ?>",
+        doiimport_header_warning: "<?= $this->translate('doiimport_header_warning'); ?>",
+        doiimport_hint_insertDoi: "<?= $this->translate('doiimport_hint_insertDoi'); ?>",
+        doiimport_hint_doiExistsPublished: "<?= $this->translate('doiimport_hint_doiExistsPublished'); ?>",
+        doiimport_hint_doiExistsUnpublished: "<?= $this->translate('doiimport_hint_doiExistsUnpublished'); ?>",
+        doiimport_hint_allFieldsDeleted: "<?= $this->translate('doiimport_hint_allFieldsDeleted'); ?>",
+        doiimport_hint_doiNotFound: "<?= $this->translate('doiimport_hint_doiNotFound'); ?>",
+        doiimport_button_cancel: "<?= $this->translate('doiimport_button_cancel'); ?>",
+        doiimport_button_showId: "<?= $this->translate('doiimport_button_showId'); ?>"
+    };
+
     let opusConfig = {
         "crossrefUrl": '<?= $config->crossref->url ?>',
         "crossrefMailTo": '<?= $config->crossref->mailTo ?>'
-    }
+    };
 
     var doiJson = document.getElementById("Enrichmentopus_doi_json").value;
     if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "false"){
