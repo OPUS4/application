@@ -63,10 +63,10 @@
 
         <tu tuid="doiimport_hint_doiNotFound">
             <tuv xml:lang="en">
-                <seg>DOI not found in Crossref.</seg>
+                <seg>DOI not found in Crossref. Please select the desired document type on the following page and enter the data manually.</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>DOI wurde nicht in Crossref gefunden.</seg>
+                <seg>DOI wurde nicht in Crossref gefunden. Wählen Sie bitte auf der folgenden Seite den gewünschten Dokumenttyp aus und tragen die Daten manuell ein.</seg>
             </tuv>
         </tu>
 

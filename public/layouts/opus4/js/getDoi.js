@@ -54,7 +54,7 @@ function readDoi(doi)
             function () {
                 var jsonraw = this.responseText;
                 if (jsonraw === "Resource not found.") {
-                    openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiNotFound, "note");
+                    openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiNotFound, "redirect");
                     colorPink("IdentifierDoi");
                 } else {
                     document.getElementById("Enrichmentopus_doi_json").value = jsonraw;
@@ -473,6 +473,13 @@ function openDialog(title, text, type = 'note', id = null)
             break;
         case 'note':
             // Keine speziellen Buttons hinzufügen, nur der Standard-OK-Button
+            break;
+        case 'redirect':
+            //Falls DOI nicht bei Crossref gefunden wurde -> zurück zur Auswahl des Dokumenttyps (um manuelle Eingabe im DOI-Import zu verhindern)
+            dialogButtons['OK'] = function () {
+                $(this).dialog("close");
+                document.getElementById("abort").click();
+            };
             break;
         default:
             // Weitere Fälle können hier hinzugefügt werden
