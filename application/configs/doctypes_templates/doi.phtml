@@ -141,9 +141,9 @@ $config = Config::get();
     };
 
     var doiJson = document.getElementById("Enrichmentopus_doi_json").value;
-    if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "false"){
+    if (doiJson.trim() !== '' && document.getElementById("Enrichmentopus_doi_flag").value === "false"){
     parseJson(doiJson);
-    } else if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true"){
+    } else if (doiJson.trim() !== '' && document.getElementById("Enrichmentopus_doi_flag").value === "true"){
     let fields = document.getElementById("Enrichmentopus_doiImportPopulated").value;
     const usedFields = fields.split(',');
     getDoctypes(JSON.parse(doiJson)); // DokType nochmal parsen, falls z.B. ein Autor gelöscht und dadurch die Seite neu aufgebaut wurde
@@ -155,7 +155,7 @@ $config = Config::get();
 
     const mandatory_fields = ['PersonSubmitterLastName_1','PersonSubmitterEmail_1','Language','TitleMain_1'];
     for (const mandatory of mandatory_fields) { //Pflichtfelder Rot färben, wenn leer 
-        if (document.getElementById(mandatory).value == "") {
+        if (document.getElementById(mandatory).value === "") {
             colorPink(mandatory);
             }
         }    
