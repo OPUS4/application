@@ -90,7 +90,7 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $documents = $this->documents->getSortedDocumentIds();
 
         $this->assertNotNull($documents);
-        $this->assertInternalType('array', $documents);
+        $this->assertIsArray($documents);
 
         $lastId = 0;
 
@@ -106,7 +106,7 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $documents = $this->documents->getSortedDocumentIds(null, false);
 
         $this->assertNotNull($documents);
-        $this->assertInternalType('array', $documents);
+        $this->assertIsArray($documents);
 
         $lastId = max($documents) + 1; // start with something greater than the greatest ID
 
@@ -141,7 +141,7 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $documents = $this->documents->getSortedDocumentIds(null, null, $state);
 
         $this->assertNotNull($documents);
-        $this->assertInternalType('array', $documents);
+        $this->assertIsArray($documents);
         // $this->assertGreaterThan(0, count($documents));
 
         if (count($documents) > 0) {

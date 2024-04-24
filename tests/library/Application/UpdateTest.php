@@ -50,7 +50,7 @@ class Application_UpdateTest extends ControllerTestCase
         $scripts = $update->getUpdateScripts();
 
         $this->assertNotNull($scripts);
-        $this->assertInternalType('array', $scripts);
+        $this->assertIsArray($scripts);
         $this->assertGreaterThan(1, count($scripts));
 
         $lastNumber = 0;

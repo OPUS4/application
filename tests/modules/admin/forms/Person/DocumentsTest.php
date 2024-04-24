@@ -58,7 +58,7 @@ class Admin_Form_Person_DocumentsTest extends ControllerTestCase
         $selected = $form->getSelectedDocuments();
 
         $this->assertNotNull($selected);
-        $this->assertInternalType('array', $selected);
+        $this->assertIsArray($selected);
         $this->assertCount(1, $selected);
         $this->assertEquals(2, $selected[0]);
     }

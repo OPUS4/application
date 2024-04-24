@@ -53,7 +53,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Irgendwas', $this->session);
         $val->validate();
 
-        $this->assertInternalType('array', $val->validator);
+        $this->assertIsArray($val->validator);
     }
 
     public function testValidationWithCollectionWithoutCollectionRole()
@@ -179,7 +179,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val      = new Publish_Model_Validation('Irgendwas', $this->session);
         $children = $val->selectOptions();
 
-        $this->assertInternalType('array', $val->validator);
+        $this->assertIsArray($val->validator);
     }
 
     public function testSelectOptionsForCollection()
@@ -289,7 +289,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $collectionRole->store();
 
         $children = $val->selectOptions('Collection');
-        $this->assertInternalType('array', $children);
+        $this->assertIsArray($children);
         $this->assertArrayHasKey('3', $children);
 
         $collectionRole->setVisible($visibleFlag);
@@ -312,7 +312,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Series', $this->session);
 
         $children = $val->selectOptions('Series');
-        $this->assertInternalType('array', $children);
+        $this->assertIsArray($children);
         $this->assertArrayHasKey('4', $children);
         //series with title: Visible Series
     }
@@ -322,7 +322,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Series', $this->session);
 
         $children = $val->selectOptions('Series');
-        $this->assertInternalType('array', $children);
+        $this->assertIsArray($children);
         $this->assertArrayNotHasKey('3', $children);
         //series with title: Invisible Series
     }

@@ -175,7 +175,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $roles = $form->getRolesForFile($file->getId());
 
-        $this->assertInternalType('array', $roles);
+        $this->assertIsArray($roles);
         $this->assertEquals(1, count($roles));
         $this->assertContains('reviewer', $roles);
     }

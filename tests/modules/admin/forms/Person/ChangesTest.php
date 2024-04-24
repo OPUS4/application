@@ -52,14 +52,14 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $prepared = $form->getPreparedChanges();
 
         $this->assertNotNull($prepared);
-        $this->assertInternalType('array', $prepared);
+        $this->assertIsArray($prepared);
         $this->assertCount(3, $prepared);
 
         $this->assertArrayHasKey('LastName', $prepared);
 
         $lastName = $prepared['LastName'];
         $this->assertNotNull($lastName);
-        $this->assertInternalType('array', $prepared);
+        $this->assertIsArray($prepared);
         $this->assertCount(3, $lastName);
 
         $this->assertArrayHasKey('old', $lastName);
@@ -93,13 +93,13 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $prepared = $form->getPreparedChanges();
 
         $this->assertNotNull($prepared);
-        $this->assertInternalType('array', $prepared);
+        $this->assertIsArray($prepared);
         $this->assertCount(3, $prepared);
         $this->assertArrayHasKey('FirstName', $prepared);
 
         $firstName = $prepared['FirstName'];
         $this->assertNotNull($firstName);
-        $this->assertInternalType('array', $prepared);
+        $this->assertIsArray($prepared);
         $this->assertCount(3, $firstName);
 
         $this->assertArrayHasKey('old', $firstName);
@@ -133,13 +133,13 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $prepared = $form->getPreparedChanges();
 
         $this->assertNotNull($prepared);
-        $this->assertInternalType('array', $prepared);
+        $this->assertIsArray($prepared);
         $this->assertCount(3, $prepared);
         $this->assertArrayHasKey('IdentifierMisc', $prepared);
 
         $miscId = $prepared['IdentifierMisc'];
         $this->assertNotNull($miscId);
-        $this->assertInternalType('array', $prepared);
+        $this->assertIsArray($prepared);
         $this->assertCount(3, $miscId);
 
         $this->assertArrayHasKey('old', $miscId);
@@ -169,7 +169,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $prepared = $form->getPreparedChanges();
 
         $this->assertNotNull($prepared);
-        $this->assertInternalType('array', $prepared);
+        $this->assertIsArray($prepared);
         $this->assertCount(1, $prepared);
 
         $this->assertArrayHasKey('FirstName', $prepared);
@@ -177,7 +177,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $firstName = $prepared['FirstName'];
 
         $this->assertNotNull($firstName);
-        $this->assertInternalType('array', $prepared);
+        $this->assertIsArray($prepared);
         $this->assertCount(3, $firstName);
 
         $this->assertArrayHasKey('old', $firstName);
@@ -232,7 +232,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $values = $form->forceArray('test');
 
         $this->assertNotNull($values);
-        $this->assertInternalType('array', $values);
+        $this->assertIsArray($values);
         $this->assertCount(1, $values);
         $this->assertContains('test', $values);
     }
@@ -244,7 +244,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $values = $form->forceArray(null);
 
         $this->assertNotNull($values);
-        $this->assertInternalType('array', $values);
+        $this->assertIsArray($values);
         $this->assertCount(0, $values);
     }
 
@@ -255,7 +255,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $values = $form->forceArray(['value1', 'value2']);
 
         $this->assertNotNull($values);
-        $this->assertInternalType('array', $values);
+        $this->assertIsArray($values);
         $this->assertCount(2, $values);
         $this->assertEquals(['value1', 'value2'], $values);
     }

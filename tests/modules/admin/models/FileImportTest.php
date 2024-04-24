@@ -114,7 +114,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
 
         $files = $this->model->getNamesOfIncomingFiles();
 
-        $this->assertInternalType('array', $files);
+        $this->assertIsArray($files);
         $this->assertEquals(1, count($files));
         $this->assertEquals('testfile', $files[0]);
 
