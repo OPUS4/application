@@ -73,7 +73,7 @@ class Setup_Form_AppearanceForm extends Application_Form_Abstract
 
         if (isset($data[self::ELEMENT_THEME])) {
             $selectedTheme = $data[self::ELEMENT_THEME];
-        } else if (isset($config->themes->selectedTheme)) {
+        } elseif (isset($config->themes->selectedTheme)) {
             $selectedTheme = $config->themes->selectedTheme;
         }
 
