@@ -64,24 +64,17 @@ class Oai_Model_Set_CollectionRoleSingleSet extends Oai_Model_Set_CollectionSets
     {
         $sets = [];
 
+        $setName = $this->getRoleOaiName();
+        $role    = CollectionRole::fetchByOaiName($setName);
+
         if ($document) {
-            // return set if document is linked to the collection role and visible in OAI
-            $setSpecs = $this->getSetsFromCollections($document->getCollection());
-
-            if (count($setSpecs) > 0) {
-                $oaiName  = $this->getRoleOaiName();
-                $role     = CollectionRole::fetchByOaiName($oaiName);
-                $roleName = trim($role->getName());
-
-                $sets[urlencode($oaiName)] = "Set for collection '$roleName'";
+            if ($role->isDocumentVisibleInOai($document->getId())) {
+                $sets = [$setName => "Set for collection '" . $setName . "'"];
             }
         } else {
             // Return set if the collection role contains documents visible in OAI
-            $setName = $this->getRoleOaiName();
-            $role    = CollectionRole::fetchByOaiName($setName);
-
-            if ($role->containsDocumentsVisibleInOai()) {
-                $sets    = [$setName => "Set for collection '" . $setName . "'"];
+            if ($role->hasOaiDocuments()) {
+                $sets = [$setName => "Set for collection '" . $setName . "'"];
             }
         }
 
