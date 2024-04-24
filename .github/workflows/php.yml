@@ -30,7 +30,7 @@ jobs:
           php-version: ${{ matrix.versions.php }}
 
       - name: Install Composer and Dependencies
-        run: sudo apt-get update && curl -s http://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar install
+        run: sudo apt-get update && curl -s https://getcomposer.org/installer | php && php composer.phar self-update && php composer.phar install
 
       - name: Fix for issue 502
         run: sudo apt-get --fix-broken install
