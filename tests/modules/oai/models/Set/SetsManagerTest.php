@@ -59,6 +59,7 @@ class Oai_Model_Set_SetsManagerTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
         $document->setBelongsToBibliography(true);
+        $document->store();
 
         $sets = $setsManager->getSets($document);
         $this->assertEquals(['bibliography:true', 'doc-type:Other'], array_keys($sets));
