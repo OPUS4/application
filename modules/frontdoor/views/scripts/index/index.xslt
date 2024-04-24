@@ -171,6 +171,7 @@
             <xsl:apply-templates select="Identifier[@Type = 'issn']" />
             <xsl:apply-templates select="Identifier[@Type = 'arxiv']" />
             <xsl:apply-templates select="Identifier[@Type = 'pmid']" />
+            <xsl:apply-templates select="Identifier[@Type = 'union-cat']" />
             <xsl:apply-templates select="TitleParent" mode="mainLanguage" />
             <xsl:apply-templates select="TitleParent" mode="otherLanguage" />
             <xsl:apply-templates select="TitleSub" mode="mainLanguage" />
@@ -287,7 +288,9 @@
             <!-- End Enrichtments -->
 
             <!-- Collection Roles Section: add the collection roles keys that have to be displayed in frontdoor -->
-            <xsl:apply-templates select="Collection[@RoleName='institutes']" />
+            <xsl:apply-templates select="Collection[@RoleName='institutes']">
+                <xsl:sort select="@DisplayFrontdoor" />
+            </xsl:apply-templates>
             <xsl:apply-templates select="Collection[@RoleName='projects']" />
 
             <xsl:apply-templates select="Collection[@RoleName='ccs']" />
