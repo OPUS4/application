@@ -110,7 +110,7 @@ class Application_ConfigurationTest extends ControllerTestCase
     public function testGetOpusInfo()
     {
         $data = Application_Configuration::getOpusInfo();
-        $this->assertInternalType('array', $data);
+        $this->assertIsArray($data);
         /* OPUSVIER-3542 Version not working the same way with git
         $this->assertArrayHasKey('admin_info_version', $data);
         $this->assertEquals($config->version, $data['admin_info_version']);

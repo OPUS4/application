@@ -29,7 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\CollectionInterface;
 use Opus\Common\CollectionRole;
+use Opus\Common\DocumentFinderInterface;
 use Opus\Common\DocumentInterface;
 
 /**

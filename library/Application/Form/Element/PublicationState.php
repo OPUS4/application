@@ -1,4 +1,4 @@
-<?php
+<?PHP
 
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -25,56 +25,70 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2024, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Element_HitsPerPageTest extends ControllerTestCase
+use Opus\Common\PublicationState;
+
+class Application_Form_Element_PublicationState extends Application_Form_Element_SelectWithNull
 {
-    public function setUp(): void
+    public function init()
     {
-        parent::setUp();
-        $this->makeConfigurationModifiable();
-    }
+        parent::init();
 
-    public function testInit()
-    {
-        $element = new Application_Form_Element_HitsPerPage('rows');
+        $this->setLabel($this->getView()->translate($this->getName()));
 
-        $options = $element->getMultiOptions();
+        $this->addMultiOption('Null', '-');
 
-        $this->assertCount(4, $options);
+        $options = $this->getAllowedValues();
 
-        $current = 0;
-
-        foreach ($options as $value => $label) {
-            $this->assertTrue($current < $value);
-            $current = $value;
-            $this->assertIsInt($value);
-            $this->assertEquals($value, $label);
+        foreach ($options as $state) {
+            $this->addMultiOption($state, $this->translateValue($state));
         }
     }
 
-    public function testInitWithCustomDefaultRows()
+    /**
+     * @param string|null $value
+     */
+    public function setValue($value)
     {
-        $this->adjustConfiguration([
-            'searchengine' => ['solr' => ['numberOfDefaultSearchResults' => '15']],
-        ]);
+        $options = $this->getMultiOptions();
 
-        $element = new Application_Form_Element_HitsPerPage('rows');
+        $publicationState = new PublicationState();
 
-        $options = $element->getMultiOptions();
+        if (! array_key_exists($value, $options) && in_array($value, $publicationState->getAllValues())) {
+            $additionalOption[$value] = $this->translateValue($value);
 
-        $this->assertCount(5, $options);
+            $options = array_merge(
+                array_slice($options, 0, 1),
+                $additionalOption,
+                array_slice($options, 1)
+            );
 
-        $current = 0;
-
-        foreach ($options as $value => $label) {
-            $this->assertTrue($current < $value);
-            $current = $value;
-            $this->assertIsInt($value);
+            $this->setMultiOptions($options);
         }
 
-        $this->assertArrayHasKey(15, $options);
+        parent::setValue($value);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllowedValues()
+    {
+        $publicationState = new PublicationState();
+
+        return $publicationState->getValues();
+    }
+
+    /**
+     * @param string $value
+     * @return string
+     */
+    public function translateValue($value)
+    {
+        $translationKey = "Opus_Document_PublicationState_Value_{$value}";
+        return $this->getTranslator()->translate($translationKey);
     }
 }

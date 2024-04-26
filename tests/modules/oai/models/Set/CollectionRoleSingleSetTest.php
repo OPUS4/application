@@ -97,16 +97,42 @@ class Oai_Model_Set_CollectionRoleSingleSetTest extends ControllerTestCase
         $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
         $openAccessSet->setRoleOaiName('open_access');
 
+        $oaRole = CollectionRole::fetchByOaiName('open_access');
+
+        $this->assertNotNull($oaRole);
+        $this->assertEquals(1, $oaRole->getVisibleOai());
+        $this->assertEquals(1, $oaRole->getVisible());
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState(Document::STATE_PUBLISHED);
+        $doc->setCollection($oaRole->getRootCollection());
+        $docId = $doc->store();
+
         $sets = $openAccessSet->getSets();
         $this->assertEquals(1, count($sets));
+        $this->assertArrayHasKey('open_access', $sets);
 
-        $setSpec = array_keys($sets)[0];
-        $setName = new Oai_Model_Set_SetName($setSpec);
-        $this->assertEquals('open_access', $setName->getSetName());
-        $collectionRole = CollectionRole::fetchByOaiName($setName->getSetName());
-        $this->assertNotNull($collectionRole);
-        $this->assertEquals(1, $collectionRole->getVisibleOai());
-        $this->assertEquals(1, $collectionRole->getVisible());
+        $documents = $oaRole->getOaiDocuments();
+        $this->assertGreaterThan(0, count($documents));
+        $this->assertContains($docId, $documents);
+    }
+
+    public function testGetSetsNoDocuments()
+    {
+        $openAccessSet = new Oai_Model_Set_CollectionRoleSingleSet();
+        $openAccessSet->setRoleOaiName('open_access');
+
+        $oaRole = CollectionRole::fetchByOaiName('open_access');
+
+        $this->assertNotNull($oaRole);
+        $this->assertEquals(1, $oaRole->getVisibleOai());
+        $this->assertEquals(1, $oaRole->getVisible());
+
+        $documents = $oaRole->getOaiDocuments();
+        $this->assertCount(0, $documents);
+
+        $sets = $openAccessSet->getSets();
+        $this->assertCount(0, $sets);
     }
 
     public function testGetSetsWithDocumentRootCollection()

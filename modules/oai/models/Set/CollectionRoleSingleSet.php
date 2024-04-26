@@ -30,11 +30,22 @@
  */
 
 use Opus\Common\CollectionRole;
+use Opus\Common\DocumentFinderInterface;
+use Opus\Common\DocumentInterface;
 
 /**
- * Class for a single oai set based on a CollectionRole
+ * Single set for an entire CollectionRole.
+ *
+ * The OAI set contains all documents visible in OAI from an entire CollectionRole
+ * independent of the collections containing the documents.
+ *
+ * If a collection of the CollectionRole is not visible in OAI, documents that are
+ * only linked with that collection are not present in the OAI set.
+ *
+ * This can be used to have multiple collections for different open access variants
+ * as well as a "closed_access" collections that is not visible in OAI.
  */
-class Oai_Model_Set_CollectionRoleSingleSet implements Oai_Model_Set_SetTypeInterface
+class Oai_Model_Set_CollectionRoleSingleSet extends Oai_Model_Set_CollectionSets
 {
     /**
      * The OAI name of the collection role for which the class is responsible.
@@ -44,7 +55,7 @@ class Oai_Model_Set_CollectionRoleSingleSet implements Oai_Model_Set_SetTypeInte
     private $roleOaiName;
 
     /**
-     * Returns all sets of the set type.
+     * Returns a single set if it contains documents.
      *
      * @param DocumentInterface|null $document
      * @return array
@@ -53,25 +64,18 @@ class Oai_Model_Set_CollectionRoleSingleSet implements Oai_Model_Set_SetTypeInte
     {
         $sets = [];
 
-        if ($document) {
-            foreach ($document->getCollection() as $collection) {
-                $role       = $collection->getRole();
-                $oaiSetName = $role->getOaiName();
+        $setName = $this->getRoleOaiName();
+        $role    = CollectionRole::fetchByOaiName($setName);
 
-                if (
-                    $oaiSetName === $this->getRoleOaiName() &&
-                    $collection->getVisible() &&
-                    $role->getVisibleOai() &&
-                    $role->getVisible() &&
-                    $document->getServerState() === 'published'
-                ) {
-                    $sets[urlencode($oaiSetName)] = "Set for collection '" . trim($role->getName()) . "'";
-                    break;
-                }
+        if ($document) {
+            if ($role->isDocumentVisibleInOai($document->getId())) {
+                $sets = [$setName => "Set for collection '" . $setName . "'"];
             }
         } else {
-            $setName = $this->getRoleOaiName();
-            $sets    = [$setName => "Set for collection '" . $setName . "'"];
+            // Return set if the collection role contains documents visible in OAI
+            if ($role->hasOaiDocuments()) {
+                $sets = [$setName => "Set for collection '" . $setName . "'"];
+            }
         }
 
         return $sets;
@@ -127,7 +131,7 @@ class Oai_Model_Set_CollectionRoleSingleSet implements Oai_Model_Set_SetTypeInte
     /**
      * Sets the role oai name.
      *
-     * @param string $roleOaiName
+     * @param string|null $roleOaiName
      */
     public function setRoleOaiName($roleOaiName)
     {
