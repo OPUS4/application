@@ -95,7 +95,7 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $lastId = 0;
 
         foreach ($documents as $value) {
-            $this->assertInternalType('int', $value);
+            $this->assertIsInt($value);
             $this->assertGreaterThan($lastId, $value); // check ascending order
             $lastId = $value;
         }
@@ -111,7 +111,7 @@ class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestC
         $lastId = max($documents) + 1; // start with something greater than the greatest ID
 
         foreach ($documents as $value) {
-            $this->assertInternalType('int', $value);
+            $this->assertIsInt($value);
             $this->assertLessThan($lastId, $value); // check descending order
             $lastId = $value;
         }

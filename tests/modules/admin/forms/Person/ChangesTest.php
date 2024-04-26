@@ -71,7 +71,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $this->assertCount(1, $lastName['new']);
 
         $this->assertArrayHasKey('action', $lastName);
-        $this->assertInternalType('string', $lastName['action']);
+        $this->assertIsString($lastName['action']);
         $this->assertEquals('notmodified', $lastName['action']);
     }
 
@@ -111,7 +111,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $this->assertCount(1, $firstName['new']);
 
         $this->assertArrayHasKey('action', $firstName);
-        $this->assertInternalType('string', $firstName['action']);
+        $this->assertIsString($firstName['action']);
         $this->assertEquals('modified', $firstName['action']);
     }
 
@@ -150,7 +150,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $this->assertCount(1, $miscId['new']);
 
         $this->assertArrayHasKey('action', $miscId);
-        $this->assertInternalType('string', $miscId['action']);
+        $this->assertIsString($miscId['action']);
         $this->assertEquals('added', $miscId['action']);
     }
 
@@ -191,7 +191,7 @@ class Admin_Form_Person_ChangesTest extends ControllerTestCase
         $this->assertContains('Thomas', $firstName['new']);
 
         $this->assertArrayHasKey('action', $firstName);
-        $this->assertInternalType('string', $firstName['action']);
+        $this->assertIsString($firstName['action']);
         $this->assertEquals('merged', $firstName['action']);
     }
 

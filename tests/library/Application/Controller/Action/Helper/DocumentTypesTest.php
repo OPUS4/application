@@ -323,7 +323,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $paths = $this->docTypeHelper->getDocTypesPath();
 
         $this->assertNotNull($paths);
-        $this->assertInternalType("array", $paths);
+        $this->assertIsArray($paths);
         $this->assertCount(2, $paths);
         $this->assertContains(APPLICATION_PATH . '/application/configs/doctypes', $paths);
         $this->assertContains(APPLICATION_PATH . '/tests/resources/doctypes', $paths);
@@ -342,7 +342,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $paths = $this->docTypeHelper->getDocTypesPath();
 
         $this->assertNotNull($paths);
-        $this->assertInternalType("string", $paths);
+        $this->assertIsString($paths);
         $this->assertEquals(APPLICATION_PATH . '/application/configs/doctypes', $paths);
     }
 

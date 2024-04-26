@@ -104,7 +104,7 @@ class Application_UpdateTest extends ControllerTestCase
         $version = $update->getVersion();
 
         $this->assertNotNull($version);
-        $this->assertInternalType('int', $version);
+        $this->assertIsInt($version);
         $this->assertGreaterThanOrEqual(2, $version);
     }
 
