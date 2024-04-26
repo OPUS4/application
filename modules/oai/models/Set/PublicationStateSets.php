@@ -113,7 +113,7 @@ class Oai_Model_Set_PublicationStateSets implements Oai_Model_Set_SetTypeInterfa
 
     /**
      * @param DocumentFinderInterface $finder
-     * @param Oai_Model_Set_SetName $setName
+     * @param Oai_Model_Set_SetName   $setName
      * @throws Oai_Model_Exception
      */
     public function configureFinder($finder, $setName)
