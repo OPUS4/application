@@ -2354,7 +2354,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertEquals(2, $elements->length);
 
         $elements = $xpath->query('//oai:setSpec');
-        $this->assertEquals(12, $elements->length);
+        $this->assertEquals(13, $elements->length);
 
         $elements = $xpath->query('//oai:request');
         $this->assertEquals(1, $elements->length);

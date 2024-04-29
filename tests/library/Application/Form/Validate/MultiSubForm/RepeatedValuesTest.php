@@ -52,7 +52,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
         $elements = $instance->getOtherElements();
 
         $this->assertNotNull($elements);
-        $this->assertInternalType('array', $elements);
+        $this->assertIsArray($elements);
         $this->assertEquals(1, count($elements));
         $this->assertEquals('Language', $elements[0]);
     }
@@ -71,7 +71,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
         $elements = $instance->getOtherElements();
 
         $this->assertNotNull($elements);
-        $this->assertInternalType('array', $elements);
+        $this->assertIsArray($elements);
         $this->assertEquals(2, count($elements));
         $this->assertEquals('Language', $elements[0]);
         $this->assertEquals('Active', $elements[1]);

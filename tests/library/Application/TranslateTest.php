@@ -152,7 +152,7 @@ class Application_TranslateTest extends ControllerTestCase
 
         $options = $this->translate->getOptions();
 
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $this->assertEquals(10, count($options));
         $this->assertArrayHasKey('log', $options);
         $this->assertInstanceOf(Zend_Log::class, $options['log']);
@@ -166,7 +166,7 @@ class Application_TranslateTest extends ControllerTestCase
 
         $options = $this->translate->getOptions();
 
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $this->assertEquals(10, count($options));
         $this->assertFalse($options['logUntranslated']);
     }

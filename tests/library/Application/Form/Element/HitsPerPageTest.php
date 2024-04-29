@@ -50,7 +50,7 @@ class Application_Form_Element_HitsPerPageTest extends ControllerTestCase
         foreach ($options as $value => $label) {
             $this->assertTrue($current < $value);
             $current = $value;
-            $this->assertInternalType('int', $value);
+            $this->assertIsInt($value);
             $this->assertEquals($value, $label);
         }
     }
@@ -72,7 +72,7 @@ class Application_Form_Element_HitsPerPageTest extends ControllerTestCase
         foreach ($options as $value => $label) {
             $this->assertTrue($current < $value);
             $current = $value;
-            $this->assertInternalType('int', $value);
+            $this->assertIsInt($value);
         }
 
         $this->assertArrayHasKey(15, $options);

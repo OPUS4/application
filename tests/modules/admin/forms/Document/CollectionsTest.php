@@ -78,7 +78,7 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
 
         $subforms = $form->getSubForms();
 
-        $this->assertInternalType('array', $subforms);
+        $this->assertIsArray($subforms);
         $this->assertArrayHasKey('ddc2', $subforms);
 
         $ddcform = $subforms['ddc2'];

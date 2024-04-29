@@ -25,57 +25,56 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Document;
+use Opus\Common\CollectionRole;
 use Opus\Common\DocumentFinderInterface;
 use Opus\Common\DocumentInterface;
-use Opus\Common\Repository;
 
 /**
- * Document type based OAI sets.
+ * Single set for an entire CollectionRole.
  *
- * Only document types actually used by documents are taken into account, for the document types the DC-Type is used.
+ * The OAI set contains all documents visible in OAI from an entire CollectionRole
+ * independent of the collections containing the documents.
+ *
+ * If a collection of the CollectionRole is not visible in OAI, documents that are
+ * only linked with that collection are not present in the OAI set.
+ *
+ * This can be used to have multiple collections for different open access variants
+ * as well as a "closed_access" collections that is not visible in OAI.
  */
-class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implements Oai_Model_Set_SetTypeInterface
+class Oai_Model_Set_CollectionRoleSingleSet extends Oai_Model_Set_CollectionSets
 {
-    private const SET_NAME = 'doc-type';
+    /**
+     * The OAI name of the collection role for which the class is responsible.
+     *
+     * @var string
+     */
+    private $roleOaiName;
 
     /**
-     * Returns oai sets for document types.
+     * Returns a single set if it contains documents.
      *
      * @param DocumentInterface|null $document
      * @return array
      */
     public function getSets($document = null)
     {
-        $logger       = $this->getLogger();
-        $dcTypeHelper = new Application_View_Helper_DcType();
-        $sets         = [];
+        $sets = [];
+
+        $setName = $this->getRoleOaiName();
+        $role    = CollectionRole::fetchByOaiName($setName);
 
         if ($document) {
-            $type           = $document->getType();
-            $dcType         = $dcTypeHelper->dcType($type);
-            $setSpec        = self::SET_NAME . ':' . $dcType;
-            $sets[$setSpec] = ucfirst($dcType);
+            if ($role->isDocumentVisibleInOai($document->getId())) {
+                $sets = [$setName => "Set for collection '" . $setName . "'"];
+            }
         } else {
-            $finder = Repository::getInstance()->getDocumentFinder();
-            $finder->setServerState(Document::STATE_PUBLISHED);
-
-            foreach ($finder->getDocumentTypes() as $doctype) {
-                if (! Oai_Model_Set_SetName::isValidSubsetName($doctype)) {
-                    $msg = "Invalid SetSpec (doctype='" . $doctype . "')."
-                        . " Allowed characters are [" . Oai_Model_Set_SetName::SET_PART_PATTERN . "].";
-                    $logger->err("OAI-PMH: $msg");
-                    continue;
-                }
-
-                $dcType = $dcTypeHelper->dcType($doctype);
-
-                $setSpec        = self::SET_NAME . ':' . $dcType;
-                $sets[$setSpec] = ucfirst($dcType);
+            // Return set if the collection role contains documents visible in OAI
+            if ($role->hasOaiDocuments()) {
+                $sets = [$setName => "Set for collection '" . $setName . "'"];
             }
         }
 
@@ -91,19 +90,21 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
      */
     public function configureFinder($finder, $setName)
     {
-        $subsetName = $setName->getSubsetName();
-
-        if ($setName->getSetPartsCount() !== 2) {
+        if ($setName->getSetPartsCount() > 1) {
             throw new Oai_Model_Exception(
                 'The given set results in an empty list: ' . $setName->getFullSetName(),
                 Oai_Model_Error::NORECORDSMATCH
             );
         }
 
-        $dcTypeHelper  = new Application_View_Helper_DcType();
-        $documentTypes = $dcTypeHelper->documentTypes($subsetName);
-
-        $finder->setDocumentType($documentTypes);
+        $role = CollectionRole::fetchByOaiName($setName->getSetName());
+        if ($role === null) {
+            throw new Oai_Model_Exception(
+                'The given set results in an empty list: ' . $setName->getFullSetName(),
+                Oai_Model_Error::NORECORDSMATCH
+            );
+        }
+        $finder->setCollectionRoleId($role->getId());
     }
 
     /**
@@ -114,6 +115,26 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
      */
     public function supports($setName)
     {
-        return $setName->getSetName() === self::SET_NAME;
+        return $setName->getSetName() === $this->getRoleOaiName();
+    }
+
+    /**
+     * Returns the role oai name.
+     *
+     * @return string
+     */
+    public function getRoleOaiName()
+    {
+        return $this->roleOaiName;
+    }
+
+    /**
+     * Sets the role oai name.
+     *
+     * @param string|null $roleOaiName
+     */
+    public function setRoleOaiName($roleOaiName)
+    {
+        $this->roleOaiName = $roleOaiName;
     }
 }
