@@ -547,6 +547,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertQueryContentContains($path, $translate->_('PageNumber'));
         $this->assertQueryContentContains($path, $translate->_('PageFirst'));
         $this->assertQueryContentContains($path, $translate->_('PageLast'));
+        $this->assertQueryContentContains($path, $translate->_('PublicationState'));
         $this->assertQueryContentContains($path, $translate->_('Note'));
         // Enrichments
         $this->assertQueryContentContains($path, $translate->_('EnrichmentEvent'));

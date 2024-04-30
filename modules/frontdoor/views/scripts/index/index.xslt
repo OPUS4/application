@@ -272,6 +272,7 @@
             <xsl:apply-templates select="@PageNumber" />
             <xsl:apply-templates select="@PageFirst" />
             <xsl:apply-templates select="@PageLast" />
+            <xsl:apply-templates select="@PublicationState" />
             <xsl:apply-templates select="Note[@Visibility='public']" />
 
             <!-- Enrichment Section: add the enrichment keys that have to be displayed in frontdoor -->
