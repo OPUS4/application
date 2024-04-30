@@ -836,8 +836,8 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertCount(1, $messages);
-        $this->assertContains('setup.translation.modules.allowed', $messages[0]);
-        $this->assertContains('unknown1', $messages[0]);
+        $this->assertStringContainsString('setup.translation.modules.allowed', $messages[0]);
+        $this->assertStringContainsString('unknown1', $messages[0]);
     }
 
     public function testUpdateTranslation()

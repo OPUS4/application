@@ -85,8 +85,8 @@ class Export_BibtexExportTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('@misc{Doe2009,', $body);
-        $this->assertContains('author    = {Doe, John},', $body);
+        $this->assertStringContainsString('@misc{Doe2009,', $body);
+        $this->assertStringContainsString('author    = {Doe, John},', $body);
     }
 
     /**

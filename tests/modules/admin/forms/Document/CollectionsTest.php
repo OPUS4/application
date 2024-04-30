@@ -100,7 +100,7 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
 
         $html = $form->render();
 
-        $this->assertContains('id="ddc2"', $html);
+        $this->assertStringContainsString('id="ddc2"', $html);
     }
 
     public function testGetGroupedCollections()

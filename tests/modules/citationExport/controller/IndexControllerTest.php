@@ -63,16 +63,16 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/citationExport/index/index/output/ris/docId/153');
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertContains('SN  - 1-2345-678-9', $response->getBody());
-        $this->assertContains('SN  - 1-5432-876-9', $response->getBody());
-        $this->assertContains('SN  - 1234-5678', $response->getBody());
-        $this->assertContains('SN  - 4321-8765', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('SN  - 1-2345-678-9', $body);
+        $this->assertStringContainsString('SN  - 1-5432-876-9', $body);
+        $this->assertStringContainsString('SN  - 1234-5678', $body);
+        $this->assertStringContainsString('SN  - 4321-8765', $body);
         $urnResolverUrl = $this->getConfig()->urn->resolverUrl;
-        $this->assertContains('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-456', $response->getBody());
-        $this->assertContains('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-789', $response->getBody());
-        $this->assertContains('UR  - http://www.myexampledomain.de/foo', $response->getBody());
-        $this->assertContains('UR  - http://www.myexampledomain.de/bar', $response->getBody());
+        $this->assertStringContainsString('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-456', $body);
+        $this->assertStringContainsString('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-789', $body);
+        $this->assertStringContainsString('UR  - http://www.myexampledomain.de/foo', $body);
+        $this->assertStringContainsString('UR  - http://www.myexampledomain.de/bar', $body);
     }
 
     /**
@@ -83,7 +83,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/146');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('T2  - Parent Title', $response->getBody());
+        $this->assertStringContainsString('T2  - Parent Title', $response->getBody());
     }
 
     /**
@@ -94,7 +94,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/146');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('A2  - Doe, Jane', $response->getBody());
+        $this->assertStringContainsString('A2  - Doe, Jane', $response->getBody());
     }
 
     /**
@@ -109,7 +109,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/152');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains(
+        $this->assertStringContainsString(
             'title   = {Dokumenttitel mit Sonderzeichen \%-&quot;-\#-\&amp;, vgl. OPUSVIER-2716.},',
             $response->getBody()
         );
@@ -152,12 +152,12 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertContains('UR  - ', $response->getBody());
-        $this->assertContains('/frontdoor/index/index/docId/' . $this->documentId, $response->getBody());
-        $this->assertContains(
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('UR  - ', $body);
+        $this->assertStringContainsString('/frontdoor/index/index/docId/' . $this->documentId, $body);
+        $this->assertStringContainsString(
             '/citationExport/index/download/output/ris/docId/' . $this->documentId,
-            $response->getBody()
+            $body
         );
     }
 
@@ -323,7 +323,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('KW  - Freies Schlagwort', $response->getBody());
+        $this->assertStringContainsString('KW  - Freies Schlagwort', $response->getBody());
     }
 
     public function testIndexActionRisSubjectSwd()
@@ -334,7 +334,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('KW  - SWD-Schlagwort', $response->getBody());
+        $this->assertStringContainsString('KW  - SWD-Schlagwort', $response->getBody());
     }
 
     public function testIndexActionRisSeriesVisible()
@@ -346,7 +346,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('T3  - ' . $s->getTitle() . ' - SeriesNumber', $response->getBody());
+        $this->assertStringContainsString('T3  - ' . $s->getTitle() . ' - SeriesNumber', $response->getBody());
     }
 
     public function testIndexActionRisSeriesInvisible()
@@ -358,7 +358,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertNotContains('T3  - ' . $s->getTitle() . ' - SeriesNumber', $response->getBody());
+        $this->assertStringNotContainsString('T3  - ' . $s->getTitle() . ' - SeriesNumber', $response->getBody());
     }
 
     public function testIndexActionRisPublicNote()
@@ -367,7 +367,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $doc->getId());
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('N1  - Für die Öffentlichkeit', $response->getBody());
+        $this->assertStringContainsString('N1  - Für die Öffentlichkeit', $response->getBody());
     }
 
     public function testIndexActionRisPrivateNote()
@@ -376,7 +376,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $doc->getId());
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertNotContains('N1  - Für den Admin.', $response->getBody());
+        $this->assertStringNotContainsString('N1  - Für den Admin.', $response->getBody());
     }
 
     public function testIndexActionBibtexDoctypeArticle()
@@ -451,9 +451,9 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertContains('series    = {' . $s->getTitle() . '},', $response->getBody());
-        $this->assertContains('number    = {SeriesNumber},', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('series    = {' . $s->getTitle() . '},', $body);
+        $this->assertStringContainsString('number    = {SeriesNumber},', $body);
     }
 
     public function testIndexActionBibtexSeriesInvisible()
@@ -465,9 +465,9 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertNotContains('series    = {' . $s->getTitle() . '},', $response->getBody());
-        $this->assertNotContains('number    = {SeriesNumber},', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('series    = {' . $s->getTitle() . '},', $body);
+        $this->assertStringNotContainsString('number    = {SeriesNumber},', $body);
     }
 
     /**
@@ -482,7 +482,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/146');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains(
+        $this->assertStringContainsString(
             'note        = {Dieses Dokument ist auch erschienen als ...}',
             $response->getBody()
         );
@@ -525,9 +525,9 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/citationExport/index/download/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertContains('UR  - ', $response->getBody());
-        $this->assertContains('/frontdoor/index/index/docId/' . $this->documentId, $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('UR  - ', $body);
+        $this->assertStringContainsString('/frontdoor/index/index/docId/' . $this->documentId, $body);
     }
 
     public function testDownloadActionBibtexDoctypeArticle()
@@ -725,12 +725,12 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     private function checkBibtexAssertions($bibtexType, $downloadLinkExists = true)
     {
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertContains($bibtexType, $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString($bibtexType, $body);
         if ($downloadLinkExists) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '/citationExport/index/download/output/bibtex/docId/' . $this->documentId,
-                $response->getBody()
+                $body
             );
         }
     }
@@ -742,12 +742,12 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     private function checkRisAssertions($risType, $downloadLinkExists = true)
     {
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertContains('TY  - ' . $risType, $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('TY  - ' . $risType, $body);
         if ($downloadLinkExists) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 '/citationExport/index/download/output/ris/docId/' . $this->documentId,
-                $response->getBody()
+                $body
             );
         }
     }

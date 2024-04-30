@@ -73,7 +73,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(401);
-        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
+        $this->assertStringContainsString('export of unpublished documents is not allowed', $this->getResponse()->getBody());
     }
 
     public function testMarc21XmlExportWithUnpublishedDocAllowedForAdmin()
@@ -182,7 +182,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(401);
-        $this->assertContains('Unauthorized: Access to module not allowed.', $this->getResponse()->getBody());
+        $this->assertStringContainsString('Unauthorized: Access to module not allowed.', $this->getResponse()->getBody());
     }
 
     public function testMarc21XmlExportWithPublishedDocAllowedForAdmin()
@@ -302,6 +302,6 @@ class Export_Marc21ExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(401);
-        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
+        $this->assertStringContainsString('export of unpublished documents is not allowed', $this->getResponse()->getBody());
     }
 }

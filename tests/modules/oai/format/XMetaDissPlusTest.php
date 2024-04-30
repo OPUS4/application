@@ -74,7 +74,7 @@ class Oai_Format_XMetaDissPlusTest extends ControllerTestCase
 
         if (preg_match('#<xMetaDiss:xMetaDiss.*>#', $xml, $matches)) {
             $startTag = $matches[0];
-            $this->assertContains('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
+            $this->assertStringContainsString('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
         } else {
             $this->fail('element \'xMetaDiss:xMetaDiss\' not found');
         }

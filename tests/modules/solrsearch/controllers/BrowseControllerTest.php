@@ -91,15 +91,15 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     public function testSeriesAction()
     {
         $this->dispatch('/solrsearch/browse/series');
-        $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/1', $responseBody);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/4', $responseBody);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/2', $responseBody);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5', $responseBody);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/6', $responseBody);
-        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/3', $responseBody);
-        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/7', $responseBody);
-        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/8', $responseBody);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/1', $body);
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/4', $body);
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/2', $body);
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/5', $body);
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/6', $body);
+        $this->assertStringNotContainsString('/solrsearch/index/search/searchtype/series/id/3', $body);
+        $this->assertStringNotContainsString('/solrsearch/index/search/searchtype/series/id/7', $body);
+        $this->assertStringNotContainsString('/solrsearch/index/search/searchtype/series/id/8', $body);
         $this->assertResponseCode(200);
     }
 
@@ -156,12 +156,14 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
 
         $this->restoreSeriesVisibility($visibilities);
 
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/7', $body);
         foreach (Series::getAll() as $series) {
             if ($series->getId() !== 7) {
-                $this->assertNotContains(
+                $this->assertStringNotContainsString(
                     '/solrsearch/index/search/searchtype/series/id/' . $series->getId(),
-                    $this->getResponse()->getBody()
+                    $body
                 );
             }
         }
@@ -285,7 +287,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $visibilities = $this->setAllSeriesToUnvisible();
         $this->dispatch('/solrsearch/browse');
         $this->assertResponseCode(200);
-        $this->assertNotContains('/solrsearch/browse/series">', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('/solrsearch/browse/series">', $this->getResponse()->getBody());
         $this->restoreSeriesVisibility($visibilities);
     }
 
@@ -303,8 +305,8 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/doctypes');
 
         $body = $this->getResponse()->getBody();
-        // $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
-        $this->assertContains("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
+        // $this->assertStringNotContainsString("http://${host}:${port}/solr/corethatdoesnotexist", $body);
+        $this->assertStringContainsString("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
         $this->assertResponseCode(503);
     }
 

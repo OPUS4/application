@@ -173,7 +173,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertCount(1, $messages);
-        $this->assertContains('Unknown subject ID = \'7777\'.', $messages[0]);
+        $this->assertStringContainsString('Unknown subject ID = \'7777\'.', $messages[0]);
     }
 
     public function testGetModelBadId()
