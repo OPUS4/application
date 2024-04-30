@@ -2343,7 +2343,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
      */
     public function testGetUsingXpathInTests()
     {
-        $this->dispatch('');
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:opus4.demo:146');
 
         $this->assertResponseCode(200);
 
