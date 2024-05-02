@@ -33,6 +33,7 @@ use Opus\Common\Date;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Repository;
 use Opus\Document;
+use Symfony\Component\Console\Output\NullOutput;
 
 class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
 {
@@ -50,6 +51,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
         parent::setUp();
         $this->job = new Application_Job_CleanTemporariesJob();
         $this->job->setDuration('P2D');
+        $this->job->setOutput(new NullOutput());
         $this->doc = new Document();
         $this->doc->setServerState('temporary');
         $this->doc->store();

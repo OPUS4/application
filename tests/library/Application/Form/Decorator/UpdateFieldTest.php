@@ -60,8 +60,8 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
 
         $output = $decorator->render('CONTENT');
 
-        $this->assertContains('name="NameUpdateEnabled', $output);
-        $this->assertContains('id="NameUpdateEnabled', $output);
+        $this->assertStringContainsString('name="NameUpdateEnabled', $output);
+        $this->assertStringContainsString('id="NameUpdateEnabled', $output);
     }
 
     public function testRenderActive()
@@ -83,7 +83,7 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
             . ' type="checkbox" checked="checked" /> Update field</div>CONTENT',
             $output
         );
-        $this->assertContains('checked="checked"', $output);
+        $this->assertStringContainsString('checked="checked"', $output);
     }
 
     public function testTranslationEnglish()
@@ -96,7 +96,7 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
 
         $output = $decorator->render('CONTENT');
 
-        $this->assertContains('Update field', $output);
+        $this->assertStringContainsString('Update field', $output);
     }
 
     public function testTranslationGerman()
@@ -114,6 +114,6 @@ class Application_Form_Decorator_UpdateFieldTest extends ControllerTestCase
 
         $output = $decorator->render('CONTENT');
 
-        $this->assertContains('Feld aktualisieren', $output);
+        $this->assertStringContainsString('Feld aktualisieren', $output);
     }
 }

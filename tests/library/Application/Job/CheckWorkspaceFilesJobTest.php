@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\Config;
+use Symfony\Component\Console\Output\NullOutput;
 
 class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
 {
@@ -43,6 +44,7 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
     {
         parent::setUp();
         $this->job = new Application_Job_CheckWorkspaceFilesJob();
+        $this->job->setOutput(new NullOutput());
     }
 
     public function tearDown(): void

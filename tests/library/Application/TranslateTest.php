@@ -120,7 +120,7 @@ class Application_TranslateTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('not found', $messages[0]);
+        $this->assertStringContainsString('not found', $messages[0]);
     }
 
     public function testLoadLanguageDirectoryNoFiles()
@@ -189,7 +189,7 @@ class Application_TranslateTest extends ControllerTestCase
 
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Unable to translate', $messages[0]);
+        $this->assertStringContainsString('Unable to translate', $messages[0]);
 
         // German is the fallback language for English by default. Since the key cannot be translated in English or
         // German two messages are generated.
@@ -200,8 +200,8 @@ class Application_TranslateTest extends ControllerTestCase
 
         $messages = $logger->getMessages();
         $this->assertEquals(2, count($messages));
-        $this->assertContains("Unable to translate key '$key' into locale 'en'", $messages[0]);
-        $this->assertContains("Unable to translate key '$key' into locale 'de'", $messages[1]);
+        $this->assertStringContainsString("Unable to translate key '$key' into locale 'en'", $messages[0]);
+        $this->assertStringContainsString("Unable to translate key '$key' into locale 'de'", $messages[1]);
     }
 
     public function testLoggingDisabled()

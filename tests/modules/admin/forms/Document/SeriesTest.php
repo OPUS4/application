@@ -200,7 +200,7 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase
 
         $this->assertTrue($form->isValid($post));
         // TODO duplicate numbers are now allowed OPUSVIER-3917
-        // $this->assertContains('notAvailable', $form->getErrors('Number'));
+        // $this->assertStringContainsString('notAvailable', $form->getErrors('Number'));
     }
 
     public function testValidationNumberCurrentDocument()

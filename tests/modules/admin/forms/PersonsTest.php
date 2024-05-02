@@ -246,7 +246,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
             $hint = $element->getHint();
             $this->assertNotNull($hint);
-            $this->assertContains('Please select update to trim values when saving.', $hint);
+            $this->assertStringContainsString('Please select update to trim values when saving.', $hint);
         }
     }
 
@@ -538,9 +538,9 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $output = $form->render($this->getView());
 
-        $this->assertContains('<option value="Köln">Köln</option>', $output);
-        $this->assertContains('<option value="Berlin">Berlin</option>', $output);
-        $this->assertContains('<option value="München">München</option>', $output);
+        $this->assertStringContainsString('<option value="Köln">Köln</option>', $output);
+        $this->assertStringContainsString('<option value="Berlin">Berlin</option>', $output);
+        $this->assertStringContainsString('<option value="München">München</option>', $output);
     }
 
     public function testValidateOneFieldMustBeSelectedForUpdate()

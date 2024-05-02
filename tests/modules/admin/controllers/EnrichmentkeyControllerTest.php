@@ -739,7 +739,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->assertController('enrichmentkey');
         $this->assertAction('index');
 
-        $this->assertContains($post['Type'], $this->getResponse()->getBody());
+        $this->assertStringContainsString($post['Type'], $this->getResponse()->getBody());
         $this->assertXpathCount('//i[@class="fa fa-info-circle" and @title="' . $post['Options'] . '"]', 1);
 
         // prüfe, dass Edit-Formular Typnamen und Optionen anzeigt
@@ -1133,10 +1133,11 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $this->dispatch($this->getControllerPath() . '/');
 
         $this->assertResponseCode(200);
-        $this->assertContains('admin/enrichmentkey/new/id/unregistered', $this->getResponse()->getBody());
-        $this->assertNotContains('admin/enrichmentkey/edit/id/unregistered', $this->getResponse()->getBody());
-        $this->assertContains('admin/enrichmentkey/removeFromDocs/id/unregistered', $this->getResponse()->getBody());
-        $this->assertNotContains('admin/enrichmentkey/delete/id/unregistered', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('admin/enrichmentkey/new/id/unregistered', $body);
+        $this->assertStringNotContainsString('admin/enrichmentkey/edit/id/unregistered', $body);
+        $this->assertStringContainsString('admin/enrichmentkey/removeFromDocs/id/unregistered', $body);
+        $this->assertStringNotContainsString('admin/enrichmentkey/delete/id/unregistered', $body);
     }
 
     public function testIndexPageShowRegisteredUnusedKeys()
@@ -1151,10 +1152,11 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $enrichmentKey->delete();
 
         $this->assertResponseCode(200);
-        $this->assertNotContains('admin/enrichmentkey/new/id/unused', $this->getResponse()->getBody());
-        $this->assertContains('admin/enrichmentkey/edit/id/unused', $this->getResponse()->getBody());
-        $this->assertNotContains('admin/enrichmentkey/removeFromDocs/id/unused', $this->getResponse()->getBody());
-        $this->assertContains('admin/enrichmentkey/delete/id/unused', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('admin/enrichmentkey/new/id/unused', $body);
+        $this->assertStringContainsString('admin/enrichmentkey/edit/id/unused', $body);
+        $this->assertStringNotContainsString('admin/enrichmentkey/removeFromDocs/id/unused', $body);
+        $this->assertStringContainsString('admin/enrichmentkey/delete/id/unused', $body);
     }
 
     public function testIndexPageShowRegisteredUsedKeys()
@@ -1178,10 +1180,11 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase
         $enrichmentKey->delete();
 
         $this->assertResponseCode(200);
-        $this->assertNotContains('admin/enrichmentkey/new/id/used', $this->getResponse()->getBody());
-        $this->assertContains('admin/enrichmentkey/edit/id/used', $this->getResponse()->getBody());
-        $this->assertContains('admin/enrichmentkey/removeFromDocs/id/used', $this->getResponse()->getBody());
-        $this->assertContains('admin/enrichmentkey/delete/id/used', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('admin/enrichmentkey/new/id/used', $body);
+        $this->assertStringContainsString('admin/enrichmentkey/edit/id/used', $body);
+        $this->assertStringContainsString('admin/enrichmentkey/removeFromDocs/id/used', $body);
+        $this->assertStringContainsString('admin/enrichmentkey/delete/id/used', $body);
     }
 
     public function testNewActionWithRenamingUnregisteredKey()

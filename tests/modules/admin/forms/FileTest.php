@@ -299,9 +299,9 @@ class Admin_Form_FileTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(3, count($messages));
-        $this->assertContains("File ID = $fileId access for role 'guest' removed.", $messages[0]);
-        $this->assertContains("File ID = $fileId access for role 'administrator' added.", $messages[1]);
-        $this->assertContains("File ID = $fileId access for role 'reviewer' added.", $messages[2]);
+        $this->assertStringContainsString("File ID = $fileId access for role 'guest' removed.", $messages[0]);
+        $this->assertStringContainsString("File ID = $fileId access for role 'administrator' added.", $messages[1]);
+        $this->assertStringContainsString("File ID = $fileId access for role 'reviewer' added.", $messages[2]);
 
         $roles = $form->getRolesForFile($fileId);
 
@@ -316,9 +316,9 @@ class Admin_Form_FileTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(3, count($messages));
-        $this->assertContains("File ID = $fileId access for role 'administrator' removed.", $messages[0]);
-        $this->assertContains("File ID = $fileId access for role 'guest' added.", $messages[1]);
-        $this->assertContains("File ID = $fileId access for role 'reviewer' already permitted.", $messages[2]);
+        $this->assertStringContainsString("File ID = $fileId access for role 'administrator' removed.", $messages[0]);
+        $this->assertStringContainsString("File ID = $fileId access for role 'guest' added.", $messages[1]);
+        $this->assertStringContainsString("File ID = $fileId access for role 'reviewer' already permitted.", $messages[2]);
 
         $roles = $form->getRolesForFile($fileId);
 
@@ -333,9 +333,9 @@ class Admin_Form_FileTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(3, count($messages));
-        $this->assertContains("File ID = $fileId access for role 'guest' removed.", $messages[0]);
-        $this->assertContains("File ID = $fileId access for role 'reviewer' removed.", $messages[1]);
-        $this->assertContains("File ID = $fileId access for role 'docsadmin' added.", $messages[2]);
+        $this->assertStringContainsString("File ID = $fileId access for role 'guest' removed.", $messages[0]);
+        $this->assertStringContainsString("File ID = $fileId access for role 'reviewer' removed.", $messages[1]);
+        $this->assertStringContainsString("File ID = $fileId access for role 'docsadmin' added.", $messages[2]);
 
         $roles = $form->getRolesForFile($fileId);
 
@@ -349,7 +349,7 @@ class Admin_Form_FileTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains("File ID = $fileId access for role 'docsadmin' removed.", $messages[0]);
+        $this->assertStringContainsString("File ID = $fileId access for role 'docsadmin' removed.", $messages[0]);
 
         $roles = $form->getRolesForFile($fileId);
 
@@ -362,7 +362,7 @@ class Admin_Form_FileTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains("Unknown role 'unknownrole'.", $messages[0]);
+        $this->assertStringContainsString("Unknown role 'unknownrole'.", $messages[0]);
 
         $roles = $form->getRolesForFile($fileId);
 
