@@ -83,7 +83,9 @@
             <!-- dc:date: embargo date -->
             <xsl:apply-templates select="EmbargoDate"  />
             <!-- dc:type -->
-            <xsl:apply-templates select="@Type"  />
+            <xsl:apply-templates select="@Type"  />            
+            <!-- dc:type publication state -->
+            <xsl:call-template name="PublicationState" />
             <!-- dc:format -->
             <xsl:apply-templates select="File/@MimeType"  />
             <!-- dc:identifier -->
@@ -104,13 +106,10 @@
             <!-- open aire  dc:relation -->
             <xsl:apply-templates select="Enrichment[@KeyName='Relation']"  />
             <xsl:apply-templates select="Rights"  />
-            <!-- dc:type -->
-            <!-- <dc:type>info:eu-repo/semantics/publishedVersion</dc:type> -->
             <!-- dc:source -->
             <xsl:apply-templates select="TitleParent"  />
             <!-- dc:source Enrichment'SourceTitle'-->
             <!-- <xsl:apply-templates select="Enrichment[@KeyName='SourceTitle']"  /> -->
-            <xsl:call-template name="PublicationVersion" />
         </oai_dc:dc>
     </xsl:template>
 
@@ -238,6 +237,26 @@
         <xsl:text>doc-type:</xsl:text><xsl:value-of select="php:functionString('Application_Xslt::dcType', .)" />
     </xsl:template>
 
+    <xsl:template name="PublicationState">
+        <xsl:choose>
+            <xsl:when test="SetSpec[starts-with(@Value,'status-type')]">
+                <dc:type>
+                    <xsl:if test="starts-with($oai_set,'openaire')">
+                        <xsl:text>info:eu-repo/semantics/</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="SetSpec[starts-with(@Value,'status-type')]" mode="metadata" />
+                </dc:type>
+            </xsl:when>
+            <xsl:when test="starts-with($oai_set,'openaire')">
+                <dc:type>info:eu-repo/semantics/publishedVersion</dc:type>
+            </xsl:when>                
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="SetSpec[starts-with(@Value,'status-type')]" mode="metadata">
+            <xsl:value-of select="substring-after(@Value,'status-type:')" />
+    </xsl:template>
+
     <xsl:template match="@ContributingCorporation" >
         <dc:contributor>
             <xsl:value-of select="." />
@@ -339,13 +358,5 @@
         </xsl:if>
     </xsl:template>
     -->
-
-    <xsl:template name="PublicationVersion">
-        <xsl:if test="starts-with($oai_set,'openaire')">
-            <dc:type>
-                <xsl:text>info:eu-repo/semantics/publishedVersion</xsl:text>
-            </dc:type>
-        </xsl:if>
-    </xsl:template>
 
 </xsl:stylesheet>

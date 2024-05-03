@@ -2173,7 +2173,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         // Publication Version
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:type");
         $values        = $this->nodeListToArray($queryResponse);
-        $this->assertContains('info:eu-repo/semantics/publishedVersion', $values);
+        $this->assertContains('info:eu-repo/semantics/updatedVersion', $values);
 
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:type");
         $values        = $this->nodeListToArray($queryResponse);
