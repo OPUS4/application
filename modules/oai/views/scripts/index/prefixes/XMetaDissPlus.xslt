@@ -126,6 +126,9 @@
                 <xsl:value-of select="php:functionString('Application_Xslt::dcmiType', @Type)" />
             </dc:type>
 
+            <!-- dini:version_driver -->
+            <xsl:apply-templates select="SetSpec[starts-with(@Value,'status-type')]" mode="metadata" />
+
             <!-- dc:identifier -->
             <xsl:choose>
                 <xsl:when test="Identifier[@Type = 'urn']">
@@ -509,6 +512,12 @@
                 <xsl:value-of select="@Address" />
             </cc:address>
         </dc:publisher>
+    </xsl:template>
+
+    <xsl:template match="SetSpec[starts-with(@Value,'status-type')]" mode="metadata">
+        <dini:version_driver>
+            <xsl:value-of select="substring-after(@Value,'status-type:')" />
+        </dini:version_driver>
     </xsl:template>
 
     <xsl:template match="Identifier[@Type = 'urn']" >
