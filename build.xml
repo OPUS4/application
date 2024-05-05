@@ -61,7 +61,7 @@
 
     <target name="clean-cache">
         <delete>
-            <fileset dir="${basedir}/workspace/cache" includes="*cache*-*" />
+            <fileset dir="${basedir}/workspace/cache" includes="*cache*-*,*.lock" />
         </delete>
         <delete>
             <fileset dir="${basedir}/tests/workspace/cache" includes="*cache*-*" />
