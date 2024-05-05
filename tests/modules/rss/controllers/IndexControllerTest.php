@@ -181,14 +181,13 @@ class Rss_IndexControllerTest extends ControllerTestCase
     /**
      * Testet, ob Links im Rss richtig aufgebaut werden.
      * Im PhpUnit-Test ist der Host leer, deswegen wird er hier im Test nicht mit berücksichtigt.
-     * TODO: insert host in test-url
      */
     public function testRssLink()
     {
-        Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
+        $this->setBaseUrl(null);
         $this->dispatch('/rss/index/index');
-        $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/147');
-        $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/150');
+        $this->assertXpathContentContains('//item/link', 'http:///frontdoor/index/index/docId/147');
+        $this->assertXpathContentContains('//item/link', 'http:///frontdoor/index/index/docId/150');
     }
 
     public function testPubDateFormatting()
