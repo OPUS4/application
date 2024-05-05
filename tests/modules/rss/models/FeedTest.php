@@ -54,7 +54,7 @@ class Rss_Model_FeedTest extends ControllerTestCase
 
     public function testGetTitle()
     {
-        $view = $this->getView();
+        $view  = $this->getView();
         $model = new Rss_Model_Feed($view);
 
         $this->assertEquals('http:///opus4test', $model->getTitle());
@@ -78,7 +78,7 @@ class Rss_Model_FeedTest extends ControllerTestCase
 
     public function testGetTitleWithFullUrl()
     {
-        $view = $this->getView();
+        $view  = $this->getView();
         $model = new Rss_Model_Feed($view);
 
         $this->adjustConfiguration([
