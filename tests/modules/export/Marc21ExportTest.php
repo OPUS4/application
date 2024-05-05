@@ -36,6 +36,13 @@ class Export_Marc21ExportTest extends ControllerTestCase
     /** @var string */
     protected $additionalResources = 'all';
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->setHostname(null);
+        $this->setBaseUrl(null);
+    }
+
     /**
      * Nicht freigeschaltete Dokumente können nur dann im Format MARC21-XML exportiert werden,
      * wenn der Benutzer das Recht 'resource_documents' besitzt.
