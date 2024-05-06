@@ -1714,10 +1714,10 @@ Beispieleingabe: "17.08" (für Semiotik)]]></seg>
 
         <tu tuid="hint_PublicationState">
             <tuv xml:lang="en">
-                <seg>Please enter the status of your document.</seg>
+                <seg>Please enter the version of your document.</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Bitte geben Sie den Status ihres Dokuments an.</seg>
+                <seg>Bitte geben Sie die Version Ihres Dokuments an.</seg>
             </tuv>
         </tu>
 

@@ -712,10 +712,10 @@
 
         <tu tuid="PublicationState">
             <tuv xml:lang="en">
-                <seg>Status</seg>
+                <seg>Version</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Status</seg>
+                <seg>Version</seg>
             </tuv>
         </tu>
 

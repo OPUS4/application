@@ -120,6 +120,19 @@
             </td>
         </tr>
     </xsl:template>
+    
+    <xsl:template match="@PublicationState">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname" />
+            </th>
+            <td>
+                <xsl:call-template name="translateString">
+                    <xsl:with-param name="string">Opus_Document_PublicationState_Value_<xsl:value-of select="." /></xsl:with-param>
+                </xsl:call-template>
+            </td>
+        </tr>
+    </xsl:template>
 
     <!-- -->
     <!-- Templates for "external fields". -->
