@@ -7,28 +7,28 @@ var doi             = null;
 function startCheck()
 {
     doi = document.getElementById("IdentifierDoi").value.trim();
-    if (doi.trim() == '') {
+    if (doi.trim() === '') {
         // Feld "IdentifierDoi" ist leer
-        openDialog("Hinweis", "Bitte zuerst eine DOI eingeben...");
-    } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value != "true") {
+        openDialog(translations.doiimport_header_note, translations.doiimport_hint_insertDoi, "note");
+    } else if (doi.trim() !== '' && document.getElementById("Enrichmentopus_doi_flag").value !== "true") {
         const checkUrl = baseUrl + '/api/doicheck?doi=' + doi;
         get(
             checkUrl,
             function () {
                 var checkdoiData = JSON.parse(this.responseText);
-                if (checkdoiData['doiExists'] == true) { // DOI existiert bereits
+                if (checkdoiData['doiExists'] === true) { // DOI existiert bereits
                     checkdoiId = checkdoiData['docId'];
                     if (typeof checkdoiId !== 'undefined') { // DOI existiert bereits und ist veröffentlicht
-                        openDialog("Hinweis", "Es ist bereits ein Datensatz mit dieser DOI im Repositorium vorhanden (ID " + checkdoiId + ").", checkdoiId);
+                        openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiExistsPublished.replace('%s', checkdoiId), "note", checkdoiId);
                     } else { // DOI existiert bereits und ist unveröffentlicht
-                        openDialog("Hinweis", "Es ist bereits ein Datensatz mit dieser DOI im Repositorium vorhanden (unveröffentlicht).");
+                        openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiExistsUnpublished, "note");
                     }} else {
-                    readDoi(doi)} // DOI existiert noch nicht, starte Import
+                    readDoi(doi);} // DOI existiert noch nicht, starte Import
             }
-        )
-    } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true") {
+        );
+    } else if (doi.trim() !== '' && document.getElementById("Enrichmentopus_doi_flag").value === "true") {
         // Import wurde bereits durchgeführt -> Bestätigung
-        openDialog("Achtung", "Achtung, alle Felder des Formulars werden gelöscht und ein neuer Import gestartet! Fortfahren?");
+        openDialog(translations.doiimport_header_warning, translations.doiimport_hint_allFieldsDeleted, "warning");
     }
 }
 
@@ -47,14 +47,14 @@ function cleanup()
 
 function readDoi(doi)
 {
-    if (doi.trim() != '') {
+    if (doi.trim() !== '') {
         const finalUrl = baseUrl + '/api/crossref?doi=' + doi;
         get(
             finalUrl,
             function () {
                 var jsonraw = this.responseText;
-                if (jsonraw == "Resource not found.") {
-                    openDialog("Hinweis", "DOI wurde nicht in Crossref gefunden. Bitte prüfen Sie die Eingabe.");
+                if (jsonraw === "Resource not found.") {
+                    openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiNotFound, "redirect");
                     colorPink("IdentifierDoi");
                 } else {
                     document.getElementById("Enrichmentopus_doi_json").value = jsonraw;
@@ -139,7 +139,7 @@ function expandCompletedDate(dates)
 {
  // Für CompletedYear
 
-    if (dates != '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
+    if (dates !== '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
 
         date = dates.join();
 
@@ -152,13 +152,13 @@ function expandCompletedDate(dates)
 
 function expandSubject(subject)
 {
-    if (subject[0] != undefined) {
+    if (subject[0] !== undefined) {
         var _laenge                                            = subject.length;
         var schlagwort                                         = subject[0] + '';
         document.getElementById("SubjectUncontrolled_1").value = schlagwort;
         finalize("SubjectUncontrolled_1");
 
-        if (document.getElementById('SubjectUncontrolled_' + _laenge) == null) {
+        if (document.getElementById('SubjectUncontrolled_' + _laenge) === null) {
             var button = document.getElementById("addMoreSubjectUncontrolled");
             button.click();
         } else {
@@ -175,7 +175,7 @@ function expandSubject(subject)
 
 function expandThesisAccepted(dates)
 {
-    if (dates != '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
+    if (dates !== '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
 
         date = dates.join();
         if (date.includes('-')) {
@@ -183,10 +183,10 @@ function expandThesisAccepted(dates)
             finalize("ThesisYearAccepted");
         } else {
             var month = date.split(',')[1];
-            if (month.length == 1) {
+            if (month.length === 1) {
                 month = '0' + month;}
             var day = date.split(',')[2];
-            if (day.length == 1) {
+            if (day.length === 1) {
                 day = '0' + day;}
             document.getElementById("ThesisDateAccepted").value = day + '.' + month + '.' + date.split(',')[0];
             finalize("ThesisDateAccepted");
@@ -201,15 +201,15 @@ function expandPages(page)
         var pageFirst  = pages[0];
         var pageLast   = pages[1];
         var pageNumber = pageLast - pageFirst + 1;
-        if (pageNumber != undefined && /^\d+$/.test(pageNumber)) {
+        if (pageNumber !== undefined && /^\d+$/.test(pageNumber)) {
             document.getElementById("PageNumber").value = pageNumber;
             finalize("PageNumber");
         }
-        if (pageFirst != undefined && /^\d+$/.test(pageFirst)) {
+        if (pageFirst !== undefined && /^\d+$/.test(pageFirst)) {
             document.getElementById("PageFirst").value = pageFirst;
             finalize("PageFirst");
         }
-        if (pageLast != undefined && /^\d+$/.test(pageLast)) {
+        if (pageLast !== undefined && /^\d+$/.test(pageLast)) {
             document.getElementById("PageLast").value = pageLast;
             finalize("PageLast");
         }
@@ -218,7 +218,7 @@ function expandPages(page)
 
 function expandAuthor(author)
 {
-    if (author[0] != undefined) {
+    if (author[0] !== undefined) {
         var _laenge      = author.length;
         var completeName = author[0] + '';
 
@@ -230,13 +230,13 @@ function expandAuthor(author)
         document.getElementById("PersonAuthorLastName_1").value = nachname;
         finalize("PersonAuthorLastName_1");
 
-        if (completeName.split(',')[2].trim() != '') {
+        if (completeName.split(',')[2].trim() !== '') {
             var orcid = completeName.split(',')[2].trim();  // [2] = ORCID
             document.getElementById("PersonAuthorIdentifierOrcid_1").value = orcid;
             finalize("PersonAuthorIdentifierOrcid_1");
         }
 
-        if (document.getElementById('PersonAuthorLastName_' + _laenge) == null) {
+        if (document.getElementById('PersonAuthorLastName_' + _laenge) === null) {
             var button = document.getElementById("addMorePersonAuthor");
             button.click();
         } else {
@@ -250,7 +250,7 @@ function expandAuthor(author)
                 var nachname                                                  = completeName.split(',')[0].trim();  // [0] = Nachname
                 document.getElementById("PersonAuthorLastName_" + feld).value = nachname;
                 finalize("PersonAuthorLastName_" + feld);
-                if (completeName.split(',')[2].trim() != '') {
+                if (completeName.split(',')[2].trim() !== '') {
                     var orcid = completeName.split(',')[2].trim();  // [2] = ORCID
                     document.getElementById("PersonAuthorIdentifierOrcid_" + feld).value = orcid;
                     finalize("PersonAuthorIdentifierOrcid_" + feld);
@@ -265,7 +265,7 @@ function expandAuthor(author)
 
 function expandEditor(editor)
 {
-    if (editor[0] != undefined) {
+    if (editor[0] !== undefined) {
         var _laenge                                              = editor.length;
         var completeName                                         = editor[0] + '';
         var vorname                                              = completeName.split(',')[1].trim();  // [1] = Vorname
@@ -274,13 +274,13 @@ function expandEditor(editor)
         var nachname                                            = completeName.split(',')[0].trim();  // [0] = Nachname
         document.getElementById("PersonEditorLastName_1").value = nachname;
         finalize("PersonEditorLastName_1");
-        if (completeName.split(',')[2].trim() != '') {
+        if (completeName.split(',')[2].trim() !== '') {
             var orcid = completeName.split(',')[2].trim();  // [2] = ORCID
             document.getElementById("PersonEditorIdentifierOrcid_1").value = orcid;
             finalize("PersonEditorIdentifierOrcid_1");
         }
 
-        if (document.getElementById('PersonEditorLastName_' + _laenge) == null) {
+        if (document.getElementById('PersonEditorLastName_' + _laenge) === null) {
             var button = document.getElementById("addMorePersonEditor");
             button.click();
         } else {
@@ -294,7 +294,7 @@ function expandEditor(editor)
                 var nachname                                                  = completeName.split(',')[0].trim();  // [0] = Nachname
                 document.getElementById("PersonEditorLastName_" + feld).value = nachname;
                 finalize("PersonEditorLastName_" + feld);
-                if (completeName.split(',')[2].trim() != '') {
+                if (completeName.split(',')[2].trim() !== '') {
                     var orcid = completeName.split(',')[2].trim();  // [2] = ORCID
                     document.getElementById("PersonEditorIdentifierOrcid_" + feld).value = orcid;
                     finalize("PersonEditorIdentifierOrcid_" + feld);
@@ -306,7 +306,7 @@ function expandEditor(editor)
 
 function expandTranslator(translator)
 {
-    if (translator[0] != undefined) {
+    if (translator[0] !== undefined) {
         var _laenge      = translator.length;
         var completeName = translator[0] + '';
         var vorname      = completeName.split(',')[1].trim();  // [1] = Vorname
@@ -318,14 +318,14 @@ function expandTranslator(translator)
         document.getElementById("PersonTranslatorLastName_1").value = nachname;
         finalize("PersonTranslatorLastName_1");
 
-        if (document.getElementById('PersonTranslatorLastName_' + _laenge) == null) {
+        if (document.getElementById('PersonTranslatorLastName_' + _laenge) === null) {
             var button = document.getElementById("addMorePersonTranslator");
             button.click();
         } else {
             var _z;
             for (_z = 1; _z < _laenge; _z++) {
                 var feld         = _z + 1;
-                var completeName = author[_z] + '';
+                var completeName = translator[_z] + '';
                 var vorname      = completeName.split(',')[1].trim();  // [1] = Vorname
                 document.getElementById("PersonTranslatorFirstName_" + feld).value = vorname;
                 finalize("PersonTranslatorFirstName_" + feld);
@@ -342,7 +342,7 @@ function get(url, callback)
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
+        if (xhr.readyState === 4) {
             // defensive check
             if (typeof callback === "function") {
                 callback.apply(xhr);
@@ -377,7 +377,7 @@ var crossrefTypeMapping = {
     "book-track": "sound",
     "posted-content/working_paper": "workingpaper",
     "dissertation": "doctoralthesis"
-}
+};
 
 /**
  *
@@ -440,7 +440,7 @@ async function getDoctypes(data)
     );
 }
 
-function openDialog(title, text, id = null)
+function openDialog(title, text, type = 'note', id = null)
 {
     var dialogButtons = {
         OK: function () {
@@ -450,24 +450,43 @@ function openDialog(title, text, id = null)
 
     var dialogContent         = document.createElement("div");
     dialogContent.textContent = text;
+
+    // Hinzufügen eines Buttons, wenn DOI schon vorhanden und eine ID verfügbar ist
     if (id) {
-        dialogButtons['ID ' + id + ' ansehen'] = function () {
+        dialogButtons[translations.doiimport_button_showId + ' ' + id] = function () {
             var checkLink = baseUrl + "/" + id;
             window.open(checkLink, '_blank');
-        }}
-    if (title == "Achtung") {
-        dialogButtons['OK'] = function () {
-            $(this).dialog("close");
-            cleanup();
-            document.getElementById("IdentifierDoi").value = doi;
-            startCheck();
         };
-
-            dialogButtons['Abbruch'] = function () {
-                $(this).dialog("close");
-            };
     }
 
+    switch (type) {
+        case 'warning':
+            dialogButtons['OK']                                 = function () {
+                $(this).dialog("close");
+                cleanup();
+                document.getElementById("IdentifierDoi").value = doi;
+                startCheck();
+            };
+            dialogButtons[translations.doiimport_button_cancel] = function () {
+                $(this).dialog("close");
+            };
+            break;
+        case 'note':
+            // Keine speziellen Buttons hinzufügen, nur der Standard-OK-Button
+            break;
+        case 'redirect':
+            //Falls DOI nicht bei Crossref gefunden wurde -> zurück zur Auswahl des Dokumenttyps (um manuelle Eingabe im DOI-Import zu verhindern)
+            dialogButtons['OK'] = function () {
+                $(this).dialog("close");
+                document.getElementById("abort").click();
+            };
+            break;
+        default:
+            // Weitere Fälle können hier hinzugefügt werden
+            break;
+    }
+
+    // Dialog initialisieren
     $(function () {
         $(dialogContent).dialog({
             title: title,
