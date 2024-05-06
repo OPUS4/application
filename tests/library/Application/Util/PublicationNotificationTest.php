@@ -258,11 +258,11 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
             $this->notification,
             ["123", [], "", "http://localhost/foo/1"]
         );
-        $this->assertContains("Autor(en): n/a", $body);
-        $this->assertContains("Titel: n/a", $body);
-        $this->assertContains("Dokument-ID: 123", $body);
-        $this->assertContains("http://localhost/foo/1", $body);
-        $this->assertContains("Folgendes Dokument wurde auf dem OPUS4-Dokumentenserver freigegeben", $body);
+        $this->assertStringContainsString("Autor(en): n/a", $body);
+        $this->assertStringContainsString("Titel: n/a", $body);
+        $this->assertStringContainsString("Dokument-ID: 123", $body);
+        $this->assertStringContainsString("http://localhost/foo/1", $body);
+        $this->assertStringContainsString("Folgendes Dokument wurde auf dem OPUS4-Dokumentenserver freigegeben", $body);
     }
 
     public function testGetPublicationMailBodyWithTwoAuthorsAndNonEmptyTitle()
@@ -272,11 +272,11 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
             $this->notification,
             ["123", ["Doe, John", "Doe, Jane"], "Test Title", "http://localhost/foo/1"]
         );
-        $this->assertContains("Autor(en):\nDoe, John\nDoe, Jane", $body);
-        $this->assertContains("Titel: Test Title", $body);
-        $this->assertContains("Dokument-ID: 123", $body);
-        $this->assertContains("http://localhost/foo/1", $body);
-        $this->assertContains("Folgendes Dokument wurde auf dem OPUS4-Dokumentenserver freigegeben", $body);
+        $this->assertStringContainsString("Autor(en):\nDoe, John\nDoe, Jane", $body);
+        $this->assertStringContainsString("Titel: Test Title", $body);
+        $this->assertStringContainsString("Dokument-ID: 123", $body);
+        $this->assertStringContainsString("http://localhost/foo/1", $body);
+        $this->assertStringContainsString("Folgendes Dokument wurde auf dem OPUS4-Dokumentenserver freigegeben", $body);
     }
 
     /**

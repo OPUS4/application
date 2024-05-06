@@ -1,5 +1,7 @@
 <?php
 
+use Opus\Common\CollectionRole;
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -57,9 +59,25 @@ class Oai_Model_Set_SetsManagerTest extends ControllerTestCase
 
         $document = $this->createTestDocument();
         $document->setBelongsToBibliography(true);
+        $document->store();
 
         $sets = $setsManager->getSets($document);
         $this->assertEquals(['bibliography:true', 'doc-type:Other'], array_keys($sets));
+    }
+
+    public function testGetSetsWithDocumentOpenAccess()
+    {
+        $setsManager = new Oai_Model_Set_SetsManager();
+
+        $openAccessRole = CollectionRole::fetchByOaiName('open_access');
+        $rootCollection = $openAccessRole->getRootCollection();
+        $document       = $this->createTestDocument();
+        $document->setServerState('published');
+        $document->addCollection($rootCollection);
+        $document->store();
+
+        $sets = $setsManager->getSets($document);
+        $this->assertEquals(['bibliography:false', 'doc-type:Other', 'open_access'], array_keys($sets));
     }
 
     public function testGetSetType()
@@ -84,8 +102,82 @@ class Oai_Model_Set_SetsManagerTest extends ControllerTestCase
         $this->assertNull($setType);
     }
 
+    public function testGetSetTypeOpenAccess()
+    {
+        $setsManager = new Oai_Model_Set_SetsManager();
+
+        $setName = new Oai_Model_Set_SetName('open_access');
+
+        $setType = $setsManager->getSetType($setName);
+
+        $this->assertInstanceOf(Oai_Model_Set_CollectionRoleSingleSet::class, $setType);
+    }
+
+    public function testGetSetTypeOpenAccessSubset()
+    {
+        $setsManager = new Oai_Model_Set_SetsManager();
+
+        $setName = new Oai_Model_Set_SetName('open_access:open_access');
+
+        $setType = $setsManager->getSetType($setName);
+
+        $this->assertInstanceOf(Oai_Model_Set_CollectionRoleSingleSet::class, $setType);
+    }
+
     public function testConfigureFinder()
     {
         $this->markTestIncomplete('Actual search results should be checked.');
+    }
+
+    public function testConfigureFinderExcludeOpenAccess()
+    {
+        $this->adjustConfiguration([
+            'oai' => ['set' => ['collection' => ['exclude' => 'open_access,ddc']]],
+        ]);
+
+        $this->expectExceptionMessage('The given set results in an empty list: open_access');
+        $this->expectException(Oai_Model_Exception::class);
+
+        $openAccessRole = CollectionRole::fetchByOaiName('open_access');
+        $rootCollection = $openAccessRole->getRootCollection();
+        $document       = $this->createTestDocument();
+        $document->setServerState('published');
+        $document->addCollection($rootCollection);
+        $document->store();
+
+        $config      = $this->getConfig();
+        $finderClass = $config->documentFinderClass;
+        $finder      = new $finderClass();
+
+        $setsManager = new Oai_Model_Set_SetsManager();
+        $setName     = new Oai_Model_Set_SetName('open_access');
+        $setTypes    = $setsManager->getSetTypeObjects();
+        $setTypes['collection']->configureFinder($finder, $setName);
+    }
+
+    public function testConfigureFinderExcludeDdc()
+    {
+        $this->adjustConfiguration([
+            'oai' => ['set' => ['collection' => ['exclude' => 'open_access,ddc']]],
+        ]);
+
+        $this->expectExceptionMessage('The given set results in an empty list: ddc');
+        $this->expectException(Oai_Model_Exception::class);
+
+        $openAccessRole = CollectionRole::fetchByOaiName('ddc');
+        $rootCollection = $openAccessRole->getRootCollection();
+        $document       = $this->createTestDocument();
+        $document->setServerState('published');
+        $document->addCollection($rootCollection);
+        $document->store();
+
+        $config      = $this->getConfig();
+        $finderClass = $config->documentFinderClass;
+        $finder      = new $finderClass();
+
+        $setsManager = new Oai_Model_Set_SetsManager();
+        $setName     = new Oai_Model_Set_SetName('ddc');
+        $setTypes    = $setsManager->getSetTypeObjects();
+        $setTypes['collection']->configureFinder($finder, $setName);
     }
 }

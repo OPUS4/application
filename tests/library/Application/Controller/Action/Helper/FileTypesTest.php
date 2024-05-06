@@ -46,7 +46,7 @@ class Application_Controller_Action_Helper_FileTypesTest extends ControllerTestC
         $types = $this->helper->getValidMimeTypes();
 
         $this->assertNotNull($types);
-        $this->assertInternalType('array', $types);
+        $this->assertIsArray($types);
 
         $this->assertArrayHasKey('pdf', $types);
         $this->assertEquals('application/pdf', $types['pdf']);

@@ -44,14 +44,14 @@ class Application_Translate_TmxFileTest extends ControllerTestCase
 
         $data = $tmxFile->toArray();
 
-        $this->assertInternalType('array', $data);
+        $this->assertIsArray($data);
         $this->assertNotEmpty($data);
         $this->assertCount(2, $data);
         $this->assertArrayHasKey('home_index_contact_pagetitle', $data);
         $this->assertArrayHasKey('home_index_contact_title', $data);
 
         foreach ($data as $key => $translations) {
-            $this->assertInternalType('array', $translations);
+            $this->assertIsArray($translations);
             $this->assertArrayHasKey('en', $translations);
             $this->assertArrayHasKey('de', $translations);
             $this->assertNotEmpty($translations['en']);

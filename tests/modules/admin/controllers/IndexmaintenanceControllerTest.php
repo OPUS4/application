@@ -143,9 +143,9 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
         $baseUrl = $this->getRequest()->getBaseUrl();
         $body    = $this->getResponse()->getBody();
-        $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
-        // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
-        // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
+        $this->assertStringContainsString("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
+        // TODO $this->assertStringContainsString("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
+        // TODO $this->assertStringContainsString("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
     }
 
     private function checkIfUnavailable()
@@ -154,9 +154,9 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
         $baseUrl = $this->getRequest()->getBaseUrl();
         $body    = $this->getResponse()->getBody();
-        $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
-        // TODO $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
-        // TODO $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
+        $this->assertStringNotContainsString("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
+        // TODO $this->assertStringNotContainsString("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
+        // TODO $this->assertStringNotContainsString("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
     }
 
     private function enableAsyncMode()
@@ -290,10 +290,10 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
         $baseUrl = $this->getRequest()->getBaseUrl();
         $body    = $this->getResponse()->getBody();
-        $this->assertContains('div class="opprogress"', $body);
-        $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
-        // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
-        // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
+        $this->assertStringContainsString('div class="opprogress"', $body);
+        $this->assertStringNotContainsString("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
+        // TODO $this->assertStringContainsString("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
+        // TODO $this->assertStringContainsString("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
 
         /*
          * run job immediately and check for result
@@ -326,11 +326,11 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
 
         $baseUrl = $this->getRequest()->getBaseUrl();
         $body    = $this->getResponse()->getBody();
-        $this->assertNotContains('div class="opprogress"', $body);
-        $this->assertContains('pre class="opoutput"', $body);
-        $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
-        // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
-        // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
+        $this->assertStringNotContainsString('div class="opprogress"', $body);
+        $this->assertStringContainsString('pre class="opoutput"', $body);
+        $this->assertStringContainsString("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
+        // TODO $this->assertStringContainsString("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
+        // TODO $this->assertStringContainsString("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
     }
 
     /**

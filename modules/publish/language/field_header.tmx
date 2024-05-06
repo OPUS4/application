@@ -737,10 +737,10 @@ END OF COMMENT -->
 
         <tu tuid="header_PublicationState">
             <tuv xml:lang="en">
-                <seg>Publication: State</seg>
+                <seg>Version</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Veröffentlichung: Zustand</seg>
+                <seg>Version</seg>
             </tuv>
         </tu>
  

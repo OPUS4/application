@@ -42,7 +42,7 @@ class AppModeTest extends ControllerTestCase
         $this->markTestSkipped('TODO common.phtml uses APPLICATION_ENV directly');
         parent::setUpWithEnv('production');
         $this->dispatch('/home');
-        $this->assertNotContains('NON PRODUCTION ENVIRONMENT', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('NON PRODUCTION ENVIRONMENT', $this->getResponse()->getBody());
     }
 
     public function testTestingMode()
@@ -50,6 +50,6 @@ class AppModeTest extends ControllerTestCase
         parent::setUpWithEnv('testing');
         $this->useEnglish();
         $this->dispatch('/home');
-        $this->assertContains('NON PRODUCTION ENVIRONMENT (testing)', $this->getResponse()->getBody());
+        $this->assertStringContainsString('NON PRODUCTION ENVIRONMENT (testing)', $this->getResponse()->getBody());
     }
 }

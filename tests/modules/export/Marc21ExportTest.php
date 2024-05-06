@@ -36,6 +36,13 @@ class Export_Marc21ExportTest extends ControllerTestCase
     /** @var string */
     protected $additionalResources = 'all';
 
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->setHostname(null);
+        $this->setBaseUrl(null);
+    }
+
     /**
      * Nicht freigeschaltete Dokumente können nur dann im Format MARC21-XML exportiert werden,
      * wenn der Benutzer das Recht 'resource_documents' besitzt.
@@ -73,7 +80,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(401);
-        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
+        $this->assertStringContainsString('export of unpublished documents is not allowed', $this->getResponse()->getBody());
     }
 
     public function testMarc21XmlExportWithUnpublishedDocAllowedForAdmin()
@@ -182,7 +189,7 @@ class Export_Marc21ExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(401);
-        $this->assertContains('Unauthorized: Access to module not allowed.', $this->getResponse()->getBody());
+        $this->assertStringContainsString('Unauthorized: Access to module not allowed.', $this->getResponse()->getBody());
     }
 
     public function testMarc21XmlExportWithPublishedDocAllowedForAdmin()
@@ -302,6 +309,6 @@ class Export_Marc21ExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(401);
-        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
+        $this->assertStringContainsString('export of unpublished documents is not allowed', $this->getResponse()->getBody());
     }
 }

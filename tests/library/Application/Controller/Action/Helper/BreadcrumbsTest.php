@@ -123,7 +123,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('No document provided.', $messages[0]);
+        $this->assertStringContainsString('No document provided.', $messages[0]);
     }
 
     public function testSetParametersPageNotFound()
@@ -136,7 +136,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Page with label \'admin_filemanager_index2\' not found.', $messages[0]);
+        $this->assertStringContainsString('Page with label \'admin_filemanager_index2\' not found.', $messages[0]);
     }
 
     public function testGetDocumentTitle()

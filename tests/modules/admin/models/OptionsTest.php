@@ -45,7 +45,7 @@ class Admin_Model_OptionsTest extends ControllerTestCase
     {
         $options = $this->model->getOptions();
 
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $this->assertCount(2, $options);
 
         foreach ($options as $name => $option) {

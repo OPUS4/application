@@ -95,7 +95,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $output = $this->helper->getOutput($request);
 
-        $this->assertContains('school    = {School of Life},', $output);
+        $this->assertStringContainsString('school    = {School of Life},', $output);
     }
 
     public function testBibtexAttributeSchoolWithDepartment()
@@ -124,7 +124,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $institute->delete();
 
-        $this->assertContains('school    = {Test Uni, Test Dep},', $output);
+        $this->assertStringContainsString('school    = {Test Uni, Test Dep},', $output);
     }
 
     public function testBibtexAttributeSchoolForDoctoralThesis()
@@ -144,7 +144,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $output = $this->helper->getOutput($request);
 
-        $this->assertContains('school    = {School of Life},', $output);
+        $this->assertStringContainsString('school    = {School of Life},', $output);
     }
 
     public function testGetExtension()
@@ -239,8 +239,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $output = $this->helper->getPlainOutput($document, 'ris.xslt');
 
-        $this->assertContains('T1  - KOBV', $output);
-        $this->assertContains('T1  - COLN', $output);
-        $this->assertContains('T2  - Parent Title', $output);
+        $this->assertStringContainsString('T1  - KOBV', $output);
+        $this->assertStringContainsString('T1  - COLN', $output);
+        $this->assertStringContainsString('T2  - Parent Title', $output);
     }
 }

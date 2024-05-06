@@ -406,7 +406,7 @@ class Admin_Form_Document_EnrichmentTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Unknown enrichment ID = \'9999\'', $messages[0]);
+        $this->assertStringContainsString('Unknown enrichment ID = \'9999\'', $messages[0]);
     }
 
     public function testGetModelBadId()

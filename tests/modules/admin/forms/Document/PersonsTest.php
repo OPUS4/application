@@ -211,7 +211,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Attempt to add person without ID.', $messages[0]);
+        $this->assertStringContainsString('Attempt to add person without ID.', $messages[0]);
     }
 
     public function testContinueEditAddTwoPersons()
