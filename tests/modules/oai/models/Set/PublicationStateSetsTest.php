@@ -45,10 +45,9 @@ class Oai_Model_Set_PublicationStateSetsTest extends ControllerTestCase
         $sets = $model->getSets();
 
         $this->assertIsArray($sets);
-        $this->assertCount(3, $sets);
+        $this->assertCount(2, $sets);
         $this->assertEquals([
             'status-type:draft'          => 'draft',
-            'status-type:'               => null,
             'status-type:updatedVersion' => 'updatedVersion',
         ], $sets);
     }
