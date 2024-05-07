@@ -90,8 +90,8 @@ class Oai_Model_Set_PublicationStateSets implements Oai_Model_Set_SetTypeInterfa
             $states = $finder->getPublicationStateCount();
             foreach ($states as $state => $docCount) {
                 if ($state !== null && $state !== '') {
-                    $subset = $this->getSubsetName($state);
-                    $setSpec = $this->setName . ':' . $subset;
+                    $subset         = $this->getSubsetName($state);
+                    $setSpec        = $this->setName . ':' . $subset;
                     $sets[$setSpec] = $subset;
                 }
             }

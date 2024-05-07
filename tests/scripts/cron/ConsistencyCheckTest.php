@@ -41,6 +41,7 @@ class ConsistencyCheckTest extends CronTestCase
     /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var bool */
     protected $rebuildIndex = false;
 
     public function tearDown(): void
@@ -112,6 +113,7 @@ class ConsistencyCheckTest extends CronTestCase
     public function testJobSuccessWithInconsistency()
     {
         $this->rebuildIndex = true;
+
         $service = Service::selectIndexingService(null, 'solr');
         $service->removeAllDocumentsFromIndex();
 
