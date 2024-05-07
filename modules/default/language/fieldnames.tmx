@@ -712,10 +712,10 @@
 
         <tu tuid="PublicationState">
             <tuv xml:lang="en">
-                <seg>Status</seg>
+                <seg>Version</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Status</seg>
+                <seg>Version</seg>
             </tuv>
         </tu>
 
@@ -1096,7 +1096,7 @@
                 <seg>Union Catalog ID</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Verbund-ID</seg>
+                <seg>Verbundkatalog-ID</seg>
             </tuv>
         </tu>
 
@@ -2317,24 +2317,6 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Veröffentlichend</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="EnrichmentConferenceTitle">
-            <tuv xml:lang="en">
-                <seg>Conference Name</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Name der Konferenz</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="EnrichmentConferencePlace">
-            <tuv xml:lang="en">
-                <seg>Conference Location</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Ort der Konferenz</seg>
             </tuv>
         </tu>
 

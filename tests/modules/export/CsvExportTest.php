@@ -49,7 +49,7 @@ class Export_CsvExportTest extends ControllerTestCase
         $body = $this->getResponse()->getBody();
 
         $this->assertEquals(2, substr_count($body, "\n"));
-        $this->assertContains('OPUS4-146', $body);
+        $this->assertStringContainsString('OPUS4-146', $body);
 
         $data = [];
 

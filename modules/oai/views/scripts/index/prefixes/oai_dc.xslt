@@ -83,7 +83,9 @@
             <!-- dc:date: embargo date -->
             <xsl:apply-templates select="EmbargoDate"  />
             <!-- dc:type -->
-            <xsl:apply-templates select="@Type"  />
+            <xsl:apply-templates select="@Type"  />            
+            <!-- dc:type publication state -->
+            <xsl:call-template name="PublicationState" />
             <!-- dc:format -->
             <xsl:apply-templates select="File/@MimeType"  />
             <!-- dc:identifier -->
@@ -104,20 +106,17 @@
             <!-- open aire  dc:relation -->
             <xsl:apply-templates select="Enrichment[@KeyName='Relation']"  />
             <xsl:apply-templates select="Rights"  />
-            <!-- dc:type -->
-            <!-- <dc:type>info:eu-repo/semantics/publishedVersion</dc:type> -->
             <!-- dc:source -->
             <xsl:apply-templates select="TitleParent"  />
             <!-- dc:source Enrichment'SourceTitle'-->
             <!-- <xsl:apply-templates select="Enrichment[@KeyName='SourceTitle']"  /> -->
-            <xsl:call-template name="PublicationVersion" />
         </oai_dc:dc>
     </xsl:template>
 
     <xsl:template name="OpusDate" >
         <dc:date>
             <xsl:choose>
-	        <xsl:when test="PublishedDate">
+            <xsl:when test="PublishedDate">
                     <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
                 </xsl:when>
                 <xsl:when test="CompletedDate">
@@ -161,6 +160,16 @@
                 <xsl:value-of select="@AcademicTitle" />
                 <xsl:text>)</xsl:text>
             </xsl:if>
+            <xsl:if test="@IdentifierOrcid">
+                <xsl:text>; </xsl:text>
+                <xsl:text>https://orcid.org/</xsl:text>
+                <xsl:value-of select="@IdentifierOrcid"/>
+            </xsl:if>
+            <xsl:if test="@IdentifierGnd">
+                <xsl:text>; </xsl:text>
+                <xsl:text>https://d-nb.info/gnd/</xsl:text>
+                <xsl:value-of select="@IdentifierGnd"/>                
+            </xsl:if>
         </dc:creator>
     </xsl:template>
 
@@ -175,6 +184,16 @@
                 <xsl:text> (</xsl:text>
                 <xsl:value-of select="@AcademicTitle" />
                 <xsl:text>)</xsl:text>
+            </xsl:if>
+            <xsl:if test="@IdentifierOrcid">
+                <xsl:text>; </xsl:text>
+                <xsl:text>https://orcid.org/</xsl:text>
+                <xsl:value-of select="@IdentifierOrcid"/>
+            </xsl:if>
+            <xsl:if test="@IdentifierGnd">
+                <xsl:text>; </xsl:text>
+                <xsl:text>https://d-nb.info/gnd/</xsl:text>
+                <xsl:value-of select="@IdentifierGnd"/>                
             </xsl:if>
         </dc:contributor>
     </xsl:template>
@@ -236,6 +255,26 @@
 
     <xsl:template name="dcType" >
         <xsl:text>doc-type:</xsl:text><xsl:value-of select="php:functionString('Application_Xslt::dcType', .)" />
+    </xsl:template>
+
+    <xsl:template name="PublicationState">
+        <xsl:choose>
+            <xsl:when test="SetSpec[starts-with(@Value,'status-type')]">
+                <dc:type>
+                    <xsl:if test="starts-with($oai_set,'openaire')">
+                        <xsl:text>info:eu-repo/semantics/</xsl:text>
+                    </xsl:if>
+                    <xsl:apply-templates select="SetSpec[starts-with(@Value,'status-type')]" mode="metadata" />
+                </dc:type>
+            </xsl:when>
+            <xsl:when test="starts-with($oai_set,'openaire')">
+                <dc:type>info:eu-repo/semantics/publishedVersion</dc:type>
+            </xsl:when>                
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template match="SetSpec[starts-with(@Value,'status-type')]" mode="metadata">
+            <xsl:value-of select="substring-after(@Value,'status-type:')" />
     </xsl:template>
 
     <xsl:template match="@ContributingCorporation" >
@@ -339,13 +378,5 @@
         </xsl:if>
     </xsl:template>
     -->
-
-    <xsl:template name="PublicationVersion">
-        <xsl:if test="starts-with($oai_set,'openaire')">
-            <dc:type>
-                <xsl:text>info:eu-repo/semantics/publishedVersion</xsl:text>
-            </dc:type>
-        </xsl:if>
-    </xsl:template>
 
 </xsl:stylesheet>

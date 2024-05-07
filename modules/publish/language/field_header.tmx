@@ -737,31 +737,13 @@ END OF COMMENT -->
 
         <tu tuid="header_PublicationState">
             <tuv xml:lang="en">
-                <seg>Publication: State</seg>
+                <seg>Version</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Veröffentlichung: Zustand</seg>
+                <seg>Version</seg>
             </tuv>
         </tu>
-
-        <tu tuid="header_Enrichmentconference_title">
-            <tuv xml:lang="en">
-                <seg>Conference Name</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Name der Konferenz</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="header_Enrichmentconference_place">
-            <tuv xml:lang="en">
-                <seg>Conference Location</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Ort der Konferenz</seg>
-            </tuv>
-        </tu>
-    
+ 
         <tu tuid="header_open_access">
             <tuv xml:lang="en">
                 <seg>Accessibility</seg>

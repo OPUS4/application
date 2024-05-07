@@ -275,7 +275,7 @@ class ControllerTestCase extends TestCase
     {
         $bodyLowerCase = strtolower($body);
         foreach ($badStrings as $badString) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 strtolower($badString),
                 $bodyLowerCase,
                 "Response must not contain '$badString'"
@@ -627,7 +627,7 @@ class ControllerTestCase extends TestCase
         $this->assertCount(1, $flashMessages, 'Expected one flash message in queue.');
         $flashMessage = $flashMessages[0];
 
-        $this->assertNotContains($message, $flashMessage['message']);
+        $this->assertStringNotContainsString($message, $flashMessage['message']);
         $this->assertEquals($level, $flashMessage['level']);
     }
 

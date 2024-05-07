@@ -65,7 +65,7 @@ class Application_Security_HttpAuthResolverTest extends ControllerTestCase
         $resolver = new Application_Security_HttpAuthResolver();
 
         $this->assertFalse($resolver->resolve('unknown', 'opus-sword'));
-        $this->assertInternalType('bool', $resolver->resolve('unknown', 'opus-sword'));
+        $this->assertIsBool($resolver->resolve('unknown', 'opus-sword'));
     }
 
     public function testResolveUserWithoutAccessToModule()

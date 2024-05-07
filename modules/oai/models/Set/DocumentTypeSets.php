@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Document;
+use Opus\Common\DocumentFinderInterface;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Repository;
 
@@ -60,7 +62,7 @@ class Oai_Model_Set_DocumentTypeSets extends Application_Model_Abstract implemen
             $sets[$setSpec] = ucfirst($dcType);
         } else {
             $finder = Repository::getInstance()->getDocumentFinder();
-            $finder->setServerState('published');
+            $finder->setServerState(Document::STATE_PUBLISHED);
 
             foreach ($finder->getDocumentTypes() as $doctype) {
                 if (! Oai_Model_Set_SetName::isValidSubsetName($doctype)) {

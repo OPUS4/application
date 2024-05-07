@@ -283,6 +283,10 @@ table.frontdoordata {
   content: "\f0d8";
   margin-left: -0.5rem;
 }
+img#licence-InCopyright-logo {
+    width: 90px;
+    height: auto;
+}
 
 @media screen and (min-width: 768px) {
   .frontdoordata tr {

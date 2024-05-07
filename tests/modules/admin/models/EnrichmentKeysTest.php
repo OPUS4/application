@@ -112,7 +112,7 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 
         $protectedKeys = $model->getProtectedEnrichmentKeys();
 
-        $this->assertInternalType('array', $protectedKeys);
+        $this->assertIsArray($protectedKeys);
         $this->assertCount(0, $protectedKeys);
     }
 
