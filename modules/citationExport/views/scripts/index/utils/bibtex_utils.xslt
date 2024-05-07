@@ -25,8 +25,8 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * 
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 -->
@@ -44,7 +44,7 @@
       <xsl:param name="type" required="yes" />
       <xsl:choose>
           <xsl:when test="$type='author'">
-            <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
+            <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
             <xsl:choose>
                 <xsl:when test="position() = last()">
                     <xsl:text></xsl:text>
@@ -57,7 +57,7 @@
            <xsl:when test="$type='identifier'">
                <xsl:choose>
                    <xsl:when test="position() = 1 or position() = 2 or position() = 3">
-                       <xsl:call-template name="replace_id_strings">
+                       <xsl:call-template name="replace_strings">
                            <xsl:with-param name="input_text"><xsl:value-of select="@LastName" /></xsl:with-param>
                        </xsl:call-template>
                    </xsl:when>
@@ -72,56 +72,52 @@
       </xsl:choose>
     </xsl:template>
 
-
-    <!-- Replace Special Characters -->
-    <xsl:template name="replace_id_strings">
-      <xsl:param name="input_text" />
-      <xsl:param name="search" select="document('identifier_characters.xml')/string_replacement/search" />
-      <xsl:variable name="replaced_text">
-        <xsl:call-template name="replace_id_substring">
-          <xsl:with-param name="text" select="$input_text" />
-          <xsl:with-param name="from" select="$search[1]/find" />
-          <xsl:with-param name="to" select="$search[1]/replace" />
-        </xsl:call-template>
-      </xsl:variable>
-
+    <!-- bibtex-style for editors  -->
+    <xsl:template match="PersonEditor">
+      <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
       <xsl:choose>
-        <xsl:when test="$search[2]">
-          <xsl:call-template name="replace_id_strings">
-            <xsl:with-param name="input_text" select="$replaced_text" />
-            <xsl:with-param name="search" select="$search[position() > 1]" />
-          </xsl:call-template>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="$replaced_text" />
-        </xsl:otherwise>
+         <xsl:when test="position()=last()">
+            <xsl:text></xsl:text>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:text> and </xsl:text>
+         </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
 
-    <xsl:template name="replace_id_substring">
-        <xsl:param name="text" />
-        <xsl:param name="from" />
-        <xsl:param name="to" />
-        <xsl:choose>
-            <xsl:when test="contains($text, $from)">
-                <xsl:call-template name="replace_id_substring">
-                    <xsl:with-param name="text">
-                        <xsl:value-of select="substring-before($text, $from)" />
-                        <xsl:value-of select="$to" />
-                        <xsl:value-of select="substring-after($text, $from)" />
-                    </xsl:with-param>
-                    <xsl:with-param name="from">
-                        <xsl:value-of select="$from" />
-                    </xsl:with-param>
-                    <xsl:with-param name="to">
-                        <xsl:value-of select="$to" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$text" />
-            </xsl:otherwise>
-       </xsl:choose>
+    <!-- bibtex-style for institutions  -->
+    <xsl:template match="Collection[@RoleName='institutes']">
+      <xsl:value-of select="@Name" />
+      <xsl:choose>
+         <xsl:when test="position()=last()">
+            <xsl:text></xsl:text>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:text>; </xsl:text>
+         </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
+
+    <!-- bibtex-style for pages  -->
+    <xsl:template name="Pages">
+      <xsl:param name="first" required="yes" />
+      <xsl:param name="last" required="yes" />
+      <xsl:param name="number" required="yes" />	  
+      <xsl:param name="articlenumber" required="yes" />
+      <xsl:choose>
+         <xsl:when test="string-length($articlenumber) > 0">
+            <xsl:value-of select="$articlenumber" />
+         </xsl:when>
+         <xsl:when test="string-length($first) > 0 and string-length($last) > 0">
+            <xsl:value-of select="$first" /><xsl:text> -- </xsl:text><xsl:value-of select="$last" />
+         </xsl:when>
+		 <xsl:when test="string-length($first) > 0">
+            <xsl:value-of select="$first" />
+         </xsl:when>
+         <xsl:when test="string-length($number) > 0">
+            <xsl:value-of select="$number" />
+         </xsl:when>	 
+      </xsl:choose>
+    </xsl:template>    
 
 </xsl:stylesheet>

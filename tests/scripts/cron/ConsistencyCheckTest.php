@@ -32,11 +32,31 @@
 require_once 'CronTestCase.php';
 
 use Opus\Common\Job;
+use Opus\Search\Console\Helper\IndexHelper;
+use Opus\Search\Service;
+use Symfony\Component\Console\Output\NullOutput;
 
 class ConsistencyCheckTest extends CronTestCase
 {
     /** @var string */
     protected $additionalResources = 'database';
+
+    /** @var bool */
+    protected $rebuildIndex = false;
+
+    public function tearDown(): void
+    {
+        if ($this->rebuildIndex) {
+            $builder = new IndexHelper();
+            $builder->setOutput(new NullOutput());
+            $builder->setClearCache(false);
+            $builder->setRemoveBeforeIndexing(false);
+            $builder->setTimeout(0);
+            $builder->index(null, null);
+        }
+
+        parent::tearDown();
+    }
 
     /**
      * @return int
@@ -92,7 +112,9 @@ class ConsistencyCheckTest extends CronTestCase
      */
     public function testJobSuccessWithInconsistency()
     {
-        $service = Opus\Search\Service::selectIndexingService(null, 'solr');
+        $this->rebuildIndex = true;
+
+        $service = Service::selectIndexingService(null, 'solr');
         $service->removeAllDocumentsFromIndex();
 
         $this->createJob(Opus\Search\Task\ConsistencyCheck::LABEL);

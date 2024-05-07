@@ -116,7 +116,7 @@
     <xsl:template name="OpusDate" >
         <dc:date>
             <xsl:choose>
-	        <xsl:when test="PublishedDate">
+            <xsl:when test="PublishedDate">
                     <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
                 </xsl:when>
                 <xsl:when test="CompletedDate">
@@ -160,6 +160,16 @@
                 <xsl:value-of select="@AcademicTitle" />
                 <xsl:text>)</xsl:text>
             </xsl:if>
+            <xsl:if test="@IdentifierOrcid">
+                <xsl:text>; </xsl:text>
+                <xsl:text>https://orcid.org/</xsl:text>
+                <xsl:value-of select="@IdentifierOrcid"/>
+            </xsl:if>
+            <xsl:if test="@IdentifierGnd">
+                <xsl:text>; </xsl:text>
+                <xsl:text>https://d-nb.info/gnd/</xsl:text>
+                <xsl:value-of select="@IdentifierGnd"/>                
+            </xsl:if>
         </dc:creator>
     </xsl:template>
 
@@ -174,6 +184,16 @@
                 <xsl:text> (</xsl:text>
                 <xsl:value-of select="@AcademicTitle" />
                 <xsl:text>)</xsl:text>
+            </xsl:if>
+            <xsl:if test="@IdentifierOrcid">
+                <xsl:text>; </xsl:text>
+                <xsl:text>https://orcid.org/</xsl:text>
+                <xsl:value-of select="@IdentifierOrcid"/>
+            </xsl:if>
+            <xsl:if test="@IdentifierGnd">
+                <xsl:text>; </xsl:text>
+                <xsl:text>https://d-nb.info/gnd/</xsl:text>
+                <xsl:value-of select="@IdentifierGnd"/>                
             </xsl:if>
         </dc:contributor>
     </xsl:template>

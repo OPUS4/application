@@ -16,9 +16,7 @@ INSERT INTO `enrichmentkeys` (`name`) VALUES
 ('opus_crossrefLicence'),
 ('opus_doiImportPopulated'),
 ('opus_import_origin'),
-('opus_doi_flag'),
-('ConferencePlace'),
-('ConferenceTitle');
+('opus_doi_flag');
 
 
 -- 'opus_doi_json': Enthält nach dem DOI-Import die kompletten Metadaten des Dokuments von Crossref. Wird gebraucht, wenn die Page im Browser neu geladen wird (nicht user-relevant).
@@ -32,7 +30,3 @@ INSERT INTO `enrichmentkeys` (`name`) VALUES
 -- 'opus_import_origin': Enthält die Quelle des DOI-Imports, z.Zt. immer "crossref" (evtl. user-relevant, z.B. als Facette)
 
 -- 'opus_doi_flag': Flag wird 'true', wenn im aktuellen Formular ein DOI-Import durchgeführt wurde und alle verfügbaren Werte (insbesondere mehrfach belgbare Felder) ins Formular eingetragen wurden, so dass danach kein Reload mehr kommen kann (nicht user-relevant).
-
--- 'ConferencePlace': "Ort der Konferenz", v.a. für DokTyp conferenceobject und DOI-Import (user-relevant). Sollte mittelfristig ein Standardfeld sein, unabhängig vom DOI-Import, vgl. Issue #209
-
--- 'ConferenceTitle': "Name der Konferenz", s.o. 

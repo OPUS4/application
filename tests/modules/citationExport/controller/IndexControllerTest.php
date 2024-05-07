@@ -69,8 +69,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->assertStringContainsString('SN  - 1234-5678', $body);
         $this->assertStringContainsString('SN  - 4321-8765', $body);
         $urnResolverUrl = $this->getConfig()->urn->resolverUrl;
-        $this->assertStringContainsString('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-456', $body);
-        $this->assertStringContainsString('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-789', $body);
+        $this->assertStringContainsString('UN  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-456', $body);
+        $this->assertStringContainsString('UN  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-789', $body);
         $this->assertStringContainsString('UR  - http://www.myexampledomain.de/foo', $body);
         $this->assertStringContainsString('UR  - http://www.myexampledomain.de/bar', $body);
     }
@@ -83,7 +83,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/146');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertStringContainsString('T2  - Parent Title', $response->getBody());
+        $this->assertStringContainsString('T3  - Parent Title', $response->getBody());
     }
 
     /**
@@ -94,7 +94,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/146');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertStringContainsString('A2  - Doe, Jane', $response->getBody());
+        $this->assertStringContainsString('ED  - Doe, Jane', $response->getBody());
     }
 
     /**
@@ -110,7 +110,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
         $response = $this->getResponse();
         $this->assertStringContainsString(
-            'title   = {Dokumenttitel mit Sonderzeichen \%-&quot;-\#-\&amp;, vgl. OPUSVIER-2716.},',
+            'title     = {Dokumenttitel mit Sonderzeichen \%-&quot;-\#-\&amp;, vgl. OPUSVIER-2716.},',
             $response->getBody()
         );
     }
@@ -153,12 +153,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
-        $this->assertStringContainsString('UR  - ', $body);
-        $this->assertStringContainsString('/frontdoor/index/index/docId/' . $this->documentId, $body);
-        $this->assertStringContainsString(
-            '/citationExport/index/download/output/ris/docId/' . $this->documentId,
-            $body
-        );
+        $this->assertStringContainsString('TY  - GEN', $body);
+        $this->assertStringContainsString('U1  - Sonstiges', $body);
     }
 
     public function testIndexActionRisDoctypeArticle()
@@ -186,7 +182,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->setDocumentType('conferenceobject');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('CONF');
+        $this->checkRisAssertions('CPAPER');
     }
 
     public function testIndexActionRisDoctypeDoctoralthesis()
@@ -242,21 +238,21 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->setDocumentType('contributiontoperiodical');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('NEWS');
+        $this->checkRisAssertions('MGZN');
     }
 
     public function testIndexActionRisReview()
     {
         $this->setDocumentType('review');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('JOUR');
+        $this->checkRisAssertions('GEN');
     }
 
     public function testIndexActionRisWorkingpaper()
     {
         $this->setDocumentType('workingpaper');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('UNPD');
+        $this->checkRisAssertions('RPRT');
     }
 
     public function testIndexActionRisMovingimage()
@@ -277,7 +273,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->setDocumentType('image');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('GEN');
+        $this->checkRisAssertions('ADVS');
     }
 
     public function testIndexActionRisLecture()
@@ -291,14 +287,14 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     {
         $this->setDocumentType('sound');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('GEN');
+        $this->checkRisAssertions('SOUND');
     }
 
     public function testIndexActionRisStudythesis()
     {
         $this->setDocumentType('studythesis');
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
-        $this->checkRisAssertions('GEN');
+        $this->checkRisAssertions('THES');
     }
 
     public function testIndexActionRisOther()
@@ -377,6 +373,17 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
         $response = $this->getResponse();
         $this->assertStringNotContainsString('N1  - Für den Admin.', $response->getBody());
+    }
+
+    public function testIndexActionRisArticleNumber()
+    {
+        $doc = Document::get($this->documentId);
+        $doc->setArticleNumber('MFJ.197136');
+        $doc->store();
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertStringContainsString('AR  - MFJ.197136', $response->getBody());
     }
 
     public function testIndexActionBibtexDoctypeArticle()
@@ -488,6 +495,17 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         );
     }
 
+    public function testIndexActionBibTexArticleNumber()
+    {
+        $doc = Document::get($this->documentId);
+        $doc->setArticleNumber('MFJ.197136');
+        $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertStringContainsString('pages     = {MFJ.197136}', $response->getBody());
+    }
+
     public function testDownloadActionWithMissingDocIdParam()
     {
         $this->dispatch('/citationExport/index/download');
@@ -526,71 +544,39 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/citationExport/index/download/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
-        $this->assertStringContainsString('UR  - ', $body);
-        $this->assertStringContainsString('/frontdoor/index/index/docId/' . $this->documentId, $body);
+        $this->assertStringContainsString('TY  - GEN', $body);
+        $this->assertStringContainsString('U1  - Sonstiges', $body);
     }
 
-    public function testDownloadActionBibtexDoctypeArticle()
+    /**
+     * @return array[]
+     */
+    public function bibtexDoctypeDataProvider()
     {
-        $this->setDocumentType('article');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@article', false);
+        return [
+            ['article', '@article'],
+            ['book', '@book'],
+            ['bookpart', '@incollection'],
+            ['conferenceobject', '@inproceedings'],
+            ['doctoralthesis', '@phdthesis'],
+            ['masterthesis', '@mastersthesis'],
+            ['preprint', '@unpublished'],
+            ['report', '@techreport'],
+            ['foo', '@misc'],
+        ];
     }
 
-    public function testDownloadActionBibtexDoctypeBook()
+    /**
+     * @param string $docType
+     * @param string $bibtexType
+     * @throws NotFoundException
+     * @dataProvider bibtexDoctypeDataProvider
+     */
+    public function testDownloadActionBibtexDoctype($docType, $bibtexType)
     {
-        $this->setDocumentType('book');
+        $this->setDocumentType($docType);
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@book', false);
-    }
-
-    public function testDownloadActionBibtexDoctypeBookpart()
-    {
-        $this->setDocumentType('bookpart');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@incollection', false);
-    }
-
-    public function testDownloadActionBibtexDoctypeConferenceobject()
-    {
-        $this->setDocumentType('conferenceobject');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@inproceedings', false);
-    }
-
-    public function testDownloadActionBibtexDoctypeDoctoralthesis()
-    {
-        $this->setDocumentType('doctoralthesis');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@phdthesis', false);
-    }
-
-    public function testDownloadActionBibtexDoctypeMasterthesis()
-    {
-        $this->setDocumentType('masterthesis');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@mastersthesis', false);
-    }
-
-    public function testDownloadActionBibtexDoctypePreprint()
-    {
-        $this->setDocumentType('preprint');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@unpublished', false);
-    }
-
-    public function testDownloadActionBibtexDoctypeReport()
-    {
-        $this->setDocumentType('report');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@techreport', false);
-    }
-
-    public function testDownloadActionBibtexMisc()
-    {
-        $this->setDocumentType('foo');
-        $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->checkBibtexAssertions('@misc', false);
+        $this->checkBibtexAssertions($bibtexType, false);
     }
 
     /**
@@ -600,9 +586,10 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testYearIsNotExportedWhenOnlyPublishedYearIsSet()
     {
         $doc = $this->createTestDocument();
+        $doc->setType('conferenceobject');
         $doc->setPublishedYear(2013);
         $docId = $doc->store();
-        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
         $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
         $this->assertQueryContentContains('//pre', "{2013}");
     }
@@ -614,9 +601,10 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testBibtexYearExportWithOnlyPublishedDateSet()
     {
         $doc = $this->createTestDocument();
+        $doc->setType('conferencepaper');
         $doc->setPublishedDate('2012-02-01');
         $docId = $doc->store();
-        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
         $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
         $this->assertQueryContentContains('//pre', "{2012}");
     }
@@ -628,9 +616,10 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testBibtexYearExportWithOnlyCompletedDateSet()
     {
         $doc = $this->createTestDocument();
+        $doc->setType('conferenceslides');
         $doc->setCompletedDate('2012-02-01');
         $docId = $doc->store();
-        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
         $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
         $this->assertQueryContentContains('//pre', "{2012}");
     }
@@ -642,10 +631,11 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testBibtexYearExportWithOnlyCompletedYearSet()
     {
         $doc = $this->createTestDocument();
+        $doc->setType('conferenceproceedings');
         $doc->setCompletedYear(2012);
         $docId = $doc->store();
-        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
+        $this->assertQueryContentContains('//pre', "@proceedings{OPUS4-$docId,");
         $this->assertQueryContentContains('//pre', "{2012}");
     }
 
@@ -655,12 +645,13 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testBibtexYearExportWithEveryDate()
     {
         $doc = $this->createTestDocument();
+        $doc->setType('conferenceobject');
         $doc->setCompletedDate('2015-01-01');
         $doc->setPublishedYear(2012);
         $doc->setPublishedDate('2013-01-01');
         $doc->setCompletedYear(2014);
         $docId = $doc->store();
-        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
         $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
         $this->assertQueryContentContains('//pre', "{2015}");
     }
@@ -671,13 +662,14 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
     public function testBibtexYearExportWithEmptyStrings()
     {
         $doc = $this->createTestDocument();
+        $doc->setType('conferenceproceedings');
         $doc->setCompletedDate('');
         $doc->setCompletedYear(null);
         $doc->setPublishedDate('');
         $doc->setPublishedYear('2015');
         $docId = $doc->store();
-        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
+        $this->assertQueryContentContains('//pre', "@proceedings{OPUS4-$docId,");
         $this->assertQueryContentContains('//pre', "{2015}");
     }
 
@@ -687,7 +679,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $doc->setType('masterthesis');
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "{masterthesis}");
+        $this->assertQueryContentContains('//pre', "@mastersthesis");
     }
 
     public function testBibtexTypeDoctoralthesis()
@@ -696,7 +688,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase
         $doc->setType('doctoralthesis');
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "{doctoralthesis}");
+        $this->assertQueryContentContains('//pre', "@phdthesis");
     }
 
     public function testBibtexNoType()
