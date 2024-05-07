@@ -35,7 +35,7 @@ use Opus\Common\Document;
 class CitationExport_Model_HelperTest extends ControllerTestCase
 {
     /** @var string[] */
-    protected $additionalResources = ['database'];
+    protected $additionalResources = ['database', 'view'];
 
     /** @var int */
     private $documentId;
@@ -241,6 +241,6 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $this->assertStringContainsString('T1  - KOBV', $output);
         $this->assertStringContainsString('T1  - COLN', $output);
-        $this->assertStringContainsString('T2  - Parent Title', $output);
+        $this->assertStringContainsString('T3  - Parent Title', $output);
     }
 }
