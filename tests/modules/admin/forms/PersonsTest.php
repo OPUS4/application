@@ -246,7 +246,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
             $hint = $element->getHint();
             $this->assertNotNull($hint);
-            $this->assertContains('Please select update to trim values when saving.', $hint);
+            $this->assertStringContainsString('Please select update to trim values when saving.', $hint);
         }
     }
 
@@ -469,7 +469,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
         $changes = $form->getChanges();
 
         $this->assertNotNull($changes);
-        $this->assertInternalType('array', $changes);
+        $this->assertIsArray($changes);
         $this->assertCount(2, $changes);
 
         $this->assertArrayHasKey('Email', $changes);
@@ -490,7 +490,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
         $changes = $form->getChanges();
 
         $this->assertNotNull($changes);
-        $this->assertInternalType('array', $changes);
+        $this->assertIsArray($changes);
         $this->assertCount(1, $changes);
 
         $this->assertArrayHasKey('DateOfBirth', $changes);
@@ -507,7 +507,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
         $changes = $form->getChanges();
 
         $this->assertNotNull($changes);
-        $this->assertInternalType('array', $changes);
+        $this->assertIsArray($changes);
         $this->assertCount(1, $changes);
 
         $this->assertArrayHasKey('DateOfBirth', $changes);
@@ -538,9 +538,9 @@ class Admin_Form_PersonsTest extends ControllerTestCase
 
         $output = $form->render($this->getView());
 
-        $this->assertContains('<option value="Köln">Köln</option>', $output);
-        $this->assertContains('<option value="Berlin">Berlin</option>', $output);
-        $this->assertContains('<option value="München">München</option>', $output);
+        $this->assertStringContainsString('<option value="Köln">Köln</option>', $output);
+        $this->assertStringContainsString('<option value="Berlin">Berlin</option>', $output);
+        $this->assertStringContainsString('<option value="München">München</option>', $output);
     }
 
     public function testValidateOneFieldMustBeSelectedForUpdate()
@@ -552,7 +552,7 @@ class Admin_Form_PersonsTest extends ControllerTestCase
         $messages = $form->getErrorMessages();
 
         $this->assertNotNull($messages);
-        $this->assertInternalType('array', $messages);
+        $this->assertIsArray($messages);
         $this->assertCount(1, $messages);
         $this->assertContains('admin_person_error_no_update', $messages);
     }

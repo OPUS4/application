@@ -345,7 +345,7 @@ class Oai_Format_DcTest extends ControllerTestCase
 
         if (preg_match('#<oai_dc:dc.*>#', $xml, $matches)) {
             $startTag = $matches[0];
-            $this->assertContains('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
+            $this->assertStringContainsString('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
         } else {
             $this->fail('element \'oai_dc:dc\' not found');
         }
@@ -397,7 +397,7 @@ class Oai_Format_DcTest extends ControllerTestCase
 
         if (preg_match('#<oai_dc:dc.*>#', $xml, $matches)) {
             $startTag = $matches[0];
-            $this->assertContains('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
+            $this->assertStringContainsString('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
         } else {
             $this->fail('element \'oai_dc:dc\' not found');
         }

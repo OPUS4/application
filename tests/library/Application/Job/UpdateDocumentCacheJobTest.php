@@ -31,6 +31,7 @@
 
 use Opus\Db\DocumentXmlCache;
 use Opus\Licence;
+use Symfony\Component\Console\Output\NullOutput;
 
 class Application_Job_UpdateDocumentCacheJobTest extends ControllerTestCase
 {
@@ -44,6 +45,7 @@ class Application_Job_UpdateDocumentCacheJobTest extends ControllerTestCase
     {
         parent::setUp();
         $this->job = new Application_Job_UpdateDocumentCacheJob();
+        $this->job->setOutput(new NullOutput());
     }
 
     public function testRun()

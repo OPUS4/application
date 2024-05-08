@@ -66,7 +66,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/invalid');
         $this->assertResponseCode(500);
         $body = $this->getResponse()->getBody();
-        $this->assertContains('Plugin invalid not found', $body);
+        $this->assertStringContainsString('Plugin invalid not found', $body);
     }
 
     public function testIndexActionWithoutFormat()
@@ -74,7 +74,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('export format is not specified', $response->getBody());
+        $this->assertStringContainsString('export format is not specified', $response->getBody());
     }
 
     public function testIndexActionWithUnsupportedFormat()
@@ -82,7 +82,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/index/export/unsupporedformat');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('export format is not supported', $response->getBody());
+        $this->assertStringContainsString('export format is not supported', $response->getBody());
     }
 
     public function testIndexActionWithoutQuery()
@@ -90,56 +90,56 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/index/export/xml');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('Unspecified search type', $response->getBody());
+        $this->assertStringContainsString('Unspecified search type', $response->getBody());
     }
 
     public function testIndexActionWithoutStylesheetParam()
     {
         $this->dispatch('/export/index/index/export/xml/query/foo/searchtype/latest');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
-        $response = $this->getResponse();
-        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
-        $this->assertContains('<export timestamp=', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<?xml version="1.0" encoding="utf-8"?>', $body);
+        $this->assertStringContainsString('<export timestamp=', $body);
     }
 
     public function testIndexActionWithStylesheetParam()
     {
         $this->dispatch('/export/index/index/export/xml/query/foo/searchtype/latest/stylesheet/example');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
-        $response = $this->getResponse();
-        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
-        $this->assertContains('<export-example>', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<?xml version="1.0" encoding="utf-8"?>', $body);
+        $this->assertStringContainsString('<export-example>', $body);
     }
 
     public function testIndexActionCollectionSearch()
     {
         $this->dispatch('/export/index/index/searchtype/collection/id/2/export/xml/stylesheet/example');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
-        $response = $this->getResponse();
-        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
-        $this->assertContains('<export-example>', $response->getBody());
-        $this->assertTrue(substr_count($response->getBody(), '<doc>') === 1);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<?xml version="1.0" encoding="utf-8"?>', $body);
+        $this->assertStringContainsString('<export-example>', $body);
+        $this->assertTrue(substr_count($body, '<doc>') === 1);
     }
 
     public function testIndexActionInvalidCollectionSearchMissingIdParam()
     {
         $this->dispatch('/export/index/index/searchtype/collection/export/xml/stylesheet/example');
         $this->assertResponseCode(400);
-        $this->assertContains("Could not browse collection due to missing id parameter.", $this->getResponse()->getBody());
+        $this->assertStringContainsString("Could not browse collection due to missing id parameter.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionInvalidCollectionSearchUnknownId()
     {
         $this->dispatch('/export/index/index/searchtype/collection/id/-1/export/xml/stylesheet/example');
         $this->assertResponseCode(404);
-        $this->assertContains("Collection with id '-1' does not exist.", $this->getResponse()->getBody());
+        $this->assertStringContainsString("Collection with id '-1' does not exist.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionInvalidCollectionSearchUnvisible()
     {
         $this->dispatch('/export/index/index/searchtype/collection/id/23/export/xml/stylesheet/example');
         $this->assertResponseCode(404);
-        $this->assertContains("Collection with id '23' is not visible.", $this->getResponse()->getBody());
+        $this->assertStringContainsString("Collection with id '23' is not visible.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionSeriesSearch()
@@ -147,8 +147,8 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/index/searchtype/series/id/1/export/xml/stylesheet/example');
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $body);
-        $this->assertContains('<export-example>', $body);
+        $this->assertStringContainsString('<?xml version="1.0" encoding="utf-8"?>', $body);
+        $this->assertStringContainsString('<export-example>', $body);
         $this->assertTrue(substr_count($body, '<doc>') === 6);
     }
 
@@ -156,28 +156,28 @@ class Export_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/export/index/index/searchtype/series/export/xml/stylesheet/example');
         $this->assertResponseCode(400);
-        $this->assertContains("Could not browse series due to missing id parameter.", $this->getResponse()->getBody());
+        $this->assertStringContainsString("Could not browse series due to missing id parameter.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionInvalidSeriesSearchUnknownId()
     {
         $this->dispatch('/export/index/index/searchtype/series/id/999999/export/xml/stylesheet/example');
         $this->assertResponseCode(404);
-        $this->assertContains("Series with id '999999' does not exist.", $this->getResponse()->getBody());
+        $this->assertStringContainsString("Series with id '999999' does not exist.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionInvalidSeriesSearchUnvisible()
     {
         $this->dispatch('/export/index/index/searchtype/series/id/3/export/xml/stylesheet/example');
         $this->assertResponseCode(404);
-        $this->assertContains("Series with id '3' is not visible.", $this->getResponse()->getBody());
+        $this->assertStringContainsString("Series with id '3' is not visible.", $this->getResponse()->getBody());
     }
 
     public function testIndexActionInvalidSeriesSearchNoDocuments()
     {
         $this->dispatch('/export/index/index/searchtype/series/id/8/export/xml/stylesheet/example');
         $this->assertResponseCode(404);
-        $this->assertContains("Series with id '8' does not have any published documents.", $this->getResponse()->getBody());
+        $this->assertStringContainsString("Series with id '8' does not have any published documents.", $this->getResponse()->getBody());
     }
 
     /**
@@ -194,7 +194,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/index/export/xml');
 
         $this->assertResponseCode(500);
-        $this->assertContains('missing parameter stylesheet', $this->getResponse()->getBody());
+        $this->assertStringContainsString('missing parameter stylesheet', $this->getResponse()->getBody());
     }
 
     /**
@@ -220,8 +220,8 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/index/searchtype/all/export/xml/stylesheet/example');
         $body = $this->getResponse()->getBody();
 
-        $this->assertNotContains("http://{$host}:{$port}/solr/corethatdoesnotexist", $body);
-        $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $body);
+        $this->assertStringNotContainsString("http://{$host}:{$port}/solr/corethatdoesnotexist", $body);
+        $this->assertStringContainsString("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $body);
         $this->assertResponseCode(503);
     }
 
@@ -277,14 +277,14 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertNotContains("No Opus_Db_Documents with id $docId2 in database.", $body);
-        $this->assertContains('Language="eng" Value="test document for OPUSVIER-1726" Type="main"', $body);
-        $this->assertNotContains('Language="eng" Value="another test document for OPUSVIER-1726" Type="main"', $body);
-        $this->assertContains('<Opus_Document Id="' . $docId1 . '" Language="eng"', $body);
-        $this->assertNotContains('<Opus_Document Id="' . $docId2 . '" Language="eng"', $body);
+        $this->assertStringNotContainsString("No Opus_Db_Documents with id $docId2 in database.", $body);
+        $this->assertStringContainsString('Language="eng" Value="test document for OPUSVIER-1726" Type="main"', $body);
+        $this->assertStringNotContainsString('Language="eng" Value="another test document for OPUSVIER-1726" Type="main"', $body);
+        $this->assertStringContainsString('<Opus_Document Id="' . $docId1 . '" Language="eng"', $body);
+        $this->assertStringNotContainsString('<Opus_Document Id="' . $docId2 . '" Language="eng"', $body);
 
-        $this->assertContains(' doccount="1"', $body); // only the first document can be instantiated (xml output does not contain the second document although it exists in search index)
-        $this->assertContains(' queryhits="2"', $body); // both documents exist in search index, but only the first one exists in database (queryhits contains the number of search hits)
+        $this->assertStringContainsString(' doccount="1"', $body); // only the first document can be instantiated (xml output does not contain the second document although it exists in search index)
+        $this->assertStringContainsString(' queryhits="2"', $body); // both documents exist in search index, but only the first one exists in database (queryhits contains the number of search hits)
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
     }
 
@@ -321,13 +321,13 @@ class Export_IndexControllerTest extends ControllerTestCase
         }
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains('doccount="' . $rows . '"', $body);
-        $this->assertContains('queryhits="' . $numOfTestDocs . '"', $body);
+        $this->assertStringContainsString('doccount="' . $rows . '"', $body);
+        $this->assertStringContainsString('queryhits="' . $numOfTestDocs . '"', $body);
         $this->assertEquals($rows, substr_count($body, 'Language="eng" Value="OPUSVIER-2488" Type="main"'));
-        $this->assertNotContains('Application_Exception', $body);
+        $this->assertStringNotContainsString('Application_Exception', $body);
 
         for ($i = $start; $i < $rows; $i++) {
-            $this->assertContains('<Opus_Document Id="' . $docIds[$i] . '"', $body);
+            $this->assertStringContainsString('<Opus_Document Id="' . $docIds[$i] . '"', $body);
         }
     }
 
@@ -479,8 +479,8 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         $response = $this->getResponse()->getBody();
 
-        $this->assertContains("The given search query is not supported.", $response);
-        $this->assertNotContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $response);
+        $this->assertStringContainsString("The given search query is not supported.", $response);
+        $this->assertStringNotContainsString("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $response);
 
         $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }
@@ -493,7 +493,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('role is not specified', $response->getBody());
+        $this->assertStringContainsString('role is not specified', $response->getBody());
     }
 
     public function testPublistActionWithoutStylesheetValue()
@@ -501,7 +501,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('role is not specified', $response->getBody());
+        $this->assertStringContainsString('role is not specified', $response->getBody());
     }
 
     public function testPublistActionWithoutRoleParameter()
@@ -509,7 +509,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('role is not specified', $response->getBody());
+        $this->assertStringContainsString('role is not specified', $response->getBody());
     }
 
     public function testPublistActionWithoutRoleArgument()
@@ -517,7 +517,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default/role');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('role is not specified', $response->getBody());
+        $this->assertStringContainsString('role is not specified', $response->getBody());
     }
 
     public function testPublistActionWithoutNumberParameter()
@@ -525,7 +525,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default/role/publists');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('number is not specified', $response->getBody());
+        $this->assertStringContainsString('number is not specified', $response->getBody());
     }
 
     public function testPublistActionWithoutNumberArgument()
@@ -533,7 +533,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('number is not specified', $response->getBody());
+        $this->assertStringContainsString('number is not specified', $response->getBody());
     }
 
     /**
@@ -544,7 +544,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/example/role/publists/number/coll_visible');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('given stylesheet does not exist or is not readable', $response->getBody());
+        $this->assertStringContainsString('given stylesheet does not exist or is not readable', $response->getBody());
     }
 
     /**
@@ -555,7 +555,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default/role/nonexistent/number/coll_visible');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('specified role does not exist', $response->getBody());
+        $this->assertStringContainsString('specified role does not exist', $response->getBody());
     }
 
     public function testPublistActionWithInvisibleRole()
@@ -563,7 +563,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default/role/no-root-test/number/foo');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('specified role is invisible', $response->getBody());
+        $this->assertStringContainsString('specified role is invisible', $response->getBody());
     }
 
     public function testPublistActionWithNonexistentNumber()
@@ -571,7 +571,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/nonexistent');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('specified number does not exist', $response->getBody());
+        $this->assertStringContainsString('specified number does not exist', $response->getBody());
     }
 
     public function testPublistActionWithInvisibleCollection()
@@ -579,7 +579,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll_invisible');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('specified collection is invisible', $response->getBody());
+        $this->assertStringContainsString('specified collection is invisible', $response->getBody());
     }
 
     public function testPublistActionWithVisibleCollection()
@@ -587,7 +587,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll_visible');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
-        $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
+        $this->assertStringContainsString('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
     }
 
     public function testPublistActionWithCollectionNumberIncludingWhiteSpace()
@@ -595,7 +595,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll%20whitespace');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
-        $this->assertContains('<h1>Publikationsliste mit Whitespace</h1>', $response->getBody());
+        $this->assertStringContainsString('<h1>Publikationsliste mit Whitespace</h1>', $response->getBody());
     }
 
     public function testPublistActionWithCollectionNumberIncludingSlash()
@@ -603,7 +603,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll%2Fslash');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
-        $this->assertContains('<h1>Publikationsliste mit Slash</h1>', $response->getBody());
+        $this->assertStringContainsString('<h1>Publikationsliste mit Slash</h1>', $response->getBody());
     }
 
     /**
@@ -614,7 +614,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
-        $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
+        $this->assertStringContainsString('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
     }
 
     public function testPublistActionWithoutStylesheetParameterInUrlAndInvalidConfigParameter()
@@ -632,7 +632,7 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('given stylesheet does not exist or is not readable', $response->getBody());
+        $this->assertStringContainsString('given stylesheet does not exist or is not readable', $response->getBody());
     }
 
     public function testPublistActionWithValidStylesheetInConfig()
@@ -658,9 +658,9 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertContains('<export timestamp=', $response->getBody());
-        $this->assertContains('</export>', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<export timestamp=', $body);
+        $this->assertStringContainsString('</export>', $body);
     }
 
     /**
@@ -670,9 +670,9 @@ class Export_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
-        $response = $this->getResponse();
-        $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
-        $normalizedResponseBody = preg_replace('/\n/', "", $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<h1>Sichtbare Publikationsliste</h1>', $body);
+        $normalizedResponseBody = preg_replace('/\n/', "", $body);
         $this->assertRegExp(
             '/<a href="#opus-year-2010">2010<\/a>.*<a href="#opus-year-2009">2009<\/a>/',
             $normalizedResponseBody
@@ -728,9 +728,9 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
         $this->assertResponseCode(200, $this->getResponse()->getBody());
-        $response = $this->getResponse();
-        $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
-        $normalizedResponseBody = preg_replace('/\n/', "", $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<h1>Sichtbare Publikationsliste</h1>', $body);
+        $normalizedResponseBody = preg_replace('/\n/', "", $body);
         $this->assertRegExp('/<a href="#opus-year-2011">2011<\/a>.*<a href="#opus-year-2009">2009<\/a>/', $normalizedResponseBody);
         $this->assertRegExp('/<h4 id="opus-year-2011">2011<\/h4>.*<h4 id="opus-year-2009">2009<\/h4>/', $normalizedResponseBody);
     }
@@ -753,11 +753,11 @@ class Export_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
-        $response = $this->getResponse();
-        $this->assertNotContains(' xmlns=', $response->getBody());
-        $this->assertNotContains(' xmlns:php=', $response->getBody());
-        $this->assertNotContains(' xmlns:xsi=', $response->getBody());
-        $this->assertNotContains(' xmlns:xsl=', $response->getBody());
+        $output = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString(' xmlns=', $output);
+        $this->assertStringNotContainsString(' xmlns:php=', $output);
+        $this->assertStringNotContainsString(' xmlns:xsi=', $output);
+        $this->assertStringNotContainsString(' xmlns:xsl=', $output);
     }
 
     /**
@@ -767,35 +767,35 @@ class Export_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
-        $response = $this->getResponse();
+        $body = $this->getResponse()->getBody();
 
         /* id */
-        $this->assertContains(' id="opus-publist"', $response->getBody());
-        $this->assertContains(' id="opus-header"', $response->getBody());
-        $this->assertNotContains(' id="header"', $response->getBody());
-        $this->assertNotContains(' id="publist"', $response->getBody());
-        $this->assertNotRegExp('/ id="[a-z]+"/', $response->getBody());
+        $this->assertStringContainsString(' id="opus-publist"', $body);
+        $this->assertStringContainsString(' id="opus-header"', $body);
+        $this->assertStringNotContainsString(' id="header"', $body);
+        $this->assertStringNotContainsString(' id="publist"', $body);
+        $this->assertNotRegExp('/ id="[a-z]+"/', $body);
 
         /* class */
-        $this->assertContains(' class="opus-persons"', $response->getBody());
-        $this->assertContains(' class="opus-year"', $response->getBody());
-        $this->assertContains(' class="opus-title"', $response->getBody());
-        $this->assertContains(' class="opus-metadata"', $response->getBody());
-        $this->assertContains(' class="opus-links"', $response->getBody());
-        $this->assertNotContains(' class="persons"', $response->getBody());
-        $this->assertNotContains(' class="year"', $response->getBody());
-        $this->assertNotContains(' class="title"', $response->getBody());
-        $this->assertNotContains(' class="metadata"', $response->getBody());
-        $this->assertNotContains(' class="links"', $response->getBody());
-        $this->assertNotRegExp('/ class="[a-z]+"/', $response->getBody());
+        $this->assertStringContainsString(' class="opus-persons"', $body);
+        $this->assertStringContainsString(' class="opus-year"', $body);
+        $this->assertStringContainsString(' class="opus-title"', $body);
+        $this->assertStringContainsString(' class="opus-metadata"', $body);
+        $this->assertStringContainsString(' class="opus-links"', $body);
+        $this->assertStringNotContainsString(' class="persons"', $body);
+        $this->assertStringNotContainsString(' class="year"', $body);
+        $this->assertStringNotContainsString(' class="title"', $body);
+        $this->assertStringNotContainsString(' class="metadata"', $body);
+        $this->assertStringNotContainsString(' class="links"', $body);
+        $this->assertNotRegExp('/ class="[a-z]+"/', $body);
 
         /* anchor */
-        $this->assertContains(' href="#opus-year-2010"', $response->getBody());
-        $this->assertContains(' id="opus-year-2010"', $response->getBody());
-        $this->assertNotContains(' href="#L2010', $response->getBody());
-        $this->assertNotContains(' id="L2010"', $response->getBody());
-        $this->assertNotRegExp('/ href="#L[0-9]{4}"/', $response->getBody());
-        $this->assertNotRegExp('/ id="L[0-9]{4}"/', $response->getBody());
+        $this->assertStringContainsString(' href="#opus-year-2010"', $body);
+        $this->assertStringContainsString(' id="opus-year-2010"', $body);
+        $this->assertStringNotContainsString(' href="#L2010', $body);
+        $this->assertStringNotContainsString(' id="L2010"', $body);
+        $this->assertNotRegExp('/ href="#L[0-9]{4}"/', $body);
+        $this->assertNotRegExp('/ id="L[0-9]{4}"/', $body);
     }
 
     /**
@@ -844,10 +844,11 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
-        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
-        $this->assertContains(urlencode('datei mit unüblichem Namen.xhtml'), $response->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString(urlencode('datei mit unüblichem Namen.xhtml'), $body);
     }
 
     public function testXMLExportForFrontdoor()
@@ -859,10 +860,10 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/export/index/index/docId/' . $docId . '/searchtype/id/export/xml/stylesheet/example');
 
         $this->assertResponseCode(200, $this->getResponse()->getBody());
-        $response = $this->getResponse();
-        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
-        $this->assertContains('<export-example>', $response->getBody());
-        $this->assertContains($docId, $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<?xml version="1.0" encoding="utf-8"?>', $body);
+        $this->assertStringContainsString('<export-example>', $body);
+        $this->assertStringContainsString($docId, $body);
     }
 
     /**
@@ -907,7 +908,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(401);
-        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
+        $this->assertStringContainsString('export of unpublished documents is not allowed', $this->getResponse()->getBody());
     }
 
     /**

@@ -62,6 +62,9 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     /** @var Oai_Model_XmlFactory */
     private $xmlFactory;
 
+    /** @var Oai_Model_Set_SetsManager */
+    private $setsManager;
+
     /** @var string */
     private $scriptPath;
 
@@ -473,9 +476,8 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         $this->proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->xml->appendChild($this->xml->createElement('Documents'));
 
-        $oaiSets = new Oai_Model_Sets();
-
-        $sets = $oaiSets->getSets();
+        $oaiSetsManager = $this->getSetsManager();
+        $sets           = $oaiSetsManager->getSets();
 
         foreach ($sets as $type => $name) {
             $opusDoc   = $this->xml->createElement('Opus_Sets');
@@ -542,7 +544,6 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
             $oaiRequest['metadataPrefix']     = $metadataPrefix;
             $oaiRequest['metadataPrefixMode'] = strtolower($metadataPrefix);
             $this->proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
-            $this->proc->setParameter('', 'oai_metadataPrefixMode', strtolower($metadataPrefix));
             $resumed = true;
         } else {
             // no resumptionToken is given
@@ -653,22 +654,11 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
 
         $node = $this->xml->importNode($domNode, true);
 
-        $dcTypeHelper = new Application_View_Helper_DcType();
+        $setsManager = $this->getSetsManager();
+        $sets        = $setsManager->getSets($document);
 
-        $type = $document->getType();
-        $this->addSpecInformation($node, 'doc-type:' . $dcTypeHelper->dcType($type));
-
-        $bibliography = $document->getBelongsToBibliography() === 1 ? 'true' : 'false';
-        $this->addSpecInformation($node, 'bibliography:' . $bibliography);
-
-        $logger   = $this->getLogger();
-        $setSpecs = Oai_Model_SetSpec::getSetSpecsFromCollections($document->getCollection());
-        foreach ($setSpecs as $setSpec) {
-            if (preg_match("/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/", $setSpec)) {
-                $this->addSpecInformation($node, $setSpec);
-                continue;
-            }
-            $logger->info("skipping invalid setspec: " . $setSpec);
+        foreach ($sets as $setSpec => $set) {
+            $this->addSpecInformation($node, $setSpec);
         }
 
         $this->xml->documentElement->appendChild($node);
@@ -1404,13 +1394,12 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
     }
 
     /**
-     * Get the initialized finder for the given metadata prefix
+     * Returns the initialized finder.
      *
-     * @param string $metadataPrefix
      * @return DocumentFinderInterface
      * @throws ConfigException
      */
-    public function getFinder($metadataPrefix)
+    public function getFinder()
     {
         $today = date('Y-m-d', time());
 
@@ -1453,5 +1442,19 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
             Log::get()->err($message);
             throw new Exception($message);
         }
+    }
+
+    /**
+     * Returns an instance of the sets manager.
+     *
+     * @return Oai_Model_Set_SetsManager
+     */
+    public function getSetsManager()
+    {
+        if ($this->setsManager === null) {
+            $this->setsManager = new Oai_Model_Set_SetsManager();
+        }
+
+        return $this->setsManager;
     }
 }

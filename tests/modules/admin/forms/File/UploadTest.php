@@ -136,7 +136,7 @@ class Admin_Form_File_UploadTest extends ControllerTestCase
 
         $fileInfo = $form->getFileInfo();
 
-        $this->assertInternalType('array', $fileInfo);
+        $this->assertIsArray($fileInfo);
         $this->assertCount(0, $fileInfo);
     }
 

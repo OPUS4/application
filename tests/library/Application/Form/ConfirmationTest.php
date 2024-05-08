@@ -128,7 +128,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     {
         $form = new Application_Form_Confirmation(Licence::class);
         $form->setModel(Licence::get(4));
-        $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
+        $this->assertStringContainsString('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
     }
 
     public function testGetModelDisplayNameNoModel()
@@ -141,7 +141,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     {
         $form = new Application_Form_Confirmation(Licence::class);
         $form->setModel(Licence::get(4));
-        $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
+        $this->assertStringContainsString('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
 
         $form->setModelDisplayName('custom display name');
 
@@ -149,7 +149,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
         $form->setModelDisplayName(null);
 
-        $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
+        $this->assertStringContainsString('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
     }
 
     public function testIsConfirmedYes()
@@ -300,7 +300,9 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
         $this->form->setModel($licence);
 
-        $this->assertNotContains('<h1>Name mit Tags</h1>', $this->form->renderQuestion());
-        $this->assertContains('&lt;h1&gt;Name mit Tags&lt;/h1&gt;', $this->form->renderQuestion());
+        $output = $this->form->renderQuestion();
+
+        $this->assertStringNotContainsString('<h1>Name mit Tags</h1>', $output);
+        $this->assertStringContainsString('&lt;h1&gt;Name mit Tags&lt;/h1&gt;', $output);
     }
 }

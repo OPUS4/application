@@ -192,7 +192,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
 
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Your regular expression for your filename-validation is not valid.', $messages[0]);
+        $this->assertStringContainsString('Your regular expression for your filename-validation is not valid.', $messages[0]);
         $this->assertEquals('', $validator->getFilenameFormat());
     }
 

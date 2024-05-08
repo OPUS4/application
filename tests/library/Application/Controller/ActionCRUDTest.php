@@ -262,7 +262,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         ]);
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertEmpty($result);
     }
 
@@ -276,7 +276,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         ]);
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('action', $result);
         $this->assertEquals('show', $result['action']);
         $this->assertArrayHasKey('message', $result);
@@ -306,7 +306,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         ]);
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayNotHasKey('action', $result);
         $this->assertArrayHasKey('message', $result);
         $this->assertEquals(Application_Controller_ActionCRUD::SAVE_SUCCESS, $result['message']);
@@ -339,7 +339,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         ]);
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertEquals(1, count($result));
         $this->assertArrayHasKey('message', $result);
         $this->assertEquals(Application_Controller_ActionCRUD::INVALID_ID, $result['message']);
@@ -350,7 +350,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $result = $this->controller->handleModelPost([]);
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertEmpty($result);
     }
 
@@ -367,7 +367,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $result = $this->controller->handleModelPost();
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertEquals(1, count($result));
         $this->assertArrayHasKey('message', $result);
         $this->assertEquals(Application_Controller_ActionCRUD::INVALID_ID, $result['message']);
@@ -378,7 +378,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $result = $this->controller->handleConfirmationPost([]);
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertEquals(1, count($result));
         $this->assertArrayHasKey('message', $result);
         $this->assertEquals(Application_Controller_ActionCRUD::INVALID_ID, $result['message']);
@@ -392,7 +392,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         ]);
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertEmpty($result);
     }
 
@@ -404,7 +404,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         ]);
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertEquals(1, count($result));
         $this->assertArrayHasKey('message', $result);
         $this->assertEquals(Application_Controller_ActionCRUD::INVALID_ID, $result['message']);
@@ -420,7 +420,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         $result = $this->controller->handleConfirmationPost();
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertEmpty($result);
     }
 
@@ -440,7 +440,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
         ]);
 
         $this->assertNotNull($result);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertEquals(1, count($result));
         $this->assertArrayHasKey('message', $result);
         $this->assertEquals(Application_Controller_ActionCRUD::DELETE_SUCCESS, $result['message']);

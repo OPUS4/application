@@ -70,7 +70,7 @@ class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase
     {
         $files = $this->helper->listFiles($this->folder);
 
-        $this->assertInternalType('array', $files);
+        $this->assertIsArray($files);
         $this->assertEquals(2, count($files));
 
         foreach ($files as $file) {
@@ -83,7 +83,7 @@ class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase
     {
         $files = $this->helper->listFiles($this->folder, true);
 
-        $this->assertInternalType('array', $files);
+        $this->assertIsArray($files);
         $this->assertEquals(3, count($files));
 
         foreach ($files as $file) {

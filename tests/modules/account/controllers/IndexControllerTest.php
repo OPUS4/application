@@ -139,7 +139,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->assertTrue($account->isPasswordCorrect('testpwd'));
         $this->assertFalse($account->isPasswordCorrect('newpassword'));
 
-        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<ul class="errors">', $this->getResponse()->getBody());
     }
 
     public function testChangePasswordFailsOnNoMatch()
@@ -165,7 +165,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $this->assertTrue($account->isPasswordCorrect('testpwd'));
         $this->assertFalse($account->isPasswordCorrect('newpassword'));
 
-        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<ul class="errors">', $this->getResponse()->getBody());
     }
 
     /**
@@ -194,7 +194,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $account = Account::fetchAccountByLogin('john');
         $this->assertTrue($account->isPasswordCorrect('newpassword'));
 
-        $this->assertNotContains('<ul class="errors">', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('<ul class="errors">', $this->getResponse()->getBody());
     }
 
     /**
@@ -223,7 +223,7 @@ class Account_IndexControllerTest extends ControllerTestCase
         $account = Account::fetchAccountByLogin('john');
         $this->assertTrue($account->isPasswordCorrect('new@pwd$%'));
 
-        $this->assertNotContains('<ul class="errors">', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('<ul class="errors">', $this->getResponse()->getBody());
     }
 
     /**

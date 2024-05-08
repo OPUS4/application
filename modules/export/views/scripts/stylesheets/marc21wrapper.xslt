@@ -35,8 +35,8 @@
     <!-- TODO Abhängigkeit zwischen Modulen auflösen (hier wird Datei aus oai-Module genutzt) -->
     <xsl:include href="../../../../oai/views/scripts/index/prefixes/marc21.xslt"/>
 
-    <xsl:template match="Opus_Document">
-        <xsl:apply-templates select="." mode="marc21" />
+    <xsl:template match="Opus_Document" mode="export">
+        <xsl:apply-templates select="." />
     </xsl:template>
 
 </xsl:stylesheet>

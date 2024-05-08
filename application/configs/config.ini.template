@@ -134,6 +134,11 @@ orcid.linkAuthor.frontdoor = 1
 ; GND SETTINGS
 gnd.linkAuthor.frontdoor = 1
 
+; UNION CATALOGUE SETTINGS
+; On the frontdoor, OPUS can link a union catalogue id to the corresponding entry in the union catalogue. 
+; To that purpose, enter the request URL to a single entry in your union catalogue here.
+; unionCat.requestUrl = 'https://opac.k10plus.de/DB=2.299/PPNSET?PRS=HOL&HILN=888&INDEXSET=21&PPN=' ; Request URL for a single catalogue entry by union catalogue id (PPN) in K10Plus
+
 ;DOCUMENTTYPE SETTINGS
 ; You can define which document types should be shown in the publish module or
 ; which ones should be excluded (comma separated names of XML files without
