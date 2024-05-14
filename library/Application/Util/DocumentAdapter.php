@@ -334,10 +334,12 @@ class Application_Util_DocumentAdapter
 
     /**
      * @return bool
+     *
+     * TODO PHP7 on old systems getBelongsToBibliography returns strings ("0" or "1")
      */
     public function isBelongsToBibliography()
     {
-        return $this->document->getBelongsToBibliography() === 1;
+        return filter_var($this->document->getBelongsToBibliography(), FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
