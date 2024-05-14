@@ -113,6 +113,32 @@ class Application_Util_DocumentAdapterTest extends ControllerTestCase
         $this->assertFalse($docAdapter->isBelongsToBibliography());
     }
 
+    public function testIsBelongsToBibliographyTrueWithStringValue()
+    {
+        $view = $this->getView();
+
+        $doc = $this->createTestDocument();
+
+        $doc->setBelongsToBibliography('1');
+
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
+
+        $this->assertTrue($docAdapter->isBelongsToBibliography());
+    }
+
+    public function testIsBelongsToBibliographyFalseWithStringValue()
+    {
+        $view = $this->getView();
+
+        $doc = $this->createTestDocument();
+
+        $doc->setBelongsToBibliography('0');
+
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
+
+        $this->assertFalse($docAdapter->isBelongsToBibliography());
+    }
+
     /**
      * Tests returning title in document language.
      */

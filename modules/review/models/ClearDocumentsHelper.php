@@ -38,7 +38,7 @@ use Opus\Common\UserRole;
 /**
  * Contains code for clearing documents (switching to published state).
  */
-class Review_Model_ClearDocumentsHelper
+class Review_Model_ClearDocumentsHelper extends Application_Model_Abstract
 {
     /**
      * Publishes documents and adds the given Person as referee.
@@ -67,9 +67,11 @@ class Review_Model_ClearDocumentsHelper
                 $document->setPublishedDate($date);
             }
 
-            $guestRole = UserRole::fetchByName('guest');
-            foreach ($document->getFile() as $file) {
-                $guestRole->appendAccessFile($file->getId());
+            if ($this->isAddGuestAccessEnabled()) {
+                $guestRole = UserRole::fetchByName('guest');
+                foreach ($document->getFile() as $file) {
+                    $guestRole->appendAccessFile($file->getId());
+                }
             }
 
             if (isset($person)) {
@@ -84,6 +86,17 @@ class Review_Model_ClearDocumentsHelper
             $document->store();
             $guestRole->store();
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAddGuestAccessEnabled()
+    {
+        $config = $this->getConfig();
+
+        return ! isset($config->workflow->stateChange->published->addGuestAccess) ||
+            filter_var($config->workflow->stateChange->published->addGuestAccess, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**

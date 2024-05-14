@@ -1,5 +1,92 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.5 - 2024-03-12
+
+Problem auf manchen Systemen bei der Anzeige von `BelongsToBibliography` 
+("Bibl.") in der Dokumentenverwaltung behoben. 
+https://github.com/OPUS4/application/issues/1190
+
+## Patch Release 4.8.0.4 - 2024-01-09
+
+Fehler beim Löschen mehrerer Dateien von einem Dokument behoben.
+https://github.com/OPUS4/application/issues/1174
+
+### Review-Modul
+
+Beim Freischalten im Review-Modul, bekommt die Rolle **guest** automatisch
+Zugriff auf die Dateien, der freigeschalteten Dokumente. Das kann nun mit
+einer neuen Option (`workflow.stateChange.published.addGuestAccess = 0`) 
+abgeschaltet werden. 
+https://github.com/OPUS4/application/issues/1176
+
+In der Standardkonfiguration ist die Option aktiviert, um in einem Patch 
+Release, das Verhalten von OPUS 4 nicht zu verändern. In einer kommenden 
+Version wird sich der Defaultwert vermutlich ändern.
+
+Die Zugriffsrechte auf die Dateien werden beim Freischalten einzelner 
+Dokumente in der Administration nicht verändert, unabhängig von der neuen 
+Option. Das Verhalten der verschiedenen Möglichkeiten zur Freigabe wird in
+Zukunft vereinheitlicht werden.
+https://github.com/OPUS4/application/issues/1177
+
+## Patch Release 4.8.0.3 - 2023-11-28
+
+Das `bin/opus4` Kommandozeilentool wurde um zwei Kommandos erweitert.
+
+- document:duplicates
+- document:diff
+
+Hilfe zu den Kommandos kann mit `help` angezeigt werden. Die Namen 
+der Kommandos können abgekürzt werden.
+
+    $ bin/opus4 help doc:dup
+
+`Document:duplicates` dient dazu Dokumente zu mehrfach auftauchenden 
+DOI-Werten zu finden. Die zu prüfenden DOIs können angegeben oder die 
+gesamte Datenbank durchsucht werden. Es kann ein Report im CSV Format
+generiert werden, der Links zu den gefundenen Dokumenten enthält.
+
+`Document:diff` zeigt die Unterschiede zwischen Dokumenten. Die IDs 
+von Dokumenten können direkt angegeben werden oder es kann mit einer 
+DOI nach Dokumenten gesucht werden.
+
+Vorschläge und Hinweise zu den Kommandos können gerne auf GitHub oder
+in der OPUS 4 Tester Mailingliste eingebracht werden.
+
+https://github.com/orgs/OPUS4/discussions
+
+## Patch Release 4.8.0.2 - 2023-08-29
+
+Es wurde ein Fehler bei der Javascript-Validierung von ISSNs behoben. 
+https://github.com/OPUS4/application/issues/1098
+
+## Patch Release 4.8.0.1 - 2023-08-15
+
+Es wurde ein Fehler behoben, bei dem Personen im Metadaten-Formular 
+unter Umständen nicht mehr angezeigt wurden.
+
+https://github.com/OPUS4/application/issues/1068
+
+### BibTeX-Import
+
+Außerdem wurde der BibTeX-Import erweitert. Beim Mapping von Titeln
+kann jetzt die Sprache angegeben werden und es kann auf alle Titel-Typen
+gemappt werden. 
+
+https://github.com/OPUS4/opus4-bibtex/issues/67
+
+In Personen-Feldern können nun Identifier mit angegeben werden.
+
+https://github.com/OPUS4/opus4-bibtex/issues/69
+
+Die Personen-Rolle in OPUS 4 kann jetzt im Mapping konfiguriert werden,
+damit der BibTeX-Feldname nicht mehr mit der Rolle übereinstimmen muss.
+
+https://github.com/OPUS4/opus4-bibtex/issues/70
+
+Für weitere Änderungen am OPUS4-BibTeX Package, siehe hier: 
+https://github.com/OPUS4/opus4-bibtex/releases/tag/4.8.0.1
+
 ## Release 4.8 - 2023-04-25
 
 Für diesen Release wurden sehr viele Änderungen am Code von OPUS 4 

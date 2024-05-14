@@ -181,11 +181,17 @@ IssnValidation.prototype.validateISSN = function (value) {
 IssnValidation.prototype.calculateCheckDigitISSN = function (value) {
     var z          = value;
     var checkdigit = 0;
-    var check      = (8 * z[0] + 7 * z[1] + 6 * z[2] + 5 * z[3] + 4 * z[5] + 3 * z[6] + 2 * z[7]);
-    if (11 - (check % 11) === 10) {
-        checkdigit = "X";
-    } else {
-        checkdigit = 11 - (check % 11);
+    var check      = (8 * z[0] + 7 * z[1] + 6 * z[2] + 5 * z[3] + 4 * z[5] + 3 * z[6] + 2 * z[7]) % 11;
+
+    switch (check) {
+        case 0:
+            checkdigit = "0";
+            break;
+        case 1:
+            checkdigit = "X";
+            break;
+        default:
+            checkdigit = 11 - check;
     }
 
     return checkdigit;
