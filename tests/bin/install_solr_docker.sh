@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 #
-# Script to install Solr. By default, version 9.4.0 will be installed.
+# Script to install Solr. By default, version 9.5.0 will be installed.
 # Another Solr version can be specified using the `--version` option.
 
 # Define variables and their default values
-version="9.4.0"
+version="9.5.0"
 
 # Parse command line options
 while [ $# -gt 0 ]; do
@@ -27,7 +27,7 @@ done
 # Check --version input
 if ! [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   echo "Unrecognized version number: $version"
-  echo "The --version option requires a 3-digit version number, e.g.: 9.4.0"
+  echo "The --version option requires a 3-digit version number, e.g.: 9.5.0"
   exit 1
 fi
 
