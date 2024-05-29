@@ -25,7 +25,7 @@ if ($licence !== null) {
     $helper->log("'{$licenceName}' licence seems to be present in database.");
 }
 
-if ($helper->askYesNo("Add '{$licenceName}' licence to database [Y|n]? ")) {
+if ($helper->askYesNo("Add '{$licenceName}' licence to database [Y|n]? ", true)) {
     $helper->log("Add '{$licenceName}' licence ...");
 
     $database = new Database();
