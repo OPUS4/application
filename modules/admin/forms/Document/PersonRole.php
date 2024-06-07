@@ -190,7 +190,11 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm
      */
     public function sortSubFormsBySortOrder()
     {
-        $subforms = $this->getSubForms();
+        if ($this->valuesSubform !== null) {
+            $subforms = $this->valuesSubform->getSubForms();
+        } else {
+            $subforms = [];
+        }
 
         $digitsOrder     = strlen(count($subforms));
         $maxSortOrder    = $this->getMaxSortOrder($subforms);

@@ -76,6 +76,15 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     /** @var array */
     private $columns;
 
+    /** @var Zend_Form_SubForm */
+    private $valuesSubform;
+
+    /** @var Zend_Form_SubForm */
+    private $headerSubform;
+
+    /** @var Zend_Form_SubForm */
+    private $footerSubform;
+
     /**
      * Konstruiert Instanz von Fomular.
      *
@@ -138,6 +147,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         } else {
             $this->getDecorator('FieldsetWithButtons')->setLegendButtons(self::ELEMENT_ADD);
         }
+
+        $this->valuesSubform = new Zend_Form_SubForm();
+        $this->valuesSubform->setDecorators(['FormElements']);
+        $this->addSubForm($this->valuesSubform, 'Values');
     }
 
     protected function initButton()
@@ -344,7 +357,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         $subForm->setOrder($position);
 
         $this->setOddEven($subForm);
-        $this->addSubForm($subForm, $this->getSubFormBaseName() . $position);
+        $this->valuesSubform->addSubForm($subForm, $this->getSubFormBaseName() . $position);
 
         return $subForm;
     }
@@ -355,7 +368,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     public function removeSubForm($name)
     {
-        $result = parent::removeSubForm($name);
+        $result = $this->valuesSubform->removeSubForm($name);
         $this->removeGapsInSubFormOrder();
         return $result;
     }
@@ -510,9 +523,9 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     protected function removeSubFormAndFixOrder($name)
     {
-        $order = $this->getSubForm($name)->getOrder();
+        $order = $this->valuesSubform->getSubForm($name)->getOrder();
 
-        $this->removeSubForm($name);
+        $this->valuesSubform->removeSubForm($name);
         $this->removeGapsInSubFormOrder();
 
         return $order;
@@ -531,7 +544,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     protected function removeGapsInSubFormOrder()
     {
-        $subforms = $this->getSubForms();
+        $subforms = $this->valuesSubform->getSubForms();
 
         $renamedSubforms = [];
 
@@ -545,7 +558,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             $pos++;
         }
 
-        $this->setSubForms($renamedSubforms);
+        $this->valuesSubform->setSubForms($renamedSubforms);
     }
 
     /**
@@ -555,7 +568,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     public function appendSubForm()
     {
-        $subforms = $this->getSubForms();
+        $subforms = $this->valuesSubform->getSubForms();
 
         return $this->addSubFormAndFixOrder(count($subforms));
     }
@@ -572,7 +585,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     public function determineSubFormForAnchor($removedPosition)
     {
-        $subforms = $this->getSubForms();
+        $subforms = $this->valuesSubform->getSubForms();
 
         $subformCount = count($subforms);
 
@@ -580,10 +593,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             return $this;
         } elseif ($removedPosition < $subformCount) {
             $keys = array_keys($subforms);
-            return $this->getSubForm($keys[$removedPosition]);
+            return $this->valuesSubform->getSubForm($keys[$removedPosition]);
         } else {
             $keys = array_keys($subforms);
-            return $this->getSubForm($keys[$subformCount - 1]);
+            return $this->valuesSubform->getSubForm($keys[$subformCount - 1]);
         }
     }
 
@@ -637,7 +650,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     public function isEmpty()
     {
-        return count($this->getSubForms()) === 0;
+        return count($this->valuesSubform->getSubForms()) === 0;
     }
 
     /**
