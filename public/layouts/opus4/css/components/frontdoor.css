@@ -235,7 +235,8 @@ table.frontdoordata {
   margin-top: 0;
 }
 
-.frontdoordata td>*:last-child {
+/** Fixes space below notes in metadata table. **/
+.frontdoordata td>pre.preserve-spaces {
   margin-bottom: 0;
 }
 
