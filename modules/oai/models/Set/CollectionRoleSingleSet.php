@@ -104,7 +104,10 @@ class Oai_Model_Set_CollectionRoleSingleSet extends Oai_Model_Set_CollectionSets
                 Oai_Model_Error::NORECORDSMATCH
             );
         }
+
         $finder->setCollectionRoleId($role->getId());
+        $visibleCollections = $role->getVisibleCollections();
+        $finder->setCollectionId($visibleCollections);
     }
 
     /**
