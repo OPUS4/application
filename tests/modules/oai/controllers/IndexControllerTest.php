@@ -3561,4 +3561,38 @@ class Oai_IndexControllerTest extends ControllerTestCase
             'Response must not contains empty \'<metadata/>\' elements.'
         );
     }
+
+    public function testOpenAccessSetWithHiddenCollection()
+    {
+        $oaRole  = CollectionRole::fetchByName('open_access');
+        $openCol = $oaRole->getCollectionByOaiSubset('open_access');
+
+        $closedCol = Collection::new();
+        $closedCol->setName('closed_access');
+        $closedCol->setVisible(false);
+
+        $rootCol = $oaRole->getRootCollection();
+        $rootCol->addLastChild($closedCol);
+        $oaRole->store();
+
+        $openDoc = $this->createTestDocument();
+        $openDoc->setServerState(Document::STATE_PUBLISHED);
+        $openDoc->addCollection($openCol);
+        $openDoc->store();
+
+        $closedDoc = $this->createTestDocument();
+        $closedDoc->setServerState(Document::STATE_PUBLISHED);
+        $closedDoc->addCollection($closedCol);
+        $closedDoc->store();
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=open_access');
+
+        $closedCol->delete();
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathCount('//oai:record', 1);
+    }
 }
