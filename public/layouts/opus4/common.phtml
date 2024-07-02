@@ -27,6 +27,9 @@
  *
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ *
+ * TODO remove old CSS files that are not needed anymore
+ *      fontawesome min files and old fonts .eot, .svg, .woff
  */
 
 use Opus\Common\Config;
@@ -34,6 +37,8 @@ use Opus\Common\Config;
 $config = Config::get();
 
 $pageLanguage = Application_Translate::getInstance()->getLocale();
+
+$this->headMeta()->prependName('viewport', 'width=device-width,initial-scale=1.0,minimum-scale=1.0');
 
 /**
  * Prevent indexing and following of links by web crawlers. Dynamic search pages should not be indexed, since their
@@ -62,14 +67,41 @@ if (isset($this->title)) {
     }
 }
 
+$this->headLink()->prependStylesheet($this->layoutPath() . '/css/custom.css');
+$this->moduleCss(); // TODO currently not used - still useful for the future?
+$this->headLink()->prependStylesheet($this->layoutPath() . '/css/print.css', 'print');
+
+if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account']) || filter_var($config->themes->legacyCss, FILTER_VALIDATE_BOOLEAN)) {
+    $this->headLink()
+        ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
+        ->prependStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
+        ->prependStylesheet($this->layoutPath() . '/fontawesome/css/solid.css') // TODO CSS entfernen?
+        ->prependStylesheet($this->layoutPath() . '/fontawesome/css/fontawesome.min.css'); // TODO CSS entfernen?
+} else {
+    $this->headLink()
+        ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
+        ->prependStylesheet($this->layoutPath() . '/css/theme/theme.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . "/css/theme/{$this->selectedThemeCss()}", 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/layout/layout.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/admin--overrides.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/login.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/help.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/publish.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/doi-import.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/frontdoor.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/browse.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/search.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/pager.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/messages.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/components/button.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/base/base.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/base/fontawesome--custom.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/base/webfonts.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/css/base/normalize.css', 'screen');
+}
+
 $this->headLink()
-    ->prependStylesheet($this->layoutPath() . '/css/custom.css')
-    ->prependStylesheet($this->layoutPath() . '/css/print.css', 'print')
-    ->prependStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
-    ->prependStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
     ->prependStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
-    ->prependStylesheet($this->layoutPath() . '/fontawesome/css/solid.css')
-    ->prependStylesheet($this->layoutPath() . '/fontawesome/css/fontawesome.min.css')
     ->headLink([
         'rel'  => 'shortcut icon',
         'type' => 'image/x-icon',
@@ -91,6 +123,8 @@ if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) {
     $jsFiles[] = 'opus-ui.js';
 } elseif (in_array($this->moduleName, ['publish'])) {
     $jsFiles[] = 'upload.js';
+    $jsFiles[] = 'getDoi.js';
+    $jsFiles[] = 'doiAssist.js';
 }
 
 if (in_array($this->moduleName, ['admin'])) {
@@ -120,7 +154,7 @@ if (isset($config->javascript->latex->mathjax)) {
 }
 ?>
 
-<?= $this->doctype() ?>
+<?= $this->doctype() ?> <!-- TODO Zend_View_Helper_Doctype::HTML5 -->
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $pageLanguage ?>" lang="<?= $pageLanguage ?>" dir="ltr" class="no-js">
 
@@ -140,13 +174,6 @@ if (isset($config->javascript->latex->mathjax)) {
 
 <?= $this->headScript()->setIndent(8) ?>
 
-    <!--[if IE 6]>
-        <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie.css" />
-        <![endif]-->
-
-        <!--[if lt IE 9]>
-        <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie-7.css" />
-        <![endif]-->
 <?= $this->javascriptMessages()->setIndent(8) ?>
     </head>
 

@@ -124,7 +124,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $translations = $manager->getTranslations();
 
         $this->assertNotNull($translations);
-        $this->assertInternalType('array', $translations);
+        $this->assertIsArray($translations);
         $this->assertGreaterThan(0, count($translations));
     }
 
@@ -221,7 +221,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $result = $this->object->findTranslations('embargo');
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertCount(1, $result);
         $this->assertEquals('EmbargoDate', $result[0]['key']);
     }
@@ -234,7 +234,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $translations = $manager->getMergedTranslations('key');
 
-        $this->assertInternalType('array', $translations);
+        $this->assertIsArray($translations);
         $this->assertCount(2, $translations);
         $this->assertArrayHasKey('answer_yes', $translations);
         $this->assertArrayHasKey('Field_Value_True', $translations);
@@ -246,7 +246,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $translations = $manager->getMergedTranslations('key');
 
-        $this->assertInternalType('array', $translations);
+        $this->assertIsArray($translations);
         $this->assertCount(3, $translations);
         $this->assertArrayHasKey('answer_yes', $translations);
         $this->assertArrayHasKey('yes', $translations);
@@ -256,7 +256,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $translations = $manager->getMergedTranslations('key');
 
-        $this->assertInternalType('array', $translations);
+        $this->assertIsArray($translations);
         $this->assertCount(3, $translations);
         $this->assertArrayHasKey('answer_yes', $translations);
         $this->assertArrayHasKey('yes', $translations);
@@ -272,7 +272,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $translations = $manager->getMergedTranslations('key');
 
-        $this->assertInternalType('array', $translations);
+        $this->assertIsArray($translations);
         $this->assertCount(1, $translations);
         $this->assertArrayHasKey('answer_no', $translations);
 
@@ -282,7 +282,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $translations = $manager->getMergedTranslations('key');
 
-        $this->assertInternalType('array', $translations);
+        $this->assertIsArray($translations);
         $this->assertCount(1, $translations);
         $this->assertArrayHasKey('answer_no', $translations);
     }
@@ -836,8 +836,8 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertCount(1, $messages);
-        $this->assertContains('setup.translation.modules.allowed', $messages[0]);
-        $this->assertContains('unknown1', $messages[0]);
+        $this->assertStringContainsString('setup.translation.modules.allowed', $messages[0]);
+        $this->assertStringContainsString('unknown1', $messages[0]);
     }
 
     public function testUpdateTranslation()

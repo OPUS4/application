@@ -46,14 +46,17 @@ class Application_Update_Helper extends Application_Update_PluginAbstract
      * Asks the user a yes|no question during update.
      *
      * @param string $question
+     * @param bool   $defaultYes
      * @return bool
      */
-    public function askYesNo($question)
+    public function askYesNo($question, $defaultYes = false)
     {
         print $question;
 
-        $response = trim(readline());
+        $line = readline();
 
-        return $response === 'Y' || $response === 'y';
+        $response = trim($line ?: '');
+
+        return $response === 'Y' || $response === 'y' || ($defaultYes && $response === '');
     }
 }

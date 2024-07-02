@@ -205,8 +205,8 @@ class Application_Form_Element_TranslationTest extends ControllerTestCase
         $output = $element->render();
 
         // do not translate 'Institute' into 'Institut'
-        $this->assertNotContains('id="DisplayName-de" value="Institut"', $output);
-        $this->assertContains('id="DisplayName-de" value="Institute"', $output);
+        $this->assertStringNotContainsString('id="DisplayName-de" value="Institut"', $output);
+        $this->assertStringContainsString('id="DisplayName-de" value="Institute"', $output);
     }
 
     public function testUpdateTranslationForDuplicateKey()

@@ -8,13 +8,13 @@
     <body>
 
         <tu tuid="Language">
-      <tuv xml:lang="en">
-        <seg>Language</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sprache</seg>
-      </tuv>
-    </tu>
+            <tuv xml:lang="en">
+                <seg>Language</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sprache</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="Licence">
             <tuv xml:lang="en">
@@ -457,7 +457,7 @@
             </tuv>
         </tu>
 
-		<tu tuid="ddc_dnb">
+        <tu tuid="ddc_dnb">
             <tuv xml:lang="en">
                 <seg>DDC subject group</seg>
             </tuv>
@@ -466,23 +466,23 @@
             </tuv>
         </tu>
 
-		<tu tuid="SubjectPACS">
-			<tuv xml:lang="en">
-				<seg>PACS Keyword</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>PACS Klasse</seg>
-			</tuv>
-		</tu>
+        <tu tuid="SubjectPACS">
+            <tuv xml:lang="en">
+                <seg>PACS Keyword</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>PACS Klasse</seg>
+            </tuv>
+        </tu>
 
-		<tu tuid="SubjectCCS">
-			<tuv xml:lang="en">
-				<seg>CCS Keyword</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>CCS Klasse</seg>
-			</tuv>
-		</tu>
+        <tu tuid="SubjectCCS">
+            <tuv xml:lang="en">
+                <seg>CCS Keyword</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>CCS Klasse</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="SubjectJEL">
             <tuv xml:lang="en">
@@ -493,7 +493,7 @@
             </tuv>
         </tu>
 
-		<tu tuid="SubjectBKL">
+        <tu tuid="SubjectBKL">
             <tuv xml:lang="en">
                 <seg>BKL Term</seg>
             </tuv>
@@ -712,10 +712,10 @@
 
         <tu tuid="PublicationState">
             <tuv xml:lang="en">
-                <seg>Status</seg>
+                <seg>Version</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Status</seg>
+                <seg>Version</seg>
             </tuv>
         </tu>
 
@@ -1000,6 +1000,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="IdentifierIsmn">
+            <tuv xml:lang="en">
+                <seg>ISMN</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ISMN</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="IdentifierUuid">
             <tuv xml:lang="en">
                 <seg>Uuid</seg>
@@ -1079,6 +1088,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>SplashURL</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="IdentifierUnionCat">
+            <tuv xml:lang="en">
+                <seg>Union Catalog ID</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Verbundkatalog-ID</seg>
             </tuv>
         </tu>
 
@@ -1869,10 +1887,10 @@
 
         <tu tuid="IdentifierOrcid">
             <tuv xml:lang="en">
-                <seg>ORCID</seg>
+                <seg>ORCID iD</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>ORCID</seg>
+                <seg>ORCID iD</seg>
             </tuv>
         </tu>
 
@@ -2205,10 +2223,10 @@
 
         <tu tuid="Opus_Person_Author_Identifier_Orcid">
             <tuv xml:lang="en">
-                <seg>Orcid Identifier</seg>
+                <seg>ORCID iD</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Orcid-Id</seg>
+                <seg>ORCID iD</seg>
             </tuv>
         </tu>
 
@@ -2299,6 +2317,69 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Veröffentlichend</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentopus_doi_json">
+            <tuv xml:lang="en">
+                <seg>JSON-Data</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>JSON-Daten</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentopus_doi_flag">
+            <tuv xml:lang="en">
+                <seg>doi_import_successful</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>doi_import_successful</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentopus_crossrefDocumentType">
+            <tuv xml:lang="en">
+                <seg>Document Type (Crossref original)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokumenttyp (Crossref original)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentopus_crossrefLicence">
+            <tuv xml:lang="en">
+                <seg>Licence (Crossref)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Lizenz (Crossref)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentopus_doiImportPopulated">
+            <tuv xml:lang="en">
+                <seg>imported_fields</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>imported_fields</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Enrichmentopus_import_origin">
+            <tuv xml:lang="en">
+                <seg>import_origin</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>import_origin</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="open_access">
+            <tuv xml:lang="en">
+                <seg>Accessibility</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Zugänglichkeit</seg>
             </tuv>
         </tu>
 

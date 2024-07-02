@@ -36,6 +36,7 @@ use Opus\Common\Config;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Licence;
 use Opus\Common\Model\NotFoundException;
+use Opus\Common\PublicationState;
 use Opus\Common\Series;
 
 class Publish_Model_Validation
@@ -371,6 +372,9 @@ class Publish_Model_Validation
             case 'Licence':
                 return $this->licenceSelect();
 
+            case 'PublicationState':
+                return $this->publicationStateSelect();
+
             case 'List':
                 return $this->listOptions;
 
@@ -445,6 +449,22 @@ class Publish_Model_Validation
             return $licences;
         }
         return null;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function publicationStateSelect()
+    {
+        $publicationState = new PublicationState();
+
+        $options = [];
+
+        foreach ($publicationState->getValues() as $value) {
+            $options[$value] = $this->translate("Opus_Document_PublicationState_Value_{$value}");
+        }
+
+        return $options;
     }
 
     /**

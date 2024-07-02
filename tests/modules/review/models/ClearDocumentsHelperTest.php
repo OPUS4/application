@@ -212,4 +212,36 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $this->assertNotNull($publishedDate);
         $this->assertEquals(0, $expectedDate->compare($publishedDate)); // still yesterday
     }
+
+    public function testIsAddGuestAccessEnabled()
+    {
+        $helper = new Review_Model_ClearDocumentsHelper();
+
+        $this->assertTrue($helper->isAddGuestAccessEnabled());
+    }
+
+    public function testIsAddGuestAccessEnabledNotConfigured()
+    {
+        $config = $this->getConfig();
+
+        unset($config->workflow->stateChange->published);
+
+        $this->assertFalse(isset($config->workflow->stateChange->published->addGuestAccess));
+
+        $helper = new Review_Model_ClearDocumentsHelper();
+        $helper->setConfig($config);
+
+        $this->assertTrue($helper->isAddGuestAccessEnabled());
+    }
+
+    public function testIsAddGuestAccessEnabledFalse()
+    {
+        $this->adjustConfiguration([
+            'workflow' => ['stateChange' => ['published' => ['addGuestAccess' => 0]]],
+        ]);
+
+        $helper = new Review_Model_ClearDocumentsHelper();
+
+        $this->assertFalse($helper->isAddGuestAccessEnabled());
+    }
 }

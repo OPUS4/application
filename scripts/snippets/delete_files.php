@@ -65,4 +65,3 @@ for ($i = $startId; $i <= $endId; $i++) {
 }
 
 echo "done.\n";
-exit();

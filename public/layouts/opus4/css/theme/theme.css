@@ -1,0 +1,257 @@
+body {
+  color: var(--maxdark);
+  background-color: var(--maxlight);
+}
+
+a:link {
+  color: var(--dark);
+  background-color: transparent;
+}
+
+a:visited {
+  color: var(--maxdark);
+  background-color: transparent;
+}
+
+a:hover {
+  color: var(--bright);
+  background-color: transparent;
+}
+
+a:active {
+  color: var(--maxdark);
+  background-color: transparent;
+}
+
+/* GND-Logo bei Personen */
+a.gnd-link {
+  display: inline-block;
+  box-sizing: content-box;
+  height: 1.1em;
+  width: 1.1em;
+  margin-left: 0.2em;
+  margin-bottom: 0.2em;
+  vertical-align: bottom;
+  background: url(../../../../img/gnd/Logo_GND.svg) no-repeat 0 0;
+  text-indent: -9999px;
+}
+
+/* ORCID-Logo bei Personen */
+a.orcid-link {
+  display: inline-block;
+  box-sizing: content-box;
+  height: 1.1em;
+  width: 1.1em;
+  margin-left: 0.2em;
+  margin-bottom: 0.2em;
+  vertical-align: bottom;
+  background: url(../../../../img/orcid/Logo_ORCID.svg) no-repeat 0 0;
+  text-indent: -9999px;
+}
+
+#top-header,
+#header,
+#content>.wrapper>h2 {
+  background-color: var(--light);
+  color: var(--dark);
+}
+
+#lang-switch a::before,
+#login-bar a::before,
+li.sorting_option a,
+input[type="submit"],
+label[for="fileupload"],
+div.services a.export {
+  color: var(--maxlight);
+  background-color: var(--dark);
+}
+
+div.facetValueExtender a {
+  color: var(--dark);
+  background-color: var(--xlight);
+}
+
+#lang-switch a:hover::before,
+#login-bar a:hover::before,
+li.sorting_option a:hover,
+input[type="submit"]:hover,
+label[for="fileupload"]:hover,
+div.services a.export:hover,
+div.facetValueExtender a:hover {
+  color: var(--maxlight);
+  background-color: var(--bright);
+  transition: background-color 0.2s ease-in;
+}
+
+#primary-nav>li>a::before,
+li.sorting_option span {
+  color: var(--maxlight);
+  background-color: var(--bright);
+}
+
+#primary-nav>li>a {
+  color: var(--dark);
+  background-color: transparent;
+}
+
+#primary-nav>li>a:hover,
+#primary-nav>li.active>a {
+  border-bottom-color: var(--dark);
+}
+
+#primary-nav>li>a:hover {
+  transition: border-bottom-color 0.2s ease-in;
+}
+
+#content>.wrapper>div.intro {
+  background-color: var(--xlight);
+  color: var(--maxdark);
+}
+
+#content>.wrapper>p,
+#content>.wrapper>div.content,
+#content>.wrapper>div.form-wrapper,
+#content>.wrapper>div.frontdoor,
+#content>.wrapper>h2+form[action*="auth"] {
+  background-color: var(--maxlight);
+  color: var(--maxdark);
+}
+
+legend,
+fieldset .description.hint,
+.section.answers dt::before,
+.section.answers dd::before,
+#download-fulltext div.accessible-file::before,
+#download-fulltext div.protected-file::before,
+.result_box a:hover,
+ul.nav.browsing>li>a:first-child:hover,
+#content>.wrapper>div.intro li::marker,
+ul#secondary-nav li:nth-child(n+2)::before,
+#fieldset-search .form-submit-wrapper::before,
+div#additional-services>div>a::before {
+  color: var(--dark);
+  background-color: transparent;
+}
+
+#content>.wrapper>h2,
+#page-footer>.wrapper,
+.section.answers dt {
+  border-top-color: var(--dark);
+}
+
+#fieldset-search #edit-search {
+  border-color: var(--dark);
+  transition: border-color 0.2s ease-in;
+}
+
+#fieldset-search #edit-search:focus {
+  border-color: var(--bright);
+}
+
+a[class*="pagination-"]::after,
+.frontdoor_pagination li[id*="pagination-"] a::after,
+#pagination-link-hitlist::before {
+  background-color: var(--xlight);
+  color: var(--maxdark);
+}
+
+.result_box:nth-child(odd) {
+  background-color: var(--xlight);
+  color: var(--maxdark);
+}
+
+.result_box a,
+ul.nav.browsing>li>a:first-child {
+  color: var(--maxdark);
+  background-color: transparent;
+}
+
+ul.nav.browsing>li:nth-child(odd),
+.services-menu>div {
+  color: var(--maxdark);
+  background-color: var(--xlight);
+}
+
+div.dropdown ul>li>a {
+  background-color: var(--light);
+  color: var(--maxdark);
+  transition: background-color 0.1s ease;
+}
+
+div.dropdown ul>li>a:hover {
+  background-color: var(--xxlight);
+  color: var(--maxdark);
+}
+
+.removeFacetLink>a::after {
+  color: var(--dark);
+  background-color: var(--maxlight);
+  transition: color 0.1s ease-in;
+}
+
+#content>.wrapper>div.content li.activeFacet .removeFacetLink>a:hover::after {
+  color: var(--bright);
+  background-color: var(--maxlight);
+}
+
+.publish fieldset {
+  border-top-color: var(--dark);
+  background-color: var(--xxlight);
+}
+
+.form-errors,
+ul.errors {
+  color: var(--error);
+  background-color: transparent;
+}
+
+#content>.wrapper div.form-hint.form-errors {
+  color: var(--maxlight);
+  background-color: var(--error);
+}
+
+#content>.wrapper .messages>.notice {
+  color: var(--maxdark);
+  background-color: var(--notice);
+}
+
+.section.answers h2,
+div#abstract>ul>li::before {
+  color: var(--dark);
+  background-color: transparent;
+}
+
+div#abstract {
+  background-color: var(--xlight);
+}
+
+div#abstract>ul>li:nth-child(n+2),
+#download-fulltext>ul>li:nth-child(n+2) {
+  border-top-color: var(--dark);
+}
+
+.frontdoordata caption,
+.publish fieldset > .form-multiple.even {
+  background-color: var(--light);
+}
+
+.frontdoordata th.name {
+  background-color: var(--xlight);
+}
+
+.frontdoordata tbody th,
+.frontdoordata tbody td {
+  border-top-color: var(--light);
+}
+
+.frontdoordata tbody tr:last-child th,
+.frontdoordata tbody tr:last-child td {
+  border-bottom-color: var(--light);
+}
+
+.frontdoor .abstractFull[style*="none"] + span.abstractThreeDots{
+  color: var(--maxdark);
+}
+.frontdoor span.abstractThreeDots::after{
+  color: var(--maxdark);
+}

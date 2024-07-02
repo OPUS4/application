@@ -36,6 +36,7 @@ use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Note;
+use Opus\Common\Subject;
 use Opus\Common\Title;
 
 /**
@@ -109,7 +110,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
-        $this->assertContains('<div class="frontdoor">', $response->getBody());
+        $this->assertStringContainsString('<div class="frontdoor">', $response->getBody());
     }
 
     public function testIndexActionOnDeleted()
@@ -123,7 +124,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertAction('index');
 
         $response = $this->getResponse();
-        $this->assertContains('<div class="frontdoor-error">', $response->getBody());
+        $this->assertStringContainsString('<div class="frontdoor-error">', $response->getBody());
     }
 
     public function testIndexActionOnUnpublished()
@@ -137,7 +138,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertAction('index');
 
         $response = $this->getResponse();
-        $this->assertContains('<div class="frontdoor-error">', $response->getBody());
+        $this->assertStringContainsString('<div class="frontdoor-error">', $response->getBody());
     }
 
     public function testIndexActionOnTemporary()
@@ -151,7 +152,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertAction('index');
 
         $response = $this->getResponse();
-        $this->assertContains('<div class="frontdoor-error">', $response->getBody());
+        $this->assertStringContainsString('<div class="frontdoor-error">', $response->getBody());
     }
 
     public function testIndexActionOnNonExistent()
@@ -164,7 +165,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertAction('index');
 
         $response = $this->getResponse();
-        $this->assertContains('<div class="frontdoor-error">', $response->getBody());
+        $this->assertStringContainsString('<div class="frontdoor-error">', $response->getBody());
     }
 
     /**
@@ -204,8 +205,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('index');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<table class="result-data frontdoordata">', $body);
-        $this->assertNotContains('<td><em class="data-marker"/></td>', $body);
+        $this->assertStringContainsString('<table class="result-data frontdoordata">', $body);
+        $this->assertStringNotContainsString('<td><em class="data-marker"/></td>', $body);
     }
 
     /**
@@ -222,8 +223,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch("/frontdoor/index/index/docId/$docId");
 
-        $this->assertContains('<title>OPUS 4 | Titel</title>', $this->getResponse()->getBody());
-        $this->assertNotContains('<title>OPUS 4 | Title</title>', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<title>OPUS 4 | Titel</title>', $body);
+        $this->assertStringNotContainsString('<title>OPUS 4 | Title</title>', $body);
     }
 
     /**
@@ -240,8 +242,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch("/frontdoor/index/index/docId/$docId");
 
-        $this->assertContains('<title>OPUS 4 | Title</title>', $this->getResponse()->getBody());
-        $this->assertNotContains('<title>OPUS 4 | Titel</title>', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<title>OPUS 4 | Title</title>', $body);
+        $this->assertStringNotContainsString('<title>OPUS 4 | Titel</title>', $body);
     }
 
     /**
@@ -261,8 +264,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch("/frontdoor/index/index/docId/$docId");
 
-        $this->assertNotContains('<title>OPUS 4 | Title</title>', $this->getResponse()->getBody());
-        $this->assertContains('<title>OPUS 4 | Titel</title>', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('<title>OPUS 4 | Title</title>', $body);
+        $this->assertStringContainsString('<title>OPUS 4 | Titel</title>', $body);
     }
 
     /**
@@ -283,9 +287,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch("/frontdoor/index/index/docId/$docId");
 
-        $this->assertNotContains('<title>OPUS 4 | Title</title>', $this->getResponse()->getBody());
-        $this->assertNotContains('<title>OPUS 4 | Titel2</title>', $this->getResponse()->getBody());
-        $this->assertContains('<title>OPUS 4 | Titel</title>', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('<title>OPUS 4 | Title</title>', $body);
+        $this->assertStringNotContainsString('<title>OPUS 4 | Titel2</title>', $body);
+        $this->assertStringContainsString('<title>OPUS 4 | Titel</title>', $body);
     }
 
     /**
@@ -367,13 +372,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testSeries146()
     {
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/1" ', $this->getResponse()->getBody());
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/1" ', $this->getResponse()->getBody());
     }
 
     public function testSubjectSortOrder()
     {
         $this->dispatch('/frontdoor/index/index/docId/1');
-        $this->assertContains('Informationssystem; Geschichte; Ostwald, Wilhelm', $this->getResponse()->getBody());
+        $this->assertStringContainsString('Informationssystem; Geschichte; Ostwald, Wilhelm', $this->getResponse()->getBody());
     }
 
     public function testSubjectSortOrderAlphabetical()
@@ -385,7 +390,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         // frontdoor.subjects.alphabeticalSorting
 
         $this->dispatch('/frontdoor/index/index/docId/1');
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Geschichte; Informations- und Dokumentationswissenschaft; Informationssystem',
             $this->getResponse()->getBody()
         );
@@ -414,11 +419,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $responseBody = $this->getResponse()->getBody();
 
         // series 3 is NOT visible
-        $this->assertNotContains('id-3-is-invisible', $responseBody);
+        $this->assertStringNotContainsString('id-3-is-invisible', $responseBody);
         $this->assertNotRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/3"/', $responseBody);
 
         // series 4 is visible
-        $this->assertContains('id-4-is-visible', $responseBody);
+        $this->assertStringContainsString('id-4-is-visible', $responseBody);
         $this->assertRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/4"/', $responseBody);
     }
 
@@ -546,6 +551,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->assertQueryContentContains($path, $translate->_('PageNumber'));
         $this->assertQueryContentContains($path, $translate->_('PageFirst'));
         $this->assertQueryContentContains($path, $translate->_('PageLast'));
+        $this->assertQueryContentContains($path, $translate->_('PublicationState'));
         $this->assertQueryContentContains($path, $translate->_('Note'));
         // Enrichments
         $this->assertQueryContentContains($path, $translate->_('EnrichmentEvent'));
@@ -607,7 +613,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre>",
             $this->getResponse()->getBody()
         );
@@ -761,7 +767,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->useGerman();
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $this->assertContains('<td>03.01.2012</td>', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<td>03.01.2012</td>', $this->getResponse()->getBody());
     }
 
     /**
@@ -771,7 +777,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->useGerman();
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<tr><th class="name">Titel verleihende Institution:</th>'
             . '<td>Foobar Universität, Testwissenschaftliche Fakultät</td></tr>',
             $this->getResponse()->getBody()
@@ -811,7 +817,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     {
         $this->useGerman();
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<a href="/solrsearch/index/search/searchtype/collection/id/16007" title="Sammlung anzeigen">'
             . 'Technische Universität Hamburg-Harburg / Bauwesen / Abwasserwirtschaft und Gewässerschutz B-2</a>',
             $this->getResponse()->getBody()
@@ -824,7 +830,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
     public function testIncludeMetaDateCitationDateIfPublishedYearSet()
     {
         $this->dispatch('/frontdoor/index/index/docId/145');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<meta name="citation_date" content="2011" />',
             $this->getResponse()->getBody()
         );
@@ -1111,23 +1117,23 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/frontdoor/index/index/docId/' . $docId);
         $body = $this->getResponse()->getBody();
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<img width="16" height="11" src="/img/lang/eng.png" class="file-language eng" alt="eng"/>',
             $body
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<img width="16" height="11" src="/img/lang/deu.png" class="file-language deu" alt="deu"/>',
             $body
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<img width="16" height="11" src="/img/lang/spa.png" class="file-language spa" alt="spa"/>',
             $body
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<img width="16" height="11" src="/img/lang/fra.png" class="file-language fra" alt="fra"/>',
             $body
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<img width="16" height="11" src="/img/lang/rus.png" class="file-language rus" alt="rus"/>',
             $body
         );
@@ -1167,11 +1173,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         rename($bupPath, $oldPath);
         $body = $this->getResponse()->getBody();
 
-        $this->assertNotContains('<img width="16" height="11" src="/img/lang/eng.png" alt="eng"/>', $body);
-        $this->assertNotContains('<img width="16" height="11" src="/img/lang/deu.png" alt="deu"/>', $body);
-        $this->assertNotContains('<img width="16" height="11" src="/img/lang/spa.png" alt="spa"/>', $body);
-        $this->assertNotContains('<img width="16" height="11" src="/img/lang/fra.png" alt="fra"/>', $body);
-        $this->assertNotContains('<img width="16" height="11" src="/img/lang/rus.png" alt="rus"/>', $body);
+        $this->assertStringNotContainsString('<img width="16" height="11" src="/img/lang/eng.png" alt="eng"/>', $body);
+        $this->assertStringNotContainsString('<img width="16" height="11" src="/img/lang/deu.png" alt="deu"/>', $body);
+        $this->assertStringNotContainsString('<img width="16" height="11" src="/img/lang/spa.png" alt="spa"/>', $body);
+        $this->assertStringNotContainsString('<img width="16" height="11" src="/img/lang/fra.png" alt="fra"/>', $body);
+        $this->assertStringNotContainsString('<img width="16" height="11" src="/img/lang/rus.png" alt="rus"/>', $body);
 
         $this->assertQueryContentContains('//span.file-language', '(spa)');
         $this->assertQueryContentContains('//span.file-language', '(eng)');
@@ -1193,7 +1199,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->addFile($file);
 
         $date = new Date();
-        $date->setYear('2000')->setMonth('00')->setDay('01');
+        $date->setYear('2000')->setMonth('01')->setDay('01');
         $doc->setEmbargoDate($date);
 
         $docId = $doc->store();
@@ -1216,7 +1222,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $doc->addFile($file);
 
         $date = new Date();
-        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $date->setYear('2100')->setMonth('01')->setDay('01');
         $doc->setEmbargoDate($date);
 
         $docId = $doc->store();
@@ -1336,7 +1342,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
-        $this->assertContains(
+        $this->assertStringContainsString(
             'http://scholar.google.de/scholar?hl=de&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe'
             . '&amp;as_ylo=2007&amp;as_yhi=2007',
             $body
@@ -1349,7 +1355,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
-        $this->assertContains(
+        $this->assertStringContainsString(
             'http://scholar.google.de/scholar?hl=en&amp;q=&quot;KOBV&quot;&amp;as_sauthors=John+Doe'
             . '&amp;as_ylo=2007&amp;as_yhi=2007',
             $body
@@ -1555,5 +1561,38 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
 
         $this->assertQueryContentContains('table.result-data.frontdoordata td', $pubmedUrl);
         $this->assertXpath("//table/tr/td/a[@href=\"$pubmedUrl\"]");
+    }
+
+    public function testRenderingGndSubjectLink()
+    {
+        $doc = $this->createTestDocument();
+
+        $subject = Subject::new();
+        $subject->setType('swd');
+        $subject->setValue('Bauhaus');
+        $subject->setExternalKey('4130303-9');
+        $doc->addSubject($subject);
+
+        $subject = Subject::new();
+        $subject->setLanguage('deu');
+        $subject->setType('uncontrolled');
+        $subject->setValue('mytag');
+        $subject->setExternalKey('mykey');
+        $doc->addSubject($subject);
+
+        $doc->setServerState(Document::STATE_PUBLISHED);
+        $docId = $doc->store();
+
+        $config     = $this->getConfig();
+        $gndLinkUrl = $config->gnd->baseUrl . '4130303-9';
+
+        $this->dispatch("/frontdoor/index/index/docId/${docId}");
+
+        $this->assertXpath("//a[@href=\"${gndLinkUrl}\"]");
+        $this->assertXpathContentContains('//em[contains(@class,"subject")]', 'Bauhaus');
+        $this->assertXpathContentContains("//a[@href=\"${gndLinkUrl}\"]", 'GND');
+
+        $this->assertXpathContentContains('//em[contains(@class, "subject")]', 'mytag');
+        $this->assertNotXpathContentContains('//a', 'mytag'); // no link for 'mytag'
     }
 }

@@ -123,7 +123,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->assertModule('admin');
         $this->assertController('collection');
         $this->assertAction('show');
-        $this->assertContains('123 first collection', $this->getResponse()->getBody());
+        $this->assertStringContainsString('123 first collection', $this->getResponse()->getBody());
     }
 
     public function testShowActionWithEmptyRole()
@@ -142,8 +142,8 @@ class Admin_CollectionControllerTest extends ControllerTestCase
         $this->assertModule('admin');
         $this->assertController('collection');
         $this->assertAction('show');
-        $this->assertContains('123 first collection', $this->getResponse()->getBody());
-        $this->assertContains('987 last collection', $this->getResponse()->getBody());
+        $this->assertStringContainsString('123 first collection', $this->getResponse()->getBody());
+        $this->assertStringContainsString('987 last collection', $this->getResponse()->getBody());
     }
 
     public function testShowActionMissingArg()
@@ -302,7 +302,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase
     public function testCollectionRoleGetsTranslatedAsLink()
     {
         $this->dispatch('/admin/collection/show/id/' . $this->collection->getId());
-        $this->assertContains('<a href="/admin/collection/show/id/' . $this->rootCollection->getId()
+        $this->assertStringContainsString('<a href="/admin/collection/show/id/' . $this->rootCollection->getId()
             . '">default_collection_role_test2role</a>', $this->getResponse()->getBody());
     }
 
@@ -327,8 +327,8 @@ class Admin_CollectionControllerTest extends ControllerTestCase
     {
         $this->dispatch('/admin/collection/assign/document/40');
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains('/admin/documents/edit/id/40', $body); // old link before fix ("documentS")
-        $this->assertContains('/admin/document/edit/id/40/section/collections', $body);
+        $this->assertStringNotContainsString('/admin/documents/edit/id/40', $body); // old link before fix ("documentS")
+        $this->assertStringContainsString('/admin/document/edit/id/40/section/collections', $body);
     }
 
     public function testShowDocInfoOnAssignStartPage()

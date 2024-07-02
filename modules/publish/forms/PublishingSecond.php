@@ -195,6 +195,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract
             // (e) additional externals fields (from view helpers)
             if (
                 $element->getValue() === ''
+                    || $element->getValue() === null
                     || $element->getType() === Zend_Form_Element_Submit::class        // Submit buttons
                     || $element->getType() === Zend_Form_Element_Hidden::class        // Hidden fields
                     || $element->getAttrib('isRoot')                                  // Root Nodes of Browsefields

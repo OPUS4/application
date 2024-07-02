@@ -219,7 +219,6 @@ class Application_Search_Facet
 
     /**
      * TODO Should probably move into Opus\Search\Result\Facet(Item)
-     * TODO $facetValue = $this->translate('Document_ServerState_Value_' . ucfirst($facetValue));
      *
      * @param string $value
      * @return string
@@ -229,7 +228,7 @@ class Application_Search_Facet
         if ($this->isTranslated()) {
             $prefix = $this->getTranslationPrefix();
             if ($prefix !== null) {
-                $value = $prefix . ucfirst($value); // TODO ucfirst should not be needed (migth not always apply)
+                $value = $prefix . $value;
             }
             return $this->getTranslator()->translate($value);
         } else {

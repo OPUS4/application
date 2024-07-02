@@ -40,13 +40,13 @@ pipeline {
 
         stage('Install Solr') {
             steps {
-                sh 'sudo bash bin/install_solr_docker.sh'
+                sh 'sudo bash tests/bin/install_solr_docker.sh'
             }
         }
 
         stage('Install MySQL') {
             steps {
-                sh 'sudo bash bin/install_mysql_docker.sh'
+                sh 'sudo bash tests/bin/install_mysql_docker.sh'
             }
         }
 

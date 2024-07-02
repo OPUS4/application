@@ -50,26 +50,56 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     {
         $this->dispatch('/solrsearch/browse');
         $this->assertResponseCode(200);
+
+        $this->assertXpath('//a[contains(@href, "solrsearch/index/search/searchtype/latest")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/years")]');
     }
 
-    public function testDoctypesAction()
+    public function testShowDoctypesDisabled()
+    {
+        $this->adjustConfiguration([
+            'browsing' => ['showDocumentTypes' => 0],
+        ]);
+
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+
+        $this->assertXpath('//a[contains(@href, "solrsearch/index/search/searchtype/latest")]');
+        $this->assertNotXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/years")]');
+    }
+
+    public function testDoctypesActionEnabled()
     {
         $this->dispatch('/solrsearch/browse/doctypes');
         $this->assertResponseCode(200);
+
+        $this->assertXpath('//div[@id = "content" and contains(@class, "solrsearch_browse_doctypes")]');
+    }
+
+    public function testDoctypesActionDisabled()
+    {
+        $this->adjustConfiguration([
+            'browsing' => ['showDocumentTypes' => 0],
+        ]);
+
+        $this->dispatch('/solrsearch/browse/doctypes');
+        $this->assertRedirect('/solrsearch/browse/index');
     }
 
     public function testSeriesAction()
     {
         $this->dispatch('/solrsearch/browse/series');
-        $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/1', $responseBody);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/4', $responseBody);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/2', $responseBody);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5', $responseBody);
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/6', $responseBody);
-        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/3', $responseBody);
-        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/7', $responseBody);
-        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/8', $responseBody);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/1', $body);
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/4', $body);
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/2', $body);
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/5', $body);
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/6', $body);
+        $this->assertStringNotContainsString('/solrsearch/index/search/searchtype/series/id/3', $body);
+        $this->assertStringNotContainsString('/solrsearch/index/search/searchtype/series/id/7', $body);
+        $this->assertStringNotContainsString('/solrsearch/index/search/searchtype/series/id/8', $body);
         $this->assertResponseCode(200);
     }
 
@@ -126,12 +156,14 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
 
         $this->restoreSeriesVisibility($visibilities);
 
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString('/solrsearch/index/search/searchtype/series/id/7', $body);
         foreach (Series::getAll() as $series) {
             if ($series->getId() !== 7) {
-                $this->assertNotContains(
+                $this->assertStringNotContainsString(
                     '/solrsearch/index/search/searchtype/series/id/' . $series->getId(),
-                    $this->getResponse()->getBody()
+                    $body
                 );
             }
         }
@@ -255,7 +287,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $visibilities = $this->setAllSeriesToUnvisible();
         $this->dispatch('/solrsearch/browse');
         $this->assertResponseCode(200);
-        $this->assertNotContains('/solrsearch/browse/series">', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('/solrsearch/browse/series">', $this->getResponse()->getBody());
         $this->restoreSeriesVisibility($visibilities);
     }
 
@@ -273,18 +305,59 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/doctypes');
 
         $body = $this->getResponse()->getBody();
-        // $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
-        $this->assertContains("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
+        // $this->assertStringNotContainsString("http://${host}:${port}/solr/corethatdoesnotexist", $body);
+        $this->assertStringContainsString("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
         $this->assertResponseCode(503);
     }
 
-    public function testBrowsingByYear()
+    public function testYearsActionEnabled()
     {
-        $this->markTestIncomplete();
+        $this->dispatch('/solrsearch/browse/years');
+        $this->assertResponseCode(200);
+
+        $this->assertXpath('//div[@id = "content" and contains(@class, "solrsearch_browse_years")]');
+    }
+
+    public function testYearsActionDisabled()
+    {
+        $this->adjustConfiguration([
+            'browsing' => ['showYears' => 0],
+        ]);
+
+        $this->dispatch('/solrsearch/browse/years');
+        $this->assertRedirect('/solrsearch/browse/index');
     }
 
     public function testBrowsingByYearWithInvertedYearFacetConfigured()
     {
         $this->markTestIncomplete();
+    }
+
+    public function testShowYearsDisabled()
+    {
+        $this->adjustConfiguration([
+            'browsing' => ['showYears' => 0],
+        ]);
+
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+
+        $this->assertXpath('//a[contains(@href, "solrsearch/index/search/searchtype/latest")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertNotXpath('//a[contains(@href, "solrsearch/browse/years")]');
+    }
+
+    public function testShowLatestDocumentsDisabled()
+    {
+        $this->adjustConfiguration([
+            'browsing' => ['showLatestDocuments' => 0],
+        ]);
+
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+
+        $this->assertNotXpath('//a[contains(@href, "solrsearch/index/search/searchtype/latest")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/years")]');
     }
 }

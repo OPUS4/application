@@ -73,5 +73,3 @@ if ($numOfErrors > 0) {
 } else {
     echo "no missing or modified documents were found\n";
 }
-
-exit();

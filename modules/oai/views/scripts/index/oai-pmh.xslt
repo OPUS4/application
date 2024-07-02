@@ -41,14 +41,8 @@
     <xsl:param name="urnResolverUrl" />
     <xsl:param name="doiResolverUrl" />
 
-    <!-- add include here for each new metadata format    -->
-
-    <xsl:include href="prefixes/oai_dc.xslt"/>
-    <xsl:include href="prefixes/oai_pp.xslt"/>
-    <xsl:include href="prefixes/epicur.xslt"/>
-    <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
-    <xsl:include href="prefixes/copy_xml.xslt"/>
-    <xsl:include href="prefixes/marc21.xslt"/>
+    <!-- The following comment may not be removed. It will be automatically replaced -->
+    <!-- INCLUDE_METADATA_FORMAT_XSLT -->
 
     <xsl:output method="xml" indent="yes" encoding="utf-8" />
 
@@ -68,7 +62,6 @@
     <xsl:param name="oai_until" />
     <xsl:param name="oai_set" />
     <xsl:param name="oai_metadataPrefix" />
-    <xsl:param name="oai_metadataPrefixMode" /><!-- strtolower version of oai_metadataPrefix TODO temp. hack -->
     <xsl:param name="oai_resumptionToken" />
     <xsl:param name="oai_identifier" />
     <xsl:param name="oai_error_code" />
@@ -155,7 +148,6 @@
         </OAI-PMH>
     </xsl:template>
 
-
     <!-- template for Identiy  -->
     <xsl:template match="Documents" mode="Identify">
         <Identify>
@@ -241,42 +233,15 @@
         </Identify>
     </xsl:template>
 
-
     <!-- template for ListMetadataFormats  -->
     <xsl:template match="Documents" mode="ListMetadataFormats">
-        <ListMetadataFormats>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>oai_dc</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc/</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>epicur</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>XMetaDissPlus</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
-          </metadataFormat>
-          <metadataFormat>
-            <metadataPrefix><xsl:text>xMetaDissPlus</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
-          </metadataFormat>
-            <metadataFormat>
-                <metadataPrefix><xsl:text>MARC21</xsl:text></metadataPrefix>
-                <schema><xsl:text>https://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd</xsl:text></schema>
-                <metadataNamespace><xsl:text>http://www.loc.gov/MARC21/slim</xsl:text></metadataNamespace>
-            </metadataFormat>
-        </ListMetadataFormats>
+        <xsl:copy-of select="php:function('Application_Xslt::listMetadataFormats')" />
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListIdentifiers">
         <xsl:if test="count(Opus_Document) > 0">
             <ListIdentifiers>
-                <xsl:apply-templates select="Opus_Document" />
+                <xsl:apply-templates select="Opus_Document" mode="oai-pmh"/>
                 <xsl:choose>
                     <xsl:when test="$totalIds > 0 and $res != ''">
                         <resumptionToken>
@@ -304,7 +269,7 @@
     <xsl:template match="Documents" mode="ListRecords">
         <xsl:if test="count(Opus_Document) > 0">
             <ListRecords>
-            <xsl:apply-templates select="Opus_Document" />
+            <xsl:apply-templates select="Opus_Document" mode="oai-pmh"/>
                 <xsl:choose>
                     <xsl:when test="$totalIds > 0 and $res != ''">
                         <resumptionToken>
@@ -325,7 +290,7 @@
 
     <xsl:template match="Documents" mode="GetRecord">
         <GetRecord>
-            <xsl:apply-templates select="Opus_Document" />
+            <xsl:apply-templates select="Opus_Document" mode="oai-pmh"/>
         </GetRecord>
     </xsl:template>
 
@@ -336,19 +301,18 @@
         </set>
     </xsl:template>
 
-    <xsl:template match="Opus_Document">
+    <xsl:template match="Opus_Document" mode="oai-pmh">
       <xsl:choose>
          <xsl:when test="$oai_verb='ListIdentifiers'">
            <xsl:call-template name="Opus_Document_Data"/>
          </xsl:when>
          <xsl:otherwise>
            <record>
-             <xsl:call-template name="Opus_Document_Data"/>
+             <xsl:call-template name="Opus_Document_Data" />
            </record>
          </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
-
 
     <xsl:template name="Opus_Document_Data">
         <header>
@@ -397,26 +361,7 @@
             <xsl:choose>
                  <xsl:when test="$oai_verb!='ListIdentifiers' and @ServerState!='deleted'">
                  <metadata>
-                 <xsl:choose>
-                    <xsl:when test="$oai_metadataPrefixMode='xmetadissplus'">
-                       <xsl:apply-templates select="." mode="xmetadissplus" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefixMode='epicur'">
-                       <xsl:apply-templates select="." mode="epicur" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefixMode='oai_dc'">
-                       <xsl:apply-templates select="." mode="oai_dc" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefixMode='oai_pp'">
-                       <xsl:apply-templates select="." mode="oai_pp" />
-                    </xsl:when>
-                    <xsl:when test="$oai_metadataPrefixMode='copy_xml'">
-                       <xsl:apply-templates select="." mode="copy_xml" />
-                    </xsl:when>
-                     <xsl:when test="$oai_metadataPrefixMode='marc21'">
-                         <xsl:apply-templates select="." mode="marc21" />
-                     </xsl:when>
-                 </xsl:choose>
+                     <xsl:apply-templates select="." />
                  </metadata>
             </xsl:when>
         </xsl:choose>

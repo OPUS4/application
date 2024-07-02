@@ -32,33 +32,5 @@
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Doi\DoiManager;
-
-/*
- * Dieses Script sucht nach Dokumenten im ServerState 'published',
- * die lokale DOIs besitzen, die noch nicht bei DataCite registiert wurden.
- * Nicht registrierte DOIs sind am Statuswert 'null' erkennbar.
- *
- * Für die ermittelten DOIs wird die Registrierung bei DataCite versucht.
- *
- */
-
-// setze auf $printErrors auf true, um Fehlermeldungen auf der Konsole auszugeben
-$printErrors = false;
-
-$doiManager = new DoiManager();
-$status     = $doiManager->registerPending();
-
-if ($status->isNoDocsToProcess()) {
-    echo "could not find matching documents for DOI registration\n";
-} else {
-    echo count($status->getDocsWithDoiStatus()) . " documents have been processed\n";
-
-    if ($printErrors) {
-        foreach ($status->getDocsWithDoiStatus() as $docId => $docWithStatus) {
-            if ($docWithStatus['error']) {
-                echo "document $docId could not registered successfully: " . $docWithStatus['msg'] . "\n";
-            }
-        }
-    }
-}
+$job = new Application_Job_RegisterLocalDoisJob();
+$job->run();

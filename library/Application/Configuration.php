@@ -30,7 +30,6 @@
  */
 
 use Opus\Common\Config;
-use Opus\Common\Log;
 use Opus\Common\LoggingTrait;
 
 /**
@@ -248,41 +247,26 @@ class Application_Configuration extends Config
     /**
      * Saves configuration as XML file.
      *
-     * @param Zend_Config $config
+     * @param Zend_Config $update
      * @throws Zend_Config_Exception
      */
-    public static function save($config)
+    public static function save($update)
     {
+        $config = self::load();
+
+        $config->merge($update);
+
         $writer = new Zend_Config_Writer_Xml();
         $writer->write(APPLICATION_PATH . '/application/configs/config.xml', $config);
     }
 
+    /**
+     * @return Zend_Config_Xml
+     * @throws Zend_Config_Exception
+     */
     public static function load()
     {
-    }
-
-    /**
-     * Gets a value from a Zend_Config object.
-     *
-     * @param Zend_Config $config
-     * @param string      $option
-     * @return null|Zend_Config
-     */
-    public static function getValueFromConfig($config, $option)
-    {
-        if ($option === null || strlen(trim($option)) === 0) {
-            return null;
-        }
-
-        $keys      = explode('.', $option);
-        $subconfig = $config;
-        foreach ($keys as $key) {
-            $subconfig = $subconfig->get($key);
-            if (! $subconfig instanceof Zend_Config) {
-                break;
-            }
-        }
-        return $subconfig;
+        return new Zend_Config_Xml(APPLICATION_PATH . '/application/configs/config.xml', null, true);
     }
 
     /**
@@ -293,42 +277,7 @@ class Application_Configuration extends Config
      */
     public function getValue($key)
     {
-        return self::getValueFromConfig($this->getConfig(), $key);
-    }
-
-    /**
-     * Updates a value in a Zend_Config object.
-     *
-     * @param Zend_Config $config
-     * @param string      $option Name of option
-     * @param string      $value New value for option
-     * @throws Zend_Exception
-     * TODO review and if possible replace this code with something simpler
-     */
-    public static function setValueInConfig($config, $option, $value)
-    {
-        if ($config->readOnly()) {
-             Log::get()->err('Zend_Config object is readonly.');
-            return;
-        }
-
-        $keys = explode('.', $option);
-
-        $subconfig = $config;
-
-        $index = 0;
-
-        foreach ($keys as $key) {
-            $index++;
-            if ($subconfig->get($key) === null && $index < count($keys)) {
-                // create subsection
-                eval('$subconfig->' . $key . ' = array();');
-                $subconfig = $subconfig->get($key);
-            } else {
-                // set value
-                eval('$subconfig->' . $key . ' = $value;');
-            }
-        }
+        return $this->getValueFromConfig($this->getConfig(), $key);
     }
 
     /**

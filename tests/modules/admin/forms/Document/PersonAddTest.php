@@ -101,7 +101,7 @@ class Admin_Form_Document_PersonAddTest extends ControllerTestCase
 
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Called with unknown role', $messages[0]);
+        $this->assertStringContainsString('Called with unknown role', $messages[0]);
     }
 
     public function testValidationFalse()

@@ -71,14 +71,19 @@ class Application_Controller_Action_Helper_Translation extends Zend_Controller_A
         if (
             $modelName === Document::class
                 && ($fieldName === 'Language'
-                        || $fieldName === 'Type'
-                        || $fieldName === 'PublicationState')
+                        || $fieldName === 'Type')
         ) {
             return $value;
         } elseif ($modelName === Enrichment::class && $fieldName === 'KeyName') {
             return $value;
         } else {
-            return $this->normalizeModelName($modelName) . '_' . $fieldName . '_Value_' . ucfirst($value);
+            switch ($fieldName) {
+                case 'ServerState':
+                case 'PublicationState':
+                    return $this->normalizeModelName($modelName) . "_{$fieldName}_Value_{$value}";
+                default:
+                    return $this->normalizeModelName($modelName) . '_' . $fieldName . '_Value_' . ucfirst($value);
+            }
         }
     }
 

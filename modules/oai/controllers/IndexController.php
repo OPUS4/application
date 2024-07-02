@@ -77,7 +77,16 @@ class Oai_IndexController extends Application_Controller_ModuleAccess
             unset($parameters[$name]);
         }
 
-        $server = new Oai_Model_Server(); // TODO needs factory
+        $serverFactory = new Oai_Model_ServerFactory();
+
+        if (isset($parameters['metadataPrefix'])) {
+            $server = $serverFactory->create($parameters['metadataPrefix']);
+        } elseif (isset($parameters['resumptionToken'])) {
+            $server = $serverFactory->createByResumptionToken($parameters['resumptionToken']);
+        } else {
+            $server = $serverFactory->create();
+        }
+
         $server->setScriptPath($this->view->getScriptPath('index'));
         $server->setBaseUrl($this->view->fullUrl());
         $server->setBaseUri($request->getBaseUrl());

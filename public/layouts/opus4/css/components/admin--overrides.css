@@ -1,0 +1,50 @@
+/* admin theme overrides */
+#page-footer {
+    clear: both;
+}
+
+ul#primary-nav #primary-nav-administration.active a,
+ul#primary-nav #primary-nav-administration.active a:hover {
+    padding: 0;
+}
+
+ul#primary-nav #primary-nav-administration.active * {
+    color: var(--dark);
+    background-color: transparent;
+}
+
+ul#primary-nav #primary-nav-administration.active a span {
+    padding-left: 0;
+    padding-right: 0;
+    background: transparent;
+    filter: none;
+}
+
+
+.opus.adminContainer .breadcrumbsContainer,
+.opus #actionboxContainer,
+.no-js .opus #actionboxContainer #Document-ServerState.dropdown:hover dd {
+  background-color: var(--dark);
+  background-image: none;
+  color: var(--maxlight);
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
+  box-sizing: border-box;
+}
+
+.opus #actionboxContainer a,
+.opus #actionboxContainer #Document-ServerState.dropdown dt a,
+.opus #Document-ServerState.dropdown dd a {
+  color: var(--maxlight);
+  background-color: transparent;
+}
+.opus #Document-ServerState.dropdown dd a:hover{
+  color: var(--maxlight);
+  background-color: transparent;
+}
+.opus #actionboxContainer #Document-ServerState.dropdown dd{
+  border-color: var(--maxlight);
+}
+.opus .dropdown dt a::after {
+  border-color: var(--maxlight) transparent transparent;
+}

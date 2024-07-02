@@ -1,5 +1,179 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.5 - 2024-03-12
+
+Problem auf manchen Systemen bei der Anzeige von `BelongsToBibliography` 
+("Bibl.") in der Dokumentenverwaltung behoben. 
+https://github.com/OPUS4/application/issues/1190
+
+## Patch Release 4.8.0.4 - 2024-01-09
+
+Fehler beim Löschen mehrerer Dateien von einem Dokument behoben.
+https://github.com/OPUS4/application/issues/1174
+
+### Review-Modul
+
+Beim Freischalten im Review-Modul, bekommt die Rolle **guest** automatisch
+Zugriff auf die Dateien, der freigeschalteten Dokumente. Das kann nun mit
+einer neuen Option (`workflow.stateChange.published.addGuestAccess = 0`) 
+abgeschaltet werden. 
+https://github.com/OPUS4/application/issues/1176
+
+In der Standardkonfiguration ist die Option aktiviert, um in einem Patch 
+Release, das Verhalten von OPUS 4 nicht zu verändern. In einer kommenden 
+Version wird sich der Defaultwert vermutlich ändern.
+
+Die Zugriffsrechte auf die Dateien werden beim Freischalten einzelner 
+Dokumente in der Administration nicht verändert, unabhängig von der neuen 
+Option. Das Verhalten der verschiedenen Möglichkeiten zur Freigabe wird in
+Zukunft vereinheitlicht werden.
+https://github.com/OPUS4/application/issues/1177
+
+## Patch Release 4.8.0.3 - 2023-11-28
+
+Das `bin/opus4` Kommandozeilentool wurde um zwei Kommandos erweitert.
+
+- document:duplicates
+- document:diff
+
+Hilfe zu den Kommandos kann mit `help` angezeigt werden. Die Namen 
+der Kommandos können abgekürzt werden.
+
+    $ bin/opus4 help doc:dup
+
+`Document:duplicates` dient dazu Dokumente zu mehrfach auftauchenden 
+DOI-Werten zu finden. Die zu prüfenden DOIs können angegeben oder die 
+gesamte Datenbank durchsucht werden. Es kann ein Report im CSV Format
+generiert werden, der Links zu den gefundenen Dokumenten enthält.
+
+`Document:diff` zeigt die Unterschiede zwischen Dokumenten. Die IDs 
+von Dokumenten können direkt angegeben werden oder es kann mit einer 
+DOI nach Dokumenten gesucht werden.
+
+Vorschläge und Hinweise zu den Kommandos können gerne auf GitHub oder
+in der OPUS 4 Tester Mailingliste eingebracht werden.
+
+https://github.com/orgs/OPUS4/discussions
+
+## Patch Release 4.8.0.2 - 2023-08-29
+
+Es wurde ein Fehler bei der Javascript-Validierung von ISSNs behoben. 
+https://github.com/OPUS4/application/issues/1098
+
+## Patch Release 4.8.0.1 - 2023-08-15
+
+Es wurde ein Fehler behoben, bei dem Personen im Metadaten-Formular 
+unter Umständen nicht mehr angezeigt wurden.
+
+https://github.com/OPUS4/application/issues/1068
+
+### BibTeX-Import
+
+Außerdem wurde der BibTeX-Import erweitert. Beim Mapping von Titeln
+kann jetzt die Sprache angegeben werden und es kann auf alle Titel-Typen
+gemappt werden. 
+
+https://github.com/OPUS4/opus4-bibtex/issues/67
+
+In Personen-Feldern können nun Identifier mit angegeben werden.
+
+https://github.com/OPUS4/opus4-bibtex/issues/69
+
+Die Personen-Rolle in OPUS 4 kann jetzt im Mapping konfiguriert werden,
+damit der BibTeX-Feldname nicht mehr mit der Rolle übereinstimmen muss.
+
+https://github.com/OPUS4/opus4-bibtex/issues/70
+
+Für weitere Änderungen am OPUS4-BibTeX Package, siehe hier: 
+https://github.com/OPUS4/opus4-bibtex/releases/tag/4.8.0.1
+
+## Release 4.8 - 2023-04-25
+
+Für diesen Release wurden sehr viele Änderungen am Code von OPUS 4 
+vorgenommen, insbesondere für den Support von PHP 8.1 und die weitere
+Vorbereitung des Umstiegs auf Doctrine und Laminas. Trotz intensiver
+manueller Tests durch die Hosting-Teams und einer umfangreichen 
+Abdeckung mit Unit-Tests, kann es Probleme geben, die bisher nicht 
+aufgefallen sind. Etwaige Schwierigkeiten am besten auf GitHub melden.  
+
+https://github.com/orgs/OPUS4/discussions
+
+### PHP 8 Kompatibilität
+
+OPUS 4.8 wurde mit PHP 7.1 und PHP 8.1 getestet. Diese Version ist noch 
+nicht mit PHP 8.2 kompatibel. PHP 8.1 wird bis November 2024 mit 
+Sicherheitsupdates versorgt.
+
+Voraussichtlich wird mit OPUS 4.9 die Kompatibilität zu PHP 7.1 fallen, 
+um für die Weiterentwicklung die neuesten Versionen der verwendeten 
+Libraries nutzen zu können. Damit wird dann auch der Support von PHP 8.2
+möglich sein.
+
+### CrossRef-Import im Publish-Formular
+
+Es gibt einen neuen Dokumenttypen **DOI**, bei dem im Publish-Formular 
+eine DOI eingeben werden kann, um das Formular automatisch mit Metadaten 
+von CrossRef zu befüllen. Diese Funktionalität benötigt Javascript im 
+Browser. 
+
+Für die Kommunikation mit der CrossRef-API sollte in der OPUS 4
+Konfiguration eine E-Mail-Adresse angegeben werden, die es CrossRef 
+erlaubt den Repository Betreiber zu kontaktieren, falls die eingehenden 
+Requests Probleme verursachen sollten. 
+
+    crossref.mailTo = ''
+
+Mehr dazu findet sich in der Dokumentation der CrossRef-API:
+https://github.com/CrossRef/rest-api-doc#etiquette
+
+### Frontdoor
+
+GND-Schlagwörter mit ExternalKey werden in der Frontdoor nun mit Link 
+zur GND angezeigt, so wie das für Autoren auch vorher schon passierte.
+
+### Enrichments
+
+Die maximale Größe für Optionen von EnrichmentKeys wurde auf 15000 erhöht,
+um längere Select-Listen zu erlauben. Das ist eine temporäre Maßnahme. Das 
+Enrichment-System wird sich mit dem Umbau der Datenbankanbindung weiter 
+verändern und ausgebaut.
+
+### Erweiterungen des 'opus4' Konsolen-Tools (bin/opus4)
+
+Es wurden ein Kommando `cover:generate` hingefügt, dass während der Arbeiten 
+an einem PDF-Deckblatt-Template, zu Testzwecken verwendet werden kann.
+
+Das `Index`-Kommando wurde erweitert, um die Indexierung auf Dokumente einer 
+Sammlung beschränken zu können. Das kann nützlich sein, wenn Sammlungen 
+direkt in der Datenbank angepasst wurden.
+
+Mit `debug:xml` kann nun das interne XML für ein Dokument ausgegeben werden. 
+Das kann bei Arbeiten am XSLT und bei der Fehleranalyse nützlich sein.
+
+Eine Liste aller Kommandos lässt sich mit `bin/opus4` anzeigen. Weitere Hilfe 
+zu einem Kommando erhält man mit `help`, also z.B. `bin/opus4 help index`. 
+
+### PDF-Deckblätter
+
+Es wurde die Möglichkeit hinzugefügt mit auf LateX-basierenden Templates
+automatisch Deckblätter für PDF-Dateien zu generieren. 
+
+Weitere Informationen 
+https://github.com/OPUS4/opus4-pdf
+
+### Vorarbeiten für Umstieg auf Doctrine und Laminas
+
+Im gesamten Code wurden viele der direkten Abhängigkeiten auf die Klassen 
+der aktuellen Framework-Implementation beseitigt. Dafür wurden zahlreiche 
+neue Klassen und Interfaces in **opus4-common** hinzugefügt. Lokaler Code
+muss unter Umständen entsprechend angepasst werden.
+
+### Erweiterungen des CSV-Exports
+
+Neben dem Standard-CSV-Export gibt es nun ein weiteres CSV-Export-Format, das eine Formatierung der Daten gemäß den Anforderungen eines Jahresforschungsberichtes ermöglicht. Zwischen beiden Formaten kann in der config.ini umgeschaltet werden. Weitere Dokumentation unter <https://www.opus-repository.org/userdoc/export/exportlist.html>
+
+--
+
 ## Patch Release 4.7.1.2 - 2022-12-13
 
 ORCID und GND-ID werden jetzt in XMetaDissPlus für die Rollen `Author`,

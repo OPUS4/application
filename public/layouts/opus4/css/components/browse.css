@@ -1,0 +1,39 @@
+#content[class*="solrsearch_browse"]>.wrapper>h2::before {
+  content: "\f802";
+}
+
+#content .wrapper ul.nav.browsing {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+#content .wrapper ul.nav.browsing>li {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem calc(0.5*var(--page--padding));
+  min-height: 2.5em;
+}
+
+ul.nav.browsing>li>a[href*="solrsearch"] {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+ul.nav.browsing>li>a[href*="solrsearch"]::before {
+  content: "\e185";
+  display: inline-block;
+  margin-right: 0.5rem;
+  width: 1.1em;
+}
+
+ul.nav.browsing>li>a[href*="solrsearch"]:hover::before {
+  content: "\f07c";
+}
+
+ul.nav.browsing>li>a.rss {
+  margin-left: auto;
+  width: 2em;
+  text-align: right;
+}

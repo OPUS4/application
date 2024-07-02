@@ -70,7 +70,7 @@ class Oai_Format_Marc21Test extends ControllerTestCase
 
         if (preg_match('#<marc:collection.*>#', $xml, $matches)) {
             $startTag = $matches[0];
-            $this->assertContains('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
+            $this->assertStringContainsString('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
         } else {
             $this->fail('element \'marc21\' not found');
         }

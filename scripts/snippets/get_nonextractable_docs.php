@@ -78,7 +78,8 @@ foreach ($docFinder->getIds() as $id) {
             $numOfNonExtractableFulltexts++;
             continue;
         }
-        if ($response->getRawResponse() === null || strlen(trim($response->getRawResponse())) === 0) {
+        $rawResponse = $response->getRawResponse();
+        if ($rawResponse === null || strlen(trim($rawResponse)) === 0) {
             echo "non-extractable full text for document # " . $d->getId() . " (file name: "
                 . $file->getPath() . " )\n";
             $numOfNonExtractableFulltexts++;
@@ -90,5 +91,3 @@ echo "overall num of full texts: $overallNumOfFulltexts\n";
 
 $errorRate = (100.0 * $numOfNonExtractableFulltexts) / $overallNumOfFulltexts;
 echo "num of non extractable full texts: $numOfNonExtractableFulltexts ($errorRate %)\n";
-
-exit();

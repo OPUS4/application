@@ -123,6 +123,11 @@ orcid.linkAuthor.frontdoor = 1
 ; GND SETTINGS
 gnd.linkAuthor.frontdoor = 1
 
+; UNION CATALOGUE SETTINGS
+; On the frontdoor, OPUS can link a union catalogue id to the corresponding entry in the union catalogue. 
+; To that purpose, enter the request URL to a single entry in your union catalogue here.
+; unionCat.requestUrl = 'https://opac.k10plus.de/DB=2.299/PPNSET?PRS=HOL&HILN=888&INDEXSET=21&PPN=' ; Request URL for a single catalogue entry by union catalogue id (PPN) in K10Plus
+
 ;DOCUMENTTYPE SETTINGS
 ; You can define which document types should be shown in the publish module or
 ; which ones should be excluded (comma separated names of XML files without
@@ -266,7 +271,16 @@ filetypes.html.mimeType = 'text/html'
 ; Allow displaying of PDF directly in browser (default for other types 'attachment')
 filetypes.pdf.contentDisposition = 'inline'
 
-; The following is needed even if sections are empty.
+; PDF COVER SETTINGS
+; if set to `1` PDF cover pages may be added in front of downloaded PDF files
+pdf.covers.generate = 0
+; path relative to the covers directory pointing to a default cover template
+pdf.covers.default = 'demo-cover.md'
+; path relative to the covers directory pointing to the cover template to be used
+; (instead of the default cover template) for documents in a certain collection
+;collection.15982.cover = ''
+
+; !!! The following is needed even if sections are empty. !!!
 [staging : production]
 
 [testing : production]
@@ -276,16 +290,5 @@ publish.path.documenttypes[] = APPLICATION_PATH "/application/configs/doctypes"
 publish.path.documenttypes[] = APPLICATION_PATH "/tests/resources/doctypes"
 publish.path.documenttemplates[] = APPLICATION_PATH "/application/configs/doctypes_templates"
 publish.path.documenttemplates[] = APPLICATION_PATH "/tests/resources/doctypes_templates"
-
-; PDF COVER SETTINGS
-; if set to `1` PDF cover pages may be added in front of downloaded PDF files
-pdf.covers.generate = 1
-; path to the covers directory that stores PDF cover templates
-pdf.covers.path = APPLICATION_PATH "/tests/resources/covers"
-; path relative to the covers directory pointing to a default cover template
-pdf.covers.default = 'demo/demo-cover-template.md'
-; path relative to the covers directory pointing to the cover template to be used
-; (instead of the default cover template) for documents in a certain collection
-;collection.15982.cover = ''
 
 [development : production]

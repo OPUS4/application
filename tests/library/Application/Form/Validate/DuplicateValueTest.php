@@ -41,7 +41,7 @@ class Application_Form_Validate_DuplicateValueTest extends TestCase
         $this->assertEquals(['deu', 'eng'], $validator->getValues());
         $this->assertEquals(1, $validator->getPosition());
         $messageTemplates = $validator->getMessageTemplates();
-        $this->assertInternalType('array', $messageTemplates);
+        $this->assertIsArray($messageTemplates);
         $this->assertArrayHasKey('notValid', $messageTemplates);
         $this->assertEquals('testmessage', $messageTemplates['notValid']);
     }

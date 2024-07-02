@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<!-- ddb: administrative und technische Metadaten Deutsche Nationalbibliothek -->
-	<!-- Copyright 2010  Deutsche Nationalbibliothek -->
-	<!-- Version xMetaDissPlus 2.1 fuer Version 2.2 angepasst -->
+<!-- ddb: administrative und technische Metadaten Deutsche Nationalbibliothek -->
+<!-- Copyright 2023 Deutsche Nationalbibliothek -->
+<!-- Version 2.5 -->
 <xs:schema targetNamespace="http://www.d-nb.de/standards/ddb/"
 	elementFormDefault="qualified"
 	attributeFormDefault="qualified"
@@ -13,16 +13,45 @@
 	<!--
 		Folgende Importe werden benötigt, da Elemente aus den zugehörigen
 		Namespaces benutzt werden.
-	-->
-	<xs:import namespace="http://www.w3.org/XML/1998/namespace"
-		schemaLocation="http://www.w3.org/2001/03/xml.xsd" />
-	<xs:import namespace="http://purl.org/dc/elements/1.1/"
-		schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd" />
-	<xs:import namespace="http://purl.org/dc/terms/"
-		schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd" />
-	<xs:import namespace="http://lcweb.loc.gov/standards/iso639-2/"
-		schemaLocation="http://www.d-nb.de/standards/xmetadiss/iso639-2.xsd" />
+	-->	
+	
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd" />
+	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="dc.xsd"/>
+	<xs:import namespace="http://purl.org/dc/terms/" schemaLocation="dcterms.xsd"/>
+	<xs:import namespace="http://lcweb.loc.gov/standards/iso639-2/" schemaLocation="iso639-2.xsd" />
 	<xs:annotation>
+		<xs:documentation xml:lang="de">
+			2023-02-27:
+			CHANGED by DNB:
+			Erweiterung für Produktsigel: ein Attributwert "ddb:Produktsigel" wurde dem Attribut xsi:type im Element dcterms:isPartOf hinzugefügt.
+			<!-- Beispiel in der Instanz:  <dcterms:isPartOf xsi:type="ddb:Produktsigel">Codewert-des-Sigels</dcterms:isPartOf>-->
+			Die vorliegende Version 2.5 ist abwärtskompatibel zu den Vorgängerversionen.
+					
+			2020-04-24:
+			CHANGED by DNB
+			element licence xs:anyURI ersetzt durch xs:string wegen Erweiterung des Elements auf OA-Werte, v.a. otherScheme
+			Version xMetaDissPlus 2.4
+			Copyright 2020 Deutsche Nationalbibliothek
+			
+			
+			2017-12-01: 
+			1.  CHANGED alle schemaLocation-Attribute verweisen auf eine DNB eigene URL, 
+			    auch wenn sie zuvor auf DNB-fremde URLs verwiesen haben 
+			    (dc: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd,
+			    dcterms: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd,
+			    xml: http://www.w3.org/2001/03/xml.xsd).
+			2.  ADD group identifierType, die neue Elemente enthält: ORCID, ISNI, Ringgold, OtherID
+			3.  ADD attributeGroup normData
+			4.  ADD Element licence + attribute licenceType
+			5.  ADD referenzierbares Attribut attribute GND-Nr
+			6.  ADD Element relatedIdentifier + Attribute: @relatedIdentifierType + @ relationType
+			7.  ADD enumeration value ISBN in identifier/@type
+			8.  DELETE Definition des Attributs xml:lang (prohibited) in extensionBase SimpleLiteral in complexType titleISO639-2
+			9.  DELETE Definition des Attributs xml:lang (prohibited) in extensionBase SimpleLiteral in complexType talternativeISO639-2
+			10. DELETE Definition des Attributs xml:lang (prohibited) in extensionBase SimpleLiteral in complexType contentISO639-2
+			11. DELETE Definition des Attributs xml:lang (prohibited) in extensionBase SimpleLiteral in complexType access
+			12. DELETE Definition des Attributs xml:lang (prohibited) in extensionBase SimpleLiteral in complexType encoding	
+					</xs:documentation>
 		<xs:documentation xml:lang="de">2010: Anpassungen im Schema ddb.xsd für die Erweiterung von xMetaDiss 1.3 auf xMetaDissPlus 2.1:
 			Das Schema wurde um das Element "checksum" ergänzt.
 			2011: Anpassungen im Schema ddb.xsd für die Erweiterung von xMetaDiss 2.1 auf xMetaDissPlus 2.2:
@@ -109,6 +138,7 @@
 								<xs:enumeration value="Erstkat-ID" />
 								<xs:enumeration value="URL_Frontdoor" />
 								<xs:enumeration value="URL_Publikation" />
+								<xs:enumeration value="ISBN" />
 								<xs:enumeration value="ISSN" />
 								<xs:enumeration value="other" />
 							</xs:restriction>
@@ -181,7 +211,7 @@
 				<xs:attribute name="type" type="titleType" use="optional" />
 				<xs:attribute name="lang" type="iso639-2:BibliographicCodeType"
 					form="unqualified" use="required" />
-				<xs:attribute ref="xml:lang" use="prohibited" />
+				<!--<xs:attribute ref="xml:lang" use="prohibited" />-->
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -194,7 +224,7 @@
 				<xs:attribute name="type" type="alttitleType" use="optional" />
 				<xs:attribute name="lang" type="iso639-2:BibliographicCodeType"
 					form="unqualified" use="required" />
-				<xs:attribute ref="xml:lang" use="prohibited" />
+				<!--<xs:attribute ref="xml:lang" use="prohibited" />-->
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -214,7 +244,7 @@
 				</xs:attribute>
 				<xs:attribute name="lang" type="iso639-2:BibliographicCodeType"
 					form="unqualified" use="required" />
-				<xs:attribute ref="xml:lang" use="prohibited" />
+				<!--<xs:attribute ref="xml:lang" use="prohibited" />-->
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -223,7 +253,7 @@
 			<xs:extension base="dc:SimpleLiteral">
 				<xs:attribute ref="kind" use="required" />
 				<xs:attribute name="type" type="accessType" use="required" />
-				<xs:attribute ref="xml:lang" use="prohibited" />
+				<!--<xs:attribute ref="xml:lang" use="prohibited" />-->
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -249,7 +279,7 @@
 		<xs:complexContent mixed="true">
 			<xs:extension base="dc:SimpleLiteral">
 				<xs:attribute name="Scheme" type="xs:string" use="required" />
-				<xs:attribute ref="xml:lang" use="prohibited" />
+				<!--<xs:attribute ref="xml:lang" use="prohibited" />-->
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
@@ -281,6 +311,17 @@
 		</xs:simpleContent>
 	</xs:complexType>
 	<xs:complexType name="Erstkat-ID">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>				
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	
+	<!-- hier wurde ein Attribut für die textuelle Verknüpfung mit einem Produktsigel eingefügt -->
+	<xs:complexType name="Produktsigel">
 		<xs:simpleContent>
 			<xs:restriction base="dc:SimpleLiteral">
 				<xs:simpleType>
@@ -356,8 +397,91 @@
 						</xs:simpleType>
 					</xs:union>
 				</xs:simpleType>
-				<xs:attribute ref="xml:lang" use="prohibited" />
+				<xs:attribute ref="xml:lang" use="prohibited"/>
 			</xs:restriction>
 		</xs:simpleContent>
 	</xs:complexType>
+	<xs:group name="identifierType">
+		<xs:choice>
+			<xs:element name="ORCID" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ISNI" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Ringgold" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="OtherID" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:choice>
+	</xs:group>
+	<xs:attributeGroup name="normData">
+		<xs:attribute name="GKD" type="xs:string" use="optional"/>
+		<xs:attribute name="SWD" type="xs:string" use="optional"/>
+		<xs:attribute name="PND" type="xs:string" use="optional"/>
+		<xs:attribute name="PND-Nr" type="xs:string" use="optional"/>
+		<xs:attribute name="GND-Nr" type="xs:string" use="optional"/>
+	</xs:attributeGroup>
+	<xs:element name="relatedIdentifier">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="relatedIdentifierType" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="URN" />
+								<xs:enumeration value="DOI" />
+								<xs:enumeration value="handle" />
+								<xs:enumeration value="other" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="relationType" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="IsCitedBy"/>
+								<xs:enumeration value="Cites"/>
+								<xs:enumeration value="IsSupplementTo"/>
+								<xs:enumeration value="IsSupplementedBy"/>
+								<xs:enumeration value="IsContinuedBy"/>
+								<xs:enumeration value="Continues"/>
+								<xs:enumeration value="HasMetadata"/>
+								<xs:enumeration value="IsMetadataFor"/>
+								<xs:enumeration value="IsNewVersionOf"/>
+								<xs:enumeration value="IsPreviousVersionOf"/>
+								<xs:enumeration value="IsPartOf"/>
+								<xs:enumeration value="HasPart"/>
+								<xs:enumeration value="IsReferencedBy"/>
+								<xs:enumeration value="References"/>
+								<xs:enumeration value="IsDocumentedBy"/>
+								<xs:enumeration value="Documents"/>
+								<xs:enumeration value="IsCompiledBy"/>
+								<xs:enumeration value="Compiles"/>
+								<xs:enumeration value="IsVariantFormOf"/>
+								<xs:enumeration value="IsOriginalFormOf"/>
+								<xs:enumeration value="IsIdenticalTo"/>
+								<xs:enumeration value="IsReviewedBy"/>
+								<xs:enumeration value="Reviews"/>
+								<xs:enumeration value="IsDerivedFrom"/>
+								<xs:enumeration value="IsSourceOf"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="licence">
+		<xs:complexType>
+			<xs:simpleContent><!-- xs:anyURI ersetzt durch xs:string wegen Erweiterung des Elements auf OA-Werte -->
+				<xs:extension base="xs:string">
+					<xs:attribute name="licenceType" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="access" />
+								<xs:enumeration value="URL" />
+								<xs:enumeration value="cc" />
+								<xs:enumeration value="otherScheme" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:attribute name="GND-Nr" type="xs:string"></xs:attribute>
 </xs:schema>

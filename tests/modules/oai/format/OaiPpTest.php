@@ -71,7 +71,7 @@ class Oai_Format_OaiPpTest extends ControllerTestCase
 
         if (preg_match('#<PP:ProPrint.*>#', $xml, $matches)) {
             $startTag = $matches[0];
-            $this->assertContains('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
+            $this->assertStringContainsString('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
         } else {
             $this->fail('element \'PP:ProPrint\' not found');
         }
