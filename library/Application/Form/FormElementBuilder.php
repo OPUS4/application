@@ -56,7 +56,6 @@ class FormElementBuilder
      */
     public function getFormElement($fieldType, $value = null)
     {
-        $element = $fieldType->getFormElement($value);
-        return $element;
+        return $fieldType->getFormElement($value);
     }
 }
