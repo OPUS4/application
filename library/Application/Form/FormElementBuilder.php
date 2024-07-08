@@ -43,7 +43,7 @@ use Opus\Common\Model\FieldTypeInterface;
  * TODO FieldDescriptor and FieldType are part of the configuration - later this configuration will be the sum of
  *      defaults and local configuration files, so the FormElementName might later come from the FieldDescriptor again
  */
-class FormElementBuilder
+class Application_Form_FormElementBuilder
 {
     /**
      * Returns form element for a field type.

@@ -153,7 +153,9 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         // neues Formularfeld für die Eingabe des Enrichment-Wertes erzeugen
         // wenn $value bezüglich der Typkonfiguration nicht zulässig ist,
         // wird $value durch den nachfolgenden Methodenaufruf nicht gesetzt
-        $element = $enrichmentType->getFormElement($value);
+        $formElementBuilder = $this->getFormElementBuilder();
+
+        $element = $formElementBuilder->getFormElement($enrichmentType, $value);
 
         $enrichmentKeyName = null;
         if ($enrichmentKey !== null) {
@@ -690,10 +692,10 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * @return FormElementBuilder
+     * @return Application_Form_FormElementBuilder
      */
     private function getFormElementBuilder()
     {
-        return new FormElementBuilder();
+        return new Application_Form_FormElementBuilder();
     }
 }
