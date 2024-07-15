@@ -1,3 +1,24 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const formFields   = document.querySelectorAll("input, select, textarea");
+    const importButton = document.querySelector("input[name='go_import']");
+    const abortButton  = document.querySelector("input[name='abort']");
+
+
+    // Event Listener für das Klicken auf alle Formularfelder außer dem DOI-Feld (und dem Import-Button)
+    formFields.forEach(function (field) {
+        if (field.id !== "IdentifierDoi" && field !== importButton && field !== abortButton) {
+            field.addEventListener("focus", function (event) {
+                const enrichmentOpusDoiFlag = document.getElementById("Enrichmentopus_doi_flag");
+                if (enrichmentOpusDoiFlag && enrichmentOpusDoiFlag.value !== "true") {
+                    //Focus wurde auf ein Formularfeld gesetzt, bevor Import durchgeführt wurde -> Hinweis
+                    openDialog(translations.doiimport_header_note, translations.doiimport_hint_importMissing, "note");
+                    event.preventDefault();
+                    event.target.blur(); // Entfernt den Fokus vom Feld
+                }
+            });
+        }
+    });
+});
 
 let populatedFields = [];
 const baseUrl       = window.location.href.split('/publish')[0];
@@ -442,11 +463,7 @@ async function getDoctypes(data)
 
 function openDialog(title, text, type = 'note', id = null)
 {
-    var dialogButtons = {
-        OK: function () {
-            $(this).dialog("close");
-        }
-    };
+    var dialogButtons = {};
 
     var dialogContent         = document.createElement("div");
     dialogContent.textContent = text;
@@ -472,17 +489,39 @@ function openDialog(title, text, type = 'note', id = null)
             };
             break;
         case 'note':
-            // Keine speziellen Buttons hinzufügen, nur der Standard-OK-Button
+            dialogButtons[translations.doiimport_button_back]     = function () {
+                $(this).dialog("close");
+                document.getElementById("abort").click();
+            };
+            dialogButtons[translations.doiimport_button_tryAgain] = function () {
+                document.getElementById("IdentifierDoi").style.backgroundColor = null;
+                document.getElementById("IdentifierDoi").value                 = "";
+                $(this).dialog("close");
+                setTimeout(function () {
+                    document.getElementById("IdentifierDoi").focus();
+                }, 100);
+            };
             break;
         case 'redirect':
             //Falls DOI nicht bei Crossref gefunden wurde -> zurück zur Auswahl des Dokumenttyps (um manuelle Eingabe im DOI-Import zu verhindern)
-            dialogButtons['OK'] = function () {
+            dialogButtons[translations.doiimport_button_back]     = function () {
                 $(this).dialog("close");
                 document.getElementById("abort").click();
+            };
+            dialogButtons[translations.doiimport_button_tryAgain] = function () {
+                document.getElementById("IdentifierDoi").style.backgroundColor = null;
+                document.getElementById("IdentifierDoi").value                 = "";
+                $(this).dialog("close");
+                setTimeout(function () {
+                    document.getElementById("IdentifierDoi").focus();
+                }, 100);
             };
             break;
         default:
             // Weitere Fälle können hier hinzugefügt werden
+            dialogButtons['OK'] = function () {
+                $(this).dialog("close");
+            };
             break;
     }
 

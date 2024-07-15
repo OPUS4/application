@@ -63,10 +63,19 @@
 
         <tu tuid="doiimport_hint_doiNotFound">
             <tuv xml:lang="en">
-                <seg>DOI not found in Crossref. Please select the desired document type on the following page and enter the data manually.</seg>
+                <seg>DOI not found in Crossref.</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>DOI wurde nicht in Crossref gefunden. Wählen Sie bitte auf der folgenden Seite den gewünschten Dokumenttyp aus und tragen die Daten manuell ein.</seg>
+                <seg>DOI wurde nicht in Crossref gefunden.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_hint_importMissing">
+            <tuv xml:lang="en">
+                <seg>Please enter a DOI and import metadata first.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte zuerst eine DOI eingeben und Metadaten importieren.</seg>                
             </tuv>
         </tu>
 
@@ -94,6 +103,24 @@
             </tuv>
             <tuv xml:lang="de">                
                 <seg>Zeige ID</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_button_back">
+            <tuv xml:lang="en">
+                <seg>Select a different document type</seg>
+            </tuv>
+            <tuv xml:lang="de">                
+                <seg>Zurück zur Dokumenttyp-Auswahl</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doiimport_button_tryAgain">
+            <tuv xml:lang="en">
+                <seg>Enter another DOI</seg>
+            </tuv>
+            <tuv xml:lang="de">                
+                <seg>Andere DOI eingeben</seg>
             </tuv>
         </tu>
 
