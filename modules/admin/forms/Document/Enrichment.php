@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Date;
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentInterface;
 use Opus\Common\EnrichmentKey;
@@ -148,6 +149,14 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                     $value = $values[0];
                 }
             }
+        } else {
+            switch ($enrichmentType->getFormElementName()) {
+                case 'Date':
+                    $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+                    $date        = new Date($value);
+                    $value       = $datesHelper->getDateString($date);
+                    break;
+            }
         }
 
         // neues Formularfeld für die Eingabe des Enrichment-Wertes erzeugen
@@ -251,30 +260,40 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 
             // besondere Behandlung von Enrichment-Keys, die als Select-Formularlement dargestellt werden
             $enrichmentType = $enrichmentKey->getEnrichmentType();
-            if ($enrichmentType !== null && $enrichmentType->getFormElementName() === 'Select') {
-                // bei Select-Feldern wird im POST nicht der ausgewählte Wert übergeben,
-                // sondern der Index des Wertes in der Werteliste (beginnend mit 0)
-                // daher ist hier ein zusätzlicher Mapping-Schritt erforderlich, der vom im POST
-                // angegebenen Index den tatsächlich ausgewählten Wert ableitet
+            if ($enrichmentType !== null) {
+                switch ($enrichmentType->getFormElementName()) {
+                    case 'Select':
+                        // bei Select-Feldern wird im POST nicht der ausgewählte Wert übergeben,
+                        // sondern der Index des Wertes in der Werteliste (beginnend mit 0)
+                        // daher ist hier ein zusätzlicher Mapping-Schritt erforderlich, der vom im POST
+                        // angegebenen Index den tatsächlich ausgewählten Wert ableitet
 
-                // falls keine strikte Validierung stattfindet, dann darf der ursprünglich im
-                // Dokument gespeichert Enrichment-Wert (steht in Select-Feldliste an erster Stelle)
-                // auch dann gespeichert werden, wenn er gemäß der Konfiguration des Enrichment-Keys
-                // eigentlich nicht gültig ist: in diesem Fall keinen neuen Wert im Enrichment setzen
-                $indexOffset = 0;
-                if ($enrichment->getId() !== null) {
-                    // keine Behandlung von Enrichments, die noch nicht in der Datenbank gespeichert sind,
-                    // (nach dem Hinzufügen von Enrichments über Hinzufügen-Button)
-                    if (! in_array($enrichment->getValue(), $enrichmentType->getValues())) {
-                        if ($enrichmentValue === 0) {
-                            return; // keine Änderung des Enrichment-Werts
+                        // falls keine strikte Validierung stattfindet, dann darf der ursprünglich im
+                        // Dokument gespeichert Enrichment-Wert (steht in Select-Feldliste an erster Stelle)
+                        // auch dann gespeichert werden, wenn er gemäß der Konfiguration des Enrichment-Keys
+                        // eigentlich nicht gültig ist: in diesem Fall keinen neuen Wert im Enrichment setzen
+                        $indexOffset = 0;
+                        if ($enrichment->getId() !== null) {
+                            // keine Behandlung von Enrichments, die noch nicht in der Datenbank gespeichert sind,
+                            // (nach dem Hinzufügen von Enrichments über Hinzufügen-Button)
+                            if (! in_array($enrichment->getValue(), $enrichmentType->getValues())) {
+                                if ($enrichmentValue === 0) {
+                                    return; // keine Änderung des Enrichment-Werts
+                                }
+
+                                // beim Mapping von Select-Feldwertindex auf tatsächlichen Wert aus Typkonfiguration 1 abziehen
+                                $indexOffset = -1;
+                            }
                         }
+                        $enrichmentValue = $enrichmentType->getValues()[$enrichmentValue + $indexOffset];
+                        break;
 
-                        // beim Mapping von Select-Feldwertindex auf tatsächlichen Wert aus Typkonfiguration 1 abziehen
-                        $indexOffset = -1;
-                    }
+                    case 'Date':
+                        $datesHelper     = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+                        $dateObj         = $datesHelper->getOpusDate($enrichmentValue);
+                        $enrichmentValue = $dateObj->__toString();
+                        break;
                 }
-                $enrichmentValue = $enrichmentType->getValues()[$enrichmentValue + $indexOffset];
             }
         }
 

@@ -108,20 +108,13 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         // TODO create form element class for 'FieldType'
         $element = $this->createElement(
-            'select',
+            'FieldType',
             self::ELEMENT_TYPE,
             [
                 'label' => 'admin_enrichmentkey_label_type',
                 'id'    => 'admin_enrichmentkey_type',
             ]
         );
-
-        // alle verfügbaren EnrichmentTypes ermitteln und als Auswahlfeld anzeigen
-        $availableTypes[''] = ''; // Standardauswahl des Select-Felds soll leer sein
-        $fieldTypes         = FieldTypes::getAll();
-        $fieldTypes         = array_combine($fieldTypes, $fieldTypes); // Creates array where key === value
-        $availableTypes     = array_merge($availableTypes, $fieldTypes);
-        $element->setMultiOptions($availableTypes);
         $this->addElement($element);
 
         $element = $this->createElement(
@@ -277,8 +270,11 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
     {
         // leere Auswahlmöglichkeit im Select-Feld für Type wird nicht angeboten (Pflichtfeld)
         $element = $this->getElement(self::ELEMENT_TYPE);
+
+        // TODO depends on the NULL option having an empty label (inside knowledge for SelectWithNull)
         $element->removeMultiOption('');
-        $element->setRequired(true);
+
+        $element->setRequired(true); // TODO this should automatically remove NULL option (handled by element)
         $this->applyCustomMessages($element);
     }
 }
