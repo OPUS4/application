@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        versions: [{php: '7.1', solr: '7.7.3'}, {php: '8.1', solr: '9.5.0'}]
+        versions: [{php: '7.1', solr: '7.7.3'}, {php: '8.1', solr: '9.6.1'}]
       fail-fast: false
 
     name: PHP ${{ matrix.versions.php }} Test
