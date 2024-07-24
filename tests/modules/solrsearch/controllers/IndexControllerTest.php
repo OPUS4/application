@@ -31,6 +31,7 @@
 
 use Opus\Common\CollectionRole;
 use Opus\Common\Date;
+use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Identifier;
 use Opus\Common\Model\ModelException;
@@ -85,6 +86,44 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/thissearchtermdoesnotexist/sortfield/score/sortorder/desc');
         $this->assertNotContains('result_box', $this->getResponse()->getBody());
         $this->assertNotContains('search_results', $this->getResponse()->getBody());
+    }
+
+    public function testSearchWithSlashInDoi()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState(Document::STATE_PUBLISHED);
+        $doc->addIdentifierDoi()->setValue('10.000/testDoi');
+        $docId = $doc->store();
+
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/query/10.000%2FtestDoi');
+        $this->assertXpath('//div[contains(@class, "result_box")]');
+        $this->assertXpath('//div[contains(@class, "search_results")]');
+        $this->assertXpath("//a[contains(@href, 'docId/{$docId}')]");
+    }
+
+    public function testSearchWithSlash()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState(Document::STATE_PUBLISHED);
+        $doc->addTitleAbstract()->setValue('10/20')->setLanguage('eng');
+        $docId = $doc->store();
+
+        $this->dispatch('/solrsearch/index/search/start/0/rows/10/sortfield/score/sortorder/desc/searchtype/simple/query/10%2F20');
+        $this->assertXpath('//div[contains(@class, "result_box")]');
+        $this->assertXpath('//div[contains(@class, "search_results")]');
+        $this->assertXpath("//a[contains(@href, 'docId/{$docId}')]");
+    }
+
+    public function testSearchDispatchWithSlash()
+    {
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost([
+                'searchtype' => 'simple',
+                'query'      => '10%2F20',
+            ]);
+        $this->dispatch('/solrsearch/dispatch');
+        $this->assertRedirect();
     }
 
     public function testLatestAction()
