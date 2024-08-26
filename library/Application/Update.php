@@ -58,6 +58,11 @@ class Application_Update extends Application_Update_PluginAbstract
     private $confirmSteps = false;
 
     /**
+     * Shell command for executing scripts.
+     */
+    private $shellCommand = 'php';
+
+    /**
      * Bootstrap Zend_Application for update process.
      */
     public function bootstrap()
@@ -205,7 +210,9 @@ class Application_Update extends Application_Update_PluginAbstract
 
         $this->log("Running '$basename' ... ");
 
-        passthru($script, $exitCode);
+        $shellCommand = $this->getShellCommand();
+
+        passthru("{$shellCommand} {$script}", $exitCode);
 
         if ($exitCode !== 0) {
             $message = "Error ($exitCode) running '$basename'!";
@@ -331,5 +338,13 @@ class Application_Update extends Application_Update_PluginAbstract
     public function getConfirmSteps()
     {
         return $this->confirmSteps;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShellCommand()
+    {
+        return $this->shellCommand;
     }
 }
