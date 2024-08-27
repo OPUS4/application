@@ -43,23 +43,13 @@ use Opus\Database;
  */
 class Application_Update extends Application_Update_PluginAbstract
 {
-    /**
-     * Path to update scripts.
-     *
-     * @var string
-     */
+    /** @var string Path to update scripts. */
     private $scriptsPath = '/scripts/update';
 
-    /**
-     * Enables confirmation before an update step is executed.
-     *
-     * @var bool
-     */
+    /** @var bool Enables confirmation before an update step is executed. */
     private $confirmSteps = false;
 
-    /**
-     * Shell command for executing scripts.
-     */
+    /** @var string Shell command for executing scripts. */
     private $shellCommand = 'php';
 
     /**
