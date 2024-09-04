@@ -1,5 +1,10 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.6 - 2024-08-27
+
+Problem bei der Ausführung von PHP Update-Skripten behoben.
+https://github.com/OPUS4/application/issues/992
+
 ## Patch Release 4.8.0.5 - 2024-03-12
 
 Problem auf manchen Systemen bei der Anzeige von `BelongsToBibliography` 

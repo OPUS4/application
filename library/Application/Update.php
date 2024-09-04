@@ -43,19 +43,14 @@ use Opus\Database;
  */
 class Application_Update extends Application_Update_PluginAbstract
 {
-    /**
-     * Path to update scripts.
-     *
-     * @var string
-     */
+    /** @var string Path to update scripts. */
     private $scriptsPath = '/scripts/update';
 
-    /**
-     * Enables confirmation before an update step is executed.
-     *
-     * @var bool
-     */
+    /** @var bool Enables confirmation before an update step is executed. */
     private $confirmSteps = false;
+
+    /** @var string Shell command for executing scripts. */
+    private $shellCommand = 'php';
 
     /**
      * Bootstrap Zend_Application for update process.
@@ -205,7 +200,9 @@ class Application_Update extends Application_Update_PluginAbstract
 
         $this->log("Running '$basename' ... ");
 
-        passthru($script, $exitCode);
+        $shellCommand = $this->getShellCommand();
+
+        passthru("{$shellCommand} {$script}", $exitCode);
 
         if ($exitCode !== 0) {
             $message = "Error ($exitCode) running '$basename'!";
@@ -331,5 +328,13 @@ class Application_Update extends Application_Update_PluginAbstract
     public function getConfirmSteps()
     {
         return $this->confirmSteps;
+    }
+
+    /**
+     * @return string
+     */
+    public function getShellCommand()
+    {
+        return $this->shellCommand;
     }
 }
