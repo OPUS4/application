@@ -68,6 +68,17 @@ searchengine.solr.default.service.extract.endpoint.localhost.timeout = 10
 ; Turn on to display document titles of search results in user interface language if possible
 search.result.display.preferUserInterfaceLanguage = 0
 
+;WEIGHTED SEARCH
+; if set to `1` a weighted search will be used where query matches in particular fields can be
+; assigned different importance 
+;search.weightedSearch = 1
+
+; boost factors for fields which increase (>1.0) or decrease (<1.0) the importance of query matches
+; in that field
+;search.simple.title = 10
+; boost factors for your instance's enrichment fields can be added in a similar fashion, e.g.:
+;search.simple.Relation = 1.5
+
 ;MAIL SETTINGS
 ; mail.opus.smtp = localhost; SMTP server for sending email
 ; mail.opus.port = 25 ; SMTP server port for sending email
