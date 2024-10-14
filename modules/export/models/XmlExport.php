@@ -32,6 +32,7 @@
 use Opus\Common\Document;
 use Opus\Common\Repository;
 use Opus\Common\Security\Realm;
+use Opus\Search\Util\Query;
 
 /**
  * Export plugin for exporting documents as XML.
@@ -319,7 +320,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
      */
     public function getMaxRows()
     {
-        $maxRows = Opus\Search\Util\Query::MAX_ROWS;
+        $maxRows = Query::MAX_ROWS;
 
         $config = $this->getConfig();
 
@@ -338,8 +339,8 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         }
 
         // Do not allows configured values to exceed java.lang.Integer.MAX_VALUE (Solr)
-        if ($maxRows > Opus\Search\Util\Query::MAX_ROWS) {
-            $maxRows = Opus\Search\Util\Query::MAX_ROWS;
+        if ($maxRows > Query::MAX_ROWS) {
+            $maxRows = Query::MAX_ROWS;
         }
 
         return $maxRows;

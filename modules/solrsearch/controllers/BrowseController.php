@@ -30,6 +30,7 @@
  */
 
 use Opus\Search\SearchException;
+use Opus\Search\Util\Query;
 
 /**
  * TODO move list handling into model
@@ -83,7 +84,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action
         }
 
         $facetname = 'doctype';
-        $query     = new Opus\Search\Util\Query(Opus\Search\Util\Query::FACET_ONLY);
+        $query     = new Query(Query::FACET_ONLY);
         $query->setFacetField($facetname);
 
         try {
@@ -119,7 +120,7 @@ class Solrsearch_BrowseController extends Application_Controller_Action
 
         $facetname = 'year';
 
-        $query = new Opus\Search\Util\Query(Opus\Search\Util\Query::FACET_ONLY);
+        $query = new Query(Query::FACET_ONLY);
 
         $facetManager = new Application_Search_FacetManager();
         $facet        = $facetManager->getFacet($facetname);

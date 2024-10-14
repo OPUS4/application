@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\Title;
+use Opus\Search\Service;
 
 /**
  * TODO fix Solr configuration
@@ -100,7 +101,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $date       = new DateTime($doc1->getServerDatePublished());
         $dateValue1 = $date->format(DateTime::RFC2822);
 
-        $indexer = Opus\Search\Service::selectIndexingService(null, 'solr');
+        $indexer = Service::selectIndexingService(null, 'solr');
 
         $indexer->addDocumentsToIndex($doc1);
 
