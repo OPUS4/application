@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\CollectionRole;
+use Opus\Search\Facet\Set;
 
 /**
  * TODO refactor as view helper or something better
@@ -45,7 +46,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
     public function buildFacetArray($paramSet)
     {
         // TODO not sure I like processing request parameters in *opus4-search* class (backend code)
-        return Opus\Search\Facet\Set::getFacetLimitsFromInput($paramSet);
+        return Set::getFacetLimitsFromInput($paramSet);
     }
 
     /**

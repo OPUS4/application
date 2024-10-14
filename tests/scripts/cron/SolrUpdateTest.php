@@ -33,6 +33,7 @@ require_once 'CronTestCase.php';
 
 use Opus\Common\DocumentInterface;
 use Opus\Common\Job;
+use Opus\Search\Task\IndexOpusDocument;
 
 class SolrUpdateTest extends CronTestCase
 {
@@ -52,38 +53,38 @@ class SolrUpdateTest extends CronTestCase
 
     public function testSolrUpdateIndex()
     {
-        $this->createJob(Opus\Search\Task\IndexOpusDocument::LABEL, [
+        $this->createJob(IndexOpusDocument::LABEL, [
             'documentId' => $this->document->getId(),
             'task'       => 'index',
         ]);
         $this->executeScript('cron-solr-update.php');
-        $allJobs = Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Job::STATE_UNDEFINED);
+        $allJobs = Job::getByLabels([IndexOpusDocument::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
-        $failedJobs = Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Job::STATE_FAILED);
+        $failedJobs = Job::getByLabels([IndexOpusDocument::LABEL], null, Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue');
     }
 
     public function testSolrRemoveIndex()
     {
-        $this->createJob(Opus\Search\Task\IndexOpusDocument::LABEL, [
+        $this->createJob(IndexOpusDocument::LABEL, [
             'documentId' => $this->document->getId(),
             'task'       => 'remove',
         ]);
         $this->executeScript('cron-solr-update.php');
-        $allJobs = Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Job::STATE_UNDEFINED);
+        $allJobs = Job::getByLabels([IndexOpusDocument::LABEL], null, Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
-        $failedJobs = Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Job::STATE_FAILED);
+        $failedJobs = Job::getByLabels([IndexOpusDocument::LABEL], null, Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue');
     }
 
     public function testJobFailsIfInvalidTask()
     {
-        $this->createJob(Opus\Search\Task\IndexOpusDocument::LABEL, [
+        $this->createJob(IndexOpusDocument::LABEL, [
             'documentId' => $this->document->getId(),
             'task'       => 'do-the-unexpected',
         ]);
         $this->executeScript('cron-solr-update.php');
-        $allJobs = Job::getByLabels([Opus\Search\Task\IndexOpusDocument::LABEL], null, Job::STATE_FAILED);
+        $allJobs = Job::getByLabels([IndexOpusDocument::LABEL], null, Job::STATE_FAILED);
         $this->assertEquals(1, count($allJobs), 'Expected one failed job in queue (found ' . count($allJobs) . ')');
     }
 }

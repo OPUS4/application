@@ -31,6 +31,8 @@
 
 use Opus\Common\Document;
 use Opus\Common\Repository;
+use Opus\Search\QueryFactory;
+use Opus\Search\Service;
 
 /**
  * Dieses Skript findet alle Dokumente mit ServerState=published, deren ServerDateModified im Solr-Index kleiner ist
@@ -49,8 +51,8 @@ $finder->setServerState('published');
 
 foreach ($finder->getIds() as $docId) {
     // check if document with id $docId is already persisted in search index
-    $search = Opus\Search\Service::selectSearchingService();
-    $query  = Opus\Search\QueryFactory::selectDocumentById($search, $docId);
+    $search = Service::selectSearchingService();
+    $query  = QueryFactory::selectDocumentById($search, $docId);
 
     if ($search->customSearch($query)->getAllMatchesCount() !== 1) {
         echo "ERROR: document # $docId is not stored in search index\n";

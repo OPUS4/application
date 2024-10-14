@@ -31,6 +31,7 @@
 
 use Opus\Search\Result\Base;
 use Opus\Search\SearchException;
+use Opus\Search\Util\Query;
 
 /**
  * Basic unit test for inded controller of home module.
@@ -144,9 +145,9 @@ class Home_IndexControllerTest extends ControllerTestCase
     private function getDocsInSearchIndex($checkConsistency = true)
     {
         $searcher = Application_Search_SearcherFactory::getSearcher();
-        $query    = new Opus\Search\Util\Query();
+        $query    = new Query();
         $query->setCatchAll("*:*");
-        $query->setRows(Opus\Search\Util\Query::MAX_ROWS);
+        $query->setRows(Query::MAX_ROWS);
         return $searcher->search($query, $checkConsistency);
     }
 

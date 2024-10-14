@@ -32,6 +32,7 @@
 use Opus\Common\Job;
 use Opus\Common\Log;
 use Opus\Job\Runner;
+use Opus\Search\Task\ConsistencyCheck;
 
 /**
  * @covers Admin_IndexmaintenanceController
@@ -59,7 +60,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         }
 
         // Cleanup of Jobs Table
-        $jobs = Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL]);
+        $jobs = Job::getByLabels([ConsistencyCheck::LABEL]);
         foreach ($jobs as $job) {
             try {
                 $job->delete();
@@ -248,7 +249,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
     {
         $this->enableAsyncIndexmaintenanceMode();
 
-        $numOfJobs = Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL);
+        $numOfJobs = Job::getCountForLabel(ConsistencyCheck::LABEL);
         $this->assertEquals(0, $numOfJobs);
 
         $this->getRequest()->setMethod('POST');
@@ -257,19 +258,19 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
 
-        $this->assertEquals(1, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL));
+        $this->assertEquals(1, Job::getCountForLabel(ConsistencyCheck::LABEL));
 
-        $jobs = Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL]);
+        $jobs = Job::getByLabels([ConsistencyCheck::LABEL]);
         $jobs[0]->delete();
 
-        $this->assertEquals(0, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL));
+        $this->assertEquals(0, Job::getCountForLabel(ConsistencyCheck::LABEL));
     }
 
     public function testCheckconsistencyActionResult()
     {
         $this->enableAsyncIndexmaintenanceMode();
 
-        $this->assertEquals(0, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL), 'missing cleanup of jobs table');
+        $this->assertEquals(0, Job::getCountForLabel(ConsistencyCheck::LABEL), 'missing cleanup of jobs table');
 
         $this->getRequest()->setMethod('POST');
         $this->dispatch('/admin/indexmaintenance/checkconsistency');
@@ -277,7 +278,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
         $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
 
-        $this->assertEquals(1, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL), 'consistency check job was not stored in database');
+        $this->assertEquals(1, Job::getCountForLabel(ConsistencyCheck::LABEL), 'consistency check job was not stored in database');
 
         /*
          * check if job was scheduled for execution
@@ -300,11 +301,11 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
          */
         $jobrunner = new Runner();
         $jobrunner->setLogger(Log::get());
-        $worker = new Opus\Search\Task\ConsistencyCheck();
+        $worker = new ConsistencyCheck();
         $jobrunner->registerWorker($worker);
         $jobrunner->run();
 
-        $jobs = Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL]);
+        $jobs = Job::getByLabels([ConsistencyCheck::LABEL]);
         if (count($jobs) > 0) {
             $job     = $jobs[0];
             $message = 'at least one unexpected job found (Label: \'%s\', State: \'%s\', Data: \'%s\', Errors: \'%s\, SHA1 Hash: \'%s\')';
@@ -316,7 +317,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase
             $this->fail(sprintf($message, $label, $state, $data, $errors, $hash));
         }
 
-        $this->assertEquals(0, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL), 'consistency check job was not removed from database after execution');
+        $this->assertEquals(0, Job::getCountForLabel(ConsistencyCheck::LABEL), 'consistency check job was not removed from database after execution');
 
         $this->resetResponse();
         $this->resetRequest();
