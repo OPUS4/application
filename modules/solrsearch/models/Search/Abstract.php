@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\Config;
 use Opus\Search\Result\Base;
 use Opus\Search\SearchException;
 use Opus\Search\Util\Query;
@@ -67,7 +68,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
 
         $this->filterFields = [];
 
-        $filters = Opus\Search\Config::getFacetNames();
+        $filters = Config::getFacetNames();
         if (! count($filters)) {
             $logger->debug('key searchengine.solr.facets is not present in config. skipping filter queries');
         } else {

@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\Util\Query;
+
 /**
  * Modelklasse fuer Suchfunktionalität, die von den Controllern verwendet wird.
  */
@@ -89,7 +91,7 @@ class Solrsearch_Model_Search extends Application_Model_Abstract
                 $params[$fieldname]              = $fieldvalue;
                 $params[$fieldname . 'modifier'] = $request->getParam(
                     $fieldname . 'modifier',
-                    Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL
+                    Query::SEARCH_MODIFIER_CONTAINS_ALL
                 );
             }
         }
@@ -104,7 +106,7 @@ class Solrsearch_Model_Search extends Application_Model_Abstract
     {
         return [
             'start'     => $request->getParam('start', '0'),
-            'rows'      => $request->getParam('rows', Opus\Search\Util\Query::getDefaultRows()),
+            'rows'      => $request->getParam('rows', Query::getDefaultRows()),
             'sortfield' => $request->getParam('sortfield', 'score'),
             'sortorder' => $request->getParam('sortorder', 'desc'),
         ];
