@@ -54,10 +54,7 @@ EOT;
             ->setHelp($help);
     }
 
-    /**
-     * @return int
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $taskManager        = new TaskManager();
         $taskConfigurations = $taskManager->getTaskConfigurations();

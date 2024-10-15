@@ -84,10 +84,9 @@ EOT;
     }
 
     /**
-     * @return int
      * @throws NotFoundException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->processArguments($input);
 

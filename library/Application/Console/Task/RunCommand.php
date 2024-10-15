@@ -66,10 +66,7 @@ EOT;
             );
     }
 
-    /**
-     * @return int
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $taskName = $input->getArgument(self::ARGUMENT_TASK_NAME);
 

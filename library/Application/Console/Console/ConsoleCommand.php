@@ -53,10 +53,8 @@ EOT;
 
     /**
      * Executes this command to run the passed PHP code.
-     *
-     * @return int 0 in case of success, otherwise an exit code
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         while ($input !== false) {
             $input = readline('opus> ');

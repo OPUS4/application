@@ -64,10 +64,9 @@ EOT;
     }
 
     /**
-     * @return int
      * @throws NotFoundException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $docId = $input->getArgument(self::ARGUMENT_DOC_ID);
 

@@ -64,10 +64,8 @@ EOT;
 
     /**
      * Executes this command to run the PHP code from the passed snippet file(s).
-     *
-     * @return int 0 in case of success, otherwise an exit code
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $snippetFiles = $input->getArgument(self::ARGUMENT_SNIPPET_FILES);
 
