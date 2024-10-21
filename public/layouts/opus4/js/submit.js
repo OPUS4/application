@@ -37,11 +37,11 @@ $(function () {
     });
 
     $('form').on('keydown', e => {
-       if (e.key === 'Enter') {
-           if ($(e.target).is("input[type='text']")) {
-               e.preventDefault();
-           }
-       }
+        if (e.key === 'Enter') {
+            if ($(e.target).is("input[type='text']")) {
+                e.preventDefault();
+            }
+        }
     });
 
 });
