@@ -1,5 +1,17 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.7 - 2024-10-22
+
+Ein Fehler beim Drücken der Enter/Return-Taste in einfachen Text-Feldern 
+des Publish-Formulars wurde korrigiert. Bisher wurde dabei unabsichtlich der 
+erste Submit-Button des Formulars ausgeführt und damit unter Umständen ein 
+neuer Eintrag für Autor*innen oder ähnliches hinzugefügt. Jetzt passiert das 
+nicht mehr. Das sorgt auch dafür, dass das Metadaten-Formular in der 
+Administration nicht mehr abgespeichert wird, wenn in einem einfachen 
+Text-Eingabefeld die Enter/Return-Taste gedrückt wird.
+
+https://github.com/OPUS4/application/issues/1243
+
 ## Patch Release 4.8.0.6 - 2024-08-27
 
 Problem bei der Ausführung von PHP Update-Skripten behoben.
