@@ -36,6 +36,7 @@ $(function () {
         });
     });
 
+    // Prevent submission of form when Enter/Return is pressed in a simple text input
     $('form').on('keydown', e => {
         if (e.key === 'Enter') {
             if ($(e.target).is("input[type='text']")) {
