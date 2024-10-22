@@ -23,12 +23,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- *
  */
 
 $(function () {
@@ -38,6 +34,15 @@ $(function () {
         $(':submit', this).click(function () {
             return false;
         });
+    });
+
+    // Prevent submission of form when Enter/Return is pressed in a simple text input
+    $('form').on('keydown', e => {
+        if (e.key === 'Enter') {
+            if ($(e.target).is("input[type='text']")) {
+                e.preventDefault();
+            }
+        }
     });
 
 });
