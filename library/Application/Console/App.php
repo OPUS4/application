@@ -29,9 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-
-use Opus\Bibtex\Import\Console\BibtexImportCommand;
-use Opus\Bibtex\Import\Console\BibtexListCommand;
 use Opus\Common\Console\DefaultCommandProvider;
 use Opus\Job\TaskManager;
 use Opus\Pdf\Console\CoverGenerateCommand;
@@ -63,8 +60,6 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Document_DuplicatesCommand());
         $this->add(new Application_Console_Document_DiffCommand());
 
-        $this->add(new BibtexImportCommand());
-        $this->add(new BibtexListCommand());
         $this->add(new Application_Console_Debug_DocumentXmlCommand());
         $this->add(new CoverGenerateCommand());
         $this->add(new Application_Console_Console_ConsoleCommand());
