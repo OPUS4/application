@@ -29,8 +29,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+
 use Opus\Bibtex\Import\Console\BibtexImportCommand;
 use Opus\Bibtex\Import\Console\BibtexListCommand;
+use Opus\Common\Console\DefaultCommandProvider;
 use Opus\Job\TaskManager;
 use Opus\Pdf\Console\CoverGenerateCommand;
 use Opus\Search\Console\ExtractCommand;
@@ -42,13 +44,21 @@ use Symfony\Component\Console\Application;
 /**
  * Command line application for OPUS 4 management tasks.
  *
- * TODO get list of Commands from configuration/registration (allow modules to add commands, decentralize the code)
+ * TODO CommandProvider for opus4-job (move commands)
+ * TODO CommandProvider for opus4-search
  */
 class Application_Console_App extends Application
 {
     public function __construct()
     {
         parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
+
+        $commandProvider = new DefaultCommandProvider();
+        $commands        = $commandProvider->getCommands();
+
+        foreach ($commands as $command) {
+            $this->add($command);
+        }
 
         $this->add(new IndexCommand());
         $this->add(new RemoveCommand());
