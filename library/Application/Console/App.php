@@ -35,10 +35,6 @@ use Opus\Bibtex\Import\Console\BibtexListCommand;
 use Opus\Common\Console\DefaultCommandProvider;
 use Opus\Job\TaskManager;
 use Opus\Pdf\Console\CoverGenerateCommand;
-use Opus\Search\Console\ExtractCommand;
-use Opus\Search\Console\ExtractFileCommand;
-use Opus\Search\Console\IndexCommand;
-use Opus\Search\Console\RemoveCommand;
 use Symfony\Component\Console\Application;
 
 /**
@@ -60,10 +56,6 @@ class Application_Console_App extends Application
             $this->add($command);
         }
 
-        $this->add(new IndexCommand());
-        $this->add(new RemoveCommand());
-        $this->add(new ExtractCommand());
-        $this->add(new ExtractFileCommand());
         // $this->add(new Application_Console_Index_RepairCommand());
         // $this->add(new Application_Console_Index_CheckCommand());
 
