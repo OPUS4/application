@@ -38,7 +38,6 @@ use Symfony\Component\Console\Application;
  * Command line application for OPUS 4 management tasks.
  *
  * TODO CommandProvider for opus4-job (move commands)
- * TODO CommandProvider for opus4-search
  */
 class Application_Console_App extends Application
 {

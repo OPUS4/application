@@ -70,7 +70,7 @@ class Sword_DepositController extends Zend_Rest_Controller
             return;
         }
 
-    // currently OPUS supports deposit of ZIP and TAR packages only
+        // currently OPUS supports deposit of ZIP and TAR packages only
         try {
             $contentType    = $request->getHeader('Content-Type');
             $packageHandler = new Sword_Model_PackageHandler($contentType);
@@ -80,7 +80,7 @@ class Sword_DepositController extends Zend_Rest_Controller
             return;
         }
 
-    // check that package size does not exceed maximum upload size
+        // check that package size does not exceed maximum upload size
         $payload = $request->getRawBody();
         if ($this->maxUploadSizeExceeded($payload)) {
             $errorDoc = new Sword_Model_ErrorDocument($request, $response);
@@ -88,7 +88,7 @@ class Sword_DepositController extends Zend_Rest_Controller
             return;
         }
 
-    // check that all import enrichment keys are present
+        // check that all import enrichment keys are present
         try {
             $additionalEnrichments = $this->getAdditionalEnrichments($userName, $request);
             $packageHandler->setAdditionalEnrichments($additionalEnrichments);
@@ -98,7 +98,7 @@ class Sword_DepositController extends Zend_Rest_Controller
             return;
         }
 
-    // compare checksums (if given in HTTP request header)
+        // compare checksums (if given in HTTP request header)
         $checksum = $additionalEnrichments->getChecksum();
         if ($checksum !== null) {
             $checksumPayload = md5($payload);
@@ -109,7 +109,7 @@ class Sword_DepositController extends Zend_Rest_Controller
             }
         }
 
-    // TODO data is stored again within handlePackage - that should be avoied
+        // TODO data is stored again within handlePackage - that should be avoided
         $filename = $this->generatePackageFileName($additionalEnrichments);
         $config   = Application_Configuration::getInstance();
         $filePath = $config->getWorkspacePath() . 'import/' . $filename;
