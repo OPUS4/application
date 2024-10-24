@@ -29,20 +29,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Bibtex\Import\Console\BibtexImportCommand;
-use Opus\Bibtex\Import\Console\BibtexListCommand;
+use Opus\Common\Console\DefaultCommandProvider;
 use Opus\Job\TaskManager;
 use Opus\Pdf\Console\CoverGenerateCommand;
-use Opus\Search\Console\ExtractCommand;
-use Opus\Search\Console\ExtractFileCommand;
-use Opus\Search\Console\IndexCommand;
-use Opus\Search\Console\RemoveCommand;
 use Symfony\Component\Console\Application;
 
 /**
  * Command line application for OPUS 4 management tasks.
  *
- * TODO get list of Commands from configuration/registration (allow modules to add commands, decentralize the code)
+ * TODO CommandProvider for opus4-job (move commands)
+ * TODO CommandProvider for opus4-search
  */
 class Application_Console_App extends Application
 {
@@ -50,10 +46,13 @@ class Application_Console_App extends Application
     {
         parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
 
-        $this->add(new IndexCommand());
-        $this->add(new RemoveCommand());
-        $this->add(new ExtractCommand());
-        $this->add(new ExtractFileCommand());
+        $commandProvider = new DefaultCommandProvider();
+        $commands        = $commandProvider->getCommands();
+
+        foreach ($commands as $command) {
+            $this->add($command);
+        }
+
         // $this->add(new Application_Console_Index_RepairCommand());
         // $this->add(new Application_Console_Index_CheckCommand());
 
@@ -61,8 +60,6 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Document_DuplicatesCommand());
         $this->add(new Application_Console_Document_DiffCommand());
 
-        $this->add(new BibtexImportCommand());
-        $this->add(new BibtexListCommand());
         $this->add(new Application_Console_Debug_DocumentXmlCommand());
         $this->add(new CoverGenerateCommand());
         $this->add(new Application_Console_Console_ConsoleCommand());

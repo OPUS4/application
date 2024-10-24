@@ -50,8 +50,6 @@ EOT;
             ->setHelp($help);
     }
 
-    /**
-     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->processOptions($input);
