@@ -33,7 +33,16 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Mime\MimeTypes;
 
+/**
+ * Console command for depositing a SWORD package.
+ *
+ * This command is meant for testing and limited use cases. It allows taking a SWORD
+ * package for OPUS 4 and deposit it without using HTTP.
+ *
+ * TODO user name option?
+ */
 class Sword_Model_DepositCommand extends Command
 {
     public const ARGUMENT_SWORD_FILE = 'File';
@@ -56,14 +65,38 @@ EOT;
             );
     }
 
+    /**
+     * TODO debug output?
+     * TODO How to handle additional enrichments for console deposit?
+     * TODO How to output error document?
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // TODO get file path
-        // TODO check if file exists
-        // TODO get content type of file (ZIP/TAR supported)
-        // TODO pass file to SWORD import classes
+        $filePath = $input->getArgument(self::ARGUMENT_SWORD_FILE);
 
-        // TODO generate output/debug output
+        if (! file_exists($filePath)) {
+            $output->writeln("'{$filePath}' not found");
+            return self::FAILURE;
+        }
+
+        $mimeTypes = new MimeTypes();
+
+        $mimeType = $mimeTypes->guessMimeType($filePath);
+
+        $output->writeln($filePath);
+        $output->writeln($mimeType);
+
+        $packageHandler = new Sword_Model_PackageHandler($mimeType);
+
+        // TODO ? set additional enrichments
+        $data = file_get_contents($filePath, );
+
+        $statusDoc = $packageHandler->handlePackage($data);
+
+        $documents = $statusDoc->getDocs();
+        $docCount = count($documents);
+
+        $output->writeln("Imported {$docCount} documents");
 
         return self::SUCCESS;
     }

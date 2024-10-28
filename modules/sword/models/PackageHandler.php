@@ -82,6 +82,7 @@ class Sword_Model_PackageHandler
                 $this->packageType = self::PACKAGE_TYPE_ZIP;
                 break;
             case 'application/tar':
+            case 'application/x-tar':
                 $this->packageType = self::PACKAGE_TYPE_TAR;
                 break;
             default:
@@ -104,7 +105,6 @@ class Sword_Model_PackageHandler
         }
 
         $tmpDirName = null;
-        $statusDoc  = null;
         try {
             $tmpDirName = $this->createTmpDir($payload);
             $this->savePackage($payload, $tmpDirName);

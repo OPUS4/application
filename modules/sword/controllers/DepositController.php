@@ -49,6 +49,9 @@ class Sword_DepositController extends Zend_Rest_Controller
 
     /**
      * TODO This function does too much.
+     * TODO move code outside controller (What is really controller specific?)
+     * TODO add factory function for creating Sword_Model_ErrorDocument
+     * TODO separate transport code from package processing (the processing needs to be reusable on console)
      */
     public function postAction()
     {
@@ -114,6 +117,8 @@ class Sword_DepositController extends Zend_Rest_Controller
         $config   = Application_Configuration::getInstance();
         $filePath = $config->getWorkspacePath() . 'import/' . $filename;
         file_put_contents($filePath, $payload);
+
+        // TODO data is already saved - use path as argument for package handler
 
         $errorDoc = null;
 
