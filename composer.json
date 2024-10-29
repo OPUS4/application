@@ -30,6 +30,8 @@
     "opus4-repo/opus4-pdf": "dev-main as 4.8.1",
     "opus4-repo/opus4-job": "dev-main as 4.8.1",
     "opus4-repo/opus4-security": "dev-main as 4.8.1",
+    "opus4-repo/opus4-sword": "dev-main",
+    "opus4-repo/opus4-app-common": "dev-main",
     "opus4-repo/opus4-deepgreen": "dev-main",
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
