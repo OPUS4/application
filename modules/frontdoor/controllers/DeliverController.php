@@ -33,6 +33,7 @@
  * Controller for handling file downloads in the frontdoor.
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Config;
 use Opus\Common\Cover\CoverGeneratorFactory;
 use Opus\Common\Cover\CoverGeneratorInterface;
@@ -224,7 +225,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
         }
 
         // configure cover generator with appropriate directory paths
-        $appConfig = Application_Configuration::getInstance();
+        $appConfig = Configuration::getInstance();
 
         $filecacheDir = $appConfig->getFilecachePath();
         $generator->setFilecacheDir($filecacheDir);

@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 /**
  * View helper for returning value of configuration option.
  *
@@ -57,7 +59,7 @@ class Application_View_Helper_OptionValue extends Application_View_Helper_Abstra
             $key = "$context.$key";
         }
 
-        $value = Application_Configuration::getInstance()->getValue($key);
+        $value = Configuration::getInstance()->getValue($key);
 
         if ($escape) {
             return htmlspecialchars($value);

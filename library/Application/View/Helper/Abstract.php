@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\LoggingTrait;
 
 /**
@@ -45,6 +46,6 @@ class Application_View_Helper_Abstract extends Zend_View_Helper_Abstract
      */
     public function getConfig()
     {
-        return Application_Configuration::getInstance()->getConfig();
+        return Configuration::getInstance()->getConfig();
     }
 }

@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Console\ConsoleColors;
 
 /**
@@ -40,7 +41,7 @@ class Application_Update_AddImportToWorkspace extends Application_Update_PluginA
     {
         $this->log('Checking import folder in workspace');
 
-        $workspacePath = Application_Configuration::getInstance()->getWorkspacePath();
+        $workspacePath = Configuration::getInstance()->getWorkspacePath();
 
         $importPath = rtrim($workspacePath, '/') . '/import';
 

@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 /**
  * Class Application_Form_Validate_uploadFilenameCheck validates the filename.
  *
@@ -137,7 +139,7 @@ class Application_Form_Validate_Filename extends Zend_Validate_Abstract
      */
     public function validateFilenameFormat($value)
     {
-        $logger = Application_Configuration::getInstance()->getLogger();
+        $logger = Configuration::getInstance()->getLogger();
 
         if (@preg_match($value, null) === false) {
             $logger->warn('Your regular expression for your filename-validation is not valid.');

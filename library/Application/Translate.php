@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Application\Modules;
 use Opus\Common\Config;
 use Opus\Common\LoggingTrait;
@@ -145,7 +146,7 @@ class Application_Translate extends Zend_Translate
             'reload'         => $reload,
         ]);
 
-        $locales = Application_Configuration::getInstance()->getSupportedLanguages();
+        $locales = Configuration::getInstance()->getSupportedLanguages();
 
         foreach ($locales as $locale) {
             $this->addTranslation([
@@ -269,7 +270,7 @@ class Application_Translate extends Zend_Translate
             return null;
         }
 
-        $languages = Application_Configuration::getInstance()->getSupportedLanguages();
+        $languages = Configuration::getInstance()->getSupportedLanguages();
 
         $translations = [];
 

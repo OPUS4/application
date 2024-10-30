@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 /**
  * TODO maybe merge with a Workspace or Mainenance or "whatever" class
  */
@@ -39,7 +41,7 @@ class Application_Util_WorkspaceCache
      */
     public function clearTranslations()
     {
-        $files = new DirectoryIterator(Application_Configuration::getInstance()->getWorkspacePath() . '/cache');
+        $files = new DirectoryIterator(Configuration::getInstance()->getWorkspacePath() . '/cache');
 
         foreach ($files as $file) {
             $basename = $file->getBasename();

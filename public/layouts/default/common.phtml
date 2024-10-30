@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Config;
 
 $config = Config::get();
@@ -92,7 +93,7 @@ if ($this->jQueryEnabled()) {
     }
 }
 
-$appConfig = new Application_Configuration();
+$appConfig = new Configuration();
 
 if ($appConfig->isLanguageSelectionEnabled()) {
     $languageSelectors = $this->languageSelector();

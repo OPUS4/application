@@ -29,12 +29,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\OpusException;
 
 /**
  * Checking of information about workspace.
  */
-class Application_Configuration_Workspace
+class Configuration_Workspace
 {
     /**
      * @return array
@@ -42,7 +43,7 @@ class Application_Configuration_Workspace
      */
     public function getFolders()
     {
-        $workspacePath = Application_Configuration::getInstance()->getWorkspacePath();
+        $workspacePath = Configuration::getInstance()->getWorkspacePath();
 
         $folders = [];
 

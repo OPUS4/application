@@ -30,6 +30,7 @@
  */
 
 use Opus\Application\ApplicationException;
+use Opus\Application\Configuration;
 use Opus\Common\Document;
 use Opus\Common\Repository;
 use Opus\Common\Security\Realm;
@@ -176,7 +177,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
     public function isDownloadEnabled()
     {
         if ($this->downloadEnabled === null) {
-            $appConfig = Application_Configuration::getInstance()->getConfig();
+            $appConfig = Configuration::getInstance()->getConfig();
 
             $this->downloadEnabled = isset($appConfig->export->download) ?
                 filter_var($appConfig->export->download, FILTER_VALIDATE_BOOLEAN) : true;

@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Translate\TranslateException;
 use Opus\Common\Translate\UnknownTranslationKeyException;
 
@@ -68,7 +69,7 @@ class Application_Form_Element_Translation extends Zend_Form_Element_Multi
 
     public function loadDefaultOptions()
     {
-        $languages = Application_Configuration::getInstance()->getSupportedLanguages();
+        $languages = Configuration::getInstance()->getSupportedLanguages();
 
         $options = [];
 

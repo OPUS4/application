@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 /**
  * Form for editing selected OPUS 4 configuration options.
  *
@@ -103,7 +105,7 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
     public function populateFromModel($config)
     {
         foreach ($this->options as $name => $option) {
-            $value = Application_Configuration::getValueFromConfig($config, $option->getKey());
+            $value = Configuration::getValueFromConfig($config, $option->getKey());
             $this->getElement($name)->setValue($value);
         }
     }
@@ -123,7 +125,7 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
                 $value = implode(',', $value);
             }
 
-            Application_Configuration::setValueInConfig($config, $option->getKey(), $value);
+            Configuration::setValueInConfig($config, $option->getKey(), $value);
         }
     }
 

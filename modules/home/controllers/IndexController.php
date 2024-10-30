@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Repository;
 
 class Home_IndexController extends Application_Controller_Action
@@ -115,7 +116,7 @@ class Home_IndexController extends Application_Controller_Action
             }
         }
 
-        $appConfig = new Application_Configuration();
+        $appConfig = new Configuration();
 
         if (
             $appConfig->isLanguageSelectionEnabled() && $language !== null

@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Console\DefaultCommandProvider;
 use Opus\Job\TaskManager;
 use Opus\Pdf\Console\CoverGenerateCommand;
@@ -43,7 +44,7 @@ class Application_Console_App extends Application
 {
     public function __construct()
     {
-        parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
+        parent::__construct('OPUS 4 Console Tool', Configuration::getOpusVersion());
 
         $commandProvider = new DefaultCommandProvider();
         $commands        = $commandProvider->getCommands();

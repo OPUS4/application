@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 /**
  * SubForm used for editing translations for multiple languages.
  */
@@ -97,6 +99,6 @@ class Setup_Form_TranslationValues extends Zend_Form_SubForm
      */
     protected function getLanguages()
     {
-        return Application_Configuration::getInstance()->getSupportedLanguages();
+        return Configuration::getInstance()->getSupportedLanguages();
     }
 }

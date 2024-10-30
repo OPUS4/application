@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Config;
 use Opus\Common\Document;
 use Opus\Common\DocumentFinderInterface;
@@ -134,7 +135,7 @@ class ControllerTestCase extends TestCase
         $this->setLogger(null);
 
         DoiManager::setInstance(null);
-        Application_Configuration::clearInstance(); // reset Application_Configuration
+        Configuration::clearInstance(); // reset Configuration
         Application_Translate::setInstance(null);
         Application_Security_AclProvider::clear();
 

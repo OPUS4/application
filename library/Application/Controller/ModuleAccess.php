@@ -30,6 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\LoggingTrait;
 use Opus\Common\Security\Realm;
 
@@ -237,7 +238,7 @@ class Application_Controller_ModuleAccess extends Zend_Controller_Action
     public function getConfig()
     {
         if ($this->config === null) {
-            $this->config = Application_Configuration::getInstance()->getConfig();
+            $this->config = Configuration::getInstance()->getConfig();
         }
         return $this->config;
     }

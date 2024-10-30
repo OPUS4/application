@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 /**
  * Checks if a configuration option is activated,
  */
@@ -49,7 +51,7 @@ class Application_View_Helper_OptionEnabled extends Application_View_Helper_Abst
             $key = "$context.$key";
         }
 
-        $value = Application_Configuration::getInstance()->getValue($key);
+        $value = Configuration::getInstance()->getValue($key);
 
         return filter_var($value, FILTER_VALIDATE_BOOLEAN);
     }

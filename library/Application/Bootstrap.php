@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Log\LogService;
 use Opus\Common\Repository;
 use Opus\Db\DatabaseBootstrap;
@@ -274,7 +275,7 @@ class Application_Bootstrap extends DatabaseBootstrap
 
         Application_Translate::setInstance($translate);
 
-        $configHelper = new Application_Configuration();
+        $configHelper = new Configuration();
 
         $session = $this->getResource('Session');
 
@@ -379,7 +380,7 @@ class Application_Bootstrap extends DatabaseBootstrap
     {
         $this->bootstrap('View');
         $view = $this->getResource('View');
-        $view->headMeta()->appendName('Opus-Version', Application_Configuration::getOpusVersion());
+        $view->headMeta()->appendName('Opus-Version', Configuration::getOpusVersion());
     }
 
     /**

@@ -30,6 +30,7 @@
  */
 
 use Opus\Application\Config\MaxUploadSize;
+use Opus\Application\Configuration;
 use Opus\Common\Log;
 use Opus\Import\AdditionalEnrichments;
 use Opus\Import\ImportStatusDocument;
@@ -117,7 +118,7 @@ class Sword_DepositController extends Zend_Rest_Controller
 
         // TODO data is stored again within handlePackage - that should be avoided
         $filename = $this->generatePackageFileName($additionalEnrichments);
-        $config   = Application_Configuration::getInstance();
+        $config   = Configuration::getInstance();
         $filePath = $config->getWorkspacePath() . 'import/' . $filename;
         file_put_contents($filePath, $payload);
 

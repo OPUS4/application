@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Date;
 use Opus\Common\EnrichmentKey;
 use Opus\Common\EnrichmentKeyInterface;
@@ -239,7 +240,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
     {
         $this->useEnglish();
 
-        $deposit = new Publish_Model_Deposit(Application_Configuration::getInstance()->getLogger());
+        $deposit = new Publish_Model_Deposit(Configuration::getInstance()->getLogger());
 
         $date = $deposit->castStringToOpusDate('2017/03/12');
 
@@ -258,7 +259,7 @@ class Publish_Model_DepositTest extends ControllerTestCase
     {
         $this->useGerman();
 
-        $deposit = new Publish_Model_Deposit(Application_Configuration::getInstance()->getLogger());
+        $deposit = new Publish_Model_Deposit(Configuration::getInstance()->getLogger());
 
         $date = $deposit->castStringToOpusDate('12.03.2017');
 

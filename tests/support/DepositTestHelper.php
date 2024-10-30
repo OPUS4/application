@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\Config;
@@ -189,7 +190,7 @@ class DepositTestHelper extends Assert
      */
     public function setupTmpDir()
     {
-        $appConfig = Application_Configuration::getInstance();
+        $appConfig = Configuration::getInstance();
         $tempPath  = $appConfig->getTempPath() . 'sword';
         if (! file_exists($tempPath)) {
             mkdir($tempPath);
@@ -204,7 +205,7 @@ class DepositTestHelper extends Assert
      */
     public function assertEmptyTmpDir()
     {
-        $dirName = Application_Configuration::getInstance()->getTempPath();
+        $dirName = Configuration::getInstance()->getTempPath();
         $files   = scandir($dirName);
         foreach ($files as $file) {
             $this->assertTrue(in_array($file, ['.', '..', '.gitignore', 'resumption']), $dirName);

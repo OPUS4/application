@@ -29,11 +29,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 class Solrsearch_OpensearchController extends Application_Controller_Xml
 {
     public function indexAction()
     {
-        $config = Application_Configuration::getInstance();
+        $config = Configuration::getInstance();
         $this->proc->setParameter(
             '',
             'searchBaseUrl',

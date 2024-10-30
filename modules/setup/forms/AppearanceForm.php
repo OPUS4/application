@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\Config;
 
 /**
@@ -91,7 +92,7 @@ class Setup_Form_AppearanceForm extends Application_Form_Abstract
         if (array_key_exists(self::ELEMENT_APPLY, $post)) {
             $selectedTheme = $this->getElementValue(self::ELEMENT_THEME);
             $config        = ['themes' => ['selectedTheme' => $selectedTheme]];
-            Application_Configuration::save(new Zend_Config($config));
+            Configuration::save(new Zend_Config($config));
         }
 
         return null;

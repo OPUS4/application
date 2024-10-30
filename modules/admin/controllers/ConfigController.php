@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 class Admin_ConfigController extends Application_Controller_Action
 {
     public function indexAction()
@@ -47,7 +49,7 @@ class Admin_ConfigController extends Application_Controller_Action
                     if ($form->isValid($data)) {
                         $config = new Zend_Config([], true);
                         $form->updateModel($config);
-                        Application_Configuration::save($config);
+                        Configuration::save($config);
                     } else {
                         break;
                     }

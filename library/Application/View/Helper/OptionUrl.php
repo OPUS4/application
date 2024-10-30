@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 /**
  * Gets a URL from a configuration option and renders it properly.
  *
@@ -53,7 +55,7 @@ class Application_View_Helper_OptionUrl extends Application_View_Helper_Abstract
             $key = "$context.$key";
         }
 
-        $value = Application_Configuration::getInstance()->getValue($key);
+        $value = Configuration::getInstance()->getValue($key);
 
         $urlParts = parse_url($value);
 

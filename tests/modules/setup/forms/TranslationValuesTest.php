@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 /**
  * TODO require default language value ?
  */
@@ -41,7 +43,7 @@ class Setup_Form_TranslationValuesTest extends ControllerTestCase
     {
         $form = $this->getForm();
 
-        $languages = Application_Configuration::getInstance()->getSupportedLanguages();
+        $languages = Configuration::getInstance()->getSupportedLanguages();
 
         $elements = $form->getElements();
 

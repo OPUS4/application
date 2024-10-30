@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Common\CollectionRole;
 use Opus\Common\Console\ConsoleColors;
 use Opus\Common\Translate\UnknownTranslationKeyException;
@@ -62,7 +63,7 @@ class Application_Update_ConvertCollectionRoleTranslations extends Application_U
                 $this->log($colors->red("Collection role (id = $roleId) name is invalid (\"$name\")"));
 
                 // create translation values using invalid collection role name
-                $supportedLanguages = Application_Configuration::getInstance()->getSupportedLanguages();
+                $supportedLanguages = Configuration::getInstance()->getSupportedLanguages();
                 $translations       = [];
                 foreach ($supportedLanguages as $lang) {
                     $translations[$lang] = $name;

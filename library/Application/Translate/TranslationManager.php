@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
 use Opus\Application\Modules;
 use Opus\Common\Translate\TranslateException;
 use Opus\Common\Translate\UnknownTranslationKeyException;
@@ -296,7 +297,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     protected function getLanguageOrderRef()
     {
         if ($this->languageOrderRef === null) {
-            $this->languageOrderRef = array_flip(Application_Configuration::getInstance()->getSupportedLanguages());
+            $this->languageOrderRef = array_flip(Configuration::getInstance()->getSupportedLanguages());
         }
 
         return $this->languageOrderRef;
