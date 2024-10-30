@@ -83,7 +83,7 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
 
         $ddcform = $subforms['ddc2'];
 
-        $this->assertInstanceOf('Admin_Form_Document_Section', $ddcform);
+        $this->assertInstanceOf(Admin_Form_Document_Section::class, $ddcform);
 
         $colforms = $ddcform->getSubforms();
 

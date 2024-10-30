@@ -73,7 +73,7 @@ class Application_ConfigurationTest extends ControllerTestCase
         $this->config->setLogger($logger);
 
         $this->assertNotNull($this->config->getLogger());
-        $this->assertInstanceOf('MockLogger', $this->config->getLogger());
+        $this->assertInstanceOf(MockLogger::class, $this->config->getLogger());
     }
 
     public function testGetSupportedLanguages()
@@ -212,7 +212,7 @@ class Application_ConfigurationTest extends ControllerTestCase
     {
         $config = Application_Configuration::getInstance();
         $this->assertNotNull($config);
-        $this->assertInstanceOf('Application_Configuration', $config);
+        $this->assertInstanceOf(Application_Configuration::class, $config);
         $this->assertSame($config, Application_Configuration::getInstance());
     }
 
@@ -232,12 +232,12 @@ class Application_ConfigurationTest extends ControllerTestCase
     public function testClearInstance()
     {
         $config = Application_Configuration::getInstance();
-        $this->assertInstanceOf('Application_Configuration', $config);
+        $this->assertInstanceOf(Application_Configuration::class, $config);
 
         Application_Configuration::clearInstance();
 
         $config2 = Application_Configuration::getInstance();
-        $this->assertInstanceOf('Application_Configuration', $config2);
+        $this->assertInstanceOf(Application_Configuration::class, $config2);
 
         $this->assertNotSame($config, $config2);
     }

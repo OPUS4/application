@@ -67,7 +67,7 @@ class Admin_Form_Document_SubjectTest extends ControllerTestCase
 
         $language = $form->getElement('Language');
         $this->assertNotNull($language);
-        $this->assertInstanceOf('Zend_Form_Element_Hidden', $language);
+        $this->assertInstanceOf(Zend_Form_Element_Hidden::class, $language);
         $this->assertEquals('deu', $language->getValue());
 
         $this->assertEquals('swd', $form->getSubjectType());

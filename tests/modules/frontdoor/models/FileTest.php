@@ -230,7 +230,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $helper = $file->getAclHelper();
 
         $this->assertNotNull($helper);
-        $this->assertInstanceOf('Application_Controller_Action_Helper_AccessControl', $helper);
+        $this->assertInstanceOf(Application_Controller_Action_Helper_AccessControl::class, $helper);
     }
 
     public function testSetAclHelper()
@@ -248,7 +248,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $helper = $file->getAclHelper();
 
         $this->assertNotNull($helper);
-        $this->assertInstanceOf('Application_Controller_Action_Helper_AccessControl', $helper);
+        $this->assertInstanceOf(Application_Controller_Action_Helper_AccessControl::class, $helper);
     }
 
     /**

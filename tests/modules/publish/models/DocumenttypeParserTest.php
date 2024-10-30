@@ -57,7 +57,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
     {
         $dom   = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
         $model = new Publish_Model_DocumenttypeParser($dom, null);
-        $this->assertInstanceOf('DOMDocument', $model->dom);
+        $this->assertInstanceOf(DOMDocument::class, $model->dom);
     }
 
     public function testConstructorWithCorrectDomAndWrongForm()
@@ -70,7 +70,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
         $form = new Publish_Form_PublishingSecond($this->logger);
 
         $model = new Publish_Model_DocumenttypeParser($dom, $form);
-        $this->assertInstanceOf('DOMDocument', $model->dom);
+        $this->assertInstanceOf(DOMDocument::class, $model->dom);
     }
 
     public function testConstructorWithCorrectDomAndCorrectForm()
@@ -80,8 +80,8 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
         $dom                   = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
         $form                  = new Publish_Form_PublishingSecond($this->logger);
         $model                 = new Publish_Model_DocumenttypeParser($dom, $form);
-        $this->assertInstanceOf('DOMDocument', $model->dom);
-        $this->assertInstanceOf('Publish_Form_PublishingSecond', $model->form);
+        $this->assertInstanceOf(DOMDocument::class, $model->dom);
+        $this->assertInstanceOf(Publish_Form_PublishingSecond::class, $model->form);
     }
 
     public function testInccorectFieldName()
@@ -91,7 +91,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
 
         /** @var DOMDocument $dom */
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('all');
-        $this->assertInstanceOf('DOMDocument', $dom);
+        $this->assertInstanceOf(DOMDocument::class, $dom);
 
         foreach ($dom->getElementsByTagname('documenttype') as $rootNode) {
             $domElement   = $dom->createElement('field');
@@ -121,7 +121,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
 
         /** @var DOMDocument $dom */
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('all');
-        $this->assertInstanceOf('DOMDocument', $dom);
+        $this->assertInstanceOf(DOMDocument::class, $dom);
 
         foreach ($dom->getElementsByTagname('documenttype') as $rootNode) {
             $domElement = $dom->createElement('field');

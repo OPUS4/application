@@ -108,10 +108,10 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
             ],
         ];
 
-        $subform1 = $this->getMockForAbstractClass('Application_Form_Model_Abstract');
+        $subform1 = $this->getMockForAbstractClass(Application_Form_Model_Abstract::class);
         $subform1->expects($this->exactly(1))->method('processPost')->will($this->returnValue(null));
 
-        $subform2 = $this->getMockForAbstractClass('Application_Form_Model_Abstract');
+        $subform2 = $this->getMockForAbstractClass(Application_Form_Model_Abstract::class);
         $subform2->expects($this->exactly(0))->method('processPost')->will($this->returnValue(null));
 
         $subform2->processPost($post, $post);
@@ -134,6 +134,6 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase
         $form = $this->getForm();
 
         $this->assertNotNull($form->getDatesHelper());
-        $this->assertInstanceOf('Application_Controller_Action_Helper_Dates', $form->getDatesHelper());
+        $this->assertInstanceOf(Application_Controller_Action_Helper_Dates::class, $form->getDatesHelper());
     }
 }

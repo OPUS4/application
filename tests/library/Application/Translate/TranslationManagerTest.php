@@ -403,7 +403,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $tmxFile = $manager->getExportTmxFile();
 
         $this->assertNotNull($tmxFile);
-        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+        $this->assertInstanceOf(Application_Translate_TmxFile::class, $tmxFile);
 
         $dom = $tmxFile->getDomDocument();
 
@@ -432,7 +432,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $tmxFile = $manager->getExportTmxFile();
 
         $this->assertNotNull($tmxFile);
-        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+        $this->assertInstanceOf(Application_Translate_TmxFile::class, $tmxFile);
 
         $dom    = $tmxFile->getDomDocument();
         $output = $dom->saveXML();
@@ -465,7 +465,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $tmxFile = $manager->getExportTmxFile();
 
         $this->assertNotNull($tmxFile);
-        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+        $this->assertInstanceOf(Application_Translate_TmxFile::class, $tmxFile);
 
         $dom    = $tmxFile->getDomDocument();
         $output = $dom->saveXML();
@@ -493,7 +493,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $tmxFile = $manager->getExportTmxFile(true);
 
         $this->assertNotNull($tmxFile);
-        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+        $this->assertInstanceOf(Application_Translate_TmxFile::class, $tmxFile);
 
         $dom    = $tmxFile->getDomDocument();
         $output = $dom->saveXML();

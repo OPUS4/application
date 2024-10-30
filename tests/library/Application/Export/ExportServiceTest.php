@@ -77,7 +77,7 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $plugin = $this->service->getPlugin('index');
 
         $this->assertNotNull($plugin);
-        $this->assertInstanceOf('Export_Model_XmlExport', $plugin);
+        $this->assertInstanceOf(Export_Model_XmlExport::class, $plugin);
 
         $pluginConfig = $plugin->getConfig();
 
@@ -111,7 +111,7 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
     public function testAddPlugin()
     {
         $this->service->addPlugin('marc', new Zend_Config([
-            'class'      => 'Export_Model_XsltExport',
+            'class'      => Export_Model_XsltExport::class,
             'stylesheet' => 'marc.xslt',
         ]));
 
@@ -122,7 +122,7 @@ class Application_Export_ExportServiceTest extends ControllerTestCase
         $plugin = $this->service->getPlugin('marc');
 
         $this->assertNotNull($plugin);
-        $this->assertInstanceOf('Export_Model_XsltExport', $plugin);
+        $this->assertInstanceOf(Export_Model_XsltExport::class, $plugin);
 
         $config = $plugin->getConfig();
 

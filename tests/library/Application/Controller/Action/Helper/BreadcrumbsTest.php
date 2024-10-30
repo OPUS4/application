@@ -65,7 +65,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
     public function testAvailable()
     {
         $this->assertNotNull($this->helper);
-        $this->assertInstanceOf('Application_Controller_Action_Helper_Breadcrumbs', $this->helper);
+        $this->assertInstanceOf(Application_Controller_Action_Helper_Breadcrumbs::class, $this->helper);
     }
 
     public function testDirect()

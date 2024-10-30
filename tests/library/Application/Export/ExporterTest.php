@@ -93,7 +93,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $bibtex = $formats['bibtex'];
 
-        $this->assertInstanceOf('Zend_Navigation_Page_Mvc', $bibtex);
+        $this->assertInstanceOf(Zend_Navigation_Page_Mvc::class, $bibtex);
         $this->assertEquals('/citationExport/index/download/output/bibtex', $bibtex->getHref());
 
         $bibtex->setParam('docId', 146);
@@ -137,7 +137,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
         // Zend_Navigation_Page_Mvc
         $bibtex = $formats['bibtex'];
 
-        $this->assertInstanceOf('Zend_Navigation_Page_Mvc', $bibtex);
+        $this->assertInstanceOf(Zend_Navigation_Page_Mvc::class, $bibtex);
 
         $this->assertTrue($bibtex->get('frontdoor'));
         $this->assertFalse($bibtex->get('search'));

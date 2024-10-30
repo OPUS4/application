@@ -68,7 +68,7 @@ class Application_Model_AbstractTest extends ControllerTestCase
         $this->model->setLogger($logger);
 
         $this->assertNotNull($this->model->getLogger());
-        $this->assertInstanceOf('MockLogger', $this->model->getLogger());
+        $this->assertInstanceOf(MockLogger::class, $this->model->getLogger());
     }
 
     public function testGetConfig()
