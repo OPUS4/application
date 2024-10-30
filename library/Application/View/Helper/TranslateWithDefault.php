@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Configuration;
+
 /**
  * View helper that translates key if translation is found or returns provided default value.
  */
@@ -42,7 +44,7 @@ class Application_View_Helper_TranslateWithDefault extends Zend_View_Helper_Abst
      */
     public function translateWithDefault($messageId, $default = '')
     {
-        $translator = Application_Configuration::getInstance()->getTranslate();
+        $translator = Configuration::getInstance()->getTranslate();
 
         if ($translator->isTranslated($messageId)) {
             return $translator->translate($messageId);
