@@ -34,6 +34,7 @@ use Opus\Application\Configuration;
 use Opus\Common\Log;
 use Opus\Import\AdditionalEnrichments;
 use Opus\Import\ImportStatusDocument;
+use Opus\Import\PackageHandler;
 use Opus\Import\Xml\MetadataImportInvalidXmlException;
 use Opus\Sword\AtomEntryDocument;
 use Opus\Sword\ErrorDocument;
@@ -80,7 +81,7 @@ class Sword_DepositController extends Zend_Rest_Controller
         // currently OPUS supports deposit of ZIP and TAR packages only
         try {
             $contentType    = $request->getHeader('Content-Type');
-            $packageHandler = new Sword_Model_PackageHandler($contentType);
+            $packageHandler = new PackageHandler($contentType);
         } catch (Exception $e) {
             $errorDoc = new ErrorDocument($request, $response);
             $errorDoc->setErrorContent();

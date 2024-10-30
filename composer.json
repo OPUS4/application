@@ -26,7 +26,7 @@
     "opus4-repo/framework": "dev-master as 4.8.1",
     "opus4-repo/search": "dev-master as 4.8.1",
     "opus4-repo/opus4-bibtex": "dev-master as 4.8.1",
-    "opus4-repo/opus4-import": "dev-main as 4.8.1",
+    "opus4-repo/opus4-import": "dev-issue49 as dev-main",
     "opus4-repo/opus4-pdf": "dev-main as 4.8.1",
     "opus4-repo/opus4-job": "dev-main as 4.8.1",
     "opus4-repo/opus4-security": "dev-main as 4.8.1",
