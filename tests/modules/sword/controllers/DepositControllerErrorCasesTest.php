@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Config\MaxUploadSize;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\EnrichmentKey;
@@ -105,7 +106,7 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         $this->getRequest()->setHeader('Content-Type', DepositTestHelper::CONTENT_TYPE_ZIP);
         $this->testHelper->setValidAuthorizationHeader($this->getRequest(), DepositTestHelper::USER_AGENT);
 
-        $maxUploadSize = new Application_Configuration_MaxUploadSize();
+        $maxUploadSize = new MaxUploadSize();
         $numOfBytes    = 1 + $maxUploadSize->getMaxUploadSizeInByte();
         $payload       = '';
         for ($i = 0; $i < $numOfBytes; $i++) {
