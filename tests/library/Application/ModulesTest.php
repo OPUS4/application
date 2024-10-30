@@ -80,7 +80,7 @@ class Application_ModulesTest extends ControllerTestCase
 
         foreach ($expectedModules as $name) {
             $this->assertArrayHasKey($name, $modules, "Module [$name] is missing");
-            $this->assertInstanceOf('Application_Configuration_Module', $modules[$name]);
+            $this->assertInstanceOf(Module::class, $modules[$name]);
         }
     }
 
