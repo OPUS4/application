@@ -44,7 +44,7 @@ class Application_View_Helper_TranslateWithDefault extends Zend_View_Helper_Abst
      */
     public function translateWithDefault($messageId, $default = '')
     {
-        $translator = Application_Translate::getInstance()();
+        $translator = Application_Translate::getInstance();
 
         if ($translator->isTranslated($messageId)) {
             return $translator->translate($messageId);
