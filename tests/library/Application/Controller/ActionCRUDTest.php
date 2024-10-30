@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Licence;
 use Opus\Common\LicenceInterface;
 use Opus\Document;
@@ -112,7 +113,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase
 
     public function testSetFormClassBadClass()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('not instance of Application_Form_IModel');
         $this->controller->setFormClass(Document::class);
     }

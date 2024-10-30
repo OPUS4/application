@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Document;
 use Opus\Common\Model\NotFoundException;
 
@@ -46,14 +47,14 @@ class Admin_FilebrowserController extends Application_Controller_Action
     {
         $docId = $this->getRequest()->getParam(self::PARAM_DOCUMENT_ID);
         if ($docId === null) {
-            throw new Application_Exception('missing parameter docId');
+            throw new ApplicationException('missing parameter docId');
         }
 
         $document = null;
         try {
             $document = Document::get($docId);
         } catch (NotFoundException $e) {
-            throw new Application_Exception('no document found for id ' . $docId, 0, $e);
+            throw new ApplicationException('no document found for id ' . $docId, 0, $e);
         }
 
         $this->breadcrumbs->setDocumentBreadcrumb($document);
@@ -77,12 +78,12 @@ class Admin_FilebrowserController extends Application_Controller_Action
     public function importAction()
     {
         if (! $this->getRequest()->isPost()) {
-            throw new Application_Exception('unsupported HTTP method');
+            throw new ApplicationException('unsupported HTTP method');
         }
 
         $docId = $this->getRequest()->getPost(self::PARAM_DOCUMENT_ID);
         if ($docId === null) {
-            throw new Application_Exception('missing parameter docId');
+            throw new ApplicationException('missing parameter docId');
         }
 
         $post = $this->getRequest()->getPost();
@@ -111,7 +112,7 @@ class Admin_FilebrowserController extends Application_Controller_Action
         }
 
         if (! is_array($files)) {
-            throw new Application_Exception('invalid POST parameter');
+            throw new ApplicationException('invalid POST parameter');
         }
 
         $fileImportModel = new Admin_Model_FileImport();

@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Model\NotFoundException;
@@ -54,7 +55,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
     /**
      * @param Zend_Controller_Request_Abstract $request
      * @return string
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws CitationExport_Model_Exception
      */
     public function getOutput($request)
@@ -209,7 +210,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
 
             return $proc->transformToXML($xml);
         } catch (Exception $e) {
-            throw new Application_Exception($e->getMessage(), 0, $e);
+            throw new ApplicationException($e->getMessage(), 0, $e);
         }
     }
 }

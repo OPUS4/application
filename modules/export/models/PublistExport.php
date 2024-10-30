@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Collection;
 use Opus\Common\CollectionInterface;
 use Opus\Common\CollectionRole;
@@ -65,7 +66,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
     }
 
     /**
-     * @throws Application_Exception If parameters are not sufficient.
+     * @throws ApplicationException If parameters are not sufficient.
      */
     public function execute()
     {
@@ -92,12 +93,12 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
         // TODO params
         $roleParam = $request->getParam('role');
         if ($roleParam === null) {
-            throw new Application_Exception('role is not specified');
+            throw new ApplicationException('role is not specified');
         }
 
         $numberParam = $request->getParam('number');
         if ($numberParam === null) {
-            throw new Application_Exception('number is not specified');
+            throw new ApplicationException('number is not specified');
         }
 
         // TODO config
@@ -198,21 +199,21 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
      * @param string $roleParam
      * @param string $numberParam
      * @return CollectionInterface
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function mapQuery($roleParam, $numberParam)
     {
         if (CollectionRole::fetchByName($roleParam) === null) {
-            throw new Application_Exception('specified role does not exist');
+            throw new ApplicationException('specified role does not exist');
         }
 
         $role = CollectionRole::fetchByName($roleParam);
         if (! $role->getVisible()) {
-            throw new Application_Exception('specified role is invisible');
+            throw new ApplicationException('specified role is invisible');
         }
 
         if (count(Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam)) === 0) {
-            throw new Application_Exception('specified number does not exist for specified role');
+            throw new ApplicationException('specified number does not exist for specified role');
         }
 
         $collection = null;
@@ -223,7 +224,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
         }
 
         if ($collection === null) {
-            throw new Application_Exception('specified collection is invisible');
+            throw new ApplicationException('specified collection is invisible');
         }
 
         return $collection;

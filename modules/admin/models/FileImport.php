@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Document;
 use Opus\Common\File;
 use Opus\Common\Model\NotFoundException;
@@ -51,19 +52,19 @@ class Admin_Model_FileImport extends Application_Model_Abstract
     /**
      * @param string $docId
      * @param array  $files
-     * @throws Application_Exception In case database contains no document with id $docID.
+     * @throws ApplicationException In case database contains no document with id $docID.
      */
     public function addFilesToDocument($docId, $files)
     {
         if (empty($files)) {
-            throw new Application_Exception('no files for import');
+            throw new ApplicationException('no files for import');
         }
 
         $document = null;
         try {
             $document = Document::get($docId);
         } catch (NotFoundException $e) {
-            throw new Application_Exception('no document found for id ' . $docId, 0, $e);
+            throw new ApplicationException('no document found for id ' . $docId, 0, $e);
         }
 
         $log            = $this->getLogger();

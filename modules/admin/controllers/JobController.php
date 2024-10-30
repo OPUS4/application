@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Job;
 
 /**
@@ -74,7 +75,7 @@ class Admin_JobController extends Application_Controller_Action
         $this->view->label = $this->_request->getParam('label');
 
         if (empty($this->view->state) || empty($this->view->label)) {
-            throw new Application_Exception('Invalid arguments');
+            throw new ApplicationException('Invalid arguments');
         }
 
         $this->view->jobs = Job::getByLabels([$this->view->label], null, $this->view->state);

@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
+
 /**
  * Shows a publishing form for new documents
  */
@@ -107,7 +109,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract
         try {
             // Fetch the current XML DOM structure of the documenttype.
             $dom = $this->documentTypesHelper->getDocument($this->doctype);
-        } catch (Application_Exception $e) {
+        } catch (ApplicationException $e) {
             $this->log->err("Unable to load document type '" . $this->doctype . "'");
             throw $e;
         }

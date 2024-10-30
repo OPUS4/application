@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Config;
 use Opus\Document;
 
@@ -131,12 +132,12 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      *
      * @param string $documentType
      * @return DOMDocument
-     * @throws Application_Exception If invalid documentType passed.
+     * @throws ApplicationException If invalid documentType passed.
      */
     public function getDocument($documentType)
     {
         if (! $this->isValid($documentType)) {
-            throw new Application_Exception('Unable to load invalid document type "' . $documentType . '"');
+            throw new ApplicationException('Unable to load invalid document type "' . $documentType . '"');
         }
 
         $dom = new DOMDocument();
@@ -148,7 +149,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
 
         if (! $dom->schemaValidate($this->getXmlSchemaPath())) {
             libxml_clear_errors();
-            throw new Application_Exception(
+            throw new ApplicationException(
                 'given xml document type definition for document type ' . $documentType
                 . ' is not valid'
             );
@@ -197,7 +198,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
 
         if (! isset($this->templates)) {
             if (! isset($config->publish->path->documenttemplates)) {
-                throw new Application_Exception('invalid configuration: publish.path.documenttemplates is not defined');
+                throw new ApplicationException('invalid configuration: publish.path.documenttemplates is not defined');
             }
 
             $path = $config->publish->path->documenttemplates;
@@ -230,7 +231,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      *
      * @param string $templateName Name of template
      * @return null|string Path to template file
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function getTemplatePath($templateName)
     {
@@ -247,7 +248,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      * Returns path for document types.
      *
      * @return string
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function getDocTypesPath()
     {
@@ -260,7 +261,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
         }
 
         if (empty($path)) {
-            throw new Application_Exception('Path to document types not configured.');
+            throw new ApplicationException('Path to document types not configured.');
         }
 
         if ($path instanceof Zend_Config) {
@@ -302,7 +303,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      *
      * @param string|array $docTypesPath Path(s)
      * @return AppendIterator|DirectoryIterator|null
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function getDirectoryIterator($docTypesPath)
     {
@@ -313,14 +314,14 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
 
             foreach ($docTypesPath as $path) {
                 if (! is_dir($path) || ! is_readable($path)) {
-                    throw new Application_Exception('could not read document type definitions');
+                    throw new ApplicationException('could not read document type definitions');
                 }
 
                 $iterator->append(new DirectoryIterator($path));
             }
         } else {
             if (! is_dir($docTypesPath) || ! is_readable($docTypesPath)) {
-                throw new Application_Exception('could not read document type definitions');
+                throw new ApplicationException('could not read document type definitions');
             }
             $iterator = new DirectoryIterator($docTypesPath);
         }

@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Model\ModelInterface;
 use Opus\Common\Model\PersistableInterface;
 
@@ -97,12 +98,12 @@ class Application_Form_Confirmation extends Application_Form_Abstract
      *
      * @param string     $modelClass Name der Modelklasse
      * @param array|null $options
-     * @throws Application_Exception Wenn $modelClass Parameer fehlt.
+     * @throws ApplicationException Wenn $modelClass Parameer fehlt.
      */
     public function __construct($modelClass, $options = null)
     {
         if ($modelClass === null || strlen(trim($modelClass)) === 0) {
-            throw new Application_Exception(__CLASS__ . 'Attempt to construct without parameter "modelClass".');
+            throw new ApplicationException(__CLASS__ . 'Attempt to construct without parameter "modelClass".');
         }
         $this->modelClass = $modelClass;
         parent::__construct($options);
@@ -189,7 +190,7 @@ class Application_Form_Confirmation extends Application_Form_Abstract
      *
      * @param PersistableInterface $model
      * @return $this
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function setModel($model)
     {
@@ -198,12 +199,12 @@ class Application_Form_Confirmation extends Application_Form_Abstract
             $this->getElement(self::ELEMENT_MODEL_ID)->setValue($model->getId());
         } else {
             if (is_object($model)) {
-                throw new Application_Exception(
+                throw new ApplicationException(
                     __METHOD__ . ' Parameter ' . get_class($model)
                     . ' not instance of Opus\Model\AbstractDb.'
                 );
             } else {
-                throw new Application_Exception(__METHOD__ . ' Parameter must be Opus\Model\AbstractDb.');
+                throw new ApplicationException(__METHOD__ . ' Parameter must be Opus\Model\AbstractDb.');
             }
         }
         return $this;

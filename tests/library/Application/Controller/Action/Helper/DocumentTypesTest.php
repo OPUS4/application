@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
+
 /**
  * Unit tests for document types helper.
  *
@@ -165,13 +167,13 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
     public function testGetDocumentThrowsException()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->docTypeHelper->getDocument('article');
     }
 
     public function testGetDocumentThrowsSchemaInvalidException()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->docTypeHelper->getDocument('demo_invalid');
     }
 
@@ -220,7 +222,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
         unset($config->publish->path->documenttypes);
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Path to document types not configured');
         $this->docTypeHelper->getDocTypesPath();
     }

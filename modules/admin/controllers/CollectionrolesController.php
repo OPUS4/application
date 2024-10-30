@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\CollectionRole;
 use Opus\Common\CollectionRoleInterface;
 
@@ -67,7 +68,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $this->view->form    = $this->getRoleForm($collectionRoleModel->getObject());
             $this->setCollectionBreadcrumb('default_collection_role_' . $collectionRoleModel->getObject()->getName());
-        } catch (Application_Exception $e) {
+        } catch (ApplicationException $e) {
             $this->_helper->Redirector->redirectToAndExit('index', ['failure' => $e->getMessage()]);
         }
     }
@@ -87,7 +88,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
                     [$collectionRoleModel->getObject()->getName()]
                 )
             );
-        } catch (Application_Exception $e) {
+        } catch (ApplicationException $e) {
             $this->_helper->Redirector->redirectToAndExit('index', ['failure' => $e->getMessage()]);
         }
     }
@@ -109,7 +110,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
                     [$collectionRoleModel->getObject()->getName()]
                 )
             );
-        } catch (Application_Exception $e) {
+        } catch (ApplicationException $e) {
             $this->_helper->Redirector->redirectToAndExit('index', ['failure' => $e->getMessage()]);
         }
     }
@@ -268,7 +269,7 @@ class Admin_CollectionrolesController extends Application_Controller_Action
                 [$collectionRoleModel->getObject()->getName()]
             );
             $this->_helper->Redirector->redirectTo('index', $message);
-        } catch (Application_Exception $e) {
+        } catch (ApplicationException $e) {
             $this->_helper->Redirector->redirectToAndExit('index', ['failure' => $e->getMessage()]);
         }
     }

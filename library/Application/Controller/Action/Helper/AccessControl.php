@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
+
 /**
  * Controller Helper für Access Control Nachfragen.
  *
@@ -66,7 +68,7 @@ class Application_Controller_Action_Helper_AccessControl extends Zend_Controller
         $acl = $this->getAcl();
 
         if ($resource === null || strlen(trim($resource)) === 0) {
-            throw new Application_Exception('#1 argument must not be empty|null');
+            throw new ApplicationException('#1 argument must not be empty|null');
         }
 
         if ($acl !== null) {

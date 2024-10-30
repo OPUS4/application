@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
+
 /**
  * Unit Tests für Controller Helper für Zugriffsprüfungen.
  */
@@ -70,14 +72,14 @@ class Application_Controller_Action_Helper_AccessControlTest extends ControllerT
 
     public function testAccessAllowedForEmptyResource()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('#1 argument must not be empty|null');
         $this->accessControl->accessAllowed('  ');
     }
 
     public function testAccessAllowedForNullResource()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('#1 argument must not be empty|null');
         $this->accessControl->accessAllowed(null);
     }

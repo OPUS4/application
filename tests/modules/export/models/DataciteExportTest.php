@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Document;
 use Opus\Common\Identifier;
 use Opus\Common\Person;
@@ -45,7 +46,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $plugin->setRequest($this->getRequest());
         $plugin->setResponse($this->getResponse());
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $plugin->execute();
     }
 
@@ -57,7 +58,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $plugin->setRequest($request);
         $plugin->setResponse($this->getResponse());
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $plugin->execute();
     }
 

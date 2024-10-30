@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Licence;
 use Opus\Common\LicenceInterface;
 
@@ -118,7 +119,7 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
 
     public function testGetModelNoModelClass()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Model class has not been set.');
         $this->form->getModel();
     }
@@ -128,7 +129,7 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $this->form->setModelClass(Licence::class);
         $this->form->getElement('Id')->setValue('notAnId');
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Model-ID must be numeric.');
         $this->form->getModel();
     }
@@ -138,7 +139,7 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $this->form->setModelClass(Licence::class);
         $this->form->getElement('Id')->setValue(1000);
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Model with ID \'1000\' not found.');
         $this->form->getModel();
     }
@@ -201,7 +202,7 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase
         $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
         $method->setAccessible(true);
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Model-ID must be numeric.');
         $method->invoke($this->form, 'enrichment');
     }

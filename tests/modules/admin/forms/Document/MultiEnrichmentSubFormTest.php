@@ -362,7 +362,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      * @param string      $value
      * @param null|string $clickedButton
      * @return Admin_Form_Document_MultiEnrichmentSubForm
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     private function createTestPostDataAndConstructForm($keyName, $value, $clickedButton = null)
     {

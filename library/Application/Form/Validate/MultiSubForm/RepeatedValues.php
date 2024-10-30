@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
+
 class Application_Form_Validate_MultiSubForm_RepeatedValues implements Application_Form_Validate_MultiSubFormInterface
 {
     /** @var string */
@@ -44,16 +46,16 @@ class Application_Form_Validate_MultiSubForm_RepeatedValues implements Applicati
      * @param string     $elementName
      * @param string     $message
      * @param array|null $otherElements
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function __construct($elementName, $message, $otherElements = null)
     {
         if ($elementName === null || strlen(trim($elementName)) === 0) {
-            throw new Application_Exception(__METHOD__ . ' #1 argument must not be null or empty.');
+            throw new ApplicationException(__METHOD__ . ' #1 argument must not be null or empty.');
         }
 
         if ($message === null || strlen(trim($message)) === 0) {
-            throw new Application_Exception(__METHOD__ . ' #2 argument must not be null or empty.');
+            throw new ApplicationException(__METHOD__ . ' #2 argument must not be null or empty.');
         }
 
         if ($otherElements !== null && ! is_array($otherElements)) {

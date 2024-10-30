@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Config;
 use Opus\Common\Log;
 use Opus\Identifier\Urn;
@@ -42,21 +43,21 @@ class Admin_Model_UrnGenerator
     private $nss;
 
     /**
-     * @throws Application_Exception Wenn ein erforderlicher Konfigurationsparameter nicht vorhanden ist.
+     * @throws ApplicationException Wenn ein erforderlicher Konfigurationsparameter nicht vorhanden ist.
      */
     public function __construct()
     {
         $config = Config::get();
 
         if (! isset($config->urn->nid) || $config->urn->nid === '') {
-            throw new Application_Exception(
+            throw new ApplicationException(
                 'missing configuration setting for urn.nid - is required for URN generation'
             );
         }
         $this->nid = $config->urn->nid;
 
         if (! isset($config->urn->nss) || $config->urn->nss === '') {
-            throw new Application_Exception(
+            throw new ApplicationException(
                 'missing configuration setting for urn.nss - is required for URN generation'
             );
         }

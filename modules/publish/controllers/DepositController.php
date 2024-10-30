@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Enrichment;
@@ -126,7 +127,7 @@ class Publish_DepositController extends Application_Controller_Action
             $depositData = new Publish_Model_Deposit();
             $depositData->storeDocument($this->session->documentId, $this->log, $this->depositData, $selectedType);
         } catch (Publish_Model_Exception $e) {
-            throw new Application_Exception('publish_error_unexpected');
+            throw new ApplicationException('publish_error_unexpected');
         }
 
         $document = $depositData->getDocument();
@@ -144,7 +145,7 @@ class Publish_DepositController extends Application_Controller_Action
         } catch (Exception $e) {
             // TODO wie sollte die Exception sinnvoll behandelt werden?
             $this->log->err("Document could not be stored successfully: " . $e->getMessage());
-            throw new Application_Exception('publish_error_unexpected');
+            throw new ApplicationException('publish_error_unexpected');
         }
 
         $this->log->info("Document $docId was successfully stored!");

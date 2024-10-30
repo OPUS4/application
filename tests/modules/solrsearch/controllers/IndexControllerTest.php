@@ -661,7 +661,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/"\""');
 
         $body = $this->getResponse()->getBody();
-        $this->assertStringNotContainsString('Application_Exception: error_search_unavailable', $body);
+        $this->assertStringNotContainsString('ApplicationException: error_search_unavailable', $body);
         $this->assertStringContainsString('Application_SearchException: error_search_invalidquery', $body);
         $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }

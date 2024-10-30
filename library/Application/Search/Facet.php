@@ -302,7 +302,7 @@ class Application_Search_Facet
 
     /**
      * @return bool
-     * @throws Application_Exception
+     * @throws ApplicationException
      *
      * TODO Refactor so there is a class for facets that answers this question
      */

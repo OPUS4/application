@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
+
 class Application_Form_TableHeaderTest extends TestCase
 {
     /** @var Application_Form_TableHeader */
@@ -63,14 +65,14 @@ class Application_Form_TableHeaderTest extends TestCase
 
     public function testConstructFormNull()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Parameter \'columns\' must be array.');
         new Application_Form_TableHeader(null);
     }
 
     public function testConstructFormNotArray()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Parameter \'columns\' must be array.');
         new Application_Form_TableHeader('notAnArray');
     }

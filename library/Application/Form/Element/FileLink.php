@@ -29,6 +29,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\File;
 use Opus\Common\FileInterface;
 use Opus\Common\Model\NotFoundException;
@@ -62,19 +63,19 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
     /**
      * @param string|FileInterface $file
      * @return $this
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function setValue($file)
     {
         if ($file === null) {
-            throw new Application_Exception(__METHOD__ . " Value must not be null.");
+            throw new ApplicationException(__METHOD__ . " Value must not be null.");
         }
 
         if (! $file instanceof FileInterface) {
             try {
                 $file = File::get($file);
             } catch (NotFoundException $omnfe) {
-                throw new Application_Exception("File with ID = $file not found.");
+                throw new ApplicationException("File with ID = $file not found.");
             }
         }
 
@@ -90,7 +91,7 @@ class Application_Form_Element_FileLink extends Application_Form_Element_Text
     /**
      * Validierung ist erfolgreich, wenn File mit ID existiert.
      *
-     * Wenn die ID nicht existiert wird in setValue eine Application_Exception geworfen.
+     * Wenn die ID nicht existiert wird in setValue eine ApplicationException geworfen.
      *
      * @param mixed      $value
      * @param null|array $context

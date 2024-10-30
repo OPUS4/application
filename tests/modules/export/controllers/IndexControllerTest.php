@@ -59,7 +59,7 @@ class Export_IndexControllerTest extends ControllerTestCase
     }
 
     /**
-     * expectedException Application_Exception
+     * expectedException ApplicationException
      */
     public function testUnknownAction()
     {
@@ -324,7 +324,7 @@ class Export_IndexControllerTest extends ControllerTestCase
         $this->assertStringContainsString('doccount="' . $rows . '"', $body);
         $this->assertStringContainsString('queryhits="' . $numOfTestDocs . '"', $body);
         $this->assertEquals($rows, substr_count($body, 'Language="eng" Value="OPUSVIER-2488" Type="main"'));
-        $this->assertStringNotContainsString('Application_Exception', $body);
+        $this->assertStringNotContainsString('ApplicationException', $body);
 
         for ($i = $start; $i < $rows; $i++) {
             $this->assertStringContainsString('<Opus_Document Id="' . $docIds[$i] . '"', $body);

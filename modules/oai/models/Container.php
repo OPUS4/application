@@ -176,7 +176,7 @@ class Oai_Model_Container extends Application_Model_Abstract
 
     /**
      * @return Oai_Model_SingleFile|Oai_Model_TarFile
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws Oai_Model_Exception
      * @throws Zend_Exception
      * @throws OpusException

@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\File;
 use Opus\Common\FileInterface;
 
@@ -212,7 +213,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $form->getElement('Id')->setValue('bla');
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Bad file ID = \'bla\'.');
         $form->getModel();
     }
@@ -223,7 +224,7 @@ class Admin_Form_FileTest extends ControllerTestCase
 
         $form->getElement('Id')->setValue('8888');
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Unknown file ID = \'8888\'.');
         $form->getModel();
     }
@@ -272,7 +273,7 @@ class Admin_Form_FileTest extends ControllerTestCase
             'Language' => 'eng',
         ];
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('File with ID = 5555 not found.');
         $result = $form->isValid($post);
     }

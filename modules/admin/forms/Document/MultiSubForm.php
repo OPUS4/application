@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\DocumentInterface;
 
 /**
@@ -92,7 +93,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         if ($validator === null || $validator instanceof Application_Form_Validate_MultiSubFormInterface) {
             $this->subformValidator = $validator;
         } else {
-            throw new Application_Exception(
+            throw new ApplicationException(
                 'Fehler beim Instanzieren von ' . __CLASS__
                 . '. Validator ist keine Instanz von Application_Form_Validate_IMultiSubForm.'
             );

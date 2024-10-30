@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Mail\SendMail;
 
 /**
@@ -41,11 +42,11 @@ class Frontdoor_MailController extends Application_Controller_Action
      */
     public function indexAction()
     {
-        throw new Application_Exception('currently not supported');
+        throw new ApplicationException('currently not supported');
         /*
         $docId = $this->getRequest()->getParam('docId');
         if ($docId === null) {
-            throw new Application_Exception('missing parameter docId');
+            throw new ApplicationException('missing parameter docId');
         }
 
         $document = Document::get($docId);
@@ -85,7 +86,7 @@ class Frontdoor_MailController extends Application_Controller_Action
      */
     public function sendmailAction()
     {
-        throw new Application_Exception('currently not supported');
+        throw new ApplicationException('currently not supported');
 
         /*
         $form = new Frontdoor_Form_MailForm();
@@ -146,7 +147,7 @@ class Frontdoor_MailController extends Application_Controller_Action
     {
         $docId = $this->getRequest()->getParam('docId');
         if ($docId === null) {
-            throw new Application_Exception('missing parameter docId');
+            throw new ApplicationException('missing parameter docId');
         }
         if (is_array($docId)) {
             $docId = end($docId);
@@ -156,12 +157,12 @@ class Frontdoor_MailController extends Application_Controller_Action
         try {
             $authorsModel = new Frontdoor_Model_Authors($docId);
         } catch (Frontdoor_Model_Exception $e) {
-            throw new Application_Exception($e->getMessage());
+            throw new ApplicationException($e->getMessage());
         }
 
         $authors = $authorsModel->getContactableAuthors();
         if (empty($authors)) {
-            throw new Application_Exception('no authors contactable via email');
+            throw new ApplicationException('no authors contactable via email');
         }
 
         $form = new Frontdoor_Form_ToauthorForm(['authors' => $authors]);

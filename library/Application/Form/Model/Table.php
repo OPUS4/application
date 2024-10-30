@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Model\ModelInterface;
 
 /**
@@ -144,7 +145,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract
     public function setModels($models)
     {
         if ($models !== null && ! is_array($models)) {
-            throw new Application_Exception(__METHOD__ . 'Parameter must be array.');
+            throw new ApplicationException(__METHOD__ . 'Parameter must be array.');
         }
         $this->models = $models;
     }

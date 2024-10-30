@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Config;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
@@ -56,7 +57,7 @@ class Publish_FormController extends Application_Controller_Action
     }
 
     /**
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws Zend_Exception
      * @throws Zend_Form_Exception
      */
@@ -174,7 +175,7 @@ class Publish_FormController extends Application_Controller_Action
     /**
      * @param array|null $postData
      * @return Publish_Form_PublishingSecond
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws Publish_Model_FormSessionTimeoutException
      * @throws Zend_Exception
      */
@@ -189,7 +190,7 @@ class Publish_FormController extends Application_Controller_Action
             throw $e; // unmittelbarer Redirect erfolgt in Action-Methode
         } catch (Publish_Model_FormIncorrectFieldNameException $e) {
             $logger->err('invalider Feldname ' . $e->fieldName);
-            throw new Application_Exception(
+            throw new ApplicationException(
                 preg_replace(
                     '/%value%/',
                     htmlspecialchars($e->fieldName),
@@ -198,7 +199,7 @@ class Publish_FormController extends Application_Controller_Action
             );
         } catch (Publish_Model_FormIncorrectEnrichmentKeyException $e) {
             $logger->err('invalider EnrichmentKey ' . $e->enrichmentKey);
-            throw new Application_Exception(
+            throw new ApplicationException(
                 preg_replace(
                     '/%value%/',
                     htmlspecialchars($e->enrichmentKey),
@@ -207,12 +208,12 @@ class Publish_FormController extends Application_Controller_Action
             );
         } catch (Publish_Model_FormException $e) {
             $logger->err('Exception bei der Erzeugung des zweiten Formulars: ' . $e->enrichmentKey);
-            throw new Application_Exception($e->getTranslateKey());
-        } catch (Application_Exception $e) {
+            throw new ApplicationException($e->getTranslateKey());
+        } catch (ApplicationException $e) {
             throw $e;
         } catch (Exception $e) {
             $logger->err('unerwartete Exception bei der Erzeugung des zweiten Formulars: ' . $e->getMessage());
-            throw new Application_Exception('publish_error_unexpected');
+            throw new ApplicationException('publish_error_unexpected');
         }
     }
 
@@ -286,7 +287,7 @@ class Publish_FormController extends Application_Controller_Action
                     try {
                         $this->manipulateSession($postData);
                     } catch (Publish_Model_FormNoButtonFoundException $e) {
-                        throw new Application_Exception($e->getTranslateKey());
+                        throw new ApplicationException($e->getTranslateKey());
                     }
                 }
 
@@ -677,7 +678,7 @@ class Publish_FormController extends Application_Controller_Action
         $templateName  = $docTypeHelper->getTemplateName($this->session->documentType);
 
         if ($templateName === null) {
-            throw new Application_Exception(
+            throw new ApplicationException(
                 'invalid configuration: could not get template name for requested document type'
             );
         }
@@ -687,7 +688,7 @@ class Publish_FormController extends Application_Controller_Action
         $file = $templateFileName !== null ? new SplFileInfo($templateFileName) : null;
 
         if ($file === null || ! $file->isReadable()) {
-            throw new Application_Exception(
+            throw new ApplicationException(
                 'invalid configuration: template file ' . $templateName . '.phtml is not readable or does not exist'
             );
         }

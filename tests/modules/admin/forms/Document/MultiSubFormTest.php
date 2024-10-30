@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Document;
 use Opus\Common\Title;
 use Opus\Common\TitleInterface;
@@ -70,7 +71,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
     public function testConstructFormWithBadValidator()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Validator ist keine Instanz von Application_Form_Validate_IMultiSubForm.');
 
         $form = new Admin_Form_Document_MultiSubForm(

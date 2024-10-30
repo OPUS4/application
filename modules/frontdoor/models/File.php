@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\File;
@@ -175,14 +176,14 @@ class Frontdoor_Model_File
 
     /**
      * @param Application_Security_AccessControlInterface|null $helper
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function setAclHelper($helper)
     {
         if ($helper instanceof Application_Security_AccessControlInterface || $helper === null) {
             $this->accessControl = $helper;
         } else {
-            throw new Application_Exception(
+            throw new ApplicationException(
                 '#1 argument must be of type Application_Security_AccessControl (not \''
                 . get_class($helper) . '\')'
             );

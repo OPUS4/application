@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class CitationExport_Model_Exception extends Application_Exception
+use Opus\Application\ApplicationException;
+
+class CitationExport_Model_Exception extends ApplicationException
 {
 }

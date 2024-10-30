@@ -32,6 +32,7 @@
  * TODO move feed code into Rss_Model_Feed
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\Document;
 use Opus\Search\Result\Base;
 use Opus\Search\SearchException;
@@ -50,7 +51,7 @@ class Rss_IndexController extends Application_Controller_Xml
     }
 
     /**
-     * @throws Application_Exception
+     * @throws ApplicationException
      *
      * TODO function should only call performSearch instead of doing the search steps separately
      */
@@ -67,7 +68,7 @@ class Rss_IndexController extends Application_Controller_Xml
             $params = $search->createQueryBuilderInputFromRequest($this->getRequest());
         } catch (Application_Search_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            $applicationException = new Application_Exception($e->getMessage());
+            $applicationException = new ApplicationException($e->getMessage());
             $code                 = $e->getCode();
             if ($code !== 0) {
                 $applicationException->setHttpResponseCode($code);
@@ -105,15 +106,15 @@ class Rss_IndexController extends Application_Controller_Xml
         $this->getLogger()->err(__METHOD__ . ' : ' . $exception);
 
         if ($exception->isServerUnreachable()) {
-            $e = new Application_Exception('error_search_unavailable');
+            $e = new ApplicationException('error_search_unavailable');
             $e->setHttpResponseCode(503);
             throw $e;
         } elseif ($exception->isInvalidQuery()) {
-            $e = new Application_Exception('error_search_invalidquery');
+            $e = new ApplicationException('error_search_invalidquery');
             $e->setHttpResponseCode(500);
             throw $e;
         } else {
-            $e = new Application_Exception('error_search_unknown');
+            $e = new ApplicationException('error_search_unknown');
             $e->setHttpResponseCode(500);
             throw $e;
         }
@@ -154,7 +155,7 @@ class Rss_IndexController extends Application_Controller_Xml
 
     /**
      * @param Base $resultList
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws DOMException
      */
     private function setItems($resultList)

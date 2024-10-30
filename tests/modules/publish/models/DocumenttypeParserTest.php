@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
+
 class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
 {
     /** @var string[] */
@@ -46,7 +48,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
 
     public function testConstructorWithWrongDom()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('irgendwas');
 
         $model = new Publish_Model_DocumenttypeParser($dom, null);
@@ -66,7 +68,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase
         $session->documentType = 'irgendwas';
         $dom                   = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $form = new Publish_Form_PublishingSecond($this->logger);
 
         $model = new Publish_Model_DocumenttypeParser($dom, $form);

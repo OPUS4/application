@@ -815,7 +815,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $response = $this->getResponse();
         $this->assertEquals('500', $response->getHttpResponseCode());
-        $this->assertStringContainsString('Application_Exception', $response->getBody());
+        $this->assertStringContainsString('ApplicationException', $response->getBody());
 
         //no button pressed, additionalFields still in intial state
         $this->assertEquals(9, count($session->additionalFields));
@@ -1022,7 +1022,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->assertResponseCode(500);
         $body = $this->getResponse()->getBody();
-        $this->assertStringContainsString('Application_Exception', $body);
+        $this->assertStringContainsString('ApplicationException', $body);
         $this->assertStringContainsString('invalid configuration: template file barbaz.phtml is not readable or does not exist', $body);
     }
 
@@ -1041,7 +1041,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->assertResponseCode(500);
         $body = $this->getResponse()->getBody();
-        $this->assertStringContainsString('Application_Exception', $body);
+        $this->assertStringContainsString('ApplicationException', $body);
         $this->assertStringContainsString('invalid configuration: template file barbaz.phtml is not readable or does not exist', $body);
     }
 }

@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Repository;
 use Opus\Common\Security\Realm;
@@ -42,13 +43,13 @@ class Application_Util_Document
 
     /**
      * @param DocumentInterface $document
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function __construct($document)
     {
         $this->document = $document;
         if (! $this->checkPermission()) {
-            throw new Application_Exception('document access for id ' . $this->document->getId() . ' not allowed');
+            throw new ApplicationException('document access for id ' . $this->document->getId() . ' not allowed');
         }
     }
 

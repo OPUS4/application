@@ -30,6 +30,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\ApplicationException;
+
 /**
  * Class Oai_ContainerController delivers files of a document for OAI clients.
  *
@@ -52,7 +54,7 @@ class Oai_ContainerController extends Application_Controller_Action
         try {
             $container  = new Oai_Model_Container($docId);
             $fileHandle = $container->getFileHandle();
-        } catch (Application_Exception $ome) {
+        } catch (ApplicationException $ome) {
             $this->view->errorMessage = $ome->getMessage();
             $this->getResponse()->setHttpResponseCode(500);
             $this->render('error');
