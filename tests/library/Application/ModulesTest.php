@@ -42,7 +42,7 @@ class Application_ModulesTest extends ControllerTestCase
         $modules = Modules::getInstance();
 
         $this->assertNotNull($modules);
-        $this->assertInstanceOf('Application_Modules', $modules);
+        $this->assertInstanceOf(Modules::class, $modules);
 
         $this->assertSame($modules, Modules::getInstance());
     }

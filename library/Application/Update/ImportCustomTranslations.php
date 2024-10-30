@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Modules;
 use Opus\Common\Console\ConsoleColors;
 use Opus\Translate\Dao;
 
@@ -42,7 +43,7 @@ class Application_Update_ImportCustomTranslations extends Application_Update_Plu
      */
     public function run()
     {
-        $modules = array_keys(Application_Modules::getInstance()->getModules());
+        $modules = array_keys(Modules::getInstance()->getModules());
 
         $manager = new Application_Translate_TranslationManager();
         $manager->setFolderNames('language_custom');

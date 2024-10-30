@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Application\Modules;
 use Opus\Common\Translate\TranslateException;
 use Opus\Common\Translate\UnknownTranslationKeyException;
 use Opus\Translate\Dao;
@@ -760,7 +761,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $modules = $manager->getModules();
 
-        $modulesManager = Application_Modules::getInstance();
+        $modulesManager = Modules::getInstance();
 
         $this->assertEquals(array_keys($modulesManager->getModules()), $modules);
     }
