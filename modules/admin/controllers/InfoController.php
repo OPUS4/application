@@ -51,7 +51,7 @@ class Admin_InfoController extends Application_Controller_Action
         $this->view->postMaxSize       = ini_get('post_max_size');
         $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
 
-        $workspace = new Configuration_Workspace();
+        $workspace = new Application_Configuration_Workspace();
         $folders   = $workspace->getFolders();
         ksort($folders);
         $this->view->workspaceFolders = $folders;

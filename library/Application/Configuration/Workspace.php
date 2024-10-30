@@ -35,7 +35,7 @@ use Opus\Common\OpusException;
 /**
  * Checking of information about workspace.
  */
-class Configuration_Workspace
+class Application_Configuration_Workspace
 {
     /**
      * @return array
