@@ -29,8 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Configuration;
-
 /**
  * View helper that translates key if translation is found or returns provided default value.
  */
