@@ -38,6 +38,8 @@ use Opus\Enrichment\TextType;
 
 /**
  * Unterformular für einzelne Enrichments im Metadaten-Formular.
+ *
+ * TODO Sonderbehandlungen für SELECT entfernen
  */
 class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 {
@@ -103,7 +105,10 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             // in diesem Fall wird der Wert des Enrichments in einem Textfeld ausgegeben
         }
 
-        $this->createValueFormElement($enrichment->getValue(), $enrichmentKey);
+        $element = $this->createValueFormElement($enrichment->getValue(), $enrichmentKey);
+
+        // Formularelement für Value in das bestehende Unterformular einfügen
+        $this->setEnrichmentValueElement($element);
     }
 
     /**
@@ -116,6 +121,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      *                                               erzeugt werden soll
      * @param string|null        $formValue aktueller Formularwert für das Enrichment (nur bei der Verarbeitung eines
      *                                      POST-Requests gesetzt)
+     * @return Zend_Form_Element
      */
     private function createValueFormElement($enrichmentValue, $enrichmentKey = null, $formValue = null)
     {
@@ -162,11 +168,6 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         // neues Formularelement soll vor dem Entfernen-Button erscheinen
         $element->setOrder(2);
 
-        // neues Formularelement in das bestehende Unterformular einfügen
-        $elements                      = $this->getElements();
-        $elements[self::ELEMENT_VALUE] = $element;
-        $this->setElements($elements);
-
         if ($enrichmentValue !== null) {
             if (! $enrichmentType->isStrictValidation()) {
                 // verstößt der im Enrichment gespeicherte Wert gegen die aktuelle Typkonfiguration?
@@ -203,6 +204,8 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             // in Auswahlliste eintragen, sofern er nicht bereits in der Auswahlliste enthalten ist
             $this->addOptionToSelectElement($element, $enrichmentType, $value);
         }
+
+        return $element;
     }
 
     /**
@@ -363,7 +366,21 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
         }
 
         $enrichmentValue = $enrichment === null ? null : $enrichment->getValue();
-        $this->createValueFormElement($enrichmentValue, $enrichmentKey, $formValue);
+        $element         = $this->createValueFormElement($enrichmentValue, $enrichmentKey, $formValue);
+
+        $this->setEnrichmentValueElement($element);
+    }
+
+    /**
+     * Sets the form element for the value of the enrichment.
+     *
+     * @param Zend_Form_Element $element
+     */
+    public function setEnrichmentValueElement($element)
+    {
+        $elements                      = $this->getElements();
+        $elements[self::ELEMENT_VALUE] = $element;
+        $this->setElements($elements);
     }
 
     /**
