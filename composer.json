@@ -20,6 +20,7 @@
     "ext-fileinfo": "*",
     "ext-readline": "*",
     "ext-sockets": "*",
+    "ext-yaml": "*",
     "opus4/zf1-future": "1.21.*",
     "jpgraph/jpgraph": "dev-master",
     "opus4-repo/opus4-common": "^4.8",

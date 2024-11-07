@@ -1,0 +1,14 @@
+name: conferenceType
+
+type: SelectType
+
+label:
+    de: Art der Konferenzveröffentlichung
+    en: Coverence Type
+
+config: |
+  Konferenzband
+  Konferenzartikel
+  Konferenz-Poster
+  Konferenz-Abstract
+  Sonstiges

@@ -1,0 +1,5 @@
+enrichments:
+  - name: opus.import.checksum
+  - name: opus.import.date
+  - name: opus.import.file
+  - name: opus.import.user
