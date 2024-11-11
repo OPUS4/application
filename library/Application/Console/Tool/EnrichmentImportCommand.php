@@ -25,48 +25,62 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2024, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Bibtex\Import\Console\BibtexImportCommand;
-use Opus\Bibtex\Import\Console\BibtexListCommand;
-use Opus\Pdf\Console\CoverGenerateCommand;
-use Opus\Search\Console\ExtractCommand;
-use Opus\Search\Console\ExtractFileCommand;
-use Opus\Search\Console\IndexCommand;
-use Opus\Search\Console\RemoveCommand;
-use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command line application for OPUS 4 management tasks.
  *
- * TODO get list of Commands from configuration/registration (allow modules to add commands, decentralize the code)
  */
-class Application_Console_App extends Application
+class Application_Console_Tool_EnrichmentImportCommand extends Command
 {
-    public function __construct()
+    public const ARGUMENT_FILE = 'config_file';
+
+    protected function configure()
     {
-        parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
+        parent::configure();
 
-        $this->add(new IndexCommand());
-        $this->add(new RemoveCommand());
-        $this->add(new ExtractCommand());
-        $this->add(new ExtractFileCommand());
-        // $this->add(new Application_Console_Index_RepairCommand());
-        // $this->add(new Application_Console_Index_CheckCommand());
+        $help = <<<EOT
+The <fg=green>enrichment:import</> command can be used to import Enrichment
+configurations using Yaml files. 
+EOT;
 
-        $this->add(new Application_Console_Document_DeleteCommand());
-        $this->add(new Application_Console_Document_DuplicatesCommand());
-        $this->add(new Application_Console_Document_DiffCommand());
+        $this->setName('enrichment:import')
+            ->setDescription('Imports an Enrichment configuration')
+            ->setHelp($help)
+            ->addArgument(
+                self::ARGUMENT_FILE,
+                InputArgument::REQUIRED,
+                'Yaml file containing configuration'
+            );
+    }
 
-        $this->add(new BibtexImportCommand());
-        $this->add(new BibtexListCommand());
-        $this->add(new Application_Console_Debug_DocumentXmlCommand());
-        $this->add(new CoverGenerateCommand());
+    /**
+     * @return int
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $file = $input->getArgument(self::ARGUMENT_FILE);
 
-        $this->add(new Application_Console_Tool_EnrichmentImportCommand());
+        if (! file_exists($file)) {
+            $output->writeln('<fg=red>Input file not found</>');
+        }
 
-        $this->setDefaultCommand('list');
+
+        if (! is_readable($file)) {
+            $output->writeln('<fg=red>Input file not readable</>');
+            return self::FAILURE;
+        }
+
+        $importer = EnrichmentConfigImporter();
+
+        $importer->import($file);
+
+        return self::SUCCESS;
     }
 }
