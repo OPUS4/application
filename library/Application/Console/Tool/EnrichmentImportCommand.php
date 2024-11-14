@@ -35,7 +35,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- *
+ * Command for importing Enrichment configurations.
  */
 class Application_Console_Tool_EnrichmentImportCommand extends Command
 {
@@ -77,7 +77,7 @@ EOT;
             return self::FAILURE;
         }
 
-        $importer = EnrichmentConfigImporter();
+        $importer = new Application_Configuration_EnrichmentConfigImporter();
 
         $importer->import($file);
 

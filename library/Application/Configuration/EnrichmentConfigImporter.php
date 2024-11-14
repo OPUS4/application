@@ -29,13 +29,101 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\EnrichmentKey;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
+
+/**
+ * Imports Yaml configuration for Enrichments.
+ *
+ * TODO support output over OutputInterface
+ */
 class Application_Configuration_EnrichmentConfigImporter
 {
+    /** @var OutputInterface */
+    private $output;
+
     /**
      * @param string $filePath
      */
     public function import($filePath)
     {
-        // TODO implement
+        $config = yaml_parse_file($filePath);
+
+        if (! $config || ! is_array($config)) {
+            // TODO throw exception
+        }
+
+        if (isset($config['enrichments'])) {
+            $enrichmentConfigs = $config['enrichments'];
+        } else {
+            $enrichmentConfigs = [$config];
+        }
+
+        foreach ($enrichmentConfigs as $enrichment) {
+            $this->createEnrichment($enrichment);
+        }
+    }
+
+    public function createEnrichment($config)
+    {
+        $name = $config['name'];
+
+        $enrichmentKey = EnrichmentKey::fetchByName($name);
+
+        if ($enrichmentKey !== null) {
+            $this->getOutput()->writeln("Enrichment '{$enrichmentKey}' already exists");
+            return;
+        }
+
+        $enrichmentKey = EnrichmentKey::new();
+
+        $enrichmentKey->setName($name);
+
+        if (isset($config['type'])) {
+            $type = $config['type'];
+            $enrichmentKey->setType($type);
+        }
+
+        if (isset($config['options'])) {
+            $options = $config['config'];
+            $enrichmentKey->setOptions($options);
+        }
+
+        // TODO strict validation
+
+        $enrichmentKey->store();
+
+        if (isset($config['label'])) {
+            $this->createTranslations($config['label']);
+        }
+
+        // TODO set translations
+    }
+
+    public function createTranslations($translations)
+    {
+
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @return $this
+     */
+    public function setOutput($output)
+    {
+        $this->output = $output;
+        return $this;
+    }
+
+    /**
+     * @return OutputInterface
+     */
+    public function getOutput()
+    {
+        if ($this->output === null) {
+            $this->output = new NullOutput();
+        }
+        return $this->output;
     }
 }

@@ -29,24 +29,32 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use function yaml_parse_file;
-
-class Application_Console_Tool_EnrichmentImportCommandTest extends ControllerTestCase
+class Application_Configuration_EnrichmentConfigImporterTest extends ControllerTestCase
 {
-    /** @var string[] */
-    protected $additionalResources = ['database'];
+    /** @var string */
+    protected $additionalResources = 'database';
 
-    public function testImport()
+    /** @var Application_Configuration_EnrichmentConfigImporter */
+    private $importer;
+
+    public function setUp() : void
+    {
+        parent::setUp();
+
+        $this->importer = new Application_Configuration_EnrichmentConfigImporter();
+    }
+
+    public function testImportSingleEnrichmentConfig()
+    {
+        $yamlFile = APPLICATION_PATH . '/tests/resources/enrichments/conferenceType.yml';
+
+        $this->importer->import($yamlFile);
+    }
+
+    public function testImportMultipleEnrichmentConfigs()
     {
         $yamlFile = APPLICATION_PATH . '/tests/resources/enrichments/import.yml';
 
-        $config = yaml_parse_file($yamlFile);
-
-        $this->markTestIncomplete('not implemented yet');
-    }
-
-    public function testImportFileNotFound()
-    {
-
+        $this->importer->import($yamlFile);
     }
 }

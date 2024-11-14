@@ -1,3 +1,4 @@
+# Example of configuration for multiple enrichments
 enrichments:
   - name: opus.import.checksum
   - name: opus.import.date

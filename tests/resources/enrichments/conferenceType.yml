@@ -1,14 +1,20 @@
+# Enrichment configuration for conference types
 name: conferenceType
 
 type: SelectType
 
 label:
     de: Art der Konferenzveröffentlichung
-    en: Coverence Type
+    en: Conference Type
 
-config: |
+# TODO support additional translation keys (like hint)
+# TODO support strict validation settign
+
+options: |
   Konferenzband
   Konferenzartikel
   Konferenz-Poster
   Konferenz-Abstract
   Sonstiges
+
+# TODO support multiple option keys
