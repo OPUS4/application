@@ -66,6 +66,7 @@ class Application_Console_App extends Application
         $this->add(new CoverGenerateCommand());
 
         $this->add(new Application_Console_Tool_EnrichmentImportCommand());
+        $this->add(new Application_Console_Model_EnrichmentListCommand());
 
         $this->setDefaultCommand('list');
     }
