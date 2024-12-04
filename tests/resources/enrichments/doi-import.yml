@@ -1,0 +1,10 @@
+# Enrichment keys for Publish module DOI import (for OPUS 4.8.0)
+enrichments:
+  - name: opus_import_data
+  - name: local_crossrefDocumentType
+  - name: local_crossrefLicence
+  - name: local_doiImportPopulated
+  - name: local_import_origin
+  - name: opus_doi_flag
+  - name: conference_place
+  - name: conference_title

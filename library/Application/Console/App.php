@@ -65,6 +65,13 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Debug_DocumentXmlCommand());
         $this->add(new CoverGenerateCommand());
 
+        // TODO use ModelCommandProvider (with OPUS 4.8.1)
+        $this->add(new Application_Console_Model_EnrichmentImportCommand());
+        $this->add(new Application_Console_Model_EnrichmentListCommand());
+        $this->add(new Application_Console_Model_EnrichmentExportCommand());
+        $this->add(new Application_Console_Model_EnrichmentRenameCommand());
+        $this->add(new Application_Console_Model_EnrichmentDeleteCommand());
+
         $this->setDefaultCommand('list');
     }
 }
