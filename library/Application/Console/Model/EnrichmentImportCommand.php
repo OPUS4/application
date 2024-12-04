@@ -1,3 +1,5 @@
+<?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,17 +25,60 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2024, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$(function () {
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-    // prevent double submits on forms
-    $('form').submit(function () {
-        $(':submit', this).click(function () {
-            return false;
-        });
-    });
+/**
+ * Command for importing Enrichment configurations.
+ */
+class Application_Console_Model_EnrichmentImportCommand extends Command
+{
+    public const ARGUMENT_FILE = 'config_file';
 
-});
+    protected function configure()
+    {
+        parent::configure();
+
+        $help = <<<EOT
+The <fg=green>enrichment:import</> command can be used to import Enrichment
+configurations using Yaml files. 
+EOT;
+
+        $this->setName('enrichment:import')
+            ->setDescription('Import Enrichment configuration')
+            ->setHelp($help)
+            ->addArgument(
+                self::ARGUMENT_FILE,
+                InputArgument::REQUIRED,
+                'Yaml file containing configuration'
+            );
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $file = $input->getArgument(self::ARGUMENT_FILE);
+
+        if (! file_exists($file)) {
+            $output->writeln('<fg=red>Input file not found</>');
+            return 1;
+        }
+
+        if (! is_readable($file)) {
+            $output->writeln('<fg=red>Input file not readable</>');
+            return 1;
+        }
+
+        $importer = new Application_Configuration_EnrichmentConfigImporter();
+        $importer->setOutput($output);
+
+        $importer->import($file);
+
+        return 0;
+    }
+}

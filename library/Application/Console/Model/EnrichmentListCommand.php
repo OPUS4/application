@@ -1,3 +1,5 @@
+<?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,17 +25,57 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2024, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$(function () {
+use Opus\Common\EnrichmentKey;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-    // prevent double submits on forms
-    $('form').submit(function () {
-        $(':submit', this).click(function () {
-            return false;
-        });
-    });
+/**
+ * Command for listing enrichments.
+ *
+ * TODO option to only list used enrichments
+ * TODO show number of documents using enrichment key
+ */
+class Application_Console_Model_EnrichmentListCommand extends Command
+{
+    protected function configure()
+    {
+        parent::configure();
 
-});
+        $help = <<<EOT
+The <fg=green>enrichment:list</> command lists all enrichments present in the
+database. 
+EOT;
+
+        $this->setName('enrichment:list')
+            ->setDescription('Lists enrichments')
+            ->setHelp($help);
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $allKeys        = EnrichmentKey::getAll();
+        $referencedKeys = EnrichmentKey::getAllReferenced();
+
+        $rows = [];
+
+        foreach ($allKeys as $key) {
+            $rows[] = [
+                $key,
+                in_array($key, $referencedKeys) ? 'used' : '',
+            ];
+        }
+
+        $table = new Table($output);
+        $table->setHeaders(['Enrichment-Key', 'Used'])
+            ->setRows($rows);
+        $table->render();
+
+        return 0;
+    }
+}

@@ -1,5 +1,21 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.8 - 2024-12-04
+
+Das Blockieren der Enter/Return-Taste wurde auf die Metadaten-Formulare 
+im Publish-Modul und in der Administration beschränkt. In allen anderen
+Formularen verhält sich die Taste daher wieder wie vor OPUS 4.8.0.7.
+
+https://github.com/OPUS4/application/issues/1258
+
+Es wurden neue Konsolen-Kommandos für den Umgang mit Enrichments hinzugefügt.
+Alle OPUS 4 Kommandos können mit `bin/opus4` angezeigt werden. Das Kommando
+`enrichment:import` kann zum Beispiel verwendet werden, um in einer Yaml-Datei 
+definierte Enrichments anzulegen. Beispiele für solche Konfigurationen finden 
+sich in `tests/resources/enrichments`.
+
+https://github.com/OPUS4/application/issues/1253
+
 ## Patch Release 4.8.0.7 - 2024-10-22
 
 Ein Fehler beim Drücken der Enter/Return-Taste in einfachen Text-Feldern 

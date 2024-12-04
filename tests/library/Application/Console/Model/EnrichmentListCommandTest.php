@@ -1,3 +1,5 @@
+<?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -23,17 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2024, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$(function () {
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 
-    // prevent double submits on forms
-    $('form').submit(function () {
-        $(':submit', this).click(function () {
-            return false;
-        });
-    });
+class Application_Console_Model_EnrichmentListCommandTest extends ControllerTestCase
+{
+    /** @var string[] */
+    protected $additionalResources = ['database'];
 
-});
+    public function testListEnrichments()
+    {
+        $app = new Application();
+
+        $command = new Application_Console_Model_EnrichmentListCommand();
+        $command->setApplication($app);
+
+        $tester = new CommandTester($command);
+
+        $tester->execute([]);
+
+        $output = $tester->getDisplay();
+
+        $this->assertRegExp('/^| Enrichment-Key\s+\| Used \|/', $output);
+        $this->assertRegExp('/^| BibtexRecord\s+\|\s+\|/', $output);
+        $this->assertRegExp('/^| ConstributorsName\s+\| used \|/', $output);
+        $this->assertRegExp('/^| validtestkey\s+\| used \|/', $output);
+    }
+}
