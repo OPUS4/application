@@ -92,7 +92,6 @@ EOT;
         if (! $input->getOption(self::OPTION_FORCE)) {
             $questionText = "<question>Do you want to remove enrichment key \"{$key}\" (Y/n)?</question>";
             $confirmation = new ConfirmationQuestion($questionText, true);
-            $confirmation->setHiddenFallback(true);
             $question     = $this->getHelper('question');
 
             if (! $question->ask($input, $output, $confirmation)) {
