@@ -174,8 +174,15 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                 // vom Benutzer nicht verändert wurde)
                 $elementValue = $element->getValue();
                 $isValidValue = false;
-                if (! ($elementValue === false)) {
-                    $isValidValue = $element->isValid($value);
+                if ($elementValue !== false) {
+                    $isValidValue = $element->isValid($value); // TODO always needed because of side effects
+                    if ($enrichmentType->getFormElementName() === 'Select') {
+                        $values       = $enrichmentType->getValues();
+                        $isValidValue = in_array($value, $values);
+                        if ($isValidValue) {
+                            $element->removeDecorator('Errors');
+                        }
+                    }
 
                     // der Aufruf der isValid-Methode hat einen Seiteneffekt, der bei Select-Elementen
                     // zum Ersetzen des Index durch den tatsächlichen Wert führt
@@ -193,6 +200,23 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                         if ($formValue === null || $enrichmentValue === $formValue) {
                             $this->handleValidationErrorNonStrict($enrichmentKey);
                         }
+                    }
+                }
+            } else {
+                /* TODO show error message immediately if value cannot be saved (strict validation)
+                        The message does not disappear right if another value is selected. The
+                        Javascript in validation.js does not support 'errors', just 'datahint'.
+                */
+                if ($enrichmentType->getFormElementName() === 'Select') {
+                    $values = $enrichmentType->getValues();
+                    if (! in_array($value, $values)) {
+                        $this->getElement(self::ELEMENT_VALUE)->markAsError();
+                        $element->setAttrib('data-opusValidationError', 'true'); // wird vom JavaScript-Code ausgewertet
+                    }
+                } else {
+                    if (! $element->isValid($value)) {
+                        $this->getElement(self::ELEMENT_VALUE)->markAsError();
+                        $element->setAttrib('data-opusValidationError', 'true'); // wird vom JavaScript-Code ausgewertet
                     }
                 }
             }
@@ -261,7 +285,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                     // keine Behandlung von Enrichments, die noch nicht in der Datenbank gespeichert sind,
                     // (nach dem Hinzufügen von Enrichments über Hinzufügen-Button)
                     if (! in_array($enrichment->getValue(), $enrichmentType->getValues())) {
-                        if ($enrichmentValue === 0) {
+                        if ((int) $enrichmentValue === 0) {
                             return; // keine Änderung des Enrichment-Werts
                         }
 

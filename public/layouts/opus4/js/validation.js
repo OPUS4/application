@@ -277,25 +277,31 @@ $(document).ready(function () {
      * darauf hinweist, dass der aktuelle Formularwert gegen die Typkonfiguration des Enrichment-Keys verstößt,
      * ausgeblendet werden, wenn der Formularwert geändert wird. Wird der Wert auf den ursprünglichen Formularwert
      * zurückgesetzt, so soll der Hinweistext wieder eingeblendet werden (ohne Interaktion mit dem Server).
+     *
+     * TODO Fehlermeldungen bei der strikten Validierung sollen sich genauso verhalten.
      */
     $("input[data-opusValidationError='true'], select[data-opusValidationError='true']").on('input', function (event) {
-        var element      = $(this);
-        var errorMessage = element.next(".datahint");
-        if (errorMessage) {
-            var oldValue = errorMessage.data('errorValue');
+        var element        = $(this);
+        var messageElement = element.next(".datahint");
+        var errorMessage   = element.next(".errors");
+        if (errorMessage.length ) {
+            messageElement = errorMessage;
+        }
+        if (messageElement) {
+            var oldValue = messageElement.data('errorValue');
             if (typeof oldValue === 'undefined' && (typeof event.target.defaultValue !== 'undefined')) {
                 // Input-Element wird das erste Mal behandelt (beim Select-Element brauchen wir den Ursprungswert nicht speichern)
-                errorMessage.data('errorValue', event.target.defaultValue);
+                messageElement.data('errorValue', event.target.defaultValue);
             }
 
-            if (errorMessage.is(":visible")) {
-                errorMessage.hide();
+            if (messageElement.is(":visible")) {
+                messageElement.hide();
             } else {
-                if (element.val() === errorMessage.data('errorValue') ||
-                    ((typeof errorMessage.data('errorValue') === 'undefined') && element.val() === '0')) {
+                if (element.val() === messageElement.data('errorValue') ||
+                    ((typeof messageElement.data('errorValue') === 'undefined') && element.val() === '0')) {
                     // beim Zurücksetzen auf den Ursprungswert Fehlermeldung wieder einblenden
                     // Sonderbehandlung für Select-Element: dort steht der Ursprungswert in der Auswahlliste immer an Position 0
-                    errorMessage.show();
+                    messageElement.show();
                 }
             }
         }
