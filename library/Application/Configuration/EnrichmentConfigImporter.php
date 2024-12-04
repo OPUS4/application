@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -44,27 +45,61 @@ class Application_Configuration_EnrichmentConfigImporter
     private $output;
 
     /**
-     * @param string $filePath
+     * @param string      $filePath
+     * @param string|null $keyName
      */
-    public function import($filePath)
+    public function import($filePath, $keyName = null)
     {
         $config = yaml_parse_file($filePath);
 
+        $this->processConfig($config, $keyName);
+    }
+
+    /**
+     * @param string      $yaml
+     * @param string|null $keyName
+     */
+    public function importYaml($yaml, $keyName = null)
+    {
+        $config = yaml_parse($yaml);
+
+        $this->processConfig($config, $keyName);
+    }
+
+    /**
+     * @param array       $config
+     * @param string|null $keyName
+     */
+    protected function processConfig($config, $keyName = null)
+    {
         if (! $config || ! is_array($config)) {
-            // TODO throw exception
+            throw new InvalidArgumentException('First parameter should be an array');
         }
+
+        $config = $this->changeKeysTolowerCase($config);
 
         if (isset($config['enrichments'])) {
             $enrichmentConfigs = $config['enrichments'];
         } else {
+            if ($keyName !== null) {
+                $config['name'] = $keyName;
+            }
             $enrichmentConfigs = [$config];
         }
 
         foreach ($enrichmentConfigs as $enrichment) {
-            $this->createEnrichment($enrichment);
+            $enrichmentKey = $this->createEnrichment($enrichment);
+            if ($enrichmentKey !== null) {
+                $name = $enrichmentKey->getName();
+                $this->getOutput()->writeln("Created enrichment key '{$name}'");
+            }
         }
     }
 
+    /**
+     * @param array $config
+     * @return EnrichmentKeyInterface|null
+     */
     public function createEnrichment($config)
     {
         $name = $config['name'];
@@ -73,37 +108,60 @@ class Application_Configuration_EnrichmentConfigImporter
 
         if ($enrichmentKey !== null) {
             $this->getOutput()->writeln("Enrichment '{$enrichmentKey}' already exists");
-            return;
+            return null;
         }
 
         $enrichmentKey = EnrichmentKey::new();
 
         $enrichmentKey->setName($name);
 
+        $type = null;
+
         if (isset($config['type'])) {
-            $type = $config['type'];
-            $enrichmentKey->setType($type);
+            $type = ucfirst($config['type'] . 'Type');
+            $enrichmentKey->setType($type); // TODO make 'Type' suffix unnecessary
         }
 
-        if (isset($config['options'])) {
-            $options = $config['config'];
-            $enrichmentKey->setOptions($options);
+        if (isset($config['options']) && $type !== null) {
+            $typeClass      = 'Opus\\Enrichment\\' . $type;
+            $enrichmentType = new $typeClass();
+            $options        = $config['options'];
+            if (is_array($options)) {
+                $enrichmentType->setOptions($options);
+                $enrichmentKey->setOptions($enrichmentType->getOptions());
+            } else {
+                $enrichmentType->setOptionsFromString($options);
+                $enrichmentKey->setOptions($enrichmentType->getOptions());
+            }
         }
-
-        // TODO strict validation
 
         $enrichmentKey->store();
 
-        if (isset($config['label'])) {
-            $this->createTranslations($config['label']);
+        if (isset($config['translations'])) {
+            $this->createTranslations($name, $config['translations']);
         }
 
-        // TODO set translations
+        return $enrichmentKey;
     }
 
-    public function createTranslations($translations)
+    /**
+     * @param string $name
+     * @param array  $translations
+     */
+    public function createTranslations($name, $translations)
     {
+        $helper          = new Admin_Model_EnrichmentKeys();
+        $keys            = array_keys($translations);
+        $supportedKeys   = $helper->getSupportedKeys();
+        $unsupportedKeys = array_diff($keys, $supportedKeys);
 
+        if (count($unsupportedKeys) > 0) {
+            foreach ($unsupportedKeys as $key) {
+                $this->getOutput()->writeln("Unsupported translation key: {$key}");
+            }
+        }
+
+        $helper->createTranslations($name, null, $translations);
     }
 
     /**
@@ -125,5 +183,19 @@ class Application_Configuration_EnrichmentConfigImporter
             $this->output = new NullOutput();
         }
         return $this->output;
+    }
+
+    /**
+     * @param array $config
+     * @return array
+     */
+    protected function changeKeysTolowerCase($config)
+    {
+        return array_map(function ($item) {
+            if (is_array($item)) {
+                $item = $this->changeKeysToLowerCase($item);
+            }
+            return $item;
+        }, array_change_key_case($config, CASE_LOWER));
     }
 }

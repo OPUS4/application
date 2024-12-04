@@ -29,24 +29,56 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use function yaml_parse_file;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-class Application_Console_Tool_EnrichmentImportCommandTest extends ControllerTestCase
+/**
+ * Command for importing Enrichment configurations.
+ */
+class Application_Console_Model_EnrichmentImportCommand extends Command
 {
-    /** @var string[] */
-    protected $additionalResources = ['database'];
+    public const ARGUMENT_FILE = 'config_file';
 
-    public function testImport()
+    protected function configure()
     {
-        $yamlFile = APPLICATION_PATH . '/tests/resources/enrichments/import.yml';
+        parent::configure();
 
-        $config = yaml_parse_file($yamlFile);
+        $help = <<<EOT
+The <fg=green>enrichment:import</> command can be used to import Enrichment
+configurations using Yaml files. 
+EOT;
 
-        $this->markTestIncomplete('not implemented yet');
+        $this->setName('enrichment:import')
+            ->setDescription('Import Enrichment configuration')
+            ->setHelp($help)
+            ->addArgument(
+                self::ARGUMENT_FILE,
+                InputArgument::REQUIRED,
+                'Yaml file containing configuration'
+            );
     }
 
-    public function testImportFileNotFound()
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $file = $input->getArgument(self::ARGUMENT_FILE);
 
+        if (! file_exists($file)) {
+            $output->writeln('<fg=red>Input file not found</>');
+            return self::FAILURE;
+        }
+
+        if (! is_readable($file)) {
+            $output->writeln('<fg=red>Input file not readable</>');
+            return self::FAILURE;
+        }
+
+        $importer = new Application_Configuration_EnrichmentConfigImporter();
+        $importer->setOutput($output);
+
+        $importer->import($file);
+
+        return self::SUCCESS;
     }
 }

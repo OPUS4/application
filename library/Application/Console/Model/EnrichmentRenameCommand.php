@@ -29,57 +29,81 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\EnrichmentKey;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Command for importing Enrichment configurations.
+ * Command for renaming enrichments.
  */
-class Application_Console_Tool_EnrichmentImportCommand extends Command
+class Application_Console_Model_EnrichmentRenameCommand extends Command
 {
-    public const ARGUMENT_FILE = 'config_file';
+    public const ARGUMENT_KEY = 'key';
+
+    public const ARGUMENT_NEW_KEY = 'newKey';
 
     protected function configure()
     {
         parent::configure();
 
         $help = <<<EOT
-The <fg=green>enrichment:import</> command can be used to import Enrichment
-configurations using Yaml files. 
+The <fg=green>enrichment:rename</> command can be used to rename enrichments. 
 EOT;
 
-        $this->setName('enrichment:import')
-            ->setDescription('Imports an Enrichment configuration')
+        $this->setName('enrichment:rename')
+            ->setDescription('Rename enrichment')
             ->setHelp($help)
             ->addArgument(
-                self::ARGUMENT_FILE,
+                self::ARGUMENT_KEY,
                 InputArgument::REQUIRED,
-                'Yaml file containing configuration'
+                'Enrichment key'
+            )->addArgument(
+                self::ARGUMENT_NEW_KEY,
+                InputArgument::REQUIRED,
+                'New Enrichment key'
             );
     }
 
-    /**
-     * @return int
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $file = $input->getArgument(self::ARGUMENT_FILE);
+        $key = $input->getArgument(self::ARGUMENT_KEY);
 
-        if (! file_exists($file)) {
-            $output->writeln('<fg=red>Input file not found</>');
-        }
-
-
-        if (! is_readable($file)) {
-            $output->writeln('<fg=red>Input file not readable</>');
+        if ($key === null) {
+            $output->writeln('<error>Enrichment key is required.</error></>');
             return self::FAILURE;
         }
 
-        $importer = new Application_Configuration_EnrichmentConfigImporter();
+        $newKey = $input->getArgument(self::ARGUMENT_NEW_KEY);
 
-        $importer->import($file);
+        if ($newKey === null) {
+            $output->writeln('<error>New enrichment key name is required.</error></>');
+            return self::FAILURE;
+        }
+
+        $enrichment = EnrichmentKey::fetchByName($key);
+
+        if ($enrichment === null) {
+            $output->writeln("<error>Enrichment key \"{$key}\" not found.</error>");
+            return self::FAILURE;
+        }
+
+        $newEnrichment = EnrichmentKey::fetchByName($newKey);
+
+        if ($newEnrichment !== null) {
+            $output->writeln("<error>Enrichment key \"{$newKey}\" already exists.</error>");
+            return self::FAILURE;
+        }
+
+        $output->writeln("Renaming key \"{$key}\" to \"{$newKey}\".");
+        $enrichment->rename($newKey);
+        $enrichment->setName($newKey);
+        $enrichment->store();
+
+        $output->writeln("Renaming translations for enrichment key \"{$newKey}\"");
+        $helper = new Admin_Model_EnrichmentKeys();
+        $helper->createTranslations($newKey, $key);
 
         return self::SUCCESS;
     }
