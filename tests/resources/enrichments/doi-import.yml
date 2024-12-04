@@ -8,3 +8,4 @@ enrichments:
   - name: opus_doi_flag
   - name: conference_place
   - name: conference_title
+  
