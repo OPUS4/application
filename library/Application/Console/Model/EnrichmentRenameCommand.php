@@ -72,28 +72,28 @@ EOT;
 
         if ($key === null) {
             $output->writeln('<error>Enrichment key is required.</error></>');
-            return self::FAILURE;
+            return 1;
         }
 
         $newKey = $input->getArgument(self::ARGUMENT_NEW_KEY);
 
         if ($newKey === null) {
             $output->writeln('<error>New enrichment key name is required.</error></>');
-            return self::FAILURE;
+            return 1;
         }
 
         $enrichment = EnrichmentKey::fetchByName($key);
 
         if ($enrichment === null) {
             $output->writeln("<error>Enrichment key \"{$key}\" not found.</error>");
-            return self::FAILURE;
+            return 1;
         }
 
         $newEnrichment = EnrichmentKey::fetchByName($newKey);
 
         if ($newEnrichment !== null) {
             $output->writeln("<error>Enrichment key \"{$newKey}\" already exists.</error>");
-            return self::FAILURE;
+            return 1;
         }
 
         $output->writeln("Renaming key \"{$key}\" to \"{$newKey}\".");
@@ -105,6 +105,6 @@ EOT;
         $helper = new Admin_Model_EnrichmentKeys();
         $helper->createTranslations($newKey, $key);
 
-        return self::SUCCESS;
+        return 0;
     }
 }

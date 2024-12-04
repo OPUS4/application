@@ -86,14 +86,14 @@ EOT;
 
                 if ($enrichment === null) {
                     $output->writeln("<error>Enrichment key \"{$key}\" not found</error>");
-                    return self::FAILURE;
+                    return 1;
                 }
             }
         }
 
         if (count($keys) === 0) {
             $output->writeln("<info>No enrichment keys found</info>");
-            return self::SUCCESS;
+            return 0;
         }
 
         $helper = new Admin_Model_EnrichmentKeys();
@@ -123,6 +123,6 @@ EOT;
             file_put_contents($outputFile, $yaml);
         }
 
-        return self::SUCCESS;
+        return 0;
     }
 }

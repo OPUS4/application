@@ -79,14 +79,14 @@ EOT;
 
         if ($key === null) {
             $output->writeln('<error>Enrichment key is required</error>');
-            return self::FAILURE;
+            return 1;
         }
 
         $enrichment = EnrichmentKey::fetchByName($key);
 
         if ($enrichment === null) {
             $output->writeln("<error>Enrichment key \"{$key}\" not found</error>");
-            return self::FAILURE;
+            return 1;
         }
 
         if (! $input->getOption(self::OPTION_FORCE)) {
@@ -96,7 +96,7 @@ EOT;
 
             if (! $question->ask($input, $output, $confirmation)) {
                 $output->writeln("Not removing enrichment key \"{$key}\".");
-                return self::SUCCESS;
+                return 0;
             }
         }
 
@@ -107,6 +107,6 @@ EOT;
         $helper = new Admin_Model_EnrichmentKeys();
         $helper->removeTranslations($key);
 
-        return self::SUCCESS;
+        return 0;
     }
 }

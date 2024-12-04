@@ -76,6 +76,6 @@ EOT;
             ->setRows($rows);
         $table->render();
 
-        return self::SUCCESS;
+        return 0;
     }
 }

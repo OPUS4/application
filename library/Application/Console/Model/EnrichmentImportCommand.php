@@ -66,12 +66,12 @@ EOT;
 
         if (! file_exists($file)) {
             $output->writeln('<fg=red>Input file not found</>');
-            return self::FAILURE;
+            return 1;
         }
 
         if (! is_readable($file)) {
             $output->writeln('<fg=red>Input file not readable</>');
-            return self::FAILURE;
+            return 1;
         }
 
         $importer = new Application_Configuration_EnrichmentConfigImporter();
@@ -79,6 +79,6 @@ EOT;
 
         $importer->import($file);
 
-        return self::SUCCESS;
+        return 0;
     }
 }
