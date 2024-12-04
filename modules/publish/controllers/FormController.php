@@ -53,6 +53,7 @@ class Publish_FormController extends Application_Controller_Action
     {
         $this->session = new Zend_Session_Namespace('Publish');
         parent::init();
+        $this->view->headScript()->prependFile($this->view->layoutPath() . '/js/form-enter.js');
     }
 
     /**
