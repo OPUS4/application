@@ -16,6 +16,12 @@ sich in `tests/resources/enrichments`.
 
 https://github.com/OPUS4/application/issues/1253
 
+### Hinweise zum Update auf OPUS 4.8.0.8
+
+Das Update kann mit `git pull` vorgenommen werden. Es ist `php-yaml` als neue
+Abhängigkeit dazu gekommen. Das Paket muss manuell installiert werden. Danach 
+ist ein `composer update` notwendig. 
+
 ## Patch Release 4.8.0.7 - 2024-10-22
 
 Ein Fehler beim Drücken der Enter/Return-Taste in einfachen Text-Feldern 
