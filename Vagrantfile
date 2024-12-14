@@ -81,7 +81,14 @@ fi
 SCRIPT
 
 $database = <<SCRIPT
-export MYSQL_PWD=root && mysql --default-character-set=utf8 -h 'localhost' -P '3306' -u 'root' -v -e "CREATE DATABASE IF NOT EXISTS opusdb DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI; CREATE USER IF NOT EXISTS 'opus4admin'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root'; GRANT ALL PRIVILEGES ON opusdb.* TO 'opus4admin'@'localhost'; CREATE USER IF NOT EXISTS 'opus4'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root'; GRANT SELECT,INSERT,UPDATE,DELETE ON opusdb.* TO 'opus4'@'localhost'; FLUSH PRIVILEGES;"
+export MYSQL_PWD=root && mysql --default-character-set=utf8 -h 'localhost' -P '3306' -u 'root' -v -e "CREATE DATABASE IF NOT EXISTS opusdb DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI; CREATE USER IF NOT EXISTS 'opus4admin'@'%' IDENTIFIED WITH mysql_native_password BY 'root'; GRANT ALL PRIVILEGES ON opusdb.* TO 'opus4admin'@'%'; CREATE USER IF NOT EXISTS 'opus4'@'%' IDENTIFIED WITH mysql_native_password BY 'root'; GRANT SELECT,INSERT,UPDATE,DELETE ON opusdb.* TO 'opus4'@'%'; FLUSH PRIVILEGES;"
+SCRIPT
+
+$database-configuration = <<SCRIPT
+# allow access to MySQL database from host
+MYSQL_CONF="/etc/mysql/mysql.conf.d/mysqld.cnf"
+sed -i -e "s/^bind-address\s*=.*/bind-address = 0.0.0.0/" $MYSQL_CONF
+service mysql restart
 SCRIPT
 
 $apache = <<SCRIPT
@@ -138,8 +145,9 @@ SCRIPT
 
 $help = <<SCRIPT
 echo "You can access OPUS 4 and Solr in your browser."
-echo "  OPUS 4: http://localhost:8080/opus4"
-echo "  Solr  : http://localhost:9983"
+echo "  OPUS 4 web app : http://localhost:8080/opus4"
+echo "  Solr admin app : http://localhost:9983"
+echo "  MySQL database : localhost:3307 ; database: opusdb
 echo "Log into the VM using 'vagrant ssh' and logout using 'logout'."
 echo "You can use 'ant reset-testdata' to reinitialize the database."
 SCRIPT
@@ -149,8 +157,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.synced_folder "workspace", "/vagrant/workspace", group: "www-data", create: true
 
-  config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 80  , host: 8080, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 8983, host: 9983, host_ip: "127.0.0.1"
+  config.vm.network "forwarded_port", guest: 3306, host: 3307, host_ip: "127.0.0.1"
 
   config.vm.provision "Install required software...", type: "shell", inline: $software
   config.vm.provision "Install pandoc...", type: "shell", inline: $pandoc
@@ -158,6 +167,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "Install Composer dependencies...", type: "shell", privileged: false, inline: $composer
   config.vm.provision "Install Apache Solr...", type: "shell", privileged: false, inline: $solr
   config.vm.provision "Create database...", type: "shell", inline: $database
+  config.vm.provision "Configure database...", type: "shell", inline: $database-configuration
   config.vm.provision "Configure OPUS 4...", type: "shell", privileged: false, inline: $opus
   config.vm.provision "Setup site in Apache2...", type: "shell", inline: $apache
   config.vm.provision "Fix permissions...", type: "shell", inline: $fix
