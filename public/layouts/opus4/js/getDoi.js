@@ -279,7 +279,7 @@ function expandAuthor(author)
             document.getElementById("Enrichmentopus_doi_flag").value = "true";  // Hier wird das Ende der Reloads erreicht! (alle Felder sind vorhanden)
         }
     } else {
-        colorPink("PersonAuthorLastName_1");
+        document.getElementById("Enrichmentopus_doi_flag").value = "true"; // Sonst den Import ohne Autor abschließen
     }
 }
 
