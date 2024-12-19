@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const abortButton  = document.querySelector("input[name='abort']");
 
 
-    // Event Listener für das Klicken auf alle Formularfelder außer dem DOI-Feld (und dem Import-Button)
+    // Event Listener für das Klicken auf ein Formularfeld außer dem DOI-Feld (sowie Import-Button und Abbruch)
     formFields.forEach(function (field) {
         if (field.id !== "IdentifierDoi" && field !== importButton && field !== abortButton) {
             field.addEventListener("focus", function (event) {
@@ -280,7 +280,7 @@ function expandAuthor(author)
             document.getElementById("Enrichmentopus_doi_flag").value = "true";  // Hier wird das Ende der Reloads erreicht! (alle Felder sind vorhanden)
         }
     } else {
-        colorPink("PersonAuthorLastName_1");
+        document.getElementById("Enrichmentopus_doi_flag").value = "true"; // Sonst den Import ohne Autor abschließen
     }
 }
 
