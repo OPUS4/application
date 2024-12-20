@@ -6,20 +6,20 @@ let populatedFields = [];
 function startCheck()
 {
     var doi = document.getElementById("IdentifierDoi").value.trim();
-    if (doi.trim() == '') {
+    if (doi.trim() === '') {
         // Feld "IdentifierDoi" ist leer
-        alert("Bitte zuerst eine DOI eingeben...")
-    } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value != "true") {
+        alert("Bitte zuerst eine DOI eingeben...");
+    } else if (doi.trim() !== '' && document.getElementById("Enrichmentopus_doi_flag").value !== "true") {
         // OK, starte Import
-        leseDoi(doi)
-    } else if (doi.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true") {
+        leseDoi(doi);
+    } else if (doi.trim() !== '' && document.getElementById("Enrichmentopus_doi_flag").value === "true") {
         // Import wurde bereits durchgeführt -> Bestätigung
         if (confirm("Achtung, alle Felder des Formulars werden gelöscht und ein neuer Import gestartet! Fortfahren?")) {
             cleanup();
             document.getElementById("IdentifierDoi").value = doi;
             leseDoi(doi);
         } else {
-            return
+            return;
         }
     }
 }
@@ -44,7 +44,7 @@ function leseDoi(doi)
 {
  // Diese Funktion wird beim Klick auf den Button "DOI-Daten übernehmen" aufgerufen und steuert alles Weitere
 
-    if (doi.trim() != '') {
+    if (doi.trim() !== '') {
 
         var getUrl        = window.location;
             const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
@@ -54,9 +54,9 @@ function leseDoi(doi)
             finalUrl,
             function () {
                 var jsonraw = this.responseText;
-                if (jsonraw == "Resource not found.") {
+                if (jsonraw === "Resource not found.") {
                     alert("DOI wurde nicht in Crossref gefunden.");
-                    colorOrange("IdentifierDoi")
+                    colorOrange("IdentifierDoi");
                 } else {
                     // document.getElementById("Enrichmentlocal_doiJson").value = jsonraw;
                     document.getElementById("Enrichmentopus_import_data").value = jsonraw;
@@ -143,7 +143,7 @@ function expandCompletedDate(dates)
 {
  // Für CompletedYear und CompletedDate
 
-    if (dates != '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
+    if (dates !== '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
 
         date = dates.join();
 
@@ -169,13 +169,13 @@ function expandCompletedDate(dates)
 
 function expandSubject(subject)
 {
-    if (subject[0] != undefined) {
+    if (subject[0] !== undefined) {
         var _laenge                                            = subject.length;
         var schlagwort                                         = subject[0] + '';
         document.getElementById("SubjectUncontrolled_1").value = schlagwort;
         finalize("SubjectUncontrolled_1");
 
-        if (document.getElementById('SubjectUncontrolled_' + _laenge) == null) {
+        if (document.getElementById('SubjectUncontrolled_' + _laenge) === null) {
             var button = document.getElementById("addMoreSubjectUncontrolled");
             button.click();
         } else {
@@ -194,7 +194,7 @@ function expandSubject(subject)
 
 function expandThesisAccepted(dates)
 {
-    if (dates != '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
+    if (dates !== '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
 
         date = dates.join();
         if (date.includes('-')) {
@@ -202,10 +202,10 @@ function expandThesisAccepted(dates)
             finalize("ThesisYearAccepted");
         } else {
             var month = date.split(',')[1];
-            if (month.length == 1) {
+            if (month.length === 1) {
                 month = '0' + month;}
             var day = date.split(',')[2];
-            if (day.length == 1) {
+            if (day.length === 1) {
                 day = '0' + day;}
             document.getElementById("ThesisDateAccepted").value = day + '.' + month + '.' + date.split(',')[0];
             finalize("ThesisDateAccepted");
@@ -220,15 +220,15 @@ function expandPages(page)
         var pageFirst  = pages[0];
         var pageLast   = pages[1];
         var pageNumber = pageLast - pageFirst + 1;
-        if (pageNumber != undefined && /^\d+$/.test(pageNumber)) {
+        if (pageNumber !== undefined && /^\d+$/.test(pageNumber)) {
             document.getElementById("PageNumber").value = pageNumber;
             finalize("PageNumber");
         }
-        if (pageFirst != undefined && /^\d+$/.test(pageFirst)) {
+        if (pageFirst !== undefined && /^\d+$/.test(pageFirst)) {
             document.getElementById("PageFirst").value = pageFirst;
             finalize("PageFirst");
         }
-        if (pageLast != undefined && /^\d+$/.test(pageLast)) {
+        if (pageLast !== undefined && /^\d+$/.test(pageLast)) {
             document.getElementById("PageLast").value = pageLast;
             finalize("PageLast");
         }
@@ -238,7 +238,7 @@ function expandPages(page)
 
 function expandAuthor(author)
 {
-    if (author[0] != undefined) {
+    if (author[0] !== undefined) {
         var _laenge      = author.length;
         var completeName = author[0] + '';
 
@@ -250,13 +250,13 @@ function expandAuthor(author)
         document.getElementById("PersonAuthorLastName_1").value = nachname;
         finalize("PersonAuthorLastName_1");
 
-        if (completeName.split(',')[2].trim() != '') {
+        if (completeName.split(',')[2].trim() !== '') {
             var orcid = completeName.split(',')[2].trim();  // [2] = ORCID
             document.getElementById("PersonAuthorIdentifierOrcid_1").value = orcid;
             finalize("PersonAuthorIdentifierOrcid_1");
         }
 
-        if (document.getElementById('PersonAuthorLastName_' + _laenge) == null) {
+        if (document.getElementById('PersonAuthorLastName_' + _laenge) === null) {
             var button = document.getElementById("addMorePersonAuthor");
             button.click();
         } else {
@@ -270,7 +270,7 @@ function expandAuthor(author)
                 var nachname                                                  = completeName.split(',')[0].trim();  // [0] = Nachname
                 document.getElementById("PersonAuthorLastName_" + feld).value = nachname;
                 finalize("PersonAuthorLastName_" + feld);
-                if (completeName.split(',')[2].trim() != '') {
+                if (completeName.split(',')[2].trim() !== '') {
                     var orcid = completeName.split(',')[2].trim();  // [2] = ORCID
                     document.getElementById("PersonAuthorIdentifierOrcid_" + feld).value = orcid;
                     finalize("PersonAuthorIdentifierOrcid_" + feld);
@@ -285,7 +285,7 @@ function expandAuthor(author)
 
 function expandEditor(editor)
 {
-    if (editor[0] != undefined) {
+    if (editor[0] !== undefined) {
         var _laenge                                              = editor.length;
         var completeName                                         = editor[0] + '';
         var vorname                                              = completeName.split(',')[1].trim();  // [1] = Vorname
@@ -294,13 +294,13 @@ function expandEditor(editor)
         var nachname                                            = completeName.split(',')[0].trim();  // [0] = Nachname
         document.getElementById("PersonEditorLastName_1").value = nachname;
         finalize("PersonEditorLastName_1");
-        if (completeName.split(',')[2].trim() != '') {
+        if (completeName.split(',')[2].trim() !== '') {
             var orcid = completeName.split(',')[2].trim();  // [2] = ORCID
             document.getElementById("PersonEditorIdentifierOrcid_1").value = orcid;
             finalize("PersonEditorIdentifierOrcid_1");
         }
 
-        if (document.getElementById('PersonEditorLastName_' + _laenge) == null) {
+        if (document.getElementById('PersonEditorLastName_' + _laenge) === null) {
             var button = document.getElementById("addMorePersonEditor");
             button.click();
         } else {
@@ -314,7 +314,7 @@ function expandEditor(editor)
                 var nachname                                                  = completeName.split(',')[0].trim();  // [0] = Nachname
                 document.getElementById("PersonEditorLastName_" + feld).value = nachname;
                 finalize("PersonEditorLastName_" + feld);
-                if (completeName.split(',')[2].trim() != '') {
+                if (completeName.split(',')[2].trim() !== '') {
                     var orcid = completeName.split(',')[2].trim();  // [2] = ORCID
                     document.getElementById("PersonEditorIdentifierOrcid_" + feld).value = orcid;
                     finalize("PersonEditorIdentifierOrcid_" + feld);
@@ -326,7 +326,7 @@ function expandEditor(editor)
 
 function expandTranslator(translator)
 {
-    if (translator[0] != undefined) {
+    if (translator[0] !== undefined) {
         var _laenge      = translator.length;
         var completeName = translator[0] + '';
         var vorname      = completeName.split(',')[1].trim();  // [1] = Vorname
@@ -338,14 +338,14 @@ function expandTranslator(translator)
         document.getElementById("PersonTranslatorLastName_1").value = nachname;
         finalize("PersonTranslatorLastName_1");
 
-        if (document.getElementById('PersonTranslatorLastName_' + _laenge) == null) {
+        if (document.getElementById('PersonTranslatorLastName_' + _laenge) === null) {
             var button = document.getElementById("addMorePersonTranslator");
             button.click();
         } else {
             var _z;
             for (_z = 1; _z < _laenge; _z++) {
                 var feld         = _z + 1;
-                var completeName = author[_z] + '';
+                var completeName = translator[_z] + '';
                 var vorname      = completeName.split(',')[1].trim();  // [1] = Vorname
                 document.getElementById("PersonTranslatorFirstName_" + feld).value = vorname;
                 finalize("PersonTranslatorFirstName_" + feld);
@@ -364,7 +364,7 @@ function get(url, callback)
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
     xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
+        if (xhr.readyState === 4) {
             // defensive check
             if (typeof callback === "function") {
                 callback.apply(xhr);
@@ -399,7 +399,7 @@ var crossrefTypeMapping = {
     "book-track": "sound",
     "posted-content/working_paper": "workingpaper",
     "dissertation": "doctoralthesis"
-}
+};
 
 /**
  *
@@ -471,7 +471,3 @@ async function getDoctypes(data)
         }
     );
 }
-
-
-
-
