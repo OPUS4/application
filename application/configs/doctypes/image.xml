@@ -35,6 +35,7 @@
     xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">
 
     <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1">
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
         <subfield name="Email" required="yes" formelement="text" datatype="Email" />
     </field>
     <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1">
@@ -60,7 +61,9 @@
     </field>
    
     <field name="ContributingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
-    <field name="PersonContributor" required="no" formelement="text" datatype="Person" multiplicity="*"/>
+    <field name="PersonContributor" required="no" formelement="text" datatype="Person" multiplicity="*">
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
+    </field>
     
     <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*">
         <required-if-fulltext/>

@@ -40,6 +40,7 @@
 
 <!-- required fields -->   
     <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1">
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
         <subfield name="Email" required="yes" formelement="text" datatype="Email" />
     </field>
     <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4"/>
@@ -65,9 +66,15 @@
     </field>
     
 <!-- unrequired fields -->
-    <field name="PersonAdvisor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
-    <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
-    <field name="PersonReferee" required="no" formelement="text" datatype="Person" multiplicity="*"/>
+    <field name="PersonAdvisor" required="no" formelement="Text" datatype="Person" multiplicity="*">
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
+    </field>
+    <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*">
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
+    </field>
+    <field name="PersonReferee" required="no" formelement="text" datatype="Person" multiplicity="*">
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
+    </field>
     <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
