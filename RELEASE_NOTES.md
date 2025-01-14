@@ -1,5 +1,15 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.9 - 2025-01-14
+
+Behebt das Fehlschlagen des DOI-Imports bei Datensätzen ohne Autor*in. 
+
+https://github.com/OPUS4/application/issues/1266
+
+Außerdem wurde ein Typo in der Basiskonfiguration behoben.
+
+https://github.com/OPUS4/application/pull/1271
+
 ## Patch Release 4.8.0.8 - 2024-12-04
 
 Das Blockieren der Enter/Return-Taste wurde auf die Metadaten-Formulare 
