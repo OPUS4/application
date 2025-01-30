@@ -1,5 +1,15 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.9 - 2025-01-14
+
+Behebt das Fehlschlagen des DOI-Imports bei Datensätzen ohne Autor*in. 
+
+https://github.com/OPUS4/application/issues/1266
+
+Außerdem wurde ein Typo in der Basiskonfiguration behoben.
+
+https://github.com/OPUS4/application/pull/1271
+
 ## Patch Release 4.8.0.8 - 2024-12-04
 
 Das Blockieren der Enter/Return-Taste wurde auf die Metadaten-Formulare 
@@ -15,6 +25,12 @@ definierte Enrichments anzulegen. Beispiele für solche Konfigurationen finden
 sich in `tests/resources/enrichments`.
 
 https://github.com/OPUS4/application/issues/1253
+
+### Hinweise zum Update auf OPUS 4.8.0.8
+
+Das Update kann mit `git pull` vorgenommen werden. Es ist `php-yaml` als neue
+Abhängigkeit dazu gekommen. Das Paket muss manuell installiert werden. Danach 
+ist ein `composer update` notwendig. 
 
 ## Patch Release 4.8.0.7 - 2024-10-22
 
