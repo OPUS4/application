@@ -177,7 +177,7 @@ EOT;
             $output->writeln('No DOI values found');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 
     /**

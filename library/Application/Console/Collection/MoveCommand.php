@@ -59,12 +59,12 @@ EOT;
 
         if ($sourceCol === null) {
             $output->writeln('Source collection needs to be specified.');
-            return 0;
+            return self::FAILURE;
         }
 
         if ($destCol === null) {
             $output->writeln('Destination collection needs to be specified.');
-            return 0;
+            return self::FAILURE;
         }
 
         $sourceId = $sourceCol->getId();
@@ -79,7 +79,7 @@ EOT;
             $output->writeln('');
             $output->writeln('  "' . $sourceCol->getDisplayName() . '"');
             $output->writeln('');
-            return 0;
+            return self::SUCCESS;
         }
 
         $output->writeln("Move documents (${sourceCount}) from source collection (ID = ${sourceId})");
@@ -107,6 +107,6 @@ EOT;
             $output->writeln('Moving cancelled');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }
