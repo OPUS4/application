@@ -66,10 +66,10 @@ EOT;
                 $output->writeln('Caught exception ' . get_class($e) . ': ' . $e->getMessage());
                 $output->writeln($e->getTraceAsString());
 
-                return Command::FAILURE;
+                return self::FAILURE;
             }
         }
 
-        return Command::SUCCESS;
+        return self::SUCCESS;
     }
 }

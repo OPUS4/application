@@ -78,6 +78,6 @@ EOT;
 
         $output->write($xml->saveXml());
 
-        return 0;
+        return self::SUCCESS;
     }
 }
