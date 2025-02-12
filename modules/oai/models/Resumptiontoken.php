@@ -51,7 +51,7 @@ class Oai_Model_Resumptiontoken
     private $totalIds = 0;
 
     /** @var string Holds the set specification (if given) */
-    private $set = null;
+    private $set;
 
     /**
      *  Returns current holded document ids.
