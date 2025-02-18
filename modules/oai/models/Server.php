@@ -484,6 +484,11 @@ class Oai_Model_Server extends Application_Model_Abstract
             $metadataPrefix = $oaiRequest['metadataPrefix'];
         }
 
+        $set = null;
+        if (true === array_key_exists('set', $oaiRequest)) {
+            $set = $oaiRequest['set'];
+        }
+
         $tokenWorker = new Oai_Model_Resumptiontokens();
         $tokenWorker->setResumptionPath($tempPath);
 
@@ -503,11 +508,15 @@ class Oai_Model_Server extends Application_Model_Abstract
             $totalIds       = $token->getTotalIds();
             $restIds        = $token->getDocumentIds();
             $metadataPrefix = $token->getMetadataPrefix();
+            $set            = $token->getSet();
 
             $oaiRequest['metadataPrefix']     = $metadataPrefix;
             $oaiRequest['metadataPrefixMode'] = strtolower($metadataPrefix);
             $this->proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
             $this->proc->setParameter('', 'oai_metadataPrefixMode', strtolower($metadataPrefix));
+            if ($set !== null) {
+                $this->proc->setParameter('', 'oai_set', $set);
+            }
             $resumed = true;
         } else {
             // no resumptionToken is given
@@ -543,6 +552,7 @@ class Oai_Model_Server extends Application_Model_Abstract
             $token->setTotalIds($totalIds);
             $token->setDocumentIds($restIds);
             $token->setMetadataPrefix($metadataPrefix);
+            $token->setSet($set);
 
             $tokenWorker->storeResumptionToken($token);
 
