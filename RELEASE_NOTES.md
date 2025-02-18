@@ -1,5 +1,18 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.10 - 2025-02-18
+
+Behebt eine Exception beim Freischalten von Dokumenten im Review-Modul,
+wenn die Option `workflow.stateChange.published.addGuestAccess` deaktiviert 
+ist.
+
+https://github.com/OPUS4/application/issues/1276
+
+Korrigiert einen Fehler in der OpenAIRE-Ausgabe nach einem Resume in der
+OAI-Schnittstelle.
+
+https://github.com/OPUS4/application/pull/1275
+
 ## Patch Release 4.8.0.9 - 2025-01-14
 
 Behebt das Fehlschlagen des DOI-Imports bei Datensätzen ohne Autor*in. 
