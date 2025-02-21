@@ -75,7 +75,7 @@ EOT;
 
         if (empty($taskConfigurations)) {
             $output->writeln('<fg=red>There are no tasks to run</>');
-            return Command::FAILURE;
+            return self::FAILURE;
         }
 
         if (empty($taskName)) {
@@ -101,7 +101,7 @@ EOT;
         $taskConfig = $taskManager->getTaskConfig($taskName);
         if (! $taskConfig) {
             $output->writeln('Task not found: <fg=red>' . $taskName . '</>');
-            return Command::FAILURE;
+            return self::FAILURE;
         }
 
         if (! $taskManager->isValidTaskClass($taskConfig->getClass())) {
@@ -109,7 +109,7 @@ EOT;
                 'Invalid task class <fg=red>' . $taskConfig->getClass()
                 . '</> for task <fg=red>' . $taskName . '</>'
             );
-            return Command::FAILURE;
+            return self::FAILURE;
         }
 
         $taskRunner       = new TaskRunner();
@@ -117,6 +117,6 @@ EOT;
         $taskRunnerLogger->info('CLI triggered run: "' . $taskName . '"');
         $taskRunner->runTask($taskName);
 
-        return Command::SUCCESS;
+        return self::SUCCESS;
     }
 }

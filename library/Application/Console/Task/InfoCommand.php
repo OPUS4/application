@@ -72,7 +72,7 @@ EOT;
 
         if (empty($taskConfigurations)) {
             $output->writeln('<fg=red>There are no tasks configured</>');
-            return Command::FAILURE;
+            return self::FAILURE;
         }
 
         if (empty($taskName)) {
@@ -98,7 +98,7 @@ EOT;
         $taskConfig = $taskManager->getTaskConfig($taskName);
         if (! $taskConfig) {
             $output->writeln('Task not found: <fg=red>' . $taskName . '</>');
-            return Command::FAILURE;
+            return self::FAILURE;
         }
 
         // show
@@ -132,6 +132,6 @@ EOT;
             ->setStyle('compact')
             ->render();
 
-        return Command::SUCCESS;
+        return self::SUCCESS;
     }
 }

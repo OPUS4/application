@@ -136,7 +136,7 @@ EOT;
             $output->writeln('Deletion cancelled');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 
     /**

@@ -35,6 +35,7 @@
     xsi:schemaLocation="http://www.opus-repository.org/schema/documenttype http://www.opus-repository.org/schema/documenttype.xsd">
 
     <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1">
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
         <subfield name="Email" required="yes" formelement="text" datatype="Email" />
     </field>
     <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1">
