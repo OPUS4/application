@@ -1,5 +1,13 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.11 - 2025-03-11
+
+Behebt die fehlerhafte Verfügbarkeit der Funktion zum Kontaktieren von Autoren 
+in der Frontdoor, wenn kein Autor kontaktierbar ist.
+
+https://github.com/OPUS4/application/issues/1285
+
+
 ## Patch Release 4.8.0.10 - 2025-02-18
 
 Behebt eine Exception beim Freischalten von Dokumenten im Review-Modul,
