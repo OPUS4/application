@@ -7,6 +7,11 @@ in der Frontdoor, wenn kein Autor kontaktierbar ist.
 
 https://github.com/OPUS4/application/issues/1285
 
+### Package `opus4-bibtex 4.8.0.4`
+
+Beim Import von Autoren (Personen) in BibTeX kann eine E-Mail angegeben werden.
+
+https://github.com/OPUS4/opus4-bibtex/issues/80
 
 ## Patch Release 4.8.0.10 - 2025-02-18
 
