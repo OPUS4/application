@@ -1,5 +1,7 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.12 - 2025-03-18
+
 ## Patch Release 4.8.0.11 - 2025-03-11
 
 Behebt die fehlerhafte Verfügbarkeit der Funktion zum Kontaktieren von Autoren 
