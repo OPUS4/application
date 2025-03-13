@@ -2,6 +2,11 @@
 
 ## Patch Release 4.8.0.12 - 2025-03-18
 
+Begrenzt die Anzahl berücksichtigter AutorInnen beim DOI-basierten Metadadatenimport
+auf 50, um eine Überlastung des Systems und einen Timeout zu vermeiden.
+
+https://github.com/OPUS4/application/issues/1283
+
 ## Patch Release 4.8.0.11 - 2025-03-11
 
 Behebt die fehlerhafte Verfügbarkeit der Funktion zum Kontaktieren von Autoren 
