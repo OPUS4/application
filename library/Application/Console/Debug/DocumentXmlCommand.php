@@ -40,6 +40,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Exports documents.
  *
  * TODO unit testing
+ * TODO support format selection
+ * TODO support output for multiple documents
+ * TODO support output file
+ * TODO error handling
  */
 class Application_Console_Debug_DocumentXmlCommand extends Command
 {
