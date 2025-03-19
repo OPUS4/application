@@ -741,7 +741,15 @@
         <seg>GND Record</seg>
       </tuv>
     </tu>
-
+    
+    <tu tuid="frontdoor_conference">
+      <tuv xml:lang="en">
+        <seg>Conference</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Konferenz</seg>
+      </tuv>
+    </tu>
 
   </body>
 </tmx>
