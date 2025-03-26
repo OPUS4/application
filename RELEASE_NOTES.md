@@ -2,6 +2,10 @@
 
 ## Patch Release 4.8.0.13 - 2025-04-01
 
+Anzeige von GND und ORCiD ID für alle Personen in der Frontdoor.
+
+https://github.com/OPUS4/application/issues/1183
+
 ## Patch Release 4.8.0.12 - 2025-03-18
 
 Begrenzt die Anzahl berücksichtigter AutorInnen beim DOI-basierten Metadadatenimport

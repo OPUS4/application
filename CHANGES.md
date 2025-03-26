@@ -2,6 +2,8 @@
 
 ## Release 4.8.0.13 - 2025-04-01
 
+https://github.com/OPUS4/application/issues/1183
+
 ## Release 4.8.0.12 - 2025-03-18
 
 https://github.com/OPUS4/application/issues/1266
