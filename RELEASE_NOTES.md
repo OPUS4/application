@@ -6,6 +6,10 @@ Anzeige von GND und ORCiD ID für alle Personen in der Frontdoor.
 
 https://github.com/OPUS4/application/issues/1183
 
+Externe Links für GND und ORCID werden in einem separaten Tab/Window geöffnet.
+
+https://github.com/OPUS4/application/issues/1199
+
 ## Patch Release 4.8.0.12 - 2025-03-18
 
 Begrenzt die Anzahl berücksichtigter AutorInnen beim DOI-basierten Metadadatenimport
