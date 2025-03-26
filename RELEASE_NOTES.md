@@ -1,5 +1,7 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.13 - 2025-04-01
+
 ## Patch Release 4.8.0.12 - 2025-03-18
 
 Begrenzt die Anzahl berücksichtigter AutorInnen beim DOI-basierten Metadadatenimport
