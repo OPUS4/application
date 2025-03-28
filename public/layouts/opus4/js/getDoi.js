@@ -56,7 +56,7 @@ function leseDoi(doi)
                 var jsonraw = this.responseText;
                 if (jsonraw === "Resource not found.") {
                     alert("DOI wurde nicht in Crossref gefunden.");
-                    colorOrange("IdentifierDoi");
+                    colorPink("IdentifierDoi");
                 } else {
                     // document.getElementById("Enrichmentlocal_doiJson").value = jsonraw;
                     document.getElementById("Enrichmentopus_import_data").value = jsonraw;
