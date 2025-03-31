@@ -1,6 +1,6 @@
 # OPUS 4 Release Notes
 
-## Patch Release 4.8.0.13 - 2025-04-01
+## Patch Release 4.8.0.13 - 2025-04-08
 
 Anzeige von GND und ORCiD ID für alle Personen in der Frontdoor.
 
