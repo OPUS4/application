@@ -52,8 +52,8 @@ class Application_View_Helper_OrcidLink extends Application_View_Helper_Abstract
             $link = $config->orcid->baseUrl . $orcidValue;
             return "<a href=\"{$link}\" target=\"_blank\">{$link}</a>";
         } else {
-            return $this->view->translate('PersonAuthorIdentifierOrcid') .
-                " <span class=\"admin_document_error\">{$orcidValue}</span>";
+            return $this->view->translate('PersonAuthorIdentifierOrcid')
+                . " <span class=\"admin_document_error\">{$orcidValue}</span>";
         }
     }
 }

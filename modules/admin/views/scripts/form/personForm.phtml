@@ -81,8 +81,9 @@ $formId = substr($formId, 0, strrpos($formId, '-') + 1);
             ><?PHP if ($person->getPlaceOfBirth() !== null) :
                 ?><?= $person->getDateOfBirth() === null ? '' : ', '
 ?><span id="<?= $formId . 'PlaceOfBirth' ?>" class="person-born-place"
-                      ><?= $person->getPlaceOfBirth() ?></span
-            ><?PHP endif; ?>)
+                      ><?= $person->getPlaceOfBirth()
+                        ?></span><?PHP
+             endif; ?>)
         <?PHP endif; ?>
         <?PHP if ($person->getEmail() !== null) : ?>
         <div>
