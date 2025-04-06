@@ -23,7 +23,7 @@
     "ext-yaml": "*",
     "opus4/zf1-future": "1.21.*",
     "jpgraph/jpgraph": "dev-master",
-    "opus4-repo/opus4-common": "^4.8",
+    "opus4-repo/opus4-common": "v4.8.0.1-dev as 4.8",
     "opus4-repo/framework": "^4.8",
     "opus4-repo/search": "^4.7.2",
     "opus4-repo/opus4-bibtex": "^4.8",
