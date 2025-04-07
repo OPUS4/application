@@ -48,6 +48,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Application_Orcid_ValidateAllIdentifierOrcid
 {
+    public const ORCID_ERROR_CODE = 'DOC_ERROR_ORCID';
+
+    public const ERROR_ENRICHMENT = 'opus_document_errors';
+
     /** @var bool Enable tagging documents with invalid ORCID iDs. */
     private $tagDocuments = false;
 
@@ -66,11 +70,13 @@ class Application_Orcid_ValidateAllIdentifierOrcid
 
         $results = $personRepository->getAllIdentifierOrcid();
 
-        $progressBar = new ProgressBar($this->getOutput(), count($results));
+        $output = $this->getOutput();
+
+        if ($this->tagDocuments) {
+            $progressBar = new ProgressBar($output, count($results));
+        }
 
         $validator = new Application_Form_Validate_Orcid();
-
-        $output = $this->getOutput();
 
         foreach ($results as $item) {
             $orcidId = $item['orcidId'];
@@ -87,7 +93,7 @@ class Application_Orcid_ValidateAllIdentifierOrcid
                     // Tag documents only once
                     $this->taggedDocuments[] = $docId;
                 } else {
-                    $output->writeln($orcidId);
+                    $output->writeln("{$orcidId} (<fg=yellow>{$docId}</>)");
                 }
             } else {
                 if ($this->tagDocuments && ! in_array($docId, $this->cleanDocuments)) {
@@ -116,19 +122,19 @@ class Application_Orcid_ValidateAllIdentifierOrcid
     public function addTag($doc)
     {
         try {
-            $otherTags = $doc->getEnrichmentValue('opusDocumentErrors');
+            $otherTags = $doc->getEnrichmentValue(self::ERROR_ENRICHMENT);
             if (! is_array($otherTags)) {
                 $otherTags = [$otherTags];
             }
-            $alreadyTagged = $otherTags !== null && in_array('DOC_ERROR_ORCID', $otherTags);
+            $alreadyTagged = $otherTags !== null && in_array(self::ORCID_ERROR_CODE, $otherTags);
         } catch (ModelException $ex) {
             $alreadyTagged = false;
         }
 
         if (! $alreadyTagged) {
             $tag = Enrichment::new();
-            $tag->setKeyName('opusDocumentErrors');
-            $tag->setValue('DOC_ERROR_ORCID');
+            $tag->setKeyName(self::ERROR_ENRICHMENT);
+            $tag->setValue(self::ORCID_ERROR_CODE);
             $doc->addEnrichment($tag);
             $doc->setLifecycleListener(null);
             $doc->store();
@@ -147,7 +153,7 @@ class Application_Orcid_ValidateAllIdentifierOrcid
         $remainingEnrichments = [];
 
         foreach ($enrichments as $enrichment) {
-            if ($enrichment->getKeyName() !== 'opusDocumentErrors' || $enrichment->getValue() !== 'DOC_ERROR_ORCID') {
+            if ($enrichment->getKeyName() !== self::ERROR_ENRICHMENT || $enrichment->getValue() !== self::ORCID_ERROR_CODE) {
                 $remainingEnrichments[] = $enrichment;
             }
         }

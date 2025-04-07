@@ -70,8 +70,8 @@ class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCas
         $person->setIdentifierOrcid('0000-0002-1825-0097');
         $doc->addPersonAuthor($person);
         $enrichment = Enrichment::new();
-        $enrichment->setKeyName('opusDocumentErrors');
-        $enrichment->setValue('DOC_ERROR_ORCID');
+        $enrichment->setKeyName(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT);
+        $enrichment->setValue(Application_Orcid_ValidateAllIdentifierOrcid::ORCID_ERROR_CODE);
         $doc->addEnrichment($enrichment);
         $enrichment = Enrichment::new();
         $enrichment->setKeyName('City');
@@ -91,9 +91,9 @@ class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCas
         $enrichments = $doc->getEnrichment();
         $this->assertCount(2, $enrichments);
 
-        $tag = $doc->getEnrichmentValue('opusDocumentErrors');
+        $tag = $doc->getEnrichmentValue(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT);
         $this->assertNotNull($tag);
-        $this->assertEquals('DOC_ERROR_ORCID', $tag);
+        $this->assertEquals(Application_Orcid_ValidateAllIdentifierOrcid::ORCID_ERROR_CODE, $tag);
 
         $doc = Document::get($this->docId2);
 
@@ -108,7 +108,7 @@ class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCas
         $doc = $this->createTestDocument();
 
         $enrichment = Enrichment::new();
-        $enrichment->setKeyName('opusDocumentErrors');
+        $enrichment->setKeyName(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT);
         $enrichment->setValue('DOC_ERROR_FULLTEXT');
         $doc->addEnrichment($enrichment);
         $docId = $doc->store();
@@ -126,8 +126,8 @@ class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCas
         $doc = $this->createTestDocument();
 
         $enrichment = Enrichment::new();
-        $enrichment->setKeyName('opusDocumentErrors');
-        $enrichment->setValue('DOC_ERROR_ORCID');
+        $enrichment->setKeyName(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT);
+        $enrichment->setValue(Application_Orcid_ValidateAllIdentifierOrcid::ORCID_ERROR_CODE);
         $doc->addEnrichment($enrichment);
         $docId = $doc->store();
 
@@ -137,7 +137,7 @@ class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCas
         $doc         = Document::get($docId);
         $enrichments = $doc->getEnrichment();
         $this->assertCount(1, $enrichments);
-        $this->assertEquals('DOC_ERROR_ORCID', $enrichments[0]->getValue());
+        $this->assertEquals($validate::ORCID_ERROR_CODE, $enrichments[0]->getValue());
     }
 
     public function testRemoveTag()
@@ -145,11 +145,11 @@ class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCas
         $doc = $this->createTestDocument();
 
         $enrichment = Enrichment::new();
-        $enrichment->setKeyName('opusDocumentErrors');
-        $enrichment->setValue('DOC_ERROR_ORCID');
+        $enrichment->setKeyName(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT);
+        $enrichment->setValue(Application_Orcid_ValidateAllIdentifierOrcid::ORCID_ERROR_CODE);
         $doc->addEnrichment($enrichment);
         $enrichment = Enrichment::new();
-        $enrichment->setKeyName('opusDocumentErrors');
+        $enrichment->setKeyName(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT);
         $enrichment->setValue('DOC_ERROR_FULLTEXT');
         $doc->addEnrichment($enrichment);
         $docId = $doc->store();
@@ -173,20 +173,20 @@ class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCas
         $doc = $this->createTestDocument();
 
         $enrichment = Enrichment::new();
-        $enrichment->setKeyName('opusDocumentErrors');
-        $enrichment->setValue('DOC_ERROR_ORCID');
+        $enrichment->setKeyName(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT);
+        $enrichment->setValue(Application_Orcid_ValidateAllIdentifierOrcid::ORCID_ERROR_CODE);
         $doc->addEnrichment($enrichment);
         $enrichment = Enrichment::new();
-        $enrichment->setKeyName('opusDocumentErrors');
-        $enrichment->setValue('DOC_ERROR_ORCID');
+        $enrichment->setKeyName(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT);
+        $enrichment->setValue(Application_Orcid_ValidateAllIdentifierOrcid::ORCID_ERROR_CODE);
         $doc->addEnrichment($enrichment);
         $docId = $doc->store();
 
         $doc         = Document::get($docId);
         $enrichments = $doc->getEnrichment();
         $this->assertCount(2, $enrichments);
-        $this->assertEquals('opusDocumentErrors', $enrichments[0]->getKeyName());
-        $this->assertEquals('opusDocumentErrors', $enrichments[1]->getKeyName());
+        $this->assertEquals(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT, $enrichments[0]->getKeyName());
+        $this->assertEquals(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT, $enrichments[1]->getKeyName());
     }
 
     public function testAddTagDoesNotUpdateServerDateModified()
@@ -222,6 +222,6 @@ class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCas
 
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('unknown enrichment key');
-        $this->assertNull($doc->getEnrichmentValue('opusDocumentErrors'));
+        $this->assertNull($doc->getEnrichmentValue(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT));
     }
 }

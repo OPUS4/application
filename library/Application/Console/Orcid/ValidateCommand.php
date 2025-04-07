@@ -69,6 +69,7 @@ EOT;
 
         $validate = new Application_Orcid_ValidateAllIdentifierOrcid();
         $validate->setTaggingEnabled($taggingEnabled);
+        $validate->setOutput($output);
         $validate->run();
 
         $taggedCount = count($validate->getTaggedDocuments());
