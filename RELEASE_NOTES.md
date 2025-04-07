@@ -2,13 +2,48 @@
 
 ## Patch Release 4.8.0.13 - 2025-04-08
 
-Anzeige von GND und ORCiD ID für alle Personen in der Frontdoor.
+Dieser Patch Release implementiert kleinere Features im Zusammenhang mit OCRID 
+iDs und behebt einige kleinere Fehler. 
 
-https://github.com/OPUS4/application/issues/1183
+Anzeige von GND und ORCiD iD für alle Personen in der Frontdoor. 
 
-Externe Links für GND und ORCID werden in einem separaten Tab/Window geöffnet.
+Externe Links für GND und ORCID iD werden in einem separaten Tab/Window 
+geöffnet.
 
-https://github.com/OPUS4/application/issues/1199
+Im Metadaten-Formular werden Identifier jetzt für alle Personen angezeigt.
+Gültige GND und ORCID iD Werte werden dabei verlinkt, ungültige werden rot 
+unterlegt, um sie leichter erkennbar zu machen.
+
+Es wurden drei neue Kommandos mit Fokus auf ORCID iDs zu `bin/opus4` 
+hinzugefügt.  
+
+    $ bin/opus4 orcid:info
+
+Ausgabe von allgemeinen Informationen und auflistung von ungültigen ORCID iDs.
+IDs mit URL werden hier mit aufgelistet, auch wenn sie gültig sind, da OPUS 4
+intern momentan ohne URL-Teil arbeitet. 
+
+    $ bin/opus4 orcid:normalize
+
+Entfernt den URL-Teil von ORCID iDs in der Datenbank.
+
+    $ bin/opus4 orcid:validate
+
+Validiert alle ORCID iDs in der Datenbank und gibt sie zusammen mit der 
+Dokument-ID aus. Wird die `--tag` Option verwendet, werden Dokumente mit einer
+ungültigen ORCID iD mit einem Enrichment (`opus_document_errors`) markiert. Das
+Enrichment wird als Facette für Administratoren angezeigt, um die betroffenen 
+Dokumente leicht auffindbar zu machen. 
+
+Bei einer Bereinigung einer ungültigen ORCID iD muss das Errors-Enrichment 
+manuell vom Dokument entfernt werden. Ein erneuter Validierungslauf mit der 
+`--tag` Option entfernt die Markierung aber automatisch von Dokumenten, die 
+keine ungültigen ORCID iDs mehr haben.
+
+Es ist geplant die Bereinigung der Markierung automatisch beim Speichern von 
+Dokumenten durchzuführen, aber die dafür notwendigen Grundlagen waren zu 
+umfangreich für einen Patch Release. Generell ist geplant solche 
+System-Enrichments von den lokale definierten Nutzer-Enrichments zu trennen. 
 
 ## Patch Release 4.8.0.12 - 2025-03-18
 
