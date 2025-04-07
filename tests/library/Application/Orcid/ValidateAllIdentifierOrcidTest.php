@@ -37,7 +37,7 @@ use Opus\Common\Person;
 class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCase
 {
     /** @var string[] */
-    protected $additionalResources = ['database', 'locale'];
+    protected $additionalResources = ['database', 'locale', 'indexPlugin'];
 
     /** @var int */
     private $docId1;
@@ -223,5 +223,21 @@ class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCas
         $this->expectException(ModelException::class);
         $this->expectExceptionMessage('unknown enrichment key');
         $this->assertNull($doc->getEnrichmentValue(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT));
+    }
+
+    /**
+     * TODO move somewhere more appropriate
+     */
+    public function testIndexingWithoutLifecycleListener()
+    {
+        $doc = $this->createTestDocument();
+        $doc = Document::get($doc->store());
+        $enrichment = Enrichment::new();
+        $enrichment->setKeyName(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT);
+        $enrichment->setValue(Application_Orcid_ValidateAllIdentifierOrcid::ORCID_ERROR_CODE);
+        $doc->addEnrichment($enrichment);
+        $doc->setLifecycleListener(null);
+        $doc->store();
+        $this->markTestIncomplete('Verify indexing');
     }
 }
