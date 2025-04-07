@@ -230,8 +230,8 @@ class Application_Orcid_ValidateAllIdentifierOrcidTest extends ControllerTestCas
      */
     public function testIndexingWithoutLifecycleListener()
     {
-        $doc = $this->createTestDocument();
-        $doc = Document::get($doc->store());
+        $doc        = $this->createTestDocument();
+        $doc        = Document::get($doc->store());
         $enrichment = Enrichment::new();
         $enrichment->setKeyName(Application_Orcid_ValidateAllIdentifierOrcid::ERROR_ENRICHMENT);
         $enrichment->setValue(Application_Orcid_ValidateAllIdentifierOrcid::ORCID_ERROR_CODE);
