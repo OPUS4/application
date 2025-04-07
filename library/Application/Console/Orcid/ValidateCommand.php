@@ -71,8 +71,15 @@ EOT;
         $validate->setTaggingEnabled($taggingEnabled);
         $validate->run();
 
-        // TODO get number of tagged documents
-        // TODO get number of cleared documents
+        $taggedCount = count($validate->getTaggedDocuments());
+        if ($taggedCount > 0) {
+            $output->writeln("{$taggedCount} Documents tagged with invalid ORCID iDs");
+        }
+
+        $cleanedCount = count($validate->getCleanedDocuments());
+        if ($cleanedCount > 0) {
+            $output->writeln("{$cleanedCount} Documents no longer tagged with invalid ORCID iDs");
+        }
 
         return 0;
     }

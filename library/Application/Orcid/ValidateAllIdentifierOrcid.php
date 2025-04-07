@@ -34,6 +34,7 @@ use Opus\Common\DocumentInterface;
 use Opus\Common\Enrichment;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Repository;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -65,6 +66,8 @@ class Application_Orcid_ValidateAllIdentifierOrcid
 
         $results = $personRepository->getAllIdentifierOrcid();
 
+        $progressBar = new ProgressBar($this->getOutput(), count($results));
+
         $validator = new Application_Form_Validate_Orcid();
 
         $output = $this->getOutput();
@@ -78,23 +81,32 @@ class Application_Orcid_ValidateAllIdentifierOrcid
             if (! $valid && ! in_array($docId, $this->taggedDocuments)) {
                 $document = Document::get($docId);
 
-                $output->writeln($orcidId);
-
                 if ($this->tagDocuments) {
                     $this->addTag($document);
 
                     // Tag documents only once
                     $this->taggedDocuments[] = $docId;
+                } else {
+                    $output->writeln($orcidId);
                 }
             } else {
                 if ($this->tagDocuments && ! in_array($docId, $this->cleanDocuments)) {
                     $this->cleanDocuments[] = $docId;
                 }
             }
+
+            if ($progressBar !== null) {
+                $progressBar->advance();
+            }
         }
 
         if ($this->tagDocuments) {
             $this->removeTagsFromCleanDocuments();
+        }
+
+        if ($progressBar !== null) {
+            $progressBar->finish();
+            $output->writeln('');
         }
     }
 
@@ -192,5 +204,21 @@ class Application_Orcid_ValidateAllIdentifierOrcid
         }
 
         return $this->output;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getTaggedDocuments()
+    {
+        return $this->taggedDocuments;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getCleanedDocuments()
+    {
+        return array_diff($this->cleanDocuments, $this->taggedDocuments);
     }
 }
