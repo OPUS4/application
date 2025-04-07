@@ -8,7 +8,8 @@ iDs und behebt einige kleinere Fehler.
 Für diesen Release ist `composer update` notwendig, weil auch **opus4-common**
 (4.8.0.1) und **framework** (4.8.0.3) aktualisiert wurden.
 
-Anzeige von GND und ORCiD iD für alle Personen in der Frontdoor. 
+Es wurde die Anzeige von GND und ORCiD iD für alle Personen in der Frontdoor
+hinzugefügt. 
 
 Externe Links für GND und ORCID iD werden in einem separaten Tab/Window 
 geöffnet.
