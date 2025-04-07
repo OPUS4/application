@@ -29,10 +29,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Person;
+use Opus\Common\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * TODO write invalid ORCID iDs to file
+ * TODO output only invalid iDs to console
+ */
 class Application_Console_Orcid_InfoCommand extends Command
 {
     protected function configure()
@@ -40,7 +46,7 @@ class Application_Console_Orcid_InfoCommand extends Command
         parent::configure();
 
         $help = <<<EOT
-
+Shows general info about ORCID iDs in database.
 EOT;
 
         $this->setName('orcid:info')
@@ -50,6 +56,61 @@ EOT;
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $persons = Repository::getInstance()->getModelRepository(Person::class);
+
+        $allIdentifierOrcid       = $persons->getAllIdentifierOrcid();
+        $allUniqueIdentifierOrcid = $persons->getAllUniqueIdentifierOrcid();
+
+        $orcidValuesCount = count($allIdentifierOrcid);
+        $uniqueOrcidCount = count($allUniqueIdentifierOrcid);
+
+        $output->writeln("{$orcidValuesCount} ORCID iD values");
+        $output->writeln("{$uniqueOrcidCount} Unique ORCID iDs");
+
+        $validator = new Application_Form_Validate_Orcid();
+
+        $invalidOrcidValues = [];
+
+        if ($output->isVerbose()) {
+            $output->writeln('');
+            $output->writeln("--- Invalid ORCID iDs");
+        }
+
+        foreach ($allUniqueIdentifierOrcid as $orcidId) {
+            if (! $validator->isValid($orcidId)) {
+                $invalidOrcidValues[] = $orcidId;
+                $output->writeln($orcidId, OutputInterface::VERBOSITY_VERBOSE);
+            }
+        }
+
+        if ($output->isVerbose()) {
+            $output->writeln("---");
+            $output->writeln('');
+        }
+
+        $invalidOrcidCount = count($invalidOrcidValues);
+
+        $output->writeln("{$invalidOrcidCount} Invalid ORCID iDs");
+
+        $orcidWithUrlCount = $this->countOrcidWithUrl($invalidOrcidValues);
+
+        $output->writeln("{$orcidWithUrlCount} ORCID iD values with URL prefix");
+
         return 0;
+    }
+
+    /**
+     * @param string[] $values
+     * @return int
+     */
+    public function countOrcidWithUrl($values)
+    {
+        $orcidWithUrlCount = 0;
+        foreach ($values as $orcidId) {
+            if (preg_match('/^https?:\/\/orcid.org\/.*/i', trim($orcidId))) {
+                $orcidWithUrlCount++;
+            }
+        }
+        return $orcidWithUrlCount;
     }
 }
