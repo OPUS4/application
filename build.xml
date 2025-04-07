@@ -247,7 +247,7 @@
 
     <target name="rebuild-index">
         <exec executable="php" dir="${basedir}/bin" failonerror="on">
-            <arg line="opus4 index:index -v" />
+            <arg line="opus4 index:index -v -r" />
         </exec>
     </target>
 
