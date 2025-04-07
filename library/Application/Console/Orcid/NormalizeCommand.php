@@ -29,9 +29,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Person;
+use Opus\Common\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Application_Console_Orcid_NormalizeCommand extends Command
 {
@@ -50,6 +53,20 @@ EOT;
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $questionHelper = $this->getHelper('question');
+
+        $question = new ConfirmationQuestion(
+            "Do you want to remove all URL prefixes from ORCID iDs [y|N]?",
+            false
+        );
+
+        if ($questionHelper->ask($input, $output, $question)) {
+            $persons = Repository::getInstance()->getModelRepository(Person::class);
+            $output->writeln('Removing URL prefixes from ORCID iDs...');
+            $persons->normalizeOrcidValues();
+            $output->writeln('Done');
+        }
+
         return 0;
     }
 }
