@@ -70,6 +70,7 @@
 
     <field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*">
         <subfield name="FirstName" required="no" formelement="text" datatype="Text"/>
+        <subfield name="IdentifierOrcid" required="no" formelement="text" datatype="Identifier"/>
     </field>
     <field name="PersonTranslator" required="no" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="FirstName" required="no" formelement="text" datatype="Text"/>

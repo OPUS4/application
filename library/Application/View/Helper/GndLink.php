@@ -25,68 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Document;
-use Opus\Common\Model\NotFoundException;
-use Opus\Common\Person;
-
 /**
- * TODO Move documents element code into this subform? (use smaller single document element)
+ * Renders GND link.
  */
-class Admin_Form_Person_Documents extends Application_Form_Abstract
+class Application_View_Helper_GndLink extends Application_View_Helper_Abstract
 {
-    public const ELEMENT_DOCUMENTS = 'Documents';
-
-    public function init()
-    {
-        parent::init();
-
-        $documents = $this->createElement('documents', self::ELEMENT_DOCUMENTS);
-        $this->addElement($documents);
-    }
-
     /**
-     * @param int[]      $documentIds
-     * @param array|null $person
-     * @throws Zend_Form_Exception
-     * @throws NotFoundException
+     * Renders link to GND.
+     *
+     * @param string $gndValue GND identifier
+     * @return string
      */
-    public function setDocuments($documentIds, $person = null)
+    public function gndLink($gndValue)
     {
-        if ($documentIds === null) {
-            // TODO do some logging
-            return;
+        $config = $this->getConfig();
+
+        $gndValue = htmlspecialchars($gndValue);
+
+        $validator = new Application_Form_Validate_Gnd();
+
+        if ($validator->isValid($gndValue) && isset($config->gnd->baseUrl)) {
+            $link = $config->gnd->baseUrl . $gndValue;
+            return "<a href=\"{$link}\" target=\"_blank\">{$gndValue}</a>";
+        } else {
+            return "<span class=\"admin_document_error\">$gndValue</span>";
         }
-
-        if (! is_array($documentIds)) {
-            $documentIds = [$documentIds];
-        }
-
-        $options = [];
-
-        foreach ($documentIds as $docId) {
-            $options[$docId] = Document::get($docId);
-        }
-
-        $documents = $this->getElement(self::ELEMENT_DOCUMENTS);
-        $documents->setMultiOptions($options);
-        $documents->setValue($documentIds);
-
-        if ($person !== null) {
-            $persons = Person::new();
-            // TODO should not depend on convertToFieldNames (Framework internals)
-            $documents->setAttrib('person', $persons::convertToFieldNames($person));
-        }
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getSelectedDocuments()
-    {
-        return $this->getElement(self::ELEMENT_DOCUMENTS)->getValue();
     }
 }

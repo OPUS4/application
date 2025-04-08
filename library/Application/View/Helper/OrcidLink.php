@@ -25,68 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Document;
-use Opus\Common\Model\NotFoundException;
-use Opus\Common\Person;
-
 /**
- * TODO Move documents element code into this subform? (use smaller single document element)
+ * View helper for rendering OCRID link.
  */
-class Admin_Form_Person_Documents extends Application_Form_Abstract
+class Application_View_Helper_OrcidLink extends Application_View_Helper_Abstract
 {
-    public const ELEMENT_DOCUMENTS = 'Documents';
-
-    public function init()
-    {
-        parent::init();
-
-        $documents = $this->createElement('documents', self::ELEMENT_DOCUMENTS);
-        $this->addElement($documents);
-    }
-
     /**
-     * @param int[]      $documentIds
-     * @param array|null $person
-     * @throws Zend_Form_Exception
-     * @throws NotFoundException
+     * Renders link for ORCID identifier.
+     *
+     * @param string $orcidValue ORCID identifier
+     * @return string
      */
-    public function setDocuments($documentIds, $person = null)
+    public function orcidLink($orcidValue)
     {
-        if ($documentIds === null) {
-            // TODO do some logging
-            return;
+        $config = $this->getConfig();
+
+        $orcidValue = htmlspecialchars($orcidValue);
+
+        $validator = new Application_Form_Validate_Orcid();
+
+        if ($validator->isValid($orcidValue) && isset($config->orcid->baseUrl)) {
+            $link = $config->orcid->baseUrl . $orcidValue;
+            return "<a href=\"{$link}\" target=\"_blank\">{$orcidValue}</a>";
+        } else {
+            return "<span class=\"admin_document_error\">{$orcidValue}</span>";
         }
-
-        if (! is_array($documentIds)) {
-            $documentIds = [$documentIds];
-        }
-
-        $options = [];
-
-        foreach ($documentIds as $docId) {
-            $options[$docId] = Document::get($docId);
-        }
-
-        $documents = $this->getElement(self::ELEMENT_DOCUMENTS);
-        $documents->setMultiOptions($options);
-        $documents->setValue($documentIds);
-
-        if ($person !== null) {
-            $persons = Person::new();
-            // TODO should not depend on convertToFieldNames (Framework internals)
-            $documents->setAttrib('person', $persons::convertToFieldNames($person));
-        }
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getSelectedDocuments()
-    {
-        return $this->getElement(self::ELEMENT_DOCUMENTS)->getValue();
     }
 }

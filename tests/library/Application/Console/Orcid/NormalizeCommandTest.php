@@ -25,68 +25,42 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\Document;
-use Opus\Common\Model\NotFoundException;
 use Opus\Common\Person;
+use Symfony\Component\Console\Output\NullOutput;
 
-/**
- * TODO Move documents element code into this subform? (use smaller single document element)
- */
-class Admin_Form_Person_Documents extends Application_Form_Abstract
+class Application_Console_Orcid_NormalizeCommandTest extends ControllerTestCase
 {
-    public const ELEMENT_DOCUMENTS = 'Documents';
+    /** @var string[] */
+    protected $additionalResources = ['database'];
 
-    public function init()
+    public function testFixOrcidValues()
     {
-        parent::init();
+        $doc    = $this->createTestDocument();
+        $person = Person::new();
+        $person->setLastName('Tester');
+        $person->setIdentifierOrcid('0000-0002-1694-233');
+        $doc->addPersonAuthor($person);
+        $docId = (int) $doc->store();
 
-        $documents = $this->createElement('documents', self::ELEMENT_DOCUMENTS);
-        $this->addElement($documents);
+        $command = new Application_Console_Orcid_NormalizeCommand();
+        $command->fixOrcidValues(new NullOutput());
+
+        $doc    = Document::get($docId);
+        $person = $doc->getPerson(0);
+        $this->assertEquals('0000-0002-1694-233X', $person->getIdentifierOrcid());
     }
 
-    /**
-     * @param int[]      $documentIds
-     * @param array|null $person
-     * @throws Zend_Form_Exception
-     * @throws NotFoundException
-     */
-    public function setDocuments($documentIds, $person = null)
+    public function testFixOrcid()
     {
-        if ($documentIds === null) {
-            // TODO do some logging
-            return;
-        }
+        $command = new Application_Console_Orcid_NormalizeCommand();
 
-        if (! is_array($documentIds)) {
-            $documentIds = [$documentIds];
-        }
-
-        $options = [];
-
-        foreach ($documentIds as $docId) {
-            $options[$docId] = Document::get($docId);
-        }
-
-        $documents = $this->getElement(self::ELEMENT_DOCUMENTS);
-        $documents->setMultiOptions($options);
-        $documents->setValue($documentIds);
-
-        if ($person !== null) {
-            $persons = Person::new();
-            // TODO should not depend on convertToFieldNames (Framework internals)
-            $documents->setAttrib('person', $persons::convertToFieldNames($person));
-        }
-    }
-
-    /**
-     * @return int[]
-     */
-    public function getSelectedDocuments()
-    {
-        return $this->getElement(self::ELEMENT_DOCUMENTS)->getValue();
+        $this->assertNull($command->fixOrcid('0000-0001-5109-3700'));
+        $this->assertNull($command->fixOrcid('1111-2222-3333-4444'));
+        $this->assertEquals('0000-0002-1694-233X', $command->fixOrcid('0000-0002-1694-233'));
     }
 }

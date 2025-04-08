@@ -1,5 +1,76 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.13 - 2025-04-08
+
+Dieser Patch Release implementiert kleinere Features im Zusammenhang mit OCRID 
+iDs und behebt ein paar Fehler. 
+
+Für diesen Release ist `composer update` notwendig, weil auch **opus4-common**
+(4.8.0.1) und **framework** (4.8.0.3) aktualisiert wurden.
+
+### ORCID iDs
+
+In der Frontdoor werden GND und ORCiD iD nun für alle Personen angezeigt.
+
+Die externen Links für GND und ORCID iD werden in einem separaten Tab/Fenster 
+geöffnet.
+
+Im Metadaten-Formular werden Identifier jetzt für alle Personen angezeigt.
+Gültige GND und ORCID iD Werte werden dabei verlinkt, ungültige werden rot 
+unterlegt, um sie leichter erkennbar zu machen.
+
+Es wurden drei neue Kommandos mit Fokus auf ORCID iDs zu `bin/opus4` 
+hinzugefügt.  
+
+    $ bin/opus4 orcid:info
+
+Ausgabe von allgemeinen Informationen und Auflistung von ungültigen ORCID iDs.
+IDs mit URL werden hier mit aufgelistet, auch wenn sie gültig sind, da OPUS 4
+intern momentan ohne URL-Teil arbeitet. 
+
+    $ bin/opus4 orcid:normalize
+
+Entfernt den URL-Teil von ORCID iDs in der Datenbank. Mit der Option `--fix`
+werden außerdem ORCID iDs, bei denen am Ende ein **X** für die Prüfsumme fehlt,
+repariert. Das fehlende **X** kann in der Vergangenheit durch einen Fehler beim
+Import verloren gegangen sein. 
+
+    $ bin/opus4 orcid:validate
+
+Validiert alle ORCID iDs in der Datenbank und gibt sie zusammen mit der 
+Dokument-ID aus. Wird die `--tag` Option verwendet, werden Dokumente mit einer
+ungültigen ORCID iD mit einem Enrichment (`opus_document_errors`) markiert. Das
+Enrichment wird als Facette für Administratoren angezeigt, um die betroffenen 
+Dokumente leicht auffindbar zu machen. 
+
+Bei der Bereinigung einer ungültigen ORCID iD in der Adminstration muss das 
+`opus_document_errors`-Enrichment manuell vom Dokument entfernt werden. Ein 
+erneuter Validierungslauf mit der `--tag` Option entfernt die Markierung aber 
+auch automatisch von Dokumenten, die keine ungültigen ORCID iDs mehr haben.
+
+Es ist geplant die Bereinigung der Markierung automatisch beim Speichern von 
+Dokumenten durchzuführen, aber die dafür notwendigen Änderungen waren zu 
+umfangreich für einen Patch Release.
+
+### Personen
+
+Beim permanenten Löschen von Dokumenten entstehen Person-Objekte, die mit 
+keinem Dokument verknüpft sind. Das passiert auch, wenn im Publish-Formular 
+ein Dokument am Ende nicht abgespeichert wird. Das zu verhindern, erfordert
+größere Änderungen, die geplant sind. Bis dahin gibt es jetzt ein neues 
+Kommando, mit dem nicht verknüpte Person-Objekte gelöscht werden können. 
+
+    $ bin/opus4 person:clean
+
+Mit der Option `--keep` können dabei Personen mit Identifiern (ORCID iD, ...)
+von der Löschung ausgeschlossen werden.
+
+### Datenbankanbindung
+
+Beim Abspeichern von Dokumenten, wird **ServerDateModified** nur noch dann 
+aktualisiert, wenn wirklich Daten geändert wurden. Bisher ist das auch 
+passiert, wenn ein unverändertes Dokument abgespeichert wurde. 
+
 ## Patch Release 4.8.0.12 - 2025-03-18
 
 Begrenzt die Anzahl berücksichtigter AutorInnen beim DOI-basierten Metadadatenimport

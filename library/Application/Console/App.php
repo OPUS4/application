@@ -60,6 +60,12 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Document_DuplicatesCommand());
         $this->add(new Application_Console_Document_DiffCommand());
 
+        $this->add(new Application_Console_Orcid_InfoCommand());
+        $this->add(new Application_Console_Orcid_NormalizeCommand());
+        $this->add(new Application_Console_Orcid_ValidateCommand());
+
+        $this->add(new Application_Console_Person_CleanCommand());
+
         $this->add(new BibtexImportCommand());
         $this->add(new BibtexListCommand());
         $this->add(new Application_Console_Debug_DocumentXmlCommand());
