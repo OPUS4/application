@@ -97,10 +97,10 @@ $formId = substr($formId, 0, strrpos($formId, '-') + 1);
         </div>
         <?PHP endif; ?>
         <?PHP if ($person->getIdentifierGnd() !== null) : ?>
-            <div><?= $this->gndLink($person->getIdentifierGnd()) ?></div>
+            <div><?= $this->translate('PersonAuthorIdentifierGnd') ?> <?= $this->gndLink($person->getIdentifierGnd()) ?></div>
         <?PHP endif; ?>
         <?PHP if ($person->getIdentifierOrcid() !== null) : ?>
-            <div><?= $this->orcidLink($person->getIdentifierOrcid()) ?></div>
+            <div><?= $this->translate('PersonAuthorIdentifierOrcid') ?> <?= $this->orcidLink($person->getIdentifierOrcid()) ?></div>
         <?PHP endif; ?>
         <?PHP if ($person->getIdentifierMisc() !== null) : ?>
             <div><?= $this->translate('PersonAuthorIdentifierMisc') ?> <?= htmlspecialchars($person->getIdentifierMisc()) ?></div>
