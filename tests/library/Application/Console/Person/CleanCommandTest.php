@@ -40,6 +40,14 @@ class Application_Console_Person_CleanCommandTest extends ControllerTestCase
     /** @var string[] */
     protected $additionalResources = ['database', 'indexPlugin'];
 
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $persons = Repository::getInstance()->getModelRepository(Person::class);
+        $persons->deleteOrphanedPersons();
+    }
+
     public function tearDown(): void
     {
         $persons = Repository::getInstance()->getModelRepository(Person::class);
