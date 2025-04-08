@@ -33,11 +33,14 @@ use Opus\Common\Person;
 use Opus\Common\Repository;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Application_Console_Orcid_NormalizeCommand extends Command
 {
+    public const OPTION_FIX = 'fix';
+
     protected function configure()
     {
         parent::configure();
@@ -48,7 +51,13 @@ EOT;
 
         $this->setName('orcid:normalize')
             ->setDescription('Normalizes ORCiD ID values in database')
-            ->setHelp($help);
+            ->setHelp($help)
+            ->addOption(
+                self::OPTION_FIX,
+                'f',
+                InputOption::VALUE_NONE,
+                'Fix ORCID iDs with missing \'X\''
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -60,13 +69,61 @@ EOT;
             false
         );
 
-        if ($questionHelper->ask($input, $output, $question)) {
-            $persons = Repository::getInstance()->getModelRepository(Person::class);
-            $output->writeln('Removing URL prefixes from ORCID iDs...');
-            $persons->normalizeOrcidValues();
-            $output->writeln('Done');
+        if (! $questionHelper->ask($input, $output, $question)) {
+            return 0;
+        }
+
+        $persons = Repository::getInstance()->getModelRepository(Person::class);
+
+        $output->writeln('Removing URL prefixes from ORCID iDs...');
+        $persons->normalizeOrcidValues();
+        $output->writeln('Done');
+
+        if ($input->getOption(self::OPTION_FIX)) {
+            $this->fixOrcidValues($output);
         }
 
         return 0;
+    }
+
+    public function fixOrcidValues(OutputInterface $output)
+    {
+        $persons = Repository::getInstance()->getModelRepository(Person::class);
+
+        $orcidValues = $persons->getAllUniqueIdentifierOrcid();
+
+        $output->writeln('Attempting to fix ORCID iDs ...');
+
+        foreach ($orcidValues as $orcid) {
+            $fixedOrcid = $this->fixOrcid($orcid);
+            if ($fixedOrcid !== null) {
+                $persons->replaceOrcid($orcid, $fixedOrcid);
+                $output->writeln("{$orcid} => {$fixedOrcid}");
+            }
+        }
+
+        $output->writeln('Done');
+    }
+
+    /**
+     * @param string $orcid
+     * @return string|null
+     * @throws Zend_Validate_Exception
+     */
+    public function fixOrcid($orcid)
+    {
+        $validator = new Application_Form_Validate_Orcid();
+
+        if (! $validator->isValid($orcid)) {
+            if (strlen($orcid) === 18) {
+                $fixedOrcid = $orcid . 'X';
+
+                if ($validator->isValid($fixedOrcid)) {
+                    return $fixedOrcid;
+                }
+            }
+        }
+
+        return null;
     }
 }
