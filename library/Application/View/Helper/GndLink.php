@@ -50,10 +50,9 @@ class Application_View_Helper_GndLink extends Application_View_Helper_Abstract
 
         if ($validator->isValid($gndValue) && isset($config->gnd->baseUrl)) {
             $link = $config->gnd->baseUrl . $gndValue;
-            return "<a href=\"{$link}\" target=\"_blank\">{$link}</a>";
+            return "<a href=\"{$link}\" target=\"_blank\">{$gndValue}</a>";
         } else {
-            return $this->view->translate('PersonAuthorIdentifierGnd')
-                . " <span class=\"admin_document_error\">$gndValue</span>";
+            return "<span class=\"admin_document_error\">$gndValue</span>";
         }
     }
 }

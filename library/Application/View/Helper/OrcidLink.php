@@ -50,10 +50,9 @@ class Application_View_Helper_OrcidLink extends Application_View_Helper_Abstract
 
         if ($validator->isValid($orcidValue) && isset($config->orcid->baseUrl)) {
             $link = $config->orcid->baseUrl . $orcidValue;
-            return "<a href=\"{$link}\" target=\"_blank\">{$link}</a>";
+            return "<a href=\"{$link}\" target=\"_blank\">{$orcidValue}</a>";
         } else {
-            return $this->view->translate('PersonAuthorIdentifierOrcid')
-                . " <span class=\"admin_document_error\">{$orcidValue}</span>";
+            return "<span class=\"admin_document_error\">{$orcidValue}</span>";
         }
     }
 }
