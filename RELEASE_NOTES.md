@@ -1,5 +1,8 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.14
+
+
 ## Patch Release 4.8.0.13 - 2025-04-08
 
 Dieser Patch Release implementiert kleinere Features im Zusammenhang mit OCRID 
