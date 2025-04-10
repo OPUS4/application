@@ -1,7 +1,9 @@
 # OPUS 4 Release Notes
 
-## Patch Release 4.8.0.14
+## Patch Release 4.8.0.14 - 2025-04-15
 
+Bei der Validierung von GND-Werten werden jetzt auch SWD- und GKD-Prüfziffern 
+berücksichtigt.
 
 ## Patch Release 4.8.0.13 - 2025-04-08
 
