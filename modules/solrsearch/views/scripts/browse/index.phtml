@@ -41,18 +41,24 @@
 
 <div class="content">
     <ul class="nav browsing">
+        <?PHP if ($this->showLatestDocuments) : ?>
         <li>
             <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'latest'], null, true) ?>"><?= htmlspecialchars($this->translate('latest_documents_title')) ?></a>&nbsp;
             <a href="<?= $this->url(['module' => 'rss', 'controller' => 'index', 'action' => 'index'], null, true) ?>" class="rss" type="application/rss+xml">
                 <img src="<?= $this->layoutPath() ?>/img/feed_small.png" width="12" height="12" alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" />
             </a>
         </li>
+        <?PHP endif ?>
+        <?PHP if ($this->showDocumentTypes) : ?>
         <li>
             <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'browse', 'action' => 'doctypes'], null, true) ?>"><?= htmlspecialchars($this->translate('search_index_doctype_browsing')) ?></a>
         </li>
+        <?PHP endif ?>
+        <?PHP if ($this->showYears) : ?>
         <li>
             <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'browse', 'action' => 'years'], null, true) ?>"><?= htmlspecialchars($this->translate('search_index_year_browsing')) ?></a>
         </li>
+        <?PHP endif ?>
         <?php if ($this->showSeriesBrowsing) : ?>
         <li>
             <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'browse', 'action' => 'series'], null, true) ?>"><?= htmlspecialchars($this->translate('search_index_series_browsing')) ?></a>
