@@ -78,7 +78,6 @@ class Application_Console_App extends Application
         $this->add(new BibtexImportCommand());
         $this->add(new BibtexListCommand());
         $this->add(new Application_Console_Debug_DocumentXmlCommand());
-        $this->add(new CoverGenerateCommand());
 
         // TODO use ModelCommandProvider
         $this->add(new Application_Console_Model_EnrichmentImportCommand());
