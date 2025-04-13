@@ -22,15 +22,22 @@ jetzt auch in der Konfiguration gezielt abgeschaltet werden.
 ### PDF-Deckblätter
 
 Es kann jetzt eine alternative Methode konfiguriert werden, um ein Deckblatt 
-mit einem Dokument-PDF zu verbinden.
+mit einem Dokument-PDF zu verbinden. 
 
     pdf.covers.concatClass = 'Opus\Pdf\PdfUniteConcatenator'
+
+Für die Verwendung der `PdfUniteConcatenator`-Klasse muss das `pdfunite`
+Kommando im System verfügbar sein. Es ist Teil der `poppler-utils`. 
+
+    $ sudo apt install poppler-utils
 
 Wenn die Zusammenführung der PDFs fehlschlägt, wird das Original-PDF 
 ausgeliefert. 
 
-Das `bin/opus4` Kommando, um ein Deckblatt zu generieren (`cover:generate`),
-wurde umbenannt. 
+#### PDF Kommandos 
+
+Das `bin/opus4` Kommando, um ein Deckblatt zu generieren (bisher 
+`cover:generate`), wurde umbenannt. 
 
     $ bin/opus4 pdf:generate-cover
 
