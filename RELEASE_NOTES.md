@@ -24,7 +24,7 @@ jetzt auch in der Konfiguration gezielt abgeschaltet werden.
 Es kann jetzt eine alternative Methode konfiguriert werden, um ein Deckblatt 
 mit einem Dokument-PDF zu verbinden.
 
-    pdf.cover.concatClass = 'Opus\Pdf\PdfUniteConcatenator'
+    pdf.covers.concatClass = 'Opus\Pdf\PdfUniteConcatenator'
 
 Wenn die Zusammenführung der PDFs fehlschlägt, wird das Original-PDF 
 ausgeliefert. 
@@ -37,6 +37,11 @@ wurde umbenannt.
 Wie immer kann das Kommando auch mit einem eindeutigen, verkürzten Namen
 verwendet werden, also z.B. `pdf:generate` oder sogar `p:g`.
 
+Neu hinzugekommen ist das Kommando `pdf:concat` mit dem sich zwei PDF-Dateien
+verknüpfen lassen. Damit kann die konfigurierte Concatenator-Klasse getestet
+werden.
+
+    $ bin/opus4 pdf:concat cover.pdf document.pdf merged.pdf
 
 ## Patch Release 4.8.0.13 - 2025-04-08
 
