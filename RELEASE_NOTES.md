@@ -2,8 +2,41 @@
 
 ## Patch Release 4.8.0.14 - 2025-04-15
 
+### Personen-Formular
+
 Bei der Validierung von GND-Werten werden jetzt auch SWD- und GKD-Prüfziffern 
 berücksichtigt.
+
+### Browsing
+
+Das Browsing über Dokumenttypen oder Jahre, wird automatisch abgeschaltet, 
+wenn die entsprechende, notwendige Facette nicht konfiguriert ist.
+
+Das Browsing für die neuesten Dokumente, die Dokumenttypen und Jahre kann
+jetzt auch in der Konfiguration gezielt abgeschaltet werden.
+
+    browsing.showLatestDocuments = 1
+    browsing.showDocumentTypes = 1
+    browsing.showYears = 1
+
+### PDF-Deckblätter
+
+Es kann jetzt eine alternative Methode konfiguriert werden, um ein Deckblatt 
+mit einem Dokument-PDF zu verbinden.
+
+    pdf.cover.concatClass = 'Opus\Pdf\PdfUniteConcatenator'
+
+Wenn die Zusammenführung der PDFs fehlschlägt, wird das Original-PDF 
+ausgeliefert. 
+
+Das `bin/opus4` Kommando, um ein Deckblatt zu generieren (`cover:generate`),
+wurde umbenannt. 
+
+    $ bin/opus4 pdf:generate-cover
+
+Wie immer kann das Kommando auch mit einem eindeutigen, verkürzten Namen
+verwendet werden, also z.B. `pdf:generate` oder sogar `p:g`.
+
 
 ## Patch Release 4.8.0.13 - 2025-04-08
 
