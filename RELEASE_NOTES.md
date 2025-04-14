@@ -2,6 +2,9 @@
 
 ## Patch Release 4.8.0.14 - 2025-04-15
 
+Es wurden kleinere Fehler behoben und einige Funktionen hinzugefügt bzw.
+verbessert.
+
 ### Personen-Formular
 
 Bei der Validierung von GND-Werten werden jetzt auch SWD- und GKD-Prüfziffern 
@@ -20,6 +23,11 @@ jetzt auch in der Konfiguration gezielt abgeschaltet werden.
     browsing.showYears = 1
 
 ### PDF-Deckblätter
+
+Das Erscheinungsdatum auf dem Deckblatt richtet sich jetzt nach der Option,
+die auch für die Steuerung der Indexierung der Jahr-Facette verwendet wird.
+
+    search.index.field.year.order = PublishedDate,PublishedYear
 
 Es kann jetzt eine alternative Methode konfiguriert werden, um ein Deckblatt 
 mit einem Dokument-PDF zu verbinden. 
