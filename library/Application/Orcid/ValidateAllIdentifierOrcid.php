@@ -72,6 +72,8 @@ class Application_Orcid_ValidateAllIdentifierOrcid
 
         $output = $this->getOutput();
 
+        $progressBar = null;
+
         if ($this->tagDocuments) {
             $progressBar = new ProgressBar($output, count($results));
         }
