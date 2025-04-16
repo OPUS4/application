@@ -44,7 +44,7 @@ class Application_Form_Validate_Gnd extends Zend_Validate_Abstract
     /**
      * Pattern for format checking.
      */
-    public const PATTERN = '/^[1-9]\d{6,10}[0-9X]/';
+    public const PATTERN = '/^[1-9]\d{6,10}-?[0-9X]/';
 
     /**
      * Translation keys for validation errors.
@@ -67,17 +67,28 @@ class Application_Form_Validate_Gnd extends Zend_Validate_Abstract
      */
     public function isValid($value)
     {
+        // TODO andere formate zulassen
         if (strlen($value) > 11 || strlen($value) < 8 || ! preg_match(self::PATTERN, $value)) {
             $this->_error(self::NOT_VALID_FORMAT);
             return false;
         }
 
-        if (self::generateCheckDigit(substr($value, 0, strlen($value) - 1)) !== substr($value, -1)) {
-            $this->_error(self::NOT_VALID_CHECKSUM);
-            return false;
+        if (preg_match('/.*-./', $value)) {
+            $number     = substr($value, 0, strlen($value) - 2);
+            $checkDigit = substr($value, -2);
+            $valid      = self::generateCheckDigitPreGnd($number) !== $checkDigit;
+        } else {
+            $number     = substr($value, 0, strlen($value) - 1);
+            $checkDigit = substr($value, -1);
+            $valid      = self::generateCheckDigit($number) === $checkDigit;
         }
 
-        return true;
+        if ($valid) {
+            return true;
+        }
+
+        $this->_error(self::NOT_VALID_CHECKSUM);
+        return false;
     }
 
     /**
@@ -86,7 +97,29 @@ class Application_Form_Validate_Gnd extends Zend_Validate_Abstract
      * @param string $number
      * @return string
      */
-    public static function generateCheckDigit($number)
+    public function generateCheckDigit($number)
+    {
+        $total  = $this->calculateSum($number);
+        $result = (11 - ($total % 11)) % 11;
+        return $result === 10 ? "X" : (string) $result;
+    }
+
+    /**
+     * @param string $number
+     * @return string
+     */
+    public function generateCheckDigitPreGnd($number)
+    {
+        $total  = $this->calculateSum($number);
+        $result = (11 - (11 - $total % 11)) % 11;
+        return (string) $result;
+    }
+
+    /**
+     * @param string $number
+     * @return int
+     */
+    protected function calculateSum($number)
     {
         $total  = 0;
         $weight = 11 - (10 - strlen($number));
@@ -95,8 +128,6 @@ class Application_Form_Validate_Gnd extends Zend_Validate_Abstract
             $total += $digit * $weight;
             $weight--;
         }
-        $remainder = $total % 11;
-        $result    = (11 - $remainder) % 11;
-        return $result === 10 ? "X" : (string) $result;
+        return $total;
     }
 }

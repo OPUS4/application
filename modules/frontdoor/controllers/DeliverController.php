@@ -34,11 +34,11 @@
  */
 
 use Opus\Common\Config;
+use Opus\Common\Cover\CoverGeneratorFactory;
+use Opus\Common\Cover\CoverGeneratorInterface;
 use Opus\Common\Document;
 use Opus\Common\FileInterface;
 use Opus\Common\Security\Realm;
-use Opus\Pdf\Cover\CoverGeneratorFactory;
-use Opus\Pdf\Cover\CoverGeneratorInterface;
 
 class Frontdoor_DeliverController extends Application_Controller_Action
 {
@@ -217,7 +217,7 @@ class Frontdoor_DeliverController extends Application_Controller_Action
             return null;
         }
 
-        $generator = CoverGeneratorFactory::create();
+        $generator = CoverGeneratorFactory::getInstance()->create();
 
         if ($generator === null) {
             return null;
@@ -228,9 +228,6 @@ class Frontdoor_DeliverController extends Application_Controller_Action
 
         $filecacheDir = $appConfig->getFilecachePath();
         $generator->setFilecacheDir($filecacheDir);
-
-        $tempDir = $appConfig->getTempPath();
-        $generator->setTempDir($tempDir);
 
         return $generator;
     }

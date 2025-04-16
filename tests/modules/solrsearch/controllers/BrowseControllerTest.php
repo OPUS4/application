@@ -50,12 +50,42 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
     {
         $this->dispatch('/solrsearch/browse');
         $this->assertResponseCode(200);
+
+        $this->assertXpath('//a[contains(@href, "solrsearch/index/search/searchtype/latest")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/years")]');
     }
 
-    public function testDoctypesAction()
+    public function testShowDoctypesDisabled()
+    {
+        $this->adjustConfiguration([
+            'browsing' => ['showDocumentTypes' => 0],
+        ]);
+
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+
+        $this->assertXpath('//a[contains(@href, "solrsearch/index/search/searchtype/latest")]');
+        $this->assertNotXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/years")]');
+    }
+
+    public function testDoctypesActionEnabled()
     {
         $this->dispatch('/solrsearch/browse/doctypes');
         $this->assertResponseCode(200);
+
+        $this->assertXpath('//div[@id = "content" and contains(@class, "solrsearch_browse_doctypes")]');
+    }
+
+    public function testDoctypesActionDisabled()
+    {
+        $this->adjustConfiguration([
+            'browsing' => ['showDocumentTypes' => 0],
+        ]);
+
+        $this->dispatch('/solrsearch/browse/doctypes');
+        $this->assertRedirect('/solrsearch/browse/index');
     }
 
     public function testSeriesAction()
@@ -278,13 +308,84 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->assertResponseCode(503);
     }
 
-    public function testBrowsingByYear()
+    public function testYearsActionEnabled()
     {
-        $this->markTestIncomplete();
+        $this->dispatch('/solrsearch/browse/years');
+        $this->assertResponseCode(200);
+
+        $this->assertXpath('//div[@id = "content" and contains(@class, "solrsearch_browse_years")]');
+    }
+
+    public function testYearsActionDisabled()
+    {
+        $this->adjustConfiguration([
+            'browsing' => ['showYears' => 0],
+        ]);
+
+        $this->dispatch('/solrsearch/browse/years');
+        $this->assertRedirect('/solrsearch/browse/index');
     }
 
     public function testBrowsingByYearWithInvertedYearFacetConfigured()
     {
         $this->markTestIncomplete();
+    }
+
+    public function testShowYearsDisabled()
+    {
+        $this->adjustConfiguration([
+            'browsing' => ['showYears' => 0],
+        ]);
+
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+
+        $this->assertXpath('//a[contains(@href, "solrsearch/index/search/searchtype/latest")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertNotXpath('//a[contains(@href, "solrsearch/browse/years")]');
+    }
+
+    public function testShowLatestDocumentsDisabled()
+    {
+        $this->adjustConfiguration([
+            'browsing' => ['showLatestDocuments' => 0],
+        ]);
+
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+
+        $this->assertNotXpath('//a[contains(@href, "solrsearch/index/search/searchtype/latest")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/years")]');
+    }
+
+    public function testMissingDoctypeFacetDisablesDoctypeBrowsing()
+    {
+        $this->adjustConfiguration([
+            'searchengine' => ['solr' => ['facets' => 'author_facet,year,language,has_fulltext']],
+        ]);
+
+        $facetManager = new Application_Search_FacetManager();
+
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+
+        $this->assertNotXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/years")]');
+    }
+
+    public function testMissingYearFacetDisablesYearBrowsing()
+    {
+        $this->adjustConfiguration([
+            'searchengine' => ['solr' => ['facets' => 'author_facet,doctype,language,has_fulltext']],
+        ]);
+
+        $facetManager = new Application_Search_FacetManager();
+
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertNotXpath('//a[contains(@href, "solrsearch/browse/years")]');
     }
 }

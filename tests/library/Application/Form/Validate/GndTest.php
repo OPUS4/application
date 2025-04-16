@@ -36,60 +36,93 @@ class Application_Form_Validate_GndTest extends TestCase
 
     public function setUp(): void
     {
-        $this->validator = new Application_Form_Validate_Gnd();
-
         parent::setUp();
+
+        $this->validator = new Application_Form_Validate_Gnd();
     }
 
-    public function testIsValidFalseFormat()
+    /**
+     * @return array[]
+     */
+    public static function invalidFormatGndProvider()
     {
-        $this->assertFalse($this->validator->isValid(''));
-        $this->assertFalse($this->validator->isValid('Hallo'));
-        $this->assertFalse($this->validator->isValid('12345AB--6789012'));
-        $this->assertFalse($this->validator->isValid('123456789012'));
-        $this->assertFalse($this->validator->isValid('009598X4798'));
-        $this->assertFalse($this->validator->isValid('0095980479X'));
-        $this->assertFalse($this->validator->isValid('00040303187'));
+        return [
+            [''],
+            ['Hallo'],
+            ['12345AB--6789012'],
+            ['123456789012'],
+            ['009598X4798'],
+            ['0095980479X'],
+            ['00040303187'],
+        ];
+    }
+
+    /**
+     * @param string $value
+     * @dataProvider invalidFormatGndProvider
+     */
+    public function testIsValidFalseFormat($value)
+    {
+        $this->assertFalse($this->validator->isValid($value));
         $this->assertArrayHasKey('notValidFormat', $this->validator->getMessages());
         $this->assertCount(1, $this->validator->getMessages());
     }
 
-    public function testIsValidFalseChecksum()
+    /**
+     * @return array[]
+     */
+    public static function invalidGndProvider()
     {
-        $this->assertFalse($this->validator->isValid('118768582'));
-        $this->assertFalse($this->validator->isValid('959804798'));
+        return [
+            ['118768582'],
+            ['959804798'],
+        ];
+    }
+
+    /**
+     * @param string $value
+     * @dataProvider invalidGndProvider
+     */
+    public function testIsValidFalseChecksum($value)
+    {
+        $this->assertFalse($this->validator->isValid($value));
         $this->assertArrayHasKey('notValidChecksum', $this->validator->getMessages());
         $this->assertCount(1, $this->validator->getMessages());
     }
 
-    public function testIsValidTrue()
+    /**
+     * @return array[]
+     */
+    public static function validGndProvider()
     {
-        $this->assertTrue($this->validator->isValid('118768581'));
-        $this->assertTrue($this->validator->isValid('95980479X'));
-        $this->assertTrue($this->validator->isValid('40303187'));
-        $this->assertTrue($this->validator->isValid('123050421')); // Spinner, Kasper H.
-        $this->assertTrue($this->validator->isValid('136704425')); // Süselbeck, Kirsten
+        return [
+            ['118768581'],
+            ['95980479X'],
+            ['40303187'],
+            ['123050421'], // Spinner, Kasper H.
+            ['136704425'], // Süselbeck, Kirsten
+            ['136307396'],
+            ['4034724-2'],
+            ['4030318-7'],
+        ];
     }
 
-    public function testIsValidTrueForShortNumber()
+    /**
+     * @param string $gndValue
+     * @dataProvider validGndProvider
+     */
+    public function testIsValidTrue($gndValue)
     {
-        $this->assertTrue($this->validator->isValid('136307396'));
-        $this->assertTrue($this->validator->isValid('40303187'));
+        $this->assertTrue($this->validator->isValid($gndValue));
     }
 
     public function testGenerateCheckDigit()
     {
-        $digit = Application_Form_Validate_Gnd::generateCheckDigit('0095980479');
+        $validator = new Application_Form_Validate_Gnd();
+        $digit     = $validator->generateCheckDigit('0095980479');
         $this->assertEquals('X', $digit);
 
-        $digit = Application_Form_Validate_Gnd::generateCheckDigit('4030318');
+        $digit = $validator->generateCheckDigit('4030318');
         $this->assertEquals('7', $digit);
-    }
-
-    public function testNoLeadingZerosAllowed()
-    {
-        $this->assertFalse($this->validator->isValid('00040303187'));
-        $this->assertFalse($this->validator->isValid('0095980479X'));
-        $this->assertFalse($this->validator->isValid('00040303187'));
     }
 }
