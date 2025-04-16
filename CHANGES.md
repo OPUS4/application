@@ -1,6 +1,6 @@
 # OPUS 4 Change Log
 
-## Release 4.8.0.14 - 2025-04-15
+## Release 4.8.0.14 - 2025-04-22
 
 OPUS 4.8.0.14 Project on GitHub
 https://github.com/orgs/OPUS4/projects/81

@@ -1,6 +1,6 @@
 # OPUS 4 Release Notes
 
-## Patch Release 4.8.0.14 - 2025-04-15
+## Patch Release 4.8.0.14 - 2025-04-22
 
 Es wurden kleinere Fehler behoben und einige Funktionen hinzugefügt bzw.
 verbessert.
@@ -29,18 +29,22 @@ die auch für die Steuerung der Indexierung der Jahr-Facette verwendet wird.
 
     search.index.field.year.order = PublishedDate,PublishedYear
 
-Es kann jetzt eine alternative Methode konfiguriert werden, um ein Deckblatt 
-mit einem Dokument-PDF zu verbinden. 
+Die Methode, um die PDFs für Deckblatt und Dokument miteinander zu verbinden,
+kann nun konfiguriert werden.
 
     pdf.covers.concatClass = 'Opus\Pdf\PdfUniteConcatenator'
 
-Für die Verwendung der `PdfUniteConcatenator`-Klasse muss das `pdfunite`
-Kommando im System verfügbar sein. Es ist Teil der `poppler-utils`. 
+Die neue Klasse, `PdfUniteConcatenator`, ist jetzt der Default, weil es damit 
+weniger Schwierigkeiten mit PDFs gibt, die Kompression verwenden. Das 
+`pdfunite` Kommando im System verfügbar sein. Es ist Teil der `poppler-utils`. 
 
     $ sudo apt install poppler-utils
 
 Wenn die Zusammenführung der PDFs fehlschlägt, wird das Original-PDF 
-ausgeliefert. 
+ausgeliefert. Die alte Verknüpfungsmethode für PDFs ist mit folgender
+Konfiguration verfügbar.
+
+    pdf.covers.concatClass = 'Opus\Pdf\LibMergePdfConcatenator'
 
 #### PDF Kommandos 
 
