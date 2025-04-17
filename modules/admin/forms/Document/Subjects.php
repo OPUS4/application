@@ -49,7 +49,7 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
         parent::init();
 
         $this->addSubForm(
-            new Admin_Form_Document_SubjectType(
+            new Admin_Form_Document_GndSubjects(
                 'swd',
                 [
                     'columns' => [
