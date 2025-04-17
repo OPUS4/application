@@ -37,7 +37,7 @@ use Opus\Common\DocumentInterface;
  * Diese Klasse überschreibt ein paar Funktion von Admin_Form_Document_MultiSubForm um Unterformulare vom richtigen Typ
  * zu verwenden und die richtigen Werte aus dem Modell zu holen.
  */
-class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm
+class Admin_Form_Document_SubjectType extends Admin_Form_Document_DefaultMultiSubForm
 {
     /**
      * Der Schlagworttyp für den dieses Unterformular verwendet wird.
