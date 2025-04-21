@@ -159,6 +159,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             return $field->getValue();
         } else {
             $this->getLogger()->err(__METHOD__ . " Feld $this->__fieldName nicht gefunden.");
+            return []; // TODO throw exception?
         }
     }
 
