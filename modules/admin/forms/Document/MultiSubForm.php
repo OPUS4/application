@@ -102,6 +102,25 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     public function init()
     {
         parent::init();
+
+        if ($this->getColumns() !== null) {
+            $this->renderAsTableEnabled = true;
+            $this->setDecorators(
+                [
+                    'FormElements', // Zend decorator
+                    'TableHeader',
+                    'TableWrapper',
+                    [
+                        ['fieldsWrapper' => 'HtmlTag'],
+                        ['tag' => 'div', 'class' => 'fields-wrapper'],
+                    ],
+                    [
+                        ['divWrapper' => 'HtmlTag'],
+                        ['tag' => 'div', 'class' => 'subform'],
+                    ],
+                ]
+            );
+        }
     }
 
     /**
