@@ -32,49 +32,30 @@
 use Opus\Common\DocumentInterface;
 
 /**
- * Unterformular fuer Subjects eines bestimmten Typs im Metadaten-Formular.
- *
- * Diese Klasse überschreibt ein paar Funktion von Admin_Form_Document_MultiSubForm um Unterformulare vom richtigen Typ
- * zu verwenden und die richtigen Werte aus dem Modell zu holen.
+ * Unterformular fuer GND Subjects im Metadaten-Formular.
  */
-class Admin_Form_Document_GndSubjects extends Admin_Form_Document_DefaultMultiSubForm
+class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
 {
-    /**
-     * Der Schlagworttyp für den dieses Unterformular verwendet wird.
-     *
-     * @var string
-     */
-    private $subjectType;
+    public const ELEMENT_ADD          = 'Add';
+    public const ELEMENT_ADD_SUBJECTS = 'AddSubjects';
+    public const SUBFORM_VALUES       = 'Values';
+
+    /** @var string Der Schlagworttyp für den dieses Unterformular verwendet wird. */
+    private $subjectType; // TODO necessary here?
+
+    /** @var Admin_Form_Document_MultiSubForm */
+    private $valuesSubForm;
 
     /**
-     * Konstruiert ein Unterformular für Schlagwörter eines bestimmten Typs.
+     * Konstruiert ein Unterformular für GND Schlagwörter.
      *
-     * @param string     $type Schlagworttyp (z.B. 'swd', 'psyndex' usw.)
      * @param null|mixed $options
      */
-    public function __construct($type, $options = null)
+    public function __construct($options = null)
     {
-        $this->subjectType = $type;
+        $this->subjectType = 'swd';
 
-        $validator = null;
-
-        switch ($type) {
-            case 'swd':
-                $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues(
-                    'Value',
-                    'admin_document_error_repeated_subject'
-                );
-                break;
-            default:
-                $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues(
-                    'Value',
-                    'admin_document_error_repeated_subject',
-                    'Language'
-                );
-                break;
-        }
-
-        parent::__construct(null, 'Subject', $validator, $options);
+        parent::__construct($options);
     }
 
     /**
@@ -87,6 +68,27 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_Document_DefaultMultiSu
         parent::init();
 
         $this->setLegend('admin_document_section_subject' . $this->subjectType);
+
+        $this->addElement('submit', self::ELEMENT_ADD, [
+            'order' => 1000,
+            'label' => 'admin_button_add',
+        ]);
+
+        $this->valuesSubForm = new Admin_Form_Document_SubjectMultiSubForm(
+            'swd',
+            [
+                'columns' => [
+                    [],
+                    ['label' => 'Opus_Subject_Value'],
+                    ['label' => 'ExternalKey'],
+                ],
+            ]
+        );
+
+        $this->addSubForm($this->valuesSubForm, self::SUBFORM_VALUES);
+
+        $this->getDecorator('FieldsetWithButtons')->setLegendButtons(self::ELEMENT_ADD);
+        $this->getElement(self::ELEMENT_ADD)->setDecorators([])->setDisableLoadDefaultDecorators(true);
     }
 
     /**
@@ -100,31 +102,29 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_Document_DefaultMultiSu
     }
 
     /**
-     * Ueberschreibt Funktion damit hier nichts passiert.
-     *
-     * In der Klasse Admin_Form_Document_MultiSubForm wird in dieser Funktion das Dokument aktualisiert, was aber bei
-     * Schlagwoertern nicht passieren soll, da die Werte aus mehreren MultiSubForm-Formularen zusammengesammelt werden
-     * muessen.
-     *
+     * @param DocumentInterface $document
+     */
+    public function populateFromModel($document)
+    {
+        $this->valuesSubForm->populateFromModel($document);
+    }
+
+    /**
+     * @param array $post
+     * @param DocumentInterface $document
+     */
+    public function constructFromPost($post, $document = null)
+    {
+        // TODO is this the best way $post['Values'] - Shouldn't base class take care of it?
+        $this->valuesSubForm->constructFromPost($post['Values'], $document);
+    }
+
+    /**
      * @param DocumentInterface $document
      */
     public function updateModel($document)
     {
         // hier darf nichts passieren
-    }
-
-    /**
-     * Erzeugt neues Unterformular Instanz fuer den entsprechenden Schlagworttyp.
-     *
-     * @return Admin_Form_Document_Subject
-     */
-    public function createNewSubFormInstance()
-    {
-        if ($this->subjectType === 'swd') {
-            return new Admin_Form_Document_Subject('swd', 'deu');
-        } else {
-            return new Admin_Form_Document_Subject($this->subjectType);
-        }
     }
 
     /**
@@ -135,16 +135,35 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_Document_DefaultMultiSu
      */
     public function getFieldValues($document)
     {
-        $values = parent::getFieldValues($document);
+        return $this->valuesSubForm->getFieldValues($document);
+    }
 
-        $subjects = [];
-
-        foreach ($values as $value) {
-            if ($value->getType() === $this->subjectType) {
-                $subjects[] = $value;
-            }
+    /**
+     * @param array $data
+     * @param array $context
+     * @return string|null
+     */
+    public function processPost($data, $context)
+    {
+        // Prüfen ob "Hinzufügen" geklickt wurde
+        if (array_key_exists(self::ELEMENT_ADD, $data)) {
+            $subform = $this->valuesSubForm->appendSubForm();
+            $subform->addDecorator(
+                ['currentAnchor' => 'HtmlTag'],
+                ['tag' => 'a', 'placement' => 'prepend', 'name' => 'current']
+            );
+            return Admin_Form_Document::RESULT_SHOW;
         }
 
-        return $subjects;
+        return parent::processPost($data, $context);
+    }
+
+    /**
+     * @param DocumentInterface|null $document
+     * @return array
+     */
+    public function getSubFormModels($document = null)
+    {
+        return $this->valuesSubForm->getSubFormModels($document);
     }
 }
