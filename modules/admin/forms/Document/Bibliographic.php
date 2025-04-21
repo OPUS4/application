@@ -79,7 +79,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
         $this->addElement('Year', self::ELEMENT_THESIS_YEAR_ACCEPTED);
 
         $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
+            new Admin_Form_Document_DefaultMultiSubForm(
                 'Admin_Form_Document_Publisher',
                 'ThesisPublisher',
                 new Application_Form_Validate_MultiSubForm_RepeatedValues(
@@ -90,7 +90,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
             'Publishers'
         );
         $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
+            new Admin_Form_Document_DefaultMultiSubForm(
                 'Admin_Form_Document_Grantor',
                 'ThesisGrantor',
                 new Application_Form_Validate_MultiSubForm_RepeatedValues(

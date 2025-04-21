@@ -121,9 +121,7 @@ class Admin_Form_Document_DefaultMultiSubForm extends Admin_Form_Document_MultiS
             return $this->processPostAdd();
         }
 
-        parent::processPost($data, $context);
-
-        return null;
+        return parent::processPost($data, $context);
     }
 
     /**
