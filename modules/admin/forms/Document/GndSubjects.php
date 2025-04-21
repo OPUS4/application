@@ -37,6 +37,7 @@ use Opus\Common\DocumentInterface;
 class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
 {
     public const ELEMENT_ADD          = 'Add';
+    public const ELEMENT_SUBJECTS     = 'Subjects';
     public const ELEMENT_ADD_SUBJECTS = 'AddSubjects';
     public const SUBFORM_VALUES       = 'Values';
 
@@ -71,6 +72,11 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
 
         $this->addElement('submit', self::ELEMENT_ADD, [
             'order' => 1000,
+            'label' => 'admin_button_add',
+        ]);
+
+        $this->addElement('textarea', self::ELEMENT_SUBJECTS);
+        $this->addElement('submit', self::ELEMENT_ADD_SUBJECTS, [
             'label' => 'admin_button_add',
         ]);
 
@@ -153,9 +159,50 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
                 ['tag' => 'a', 'placement' => 'prepend', 'name' => 'current']
             );
             return Admin_Form_Document::RESULT_SHOW;
+        } else if (
+            array_key_exists(self::ELEMENT_ADD_SUBJECTS, $data)
+            && array_key_exists(self::ELEMENT_SUBJECTS, $data)
+        ) {
+            $this->addMultipleSubjectsFromString($data[self::ELEMENT_SUBJECTS]);
+            return Admin_Form_Document::RESULT_SHOW;
         }
 
         return parent::processPost($data, $context);
+    }
+
+    /**
+     * @param string $value
+     */
+    public function addMultipleSubjectsFromString($value)
+    {
+        if (strlen(trim($value)) > 0) {
+            $value    = preg_replace('/,/', PHP_EOL, $value);
+            $subjects = explode(PHP_EOL, $value);
+
+            $existingSubjects = [];
+
+            $models = $this->valuesSubForm->getSubFormModels();
+            foreach ($models as $model) {
+                $existingSubjects[] = $model->getValue();
+            }
+
+            foreach ($subjects as $subject) {
+                $subject = trim($subject);
+                if (strlen($subject) > 0 && ! in_array($subject, $existingSubjects)) {
+                    $subform = $this->valuesSubForm->appendSubForm();
+                    $subform->getElement('Value')->setValue($subject);
+                }
+            }
+
+            // Jump to new subject elements
+            $subform->addDecorator(
+                ['currentAnchor' => 'HtmlTag'],
+                ['tag' => 'a', 'placement' => 'prepend', 'name' => 'current']
+            );
+
+            // Clear input textarea
+            $this->getElement(self::ELEMENT_SUBJECTS)->setValue(null);
+        }
     }
 
     /**
