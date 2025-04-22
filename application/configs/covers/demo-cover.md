@@ -47,8 +47,6 @@ graphics: true # specifies whether images should be supported (if true, this wil
 images-dir-name: "images"
 main-logo-name: "logo.png"
 header-left: "Demo Repository"
-header-right: "OPUS 4 Repository"
-header-url: "https://www.opus-repository.org"
 bibliography-intro: "Suggested citation:"
 abstract-heading: "Abstract"
 licence-heading: "Terms of use"
@@ -68,9 +66,9 @@ header-includes: |
   }
   \cohead{}
   \rohead{
-    \subsection{\hfill $header-right$}
+    \subsection{\hfill $config-name$}
     \begin{minipage}[b]{0.30\textwidth}
-    \rightline{\small \url{$header-url$}}
+    \rightline{\small \url{$config-url$}}
     \end{minipage}
   }
   \lofoot{

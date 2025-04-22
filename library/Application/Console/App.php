@@ -31,7 +31,7 @@
 
 use Opus\Bibtex\Import\Console\BibtexImportCommand;
 use Opus\Bibtex\Import\Console\BibtexListCommand;
-use Opus\Pdf\Console\CoverGenerateCommand;
+use Opus\Common\Console\DefaultCommandProvider;
 use Opus\Search\Console\ExtractCommand;
 use Opus\Search\Console\ExtractFileCommand;
 use Opus\Search\Console\IndexCommand;
@@ -41,13 +41,21 @@ use Symfony\Component\Console\Application;
 /**
  * Command line application for OPUS 4 management tasks.
  *
- * TODO get list of Commands from configuration/registration (allow modules to add commands, decentralize the code)
+ * TODO CommandProvider for opus4-job (move commands)
+ * TODO CommandProvider for opus4-search
  */
 class Application_Console_App extends Application
 {
     public function __construct()
     {
         parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
+
+        $commandProvider = new DefaultCommandProvider();
+        $commands        = $commandProvider->getCommands();
+
+        foreach ($commands as $command) {
+            $this->add($command);
+        }
 
         $this->add(new IndexCommand());
         $this->add(new RemoveCommand());
@@ -69,9 +77,8 @@ class Application_Console_App extends Application
         $this->add(new BibtexImportCommand());
         $this->add(new BibtexListCommand());
         $this->add(new Application_Console_Debug_DocumentXmlCommand());
-        $this->add(new CoverGenerateCommand());
 
-        // TODO use ModelCommandProvider (with OPUS 4.8.1)
+        // TODO use ModelCommandProvider
         $this->add(new Application_Console_Model_EnrichmentImportCommand());
         $this->add(new Application_Console_Model_EnrichmentListCommand());
         $this->add(new Application_Console_Model_EnrichmentExportCommand());

@@ -56,10 +56,44 @@ class Solrsearch_BrowseController extends Application_Controller_Action
         $collectionRoles                = new Solrsearch_Model_CollectionRoles();
         $this->view->collectionRoles    = $collectionRoles->getAllVisible();
         $this->view->showSeriesBrowsing = $this->seriesUtil->hasDisplayableSeries();
+
+        $config = $this->getConfig();
+
+        $facetManager = new Application_Search_FacetManager();
+        $activeFacets = $facetManager->getActiveFacets();
+
+        $this->view->showLatestDocuments =
+            isset($config->browsing->showLatestDocuments)
+            && filter_var($config->browsing->showLatestDocuments, FILTER_VALIDATE_BOOLEAN);
+
+        $this->view->showDocumentTypes =
+            isset($config->browsing->showDocumentTypes)
+            && filter_var($config->browsing->showDocumentTypes, FILTER_VALIDATE_BOOLEAN)
+            && in_array('doctype', $activeFacets);
+
+        $this->view->showYears =
+            isset($config->browsing->showYears)
+            && filter_var($config->browsing->showYears, FILTER_VALIDATE_BOOLEAN)
+            && in_array('year', $activeFacets);
     }
 
     public function doctypesAction()
     {
+        $config = $this->getConfig();
+
+        $facetManager = new Application_Search_FacetManager();
+        $activeFacets = $facetManager->getActiveFacets();
+
+        if (
+            ! (isset($config->browsing->showDocumentTypes)
+                && filter_var($config->browsing->showDocumentTypes, FILTER_VALIDATE_BOOLEAN)
+                && in_array('doctype', $activeFacets))
+        ) {
+            $this->_helper->Redirector->redirectTo(
+                'index'
+            );
+        }
+
         $facetname = 'doctype';
         $query     = new Query(Query::FACET_ONLY);
         $query->setFacetField($facetname);
@@ -84,6 +118,21 @@ class Solrsearch_BrowseController extends Application_Controller_Action
 
     public function yearsAction()
     {
+        $config = $this->getConfig();
+
+        $facetManager = new Application_Search_FacetManager();
+        $activeFacets = $facetManager->getActiveFacets();
+
+        if (
+            ! (isset($config->browsing->showYears)
+                && filter_var($config->browsing->showYears, FILTER_VALIDATE_BOOLEAN)
+                && in_array('year', $activeFacets))
+        ) {
+            $this->_helper->Redirector->redirectTo(
+                'index'
+            );
+        }
+
         $facetname = 'year';
 
         $query = new Query(Query::FACET_ONLY);

@@ -1,5 +1,75 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.14 - 2025-04-22
+
+Es wurden kleinere Fehler behoben und einige Funktionen hinzugefügt bzw.
+verbessert.
+
+### Metadaten-Formular
+
+Im Bereich zum Editieren von GND-Schlagwörtern gibt es jetzt ein zusätzliches
+Eingabefeld mit Hinzufügen-Button. Damit können mehrere Schlagwörter, durch 
+Kommas oder Zeilenumbrüche getrennt, in einem Schritt hinzugefügt werden. 
+Bereits existierende Schlagwörter werden dabei ignoriert. Externe Schlüssel
+können nicht angegeben werden.
+
+### Personen-Formular
+
+Bei der Validierung von GND-Werten werden jetzt auch SWD- und GKD-Prüfziffern 
+berücksichtigt.
+
+### Browsing
+
+Das Browsing über Dokumenttypen oder Jahre, wird automatisch abgeschaltet, 
+wenn die entsprechende, notwendige Facette nicht konfiguriert ist.
+
+Das Browsing für die neuesten Dokumente, die Dokumenttypen und Jahre kann
+jetzt auch in der Konfiguration gezielt abgeschaltet werden.
+
+    browsing.showLatestDocuments = 1
+    browsing.showDocumentTypes = 1
+    browsing.showYears = 1
+
+### PDF-Deckblätter
+
+Das Erscheinungsdatum auf dem Deckblatt richtet sich jetzt nach der Option,
+die auch für die Steuerung der Indexierung der Jahr-Facette verwendet wird.
+
+    search.index.field.year.order = PublishedDate,PublishedYear
+
+Die Methode, um die PDFs für Deckblatt und Dokument miteinander zu verbinden,
+kann nun konfiguriert werden.
+
+    pdf.covers.concatClass = 'Opus\Pdf\PdfUniteConcatenator'
+
+Die neue Klasse, `PdfUniteConcatenator`, ist jetzt der Default, weil es damit 
+weniger Schwierigkeiten mit PDFs gibt, die Kompression verwenden. Das 
+`pdfunite` Kommando im System verfügbar sein. Es ist Teil der `poppler-utils`. 
+
+    $ sudo apt install poppler-utils
+
+Wenn die Zusammenführung der PDFs fehlschlägt, wird das Original-PDF 
+ausgeliefert. Die alte Verknüpfungsmethode für PDFs ist mit folgender
+Konfiguration verfügbar.
+
+    pdf.covers.concatClass = 'Opus\Pdf\LibMergePdfConcatenator'
+
+#### PDF Kommandos 
+
+Das `bin/opus4` Kommando, um ein Deckblatt zu generieren (bisher 
+`cover:generate`), wurde umbenannt. 
+
+    $ bin/opus4 pdf:generate-cover
+
+Wie immer kann das Kommando auch mit einem eindeutigen, verkürzten Namen
+verwendet werden, also z.B. `pdf:generate` oder sogar `p:g`.
+
+Neu hinzugekommen ist das Kommando `pdf:concat` mit dem sich zwei PDF-Dateien
+verknüpfen lassen. Damit kann die konfigurierte Concatenator-Klasse getestet
+werden.
+
+    $ bin/opus4 pdf:concat cover.pdf document.pdf merged.pdf
+
 ## Patch Release 4.8.0.13 - 2025-04-08
 
 Dieser Patch Release implementiert kleinere Features im Zusammenhang mit OCRID 
