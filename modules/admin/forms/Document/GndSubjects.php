@@ -116,8 +116,8 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
     }
 
     /**
-     * @param array $post
-     * @param DocumentInterface $document
+     * @param array                  $post
+     * @param DocumentInterface|null $document
      */
     public function constructFromPost($post, $document = null)
     {
