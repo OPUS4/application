@@ -5,6 +5,14 @@
 Es wurden kleinere Fehler behoben und einige Funktionen hinzugefügt bzw.
 verbessert.
 
+### Metadaten-Formular
+
+Im Bereich zum Editieren von GND-Schlagwörtern gibt es jetzt ein zusätzliches
+Eingabefeld mit Hinzufügen-Button. Damit können mehrere Schlagwörter, durch 
+Kommas oder Zeilenumbrüche getrennt, in einem Schritt hinzugefügt werden. 
+Bereits existierende Schlagwörter werden dabei ignoriert. Externe Schlüssel
+können nicht angegeben werden.
+
 ### Personen-Formular
 
 Bei der Validierung von GND-Werten werden jetzt auch SWD- und GKD-Prüfziffern 
