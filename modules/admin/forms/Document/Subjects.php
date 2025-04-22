@@ -48,19 +48,7 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
     {
         parent::init();
 
-        $this->addSubForm(
-            new Admin_Form_Document_SubjectType(
-                'swd',
-                [
-                    'columns' => [
-                        [],
-                        ['label' => 'Opus_Subject_Value'],
-                        ['label' => 'ExternalKey'],
-                    ],
-                ]
-            ),
-            'Swd'
-        );
+        $this->addSubForm(new Admin_Form_Document_GndSubjects(), 'Swd');
 
         $this->addSubForm(
             new Admin_Form_Document_SubjectType(
