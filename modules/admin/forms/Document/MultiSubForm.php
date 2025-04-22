@@ -173,6 +173,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     public function constructFromPost($post, $document = null)
     {
+        if ($post === null) {
+            return;
+        }
+
         $keys = array_keys($post);
 
         $position = 0;
