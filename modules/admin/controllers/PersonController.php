@@ -277,11 +277,14 @@ class Admin_PersonController extends Application_Controller_Action
 
                             $changes = $form->getChanges();
 
+                            // TODO find better way to access convertToFieldNames or avoid it entirely
+                            $personModel = Person::new();
+
                             $confirmForm = new Admin_Form_PersonsConfirm();
                             $confirmForm->getElement(Admin_Form_PersonsConfirm::ELEMENT_FORM_ID)->setValue($formId);
-                            $confirmForm->setOldValues($personRepository->convertToFieldNames($personValues));
+                            $confirmForm->setOldValues($personModel->convertToFieldNames($personValues));
                             $confirmForm->populateFromModel($person);
-                            $confirmForm->setChanges($personRepository->convertToFieldNames($changes));
+                            $confirmForm->setChanges($personModel->convertToFieldNames($changes));
                             $confirmForm->setAction($this->view->url([
                                 'module'     => 'admin',
                                 'controller' => 'person',

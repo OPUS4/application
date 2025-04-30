@@ -171,6 +171,8 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         $enrichmentType = $this->initEnrichmentType($enrichmentKey->getType());
         if ($enrichmentType !== null) {
+            // TODO this should not be necessary - The EnrichmentType defines the options, but the options are not for
+            //      the type, but for the EnrichmentKey.
             $enrichmentType->setOptions($enrichmentKey->getOptions());
 
             $optionsElement = $this->getElement(self::ELEMENT_OPTIONS);

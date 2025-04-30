@@ -27,7 +27,7 @@ var doi             = null;
 // Diese Funktion wird beim Klick auf den Button "DOI-Daten übernehmen" aufgerufen und steuert alles Weitere
 function startCheck()
 {
-    doi = document.getElementById("IdentifierDoi").value.trim();
+    var doi = document.getElementById("IdentifierDoi").value.trim();
     if (doi.trim() === '') {
         // Feld "IdentifierDoi" ist leer
         openDialog(translations.doiimport_header_note, translations.doiimport_hint_insertDoi, "note");

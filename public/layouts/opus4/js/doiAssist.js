@@ -325,7 +325,9 @@ function getAuthor(json)
 
         var authors = [];
         var _laenge = json.message.author.length;
+
         if (_laenge > 0) {
+            // Zuerst alle Autoren in das 'authors'-Array einfügen
             for (_z = 0; _z < _laenge; _z++) {
                 if (json.message.author[_z].given != null || json.message.author[_z].family != null) {
                     vorname  = json.message.author[_z].given;
@@ -337,22 +339,39 @@ function getAuthor(json)
                             if (re != null) {
                                 orcid = re[0];
                             } else {
-                                orcid = ''
+                                orcid = '';
                             }
                         } else {
                             orcid = json.message.author[_z].ORCID;
                         }
                     } else {
-                        orcid = ''
+                        orcid = '';
                     }
                     complete_name = nachname + ',' + vorname + ',' + orcid;
                     authors.push(complete_name);
                 }
             }
+
+            // Prüfen, ob es mehr als 50 Autoren gibt
+            if (_laenge > 50) {
+                // Den letzten Autor extrahieren
+                let lastAuthor;
+                //lastAuthor = authors[_laenge - 1];
+                if (authors[_laenge - 1]) {
+                    lastAuthor = authors[_laenge - 1];
+                } else {
+                    lastAuthor = authors[_laenge - 2];
+                }
+                // Entferne den letzten Autor vom Array (da wir ihn an Position 50 wieder einfügen)
+                authors.pop();
+                // Füge den letzten Autor an der 50. Position ein
+                authors.splice(49, 0, lastAuthor);
+                //alert("lastAuthor: "+lastAuthor);
+            }
         }
-        return authors
+        return authors; // Gibt das Autoren-Array direkt zurück
     } else {
-        return ''
+        return '';
     }
 }
 exports.getAuthor = getAuthor;
