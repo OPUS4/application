@@ -17,6 +17,10 @@ INSERT INTO `enrichmentkeys` (`name`) VALUES
 ('opus_doiImportPopulated'),
 ('opus_import_origin'),
 ('opus_doi_flag');
+('OpusConferenceName');
+('OpusConferencePlace');
+('OpusConferenceNumber');
+('OpusConferenceYear');
 
 
 -- 'opus_doi_json': Enthält nach dem DOI-Import die kompletten Metadaten des Dokuments von Crossref. Wird gebraucht, wenn die Page im Browser neu geladen wird (nicht user-relevant).
