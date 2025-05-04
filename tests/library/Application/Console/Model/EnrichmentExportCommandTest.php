@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\EnrichmentKey;
-use Opus\Enrichment\SelectType;
+use Opus\Common\Model\FieldType\SelectType;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 

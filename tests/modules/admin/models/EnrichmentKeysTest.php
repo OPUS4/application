@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\EnrichmentKey;
-use Opus\Enrichment\RegexType;
+use Opus\Common\Model\FieldType\RegexType;
 use Opus\Translate\Dao;
 
 class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
