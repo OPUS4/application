@@ -34,7 +34,7 @@ use Opus\Common\DocumentInterface;
 /**
  * Unterformular für die Personen in einer bestimmten Role für ein Dokument.
  */
-class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm
+class Admin_Form_Document_PersonRole extends Admin_Form_Document_DefaultMultiSubForm
 {
     /**
      * Name fuer Button um Person hinzuzufuegen.

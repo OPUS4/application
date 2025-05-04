@@ -53,7 +53,7 @@ class Admin_Form_Document_Titles extends Admin_Form_Document_Section
 
         $this->addSubForm(new Admin_Form_Document_TitlesMain(), 'Main');
         $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
+            new Admin_Form_Document_DefaultMultiSubForm(
                 'Admin_Form_Document_Title',
                 'TitleAdditional',
                 new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
@@ -61,7 +61,7 @@ class Admin_Form_Document_Titles extends Admin_Form_Document_Section
             'Additional'
         );
         $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
+            new Admin_Form_Document_DefaultMultiSubForm(
                 'Admin_Form_Document_Title',
                 'TitleParent',
                 new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
@@ -69,7 +69,7 @@ class Admin_Form_Document_Titles extends Admin_Form_Document_Section
             'Parent'
         );
         $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
+            new Admin_Form_Document_DefaultMultiSubForm(
                 'Admin_Form_Document_Title',
                 'TitleSub',
                 new Application_Form_Validate_MultiSubForm_RepeatedLanguages()

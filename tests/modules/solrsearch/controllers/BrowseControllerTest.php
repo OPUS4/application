@@ -360,4 +360,34 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->assertXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
         $this->assertXpath('//a[contains(@href, "solrsearch/browse/years")]');
     }
+
+    public function testMissingDoctypeFacetDisablesDoctypeBrowsing()
+    {
+        $this->adjustConfiguration([
+            'searchengine' => ['solr' => ['facets' => 'author_facet,year,language,has_fulltext']],
+        ]);
+
+        $facetManager = new Application_Search_FacetManager();
+
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+
+        $this->assertNotXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/years")]');
+    }
+
+    public function testMissingYearFacetDisablesYearBrowsing()
+    {
+        $this->adjustConfiguration([
+            'searchengine' => ['solr' => ['facets' => 'author_facet,doctype,language,has_fulltext']],
+        ]);
+
+        $facetManager = new Application_Search_FacetManager();
+
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+
+        $this->assertXpath('//a[contains(@href, "solrsearch/browse/doctypes")]');
+        $this->assertNotXpath('//a[contains(@href, "solrsearch/browse/years")]');
+    }
 }

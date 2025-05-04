@@ -310,8 +310,8 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
         $person = $this->getPerson();
 
         if ($person !== null) {
-            $persons = Person::getModelRepository();
-
+            $persons = Person::new();
+            // TODO code should not depend on convertFieldnameToColumn (Framework internals)
             $columnName = $persons->convertFieldnameToColumn($element->getName());
             if (array_key_exists($columnName, $person)) {
                 $displayValue = $person[$columnName];

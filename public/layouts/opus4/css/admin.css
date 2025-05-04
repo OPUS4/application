@@ -1930,6 +1930,10 @@ ul.links input:hover {
     background-color: #FFD4D4;
 }
 
+.admin_document_error {
+    background-color: #FFD4D4;
+}
+
 /* Definitionsliste für Anzeige auf Dokumenttypenseite. */
 
 .adminContainer dl.table {

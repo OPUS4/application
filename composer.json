@@ -20,6 +20,7 @@
     "ext-fileinfo": "*",
     "ext-readline": "*",
     "ext-sockets": "*",
+    "ext-yaml": "*",
     "opus4/zf1-future": "1.21.*",
     "jpgraph/jpgraph": "dev-master",
     "opus4-repo/opus4-common": "dev-master as 4.8.1",
@@ -35,6 +36,7 @@
     "components/jqueryui": "1.12.*",
     "oomphinc/composer-installers-extender": "^2.0",
     "symfony/console": "*",
+    "symfony/yaml": "*",
     "pear/log": "*"
   },
   "require-dev": {

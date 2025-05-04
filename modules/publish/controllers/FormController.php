@@ -53,6 +53,7 @@ class Publish_FormController extends Application_Controller_Action
     {
         $this->session = new Zend_Session_Namespace('Publish');
         parent::init();
+        $this->view->headScript()->prependFile($this->view->layoutPath() . '/js/form-enter.js');
     }
 
     /**
@@ -104,7 +105,7 @@ class Publish_FormController extends Application_Controller_Action
         $postData['MAX_FILE_SIZE'] = $config->publish->maxfilesize;
 
         $indexForm->populate($postData);
-        $this->initializeDocument($postData);
+        $this->initializeDocument($postData); // TODO do not create a document unnecessarily
 
         $files = $this->document->getFile();
         if (! empty($files)) {

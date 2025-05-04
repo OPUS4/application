@@ -34,7 +34,7 @@ use Opus\Common\DocumentInterface;
 /**
  * Formular fuer alle Dateien eines Dokuments.
  */
-class Admin_Form_Files extends Admin_Form_Document_MultiSubForm
+class Admin_Form_Files extends Admin_Form_Document_DefaultMultiSubForm
 {
     public const ELEMENT_IMPORT = 'Import';
 

@@ -51,7 +51,7 @@
     <field name="Language" required="yes" formelement="select" datatype="Language" multiplicity="1">
         <default value="deu" edit="yes" public="yes"/>
     </field>
-    
+
     <field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*">
         <subfield name="FirstName" required="no" formelement="Text" datatype="Text"/>
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text"/>
@@ -65,11 +65,11 @@
     <field name="TitleAbstract" required="no" formelement="textarea" datatype="Title" multiplicity="4"/>
 
     <field name="TitleAdditional" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
-    
+
     <field name="TitleParent" required="no" formelement="text" datatype="Title" multiplicity="1"/>
     <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    
+
     <field name="ArticleNumber" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PageNumber" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PageFirst" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
@@ -83,20 +83,21 @@
     <field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*">
         <subfield name="FirstName" required="no" formelement="text" datatype="Text"/>
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
+        <subfield name="IdentifierOrcid" required="no" formelement="text" datatype="Identifier"/>
     </field>
     <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PersonTranslator" required="no" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="FirstName" required="no" formelement="text" datatype="Text"/>
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
     </field>
-    
+
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 
     <field name="SubjectUncontrolled" required="no" formelement="Select" datatype="Subject" multiplicity="*"/>
-    
+
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
-    <field name="IdentifierIssn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>    
+    <field name="IdentifierIssn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     <field name="IdentifierUrl" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
 
 </documenttype>

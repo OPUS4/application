@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\EnrichmentKey;
+use Opus\Common\Model\FieldType\RegexType;
 use Opus\Translate\Dao;
 
 class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
@@ -225,5 +227,65 @@ class Admin_Model_EnrichmentKeysTest extends ControllerTestCase
 
         $translations = $database->getTranslations('default');
         $this->assertCount(0, $translations);
+    }
+
+    public function testGetTranslation()
+    {
+        $model = new Admin_Model_EnrichmentKeys();
+
+        $key = 'MyTestEnrichment';
+
+        $model->createTranslations($key);
+
+        $translations = $model->getTranslations($key);
+
+        $model->removeTranslations($key);
+
+        $this->assertCount(6, $translations);
+
+        $translationKeys = $model->getSupportedKeys();
+
+        foreach ($translationKeys as $translationKey) {
+            $this->assertArrayHasKey($translationKey, $translations);
+            $this->assertEquals('MyTestEnrichment', $translations[$translationKey]['de']);
+            $this->assertEquals('MyTestEnrichment', $translations[$translationKey]['en']);
+        }
+    }
+
+    public function testGetEnrichmentConfig()
+    {
+        $model = new Admin_Model_EnrichmentKeys();
+
+        $key = 'MyTestEnrichment';
+
+        $enrichment = EnrichmentKey::fetchByName($key);
+
+        if ($enrichment === null) {
+            $enrichment = EnrichmentKey::new();
+            $enrichment->setName($key);
+            $enrichment->setType('RegexType');
+            $enrichmentType = new RegexType();
+            $enrichmentType->setRegex('/[a-z]+/');
+            $enrichment->setOptions($enrichmentType->getOptions());
+            $enrichment->store();
+        }
+
+        $this->addModelToCleanup($enrichment);
+
+        $model->createTranslations($key);
+
+        $config = $model->getEnrichmentConfig($key);
+
+        // cleanup
+        $model->removeTranslations($key);
+
+        $this->assertArrayHasKey('name', $config);
+        $this->assertEquals($key, $config['name']);
+        $this->assertArrayHasKey('translations', $config);
+        $this->assertCount(6, $config['translations']);
+
+        $this->assertArrayHasKey('options', $config);
+        $this->assertEquals('none', $config['options']['validation']);
+        $this->assertEquals('/[a-z]+/', $config['options']['regex']);
     }
 }

@@ -178,6 +178,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="PersonEditorIdentifierOrcid">
+      <tuv xml:lang="en">
+        <seg>ORCID iD</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ORCID iD</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="PersonTranslatorFirstName">
       <tuv xml:lang="en">
         <seg>First name</seg>

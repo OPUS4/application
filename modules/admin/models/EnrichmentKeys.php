@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\EnrichmentKey;
 use Opus\Translate\Dao;
 
 /**
@@ -41,12 +42,12 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
 {
     /** @var string[] */
     private $translationKeyPatterns = [
-        'hint_Enrichment%s',
-        'header_Enrichment%s',
-        'group%s',
-        'hint_group%s',
-        'button_label_add_one_moreEnrichment%s',
-        'button_label_deleteEnrichment%s',
+        'hint'         => 'hint_Enrichment%s',
+        'header'       => 'header_Enrichment%s',
+        'group'        => 'group%s',
+        'groupHint'    => 'hint_group%s',
+        'buttonAdd'    => 'button_label_add_one_moreEnrichment%s',
+        'buttonDelete' => 'button_label_deleteEnrichment%s',
     ];
 
     /**
@@ -110,34 +111,83 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
      *
      * @param string      $name Name of enrichment
      * @param string|null $oldName Optionally old name if it has been changed
+     * @param array|null  $translations
      *
      * TODO create keys if they don't exist
      * TODO what happens if renameKey into keys that already exist?
+     * TODO support more languages
      */
-    public function createTranslations($name, $oldName = null)
+    public function createTranslations($name, $oldName = null, $translations = null)
     {
         $patterns = $this->translationKeyPatterns;
 
         $database = new Dao();
         $manager  = new Application_Translate_TranslationManager();
 
+        if ($translations === null) {
+            $translations = [];
+        }
+
         if ($oldName !== null && $name !== $oldName) {
+            $patterns['label'] = 'Enrichment%s'; // TODO avoid custom handling for 'label'
+
             foreach ($patterns as $pattern) {
                 $key    = sprintf($pattern, $name);
                 $oldKey = sprintf($pattern, $oldName);
                 $database->renameKey($oldKey, $key, 'default');
             }
         } else {
-            foreach ($patterns as $pattern) {
+            if (isset($translations['label'])) {
+                $patterns['label'] = 'Enrichment%s'; // TODO avoid custom handling for 'label'
+            }
+            foreach ($patterns as $patternName => $pattern) {
                 $key = sprintf($pattern, $name);
                 if (! $manager->keyExists($key)) {
+                    $enValue = $name;
+                    if (isset($translations[$patternName]['en'])) {
+                        $enValue = $translations[$patternName]['en'];
+                    }
+
+                    $deValue = $name;
+                    if (isset($translations[$patternName]['de'])) {
+                        $deValue = $translations[$patternName]['de'];
+                    }
+
                     $database->setTranslation($key, [
-                        'en' => $name,
-                        'de' => $name,
+                        'en' => $enValue,
+                        'de' => $deValue,
                     ], 'default');
                 }
             }
         }
+    }
+
+    /**
+     * @param string $name Name of enrichment key
+     * @return string[]
+     *
+     * TODO 'label' translation handled separately (here and in admin form) - unify handling?
+     */
+    public function getTranslations($name)
+    {
+        $patterns = $this->translationKeyPatterns;
+
+        $patterns['label'] = 'Enrichment%s';
+
+        $manager = new Application_Translate_TranslationManager();
+
+        $translations = [];
+
+        $allTranslations = $manager->getMergedTranslations();
+
+        foreach ($patterns as $patternName => $pattern) {
+            $key = sprintf($pattern, $name);
+            if (isset($allTranslations[$key]['translations'])) {
+                $translations[$patternName] = $allTranslations[$key]['translations'];
+            }
+        }
+
+        return $translations;
     }
 
     /**
@@ -151,6 +201,8 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
 
         $database = new Dao();
 
+        $patterns['label'] = 'Enrichment%s'; // TODO avoid custom handling for 'label'
+
         foreach ($patterns as $pattern) {
             $key = sprintf($pattern, $name);
             $database->remove($key, 'default');
@@ -163,5 +215,51 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
     public function getKeyPatterns()
     {
         return $this->translationKeyPatterns;
+    }
+
+    /**
+     * @param string $name
+     * @return string[]
+     */
+    public function getEnrichmentConfig($name)
+    {
+        $enrichment       = EnrichmentKey::fetchByName($name);
+        $enrichmentConfig = $enrichment->toArray();
+
+        // remove NULL values
+        $enrichmentConfig = array_filter($enrichmentConfig, function ($value) {
+            return $value !== null;
+        });
+
+        // remove 'Type' from type name (TODO this should not be necessary later)
+        if (isset($enrichmentConfig['Type'])) {
+            $type                     = preg_replace('/Type$/', '', $enrichmentConfig['Type']);
+            $enrichmentConfig['Type'] = $type;
+        }
+
+        // add translations to configuration
+        $translations = $this->getTranslations($name);
+        if (count($translations) > 0) {
+            $enrichmentConfig['translations'] = $translations;
+        }
+
+        // handle options
+        if (isset($enrichmentConfig['Options'])) {
+            $options                     = json_decode($enrichmentConfig['Options'], true);
+            $enrichmentConfig['Options'] = $options;
+        }
+
+        // use lowercase keys in yaml
+        $enrichmentConfig = array_change_key_case($enrichmentConfig, CASE_LOWER);
+
+        return $enrichmentConfig;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getSupportedKeys()
+    {
+        return array_keys($this->getKeyPatterns());
     }
 }

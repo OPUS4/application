@@ -59,24 +59,35 @@ class Solrsearch_BrowseController extends Application_Controller_Action
 
         $config = $this->getConfig();
 
-        if (isset($config->browsing->showLatestDocuments)) {
-            $this->view->showLatestDocuments = filter_var($config->browsing->showLatestDocuments, FILTER_VALIDATE_BOOLEAN);
-        }
-        if (isset($config->browsing->showDocumentTypes)) {
-            $this->view->showDocumentTypes = filter_var($config->browsing->showDocumentTypes, FILTER_VALIDATE_BOOLEAN);
-        }
-        if (isset($config->browsing->showYears)) {
-            $this->view->showYears = filter_var($config->browsing->showYears, FILTER_VALIDATE_BOOLEAN);
-        }
+        $facetManager = new Application_Search_FacetManager();
+        $activeFacets = $facetManager->getActiveFacets();
+
+        $this->view->showLatestDocuments =
+            isset($config->browsing->showLatestDocuments)
+            && filter_var($config->browsing->showLatestDocuments, FILTER_VALIDATE_BOOLEAN);
+
+        $this->view->showDocumentTypes =
+            isset($config->browsing->showDocumentTypes)
+            && filter_var($config->browsing->showDocumentTypes, FILTER_VALIDATE_BOOLEAN)
+            && in_array('doctype', $activeFacets);
+
+        $this->view->showYears =
+            isset($config->browsing->showYears)
+            && filter_var($config->browsing->showYears, FILTER_VALIDATE_BOOLEAN)
+            && in_array('year', $activeFacets);
     }
 
     public function doctypesAction()
     {
         $config = $this->getConfig();
 
+        $facetManager = new Application_Search_FacetManager();
+        $activeFacets = $facetManager->getActiveFacets();
+
         if (
-            isset($config->browsing->showDocumentTypes) &&
-            ! filter_var($config->browsing->showDocumentTypes, FILTER_VALIDATE_BOOLEAN)
+            ! (isset($config->browsing->showDocumentTypes)
+                && filter_var($config->browsing->showDocumentTypes, FILTER_VALIDATE_BOOLEAN)
+                && in_array('doctype', $activeFacets))
         ) {
             $this->_helper->Redirector->redirectTo(
                 'index'
@@ -109,9 +120,13 @@ class Solrsearch_BrowseController extends Application_Controller_Action
     {
         $config = $this->getConfig();
 
+        $facetManager = new Application_Search_FacetManager();
+        $activeFacets = $facetManager->getActiveFacets();
+
         if (
-            isset($config->browsing->showYears) &&
-            ! filter_var($config->browsing->showYears, FILTER_VALIDATE_BOOLEAN)
+            ! (isset($config->browsing->showYears)
+                && filter_var($config->browsing->showYears, FILTER_VALIDATE_BOOLEAN)
+                && in_array('year', $activeFacets))
         ) {
             $this->_helper->Redirector->redirectTo(
                 'index'

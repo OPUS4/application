@@ -1,0 +1,18 @@
+# Enrichment configuration for conference types
+name: conferenceType
+
+type: Select
+
+translations:
+  label:
+    de: Art der Konferenzveröffentlichung
+    en: Conference Type
+
+options:
+  validation: strict
+  values:
+    - Konferenzband
+    - Konferenzartikel
+    - Konferenz-Poster
+    - Konferenz-Abstract
+    - Sonstiges

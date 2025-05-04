@@ -1,0 +1,6 @@
+# Example of configuration for multiple enrichments
+enrichments:
+  - name: testKey1
+  - name: testKey2
+  - name: testKey3
+  - name: testKey4

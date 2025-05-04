@@ -341,6 +341,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
             'input#Document-Collections-Add',
             'input#Document-Content-Abstracts-Add',
             'input#Document-Content-Subjects-Swd-Add',
+            'input#Document-Content-Subjects-Swd-AddSubjects',
             'input#Document-Content-Subjects-Psyndex-Add',
             'input#Document-Content-Subjects-Uncontrolled-Add',
             'input#Document-IdentifiersAll-Identifiers-Add',
@@ -585,7 +586,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         );
 
         // Subjects
-        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Subject0-Value"]', 'Berlin');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Values-Subject0-Value"]', 'Berlin');
 
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Language"]', 'Deutsch');
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
@@ -851,7 +852,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         );
 
         // Subjects
-        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Subject0-Value"]', 'Berlin');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Values-Subject0-Value"]', 'Berlin');
 
         $this->assertQueryContentContains(
             '//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Language"]',

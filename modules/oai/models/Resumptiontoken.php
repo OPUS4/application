@@ -50,6 +50,9 @@ class Oai_Model_Resumptiontoken
     /** @var int Holds total amount of document ids */
     private $totalIds = 0;
 
+    /** @var string Holds the set specification (if given) */
+    private $set;
+
     /**
      *  Returns current holded document ids.
      *
@@ -98,6 +101,16 @@ class Oai_Model_Resumptiontoken
     public function getTotalIds()
     {
         return $this->totalIds;
+    }
+
+    /**
+     * Returns the set specification.
+     *
+     * @return string|null
+     */
+    public function getSet()
+    {
+        return $this->set;
     }
 
     /**
@@ -152,5 +165,15 @@ class Oai_Model_Resumptiontoken
     public function setTotalIds($totalIds)
     {
         $this->totalIds = $totalIds;
+    }
+
+    /**
+     * Sets the set specification.
+     *
+     * @param string $set
+     */
+    public function setSet($set)
+    {
+        $this->set = $set;
     }
 }

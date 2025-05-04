@@ -1,0 +1,17 @@
+# Example of SELECT enrichment with simple options
+# with 'validation: none' - 'none' meaning invalid stored values are allowed to remain
+name: conferenceType
+
+type: Select
+
+translations:
+  label:
+    de: Art der Konferenzveröffentlichung
+    en: Conference Type
+
+options: |
+  Konferenzband
+  Konferenzartikel
+  Konferenz-Poster
+  Konferenz-Abstract
+  Sonstiges

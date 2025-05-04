@@ -51,6 +51,7 @@ class Admin_DocumentController extends Application_Controller_Action
     {
         parent::init();
         $this->documentsHelper = $this->_helper->getHelper('Documents');
+        $this->view->headScript()->prependFile($this->view->layoutPath() . '/js/form-enter.js');
     }
 
     /**

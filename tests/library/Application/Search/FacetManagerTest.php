@@ -90,7 +90,7 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
         $facets = $manager->getActiveFacets();
 
-        $this->assertCount(10, $facets);
+        $this->assertCount(11, $facets);
         $this->assertContains('server_state', $facets); // TODO does this make sense?
     }
 

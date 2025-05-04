@@ -120,7 +120,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
         $this->addSubForm(new Admin_Form_Document_Titles(), 'Titles');
         $this->addSubForm(new Admin_Form_Document_Bibliographic(), 'Bibliographic');
         $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
+            new Admin_Form_Document_DefaultMultiSubForm(
                 'Admin_Form_Document_Series',
                 'Series',
                 new Application_Form_Validate_MultiSubForm_RepeatedValues(
@@ -159,7 +159,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
         $subform = new Admin_Form_Document_Section();
         $subform->setLegend('admin_document_section_content');
         $subform->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
+            new Admin_Form_Document_DefaultMultiSubForm(
                 'Admin_Form_Document_Abstract',
                 'TitleAbstract',
                 new Application_Form_Validate_MultiSubForm_RepeatedValues(
@@ -175,8 +175,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm
         // Weiteres Allgemeines
         $this->addSubForm(new Admin_Form_Document_Identifiers(), 'IdentifiersAll');
         $this->addSubForm(new Admin_Form_Document_Licences(), 'Licences');
-        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Patent', 'Patent'), 'Patents');
-        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Note', 'Note'), 'Notes');
+        $this->addSubForm(new Admin_Form_Document_DefaultMultiSubForm('Admin_Form_Document_Patent', 'Patent'), 'Patents');
+        $this->addSubForm(new Admin_Form_Document_DefaultMultiSubForm('Admin_Form_Document_Note', 'Note'), 'Notes');
 
         $this->addSubForm(new Admin_Form_Document_Actions(), 'Actions');
     }
