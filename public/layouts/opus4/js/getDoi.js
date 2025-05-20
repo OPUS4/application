@@ -239,48 +239,60 @@ function expandPages(page)
 
 function expandAuthor(author)
 {
-    if (author[0] !== undefined) {
-        var _laenge      = author.length;
-        var completeName = author[0] + '';
+    // Abbruch, wenn kein Autor vorhanden
+    if (! author[0]) {
+        document.getElementById("Enrichmentopus_doi_flag").value = "true";
+        return;
+    }
 
-        var vorname                                              = completeName.split(',')[1].trim();  // [1] = Vorname
-        document.getElementById("PersonAuthorFirstName_1").value = vorname;
-        finalize("PersonAuthorFirstName_1");
+    const maxAuthors   = 50;
+    const authorLength = author.length;
 
-        var nachname                                            = completeName.split(',')[0].trim();  // [0] = Nachname
-        document.getElementById("PersonAuthorLastName_1").value = nachname;
-        finalize("PersonAuthorLastName_1");
+    // Setzen von Autor-Informationen
+    const setAuthorInfo                  = (index, feld) => {
+        const completeName               = author[index] + '';
+        const [nachname, vorname, orcid] = completeName.split(',').map(s => s.trim());
 
-        if (completeName.split(',')[2].trim() !== '') {
-            var orcid = completeName.split(',')[2].trim();  // [2] = ORCID
-            document.getElementById("PersonAuthorIdentifierOrcid_1").value = orcid;
-            finalize("PersonAuthorIdentifierOrcid_1");
+        document.getElementById(`PersonAuthorFirstName_${feld}`).value = vorname;
+        finalize(`PersonAuthorFirstName_${feld}`);
+
+        document.getElementById(`PersonAuthorLastName_${feld}`).value = nachname;
+        finalize(`PersonAuthorLastName_${feld}`);
+
+        if (orcid) {
+            document.getElementById(`PersonAuthorIdentifierOrcid_${feld}`).value = orcid;
+            finalize(`PersonAuthorIdentifierOrcid_${feld}`);
+        }
+    };
+
+    // Überprüfen und ggf. weitere Autor-Felder hinzufügen
+    let maxFields            = Math.min(maxAuthors, authorLength);
+    const ensureAuthorFields = () => {
+        if (document.getElementById(`PersonAuthorLastName_${maxFields}`) === null) {
+            document.getElementById("addMorePersonAuthor").click();
+            return false;
+        }
+        return true;
+    };
+
+    // Überprüfen und Hinweis für zu viele Autoren
+    if (document.getElementById('PersonAuthorLastName_' + maxAuthors) !== null ) {
+        openDialog(translations.doiimport_header_note, translations.doiimport_hint_manyAuthors.replace('%s', authorLength), "OK");
+    }
+
+    // Ersten Autor setzen
+    setAuthorInfo(0, 1);
+
+    // Weitere Autoren setzen
+    if (ensureAuthorFields()) {
+        const limitedLength = Math.min(authorLength, maxAuthors);
+
+        for (let i = 1; i < limitedLength; i++) {
+            setAuthorInfo(i, i + 1);
         }
 
-        if (document.getElementById('PersonAuthorLastName_' + _laenge) === null) {
-            var button = document.getElementById("addMorePersonAuthor");
-            button.click();
-        } else {
-            var _z;
-            for (_z = 1; _z < _laenge; _z++) {
-                var feld         = _z + 1;
-                var completeName = author[_z] + '';
-                var vorname      = completeName.split(',')[1].trim();  // [1] = Vorname
-                document.getElementById("PersonAuthorFirstName_" + feld).value = vorname;
-                finalize("PersonAuthorFirstName_" + feld);
-                var nachname                                                  = completeName.split(',')[0].trim();  // [0] = Nachname
-                document.getElementById("PersonAuthorLastName_" + feld).value = nachname;
-                finalize("PersonAuthorLastName_" + feld);
-                if (completeName.split(',')[2].trim() !== '') {
-                    var orcid = completeName.split(',')[2].trim();  // [2] = ORCID
-                    document.getElementById("PersonAuthorIdentifierOrcid_" + feld).value = orcid;
-                    finalize("PersonAuthorIdentifierOrcid_" + feld);
-                }
-            }
-            document.getElementById("Enrichmentopus_doi_flag").value = "true";  // Hier wird das Ende der Reloads erreicht! (alle Felder sind vorhanden)
-        }
-    } else {
-        colorPink("PersonAuthorLastName_1");
+        // Flag setzen, dass alle Felder vorhanden sind
+        document.getElementById("Enrichmentopus_doi_flag").value = "true";
     }
 }
 

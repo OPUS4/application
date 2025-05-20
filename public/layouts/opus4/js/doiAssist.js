@@ -8,7 +8,7 @@ function finalize(field)
 {
   // Grüne Farbe und Feldname wird in populatedFields geschrieben, um die Feldfarben nach einem Reload neu aufzubauen
     colorGreen(field);
-    populatedFields.push(field);
+    populatedFields.push(" " + field);
 }
 
 function colorGreen(field)

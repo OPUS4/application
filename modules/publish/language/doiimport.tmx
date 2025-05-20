@@ -124,5 +124,14 @@
             </tuv>
         </tu>
 
+        <tu tuid="doiimport_hint_manyAuthors">
+            <tuv xml:lang="en">
+                <seg>The DOI dataset has too many authors (%s). The first 49 authors and the last author are imported.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Der DOI-Datensatz hat zu viele AutorInnen (%s). Importiert werden die ersten 49 AutorInnen sowie der/die letzte AutorIn.</seg>
+            </tuv>
+        </tu>
+
     </body>
 </tmx>
