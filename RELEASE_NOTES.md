@@ -1,5 +1,223 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.14 - 2025-04-22
+
+Es wurden kleinere Fehler behoben und einige Funktionen hinzugefügt bzw.
+verbessert.
+
+### Metadaten-Formular
+
+Im Bereich zum Editieren von GND-Schlagwörtern gibt es jetzt ein zusätzliches
+Eingabefeld mit Hinzufügen-Button. Damit können mehrere Schlagwörter, durch 
+Kommas oder Zeilenumbrüche getrennt, in einem Schritt hinzugefügt werden. 
+Bereits existierende Schlagwörter werden dabei ignoriert. Externe Schlüssel
+können nicht angegeben werden.
+
+### Personen-Formular
+
+Bei der Validierung von GND-Werten werden jetzt auch SWD- und GKD-Prüfziffern 
+berücksichtigt.
+
+### Browsing
+
+Das Browsing über Dokumenttypen oder Jahre, wird automatisch abgeschaltet, 
+wenn die entsprechende, notwendige Facette nicht konfiguriert ist.
+
+Das Browsing für die neuesten Dokumente, die Dokumenttypen und Jahre kann
+jetzt auch in der Konfiguration gezielt abgeschaltet werden.
+
+    browsing.showLatestDocuments = 1
+    browsing.showDocumentTypes = 1
+    browsing.showYears = 1
+
+### PDF-Deckblätter
+
+Das Erscheinungsdatum auf dem Deckblatt richtet sich jetzt nach der Option,
+die auch für die Steuerung der Indexierung der Jahr-Facette verwendet wird.
+
+    search.index.field.year.order = PublishedDate,PublishedYear
+
+Die Methode, um die PDFs für Deckblatt und Dokument miteinander zu verbinden,
+kann nun konfiguriert werden.
+
+    pdf.covers.concatClass = 'Opus\Pdf\PdfUniteConcatenator'
+
+Die neue Klasse, `PdfUniteConcatenator`, ist jetzt der Default, weil es damit 
+weniger Schwierigkeiten mit PDFs gibt, die Kompression verwenden. Das 
+`pdfunite` Kommando im System verfügbar sein. Es ist Teil der `poppler-utils`. 
+
+    $ sudo apt install poppler-utils
+
+Wenn die Zusammenführung der PDFs fehlschlägt, wird das Original-PDF 
+ausgeliefert. Die alte Verknüpfungsmethode für PDFs ist mit folgender
+Konfiguration verfügbar.
+
+    pdf.covers.concatClass = 'Opus\Pdf\LibMergePdfConcatenator'
+
+#### PDF Kommandos 
+
+Das `bin/opus4` Kommando, um ein Deckblatt zu generieren (bisher 
+`cover:generate`), wurde umbenannt. 
+
+    $ bin/opus4 pdf:generate-cover
+
+Wie immer kann das Kommando auch mit einem eindeutigen, verkürzten Namen
+verwendet werden, also z.B. `pdf:generate` oder sogar `p:g`.
+
+Neu hinzugekommen ist das Kommando `pdf:concat` mit dem sich zwei PDF-Dateien
+verknüpfen lassen. Damit kann die konfigurierte Concatenator-Klasse getestet
+werden.
+
+    $ bin/opus4 pdf:concat cover.pdf document.pdf merged.pdf
+
+## Patch Release 4.8.0.13 - 2025-04-08
+
+Dieser Patch Release implementiert kleinere Features im Zusammenhang mit OCRID 
+iDs und behebt ein paar Fehler. 
+
+Für diesen Release ist `composer update` notwendig, weil auch **opus4-common**
+(4.8.0.1) und **framework** (4.8.0.3) aktualisiert wurden.
+
+### ORCID iDs
+
+In der Frontdoor werden GND und ORCiD iD nun für alle Personen angezeigt.
+
+Die externen Links für GND und ORCID iD werden in einem separaten Tab/Fenster 
+geöffnet.
+
+Im Metadaten-Formular werden Identifier jetzt für alle Personen angezeigt.
+Gültige GND und ORCID iD Werte werden dabei verlinkt, ungültige werden rot 
+unterlegt, um sie leichter erkennbar zu machen.
+
+Es wurden drei neue Kommandos mit Fokus auf ORCID iDs zu `bin/opus4` 
+hinzugefügt.  
+
+    $ bin/opus4 orcid:info
+
+Ausgabe von allgemeinen Informationen und Auflistung von ungültigen ORCID iDs.
+IDs mit URL werden hier mit aufgelistet, auch wenn sie gültig sind, da OPUS 4
+intern momentan ohne URL-Teil arbeitet. 
+
+    $ bin/opus4 orcid:normalize
+
+Entfernt den URL-Teil von ORCID iDs in der Datenbank. Mit der Option `--fix`
+werden außerdem ORCID iDs, bei denen am Ende ein **X** für die Prüfsumme fehlt,
+repariert. Das fehlende **X** kann in der Vergangenheit durch einen Fehler beim
+Import verloren gegangen sein. 
+
+    $ bin/opus4 orcid:validate
+
+Validiert alle ORCID iDs in der Datenbank und gibt sie zusammen mit der 
+Dokument-ID aus. Wird die `--tag` Option verwendet, werden Dokumente mit einer
+ungültigen ORCID iD mit einem Enrichment (`opus_document_errors`) markiert. Das
+Enrichment wird als Facette für Administratoren angezeigt, um die betroffenen 
+Dokumente leicht auffindbar zu machen. 
+
+Bei der Bereinigung einer ungültigen ORCID iD in der Adminstration muss das 
+`opus_document_errors`-Enrichment manuell vom Dokument entfernt werden. Ein 
+erneuter Validierungslauf mit der `--tag` Option entfernt die Markierung aber 
+auch automatisch von Dokumenten, die keine ungültigen ORCID iDs mehr haben.
+
+Es ist geplant die Bereinigung der Markierung automatisch beim Speichern von 
+Dokumenten durchzuführen, aber die dafür notwendigen Änderungen waren zu 
+umfangreich für einen Patch Release.
+
+### Personen
+
+Beim permanenten Löschen von Dokumenten entstehen Person-Objekte, die mit 
+keinem Dokument verknüpft sind. Das passiert auch, wenn im Publish-Formular 
+ein Dokument am Ende nicht abgespeichert wird. Das zu verhindern, erfordert
+größere Änderungen, die geplant sind. Bis dahin gibt es jetzt ein neues 
+Kommando, mit dem nicht verknüpte Person-Objekte gelöscht werden können. 
+
+    $ bin/opus4 person:clean
+
+Mit der Option `--keep` können dabei Personen mit Identifiern (ORCID iD, ...)
+von der Löschung ausgeschlossen werden.
+
+### Datenbankanbindung
+
+Beim Abspeichern von Dokumenten, wird **ServerDateModified** nur noch dann 
+aktualisiert, wenn wirklich Daten geändert wurden. Bisher ist das auch 
+passiert, wenn ein unverändertes Dokument abgespeichert wurde. 
+
+## Patch Release 4.8.0.12 - 2025-03-18
+
+Begrenzt die Anzahl berücksichtigter AutorInnen beim DOI-basierten Metadadatenimport
+auf 50, um eine Überlastung des Systems und einen Timeout zu vermeiden.
+
+https://github.com/OPUS4/application/issues/1283
+
+## Patch Release 4.8.0.11 - 2025-03-11
+
+Behebt die fehlerhafte Verfügbarkeit der Funktion zum Kontaktieren von Autoren 
+in der Frontdoor, wenn kein Autor kontaktierbar ist.
+
+https://github.com/OPUS4/application/issues/1285
+
+### Package `opus4-bibtex 4.8.0.4`
+
+Beim Import von Autoren (Personen) in BibTeX kann eine E-Mail angegeben werden.
+
+https://github.com/OPUS4/opus4-bibtex/issues/80
+
+## Patch Release 4.8.0.10 - 2025-02-18
+
+Behebt eine Exception beim Freischalten von Dokumenten im Review-Modul,
+wenn die Option `workflow.stateChange.published.addGuestAccess` deaktiviert 
+ist.
+
+https://github.com/OPUS4/application/issues/1276
+
+Korrigiert einen Fehler in der OpenAIRE-Ausgabe nach einem Resume in der
+OAI-Schnittstelle.
+
+https://github.com/OPUS4/application/pull/1275
+
+## Patch Release 4.8.0.9 - 2025-01-14
+
+Behebt das Fehlschlagen des DOI-Imports bei Datensätzen ohne Autor*in. 
+
+https://github.com/OPUS4/application/issues/1266
+
+Außerdem wurde ein Typo in der Basiskonfiguration behoben.
+
+https://github.com/OPUS4/application/pull/1271
+
+## Patch Release 4.8.0.8 - 2024-12-04
+
+Das Blockieren der Enter/Return-Taste wurde auf die Metadaten-Formulare 
+im Publish-Modul und in der Administration beschränkt. In allen anderen
+Formularen verhält sich die Taste daher wieder wie vor OPUS 4.8.0.7.
+
+https://github.com/OPUS4/application/issues/1258
+
+Es wurden neue Konsolen-Kommandos für den Umgang mit Enrichments hinzugefügt.
+Alle OPUS 4 Kommandos können mit `bin/opus4` angezeigt werden. Das Kommando
+`enrichment:import` kann zum Beispiel verwendet werden, um in einer Yaml-Datei 
+definierte Enrichments anzulegen. Beispiele für solche Konfigurationen finden 
+sich in `tests/resources/enrichments`.
+
+https://github.com/OPUS4/application/issues/1253
+
+### Hinweise zum Update auf OPUS 4.8.0.8
+
+Das Update kann mit `git pull` vorgenommen werden. Es ist `php-yaml` als neue
+Abhängigkeit dazu gekommen. Das Paket muss manuell installiert werden. Danach 
+ist ein `composer update` notwendig. 
+
+## Patch Release 4.8.0.7 - 2024-10-22
+
+Ein Fehler beim Drücken der Enter/Return-Taste in einfachen Text-Feldern 
+des Publish-Formulars wurde korrigiert. Bisher wurde dabei unabsichtlich der 
+erste Submit-Button des Formulars ausgeführt und damit unter Umständen ein 
+neuer Eintrag für Autor*innen oder ähnliches hinzugefügt. Jetzt passiert das 
+nicht mehr. Das sorgt auch dafür, dass das Metadaten-Formular in der 
+Administration nicht mehr abgespeichert wird, wenn in einem einfachen 
+Text-Eingabefeld die Enter/Return-Taste gedrückt wird.
+
+https://github.com/OPUS4/application/issues/1243
+
 ## Patch Release 4.8.0.6 - 2024-08-27
 
 Problem bei der Ausführung von PHP Update-Skripten behoben.
