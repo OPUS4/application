@@ -725,6 +725,42 @@ END OF COMMENT -->
                 <seg>Land</seg>
             </tuv>
         </tu>
+        
+        <tu tuid="header_EnrichmentOpusConferenceName">
+            <tuv xml:lang="en">
+                <seg>Conference: Name</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Konferenz: Name</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="header_EnrichmentOpusConferencePlace">
+            <tuv xml:lang="en">
+                <seg>Conference: Location</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Konferenz: Ort</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="header_EnrichmentOpusConferenceNumber">
+            <tuv xml:lang="en">
+                <seg>Conference: Number</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Konferenz: Zählung</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="header_EnrichmentOpusConferenceYear">
+            <tuv xml:lang="en">
+                <seg>Conference: Year</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Konferenz: Jahr</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="groupSeries">
             <tuv xml:lang="en">

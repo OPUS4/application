@@ -216,6 +216,47 @@
             </td>
         </tr>
     </xsl:template>
+    
+    <xsl:template name="conferences">
+        <xsl:param name="counter" />
+        <xsl:param name="numOfConferences" />        
+        <xsl:if test="$counter &lt;= $numOfConferences">
+            <tr>
+                <th class="name">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_conference</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:text>:</xsl:text>
+                </th>
+                <td>
+                    <xsl:value-of select="Enrichment[@KeyName='OpusConferenceName'][$counter]/@Value" /> 
+                    <xsl:if test="Enrichment[@KeyName='OpusConferenceNumber'][$counter] or Enrichment[@KeyName='OpusConferencePlace'][$counter] or Enrichment[@KeyName='OpusConferenceYear'][$counter]">
+                        <xsl:text> (</xsl:text>
+                        <xsl:if test="Enrichment[@KeyName='OpusConferenceNumber'][$counter]">
+                            <xsl:value-of select="Enrichment[@KeyName='OpusConferenceNumber'][$counter]/@Value" />
+                        </xsl:if>
+                        <xsl:if test="Enrichment[@KeyName='OpusConferenceYear'][$counter]">
+                            <xsl:if test="Enrichment[@KeyName='OpusConferenceNumber'][$counter]">
+                                <xsl:text> : </xsl:text>
+                            </xsl:if> 
+                            <xsl:value-of select="Enrichment[@KeyName='OpusConferenceYear'][$counter]/@Value" />
+                        </xsl:if>
+                        <xsl:if test="Enrichment[@KeyName='OpusConferencePlace'][$counter]">
+                            <xsl:if test="Enrichment[@KeyName='OpusConferenceNumber'][$counter] or Enrichment[@KeyName='OpusConferenceYear'][$counter]">
+                                <xsl:text> : </xsl:text>                            
+                            </xsl:if>
+                            <xsl:value-of select="Enrichment[@KeyName='OpusConferencePlace'][$counter]/@Value" />
+                        </xsl:if>
+                        <xsl:text>)</xsl:text>
+                    </xsl:if>
+                </td>
+            </tr>                        
+            <xsl:call-template name="conferences">
+                <xsl:with-param name="counter" select="$counter + 1" />
+                <xsl:with-param name="numOfConferences" select="$numOfConferences" />
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
 
     <xsl:template match="Enrichment" mode="unescaped">
         <tr>
