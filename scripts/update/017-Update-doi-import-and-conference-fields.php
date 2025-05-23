@@ -33,8 +33,9 @@ require_once dirname(__FILE__) . '/../common/update.php';
 
 /**
  * Changes names of enrichment fields for doi based metadata import to new OPUS default.
- * Adds enrichment fields for conferences.
+ * Updates and adds enrichment fields for conferences.
+ * Updates key names for translations for doi based metadata import and conferences.
  */
 
-$update = new Application_Update_UpdateDoiImportAndConferencesEnrichments();
+$update = new Application_Update_UpdateDoiImportAndConferencesFields();
 $update->run();
