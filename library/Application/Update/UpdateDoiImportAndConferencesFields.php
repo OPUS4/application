@@ -34,6 +34,8 @@ use Opus\Common\EnrichmentKey;
 use Opus\Translate\Dao;
 
 /**
+ * Updates enrichment fields used by DOI import functionality.
+ *
  * Changes names of enrichment fields for doi based metadata import to new OPUS default.
  * Changes names of existing and adds new enrichment fields for conferences.
  *
@@ -67,13 +69,11 @@ class Application_Update_UpdateDoiImportAndConferencesFields extends Application
     public function run()
     {
         $this->log("Updating enrichment fieds for doi import and conferences as well as their translations");
-        $colors = new ConsoleColors();
-
         // Iterate through the keys
         foreach ($this->keyNames as $oldKeyString => $newKeyString) {
             $this->log("Updating '$oldKeyString' -> '$newKeyString'");
-            $this->updateEnrichments($oldKeyString, $newKeyString, $colors);
-            $this->updateTranslations($oldKeyString, $newKeyString, $colors);
+            $this->updateEnrichments($oldKeyString, $newKeyString);
+            $this->updateTranslations($oldKeyString, $newKeyString);
         }
     }
 
@@ -84,8 +84,10 @@ class Application_Update_UpdateDoiImportAndConferencesFields extends Application
      * @param string $newKeyString
      * @param object $colors
      */
-    public function updateEnrichments($oldKeyString, $newKeyString, $colors)
+    public function updateEnrichments($oldKeyString, $newKeyString)
     {
+        $colors = new ConsoleColors();
+
         // Identify already existing enrichment fields
         $oldField = EnrichmentKey::fetchByName($oldKeyString);
         $newField = EnrichmentKey::fetchByName($newKeyString);
@@ -131,8 +133,10 @@ class Application_Update_UpdateDoiImportAndConferencesFields extends Application
      * @param  string $newKeyString
      * @param  object $colors
      */
-    public function updateTranslations($oldKeyString, $newKeyString, $colors)
+    public function updateTranslations($oldKeyString, $newKeyString)
     {
+        $colors = new ConsoleColors();
+
         $manager = new Application_Translate_TranslationManager();
 
         // Identify already existing modified new translation keys
