@@ -76,8 +76,9 @@ class Admin_Form_Person_Documents extends Application_Form_Abstract
         $documents->setValue($documentIds);
 
         if ($person !== null) {
-            $persons = Person::getModelRepository();
-            $documents->setAttrib('person', $persons->convertToFieldNames($person));
+            $persons = Person::new();
+            // TODO should not depend on convertToFieldNames (Framework internals)
+            $documents->setAttrib('person', $persons::convertToFieldNames($person));
         }
     }
 

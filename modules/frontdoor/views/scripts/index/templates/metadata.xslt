@@ -120,7 +120,7 @@
             </td>
         </tr>
     </xsl:template>
-    
+
     <xsl:template match="@PublicationState">
         <tr>
             <th class="name">
@@ -346,12 +346,12 @@
             <xsl:text disable-output-escaping="yes">&lt;td&gt;</xsl:text>
         </xsl:if>
         <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
-        
+
         <xsl:call-template name="PersonOrcidLink" />
         <xsl:call-template name="PersonGndLink" />
 
         <xsl:if test="position() != last()">, </xsl:if>
-        
+
         <xsl:if test="position() = last()">
             <xsl:text disable-output-escaping="yes">&lt;/td&gt;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
@@ -517,7 +517,7 @@
             </td>
         </tr>
     </xsl:template>
-    
+
     <xsl:template match="Identifier[@Type = 'union-cat']">
         <tr>
             <th class="name">
@@ -530,7 +530,7 @@
                             <xsl:attribute name="href">
                                 <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'unionCat.requestUrl')"/>
                                 <xsl:value-of select="@Value" />
-                            </xsl:attribute>                            
+                            </xsl:attribute>
                             <xsl:value-of select="@Value" />
                         </xsl:element>
                     </xsl:when>
@@ -649,8 +649,8 @@
                         <xsl:text>-logo</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="src">
-                        <xsl:value-of select="@LinkLogo"/>                        
-                    </xsl:attribute>                    
+                        <xsl:value-of select="@LinkLogo"/>
+                    </xsl:attribute>
                     <xsl:attribute name="title">
                         <xsl:value-of select="@LinkLicence"/>
                     </xsl:attribute>

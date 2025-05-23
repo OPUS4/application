@@ -8,12 +8,11 @@
  *
  * OPUS 4 is a complete rewrite of the original OPUS software and was developed
  * by the Stuttgart University Library, the Library Service Center
- * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
- * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
- * and State Library, the Saxon State Library - Dresden State and University
- * Library, the Bielefeld University Library and the University Library of
- * Hamburg University of Technology with funding from the German Research
- * Foundation and the European Regional Development Fund.
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
  *
  * LICENCE
  * OPUS is free software; you can redistribute it and/or modify it under the
@@ -26,34 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// Bootstrapping
-require_once dirname(__FILE__) . '/common/bootstrap.php';
+/**
+ * Renders GND link.
+ */
+class Application_View_Helper_GndLink extends Application_View_Helper_Abstract
+{
+    /**
+     * Renders link to GND.
+     *
+     * @param string $gndValue GND identifier
+     * @return string
+     */
+    public function gndLink($gndValue)
+    {
+        $config = $this->getConfig();
 
-use Opus\Common\Document;
-use Opus\Model\Xml;
-use Opus\Model\Xml\Version1;
+        $gndValue = htmlspecialchars($gndValue);
 
-// Remove first argument
-array_shift($argv);
+        $validator = new Application_Form_Validate_Gnd();
 
-// Dump given documents
-error_log("dumping document(s): " . implode(", ", $argv));
-
-foreach ($argv as $docId) {
-    error_log("<!-- dumping document-id $docId: -->");
-
-    $d = Document::get($docId);
-
-    $xmlModel = new Xml();
-    $xmlModel->setModel($d);
-    $xmlModel->excludeEmptyFields();
-    $xmlModel->setStrategy(new Version1());
-
-    $docXml               = $xmlModel->getDomDocument();
-    $docXml->formatOutput = true;
-    echo $docXml->saveXml();
+        if ($validator->isValid($gndValue) && isset($config->gnd->baseUrl)) {
+            $link = $config->gnd->baseUrl . $gndValue;
+            return "<a href=\"{$link}\" target=\"_blank\">{$gndValue}</a>";
+        } else {
+            return "<span class=\"admin_document_error\">$gndValue</span>";
+        }
+    }
 }

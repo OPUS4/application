@@ -31,10 +31,15 @@
 
 use Opus\Common\Date;
 use Opus\Common\Document;
+use Opus\Common\FileInterface;
 use Opus\Common\Model\NotFoundException;
 use Opus\Common\Person;
 use Opus\Common\PersonInterface;
+use Opus\Common\UserRole;
 
+/**
+ * TODO Where is the magic 23 coming from? Fix!
+ */
 class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
 {
     /** @var string[] */
@@ -105,6 +110,16 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $enrichments = $document->getEnrichment();
         $this->assertEquals(1, count($enrichments));
         $this->assertEquals(23, $enrichments[0]->getValue());
+
+        // Check guest access for file
+        $files = $document->getFile();
+        $this->assertCount(1, $files);
+
+        $file = $files[0];
+
+        $guestRole = UserRole::fetchByName('guest');
+
+        $this->assertContains($file->getId(), $guestRole->listAccessFiles());
     }
 
     public function testRejectDocument()
@@ -243,5 +258,47 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase
         $helper = new Review_Model_ClearDocumentsHelper();
 
         $this->assertFalse($helper->isAddGuestAccessEnabled());
+    }
+
+    public function testNoExceptionIfAddGuestAccessIsDisabled()
+    {
+        $guestRole = UserRole::fetchByName('guest');
+
+        $this->adjustConfiguration([
+            'workflow' => ['stateChange' => ['published' => ['addGuestAccess' => 0]]],
+        ]);
+
+        $path = '/tmp/opus4-test/' . uniqid() . "/src";
+        mkdir($path, 0777, true);
+
+        $filepath = $path . DIRECTORY_SEPARATOR . "foobar.pdf";
+        touch($filepath);
+
+        $document = Document::get($this->documentId);
+        $document->addFile()
+            ->setTempFile($filepath)
+            ->setPathName('foobar.pdf')
+            ->setLabel('Volltextdokument (PDF)');
+        $document->store();
+
+        $files = $document->getFile();
+        $this->assertCount(1, $files);
+
+        $file = $files[0];
+        $this->assertInstanceOf(FileInterface::class, $file);
+
+        // Access to file for guest is automatically set because of **defaultAccessRole**
+        $guestRole->removeAccessFile($file->getId());
+        $guestRole->store();
+
+        $helper = new Review_Model_ClearDocumentsHelper();
+        $helper->clear([$this->documentId], 23, $this->person);
+
+        $document = Document::get($this->documentId);
+        $this->assertEquals('published', $document->getServerState());
+        $this->assertEquals(1, count($document->getPersonReferee()));
+
+        // Check no guest access for file
+        $this->assertNotContains($file->getId(), $guestRole->listAccessFiles());
     }
 }

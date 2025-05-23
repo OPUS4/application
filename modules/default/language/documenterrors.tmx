@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+   <body>
+
+       <tu tuid="EnrichmentOpusDocumentErrors">
+            <tuv xml:lang="en">
+                <seg>Problems</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Probleme</seg>
+            </tuv>
+       </tu>
+
+       <tu tuid="DOC_ERROR_ORCID">
+            <tuv xml:lang="en">
+                <seg>ORCID</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ORCID</seg>
+            </tuv>
+       </tu>
+
+   </body>
+
+</tmx>

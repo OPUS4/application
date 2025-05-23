@@ -67,6 +67,8 @@ class Review_Model_ClearDocumentsHelper extends Application_Model_Abstract
                 $document->setPublishedDate($date);
             }
 
+            $guestRole = null;
+
             if ($this->isAddGuestAccessEnabled()) {
                 $guestRole = UserRole::fetchByName('guest');
                 foreach ($document->getFile() as $file) {
@@ -84,7 +86,10 @@ class Review_Model_ClearDocumentsHelper extends Application_Model_Abstract
 
             // TODO: Put into same transaction...
             $document->store();
-            $guestRole->store();
+
+            if ($guestRole !== null) {
+                $guestRole->store();
+            }
         }
     }
 

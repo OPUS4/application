@@ -25,37 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Document;
-use Opus\Common\Model\NotFoundException;
-use Opus\Model\Xml;
-use Opus\Model\Xml\Version1;
-
 /**
- * Returns the XML representation of the document with given id $id.
- *
- * TODO convert to command (overlaps with opus-dump-document-xml.php)
+ * View helper for rendering OCRID link.
  */
+class Application_View_Helper_OrcidLink extends Application_View_Helper_Abstract
+{
+    /**
+     * Renders link for ORCID identifier.
+     *
+     * @param string $orcidValue ORCID identifier
+     * @return string
+     */
+    public function orcidLink($orcidValue)
+    {
+        $config = $this->getConfig();
 
-if (isset($argv[2]) && ! empty($argv[2]) && is_numeric($argv[2])) {
-    $id = $argv[2];
-} else {
-    $id = 91;
+        $orcidValue = htmlspecialchars($orcidValue);
+
+        $validator = new Application_Form_Validate_Orcid();
+
+        if ($validator->isValid($orcidValue) && isset($config->orcid->baseUrl)) {
+            $link = $config->orcid->baseUrl . $orcidValue;
+            return "<a href=\"{$link}\" target=\"_blank\">{$orcidValue}</a>";
+        } else {
+            return "<span class=\"admin_document_error\">{$orcidValue}</span>";
+        }
+    }
 }
-
-try {
-    $doc = Document::get($id);
-} catch (NotFoundException $e) {
-    echo "document with id $id does not exist";
-    exit();
-}
-
-$xmlModel = new Xml();
-$xmlModel->setModel($doc);
-$xmlModel->setStrategy(new Version1());
-$xmlModel->excludeEmptyFields();
-
-echo $xmlModel->getDomDocument()->saveXML();
