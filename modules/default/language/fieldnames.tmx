@@ -2374,6 +2374,42 @@
             </tuv>
         </tu>
 
+        <tu tuid="EnrichmentOpusConferenceName">
+            <tuv xml:lang="en">
+                <seg>Conference Name</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Konferenzname</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="EnrichmentOpusConferencePlace">
+            <tuv xml:lang="en">
+                <seg>Conference Place</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Konferenzort</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="EnrichmentOpusConferenceNumber">
+            <tuv xml:lang="en">
+                <seg>Conference Number</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Konferenzzählung</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="EnrichmentOpusConferenceYear">
+            <tuv xml:lang="en">
+                <seg>Conference Year</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Konferenzjahr</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="open_access">
             <tuv xml:lang="en">
                 <seg>Accessibility</seg>

@@ -219,7 +219,16 @@
             <xsl:apply-templates select="ThesisDateAccepted" />
             <xsl:apply-templates select="@CreatingCorporation" />
             <xsl:apply-templates select="@ContributingCorporation" />
-
+            
+            <!-- Conferences -->
+            <xsl:variable name="numOfConferences" select="count(Enrichment[@KeyName='OpusConferenceName'])" />
+            <xsl:if test="$numOfConferences &gt; 0">
+                <xsl:call-template name="conferences">
+                    <xsl:with-param name="counter" select="1" />
+                    <xsl:with-param name="numOfConferences" select="$numOfConferences" />
+                </xsl:call-template>
+            </xsl:if>
+            
             <xsl:apply-templates select="ServerDatePublished" />
 
             <!-- Subjects section:  New subjects must be introduced right here. -->
@@ -274,7 +283,7 @@
             <xsl:apply-templates select="@PageLast" />
             <xsl:apply-templates select="@PublicationState" />
             <xsl:apply-templates select="Note[@Visibility='public']" />
-
+            
             <!-- Enrichment Section: add the enrichment keys that have to be displayed in frontdoor -->
             <xsl:apply-templates select="Enrichment[@KeyName='Event']" />
             <xsl:apply-templates select="Enrichment[@KeyName='Relation']" />
