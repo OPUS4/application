@@ -37,19 +37,12 @@ use Opus\Translate\Dao;
  * Updates enrichment fields used by DOI import functionality.
  *
  * Changes names of enrichment fields for doi based metadata import to new OPUS default.
- * Changes names of existing and adds new enrichment fields for conferences.
  *
- * Checks whether old fields exist and changes their names. If one or more old fields
- * are missing, the corresponding new fields are created unless the new fields do
- * already exist, too. In this case, an error message for manual revision is generated.
+ * Changes names of existing and adds new enrichment fields for conferences.
  *
  * Adapts key names for edited or added translations of the enrichment fields for
  * the doi based metadata import and conferences to the new names of the enrichment
  * fields.
- *
- * Checks whether old keys with edited or added translations exist and changes their
- * names. If the new translation key already exists with an edited or added translation,
- * an error message for manual revision is generated.
  */
 class Application_Update_UpdateDoiImportAndConferencesFields extends Application_Update_PluginAbstract
 {
@@ -68,7 +61,7 @@ class Application_Update_UpdateDoiImportAndConferencesFields extends Application
 
     public function run()
     {
-        $this->log("Updating enrichment fieds for doi import and conferences as well as their translations");
+        $this->log('Updating enrichment keys for DOI import and conferences (including their translation keys)...');
         // Iterate through the keys
         foreach ($this->keyNames as $oldKeyString => $newKeyString) {
             $this->log("Updating '$oldKeyString' -> '$newKeyString'");
@@ -82,7 +75,6 @@ class Application_Update_UpdateDoiImportAndConferencesFields extends Application
      *
      * @param string $oldKeyString
      * @param string $newKeyString
-     * @param object $colors
      */
     public function updateEnrichments($oldKeyString, $newKeyString)
     {
@@ -93,23 +85,25 @@ class Application_Update_UpdateDoiImportAndConferencesFields extends Application
         $newField = EnrichmentKey::fetchByName($newKeyString);
 
         if ($oldField === null) {
-            // If old and new enrichment field don't exist, the new enrichtment field is created
             if ($newField === null) {
+                // If old and new enrichment don't exist, the new enrichment field is created
                 $newKey = EnrichmentKey::new();
                 $this->updateEnrichmentKey($newKey, $newKeyString);
-                $this->getLogger()->info("Old enrichment field '$oldKeyString' doesn't exist. New enrichment field '$newKeyString' didn't exist either and was created.");
-            // If only the new enrichment field exists, no changes are needed
+                $this->log("New enrichment '{$newKeyString}' created.");
             } else {
-                $this->getLogger()->info("Old enrichment field '$oldKeyString' doesn't exist. New enrichment field '$newKeyString' exists. Already up-to-date. No changes needed.");
+                // If only the new enrichment exists, no changes are needed
+                $this->log("New enrichment field '{$newKeyString}' already exists. No changes needed.");
             }
         } else {
-            // If old and new enrichment field exist already, something seems to be wrong and should be checked
             if ($newField !== null) {
-                $this->log($colors->red("Old enrichment field '$oldKeyString' and new one '$newKeyString' exist parallel. Please clean this up manually."));
-            // If only the old enrichment field exists, it is updated to its new name
+                // If old and new enrichment exist, something seems to be wrong and should be checked manually
+                $this->log($colors->red(
+                    "Old ({$oldKeyString}) and new ({$newKeyString}) enrichment exist. Please clean up manually."
+                ));
             } else {
+                // If only the old enrichment field exists, it is updated to its new name
                 $this->updateEnrichmentKey($oldField, $newKeyString);
-                $this->getLogger()->info("Old enrichment field '$oldKeyString' did exist. It has been updated to '$newKeyString'.");
+                $this->log("Enrichment key '{$oldKeyString}' has been changed to '{$newKeyString}'.");
             }
         }
     }
@@ -129,62 +123,73 @@ class Application_Update_UpdateDoiImportAndConferencesFields extends Application
     /**
      * Update translations
      *
-     * @param  string $oldKeyString
-     * @param  string $newKeyString
-     * @param  object $colors
+     * @param string $oldKeyString
+     * @param string $newKeyString
      */
     public function updateTranslations($oldKeyString, $newKeyString)
     {
         $colors = new ConsoleColors();
 
-        $manager = new Application_Translate_TranslationManager();
-
-        // Identify already existing modified new translation keys
-        $manager->setFilter($newKeyString);
-        $newTranslations = $manager->getMergedTranslations();
-        foreach (array_keys($newTranslations) as $newKey) {
-            $translation = $manager->getTranslation($newKey);
-            if (isset($translation['state']) && (in_array($translation['state'], ['edited', 'added']))) {
-                $modNewKeys[$newKey] = '';
-            }
-        }
+        // Identify already existing modified new translation keys (in database)
+        $modNewKeys   = $this->getModifiedTranslationKeys($newKeyString);
+        $conflictKeys = [];
 
         // Identify modified old translation keys and update them to their new names
+        $manager = new Application_Translate_TranslationManager();
         $manager->setFilter($oldKeyString);
-        $oldTranslations = $manager->getMergedTranslations();
+        $oldTranslations = $manager->getMergedTranslations(); // TODO expensive, seems unnecessary just for keys in DB
+
         foreach (array_keys($oldTranslations) as $oldKey) {
             $translation = $manager->getTranslation($oldKey);
 
             if (isset($translation['state']) && (in_array($translation['state'], ['edited', 'added']))) {
                 $newKey = str_replace($oldKeyString, $newKeyString, $oldKey);
-                // If the new translation key exists and has been modified, something might be wrong and should be checked
                 if ($manager->keyExists($newKey)) {
-                    $this->log($colors->yellow("New translation key '$newKey' already exists. Cannot rename old key '$oldKey'. Please check this manually."));
-                    // Unset modified new key to avoid provding redundant information to user
-                    if (array_key_exists($newKey, $modNewKeys)) {
-                        unset($modNewKeys[$newKey]);
-                    }
-
-                // If the new translation key doesn't exist, the old one is renamed
+                    // New translation key exists and has been modified, something might be wrong and should be checked
+                    $this->log($colors->yellow(
+                        "New key '{$newKey}' already exists. Cannot rename old key '{$oldKey}'. Please check this manually."
+                    ));
+                    $conflictKeys[] = $newKey;
                 } else {
+                    // If the new translation key doesn't exist, the old one is renamed
                     $this->updateTranslationKey($oldKey, $translation, $newKey);
-                    $this->getLogger()->info("Translation key '$oldKey' updated successfully to '$newKey'.");
+                    $this->log("Translation key '{$oldKey}' updated to '{$newKey}'.");
                 }
-            // If the old translation key doesn't exist, no action is needed
-            } else {
-                $this->getLogger()->info("Old translation Key '$oldKey' was not edited. No changes needed.");
             }
         }
 
         // Provide information on modified new translation keys that already exist so
-        // the user may check whether something might be wrong or everything is ok.
-        if (isset($modNewKeys) && count(array_keys($modNewKeys)) > 0) {
-            foreach (array_keys($modNewKeys) as $modNewKey) {
-                $this->log($colors->yellow("New translation key '$modNewKey' exists and has already been modified. Old key doesn't exist or hasn't been modified. You should check this manually."));
+        // the user may check if something is wrong or everything is ok.
+        // TODO does this make sense? Does it provide useful information?
+        $remainingKeys = array_diff($modNewKeys, $conflictKeys);
+        if (count($remainingKeys) > 0) {
+            $this->log("The following keys with modified translations already existed for '{$newKeyString}'.");
+            foreach ($remainingKeys as $key) {
+                $this->log($colors->yellow($key));
             }
-        } elseif (isset($oldTranslations) && count(array_keys($oldTranslations)) === 0) {
-            $this->getLogger()->info("Translation keys are up-to-date. No changes needed.");
         }
+    }
+
+    /**
+     * @param string $filterKey
+     * @return array
+     */
+    protected function getModifiedTranslationKeys($filterKey)
+    {
+        $manager = new Application_Translate_TranslationManager();
+        $manager->setFilter($filterKey);
+
+        $modifiedKeys = [];
+
+        $translations = $manager->getMergedTranslations();
+        foreach (array_keys($translations) as $key) {
+            $translation = $manager->getTranslation($key);
+            if (isset($translation['state']) && (in_array($translation['state'], ['edited', 'added']))) {
+                $modifiedKeys[] = $key;
+            }
+        }
+
+        return $modifiedKeys;
     }
 
     /**
