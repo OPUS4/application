@@ -159,7 +159,7 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
                 ['tag' => 'a', 'placement' => 'prepend', 'name' => 'current']
             );
             return Admin_Form_Document::RESULT_SHOW;
-        } else if (
+        } elseif (
             array_key_exists(self::ELEMENT_ADD_SUBJECTS, $data)
             && array_key_exists(self::ELEMENT_SUBJECTS, $data)
         ) {
@@ -176,8 +176,7 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
     public function addMultipleSubjectsFromString($value)
     {
         if (strlen(trim($value)) > 0) {
-            $value    = preg_replace('/,/', PHP_EOL, $value);
-            $subjects = explode(PHP_EOL, $value);
+            $subjects = $this->explodeSubjectsString($value);
 
             $existingSubjects = [];
 
@@ -203,6 +202,24 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
             // Clear input textarea
             $this->getElement(self::ELEMENT_SUBJECTS)->setValue(null);
         }
+    }
+
+    /**
+     * Breaks string into separate subjects at commas or line breaks.
+     *
+     * TODO handle strings with uneven number of quotes properly
+     *
+     * @param string $text
+     * @return string[]
+     */
+    public function explodeSubjectsString($text)
+    {
+        $regex    = '/,(?=(?:[^"]*"[^"]*")*[^"]*$)/';
+        $text     = preg_replace($regex, PHP_EOL, $text);
+        $subjects = preg_split('/(\r\n|\n|\r)/', $text, -1, PREG_SPLIT_NO_EMPTY);
+        return array_map(function ($value) {
+            return trim($value, ' "');
+        }, $subjects);
     }
 
     /**
