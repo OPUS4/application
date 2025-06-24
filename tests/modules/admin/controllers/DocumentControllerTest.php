@@ -341,7 +341,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase
             'input#Document-Content-Subjects-Swd-Add',
             'input#Document-Content-Subjects-Swd-AddSubjects',
             'input#Document-Content-Subjects-Psyndex-Add',
+            'input#Document-Content-Subjects-Psyndex-AddSubjects',
             'input#Document-Content-Subjects-Uncontrolled-Add',
+            'input#Document-Content-Subjects-Uncontrolled-AddSubjects',
             'input#Document-IdentifiersAll-Identifiers-Add',
             'input#Document-Patents-Add',
             'input#Document-Notes-Add',
@@ -586,8 +588,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         // Subjects
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Values-Subject0-Value"]', 'Berlin');
 
-        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Language"]', 'Deutsch');
-        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Values-Subject0-Language"]', 'Deutsch');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Values-Subject0-Value"]', 'Palmöl');
 
         // Identifier
         $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '10.1007/978-3-540-76406-9');
@@ -853,10 +855,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Values-Subject0-Value"]', 'Berlin');
 
         $this->assertQueryContentContains(
-            '//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Language"]',
+            '//*[@id="Document-Content-Subjects-Uncontrolled-Values-Subject0-Language"]',
             'German'
         );
-        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Values-Subject0-Value"]', 'Palmöl');
 
         // Identifier
         $this->assertQueryContentContains('//*[@id="Document-IdentifiersAll-IdentifiersDOI-IdentifierDOI0-Value"]', '10.1007/978-3-540-76406-9');
