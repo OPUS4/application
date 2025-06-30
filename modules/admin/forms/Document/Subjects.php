@@ -49,34 +49,8 @@ class Admin_Form_Document_Subjects extends Admin_Form_Document_Section
         parent::init();
 
         $this->addSubForm(new Admin_Form_Document_GndSubjects(), 'Swd');
-
-        $this->addSubForm(
-            new Admin_Form_Document_SubjectType(
-                'psyndex',
-                [
-                    'columns' => [
-                        [],
-                        ['label' => 'Opus_Subject_Value'],
-                        ['label' => 'ExternalKey'],
-                    ],
-                ]
-            ),
-            'Psyndex'
-        );
-
-        $this->addSubForm(
-            new Admin_Form_Document_SubjectType(
-                'uncontrolled',
-                [
-                    'columns' => [
-                        [],
-                        ['label' => 'Opus_Subject_Value'],
-                        ['label' => 'ExternalKey'],
-                    ],
-                ]
-            ),
-            'Uncontrolled'
-        );
+        $this->addSubForm(new Admin_Form_Document_Tags('psyndex'), 'Psyndex');
+        $this->addSubForm(new Admin_Form_Document_Tags('uncontrolled'), 'Uncontrolled');
 
         // TODO Unterformular fuer unbekannte Typen hinzufügen?
 

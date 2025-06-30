@@ -1,5 +1,19 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.15 - 2025-06-24
+
+Die Möglichkeit mehrere Schlagwörter auf einmal hinzuzufügen, wurde jetzt
+auch für PSyndex und Tags umgesetzt. 
+
+https://github.com/OPUS4/application/issues/1349
+
+Personenschlagwörter mit Kommas, können nun mit Anführungszeichen ("Mann, 
+Thomas") umschlossen werden, damit die enthaltenen Kommas beim Aufsplitten 
+der Schlagwörter ignoriert werden. Schlagwörter können durch Kommas und 
+Zeilenumbrüche voneinander getrennt werden. 
+
+https://github.com/OPUS4/application/issues/1348
+
 ## Patch Release 4.8.0.14 - 2025-04-22
 
 Es wurden kleinere Fehler behoben und einige Funktionen hinzugefügt bzw.
