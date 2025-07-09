@@ -242,7 +242,10 @@
                 <xsl:text>:</xsl:text>
             </th>
             <td>
-                <xsl:value-of select="@Value" />
+                <xsl:attribute name="href">
+                    <xsl:value-of select="@KeyName"/>
+                </xsl:attribute>
+                <xsl:value-of select="php:functionString('Application_Xslt::renderValue', @Value, @KeyName)" disable-output-escaping="yes" />
             </td>
         </tr>
     </xsl:template>
