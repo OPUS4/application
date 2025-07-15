@@ -451,4 +451,24 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $doc->setServerState('unpublished');
         $doc->store();
     }
+
+    public function testPublishDocumentWithoutConfirmation()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState(Document::STATE_UNPUBLISHED);
+        $docId = $doc->store();
+
+        $this->adjustConfiguration([
+            'confirmation' => ['document' => ['statechange' => ['enabled' => '0']]],
+        ]);
+
+        $this->dispatch("/admin/workflow/changestate/docId/{$docId}/targetState/published");
+
+        // TODO make assertion more specific
+        $this->assertRedirect();
+
+        $doc = Document::get($docId);
+
+        $this->assertEquals(Document::STATE_PUBLISHED, $doc->getServerState());
+    }
 }
