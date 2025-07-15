@@ -190,7 +190,9 @@ class Admin_WorkflowController extends Application_Controller_Action
         try {
             $this->workflowHelper->changeState($document, $targetState);
 
+            // TODO this should be configurable/extendable for any event
             if ($targetState === 'published') {
+                // TODO notification code should be a separate class/module/extension
                 $this->sendNotification($document, $form);
             }
         } catch (Exception $e) {
@@ -247,7 +249,13 @@ class Admin_WorkflowController extends Application_Controller_Action
 
         $post = $this->getRequest()->getPost();
 
-        $recipients = $form->getSelectedRecipients($document, $post);
+        // TODO remove dependency on form (form only available if confirmation is activated)
+        if ($form !== null) {
+            $recipients = $form->getSelectedRecipients($document, $post);
+        } else {
+            $form       = $this->getConfirmationForm($document, 'published'); // TODO move recipient code out of form
+            $recipients = $form->getRecipients($document);
+        }
 
         $notification->prepareMailFor(
             $document,
