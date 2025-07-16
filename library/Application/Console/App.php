@@ -29,17 +29,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Bibtex\Import\Console\BibtexImportCommand;
-use Opus\Bibtex\Import\Console\BibtexListCommand;
-use Opus\Pdf\Console\CoverGenerateCommand;
-use Opus\Search\Console\ExtractCommand;
-use Opus\Search\Console\ExtractFileCommand;
-use Opus\Search\Console\IndexCommand;
-use Opus\Search\Console\RemoveCommand;
+use Opus\Common\Console\DefaultCommandProvider;
+use Opus\Job\TaskManager;
 use Symfony\Component\Console\Application;
 
 /**
  * Command line application for OPUS 4 management tasks.
+ *
+ * TODO CommandProvider for opus4-job (move commands)
+ * TODO CommandProvider for opus4-search
  */
 class Application_Console_App extends Application
 {
@@ -47,20 +45,51 @@ class Application_Console_App extends Application
     {
         parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
 
-        $this->add(new IndexCommand());
-        $this->add(new RemoveCommand());
-        $this->add(new ExtractCommand());
-        $this->add(new ExtractFileCommand());
+        $commandProvider = new DefaultCommandProvider();
+        $commands        = $commandProvider->getCommands();
+
+        foreach ($commands as $command) {
+            $this->add($command);
+        }
+
         // $this->add(new Application_Console_Index_RepairCommand());
         // $this->add(new Application_Console_Index_CheckCommand());
+
         $this->add(new Application_Console_Document_DeleteCommand());
-        $this->add(new BibtexImportCommand());
-        $this->add(new BibtexListCommand());
+        $this->add(new Application_Console_Document_DuplicatesCommand());
+        $this->add(new Application_Console_Document_DiffCommand());
+
+        $this->add(new Application_Console_Orcid_InfoCommand());
+        $this->add(new Application_Console_Orcid_NormalizeCommand());
+        $this->add(new Application_Console_Orcid_ValidateCommand());
+
+        $this->add(new Application_Console_Person_CleanCommand());
+
         $this->add(new Application_Console_Debug_DocumentXmlCommand());
-        $this->add(new CoverGenerateCommand());
+
+        $this->add(new Application_Console_Console_ConsoleCommand());
+        $this->add(new Application_Console_Console_ExecCommand());
+
         $this->add(new Application_Console_Collection_CopyCommand());
         $this->add(new Application_Console_Collection_MoveCommand());
         $this->add(new Application_Console_Collection_RemoveCommand());
+
+        if (class_exists(TaskManager::class)) {
+            /*
+                Tasks commands do not work without the TaskManager. If the current PHP version is less than 7.4
+                there will be no TaskManager due to lack of crunz support.
+            */
+            $this->add(new Application_Console_Task_InfoCommand());
+            $this->add(new Application_Console_Task_ListCommand());
+            $this->add(new Application_Console_Task_RunCommand());
+        }
+
+        // TODO use ModelCommandProvider
+        $this->add(new Application_Console_Model_EnrichmentImportCommand());
+        $this->add(new Application_Console_Model_EnrichmentListCommand());
+        $this->add(new Application_Console_Model_EnrichmentExportCommand());
+        $this->add(new Application_Console_Model_EnrichmentRenameCommand());
+        $this->add(new Application_Console_Model_EnrichmentDeleteCommand());
 
         $this->setDefaultCommand('list');
     }

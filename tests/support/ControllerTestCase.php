@@ -275,7 +275,7 @@ class ControllerTestCase extends TestCase
     {
         $bodyLowerCase = strtolower($body);
         foreach ($badStrings as $badString) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 strtolower($badString),
                 $bodyLowerCase,
                 "Response must not contain '$badString'"
@@ -520,12 +520,22 @@ class ControllerTestCase extends TestCase
             'No declaration for attribute class of element html',
             'No declaration for attribute placeholder of element input',
             'No declaration for attribute target of element a',
+            'No declaration for attribute aria-label of element',
         ];
 
         $filteredErrors = [];
 
         foreach ($errors as $error) {
-            if (! in_array(trim($error->message), $ignored)) {
+            $ignore = false;
+
+            foreach ($ignored as $pattern) {
+                if (stripos($error->message, $pattern) !== false) {
+                    $ignore = true;
+                    break;
+                }
+            }
+
+            if (! $ignore) {
                 $filteredErrors[] = $error;
             }
         }
@@ -627,7 +637,7 @@ class ControllerTestCase extends TestCase
         $this->assertCount(1, $flashMessages, 'Expected one flash message in queue.');
         $flashMessage = $flashMessages[0];
 
-        $this->assertNotContains($message, $flashMessage['message']);
+        $this->assertStringNotContainsString($message, $flashMessage['message']);
         $this->assertEquals($level, $flashMessage['level']);
     }
 

@@ -50,10 +50,7 @@ EOT;
             ->setHelp($help);
     }
 
-    /**
-     * @return int
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->processOptions($input);
 
@@ -62,12 +59,12 @@ EOT;
 
         if ($sourceCol === null) {
             $output->writeln('Source collection needs to be specified.');
-            return 0;
+            return self::FAILURE;
         }
 
         if ($destCol === null) {
             $output->writeln('Destination collection needs to be specified.');
-            return 0;
+            return self::FAILURE;
         }
 
         $sourceId = $sourceCol->getId();
@@ -82,7 +79,7 @@ EOT;
             $output->writeln('');
             $output->writeln('  "' . $sourceCol->getDisplayName() . '"');
             $output->writeln('');
-            return 0;
+            return self::SUCCESS;
         }
 
         $destDocuments = $destCol->getDocumentIds();
@@ -91,7 +88,7 @@ EOT;
 
         if ($moveCount === 0) {
             $output->writeln("Destination collection already contains all the documents (${sourceCount}) of source collection.");
-            return 0;
+            return self::SUCCESS;
         }
 
         $output->writeln("Copy documents (${moveCount}) from source collection (ID = ${sourceId})");
@@ -119,6 +116,6 @@ EOT;
             $output->writeln('Copying cancelled');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }

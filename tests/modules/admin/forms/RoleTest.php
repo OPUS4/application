@@ -121,19 +121,19 @@ class Admin_Form_RoleTest extends ControllerTestCase
         $messages = $name->getMessages();
 
         $this->assertArrayHasKey('regexNotMatch', $messages);
-        $this->assertContains('letters and numbers', $messages['regexNotMatch']);
+        $this->assertStringContainsString('letters and numbers', $messages['regexNotMatch']);
 
         $this->assertArrayHasKey('stringLengthTooShort', $messages);
-        $this->assertContains('less than 3 characters', $messages['stringLengthTooShort']);
+        $this->assertStringContainsString('less than 3 characters', $messages['stringLengthTooShort']);
 
         $this->useGerman();
         $name->isValid('');
         $messages = $name->getMessages();
 
         $this->assertArrayHasKey('regexNotMatch', $messages);
-        $this->assertContains('Buchstaben und Zahlen', $messages['regexNotMatch']);
+        $this->assertStringContainsString('Buchstaben und Zahlen', $messages['regexNotMatch']);
 
         $this->assertArrayHasKey('stringLengthTooShort', $messages);
-        $this->assertContains('weniger als 3 Zeichen', $messages['stringLengthTooShort']);
+        $this->assertStringContainsString('weniger als 3 Zeichen', $messages['stringLengthTooShort']);
     }
 }

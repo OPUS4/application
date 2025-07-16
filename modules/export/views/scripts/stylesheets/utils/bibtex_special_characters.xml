@@ -324,7 +324,7 @@
             <find>ÿ</find>
             <replace>{\"y}</replace>
     </search>
-	
+
 	<!-- ab hier durch Tests als notwendig erkannt / Boris 12.3.2014 -->
 	<search>
             <find>&#8216;</find>

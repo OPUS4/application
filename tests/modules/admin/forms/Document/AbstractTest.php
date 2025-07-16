@@ -152,7 +152,7 @@ class Admin_Form_Document_AbstractTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Unknown ID = \'9999\'', $messages[0]);
+        $this->assertStringContainsString('Unknown ID = \'9999\'', $messages[0]);
     }
 
     public function testValidation()

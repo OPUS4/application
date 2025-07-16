@@ -41,7 +41,8 @@ use Opus\Common\Person;
 $personId = $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getValue();
 $person   = $this->element->getModel();
 if ($person === null && $personId !== null) {
-    $person = Person::new($personId);
+    // TODO TEST Bug #1068 new() was used instead of get() - How to write a unit test for that?
+    $person = Person::get($personId);
 }
 // TODO ELSE err output
 
@@ -80,9 +81,9 @@ $formId = substr($formId, 0, strrpos($formId, '-') + 1);
             ><?PHP if ($person->getPlaceOfBirth() !== null) :
                 ?><?= $person->getDateOfBirth() === null ? '' : ', '
 ?><span id="<?= $formId . 'PlaceOfBirth' ?>" class="person-born-place"
-                      ><?= $person->getPlaceOfBirth() ?></span
-            >
-             <?PHP endif; ?>)
+                      ><?= $person->getPlaceOfBirth()
+                        ?></span><?PHP
+             endif; ?>)
         <?PHP endif; ?>
         <?PHP if ($person->getEmail() !== null) : ?>
         <div>
@@ -94,6 +95,15 @@ $formId = substr($formId, 0, strrpos($formId, '-') + 1);
             <span id="<?= $formId . 'AllowContact'?>">(<?= $this->translate('AllowEmailContact') ?>)</span>
             <?PHP endif; ?>
         </div>
+        <?PHP endif; ?>
+        <?PHP if ($person->getIdentifierGnd() !== null) : ?>
+            <div><?= $this->translate('PersonAuthorIdentifierGnd') ?> <?= $this->gndLink($person->getIdentifierGnd()) ?></div>
+        <?PHP endif; ?>
+        <?PHP if ($person->getIdentifierOrcid() !== null) : ?>
+            <div><?= $this->translate('PersonAuthorIdentifierOrcid') ?> <?= $this->orcidLink($person->getIdentifierOrcid()) ?></div>
+        <?PHP endif; ?>
+        <?PHP if ($person->getIdentifierMisc() !== null) : ?>
+            <div><?= $this->translate('PersonAuthorIdentifierMisc') ?> <?= htmlspecialchars($person->getIdentifierMisc()) ?></div>
         <?PHP endif; ?>
     </div>
     <?PHP if (! $this->element->isViewModeEnabled()) : ?>

@@ -40,7 +40,7 @@ use Opus\Common\DocumentInterface;
  * TODO generic mechanism for excluding enrichments from editing
  * TODO use custom elements/subforms for different enrichment types
  */
-class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_MultiSubForm
+class Admin_Form_Document_MultiEnrichmentSubForm extends Admin_Form_Document_DefaultMultiSubForm
 {
     /**
      * Es wurde ein neuer Enrichmentkey im Select-Formularfeld ausgewählt.

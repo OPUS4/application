@@ -31,6 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
+use Opus\Common\Repository;
 
 /**
  * @covers Publish_FormController
@@ -91,9 +92,138 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $body);
-        $this->assertContains('Bitte wählen Sie einen Dokumenttyp aus der Liste aus.', $body);
-        $this->assertContains("<div class='form-errors'>", $body);
+        $this->assertStringContainsString('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $body);
+        $this->assertStringContainsString('Bitte wählen Sie einen Dokumenttyp aus der Liste aus.', $body);
+        $this->assertStringContainsString("<div class='form-errors'>", $body);
+    }
+
+    public function testUploadActionWithoutFile()
+    {
+        // TODO currently it is necessary to disable file upload, because otherwise dispatch always fails
+        $this->adjustConfiguration([
+            'form' => ['first' => ['enable_upload' => 0]],
+        ]);
+
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost([
+                'documentType' => 'all',
+                'rights'       => '1',
+                'send'         => 'Next step',
+            ]);
+
+        $this->dispatch('/publish/form/upload');
+
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('upload');
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringNotContainsString(
+            'Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.',
+            $body
+        );
+
+        $this->assertXpathContentContains('//legend', 'Kontaktdaten der Einstellerin/des Einstellers');
+    }
+
+    public function testUploadActionSqlInjectionWithDocumentTypePrevented()
+    {
+        // TODO currently it is necessary to disable file upload, because otherwise dispatch always fails
+        $this->adjustConfiguration([
+            'form' => ['first' => ['enable_upload' => 0]],
+        ]);
+
+        $finder = Repository::getInstance()->getDocumentFinder();
+
+        $finder->setServerState(Document::STATE_TEMPORARY);
+
+        // NOTE: there might be some temporary documents left by other tests
+        $temporaryDocs = $finder->getIds();
+
+        // NOTE: it is not clear if this injection would actually work, if there weren't protections in the underlying
+        //       Framework layer
+        $injection = '`all`; INSERT INTO model_types(type) VALUES (\'123\');';
+
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost([
+                'documentType' => $injection,
+                'rights'       => '1',
+                'send'         => 'Weiter zum nächsten Schritt',
+            ]);
+
+        $this->dispatch('/publish/form/upload');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString(
+            'Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.',
+            $body
+        );
+        $this->assertStringContainsString(
+            'Bitte wählen Sie einen Dokumenttyp aus der Liste aus.',
+            $body
+        );
+        $this->assertStringContainsString("<div class='form-errors'>", $body);
+
+        // Check that count of temporary documents has not changed
+        $newTemporaryDocs = array_values(array_diff($finder->getIds(), $temporaryDocs));
+
+        $this->assertCount(1, $newTemporaryDocs);
+
+        $newDocId = $newTemporaryDocs[0];
+
+        $doc = Document::get($newDocId);
+
+        $this->assertEquals($injection, $doc->getType());
+    }
+
+    public function testFailedUploadActionDoesNotCreateDocument()
+    {
+        $this->markTestSkipped('Currently failed action creates new document TODO refactor');
+
+        // TODO currently it is necessary to disable file upload, because otherwise dispatch always fails
+        $this->adjustConfiguration([
+            'form' => ['first' => ['enable_upload' => 0]],
+        ]);
+
+        $finder = Repository::getInstance()->getDocumentFinder();
+
+        $finder->setServerState(Document::STATE_TEMPORARY);
+
+        // NOTE: there might be some temporary documents left by other tests
+        $docCount = $finder->getCount();
+
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost([
+                'documentType' => 'all',
+                'rights'       => '0', // causes submit to fail
+                'send'         => 'Weiter zum nächsten Schritt',
+            ]);
+
+        $this->dispatch('/publish/form/upload');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString(
+            'Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.',
+            $body
+        );
+        $this->assertStringContainsString(
+            'Bitte wählen Sie einen Dokumenttyp aus der Liste aus.',
+            $body
+        );
+        $this->assertStringContainsString("<div class='form-errors'>", $body);
+
+        // Check that count of temporary documents has not changed
+        $this->assertEquals($docCount, $finder->getCount());
     }
 
     /**
@@ -142,12 +272,12 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('TitleMain_1', $body);
-        $this->assertContains('TitleMainLanguage_1', $body);
-        $this->assertContains('TitleMain_2', $body);
-        $this->assertContains('TitleMainLanguage_2', $body);
+        $this->assertStringContainsString('TitleMain_1', $body);
+        $this->assertStringContainsString('TitleMainLanguage_1', $body);
+        $this->assertStringContainsString('TitleMain_2', $body);
+        $this->assertStringContainsString('TitleMainLanguage_2', $body);
 
-        $this->assertNotContains("<div class='form-errors'>", $body);
+        $this->assertStringNotContainsString("<div class='form-errors'>", $body);
     }
 
     /**
@@ -198,8 +328,8 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('check');
-        $this->assertContains('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $this->getResponse()->getBody());
-        $this->assertContains("<div class='form-errors'>", $this->getResponse()->getBody());
+        $this->assertStringContainsString('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $this->getResponse()->getBody());
+        $this->assertStringContainsString("<div class='form-errors'>", $this->getResponse()->getBody());
     }
 
     public function testCheckActionWithValidPostAndSendButtonAndAllRequiredFields()
@@ -207,7 +337,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $doc = $this->createTemporaryDoc();
 
         $session                   = new Zend_Session_Namespace('Publish');
-        $session->documentType     = 'preprint';
+        $session->documentType     = 'all';
         $session->documentId       = $doc->getId();
         $session->fulltext         = '0';
         $session->additionalFields = [];
@@ -233,26 +363,27 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->assertController('form');
         $this->assertAction('check');
 
-        $this->assertNotContains('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $this->getResponse()->getBody());
-        $this->assertNotContains("<div class='form-errors'>", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $body);
+        $this->assertStringNotContainsString("<div class='form-errors'>", $body);
 
-        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
-        $this->assertContains('<b>Kontaktdaten der Einstellerin/des Einstellers</b>', $this->getResponse()->getBody());
-        $this->assertContains('<td>Doe</td>', $this->getResponse()->getBody());
-        $this->assertContains('<td>doe@example.org</td>', $this->getResponse()->getBody());
+        $this->assertStringContainsString('Bitte überprüfen Sie Ihre Eingaben.', $body);
+        $this->assertStringContainsString('<b>Kontaktdaten der Einstellerin/des Einstellers</b>', $body);
+        $this->assertStringContainsString('<td>Doe</td>', $body);
+        $this->assertStringContainsString('<td>doe@example.org</td>', $body);
 
-        $this->assertContains('<b>Haupttitel</b>', $this->getResponse()->getBody());
-        $this->assertContains('<td>Entenhausen</td>', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<b>Haupttitel</b>', $body);
+        $this->assertStringContainsString('<td>Entenhausen</td>', $body);
         $this->assertQueryContentRegex('td', '/German|Deutsch/');
 
-        $this->assertContains('<b>Autor*innen</b>', $this->getResponse()->getBody());
-        $this->assertContains('<td>AuthorLastName</td>', $this->getResponse()->getBody());
-        $this->assertContains('<td>Nein</td>', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<b>Autor*innen</b>', $body);
+        $this->assertStringContainsString('<td>AuthorLastName</td>', $body);
+        $this->assertStringContainsString('<td>Nein</td>', $body);
 
-        $this->assertContains('<b>Weitere Formulardaten:</b>', $this->getResponse()->getBody());
-        $this->assertContains('<td>22.01.2011</td>', $this->getResponse()->getBody());
-        $this->assertContains('<td>Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</td>', $this->getResponse()->getBody());
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<b>Weitere Formulardaten:</b>', $body);
+        $this->assertStringContainsString('<td>22.01.2011</td>', $body);
+        $this->assertStringContainsString('<td>Creative Commons - CC BY-ND - Namensnennung - Keine Bearbeitungen 4.0 International</td>', $body);
+        $this->assertStringContainsString('<b>Es wurden keine Dateien hochgeladen.</b>', $body);
     }
 
     /**
@@ -282,9 +413,10 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->dispatch('/publish/form/check');
 
         $this->assertResponseCode(200);
-        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
-        $this->assertContains('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('Bitte überprüfen Sie Ihre Eingaben.', $body);
+        $this->assertStringContainsString('<legend>Bibliographie</legend>', $body);
+        $this->assertStringContainsString('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $body);
     }
 
     public function testOPUSVIER1886WithBibliographyUnselected()
@@ -313,9 +445,10 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->dispatch('/publish/form/check');
 
         $this->assertResponseCode(200);
-        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
-        $this->assertContains('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('Bitte überprüfen Sie Ihre Eingaben.', $body);
+        $this->assertStringContainsString('<legend>Bibliographie</legend>', $body);
+        $this->assertStringContainsString('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $body);
     }
 
     public function testOPUSVIER1886WithBibliographySelected()
@@ -344,9 +477,10 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->dispatch('/publish/form/check');
 
         $this->assertResponseCode(200);
-        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
-        $this->assertContains('Dokument wird zur Bibliographie <b>hinzugefügt</b>.', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('Bitte überprüfen Sie Ihre Eingaben.', $body);
+        $this->assertStringContainsString('<legend>Bibliographie</legend>', $body);
+        $this->assertStringContainsString('Dokument wird zur Bibliographie <b>hinzugefügt</b>.', $body);
     }
 
     /**
@@ -376,9 +510,10 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->dispatch('/publish/form/check');
 
         $this->assertResponseCode(200);
-        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
-        $this->assertNotContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
-        $this->assertNotContains('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('Bitte überprüfen Sie Ihre Eingaben.', $body);
+        $this->assertStringNotContainsString('<legend>Bibliographie</legend>', $body);
+        $this->assertStringNotContainsString('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $body);
     }
 
     /**
@@ -409,7 +544,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $doc->delete();
 
         $this->assertResponseCode(200);
-        $this->assertNotContains("Es sind Fehler aufgetreten.", $this->response->getBody());
+        $this->assertStringNotContainsString("Es sind Fehler aufgetreten.", $this->response->getBody());
         $this->assertFalse((bool) $belongsToBibliography, 'Expected that document does not belong to bibliography');
     }
 
@@ -428,9 +563,10 @@ class Publish_FormControllerTest extends ControllerTestCase
     {
         $this->fileNoticeOnSecondFormPage(self::CONFIG_VALUE_FALSE);
 
-        $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
-        $this->assertNotContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
-        $this->assertNotContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $body);
+        $this->assertStringNotContainsString('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $body);
+        $this->assertStringNotContainsString('<b>Es wurden keine Dateien hochgeladen. </b>', $body);
     }
 
     public function testDoNotShowFileNoticeOnThirdFormPageIfFileUploadIsDisabled()
@@ -438,9 +574,10 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->fileNoticeOnThirdFormPage(self::CONFIG_VALUE_FALSE);
 
         $this->assertResponseCode(200);
-        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
-        $this->assertNotContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
-        $this->assertNotContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('Bitte überprüfen Sie Ihre Eingaben', $body);
+        $this->assertStringNotContainsString('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $body);
+        $this->assertStringNotContainsString('<b>Es wurden keine Dateien hochgeladen. </b>', $body);
     }
 
     public function testShowFileNoticeOnSecondFormPageIfFileUploadIsEnabled()
@@ -449,9 +586,9 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $output = $this->getResponse()->getBody();
 
-        $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $output);
-        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $output);
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $output);
+        $this->assertStringContainsString('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $output);
+        $this->assertStringContainsString('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $output);
+        $this->assertStringContainsString('<b>Es wurden keine Dateien hochgeladen.</b>', $output);
     }
 
     public function testShowFileNoticeOnThirdFormPageIfFileUploadIsEnabled()
@@ -461,9 +598,9 @@ class Publish_FormControllerTest extends ControllerTestCase
         $output = $this->getResponse()->getBody();
 
         $this->assertResponseCode(200);
-        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $output);
-        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $output);
-        $this->assertContains('<b>Es wurden keine Dateien hochgeladen.</b>', $output);
+        $this->assertStringContainsString('Bitte überprüfen Sie Ihre Eingaben', $output);
+        $this->assertStringContainsString('<legend>Sie haben folgende Datei(en) hochgeladen:</legend>', $output);
+        $this->assertStringContainsString('<b>Es wurden keine Dateien hochgeladen.</b>', $output);
     }
 
     /**
@@ -808,7 +945,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $response = $this->getResponse();
         $this->assertEquals('500', $response->getHttpResponseCode());
-        $this->assertContains('Application_Exception', $response->getBody());
+        $this->assertStringContainsString('Application_Exception', $response->getBody());
 
         //no button pressed, additionalFields still in intial state
         $this->assertEquals(9, count($session->additionalFields));
@@ -852,8 +989,9 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->assertController('form');
         $this->assertAction('check');
 
-        $this->assertNotContains('Undefined index: TitleMainLanguage_1', $this->getResponse()->getBody());
-        $this->assertContains("<div class='form-errors'>", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('Undefined index: TitleMainLanguage_1', $body);
+        $this->assertStringContainsString("<div class='form-errors'>", $body);
     }
 
     public function testManipulatePostMissingTitleAbstractLanguage()
@@ -887,7 +1025,7 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->assertController('form');
         $this->assertAction('check');
 
-        $this->assertNotContains('Undefined index: TitleAbstractLanguage_1', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('Undefined index: TitleAbstractLanguage_1', $this->getResponse()->getBody());
     }
 
     public function testManipulatePostMissingTitleParentLanguage()
@@ -917,7 +1055,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        $this->assertNotContains('Undefined index: TitleParentLanguage_1', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('Undefined index: TitleParentLanguage_1', $this->getResponse()->getBody());
     }
 
     public function testManipulatePostMissingTitleSubLanguage()
@@ -947,7 +1085,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        $this->assertNotContains('Undefined index: TitleSubLanguage_1', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('Undefined index: TitleSubLanguage_1', $this->getResponse()->getBody());
     }
 
     public function testManipulatePostMissingTitleAdditionalLanguage()
@@ -977,7 +1115,7 @@ class Publish_FormControllerTest extends ControllerTestCase
 
         $this->dispatch('/publish/form/check');
 
-        $this->assertNotContains('Undefined index: TitleAdditionalLanguage_1', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('Undefined index: TitleAdditionalLanguage_1', $this->getResponse()->getBody());
     }
 
     public function testBarfooTemplateIsRenderedForDoctypeFoobar()
@@ -995,8 +1133,8 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->dispatch('/publish/form/check');
 
         $respBody = $this->getResponse()->getBody();
-        $this->assertContains("<label for='Language'>", $respBody);
-        $this->assertContains('>foobar</h3>', $respBody);
+        $this->assertStringContainsString("<label for='Language'>", $respBody);
+        $this->assertStringContainsString('>foobar</h3>', $respBody);
     }
 
     public function testApplicationErrorForDoctypeBarbaz()
@@ -1013,8 +1151,9 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->dispatch('/publish/form/check');
 
         $this->assertResponseCode(500);
-        $this->assertContains('Application_Exception', $this->getResponse()->getBody());
-        $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('Application_Exception', $body);
+        $this->assertStringContainsString('invalid configuration: template file barbaz.phtml is not readable or does not exist', $body);
     }
 
     public function testApplicationErrorForDoctypeBazbar()
@@ -1031,7 +1170,8 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->dispatch('/publish/form/check');
 
         $this->assertResponseCode(500);
-        $this->assertContains('Application_Exception', $this->getResponse()->getBody());
-        $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('Application_Exception', $body);
+        $this->assertStringContainsString('invalid configuration: template file barbaz.phtml is not readable or does not exist', $body);
     }
 }

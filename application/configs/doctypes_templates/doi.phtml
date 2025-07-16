@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2022, OPUS 4 development team
+ * @copyright   Copyright (c) 2023, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
@@ -45,76 +45,72 @@ $config = Config::get();
 <?php if (isset($this->errorCaseMessage)) : ?>
     <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
 <?php endif; ?>
-<form id="Alles" enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
+<form id="doi-form" enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
     <div class="form-items-wrapper">
         <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
-        
-            <?php $this->count = 0; ?>
-            <!-- <?= $this->fileOverview(); ?> -->            
-         
+    
+        <?php $this->count = 0; ?>
+        <!-- <?= $this->fileOverview(); ?> -->            
 
-            <?= $this->element($this->IdentifierDoi); ?>
-            <!-- <input type="button" name="go_import" value="Metadaten von Crossref holen" onclick="leseDoi();"> --> <!-- DOI-Button -->
+        <?= $this->element($this->IdentifierDoi); ?>
 
-            <input type="button" name="go_import" value="Metadaten von Crossref holen" onclick="startCheck()">
+        <input type="button" name="go_import" id="DoiButton" value="<?= $this->translate('doiimport_button_getMetadata'); ?>" onclick="startCheck()">
 
-            <span id="unsichtbares_formularfeld">
-                <?= $this->element($this->opus_doi_flag); ?>
-                <?= $this->element($this->local_import_origin); ?>
-                <?= $this->element($this->opus_import_data); ?>
-                <?= $this->element($this->local_crossrefDocumentType); ?>
-                <?= $this->element($this->local_crossrefLicence); ?>
-                <?= $this->element($this->local_doiImportPopulated); ?>
+        <span id="doi_import_invisible_field">
                 
-                <input type="text" name="DocumentType" id="DocumentType" value="" />
-                Dokumenttyp in Crossref:&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="CrossrefDocumentType" id="CrossrefDocumentType" size="35" /> <!-- Für Prod: type="hidden" --> 
-                <br /><br />Wird in OPUS angelegt als:
-                <input type="text" name="OpusDocumentType" id="OpusDocumentType" size="35" value="<?= $this->translate($GET['DocumentType']) ?>" /> <!-- Für Prod: type="hidden" -->
-                <br /><br />
-            </span>
-
-
-            <?= $this->group($this->groupPersonSubmitter); ?>
-            <?= $this->element($this->Language); ?>         
-            <?= $this->element($this->CompletedYear); ?>
-            <!-- <?= $this->element($this->CompletedDate); ?> -->
-            <span id="no_delete">
-                <?= $this->group($this->groupPersonAuthor); ?>
-            </span> 
-			<?= $this->group($this->groupPersonEditor); ?>
-            <?= $this->group($this->groupPersonTranslator); ?>
-            <?= $this->element($this->ContributingCorporation); ?>
-            <?= $this->group($this->groupTitleMain); ?>
-            <?= $this->group($this->groupTitleAbstract); ?>
-            <?= $this->group($this->groupTitleSub); ?>
-            <?= $this->group($this->groupTitleAdditional); ?>
-            <?= $this->group($this->groupTitleParent); ?>
-			<?= $this->element($this->Volume); ?>
-            <?= $this->element($this->Issue); ?>
-            <?= $this->element($this->Edition); ?>
-			<?= $this->element($this->PageNumber); ?>
-            <?= $this->element($this->PageFirst); ?>
-            <?= $this->element($this->PageLast); ?>
-		    <?= $this->element($this->ArticleNumber); ?>
-			<?= $this->element($this->IdentifierIsbn); ?>
-            <?= $this->element($this->IdentifierIssn); ?>
-            <?= $this->element($this->conference_title); ?>
-            <?= $this->element($this->conference_place); ?>
-			<?= $this->element($this->ThesisDateAccepted); ?>
-            <?= $this->element($this->ThesisYearAccepted); ?>   			
-			<?= $this->element($this->PublisherName); ?>
-            <?= $this->element($this->PublisherPlace); ?>            
-            <?= $this->group($this->groupSubjectUncontrolled); ?>
-            <hr><br />
+            <?= $this->element($this->opus_doi_flag); ?>
+            <?= $this->element($this->opus_import_origin); ?>
+            <?= $this->element($this->opus_doi_json); ?>
+            <?= $this->element($this->opus_crossrefDocumentType); ?>
+            <?= $this->element($this->opus_crossrefLicence); ?>
+            <?= $this->element($this->opus_doiImportPopulated); ?>
             
-		   
-			
-                
+            </br></br>
+            OPUS:&nbsp;&nbsp;<input type="text" name="DocumentType" id="DocumentType" value="" />
+            Crossref:&nbsp;&nbsp;<input type="text" name="CrossrefDocumentType" id="CrossrefDocumentType" size="35" />
+        </span>
 
-<div class="button-wrapper">
-        <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
-        <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
-    </div>
+        <?= $this->group($this->groupPersonSubmitter); ?>
+        <?= $this->element($this->Language); ?>         
+        <?= $this->group($this->groupPersonAuthor); ?>
+        <?= $this->group($this->groupTitleMain); ?>
+        <?= $this->group($this->groupTitleSub); ?>
+        <?= $this->group($this->groupTitleAbstract); ?>
+        <?= $this->group($this->groupTitleAdditional); ?>
+        
+        <?= $this->group($this->groupTitleParent); ?>
+        <?= $this->element($this->Volume); ?>
+        <?= $this->element($this->Issue); ?>
+        
+        <?= $this->element($this->ArticleNumber); ?>
+        <?= $this->element($this->PageNumber); ?>
+        <?= $this->element($this->PageFirst); ?>
+        <?= $this->element($this->PageLast); ?>
+        
+        <?= $this->element($this->CompletedYear); ?>
+        <?= $this->element($this->ThesisDateAccepted); ?>
+        <?= $this->element($this->ThesisYearAccepted); ?>
+        <?= $this->element($this->Edition); ?>
+        
+        <?= $this->group($this->groupPersonEditor); ?>
+        <?= $this->element($this->ContributingCorporation); ?>
+        <?= $this->group($this->groupPersonTranslator); ?>
+        
+        <?= $this->element($this->PublisherName); ?>
+        <?= $this->element($this->PublisherPlace); ?>
+        
+        <?= $this->group($this->groupSubjectUncontrolled); ?>
+        
+        <?= $this->element($this->IdentifierIsbn); ?>
+        <?= $this->element($this->IdentifierIssn); ?>
+        <?= $this->element($this->IdentifierUrl); ?>
+        
+        <hr><br />
+            
+        <div class="button-wrapper">
+            <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
+            <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
+        </div>
 
     </div>
 </form>
@@ -124,19 +120,35 @@ $config = Config::get();
 <?php endif; ?>
 </div>
 
-<!-- Nach Reload nochmal parsen, falls local_doiJson schon gefüllt ist. Anderenfalls würden alle Felder wieder geleert, sobald ein Feld hinzugefügt wird. -->
+<!-- Nach Reload nochmal parsen, falls opus_doi_json schon gefüllt ist. Anderenfalls würden alle Felder wieder geleert, sobald ein Feld hinzugefügt wird. -->
 <script language="javascript" type="text/javascript">
+
+    var translations = {
+        doiimport_header_note: "<?= $this->translate('doiimport_header_note'); ?>",
+        doiimport_header_warning: "<?= $this->translate('doiimport_header_warning'); ?>",
+        doiimport_hint_insertDoi: "<?= $this->translate('doiimport_hint_insertDoi'); ?>",
+        doiimport_hint_importMissing: "<?= $this->translate('doiimport_hint_importMissing'); ?>",
+        doiimport_hint_doiExistsPublished: "<?= $this->translate('doiimport_hint_doiExistsPublished'); ?>",
+        doiimport_hint_doiExistsUnpublished: "<?= $this->translate('doiimport_hint_doiExistsUnpublished'); ?>",
+        doiimport_hint_allFieldsDeleted: "<?= $this->translate('doiimport_hint_allFieldsDeleted'); ?>",
+        doiimport_hint_doiNotFound: "<?= $this->translate('doiimport_hint_doiNotFound'); ?>",
+        doiimport_button_cancel: "<?= $this->translate('doiimport_button_cancel'); ?>",
+        doiimport_button_showId: "<?= $this->translate('doiimport_button_showId'); ?>",
+        doiimport_button_back: "<?= $this->translate('doiimport_button_back'); ?>",
+        doiimport_button_tryAgain: "<?= $this->translate('doiimport_button_tryAgain'); ?>",
+        doiimport_hint_manyAuthors: "<?= $this->translate('doiimport_hint_manyAuthors'); ?>"
+    };
 
     let opusConfig = {
         "crossrefUrl": '<?= $config->crossref->url ?>',
         "crossrefMailTo": '<?= $config->crossref->mailTo ?>'
-    }
+    };
 
-	 var doiJson = document.getElementById("Enrichmentopus_import_data").value;
- if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "false"){
+    var doiJson = document.getElementById("Enrichmentopus_doi_json").value;
+    if (doiJson.trim() !== '' && document.getElementById("Enrichmentopus_doi_flag").value === "false"){
     parseJson(doiJson);
-    } else if (doiJson.trim() != '' && document.getElementById("Enrichmentopus_doi_flag").value == "true"){
-    let fields = document.getElementById("Enrichmentlocal_doiImportPopulated").value;
+    } else if (doiJson.trim() !== '' && document.getElementById("Enrichmentopus_doi_flag").value === "true"){
+    let fields = document.getElementById("Enrichmentopus_doiImportPopulated").value;
     const usedFields = fields.split(',');
     getDoctypes(JSON.parse(doiJson)); // DokType nochmal parsen, falls z.B. ein Autor gelöscht und dadurch die Seite neu aufgebaut wurde
     for (const element of usedFields) { // Hier werden die importierten Felder nach Reload (z.B. "Autor löschen") nochmal begrünt
@@ -145,29 +157,11 @@ $config = Config::get();
         }        
         }
 
-    const mandatory_fields = ['PersonSubmitterLastName_1','PersonSubmitterFirstName_1','Language','TitleMain_1'];
+    const mandatory_fields = ['PersonSubmitterLastName_1','PersonSubmitterEmail_1','Language','TitleMain_1'];
     for (const mandatory of mandatory_fields) { //Pflichtfelder Rot färben, wenn leer 
-        if (document.getElementById(mandatory).value == "") {
+        if (document.getElementById(mandatory).value === "") {
             colorPink(mandatory);
             }
-        }
-    
+        }    
     }
-    
-
-    /* if (document.getElementById("IdentifierDoi").value !== "") {
-        document.getElementById("go_import").addEventListener('click', (event) => {
-            alert("Löschen!");
-        }) */
-
-    /* document.getElementById("IdentifierDoi").addEventListener('click', (event) => { 
-        if (confirm("Achtung! Formular wird geleert und ein neuer Import gestartet!")) 
-            {   document.Alles.reset();
-                alert("Löschen!");
-                //parseJson(doiJson)
-            }
-        else {return}
-    }) 
-    }*/
-
 </script>

@@ -50,7 +50,7 @@
                             ?>
         <li class="sorting_option">
                          <?php if ($this->sortfield === 'score' && $this->sortorder === 'desc') : ?>
-                                <?= $this->translate('sorting_relevancy') ?>
+                             <span><?= $this->translate('sorting_relevancy') ?></span>
                          <?php else : ?>
                 <a href="<?= $this->url($urlparams) ?>" rel="nofollow">
                              <?= $this->translate('sorting_relevancy') ?>
@@ -73,7 +73,7 @@
                     $urlparams['sortorder'] = $sortorder; ?>
         <li class="sorting_option sort_<?= $sortorder ?>">
             <?php if ($this->sortfield === $sortfield && $this->sortorder === $sortorder) : ?>
-                <?= $this->translate('sorting_' . $sortfield) ?>
+                <span><?= $this->translate('sorting_' . $sortfield) ?></span>
             <?php else : ?>
                 <a href="<?= $this->url($urlparams) ?>" rel="nofollow">
                     <?= $this->translate('sorting_' . $sortfield) ?>

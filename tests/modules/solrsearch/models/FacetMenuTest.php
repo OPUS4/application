@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\Config;
+
 class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
 {
     /** @var string[] */
@@ -53,7 +55,7 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
             ],
         ]);
 
-        $facetLimits = Opus\Search\Config::getFacetLimits();
+        $facetLimits = Config::getFacetLimits();
 
         $this->assertEquals(3, $facetLimits['author_facet']);
         $this->assertEquals(15, $facetLimits['published_year']);
@@ -92,7 +94,7 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase
             ],
         ]);
 
-        $facetLimits = Opus\Search\Config::getFacetLimits();
+        $facetLimits = Config::getFacetLimits();
 
         $this->assertEquals(3, $facetLimits['author_facet']);
         $this->assertEquals(15, $facetLimits['published_year']);

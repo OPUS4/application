@@ -247,17 +247,26 @@ class Application_Configuration extends Config
     /**
      * Saves configuration as XML file.
      *
-     * @param Zend_Config $config
+     * @param Zend_Config $update
      * @throws Zend_Config_Exception
      */
-    public static function save($config)
+    public static function save($update)
     {
+        $config = self::load();
+
+        $config->merge($update);
+
         $writer = new Zend_Config_Writer_Xml();
         $writer->write(APPLICATION_PATH . '/application/configs/config.xml', $config);
     }
 
+    /**
+     * @return Zend_Config_Xml
+     * @throws Zend_Config_Exception
+     */
     public static function load()
     {
+        return new Zend_Config_Xml(APPLICATION_PATH . '/application/configs/config.xml', null, true);
     }
 
     /**

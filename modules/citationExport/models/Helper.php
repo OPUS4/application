@@ -209,7 +209,7 @@ class CitationExport_Model_Helper extends Application_Model_Abstract
 
             return $proc->transformToXML($xml);
         } catch (Exception $e) {
-            throw new Application_Exception($e->getMessage(), null, $e);
+            throw new Application_Exception($e->getMessage(), 0, $e);
         }
     }
 }

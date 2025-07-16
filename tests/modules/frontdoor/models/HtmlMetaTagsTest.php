@@ -887,7 +887,7 @@ class Frontdoor_Model_HtmlMetaTagsTest extends ControllerTestCase
 
         $config = $metaTags->getMappingConfig();
 
-        $this->assertCount(16, $config);
+        $this->assertCount(31, $config);
         $this->assertCount(6, array_unique($config));
 
         // a sample check

@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\Title;
+use Opus\Search\Service;
 
 /**
  * TODO fix Solr configuration
@@ -45,9 +46,9 @@ class Rss_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/rss/index/index');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
-        $response = $this->getResponse();
-        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
-        $this->assertContains('<rss version="2.0">', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<?xml version="1.0" encoding="utf-8"?>', $body);
+        $this->assertStringContainsString('<rss version="2.0">', $body);
     }
 
     /**
@@ -68,8 +69,8 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/rss/index/index/searchtype/all');
         $body = $this->getResponse()->getBody();
 
-        $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
-        $this->assertContains("The search service is currently not available.", $body);
+        $this->assertStringNotContainsString("http://${host}:${port}/solr/corethatdoesnotexist", $body);
+        $this->assertStringContainsString("The search service is currently not available.", $body);
 
         $this->assertResponseCode(503);
 
@@ -100,7 +101,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $date       = new DateTime($doc1->getServerDatePublished());
         $dateValue1 = $date->format(DateTime::RFC2822);
 
-        $indexer = Opus\Search\Service::selectIndexingService(null, 'solr');
+        $indexer = Service::selectIndexingService(null, 'solr');
 
         $indexer->addDocumentsToIndex($doc1);
 
@@ -130,15 +131,15 @@ class Rss_IndexControllerTest extends ControllerTestCase
         $doc2->delete();
 
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains("No Opus_Db_Documents with id $docId1 in database.", $body);
-        $this->assertNotContains('<title>test document for OPUSVIER-1726</title>', $body);
-        $this->assertContains('<title>another test document for OPUSVIER-1726</title>', $body);
-        $this->assertNotContains("frontdoor/index/index/docId/$docId1</link>", $body);
-        $this->assertContains("frontdoor/index/index/docId/$docId2</link>", $body);
-        $this->assertNotContains("<pubDate>$dateValue1</pubDate>", $body);
-        $this->assertNotContains("<lastBuildDate>$dateValue1</lastBuildDate>", $body);
-        $this->assertContains("<pubDate>$dateValue2</pubDate>", $body);
-        $this->assertContains("<lastBuildDate>$dateValue2</lastBuildDate>", $body);
+        $this->assertStringNotContainsString("No Opus_Db_Documents with id $docId1 in database.", $body);
+        $this->assertStringNotContainsString('<title>test document for OPUSVIER-1726</title>', $body);
+        $this->assertStringContainsString('<title>another test document for OPUSVIER-1726</title>', $body);
+        $this->assertStringNotContainsString("frontdoor/index/index/docId/$docId1</link>", $body);
+        $this->assertStringContainsString("frontdoor/index/index/docId/$docId2</link>", $body);
+        $this->assertStringNotContainsString("<pubDate>$dateValue1</pubDate>", $body);
+        $this->assertStringNotContainsString("<lastBuildDate>$dateValue1</lastBuildDate>", $body);
+        $this->assertStringContainsString("<pubDate>$dateValue2</pubDate>", $body);
+        $this->assertStringContainsString("<lastBuildDate>$dateValue2</lastBuildDate>", $body);
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
     }
 
@@ -153,8 +154,10 @@ class Rss_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/rss/index/index/searchtype/simple/start/0/rows/10/query/%22%5C%22%22');
 
-        $this->assertContains("The given search query is not supported", $this->getResponse()->getBody());
-        $this->assertNotContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString("The given search query is not supported", $body);
+        $this->assertStringNotContainsString("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $body);
 
         $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }
@@ -168,7 +171,7 @@ class Rss_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/rss/index/index/searchtype/simple/start/0/rows/10/query/asearchquerywithoutanyhits');
 
-        $this->assertNotContains("Warning: XSLTProcessor::transformToXml(): runtime error", $this->getResponse()->getBody());
+        $this->assertStringNotContainsString("Warning: XSLTProcessor::transformToXml(): runtime error", $this->getResponse()->getBody());
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
@@ -179,14 +182,13 @@ class Rss_IndexControllerTest extends ControllerTestCase
     /**
      * Testet, ob Links im Rss richtig aufgebaut werden.
      * Im PhpUnit-Test ist der Host leer, deswegen wird er hier im Test nicht mit berücksichtigt.
-     * TODO: insert host in test-url
      */
     public function testRssLink()
     {
-        Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
+        $this->setBaseUrl(null);
         $this->dispatch('/rss/index/index');
-        $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/147');
-        $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/150');
+        $this->assertXpathContentContains('//item/link', 'http:///frontdoor/index/index/docId/147');
+        $this->assertXpathContentContains('//item/link', 'http:///frontdoor/index/index/docId/150');
     }
 
     public function testPubDateFormatting()

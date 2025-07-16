@@ -87,7 +87,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $formats = $exporter->getFormats();
 
-        $this->assertInternalType('array', $formats);
+        $this->assertIsArray($formats);
         $this->assertCount(1, $formats);
         $this->assertArrayHasKey('bibtex', $formats);
 
@@ -130,7 +130,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $formats = $exporter->getFormats();
 
-        $this->assertInternalType('array', $formats);
+        $this->assertIsArray($formats);
         $this->assertCount(1, $formats);
         $this->assertArrayHasKey('bibtex', $formats);
 

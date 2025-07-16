@@ -382,6 +382,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="publication_state_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Publication State</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Publikationsstatus</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="language_facet_heading">
             <tuv xml:lang="en">
                 <seg>Language</seg>

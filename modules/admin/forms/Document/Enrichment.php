@@ -29,15 +29,19 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Date;
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentInterface;
 use Opus\Common\EnrichmentKey;
+use Opus\Common\EnrichmentKeyInterface;
+use Opus\Common\Model\FieldType\SelectType;
+use Opus\Common\Model\FieldType\TextType;
 use Opus\Common\Model\ModelException;
-use Opus\Enrichment\SelectType;
-use Opus\Enrichment\TextType;
 
 /**
  * Unterformular für einzelne Enrichments im Metadaten-Formular.
+ *
+ * TODO move code for creating form elements to FormElementBuilder
  */
 class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 {
@@ -83,7 +87,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * Initialisiert die Formularelemente mit den Werten aus dem übergebenen Enrichment-Model. Diese Methode wird beim
      * initialen Formularaufruf (d.h. nur im Kontext eines GET-Requests) aufgerufen.
      *
-     * @param Enrichment $enrichment Enrichment aus der Datenbank, das im Formular angezeigt werden soll
+     * @param EnrichmentInterface $enrichment Enrichment aus der Datenbank, das im Formular angezeigt werden soll
      */
     public function populateFromModel($enrichment)
     {
@@ -111,11 +115,11 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
      * EnrichmentKey des Enrichments zugeordnet wurde). Ist kein EnrichmentType zugeordnet, so wird ein einfaches
      * Texteingabefeld verwendet.
      *
-     * @param string             $enrichmentValue Wert des anzuzeigenden Enrichments (in der Datenbank)
-     * @param EnrichmentKey|null $enrichmentKey EnrichmentKey des Enrichments, für das ein Eingabeformularelement
-     *                                               erzeugt werden soll
-     * @param string|null        $formValue aktueller Formularwert für das Enrichment (nur bei der Verarbeitung eines
-     *                                      POST-Requests gesetzt)
+     * @param string                      $enrichmentValue Wert des anzuzeigenden Enrichments (in der Datenbank)
+     * @param EnrichmentKeyInterface|null $enrichmentKey EnrichmentKey des Enrichments, für das ein
+     *                                                  Eingabeformularelement erzeugt werden soll
+     * @param string|null                 $formValue aktueller Formularwert für das Enrichment (nur bei der
+     *                                               Verarbeitung eines POST-Requests gesetzt)
      */
     private function createValueFormElement($enrichmentValue, $enrichmentKey = null, $formValue = null)
     {
@@ -145,12 +149,22 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                     $value = $values[0];
                 }
             }
+        } else {
+            switch ($enrichmentType->getFormElementName()) {
+                case 'Date':
+                    $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+                    $date        = new Date($value);
+                    $value       = $datesHelper->getDateString($date);
+                    break;
+            }
         }
 
         // neues Formularfeld für die Eingabe des Enrichment-Wertes erzeugen
         // wenn $value bezüglich der Typkonfiguration nicht zulässig ist,
         // wird $value durch den nachfolgenden Methodenaufruf nicht gesetzt
-        $element = $enrichmentType->getFormElement($value);
+        $formElementBuilder = $this->getFormElementBuilder();
+
+        $element = $formElementBuilder->getFormElement($enrichmentType, $value);
 
         $enrichmentKeyName = null;
         if ($enrichmentKey !== null) {
@@ -231,7 +245,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
     /**
      * Aktualisiert Enrichment Modell mit Werten im Formular.
      *
-     * @param Enrichment $enrichment
+     * @param EnrichmentInterface $enrichment
      */
     public function updateModel($enrichment)
     {
@@ -246,30 +260,40 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
 
             // besondere Behandlung von Enrichment-Keys, die als Select-Formularlement dargestellt werden
             $enrichmentType = $enrichmentKey->getEnrichmentType();
-            if ($enrichmentType !== null && $enrichmentType->getFormElementName() === 'Select') {
-                // bei Select-Feldern wird im POST nicht der ausgewählte Wert übergeben,
-                // sondern der Index des Wertes in der Werteliste (beginnend mit 0)
-                // daher ist hier ein zusätzlicher Mapping-Schritt erforderlich, der vom im POST
-                // angegebenen Index den tatsächlich ausgewählten Wert ableitet
+            if ($enrichmentType !== null) {
+                switch ($enrichmentType->getFormElementName()) {
+                    case 'Select':
+                        // bei Select-Feldern wird im POST nicht der ausgewählte Wert übergeben,
+                        // sondern der Index des Wertes in der Werteliste (beginnend mit 0)
+                        // daher ist hier ein zusätzlicher Mapping-Schritt erforderlich, der vom im POST
+                        // angegebenen Index den tatsächlich ausgewählten Wert ableitet
 
-                // falls keine strikte Validierung stattfindet, dann darf der ursprünglich im
-                // Dokument gespeichert Enrichment-Wert (steht in Select-Feldliste an erster Stelle)
-                // auch dann gespeichert werden, wenn er gemäß der Konfiguration des Enrichment-Keys
-                // eigentlich nicht gültig ist: in diesem Fall keinen neuen Wert im Enrichment setzen
-                $indexOffset = 0;
-                if ($enrichment->getId() !== null) {
-                    // keine Behandlung von Enrichments, die noch nicht in der Datenbank gespeichert sind,
-                    // (nach dem Hinzufügen von Enrichments über Hinzufügen-Button)
-                    if (! in_array($enrichment->getValue(), $enrichmentType->getValues())) {
-                        if ($enrichmentValue === 0) {
-                            return; // keine Änderung des Enrichment-Werts
+                        // falls keine strikte Validierung stattfindet, dann darf der ursprünglich im
+                        // Dokument gespeichert Enrichment-Wert (steht in Select-Feldliste an erster Stelle)
+                        // auch dann gespeichert werden, wenn er gemäß der Konfiguration des Enrichment-Keys
+                        // eigentlich nicht gültig ist: in diesem Fall keinen neuen Wert im Enrichment setzen
+                        $indexOffset = 0;
+                        if ($enrichment->getId() !== null) {
+                            // keine Behandlung von Enrichments, die noch nicht in der Datenbank gespeichert sind,
+                            // (nach dem Hinzufügen von Enrichments über Hinzufügen-Button)
+                            if (! in_array($enrichment->getValue(), $enrichmentType->getValues())) {
+                                if ($enrichmentValue === 0) {
+                                    return; // keine Änderung des Enrichment-Werts
+                                }
+
+                                // beim Mapping von Select-Feldwertindex auf tatsächlichen Wert aus Typkonfiguration 1 abziehen
+                                $indexOffset = -1;
+                            }
                         }
+                        $enrichmentValue = $enrichmentType->getValues()[$enrichmentValue + $indexOffset];
+                        break;
 
-                        // beim Mapping von Select-Feldwertindex auf tatsächlichen Wert aus Typkonfiguration 1 abziehen
-                        $indexOffset = -1;
-                    }
+                    case 'Date':
+                        $datesHelper     = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+                        $dateObj         = $datesHelper->getOpusDate($enrichmentValue);
+                        $enrichmentValue = $dateObj->__toString();
+                        break;
                 }
-                $enrichmentValue = $enrichmentType->getValues()[$enrichmentValue + $indexOffset];
             }
         }
 
@@ -684,5 +708,13 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
             return $translator->translate($translationKey);
         }
         return $translationKey;
+    }
+
+    /**
+     * @return Application_Form_FormElementBuilder
+     */
+    private function getFormElementBuilder()
+    {
+        return new Application_Form_FormElementBuilder();
     }
 }

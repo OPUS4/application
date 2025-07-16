@@ -33,6 +33,7 @@ use Opus\Common\Config;
 use Opus\Common\Job;
 use Opus\Common\Log;
 use Opus\Job\Runner;
+use Opus\Search\Task\ConsistencyCheck;
 
 class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
 {
@@ -61,7 +62,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         }
 
         // Cleanup of Jobs Table
-        $jobs = Job::getByLabels([Opus\Search\Task\ConsistencyCheck::LABEL]);
+        $jobs = Job::getByLabels([ConsistencyCheck::LABEL]);
         foreach ($jobs as $job) {
             try {
                 $job->delete();
@@ -147,7 +148,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         $model->createJob();
         $this->assertFalse($model->allowConsistencyCheck());
 
-        $this->assertEquals(1, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL));
+        $this->assertEquals(1, Job::getCountForLabel(ConsistencyCheck::LABEL));
     }
 
     public function testNotAllowConsistencyCheckAlt()
@@ -158,7 +159,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         $model->createJob();
         $this->assertFalse($model->allowConsistencyCheck());
 
-        $this->assertEquals(1, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL));
+        $this->assertEquals(1, Job::getCountForLabel(ConsistencyCheck::LABEL));
     }
 
     public function testProcessingStateInvalidContext()
@@ -170,15 +171,15 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
 
     private function runJobImmediately()
     {
-        $this->assertEquals(1, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL));
+        $this->assertEquals(1, Job::getCountForLabel(ConsistencyCheck::LABEL));
 
         $jobrunner = new Runner();
         $jobrunner->setLogger(Log::get());
-        $worker = new Opus\Search\Task\ConsistencyCheck();
+        $worker = new ConsistencyCheck();
         $jobrunner->registerWorker($worker);
         $jobrunner->run();
 
-        $this->assertEquals(0, Job::getCountForLabel(Opus\Search\Task\ConsistencyCheck::LABEL));
+        $this->assertEquals(0, Job::getCountForLabel(ConsistencyCheck::LABEL));
     }
 
     public function testProcessingStateInitial()
@@ -259,9 +260,9 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase
         $this->assertNotNull($logdata->getContent());
         $this->assertNotNull($logdata->getModifiedDate());
 
-        $this->assertContains("checking $numOfPublishedDocs published documents for consistency.", $logdata->getContent(), "content of logfile:\n" . $logdata->getContent());
-        $this->assertContains('No inconsistency was detected.', $logdata->getContent());
-        $this->assertContains('Completed operation after ', $logdata->getContent());
+        $this->assertStringContainsString("checking $numOfPublishedDocs published documents for consistency.", $logdata->getContent(), "content of logfile:\n" . $logdata->getContent());
+        $this->assertStringContainsString('No inconsistency was detected.', $logdata->getContent());
+        $this->assertStringContainsString('Completed operation after ', $logdata->getContent());
     }
 
     /**

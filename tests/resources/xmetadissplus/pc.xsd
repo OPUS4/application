@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- pc: Metadaten fuer Personen;  Personal Core -->
-<!-- Copyright 2006  Deutsche Nationalbibliothek -->
-<!-- Version 1.4 - Schema wurde um erweitert, um auch eine Koerperschaft als Urheber nennen zu koennen -->
+<!-- Copyright 2023  Deutsche Nationalbibliothek -->
+<!-- Version xMetaDissPlus 2.5 -->
 <xs:schema targetNamespace="http://www.d-nb.de/standards/pc/" xmlns="http://www.d-nb.de/standards/pc/"
     xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:dcterms="http://purl.org/dc/terms/"
@@ -10,11 +10,25 @@
     xmlns:cc="http://www.d-nb.de/standards/cc/"
     elementFormDefault="qualified" attributeFormDefault="unqualified">
     <!-- Folgende Importe werden benoetigt, da Elemente aus den zugehoerigen Namespaces benutzt werden. -->
-    <xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd"/>
-    <xs:import namespace="http://purl.org/dc/terms/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd"/>
-    <xs:import namespace="http://www.ndltd.org/standards/metadata/etdms/1.0/"
-        schemaLocation="thesis.xsd"/>	
-    <xs:import namespace="http://www.d-nb.de/standards/ddb/" schemaLocation="ddb.xsd"></xs:import>
+    <xs:annotation>
+        <xs:documentation>
+            2023-02-27:
+            CHANGED by DNB: 
+            keine Änderungen. Version auf 2.5 hochgesetzt für Einheitlichkeit.
+            
+            2017-12-01:             
+            1. CHANGED alle schemaLocation-Attribute verweisen auf eine DNB eigene URL, 
+            auch wenn sie zuvor auf DNB-fremde URLs verwiesen haben 
+            (dc: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd,
+            dcterms: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd).  
+            2. ADD in Element person Referenz auf group ddb:identifierType
+            3. DELETE default-Wert SWD in SWDType/@Scheme
+        </xs:documentation>
+    </xs:annotation>
+    <xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="dc.xsd"/>    
+    <xs:import namespace="http://purl.org/dc/terms/" schemaLocation="dcterms.xsd"/>
+    <xs:import namespace="http://www.ndltd.org/standards/metadata/etdms/1.0/" schemaLocation="thesis.xsd"/>	
+    <xs:import namespace="http://www.d-nb.de/standards/ddb/" schemaLocation="ddb.xsd"/>
     <xs:import namespace="http://www.d-nb.de/standards/cc/" schemaLocation="cc.xsd"/>
     <xs:include schemaLocation="mime.xsd"/>
     <!-- Folgende Inklusion wird fuer die Definition des unqualifizierten Attributs countryCode benoetigt (kein ddb Type) -->
@@ -24,8 +38,10 @@
             <xs:documentation xml:lang="de">PC Personal Core: Personenmetadaten  Deutsche
                 Nationalbibliothek, Speicherung in der PND </xs:documentation>
         </xs:annotation>
+        
         <xs:complexType>
-            <xs:sequence>
+            <xs:sequence>                
+                <xs:group ref="ddb:identifierType" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element name="name" type="nameType" maxOccurs="unbounded"/>
                 <xs:element name="academicTitle" type="xs:string" minOccurs="0"
                     maxOccurs="unbounded"/>
@@ -66,6 +82,7 @@
                 </xs:simpleType>
             </xs:attribute>
             <xs:attribute name="PND-Nr" type="xs:string" use="optional"/>
+            <xs:attributeGroup ref="ddb:normData"/>
         </xs:complexType>
     </xs:element>
     <xs:complexType name="nameType">
@@ -148,7 +165,7 @@
     <xs:complexType name="SWDType">
         <xs:simpleContent>
             <xs:extension base="xs:string">
-                <xs:attribute name="Scheme" use="optional" default="SWD"/>
+                <xs:attribute name="Scheme" use="optional"/>
             </xs:extension>
         </xs:simpleContent>
     </xs:complexType>

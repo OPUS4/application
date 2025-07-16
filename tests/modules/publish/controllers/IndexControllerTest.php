@@ -62,13 +62,14 @@ class Publish_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('index');
 
-        $this->assertContains('<h3 class="document-type">Dokumenttyp und Datei wählen</h3>', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Dokument(e) hochladen</legend>', $this->getResponse()->getBody());
-        $this->assertContains("<input type='hidden' name='MAX_FILE_SIZE' id='MAX_FILE_SIZE' value='1024000' />", $this->getResponse()->getBody());
-        $this->assertContains("<label for='fileupload'>Datei wählen</label>", $this->getResponse()->getBody());
-        $this->assertContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten' size='30' />", $this->getResponse()->getBody());
-        $this->assertContains("<label for='uploadComment'>Kommentar</label>", $this->getResponse()->getBody());
-        $this->assertContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='Fügen Sie hier einen Kommentar hinzu.'  id='uploadComment'></textarea>", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<h3 class="document-type">Dokumenttyp und Datei wählen</h3>', $body);
+        $this->assertStringContainsString('<legend>Dokument(e) hochladen</legend>', $body);
+        $this->assertStringContainsString("<input type='hidden' name='MAX_FILE_SIZE' id='MAX_FILE_SIZE' value='1024000' />", $body);
+        $this->assertStringContainsString("<label for='fileupload'>Datei wählen</label>", $body);
+        $this->assertStringContainsString("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten' size='30' />", $body);
+        $this->assertStringContainsString("<label for='uploadComment'>Kommentar</label>", $body);
+        $this->assertStringContainsString("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='Fügen Sie hier einen Kommentar hinzu.'  id='uploadComment'></textarea>", $body);
     }
 
     public function testDoNotShowFileUpload()
@@ -82,13 +83,14 @@ class Publish_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('index');
 
-        $this->assertContains('<h3 class="document-type">Dokumenttyp wählen</h3>', $this->getResponse()->getBody());
-        $this->assertNotContains('<legend>Dokument(e) hochladen</legend>', $this->getResponse()->getBody());
-        $this->assertNotContains("<input type='hidden' name='MAX_FILE_SIZE' id='MAX_FILE_SIZE' value='10240000' />", $this->getResponse()->getBody());
-        $this->assertNotContains("<label for='fileupload'>Datei wählen</label>", $this->getResponse()->getBody());
-        $this->assertNotContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten ' size='30' />", $this->getResponse()->getBody());
-        $this->assertNotContains("<label for='uploadComment'>Kommentar</label>", $this->getResponse()->getBody());
-        $this->assertNotContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='Fügen Sie hier einen Kommentar hinzu.'  id='uploadComment'></textarea>", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<h3 class="document-type">Dokumenttyp wählen</h3>', $body);
+        $this->assertStringNotContainsString('<legend>Dokument(e) hochladen</legend>', $body);
+        $this->assertStringNotContainsString("<input type='hidden' name='MAX_FILE_SIZE' id='MAX_FILE_SIZE' value='10240000' />", $body);
+        $this->assertStringNotContainsString("<label for='fileupload'>Datei wählen</label>", $body);
+        $this->assertStringNotContainsString("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten ' size='30' />", $body);
+        $this->assertStringNotContainsString("<label for='uploadComment'>Kommentar</label>", $body);
+        $this->assertStringNotContainsString("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='Fügen Sie hier einen Kommentar hinzu.'  id='uploadComment'></textarea>", $body);
     }
 
     public function testShowBibliographyCheckbox()
@@ -102,11 +104,12 @@ class Publish_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('index');
 
-        $this->assertContains('<h3 class="document-type">Dokumenttyp und Datei wählen</h3>', $this->getResponse()->getBody());
-        $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
-        $this->assertContains("<input type='checkbox' class='form-checkbox' name='bibliographie' id='bibliographie' value='1'  />", $this->getResponse()->getBody());
-        $this->assertContains("<label for='bibliographie'>Zur Bibliographie hinzufügen?</label>", $this->getResponse()->getBody());
-        $this->assertContains("<input type='hidden' name='bibliographie' value='0' />", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<h3 class="document-type">Dokumenttyp und Datei wählen</h3>', $body);
+        $this->assertStringContainsString('<legend>Bibliographie</legend>', $body);
+        $this->assertStringContainsString("<input type='checkbox' class='form-checkbox' name='bibliographie' id='bibliographie' value='1'  />", $body);
+        $this->assertStringContainsString("<label for='bibliographie'>Zur Bibliographie hinzufügen?</label>", $body);
+        $this->assertStringContainsString("<input type='hidden' name='bibliographie' value='0' />", $body);
     }
 
     public function testDoNotShowBibliographyCheckbox()
@@ -120,11 +123,12 @@ class Publish_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('index');
 
-        $this->assertContains('<h3 class="document-type">Dokumenttyp und Datei wählen</h3>', $this->getResponse()->getBody());
-        $this->assertNotContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
-        $this->assertNotContains("<input type='checkbox' class='form-checkbox' name='bibliographie' id='bibliographie' value='1'  />", $this->getResponse()->getBody());
-        $this->assertNotContains("<label for='bibliographie'>Zur Bibliographie hinzufügen?</label>", $this->getResponse()->getBody());
-        $this->assertNotContains("<input type='hidden' name='bibliographie' value='0' />", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<h3 class="document-type">Dokumenttyp und Datei wählen</h3>', $body);
+        $this->assertStringNotContainsString('<legend>Bibliographie</legend>', $body);
+        $this->assertStringNotContainsString("<input type='checkbox' class='form-checkbox' name='bibliographie' id='bibliographie' value='1'  />", $body);
+        $this->assertStringNotContainsString("<label for='bibliographie'>Zur Bibliographie hinzufügen?</label>", $body);
+        $this->assertStringNotContainsString("<input type='hidden' name='bibliographie' value='0' />", $body);
     }
 
     /**
@@ -148,10 +152,10 @@ class Publish_IndexControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $doctypeAllPos       = strpos($body, '<option value="all" label="Alle Felder (Testdokumenttyp)">Alle Felder (Testdokumenttyp)</option>');
-        $doctypeArticlePos   = strpos($body, '<option value="article" label="Wissenschaftlicher Artikel">Wissenschaftlicher Artikel</option>');
-        $doctypeWorkingpaper = strpos($body, '<option value="workingpaper" label="Arbeitspapier">Arbeitspapier</option>');
-        $doctypeDemodemo     = strpos($body, '<option value="demodemo" label="demodemo">demodemo</option>');
+        $doctypeAllPos       = strpos($body, '<option value="all" title="Alle Felder (Testdokumenttyp)">Alle Felder (Testdokumenttyp)</option>');
+        $doctypeArticlePos   = strpos($body, '<option value="article" title="Wissenschaftlicher Artikel">Wissenschaftlicher Artikel</option>');
+        $doctypeWorkingpaper = strpos($body, '<option value="workingpaper" title="Arbeitspapier">Arbeitspapier</option>');
+        $doctypeDemodemo     = strpos($body, '<option value="demodemo" title="demodemo">demodemo</option>');
 
         $this->assertTrue($doctypeAllPos < $doctypeWorkingpaper);
         $this->assertTrue($doctypeWorkingpaper < $doctypeArticlePos);

@@ -55,14 +55,14 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
     {
         $this->dispatch('/admin/filebrowser/index');
         $this->assertResponseCode(500);
-        $this->assertContains('missing parameter docId', $this->getResponse()->getBody());
+        $this->assertStringContainsString('missing parameter docId', $this->getResponse()->getBody());
     }
 
     public function testIndexActionWithInvalidDocId()
     {
         $this->dispatch('/admin/filebrowser/index/id/invaliddocid');
         $this->assertResponseCode(500);
-        $this->assertContains('no document found for id invaliddocid', $this->getResponse()->getBody());
+        $this->assertStringContainsString('no document found for id invaliddocid', $this->getResponse()->getBody());
     }
 
     public function testIndexAction()
@@ -71,7 +71,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
 
         $this->dispatch('/admin/filebrowser/index/id/' . $this->documentId);
         $this->assertResponseCode(200);
-        $this->assertContains('<div id="filebrowser">', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<div id="filebrowser">', $this->getResponse()->getBody());
 
         // check breadcrumbs
         $this->verifyBreadcrumbDefined();
@@ -102,7 +102,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
     {
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);
-        $this->assertContains('unsupported HTTP method', $this->getResponse()->getBody());
+        $this->assertStringContainsString('unsupported HTTP method', $this->getResponse()->getBody());
     }
 
     public function testImportActionWithMissingParam()
@@ -112,7 +112,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
             ->setPost([]);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);
-        $this->assertContains('missing parameter docId', $this->getResponse()->getBody());
+        $this->assertStringContainsString('missing parameter docId', $this->getResponse()->getBody());
     }
 
     public function testImportActionWithInvalidDocId()
@@ -143,7 +143,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase
             ]);
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);
-        $this->assertContains('invalid POST parameter', $this->getResponse()->getBody());
+        $this->assertStringContainsString('invalid POST parameter', $this->getResponse()->getBody());
     }
 
     public function testImportAction()

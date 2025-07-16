@@ -227,4 +227,26 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $this->expectExceptionMessage('access to requested document is forbidden');
         new Frontdoor_Model_Authors($doc);
     }
+
+    public function testGetContactableAuthorsNoAuthors()
+    {
+        $doc = $this->createTestDocument();
+
+        $author = Person::new();
+        $author->setFirstName('John');
+        $author->setLastName('Doe');
+        $author->setEmail('doe@example.org');
+        $this->authorId = $author->store();
+
+        $linkPerson = $doc->addPersonAuthor($author);
+        $linkPerson->setAllowEmailContact(false);
+
+        $doc->store();
+
+        $model = new Frontdoor_Model_Authors($doc);
+
+        $authors = $model->getContactableAuthors();
+
+        $this->assertCount(0, $authors);
+    }
 }

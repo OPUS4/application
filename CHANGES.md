@@ -1,5 +1,91 @@
 # OPUS 4 Change Log
 
+## Release 4.8.0.16 - 2025-07-15
+
+https://github.com/OPUS4/application/issues/1352
+
+Vollständige Liste aller Änderungen in Application
+https://github.com/OPUS4/application/compare/4.8.0.15...4.8.0.16
+
+## Release 4.8.0.15 - 2025-06-24
+
+OPUS 4.8.0.15 Project on GitHub
+https://github.com/orgs/OPUS4/projects/83
+
+Vollständige Liste aller Änderungen in Application
+https://github.com/OPUS4/application/compare/4.8.0.14...4.8.0.15
+
+## Release 4.8.0.14 - 2025-04-22
+
+OPUS 4.8.0.14 Project on GitHub
+https://github.com/orgs/OPUS4/projects/81
+
+Vollständige Liste aller Änderungen in Application
+https://github.com/OPUS4/application/compare/4.8.0.13...4.8.0.14
+
+## Release 4.8.0.13 - 2025-04-08
+
+OPUS 4.8.0.13 Project on GitHub
+https://github.com/orgs/OPUS4/projects/79
+
+Vollständige Liste aller Änderungen in Application
+https://github.com/OPUS4/application/compare/4.8.0.12...4.8.0.13
+
+## Release 4.8.0.12 - 2025-03-18
+
+https://github.com/OPUS4/application/issues/1266
+
+## Release 4.8.0.11 - 2025-03-11
+
+https://github.com/OPUS4/application/issues/1285
+
+## Release 4.8.0.10 - 2025-02-18
+
+https://github.com/OPUS4/application/issues/1276
+https://github.com/OPUS4/application/pull/1275
+
+## Release 4.8.0.9 - 2025-01-14
+
+https://github.com/OPUS4/application/issues/1266
+https://github.com/OPUS4/application/pull/1271
+
+## Release 4.8.0.8 - 2024-12-04
+
+https://github.com/OPUS4/application/issues/1253
+https://github.com/OPUS4/application/issues/1258
+
+## Release 4.8.0.7 - 2024-10-22
+
+https://github.com/OPUS4/application/issues/1243
+
+## Release 4.8.0.6 - 2024-08-27
+
+https://github.com/OPUS4/application/issues/992
+
+## Release 4.8.0.5 - 2024-03-12
+
+https://github.com/OPUS4/application/issues/1190
+
+## Release 4.8.0.4 - 2024-01-09
+
+https://github.com/OPUS4/application/issues/1174
+https://github.com/OPUS4/application/issues/1176
+
+## Release 4.8.0.3 - 2023-11-28
+
+https://github.com/OPUS4/application/issues/1159
+https://github.com/orgs/OPUS4/projects/58
+
+## Release 4.8.0.2 - 2023-08-29
+
+https://github.com/OPUS4/application/issues/1068
+https://github.com/orgs/OPUS4/projects/56
+
+## Release 4.8.0.1 - 2023-08-15
+
+OPUS 4.8.0.1 Project on GitHub
+https://github.com/orgs/OPUS4/projects/55
+
 ## Release 4.8 - 2023-04-25
 
 OPUS 4.8 Project on GitHub

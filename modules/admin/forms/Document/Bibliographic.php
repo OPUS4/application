@@ -50,6 +50,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
     public const ELEMENT_THESIS_DATE_ACCEPTED     = 'ThesisDateAccepted';
     public const ELEMENT_THESIS_YEAR_ACCEPTED     = 'ThesisYearAccepted';
     public const ELEMENT_BELONGS_TO_BIBLIOGRAPHY  = 'BelongsToBibliography';
+    public const ELEMENT_PUBLICATION_STATE        = 'PublicationState';
 
     public function init()
     {
@@ -79,7 +80,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
         $this->addElement('Year', self::ELEMENT_THESIS_YEAR_ACCEPTED);
 
         $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
+            new Admin_Form_Document_DefaultMultiSubForm(
                 'Admin_Form_Document_Publisher',
                 'ThesisPublisher',
                 new Application_Form_Validate_MultiSubForm_RepeatedValues(
@@ -90,7 +91,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
             'Publishers'
         );
         $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
+            new Admin_Form_Document_DefaultMultiSubForm(
                 'Admin_Form_Document_Grantor',
                 'ThesisGrantor',
                 new Application_Form_Validate_MultiSubForm_RepeatedValues(
@@ -102,6 +103,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
         );
 
         $this->addElement('checkbox', self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY);
+        $this->addElement('PublicationState', self::ELEMENT_PUBLICATION_STATE);
 
         $this->setRemoveEmptyCheckbox(false);
     }
@@ -131,6 +133,7 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
         $this->getElement(self::ELEMENT_THESIS_DATE_ACCEPTED)->setValue($date);
         $this->getElement(self::ELEMENT_THESIS_YEAR_ACCEPTED)->setValue($document->getThesisYearAccepted());
         $this->getElement(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY)->setValue($document->getBelongsToBibliography());
+        $this->getElement(self::ELEMENT_PUBLICATION_STATE)->setValue($document->getPublicationState());
     }
 
     /**
@@ -160,5 +163,6 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section
 
         $document->setThesisYearAccepted($this->getElementValue(self::ELEMENT_THESIS_YEAR_ACCEPTED));
         $document->setBelongsToBibliography($this->getElementValue(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY));
+        $document->setPublicationState($this->getElementValue(self::ELEMENT_PUBLICATION_STATE));
     }
 }

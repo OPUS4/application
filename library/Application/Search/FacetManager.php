@@ -120,8 +120,9 @@ class Application_Search_FacetManager
         $facets = preg_split('/[\s,]+/', trim($facetsList ?? ''), 0, PREG_SPLIT_NO_EMPTY);
 
         // TODO how to define list of always active facets, like 'server_state'?
-        // TODO does this make any sense here ('server_state' will already be there)
-        $facets = array_merge($facets, ['server_state']);
+        if (! in_array('server_state', $facets)) {
+            $facets = array_merge($facets, ['server_state']);
+        }
 
         // TODO there must be a better way, also make year_inverted independent of year
         if (in_array('year_inverted', $facets)) {

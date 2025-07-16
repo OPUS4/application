@@ -32,6 +32,7 @@
 use Opus\Common\Date;
 use Opus\Common\Document;
 use Opus\Common\Repository;
+use Opus\Job\AbstractTask;
 
 /*
  * This cron job must be used if embargo dates are used in repository.
@@ -48,8 +49,11 @@ use Opus\Common\Repository;
  *
  * TODO document policies of EmbargoDate - is it '<' or '<=' ?
  */
-class Application_Job_EmbargoUpdateJob implements Application_Job_JobInterface
+class Application_Job_EmbargoUpdateJob extends AbstractTask
 {
+    /**
+     * @return int
+     */
     public function run()
     {
         $finder = Repository::getInstance()->getDocumentFinder();
@@ -68,5 +72,7 @@ class Application_Job_EmbargoUpdateJob implements Application_Job_JobInterface
         $documents = Repository::getInstance()->getModelRepository(Document::class);
 
         $documents->setServerDateModifiedForDocuments($now, $foundIds);
+
+        return 0;
     }
 }

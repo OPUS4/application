@@ -1,14 +1,14 @@
 "use strict";
 var exports = new Object;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEdition = exports.getArticleNumber = exports.getLicence = exports.getSubject = exports.getThesisAccepted = exports.getPublisherPlace = exports.getTranslator = exports.getConferencePlace = exports.getConferenceTitle = exports.getUrl = exports.getIssn = exports.getEditor = exports.getIsbn = exports.getCompletedDate = exports.getVolume = exports.getIssue = exports.getPages = exports.getAuthor = exports.getPersonAuthorAcademicTitle = exports.getPersonAuthorIdentifierOrcid = exports.getType = exports.getTitleParent = exports.getAbstract = exports.getPersonAuthorLastName = exports.getPersonAuthorFirstName = exports.getOtherperson = exports.getTranslator = exports.getEditor = exports.getContributor = exports.getIdentifierIsbn = exports.getLanguage = exports.getIdentifierUrl = exports.getContributingCorporation = exports.getNote = exports.getPageCount = exports.getEdition = exports.getTitleSub = exports.getCreatingCorporation = exports.getId = exports.getCompletedYear = exports.getPublisherName = exports.getTitleMain = exports.parseDoi = void 0;
+exports.getEdition = exports.getArticleNumber = exports.getLicence = exports.getSubject = exports.getThesisAccepted = exports.getPublisherPlace = exports.getTranslator = exports.getUrl = exports.getIssn = exports.getEditor = exports.getIsbn = exports.getCompletedDate = exports.getVolume = exports.getIssue = exports.getPages = exports.getAuthor = exports.getPersonAuthorAcademicTitle = exports.getPersonAuthorIdentifierOrcid = exports.getType = exports.getTitleParent = exports.getAbstract = exports.getPersonAuthorLastName = exports.getPersonAuthorFirstName = exports.getOtherperson = exports.getTranslator = exports.getEditor = exports.getContributor = exports.getIdentifierIsbn = exports.getLanguage = exports.getIdentifierUrl = exports.getContributingCorporation = exports.getNote = exports.getPageCount = exports.getEdition = exports.getTitleSub = exports.getCreatingCorporation = exports.getId = exports.getCompletedYear = exports.getPublisherName = exports.getTitleMain = exports.parseDoi = void 0;
 
 
 function finalize(field)
 {
   // Grüne Farbe und Feldname wird in populatedFields geschrieben, um die Feldfarben nach einem Reload neu aufzubauen
     colorGreen(field);
-    populatedFields.push(field);
+    populatedFields.push(" " + field);
 }
 
 function colorGreen(field)
@@ -30,7 +30,7 @@ function getLicence(json)
     if (json['message']['license'] != undefined) {
         var result = json['message']['license'][0]['URL'];
         if (result != undefined) {
-            finalize("Enrichmentlocal_crossrefLicence")
+            finalize("Enrichmentopus_crossrefLicence")
         }
     }
     return result ? result : ''
@@ -58,29 +58,25 @@ function getSubject(json)
 exports.getSubject = getSubject;
 
 
-function getConferenceTitle(json)
+function getContributingCorporation(json)
 {
     if (json['message']['event'] != undefined) {
-        var result = json['message']['event']['name'];
-        if (result != undefined) {
-            finalize("Enrichmentconference_title")
-        }
+        var result_name = json['message']['event']['name']; // Name der Konferenz
     }
-    return result ? result : ''
-}
-exports.getConferenceTitle = getConferenceTitle;
+    if (json['message']['event'] != undefined) {
+        var result_location = json['message']['event']['location']; // Ort der Konferenz
+    }
+    if (result_name != undefined && result_location != undefined) {
+        var result = result_name + ' (' + result_location + ')';
+    }
 
-function getConferencePlace(json)
-{
-    if (json['message']['event'] != undefined) {
-        var result = json['message']['event']['location'];
-        if (result != undefined) {
-            finalize("Enrichmentconference_place")
-        }
+    if (result != undefined) {
+        finalize("ContributingCorporation")
     }
     return result ? result : ''
 }
-exports.getConferencePlace = getConferencePlace;
+exports.getContributingCorporation = getContributingCorporation;
+
 
 function getUrl(json)
 {
@@ -279,7 +275,7 @@ function getEditor(json)
                 if (json.message.editor[_z].ORCID != null) {
                     if (json.message.editor[_z].ORCID.includes("/")) {
                         var orcid_raw = json.message.editor[_z].ORCID;
-                        let re        = orcid_raw.match(/([\d\-]+)/g);
+                        let re        = orcid_raw.match(/([\d\-X]+)/g);
                         if (re != null) {
                             orcid = re[0];} else {
                             orcid = ''}
@@ -329,7 +325,9 @@ function getAuthor(json)
 
         var authors = [];
         var _laenge = json.message.author.length;
+
         if (_laenge > 0) {
+            // Zuerst alle Autoren in das 'authors'-Array einfügen
             for (_z = 0; _z < _laenge; _z++) {
                 if (json.message.author[_z].given != null || json.message.author[_z].family != null) {
                     vorname  = json.message.author[_z].given;
@@ -337,26 +335,43 @@ function getAuthor(json)
                     if (json.message.author[_z].ORCID != null) {
                         if (json.message.author[_z].ORCID.includes("/")) {
                             var orcid_raw = json.message.author[_z].ORCID;
-                            let re        = orcid_raw.match(/([\d\-]+)/g);
+                            let re        = orcid_raw.match(/([\d\-X]+)/g);
                             if (re != null) {
                                 orcid = re[0];
                             } else {
-                                orcid = ''
+                                orcid = '';
                             }
                         } else {
                             orcid = json.message.author[_z].ORCID;
                         }
                     } else {
-                        orcid = ''
+                        orcid = '';
                     }
                     complete_name = nachname + ',' + vorname + ',' + orcid;
                     authors.push(complete_name);
                 }
             }
+
+            // Prüfen, ob es mehr als 50 Autoren gibt
+            if (_laenge > 50) {
+                // Den letzten Autor extrahieren
+                let lastAuthor;
+                //lastAuthor = authors[_laenge - 1];
+                if (authors[_laenge - 1]) {
+                    lastAuthor = authors[_laenge - 1];
+                } else {
+                    lastAuthor = authors[_laenge - 2];
+                }
+                // Entferne den letzten Autor vom Array (da wir ihn an Position 50 wieder einfügen)
+                authors.pop();
+                // Füge den letzten Autor an der 50. Position ein
+                authors.splice(49, 0, lastAuthor);
+                //alert("lastAuthor: "+lastAuthor);
+            }
         }
-        return authors
+        return authors; // Gibt das Autoren-Array direkt zurück
     } else {
-        return ''
+        return '';
     }
 }
 exports.getAuthor = getAuthor;
@@ -372,7 +387,7 @@ function getTitleMain(json)
 }
 exports.getTitleMain = getTitleMain;
 
-function getContributingCorporation(json)
+/* function getContributingCorporation(json)
 {
     if (json.message.author) {
         var name, _z;
@@ -392,7 +407,7 @@ function getContributingCorporation(json)
         return ''
     }
 }
-exports.ContributingCorporation = getContributingCorporation;
+exports.ContributingCorporation = getContributingCorporation; */
 
 
 function getTitleSub(json)

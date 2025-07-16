@@ -136,9 +136,9 @@
     <tu tuid="admin_person_edit_help">
       <tuv xml:lang="en">
         <seg><![CDATA[
-<p>This form can be used to edit a person across all associated documents, for instance to add an ID like ORCiD to that
-person.</p>
-<p>Persons are identified by <b>name</b>, <b>first name</b> and identifiers like <b>ORCiD</b>, <b>GND</b> and
+<p>This form can be used to edit a person across all associated documents, for instance to add an ID like an ORCID iD to
+that person.</p>
+<p>Persons are identified by <b>name</b>, <b>first name</b> and the identifiers <b>ORCiD iD</b>, <b>GND ID</b>, and
 <b>Misc</b>. If you change the last name, it will be changed for all person objects matching the original values.</p>
 <blockquote>
 If there are 10 documents with an author "John Smith" and "John" is changed to "Jeff", then after saving the form, all
@@ -150,7 +150,7 @@ If there are 10 documents with an author "John Smith" and "John" is changed to "
           <seg><![CDATA[
 <p>
   In diesem Formular können Änderungen an Personen über mehrere Dokumente hinweg vorgenommen werden. Die Personen werden
-  durch den <b>Namen</b>, <b>Vornamen</b> und die Identifikationen (<b>ORCiD</b>, <b>GND</b>, <b>Misc</b>) bestimmt.
+  durch den <b>Namen</b>, <b>Vornamen</b> und die Identifikatoren (<b>ORCID iD</b>, <b>GND-ID</b> und <b>Misc</b>) bestimmt.
 </p>
 <p>
   In den anderen Felder kann einer der vorhandenen Werte ausgesucht oder ein neuer Wert eingegeben werden.

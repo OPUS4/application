@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Search\Util\Query;
+
 class Application_Form_Element_SearchFieldModifier extends Application_Form_Element_Select
 {
     public function init()
@@ -36,9 +38,9 @@ class Application_Form_Element_SearchFieldModifier extends Application_Form_Elem
         parent::init();
 
         $options = [
-            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ALL  => 'advanced_search_form_modifier_all',
-            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_ANY  => 'advanced_search_form_modifier_one',
-            Opus\Search\Util\Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none',
+            Query::SEARCH_MODIFIER_CONTAINS_ALL  => 'advanced_search_form_modifier_all',
+            Query::SEARCH_MODIFIER_CONTAINS_ANY  => 'advanced_search_form_modifier_one',
+            Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none',
         ];
 
         $this->addMultiOptions($options);

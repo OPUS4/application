@@ -31,7 +31,7 @@
 
 use Opus\Common\DocumentInterface;
 
-class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Document_MultiSubForm
+class Admin_Form_Document_MultiIdentifierOtherSubForm extends Admin_Form_Document_DefaultMultiSubForm
 {
     public function init()
     {

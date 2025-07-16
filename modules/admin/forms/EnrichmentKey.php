@@ -31,8 +31,8 @@
 
 use Opus\Common\EnrichmentKey;
 use Opus\Common\EnrichmentKeyInterface;
-use Opus\Enrichment\AbstractType;
-use Opus\Enrichment\TypeInterface;
+use Opus\Common\Model\FieldTypeInterface;
+use Opus\Common\Model\FieldTypes;
 
 /**
  * Form for creating and editing an enrichment key.
@@ -106,19 +106,15 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
             'label'    => 'DisplayName',
         ]);
 
+        // TODO create form element class for 'FieldType'
         $element = $this->createElement(
-            'select',
+            'FieldType',
             self::ELEMENT_TYPE,
             [
                 'label' => 'admin_enrichmentkey_label_type',
                 'id'    => 'admin_enrichmentkey_type',
             ]
         );
-
-        // alle verfügbaren EnrichmentTypes ermitteln und als Auswahlfeld anzeigen
-        $availableTypes[''] = ''; // Standardauswahl des Select-Felds soll leer sein
-        $availableTypes     = array_merge($availableTypes, AbstractType::getAllEnrichmentTypes());
-        $element->setMultiOptions($availableTypes);
         $this->addElement($element);
 
         $element = $this->createElement(
@@ -175,6 +171,8 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
 
         $enrichmentType = $this->initEnrichmentType($enrichmentKey->getType());
         if ($enrichmentType !== null) {
+            // TODO this should not be necessary - The EnrichmentType defines the options, but the options are not for
+            //      the type, but for the EnrichmentKey.
             $enrichmentType->setOptions($enrichmentKey->getOptions());
 
             $optionsElement = $this->getElement(self::ELEMENT_OPTIONS);
@@ -241,26 +239,15 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
      * null, wenn der Typ-Name nicht aufgelöst werden kann.
      *
      * @param string $enrichmentTypeName Name des Enrichment-Typs
-     * @return TypeInterface|null
+     * @return FieldTypeInterface|null
      */
     private function initEnrichmentType($enrichmentTypeName)
     {
-        if ($enrichmentTypeName === null || $enrichmentTypeName === '') {
+        if ($enrichmentTypeName === null || empty($enrichmentTypeName)) {
             return null;
         }
 
-        // TODO better way? - allow registering namespaces/types like in Zend for form elements?
-        $enrichmentTypeName = 'Opus\\Enrichment\\' . $enrichmentTypeName;
-        try {
-            if (class_exists($enrichmentTypeName, false)) {
-                return new $enrichmentTypeName();
-            }
-            $this->getLogger()->err('could not find class ' . $enrichmentTypeName);
-        } catch (Throwable $ex) { // TODO Throwable only available in PHP 7+
-            $this->getLogger()->err('could not instantiate class ' . $enrichmentTypeName . ': ' . $ex->getMessage());
-        }
-
-        return null;
+        return FieldTypes::getType($enrichmentTypeName);
     }
 
     /**
@@ -285,8 +272,11 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract
     {
         // leere Auswahlmöglichkeit im Select-Feld für Type wird nicht angeboten (Pflichtfeld)
         $element = $this->getElement(self::ELEMENT_TYPE);
+
+        // TODO depends on the NULL option having an empty label (inside knowledge for SelectWithNull)
         $element->removeMultiOption('');
-        $element->setRequired(true);
+
+        $element->setRequired(true); // TODO this should automatically remove NULL option (handled by element)
         $this->applyCustomMessages($element);
     }
 }

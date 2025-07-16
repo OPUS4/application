@@ -31,7 +31,7 @@
  */
 
 use Opus\Common\CollectionRole;
-use Opus\Enrichment\AbstractType;
+use Opus\Common\Model\FieldTypes;
 
 /**
  * Controller for providing JSON formatted data used for autocomplete
@@ -96,18 +96,23 @@ class Admin_AutocompleteController extends Application_Controller_ModuleAccess
         echo json_encode($data);
     }
 
+    /**
+     * Provides description for an field type.
+     *
+     * TODO change JSON key 'typeName' to 'description' and add second key 'type' for response
+     */
     public function enrichmenttypedescriptionAction()
     {
         $description = '';
 
         $typeName = $this->getRequest()->getParam('typeName');
+
         if ($typeName !== null && $typeName !== '') {
-            $typeName = 'Opus\\Enrichment\\' . $typeName;
-            $allTypes = AbstractType::getAllEnrichmentTypes(true);
-            if (in_array($typeName, $allTypes)) {
-                $typeObj         = new $typeName();
+            $typeObj = FieldTypes::getType($typeName);
+
+            if ($typeObj !== null) {
                 $typeDescription = $typeObj->getDescription();
-                if ($typeDescription !== null && $typeDescription !== '') {
+                if ($typeDescription !== null && ! empty($typeDescription)) {
                     $description = $this->view->translate($typeDescription);
                 }
             }

@@ -307,13 +307,13 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertNotContains('submitter@localhost.de', $body);
-        $this->assertNotContains('author@localhost.de', $body);
-        $this->assertNotContains(
+        $this->assertStringNotContainsString('submitter@localhost.de', $body);
+        $this->assertStringNotContainsString('author@localhost.de', $body);
+        $this->assertStringNotContainsString(
             '<input type="checkbox" name="submitter" id="submitter"',
             $body
         );
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             '<input type="checkbox" name="author_1" id="author_1"',
             $body
         );
@@ -330,8 +330,8 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('submitter@localhost.de', $body);
-        $this->assertContains('author@localhost.de', $body);
+        $this->assertStringContainsString('submitter@localhost.de', $body);
+        $this->assertStringContainsString('author@localhost.de', $body);
         $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @checked="checked"]');
     }
 
@@ -346,8 +346,8 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('submitter@localhost.de', $body);
-        $this->assertContains('author@localhost.de', $body);
+        $this->assertStringContainsString('submitter@localhost.de', $body);
+        $this->assertStringContainsString('author@localhost.de', $body);
         $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @checked="checked"]');
     }
 
@@ -360,8 +360,8 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertNotContains('submitter@localhost.de', $body);
-        $this->assertContains('author@localhost.de', $body);
+        $this->assertStringNotContainsString('submitter@localhost.de', $body);
+        $this->assertStringContainsString('author@localhost.de', $body);
         $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @disabled="disabled"]');
         $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @checked="checked"]');
     }
@@ -375,8 +375,8 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('submitter@localhost.de', $body);
-        $this->assertNotContains('author@localhost.de', $body);
+        $this->assertStringContainsString('submitter@localhost.de', $body);
+        $this->assertStringNotContainsString('author@localhost.de', $body);
         $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @checked="checked"]');
         $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @disabled="disabled"]');
     }
@@ -412,10 +412,10 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('submitter@localhost.de', $body);
-        $this->assertContains('author@localhost.de', $body);
-        $this->assertContains('A@localhost.de', $body);
-        $this->assertContains('C@localhost.de', $body);
+        $this->assertStringContainsString('submitter@localhost.de', $body);
+        $this->assertStringContainsString('author@localhost.de', $body);
+        $this->assertStringContainsString('A@localhost.de', $body);
+        $this->assertStringContainsString('C@localhost.de', $body);
 
         $this->assertXpath('//input[@type="checkbox" and @id="submitter" and @name="submitter" and @value="1" and @checked="checked"]');
         $this->assertXpath('//input[@type="checkbox" and @id="author_0" and @name="author_0" and @value="1" and @checked="checked"]');
@@ -450,5 +450,25 @@ class Admin_WorkflowControllerTest extends ControllerTestCase
         $this->assertEquals('deleted', $doc->getServerState());
         $doc->setServerState('unpublished');
         $doc->store();
+    }
+
+    public function testPublishDocumentWithoutConfirmation()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState(Document::STATE_UNPUBLISHED);
+        $docId = $doc->store();
+
+        $this->adjustConfiguration([
+            'confirmation' => ['document' => ['statechange' => ['enabled' => '0']]],
+        ]);
+
+        $this->dispatch("/admin/workflow/changestate/docId/{$docId}/targetState/published");
+
+        // TODO make assertion more specific
+        $this->assertRedirect();
+
+        $doc = Document::get($docId);
+
+        $this->assertEquals(Document::STATE_PUBLISHED, $doc->getServerState());
     }
 }
