@@ -1,5 +1,13 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.16 - 2025-07-15
+
+Es wurde ein Fehler behoben, der auftrat, wenn beim Freischalten (Publish) 
+eines einzelnen Dokuments in der Metadatenansicht (nicht Review-Modul) die 
+Bestätigungsseite für das Freischalten abgeschaltet war. 
+
+https://github.com/OPUS4/application/issues/1352
+
 ## Patch Release 4.8.0.15 - 2025-06-24
 
 Die Möglichkeit mehrere Schlagwörter auf einmal hinzuzufügen, wurde jetzt
