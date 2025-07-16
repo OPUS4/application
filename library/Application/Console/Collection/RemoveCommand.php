@@ -201,7 +201,7 @@ EOT;
 
         if ($targetCol === null) {
             $output->writeln('Collection must be specified');
-            return 0;
+            return self::FAILURE;
         }
 
         $targetId = $targetCol->getId();
@@ -214,7 +214,7 @@ EOT;
             $output->writeln('');
             $output->writeln('  "' . $targetCol->getDisplayName() . '"');
             $output->writeln('');
-            return 0;
+            return self::FAILURE;
         }
 
         $removeDocuments = null;
@@ -235,7 +235,7 @@ EOT;
                 $output->writeln('');
                 $output->writeln('  "' . $filterCol->getDisplayName() . '"');
                 $output->writeln('');
-                return 0;
+                return self::FAILURE;
             }
 
             $removeDocuments = array_intersect($filterDocuments, $targetDocuments);
@@ -246,11 +246,11 @@ EOT;
                 $output->writeln('');
                 $output->writeln('  "' . $filterCol->getDisplayName() . '"');
                 $output->writeln('');
-                $output->writeln("is present in the target collection (ID= ${targetId})");
+                $output->writeln("are present in the target collection (ID= ${targetId})");
                 $output->writeln('');
                 $output->writeln('  "' . $targetCol->getDisplayName() . '"');
                 $output->writeln('');
-                return 0;
+                return self::FAILURE;
             }
 
             $output->writeln("Remove documents (${filterCount}) in collection (ID = ${filterId})");
@@ -279,6 +279,6 @@ EOT;
             $output->writeln('Removing cancelled');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }

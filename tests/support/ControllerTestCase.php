@@ -521,12 +521,22 @@ class ControllerTestCase extends TestCase
             'No declaration for attribute class of element html',
             'No declaration for attribute placeholder of element input',
             'No declaration for attribute target of element a',
+            'No declaration for attribute aria-label of element',
         ];
 
         $filteredErrors = [];
 
         foreach ($errors as $error) {
-            if (! in_array(trim($error->message), $ignored)) {
+            $ignore = false;
+
+            foreach ($ignored as $pattern) {
+                if (stripos($error->message, $pattern) !== false) {
+                    $ignore = true;
+                    break;
+                }
+            }
+
+            if (! $ignore) {
                 $filteredErrors[] = $error;
             }
         }

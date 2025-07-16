@@ -67,7 +67,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
         }
 
         if ($this->view->currentAnchor === $group['Name']) {
-            $fieldset .= "<a name='current'></a>";
+            $fieldset .= "<a id='current'></a>";
         }
 
         $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "'>";

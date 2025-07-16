@@ -116,6 +116,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
             'languageWebForm',
             'mimeTypeAsCssClass',
             'accessAllowed',
+            'renderValue',
         ]);
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);

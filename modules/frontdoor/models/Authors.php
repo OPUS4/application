@@ -102,7 +102,7 @@ class Frontdoor_Model_Authors
     {
         $authors = [];
         foreach ($this->getAuthors() as $author) {
-            if (! ($author['allowMail'] === '0' || empty($author['mail']))) {
+            if ($author['allowMail'] && ! empty($author['mail'])) {
                 array_push($authors, $author);
             }
         }

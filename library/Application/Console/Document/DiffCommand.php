@@ -124,7 +124,7 @@ EOT;
             $diff->diff($docIds);
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 
     /**

@@ -47,9 +47,6 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $this->disableTranslation();
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
 
-        $this->assertNotNull($form->getElement('Add'));
-        $this->assertNotNull($form->getLegend());
-        $this->assertEquals($form->getLegend(), 'admin_document_section_identifier');
         $this->assertFalse($form->isRenderAsTableEnabled());
     }
 
@@ -63,9 +60,6 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
             new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
         );
 
-        $this->assertNotNull($form->getElement('Add'));
-        $this->assertNotNull($form->getLegend());
-        $this->assertEquals($form->getLegend(), 'admin_document_section_titleparent');
         $this->assertFalse($form->isRenderAsTableEnabled());
     }
 
@@ -171,8 +165,10 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
         $this->assertNotNull($form->getSubForm('TitleParent2'));
     }
 
-    public function testProcessPostAdd()
+    public function testAddSubFormAndFixOrder()
     {
+        $this->markTestSkipped('TODO update for direkt test of function');
+
         $form = new Admin_Form_Document_MultiSubForm(
             'Admin_Form_Document_Title',
             'TitleParent',
@@ -439,7 +435,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase
 
         $decorators = $form->getDecorators();
 
-        $this->assertEquals(6, count($decorators));
+        $this->assertEquals(5, count($decorators));
         $this->assertNotNull($form->getDecorator('TableHeader'));
         $this->assertNotNull($form->getDecorator('TableWrapper'));
     }

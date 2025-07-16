@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\ConfigTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,9 +40,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Application_Console_Console_ExecCommand extends Command
 {
-    /**
-     * Argument for the PHP code snippet file(s) to be executed
-     */
+    use ConfigTrait;
+
+    /** Argument for the PHP code snippet file(s) to be executed */
     public const ARGUMENT_SNIPPET_FILES = 'SnippetFile';
 
     protected function configure()
@@ -50,6 +51,15 @@ class Application_Console_Console_ExecCommand extends Command
 
         $help = <<<EOT
 The <fg=green>console:exec</> command can be used to execute PHP code snippet file(s).
+
+Snippets are short PHP scripts using the OPUS 4 API to modify documents, 
+generate statistics, do cleanup or any other kind of custom task. In general 
+snippets have been replaced by 'bin/opus4' commands, but can still be useful
+for tasks required locally.  
+
+Snippets are usually located in 'scripts\snippets'. This command can be used 
+with just the name of a snippet located in the default snippet folder or a 
+complete path to the snippet.
 EOT;
 
         $this->setName('console:exec')
@@ -58,38 +68,70 @@ EOT;
             ->addArgument(
                 self::ARGUMENT_SNIPPET_FILES,
                 InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-                'Snippet file path (or multiple space-separated paths)'
+                'Snippet file name or path (multiple snippets can be separated by spaces)'
             );
     }
 
     /**
      * Executes this command to run the PHP code from the passed snippet file(s).
+     *
+     * This function cannot judge if a snippet was executed "successfully", only if there has been an exception.
+     *
+     * TODO snippets with parameters?
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $snippetFiles = $input->getArgument(self::ARGUMENT_SNIPPET_FILES);
 
-        $successfulIncludes = 0;
-
         foreach ($snippetFiles as $snippetFile) {
-            if (false === is_readable($snippetFile)) {
-                $output->writeln('# snippet ' . $snippetFile . ' does not exist');
+            $snippetPath = $this->resolveSnippetPath($snippetFile);
+
+            if ($snippetPath === null) {
+                $output->writeln('# snippet ' . $snippetFile . ' not found');
                 continue;
             }
 
             try {
-                $output->writeln('# including snippet ' . $snippetFile);
-                include_once $snippetFile;
-                $successfulIncludes++;
+                $output->writeln('# executing snippet ' . $snippetPath);
+                include_once $snippetPath;
             } catch (Exception $e) {
-                $output->writeln('# failed including snippet ' . $snippetFile . ':');
+                $output->writeln('# failed including snippet ' . $snippetPath . ':');
                 $output->writeln('Caught exception ' . get_class($e) . ': ' . $e->getMessage());
                 $output->writeln($e->getTraceAsString());
-
-                return Command::FAILURE;
+                return self::FAILURE;
             }
         }
 
-        return $successfulIncludes > 0 ? Command::SUCCESS : Command::FAILURE;
+        return self::SUCCESS;
+    }
+
+    /**
+     * @param string $snippetFile
+     * @return string|null
+     */
+    protected function resolveSnippetPath($snippetFile)
+    {
+        if (is_readable($snippetFile)) {
+            return $snippetFile;
+        }
+
+        $config = $this->getConfig();
+
+        if (! isset($config->snippets->basePath)) {
+            return null;
+        }
+
+        $snippetFolder = rtrim($config->snippets->basePath, '/\\');
+        $snippetPath   = $snippetFolder . '/' . $snippetFile;
+
+        if (! preg_match('/\.php$/i', $snippetPath)) {
+            $snippetPath .= '.php';
+        }
+
+        if (! is_readable($snippetPath)) {
+            return null;
+        }
+
+        return $snippetPath;
     }
 }

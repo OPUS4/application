@@ -31,6 +31,7 @@
 
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
+use Opus\Common\Repository;
 
 /**
  * @covers Publish_FormController
@@ -94,6 +95,135 @@ class Publish_FormControllerTest extends ControllerTestCase
         $this->assertStringContainsString('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $body);
         $this->assertStringContainsString('Bitte wählen Sie einen Dokumenttyp aus der Liste aus.', $body);
         $this->assertStringContainsString("<div class='form-errors'>", $body);
+    }
+
+    public function testUploadActionWithoutFile()
+    {
+        // TODO currently it is necessary to disable file upload, because otherwise dispatch always fails
+        $this->adjustConfiguration([
+            'form' => ['first' => ['enable_upload' => 0]],
+        ]);
+
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost([
+                'documentType' => 'all',
+                'rights'       => '1',
+                'send'         => 'Next step',
+            ]);
+
+        $this->dispatch('/publish/form/upload');
+
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('upload');
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringNotContainsString(
+            'Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.',
+            $body
+        );
+
+        $this->assertXpathContentContains('//legend', 'Kontaktdaten der Einstellerin/des Einstellers');
+    }
+
+    public function testUploadActionSqlInjectionWithDocumentTypePrevented()
+    {
+        // TODO currently it is necessary to disable file upload, because otherwise dispatch always fails
+        $this->adjustConfiguration([
+            'form' => ['first' => ['enable_upload' => 0]],
+        ]);
+
+        $finder = Repository::getInstance()->getDocumentFinder();
+
+        $finder->setServerState(Document::STATE_TEMPORARY);
+
+        // NOTE: there might be some temporary documents left by other tests
+        $temporaryDocs = $finder->getIds();
+
+        // NOTE: it is not clear if this injection would actually work, if there weren't protections in the underlying
+        //       Framework layer
+        $injection = '`all`; INSERT INTO model_types(type) VALUES (\'123\');';
+
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost([
+                'documentType' => $injection,
+                'rights'       => '1',
+                'send'         => 'Weiter zum nächsten Schritt',
+            ]);
+
+        $this->dispatch('/publish/form/upload');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString(
+            'Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.',
+            $body
+        );
+        $this->assertStringContainsString(
+            'Bitte wählen Sie einen Dokumenttyp aus der Liste aus.',
+            $body
+        );
+        $this->assertStringContainsString("<div class='form-errors'>", $body);
+
+        // Check that count of temporary documents has not changed
+        $newTemporaryDocs = array_values(array_diff($finder->getIds(), $temporaryDocs));
+
+        $this->assertCount(1, $newTemporaryDocs);
+
+        $newDocId = $newTemporaryDocs[0];
+
+        $doc = Document::get($newDocId);
+
+        $this->assertEquals($injection, $doc->getType());
+    }
+
+    public function testFailedUploadActionDoesNotCreateDocument()
+    {
+        $this->markTestSkipped('Currently failed action creates new document TODO refactor');
+
+        // TODO currently it is necessary to disable file upload, because otherwise dispatch always fails
+        $this->adjustConfiguration([
+            'form' => ['first' => ['enable_upload' => 0]],
+        ]);
+
+        $finder = Repository::getInstance()->getDocumentFinder();
+
+        $finder->setServerState(Document::STATE_TEMPORARY);
+
+        // NOTE: there might be some temporary documents left by other tests
+        $docCount = $finder->getCount();
+
+        $this->getRequest()
+            ->setMethod('POST')
+            ->setPost([
+                'documentType' => 'all',
+                'rights'       => '0', // causes submit to fail
+                'send'         => 'Weiter zum nächsten Schritt',
+            ]);
+
+        $this->dispatch('/publish/form/upload');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString(
+            'Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.',
+            $body
+        );
+        $this->assertStringContainsString(
+            'Bitte wählen Sie einen Dokumenttyp aus der Liste aus.',
+            $body
+        );
+        $this->assertStringContainsString("<div class='form-errors'>", $body);
+
+        // Check that count of temporary documents has not changed
+        $this->assertEquals($docCount, $finder->getCount());
     }
 
     /**

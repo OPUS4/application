@@ -94,7 +94,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm
     }
 
     /**
-     * Initialsiert die Formularelemente.
+     * Initialisiert die Formularelemente.
      */
     public function init()
     {

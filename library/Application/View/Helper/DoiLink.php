@@ -25,37 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Document;
-use Opus\Common\Model\NotFoundException;
-use Opus\Model\Xml;
-use Opus\Model\Xml\Version1;
-
 /**
- * Returns the XML representation of the document with given id $id.
- *
- * TODO convert to command (overlaps with opus-dump-document-xml.php)
+ * Renders DOI link.
  */
+class Application_View_Helper_DoiLink extends Application_View_Helper_Abstract
+{
+    /**
+     * Renders link to DOI.
+     *
+     * @param string $value DOI identifier
+     * @return string
+     */
+    public function doiLink($value)
+    {
+        $config = $this->getConfig();
+        $value  = htmlspecialchars(trim($value));
 
-if (isset($argv[2]) && ! empty($argv[2]) && is_numeric($argv[2])) {
-    $id = $argv[2];
-} else {
-    $id = 91;
+        if (isset($config->doi->resolverUrl)) {
+            $baseUrl = rtrim($config->doi->resolverUrl, '/');
+            $link    = $baseUrl . '/' . $value;
+            return "<a href=\"{$link}\" target=\"_blank\">{$value}</a>";
+        } else {
+            return $value;
+        }
+    }
 }
-
-try {
-    $doc = Document::get($id);
-} catch (NotFoundException $e) {
-    echo "document with id $id does not exist";
-    exit();
-}
-
-$xmlModel = new Xml();
-$xmlModel->setModel($doc);
-$xmlModel->setStrategy(new Version1());
-$xmlModel->excludeEmptyFields();
-
-echo $xmlModel->getDomDocument()->saveXML();

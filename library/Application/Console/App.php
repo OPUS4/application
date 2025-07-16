@@ -32,7 +32,6 @@
 use Opus\Application\Configuration;
 use Opus\Common\Console\DefaultCommandProvider;
 use Opus\Job\TaskManager;
-use Opus\Pdf\Console\CoverGenerateCommand;
 use Symfony\Component\Console\Application;
 
 /**
@@ -60,10 +59,17 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Document_DuplicatesCommand());
         $this->add(new Application_Console_Document_DiffCommand());
 
+        $this->add(new Application_Console_Orcid_InfoCommand());
+        $this->add(new Application_Console_Orcid_NormalizeCommand());
+        $this->add(new Application_Console_Orcid_ValidateCommand());
+
+        $this->add(new Application_Console_Person_CleanCommand());
+
         $this->add(new Application_Console_Debug_DocumentXmlCommand());
-        $this->add(new CoverGenerateCommand());
+
         $this->add(new Application_Console_Console_ConsoleCommand());
         $this->add(new Application_Console_Console_ExecCommand());
+
         $this->add(new Application_Console_Collection_CopyCommand());
         $this->add(new Application_Console_Collection_MoveCommand());
         $this->add(new Application_Console_Collection_RemoveCommand());
@@ -77,6 +83,13 @@ class Application_Console_App extends Application
             $this->add(new Application_Console_Task_ListCommand());
             $this->add(new Application_Console_Task_RunCommand());
         }
+
+        // TODO use ModelCommandProvider
+        $this->add(new Application_Console_Model_EnrichmentImportCommand());
+        $this->add(new Application_Console_Model_EnrichmentListCommand());
+        $this->add(new Application_Console_Model_EnrichmentExportCommand());
+        $this->add(new Application_Console_Model_EnrichmentRenameCommand());
+        $this->add(new Application_Console_Model_EnrichmentDeleteCommand());
 
         $this->setDefaultCommand('list');
     }

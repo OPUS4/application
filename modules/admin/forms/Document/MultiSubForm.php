@@ -49,11 +49,6 @@ use Opus\Common\DocumentInterface;
 class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubForm
 {
     /**
-     * Name von Button zum Hinzufügen eines Unterformulars (z.B. Enrichment).
-     */
-    public const ELEMENT_ADD = 'Add';
-
-    /**
      * Name von Button zum Entfernen eines Unterformulars (z.B. Identifier).
      */
     public const ELEMENT_REMOVE = 'Remove';
@@ -72,13 +67,13 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     private $subformValidator;
 
     /** @var bool */
-    private $renderAsTableEnabled = false;
+    protected $renderAsTableEnabled = false;
 
     /** @var array */
     private $columns;
 
     /**
-     * Konstruiert Instanz von Fomular.
+     * Konstruiert Instanz von Formular.
      *
      * @param string                                               $subFormClass Name der Klasse für Unterformulare
      * @param string                                               $fieldName Name des Document Feldes, das angezeigt werden soll
@@ -109,12 +104,6 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     {
         parent::init();
 
-        $this->initButton();
-
-        $this->setLegend('admin_document_section_' . strtolower($this->fieldName));
-
-        $this->getElement(self::ELEMENT_ADD)->setDecorators([])->setDisableLoadDefaultDecorators(true);
-
         if ($this->getColumns() !== null) {
             $this->renderAsTableEnabled = true;
             $this->setDecorators(
@@ -127,26 +116,12 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
                         ['tag' => 'div', 'class' => 'fields-wrapper'],
                     ],
                     [
-                        'FieldsetWithButtons',
-                        ['legendButtons' => self::ELEMENT_ADD],
-                    ],
-                    [
                         ['divWrapper' => 'HtmlTag'],
                         ['tag' => 'div', 'class' => 'subform'],
                     ],
                 ]
             );
-        } else {
-            $this->getDecorator('FieldsetWithButtons')->setLegendButtons(self::ELEMENT_ADD);
         }
-    }
-
-    protected function initButton()
-    {
-        $this->addElement('submit', self::ELEMENT_ADD, [
-            'order' => 1000,
-            'label' => 'admin_button_add',
-        ]);
     }
 
     /**
@@ -169,9 +144,6 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             $subForm = $this->addSubFormAndFixOrder($index);
             $subForm->populateFromModel($value);
         }
-
-       // Sicherstellen, daß Button zum Hinzufügen zuletzt angezeigt wird
-        $this->getElement(self::ELEMENT_ADD)->setOrder($maxIndex + 1);
     }
 
     /**
@@ -188,6 +160,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             return $field->getValue();
         } else {
             $this->getLogger()->err(__METHOD__ . " Feld $this->__fieldName nicht gefunden.");
+            return []; // TODO throw exception?
         }
     }
 
@@ -201,6 +174,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     public function constructFromPost($post, $document = null)
     {
+        if ($post === null) {
+            return;
+        }
+
         $keys = array_keys($post);
 
         $position = 0;
@@ -239,11 +216,6 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     public function processPost($data, $context)
     {
-        // Prüfen ob "Hinzufügen" geklickt wurde
-        if (array_key_exists(self::ELEMENT_ADD, $data)) {
-            return $this->processPostAdd();
-        }
-
         // Prüfen ob in einem Unterformular "Entfernen" geklickt wurde
         foreach ($data as $subFormName => $subdata) {
             $subform = $this->getSubForm($subFormName);
@@ -279,16 +251,6 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
         $this->addAnchor($this->determineSubFormForAnchor($position));
 
-        return Admin_Form_Document::RESULT_SHOW;
-    }
-
-    /**
-     * @return string
-     */
-    protected function processPostAdd()
-    {
-        $subform = $this->appendSubForm();
-        $this->addAnchor($subform);
         return Admin_Form_Document::RESULT_SHOW;
     }
 

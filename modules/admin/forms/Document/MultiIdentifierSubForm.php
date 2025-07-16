@@ -36,7 +36,7 @@ use Opus\Common\Identifier;
 use Opus\Doi\DoiException;
 use Opus\Doi\DoiManager;
 
-class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_MultiSubForm
+class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_DefaultMultiSubForm
 {
     /**
      * Name des Buttons zum Entfernen eines Unterformulars (z.B. Identifier).
