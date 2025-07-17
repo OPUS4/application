@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Configuration;
+use Opus\App\Common\Configuration;
 
 /**
  * Controller für die Anzeige von Informationen zur Konfiguration von OPUS und dem System auf dem es läuft.

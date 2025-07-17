@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\ApplicationException;
+use Opus\App\Common\ApplicationException;
 use Opus\Search\Util\Query;
 
 class Solrsearch_Model_Search_Document extends Solrsearch_Model_Search_Basic

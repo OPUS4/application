@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\ApplicationException;
+use Opus\App\Common\ApplicationException;
 use Opus\Search\Config;
 use Opus\Search\Result\Base;
 use Opus\Search\SearchException;

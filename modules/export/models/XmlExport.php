@@ -29,8 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\ApplicationException;
-use Opus\Application\Configuration;
+use Opus\App\Common\ApplicationException;
+use Opus\App\Common\Configuration;
 use Opus\Common\Document;
 use Opus\Common\Repository;
 use Opus\Common\Security\Realm;

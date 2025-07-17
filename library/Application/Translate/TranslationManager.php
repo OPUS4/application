@@ -29,8 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Configuration;
-use Opus\Application\Modules;
+use Opus\App\Common\Configuration;
+use Opus\App\Common\Modules;
 use Opus\Common\Translate\TranslateException;
 use Opus\Common\Translate\UnknownTranslationKeyException;
 use Opus\Translate\Dao;

@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Configuration;
+use Opus\App\Common\Configuration;
 use Opus\Common\Config;
 
 /**

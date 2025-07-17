@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\ApplicationException;
+use Opus\App\Common\ApplicationException;
 use Opus\Common\DocumentFinderInterface;
 use Opus\Common\Repository;
 use Opus\Common\Security\Realm;

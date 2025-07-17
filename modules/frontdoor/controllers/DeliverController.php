@@ -33,7 +33,7 @@
  * Controller for handling file downloads in the frontdoor.
  */
 
-use Opus\Application\Configuration;
+use Opus\App\Common\Configuration;
 use Opus\Common\Config;
 use Opus\Common\Cover\CoverGeneratorFactory;
 use Opus\Common\Cover\CoverGeneratorInterface;

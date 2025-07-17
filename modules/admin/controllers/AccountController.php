@@ -30,7 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Modules;
+use Opus\App\Common\Modules;
 use Opus\Common\Account;
 use Opus\Common\AccountInterface;
 use Opus\Common\UserRole;

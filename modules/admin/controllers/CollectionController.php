@@ -30,7 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\ApplicationException;
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Collection;
 use Opus\Common\CollectionInterface;
 use Opus\Common\CollectionRole;

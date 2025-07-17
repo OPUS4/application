@@ -30,7 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\ApplicationException;
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\ModelInterface;
 use Opus\Common\Model\NotFoundException;

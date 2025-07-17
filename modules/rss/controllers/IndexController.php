@@ -32,7 +32,7 @@
  * TODO move feed code into Rss_Model_Feed
  */
 
-use Opus\Application\ApplicationException;
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Document;
 use Opus\Search\Result\Base;
 use Opus\Search\SearchException;

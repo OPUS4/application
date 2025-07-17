@@ -29,8 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Config\MaxUploadSize;
-use Opus\Application\Configuration;
+use Opus\App\Common\Config\MaxUploadSize;
+use Opus\App\Common\Configuration;
 use Opus\Common\Log;
 use Opus\Import\AdditionalEnrichments;
 use Opus\Import\ImportStatusDocument;

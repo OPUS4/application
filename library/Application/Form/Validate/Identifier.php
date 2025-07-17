@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Configuration;
+use Opus\App\Common\Configuration;
 
 /**
  * Validator that delegates validation of identifiers depending on the type.

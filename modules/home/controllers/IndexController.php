@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Configuration;
+use Opus\App\Common\Configuration;
 use Opus\Common\Repository;
 
 class Home_IndexController extends Application_Controller_Action

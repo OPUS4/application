@@ -29,8 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Config\Module;
-use Opus\Application\Modules;
+use Opus\App\Common\Config\Module;
+use Opus\App\Common\Modules;
 
 /**
  * TODO move test to opus4-app-common (however with Laminas the Modules class becomes obsolete)

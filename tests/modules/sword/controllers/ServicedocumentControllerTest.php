@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Config\MaxUploadSize;
+use Opus\App\Common\Config\MaxUploadSize;
 use Opus\Sword\ServiceDocument;
 
 /**

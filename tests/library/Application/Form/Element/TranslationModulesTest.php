@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Application\Modules;
+use Opus\App\Common\Modules;
 
 class Application_Form_Element_TranslationModulesTest extends ControllerTestCase
 {
