@@ -79,9 +79,11 @@
             <xsl:call-template name="Author" />
          </div>
 
+         <xsl:if test="TitleAbstract">
          <div id="abstract">
             <xsl:call-template name="SortedAbstracts" />
          </div>
+         </xsl:if>
       </div>
 
       <!-- service templates defined in templates/services.xsl -->
