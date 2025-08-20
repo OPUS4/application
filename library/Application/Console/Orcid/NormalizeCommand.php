@@ -46,11 +46,11 @@ class Application_Console_Orcid_NormalizeCommand extends Command
         parent::configure();
 
         $help = <<<EOT
-Removes URL part from ORCiD IDs.
+Removes URL part from ORCID iDs.
 EOT;
 
         $this->setName('orcid:normalize')
-            ->setDescription('Normalizes ORCiD ID values in database')
+            ->setDescription('Normalizes ORCID iD values in database')
             ->setHelp($help)
             ->addOption(
                 self::OPTION_FIX,

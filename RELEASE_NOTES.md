@@ -102,7 +102,7 @@ Für diesen Release ist `composer update` notwendig, weil auch **opus4-common**
 
 ### ORCID iDs
 
-In der Frontdoor werden GND und ORCiD iD nun für alle Personen angezeigt.
+In der Frontdoor werden GND und ORCID iD nun für alle Personen angezeigt.
 
 Die externen Links für GND und ORCID iD werden in einem separaten Tab/Fenster 
 geöffnet.
