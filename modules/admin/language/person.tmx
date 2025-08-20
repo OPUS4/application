@@ -138,7 +138,7 @@
         <seg><![CDATA[
 <p>This form can be used to edit a person across all associated documents, for instance to add an ID like an ORCID iD to
 that person.</p>
-<p>Persons are identified by <b>name</b>, <b>first name</b> and the identifiers <b>ORCiD iD</b>, <b>GND ID</b>, and
+<p>Persons are identified by <b>name</b>, <b>first name</b> and the identifiers <b>ORCID iD</b>, <b>GND ID</b>, and
 <b>Misc</b>. If you change the last name, it will be changed for all person objects matching the original values.</p>
 <blockquote>
 If there are 10 documents with an author "John Smith" and "John" is changed to "Jeff", then after saving the form, all

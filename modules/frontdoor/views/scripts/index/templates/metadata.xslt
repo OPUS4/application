@@ -327,7 +327,7 @@
                 <xsl:with-param name="id"><xsl:value-of select="@IdentifierOrcid"/></xsl:with-param>
                 <xsl:with-param name="cssClass">orcid-link</xsl:with-param>
                 <xsl:with-param name="linkTitle">frontdoor_orcid</xsl:with-param>
-                <xsl:with-param name="linkText">ORCiD</xsl:with-param>
+                <xsl:with-param name="linkText">ORCID</xsl:with-param>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
