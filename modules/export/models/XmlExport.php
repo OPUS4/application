@@ -225,6 +225,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
     /**
      * Performs XML export.
      *
+     * @return int
      * @throws Application_Exception
      * @throws Application_SearchException
      * @throws Exception
@@ -265,6 +266,8 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         );
 
         $this->prepareXml();
+
+        return 0;
     }
 
     /**

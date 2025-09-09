@@ -93,12 +93,12 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
             $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
             // TODO Content-Disposition
             $response->setBody($output);
-            return true;
+            return 0;
         }
 
         // HTML-Statusseite mit Fehlermeldungen zurückgeben
         $this->prepareView($document, $requiredFieldsStatus, $errors);
-        return false;
+        return 1;
     }
 
     /**
