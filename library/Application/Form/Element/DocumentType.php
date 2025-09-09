@@ -49,14 +49,20 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
 
         $translator = Application_Translate::getInstance();
 
-        foreach ($options as $index => $type) {
-            if ($translator !== null && $translator->isTranslated($index)) {
-                $label = $translator->translate($index);
+        $translatedOptions = [];
+
+        foreach ($options as $value => $type) {
+            if ($translator !== null && $translator->isTranslated($value)) {
+                $label = $translator->translate($value);
             } else {
-                $label = $index;
+                $label = $value;
             }
-            $this->addMultiOption($index, $label);
+            $translatedOptions[$value] = $label;
         }
+
+        natcasesort($translatedOptions);
+
+        $this->setMultiOptions($translatedOptions);
     }
 
     /**
