@@ -55,7 +55,7 @@ tar xfz "$SOLR_TAR" -C ..
 
 # Configure & start Solr
 cd ../solr-$SOLR_VERSION
-./bin/solr start -force
+./bin/solr start -force --user-managed
 ./bin/solr create -c opus4 -force
 cd server/solr/opus4/conf/
 rm -f managed-schema schema.xml solrconfig.xml
