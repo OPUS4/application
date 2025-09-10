@@ -46,16 +46,10 @@ interface Application_Export_ExportPluginInterface
     public function getName();
 
     /**
-     * Sets the plugin configuration.
-     *
-     * @param null|Zend_Config $config
-     */
-    public function setConfig($config = null);
-
-    /**
      * Sets the HTTP request being processed.
      *
      * @param Zend_Controller_Request_Abstract $request
+     * @return void
      */
     public function setRequest($request);
 
@@ -63,6 +57,7 @@ interface Application_Export_ExportPluginInterface
      * Sets the HTTP response.
      *
      * @param Zend_Controller_Response_Abstract $response
+     * @return void
      */
     public function setResponse($response);
 
@@ -70,11 +65,14 @@ interface Application_Export_ExportPluginInterface
      * Sets the view objekt for rendering the response.
      *
      * @param Zend_View_Interface $view
+     * @return void
      */
     public function setView($view);
 
     /**
      * Main function performing export.
+     *
+     * @return int
      */
     public function execute();
 

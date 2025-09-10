@@ -158,7 +158,7 @@ class Publish_IndexControllerTest extends ControllerTestCase
         $doctypeDemodemo     = strpos($body, '<option value="demodemo" title="demodemo">demodemo</option>');
 
         $this->assertTrue($doctypeAllPos < $doctypeWorkingpaper);
-        $this->assertTrue($doctypeWorkingpaper < $doctypeArticlePos);
-        $this->assertTrue($doctypeArticlePos < $doctypeDemodemo);
+        $this->assertTrue($doctypeDemodemo < $doctypeArticlePos);
+        $this->assertTrue($doctypeWorkingpaper < $doctypeDemodemo);
     }
 }

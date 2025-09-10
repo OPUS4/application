@@ -47,7 +47,7 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
     /**
      * Generates DataCite-XML for document.
      *
-     * @return bool wurde (valides oder invalides) XML erzeugt, so gibt die Methode den Rückgabewert true zurück
+     * @return int wurde (valides oder invalides) XML erzeugt, so gibt die Methode den Rückgabewert 0 zurück
      * @throws Application_Exception Wenn kein Dokument mit der uebergebenen ID gefunden werden konnte.
      */
     public function execute()
@@ -93,12 +93,12 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
             $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
             // TODO Content-Disposition
             $response->setBody($output);
-            return true;
+            return 0;
         }
 
         // HTML-Statusseite mit Fehlermeldungen zurückgeben
         $this->prepareView($document, $requiredFieldsStatus, $errors);
-        return false;
+        return 1;
     }
 
     /**

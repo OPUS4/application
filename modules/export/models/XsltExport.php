@@ -34,6 +34,13 @@
  */
 class Export_Model_XsltExport extends Export_Model_XmlExport
 {
+    /**
+     * @return int
+     * @throws Application_Exception
+     * @throws Application_SearchException
+     * @throws Zend_Exception
+     * @throws Zend_View_Exception
+     */
     public function execute()
     {
         $config = $this->getConfig();
@@ -57,5 +64,7 @@ class Export_Model_XsltExport extends Export_Model_XmlExport
         );
 
         $this->prepareXml();
+
+        return 0;
     }
 }

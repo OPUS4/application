@@ -42,6 +42,7 @@ interface Application_Form_Validate_MultiSubFormInterface
      * @param Zend_Form  $form
      * @param array      $data
      * @param null|array $context
+     * @return void
      */
     public function prepareValidation($form, $data, $context = null);
 
@@ -51,6 +52,7 @@ interface Application_Form_Validate_MultiSubFormInterface
      *
      * @param array      $data
      * @param null|array $context
+     * @return bool
      */
     public function isValid($data, $context = null);
 }

@@ -109,6 +109,9 @@ abstract class CrudControllerTestCase extends ControllerTestCase
         }
     }
 
+    /**
+     * @return mixed
+     */
     abstract public function getModels();
 
     public function testIndexAction()
@@ -217,6 +220,9 @@ abstract class CrudControllerTestCase extends ControllerTestCase
         $this->verifyFlashMessage('controller_crud_invalid_id');
     }
 
+    /**
+     * @return mixed
+     */
     abstract public function createNewModel();
 
     /**
