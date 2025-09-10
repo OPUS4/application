@@ -65,6 +65,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
     }
 
     /**
+     * @return int
      * @throws Application_Exception If parameters are not sufficient.
      */
     public function execute()
@@ -131,6 +132,8 @@ class Export_Model_PublistExport extends Export_Model_XsltExport
         $this->loadStyleSheet($this->buildStylesheetPath($stylesheet, $view->getScriptPath('') . $stylesheetDirectory));
 
         $this->prepareXml();
+
+        return 0;
     }
 
     /**

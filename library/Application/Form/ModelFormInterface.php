@@ -64,6 +64,7 @@ interface Application_Form_ModelFormInterface
      * Initialisiert das Formular mit Werten einer Model-Instanz.
      *
      * @param ModelInterface $model
+     * @return void
      */
     public function populateFromModel($model);
 
@@ -71,11 +72,14 @@ interface Application_Form_ModelFormInterface
      * Aktualsiert Model-Instanz mit Werten im Formular.
      *
      * @param ModelInterface $model
+     * @return void
      */
     public function updateModel($model);
 
     /**
      * Bereitet das Formular fuer die Anzeige als View vor.
+     *
+     * @return void
      */
     public function prepareRenderingAsView();
 }

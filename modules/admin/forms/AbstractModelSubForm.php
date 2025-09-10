@@ -56,6 +56,8 @@ abstract class Admin_Form_AbstractModelSubForm extends Admin_Form_AbstractDocume
      * Wird zum Beispiel vom Formular ein existierender Identifier Eintrag angezeigt, sollte diese Funktion das Model
      * für den in der Datenbank gespeicherten Identifier zurück liefern. Ist der Identifier im Formular hinzugefügt
      * worden muss eine new Model Instanz zurück gegeben werden bei der der Wert vom ID-Feld noch null ist.
+     *
+     * @return mixed
      */
     abstract public function getModel();
 }
