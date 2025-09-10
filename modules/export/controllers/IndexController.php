@@ -106,8 +106,8 @@ class Export_IndexController extends Application_Controller_ModuleAccess
             $plugin->setView($this->view);
 
             $plugin->init();
-            $success = $plugin->execute();
-            if (is_bool($success) && ! $success) {
+            $result = $plugin->execute();
+            if ($result !== 0) {
                 // nur im Fehlerfall wird eine HTML-Statusseite an den Client zurückgegeben
                 $this->_helper->layout->enableLayout();
                 $this->_helper->viewRenderer->setNoRender(false);

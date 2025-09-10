@@ -341,7 +341,7 @@
 
     <target name="download-solr">
         <mkdir dir="${downloadDir}" />
-        <get src="https://archive.apache.org/dist/lucene/solr/${solrVersion}/solr-${solrVersion}.tgz"
+        <get src="https://www.apache.org/dyn/closer.lua/solr/solr/${solrVersion}/solr-${solrVersion}.tgz?action=download"
              dest="${downloadDir}/solr-${solrVersion}.tgz"
              skipexisting="true" />
         <exec executable="tar" dir="${downloadDir}">
