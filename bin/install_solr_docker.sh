@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-ant download-solr -DsolrVersion=7.7.2 -DdownloadDir=./downloads
-cd solr-7.7.2
+ant download-solr -DsolrVersion=9.9.0 -DdownloadDir=./downloads
+cd solr-9.9.0
 ./bin/solr start -force
 ./bin/solr create -c opus4 -force
 cd server/solr/opus4/conf/
