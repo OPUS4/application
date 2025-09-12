@@ -50,6 +50,14 @@ class Frontdoor_IndexController extends Application_Controller_Action
     {
         $request = $this->getRequest();
 
+        if (
+            $request->getParam('urn', null) !== null ||
+            ! is_numeric($request->getParam('docId', ''))
+        ) {
+            $this->infoAction();
+            return;
+        }
+
         $docId = $this->handleSearchResultNavigation();
 
         if ($docId === false) {
@@ -351,5 +359,20 @@ class Frontdoor_IndexController extends Application_Controller_Action
         }
 
         return $docId;
+    }
+
+    public function infoAction()
+    {
+        $request = $this->getRequest();
+        $docId   = $request->getParam('docId', '');
+        $urn     = $request->getParam('urn', null);
+
+        if ($urn !== null && strlen($urn) > 0) {
+            $docId = htmlspecialchars($urn);
+        }
+
+        $this->view->title = $this->view->translate('frontdoor_title');
+        $this->view->docId = $docId;
+        $this->printDocumentError('frontdoor_doc_id_not_found', 404);
     }
 }
