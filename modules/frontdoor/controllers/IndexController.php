@@ -50,11 +50,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
     {
         $request = $this->getRequest();
 
-        if (
-            $request->getParam('urn', null) !== null ||
-            ! is_numeric($request->getParam('docId', ''))
-        ) {
-            $this->infoAction();
+        if ($this->handleInfoRequest()) {
             return;
         }
 
@@ -359,6 +355,27 @@ class Frontdoor_IndexController extends Application_Controller_Action
         }
 
         return $docId;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function handleInfoRequest()
+    {
+        $request = $this->getRequest();
+
+        $docId = $request->getParam('docId', null);
+
+        if (is_array($docId)) {
+            $docId = end($docId);
+        }
+
+        if ($request->getParam('urn', null) !== null || ! is_numeric($docId)) {
+            $this->infoAction();
+            return true;
+        }
+
+        return false;
     }
 
     public function infoAction()
