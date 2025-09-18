@@ -54,7 +54,7 @@ class Application_Update_UpdateEnrichments
     private $output;
 
     /**
-     * @param $changes array
+     * @param array $changes
      * @return void
      */
     public function update($changes)
@@ -64,7 +64,7 @@ class Application_Update_UpdateEnrichments
             'Updating enrichment keys for DOI import and conferences (including their translation keys)...'
         );
         // Iterate through the keys
-        foreach ($this->changes as $oldKey => $newKey) {
+        foreach ($changes as $oldKey => $newKey) {
             $output->writeln("Updating '{$oldKey}' -> '{$newKey}'");
             $this->updateEnrichments($oldKey, $newKey);
             $this->updateTranslations($oldKey, $newKey);
@@ -225,7 +225,7 @@ class Application_Update_UpdateEnrichments
      * @param OutputInterface $output
      * @return $this
      */
-    public function setOutput(OutputInterface $output)
+    public function setOutput($output)
     {
         $this->output = $output;
         return $this;
