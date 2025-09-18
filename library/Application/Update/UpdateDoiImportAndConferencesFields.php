@@ -29,10 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Console\ConsoleColors;
-use Opus\Common\EnrichmentKey;
-use Opus\Translate\Dao;
-
 /**
  * Updates enrichment fields used by DOI import functionality.
  *
