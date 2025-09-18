@@ -25,34 +25,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
- */
-interface Application_Form_Validate_MultiSubFormInterface
+class Application_View_Helper_RenderUrlTest extends ControllerTestCase
 {
-    /**
-     * Bereitet die Validierung vor.
-     *
-     * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
-     *
-     * @param Zend_Form  $form
-     * @param array      $data
-     * @param null|array $context
-     * @return void
-     */
-    public function prepareValidation($form, $data, $context = null);
+    /** @var string */
+    protected $additionalResources = 'view';
 
-    /**
-     * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein
-     * sollen.
-     *
-     * @param array      $data
-     * @param null|array $context
-     * @return bool
-     */
-    public function isValid($data, $context = null);
+    /** @var Application_View_Helper_RenderUrl */
+    private $viewHelper;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->viewHelper = new Application_View_Helper_RenderUrl();
+    }
+
+    public function testRenderUrl()
+    {
+        $url = 'http://test.org';
+
+        $output = $this->viewHelper->renderUrl($url);
+
+        $this->assertEquals("<a href=\"{$url}\" target=\"_blank\">{$url}</a>", $output);
+    }
+
+    public function testRenderUrlInvalidUrl()
+    {
+        $url = 'http://test.org" style="color: red;"';
+
+        $output = $this->viewHelper->renderUrl($url);
+
+        $this->assertEquals($url, $output);
+    }
+
+    public function testRenderUrlTrimming()
+    {
+        $url = '  http://test.org  ';
+
+        $output = $this->viewHelper->renderUrl($url);
+
+        $url = trim($url);
+
+        $this->assertEquals("<a href=\"{$url}\" target=\"_blank\">{$url}</a>", $output);
+    }
 }

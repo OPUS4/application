@@ -25,34 +25,32 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 /**
- * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
+ * Renders URN link.
  */
-interface Application_Form_Validate_MultiSubFormInterface
+class Application_View_Helper_UrnLink extends Application_View_Helper_Abstract
 {
     /**
-     * Bereitet die Validierung vor.
+     * Renders link to URN.
      *
-     * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
-     *
-     * @param Zend_Form  $form
-     * @param array      $data
-     * @param null|array $context
-     * @return void
+     * @param string $value URN identifier
+     * @return string
      */
-    public function prepareValidation($form, $data, $context = null);
+    public function urnLink($value)
+    {
+        $config = $this->getConfig();
+        $value  = htmlspecialchars(trim($value));
 
-    /**
-     * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein
-     * sollen.
-     *
-     * @param array      $data
-     * @param null|array $context
-     * @return bool
-     */
-    public function isValid($data, $context = null);
+        if (isset($config->urn->resolverUrl)) {
+            $baseUrl = rtrim($config->urn->resolverUrl, '/');
+            $link    = $baseUrl . '/' . $value;
+            return "<a href=\"{$link}\" target=\"_blank\">{$value}</a>";
+        } else {
+            return $value;
+        }
+    }
 }

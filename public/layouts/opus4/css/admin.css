@@ -2625,3 +2625,11 @@ fieldset.collectionRole i.fa-trash:hover {
     padding: .2em .2em;
     margin: .2em 0 .8em;
 }
+
+#Document-Content-Subjects-Psyndex-Language {
+    margin-top: 0.5em;
+}
+
+#Document-Content-Subjects-Uncontrolled-Language {
+    margin-top: 0.5em;
+}

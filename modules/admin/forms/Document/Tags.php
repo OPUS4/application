@@ -25,21 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
 use Opus\Common\DocumentInterface;
+use Opus\Common\Language;
 
 /**
  * Unterformular fuer GND Subjects im Metadaten-Formular.
  */
-class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
+class Admin_Form_Document_Tags extends Admin_Form_AbstractDocumentSubForm
 {
     public const ELEMENT_ADD          = 'Add';
+    public const ELEMENT_LANGUAGE     = 'Language';
     public const ELEMENT_SUBJECTS     = 'Subjects';
     public const ELEMENT_ADD_SUBJECTS = 'AddSubjects';
     public const SUBFORM_VALUES       = 'Values';
+    public const SUBFORM_CONTROLS     = 'Controls';
 
     /** @var string Der Schlagworttyp für den dieses Unterformular verwendet wird. */
     private $subjectType; // TODO necessary here?
@@ -50,11 +53,12 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
     /**
      * Konstruiert ein Unterformular für GND Schlagwörter.
      *
+     * @param string     $subjectType
      * @param null|mixed $options
      */
-    public function __construct($options = null)
+    public function __construct($subjectType, $options = null)
     {
-        $this->setSubjectType('swd');
+        $this->setSubjectType($subjectType);
 
         parent::__construct($options);
     }
@@ -63,6 +67,8 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
      * Initialisiert die Formularelemente.
      *
      * Setzt die Legende für das Unterformular.
+     *
+     * TODO wrap form elements in subform and render with DIV
      */
     public function init()
     {
@@ -75,6 +81,9 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
             'label' => 'admin_button_add',
         ]);
 
+        $this->addElement('Language', self::ELEMENT_LANGUAGE, [
+            'decorators' => ['ViewHelper'],
+        ]);
         $this->addElement('textarea', self::ELEMENT_SUBJECTS);
         $this->addElement('submit', self::ELEMENT_ADD_SUBJECTS, [
             'label' => 'admin_button_add',
@@ -98,16 +107,6 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
     }
 
     /**
-     * Liefert den Schlagworttyp für das Formular zurück.
-     *
-     * @return string Schlagworttyp
-     */
-    public function getSubjectType()
-    {
-        return $this->subjectType;
-    }
-
-    /**
      * @param string $type
      * @return $this
      */
@@ -118,11 +117,21 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
     }
 
     /**
-     * @param DocumentInterface $document
+     * Liefert den Schlagworttyp für das Formular zurück.
+     *
+     * @return string Schlagworttyp
      */
-    public function populateFromModel($document)
+    public function getSubjectType()
     {
-        $this->valuesSubForm->populateFromModel($document);
+        return $this->subjectType;
+    }
+
+    /**
+     * @param DocumentInterface $model
+     */
+    public function populateFromModel($model)
+    {
+        $this->valuesSubForm->populateFromModel($model);
     }
 
     /**
@@ -132,15 +141,13 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
     public function constructFromPost($post, $document = null)
     {
         // TODO is this the best way $post['Values'] - Shouldn't base class take care of it?
-        if (isset($post['Values'])) {
-            $this->valuesSubForm->constructFromPost($post['Values'], $document);
-        }
+        $this->valuesSubForm->constructFromPost($post['Values'], $document);
     }
 
     /**
-     * @param DocumentInterface $document
+     * @param DocumentInterface $model
      */
-    public function updateModel($document)
+    public function updateModel($model)
     {
         // hier darf nichts passieren
     }
@@ -175,7 +182,12 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
             array_key_exists(self::ELEMENT_ADD_SUBJECTS, $data)
             && array_key_exists(self::ELEMENT_SUBJECTS, $data)
         ) {
-            $this->addMultipleSubjectsFromString($data[self::ELEMENT_SUBJECTS]);
+            $lang = $data[self::ELEMENT_LANGUAGE];
+            if ($lang === null) {
+                $translate = Application_Translate::getInstance();
+                $lang      = Language::getPart2tForPart1($translate->getLocale());
+            }
+            $this->addMultipleSubjectsFromString($data[self::ELEMENT_SUBJECTS], $lang);
             return Admin_Form_Document::RESULT_SHOW;
         }
 
@@ -184,8 +196,9 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * @param string $value
+     * @param string $lang
      */
-    public function addMultipleSubjectsFromString($value)
+    public function addMultipleSubjectsFromString($value, $lang)
     {
         if (strlen(trim($value)) > 0) {
             $subjects = $this->explodeSubjectsString($value);
@@ -201,7 +214,9 @@ class Admin_Form_Document_GndSubjects extends Admin_Form_AbstractDocumentSubForm
                 $subject = trim($subject);
                 if (strlen($subject) > 0 && ! in_array($subject, $existingSubjects)) {
                     $subform = $this->valuesSubForm->appendSubForm();
-                    $subform->getElement('Value')->setValue($subject);
+
+                    $subform->getElement(Admin_Form_Document_Subject::ELEMENT_LANGUAGE)->setValue($lang);
+                    $subform->getElement(Admin_Form_Document_Subject::ELEMENT_VALUE)->setValue($subject);
                 }
             }
 

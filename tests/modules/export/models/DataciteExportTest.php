@@ -106,7 +106,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         // Testdokument wieder löschen
         $doc->delete();
 
-        $this->assertTrue($result);
+        $this->assertEquals(0, $result);
         $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
     }
 
@@ -130,7 +130,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         // Testdokument wieder löschen
         $doc->delete();
 
-        $this->assertFalse($result);
+        $this->assertGreaterThan(0, $result);
         $this->assertTrue(is_array($view->requiredFieldsStatus));
         $this->assertTrue(is_array($view->errors));
     }
@@ -157,7 +157,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         // Testdokument wieder löschen
         $doc->delete();
 
-        $this->assertFalse($result);
+        $this->assertGreaterThan(0, $result);
         $this->assertTrue(is_array($view->requiredFieldsStatus));
         $this->assertTrue(is_array($view->errors));
     }
@@ -181,7 +181,7 @@ class Export_Model_DataciteExportTest extends ControllerTestCase
         $doc->delete();
 
         // XML wird in jedem Fall generiert, auch wenn das DataCite-XML nicht valide ist
-        $this->assertTrue($result);
+        $this->assertEquals(0, $result);
         $this->assertHeaderContains('Content-Type', 'text/xml; charset=UTF-8');
     }
 }

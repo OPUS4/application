@@ -135,7 +135,7 @@ class Admin_Form_WorkflowNotification extends Admin_Form_YesNoForm
      */
     protected function addPersons(&$recipients, $persons, $role = 'author')
     {
-        foreach ($persons as $index => $person) {
+        foreach ($persons as $person) {
             $fullname = $person->getDisplayName();
             $email    = $person->getEmail();
             if ($email !== null && strlen(trim($email)) > 0) {
