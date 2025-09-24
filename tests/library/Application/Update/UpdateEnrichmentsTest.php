@@ -48,6 +48,9 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
     /** @var Application_Update_UpdateEnrichments */
     private $updater;
 
+    /** @var Admin_Model_EnrichmentKeys */
+    private $translationHelper;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -55,6 +58,9 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
         $enrichmentKey = EnrichmentKey::new();
         $enrichmentKey->setName('testOldKey');
         $enrichmentKey->store();
+
+        $this->translationHelper = new Admin_Model_EnrichmentKeys();
+        $this->translationHelper->createTranslations('testOldKey');
 
         $this->updater = new Application_Update_UpdateEnrichments();
         $this->updater->setOutput(new NullOutput());
@@ -108,12 +114,28 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
 
     public function testUpdateTranslations()
     {
-        $this->markTestIncomplete('implement');
+        $translations = $this->translationHelper->getTranslations('testOldKey');
+        $this->assertCount(6, $translations);
+
+        $this->updater->update([
+            'testOldKey' => 'testNewKey',
+        ]);
+
+        $translations = $this->translationHelper->getTranslations('testNewKey');
+        $this->assertCount(6, $translations);
+
+        $this->translationHelper->removeTranslations('testOldKey');
+        $this->translationHelper->removeTranslations('testNewKey');
     }
 
     public function testUpdateTranslationsDoNotExist()
     {
         $this->markTestIncomplete('implement');
+    }
+
+    public function testUpdateTranslationNoSideEffects()
+    {
+        $this->markTestIncomplete('do not change other keys');
     }
 
     public function testUpdateDocuments()

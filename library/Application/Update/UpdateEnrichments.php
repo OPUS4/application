@@ -66,7 +66,7 @@ class Application_Update_UpdateEnrichments
         // Iterate through the keys
         foreach ($changes as $oldKey => $newKey) {
             $output->writeln("Updating '{$oldKey}' -> '{$newKey}'");
-            $this->updateEnrichments($oldKey, $newKey);
+            $this->updateEnrichment($oldKey, $newKey);
             $this->updateTranslations($oldKey, $newKey);
         }
     }
@@ -77,7 +77,7 @@ class Application_Update_UpdateEnrichments
      * @param string $oldKeyString
      * @param string $newKeyString
      */
-    public function updateEnrichments($oldKeyString, $newKeyString)
+    public function updateEnrichment($oldKeyString, $newKeyString)
     {
         $colors = new ConsoleColors();
         $output = $this->getOutput();
@@ -174,6 +174,8 @@ class Application_Update_UpdateEnrichments
     }
 
     /**
+     * Returns all modified (added/edited) translation keys for Enrichment.
+     *
      * @param string $filterKey
      * @return array
      */
