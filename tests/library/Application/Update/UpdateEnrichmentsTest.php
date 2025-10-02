@@ -32,6 +32,7 @@
 use Opus\Common\Document;
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentKey;
+use Opus\Translate\Dao;
 use Symfony\Component\Console\Output\NullOutput;
 
 class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
@@ -73,6 +74,7 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
             if ($enrichmentKey) {
                 $enrichmentKey->delete();
             }
+            $this->translationHelper->removeTranslations($enrichmentKey);
         }
 
         parent::tearDown();
@@ -121,21 +123,70 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
             'testOldKey' => 'testNewKey',
         ]);
 
+        $translations = $this->translationHelper->getTranslations('testOldKey');
+        $this->assertCount(0, $translations);
         $translations = $this->translationHelper->getTranslations('testNewKey');
         $this->assertCount(6, $translations);
 
-        $this->translationHelper->removeTranslations('testOldKey');
         $this->translationHelper->removeTranslations('testNewKey');
     }
 
     public function testUpdateTranslationsDoNotExist()
     {
-        $this->markTestIncomplete('implement');
+        $this->translationHelper->removeTranslations('testOldKey');
+        $translations = $this->translationHelper->getTranslations('testOldKey');
+        $this->assertCount(0, $translations);
+
+        $this->updater->update([
+            'testOldKey' => 'testNewKey',
+        ]);
+
+        $translations = $this->translationHelper->getTranslations('testOldKey');
+        $this->assertCount(0, $translations);
+
+        // Translations for new key are not automatically created (in database, defaults in TMX files still exist)
+        $translations = $this->translationHelper->getTranslations('testNewKey');
+        $this->assertCount(0, $translations);
     }
 
     public function testUpdateTranslationNoSideEffects()
     {
-        $this->markTestIncomplete('do not change other keys');
+        $database = new Dao();
+
+        $extraKey = 'additionalTestKey_testOldKey';
+        $database->remove($extraKey);
+        $database->remove('additionalTestKey_testNewKey');
+
+        $database->setTranslation($extraKey, [
+            'en' => 'testOldKeyValueEN',
+            'de' => 'testOldKeyValueDE',
+        ]);
+
+        $translationManager = new Application_Translate_TranslationManager();
+        $translationManager->setFilter('testOldKey');
+
+        $matchingTranslations = $translationManager->getMergedTranslations();
+        $this->assertCount(7, $matchingTranslations);
+
+        $translations = $this->translationHelper->getTranslations('testOldKey');
+        $this->assertCount(6, $translations);
+
+        $this->updater->update([
+            'testOldKey' => 'testNewKey',
+        ]);
+
+        $translations = $this->translationHelper->getTranslations('testOldKey');
+        $this->assertCount(0, $translations);
+        $translations = $this->translationHelper->getTranslations('testNewKey');
+        $this->assertCount(6, $translations);
+
+        $translationManager->setFilter('testNewKey');
+        $matchingTranslations = $translationManager->getMergedTranslations();
+        $this->assertCount(6, $matchingTranslations);
+
+        $this->assertArrayNotHasKey('additionalTestKey_testNewKey', $matchingTranslations);
+
+        $this->translationHelper->removeTranslations('testNewKey');
     }
 
     public function testUpdateDocuments()

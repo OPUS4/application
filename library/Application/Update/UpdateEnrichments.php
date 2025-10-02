@@ -31,7 +31,6 @@
 
 use Opus\Common\Console\ConsoleColors;
 use Opus\Common\EnrichmentKey;
-use Opus\Translate\Dao;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -52,6 +51,9 @@ class Application_Update_UpdateEnrichments
 {
     /** @var OutputInterface */
     private $output;
+
+    /** @var Application_Update_UpdateTranslations */
+    private $translationUpdater;
 
     /**
      * @param array $changes
@@ -125,90 +127,50 @@ class Application_Update_UpdateEnrichments
     /**
      * Update translations
      *
-     * @param string $oldKeyString
-     * @param string $newKeyString
+     * @param string $oldEnrichmentKey
+     * @param string $newEnrichmentKey
      */
-    public function updateTranslations($oldKeyString, $newKeyString)
+    public function updateTranslations($oldEnrichmentKey, $newEnrichmentKey)
     {
         $colors = new ConsoleColors();
         $output = $this->getOutput();
 
-        // Identify already existing modified new translation keys (in database)
-        $modNewKeys   = $this->getModifiedTranslationKeys($newKeyString);
         $conflictKeys = [];
 
-        // Identify modified old translation keys and update them to their new names
-        $manager = new Application_Translate_TranslationManager();
-        $manager->setFilter($oldKeyString);
-        $oldTranslations = $manager->getMergedTranslations(); // TODO expensive, seems unnecessary just for keys in DB
+        $translationUpdater   = $this->getTranslationUpdater();
+        $enrichmentKeysHelper = new Admin_Model_EnrichmentKeys();
 
-        foreach (array_keys($oldTranslations) as $oldKey) {
-            $translation = $manager->getTranslation($oldKey);
+        $oldTranslationKeys = $enrichmentKeysHelper->getTranslationKeys($oldEnrichmentKey);
+        $newTranslationKeys = $enrichmentKeysHelper->getTranslationKeys($newEnrichmentKey);
 
-            if (isset($translation['state']) && (in_array($translation['state'], ['edited', 'added']))) {
-                $newKey = str_replace($oldKeyString, $newKeyString, $oldKey);
-                if ($manager->keyExists($newKey)) {
-                    // New translation key exists and has been modified, something might be wrong and should be checked
-                    $output->writeln($colors->yellow(
-                        "New key '{$newKey}' already exists. Cannot rename old key '{$oldKey}'. Please check this manually."
-                    ));
-                    $conflictKeys[] = $newKey;
-                } else {
-                    // If the new translation key doesn't exist, the old one is renamed
-                    $this->updateTranslationKey($oldKey, $translation, $newKey);
-                    $output->writeln("Translation key '{$oldKey}' updated to '{$newKey}'.");
-                }
+        foreach ($oldTranslationKeys as $patternName => $oldTranslationKey) {
+            $newTranslationKey = $newTranslationKeys[$patternName];
+            if ($translationUpdater->update($oldTranslationKey, $newTranslationKey) !== 0) {
+                $conflictKeys[] = $newTranslationKey;
             }
         }
 
         // Provide information on modified new translation keys that already exist so
         // the user may check if something is wrong or everything is ok.
         // TODO does this make sense? Does it provide useful information?
-        $remainingKeys = array_diff($modNewKeys, $conflictKeys);
-        if (count($remainingKeys) > 0) {
-            $output->writeln("The following keys with modified translations already existed for '{$newKeyString}'.");
-            foreach ($remainingKeys as $key) {
+        if (count($conflictKeys) > 0) {
+            $output->writeln("The following keys with modified translations already existed for '{$newEnrichmentKey}'.");
+            foreach ($conflictKeys as $key) {
                 $output->writeln($colors->yellow($key));
             }
         }
     }
 
     /**
-     * Returns all modified (added/edited) translation keys for Enrichment.
-     *
-     * @param string $filterKey
-     * @return array
+     * @return Application_Update_UpdateTranslations
      */
-    protected function getModifiedTranslationKeys($filterKey)
+    public function getTranslationUpdater()
     {
-        $manager = new Application_Translate_TranslationManager();
-        $manager->setFilter($filterKey);
-
-        $modifiedKeys = [];
-
-        $translations = $manager->getMergedTranslations();
-        foreach (array_keys($translations) as $key) {
-            $translation = $manager->getTranslation($key);
-            if (isset($translation['state']) && (in_array($translation['state'], ['edited', 'added']))) {
-                $modifiedKeys[] = $key;
-            }
+        if ($this->translationUpdater === null) {
+            $this->translationUpdater = new Application_Update_UpdateTranslations();
         }
 
-        return $modifiedKeys;
-    }
-
-    /**
-     * Insert new key with translations, delete old key
-     *
-     * @param string $oldKey
-     * @param array  $translation
-     * @param string $newKey
-     */
-    public function updateTranslationKey($oldKey, $translation, $newKey)
-    {
-        $dao = new Dao();
-        $dao->remove($oldKey);
-        $dao->setTranslation($newKey, $translation['translations'], $translation['module']);
+        return $this->translationUpdater;
     }
 
     /**
