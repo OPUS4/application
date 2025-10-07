@@ -29,23 +29,104 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Translate\Dao;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Output\NullOutput;
+
 class Application_Update_UpdateTranslationsTest extends ControllerTestCase
 {
     /** @var string */
     protected $additionalResources = 'database';
 
+    /** @var Application_Update_UpdateTranslations */
+    private $updater;
+
+    /** @var Dao */
+    private $translations;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->updater = new Application_Update_UpdateTranslations();
+        $this->updater->setOutput(new NullOutput());
+
+        $this->translations = new Dao();
+        $this->translations->setTranslation('oldTestTranslation', [
+            'en' => 'translationEN',
+            'de' => 'translationDE',
+        ]);
+        $this->translations->remove('newTestTranslation');
+    }
+
+    public function tearDown(): void
+    {
+        $this->translations->remove('oldTestTranslation');
+        $this->translations->remove('newTestTranslation');
+
+        parent::tearDown();
+    }
+
     public function testUpdate()
     {
-        $this->markTestIncomplete('not tested yet.');
+        $oldKey = 'oldTestTranslation';
+        $newKey = 'newTestTranslation';
+
+        $this->assertNotNull($this->translations->getTranslation($oldKey));
+        $this->assertNull($this->translations->getTranslation($newKey));
+
+        $this->updater->update($oldKey, $newKey);
+
+        $this->assertNull($this->translations->getTranslation($oldKey));
+        $this->assertNotNull($this->translations->getTranslation($newKey));
     }
 
     public function testUpdateOldKeyDoesNotExist()
     {
-        $this->markTestIncomplete('not tested yet.');
+        $oldKey = 'oldTestTranslation';
+        $newKey = 'newTestTranslation';
+
+        $this->translations->remove($oldKey);
+
+        $this->assertNull($this->translations->getTranslation($oldKey));
+        $this->assertNull($this->translations->getTranslation($newKey));
+
+        $this->updater->update($oldKey, $newKey);
+
+        $this->assertNull($this->translations->getTranslation($oldKey));
+        $this->assertNull($this->translations->getTranslation($newKey));
     }
 
     public function testUpdateNewKeyAlreadyExists()
     {
-        $this->markTestIncomplete('not tested yet.');
+        $oldKey = 'oldTestTranslation';
+        $newKey = 'newTestTranslation';
+
+        $this->translations->setTranslation($newKey, [
+            'en' => 'newTranslationEN',
+            'de' => 'newTranslationDE',
+        ]);
+
+        $this->assertNotNull($this->translations->getTranslation($oldKey));
+        $this->assertNotNull($this->translations->getTranslation($newKey));
+
+        $output = new BufferedOutput();
+        $this->updater->setOutput($output);
+
+        $this->updater->update($oldKey, $newKey);
+
+        $this->assertNotNull($this->translations->getTranslation($oldKey));
+        $this->assertNotNull($this->translations->getTranslation($newKey));
+
+        // Check existing key was not changed
+        $this->assertEqualsCanonicalizing([
+            'en' => 'newTranslationEN',
+            'de' => 'newTranslationDE',
+        ], $this->translations->getTranslation($newKey));
+
+        $this->assertStringContainsString(
+            "New key '{$newKey}' already exists.",
+            $output->fetch()
+        );
     }
 }

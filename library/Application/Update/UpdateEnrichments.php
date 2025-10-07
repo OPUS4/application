@@ -35,25 +35,20 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Updates enrichment fields used by DOI import functionality.
- *
- * Changes names of enrichment fields for doi based metadata import to new OPUS default.
- *
- * Changes names of existing and adds new enrichment fields for conferences.
- *
- * Adapts key names for edited or added translations of the enrichment fields for
- * the doi based metadata import and conferences to the new names of the enrichment
- * fields.
- *
- * TODO use ConsoleOutput (support logging)
+ * Changes name of enrichment key and updates the associated translation keys.
  */
-class Application_Update_UpdateEnrichments
+class Application_Update_UpdateEnrichments extends Application_Update_PluginAbstract
 {
     /** @var OutputInterface */
     private $output;
 
     /** @var Application_Update_UpdateTranslations */
     private $translationUpdater;
+
+    public function run()
+    {
+        // do nothing
+    }
 
     /**
      * @param array $changes
@@ -181,6 +176,9 @@ class Application_Update_UpdateEnrichments
     {
         if ($this->output === null) {
             $this->output = new ConsoleOutput();
+            if ($this->getQuietMode()) {
+                $this->output->setVerbosity(ConsoleOutput::VERBOSITY_QUIET);
+            }
         }
 
         return $this->output;

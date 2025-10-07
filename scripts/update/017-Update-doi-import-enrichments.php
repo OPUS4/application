@@ -1,4 +1,4 @@
-<?php
+<?PHP
 
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -29,40 +29,20 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Symfony\Component\Console\Output\OutputInterface;
+require_once dirname(__FILE__) . '/../common/update.php';
 
 /**
- * Updates enrichment fields used by DOI import functionality.
- *
  * Changes names of enrichment fields for doi based metadata import to new OPUS default.
- *
- * Changes names of existing and adds new enrichment fields for conferences.
- *
- * Adapts key names for edited or added translations of the enrichment fields for
- * the doi based metadata import and conferences to the new names of the enrichment
- * fields.
+ * Updates key names for associated translations.
  */
-class Application_Update_UpdateDoiImportAndConferencesFields extends Application_Update_PluginAbstract
-{
-    /** @var array[] */
-    private $keyNames = [
-        'opus_import_data'           => 'opus_doi_json',
-        'local_crossrefDocumentType' => 'opus_crossrefDocumentType',
-        'local_crossrefLicence'      => 'opus_crossrefLicence',
-        'local_doiImportPopulated'   => 'opus_doiImportPopulated',
-        'local_import_origin'        => 'opus_import_origin',
-        'conference_title'           => 'OpusConferenceName',
-        'conference_place'           => 'OpusConferencePlace',
-        'conference_number'          => 'OpusConferenceNumber',
-        'conference_year'            => 'OpusConferenceYear',
-    ];
 
-    public function run()
-    {
-        $updater = new Application_Update_UpdateEnrichments();
-        if ($this->getQuietMode()) {
-            $updater->getOutput()->setVerbosity(OutputInterface::VERBOSITY_QUIET);
-        }
-        $updater->update($this->keyNames);
-    }
-}
+$keyNames = [
+    'opus_import_data'           => 'opus_doi_json',
+    'local_crossrefDocumentType' => 'opus_crossrefDocumentType',
+    'local_crossrefLicence'      => 'opus_crossrefLicence',
+    'local_doiImportPopulated'   => 'opus_doiImportPopulated',
+    'local_import_origin'        => 'opus_import_origin',
+];
+
+$update = new Application_Update_UpdateEnrichments();
+$update->update($keyNames);
