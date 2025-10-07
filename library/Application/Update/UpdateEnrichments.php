@@ -168,6 +168,7 @@ class Application_Update_UpdateEnrichments
     {
         if ($this->translationUpdater === null) {
             $this->translationUpdater = new Application_Update_UpdateTranslations();
+            $this->translationUpdater->setOutput($this->getOutput());
         }
 
         return $this->translationUpdater;
@@ -192,6 +193,11 @@ class Application_Update_UpdateEnrichments
     public function setOutput($output)
     {
         $this->output = $output;
+
+        if ($this->translationUpdater !== null) {
+            $this->translationUpdater->setOutput($this->output);
+        }
+
         return $this;
     }
 }

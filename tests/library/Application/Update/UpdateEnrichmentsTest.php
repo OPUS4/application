@@ -33,7 +33,9 @@ use Opus\Common\Document;
 use Opus\Common\Enrichment;
 use Opus\Common\EnrichmentKey;
 use Opus\Translate\Dao;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
 {
@@ -216,7 +218,35 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
 
     public function testQuietModeOn()
     {
-        // TODO no output should be written to console
-        $this->markTestIncomplete('implement');
+        $output = new BufferedOutput();
+        $output->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+
+        $this->updater->setOutput($output);
+
+        $this->updater->update([
+            'testOldKey' => 'testNewKey',
+        ]);
+
+        $this->assertNull(EnrichmentKey::fetchByName('testOldKey'));
+        $this->assertNotNull(EnrichmentKey::fetchByName('testNewKey'));
+
+        $this->assertEmpty($output->fetch());
+    }
+
+    public function testQuietModeOff()
+    {
+        $output = new BufferedOutput();
+        $output->setVerbosity(OutputInterface::VERBOSITY_NORMAL);
+
+        $this->updater->setOutput($output);
+
+        $this->updater->update([
+            'testOldKey' => 'testNewKey',
+        ]);
+
+        $this->assertNull(EnrichmentKey::fetchByName('testOldKey'));
+        $this->assertNotNull(EnrichmentKey::fetchByName('testNewKey'));
+
+        $this->assertNotEmpty($output->fetch());
     }
 }

@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 /**
  * Updates enrichment fields used by DOI import functionality.
  *
@@ -58,6 +60,9 @@ class Application_Update_UpdateDoiImportAndConferencesFields extends Application
     public function run()
     {
         $updater = new Application_Update_UpdateEnrichments();
+        if ($this->getQuietMode()) {
+            $updater->getOutput()->setVerbosity(OutputInterface::VERBOSITY_QUIET);
+        }
         $updater->update($this->keyNames);
     }
 }
