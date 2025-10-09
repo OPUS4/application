@@ -1748,5 +1748,41 @@ Beispieleingabe: "17.08" (für Semiotik)]]></seg>
             </tuv>
         </tu>
         
+        <tu tuid="hint_EnrichmentOpusConferenceName">
+            <tuv xml:lang="en">
+                <seg>Please enter the name of the conference, e.g.: "IEEE International Conference on Fuzzy Systems (FUZZ-IEEE)".</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte geben Sie den Namen der Konferenz an, z.B.: "IEEE International Conference on Fuzzy Systems (FUZZ-IEEE)".</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="hint_EnrichmentOpusConferencePlace">
+            <tuv xml:lang="en">
+                <seg>Please enter the location where the conference took place (e.g. "Seoul").</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte geben Sie den Ort an, an dem die Konferenz stattgefunden hat (z.B. "Seoul").</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="hint_EnrichmentOpusConferenceNumber">
+            <tuv xml:lang="en">
+                <seg>Please enter the number of the conference (e.g. "8.").</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte geben Sie die Zählung der Konferenz an (z.B. "8.").</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="hint_EnrichmentOpusConferenceYear">
+            <tuv xml:lang="en">
+                <seg>Please enter the year the conference took place in (e.g. "1999").</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte geben Sie das Jahr an, in dem die Konferenz stattgefunden hat (z.B. "1999").</seg>
+            </tuv>
+        </tu>
+        
     </body>
 </tmx>

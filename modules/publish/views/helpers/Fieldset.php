@@ -55,9 +55,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract
                 || in_array($field['id'], [
                     'IdentifierUrl',
                     'PublisherName',
-                    'EnrichmentConferenceTitle',
-                    'EnrichmentConferencePlace',
-                    'Enrichmentopus_crossrefLicence', // TODO still used?
+                    'EnrichmentOpusConferenceName',
                 ])
             ) {
                 $maxWidthClass = ' textfield-max-width';
