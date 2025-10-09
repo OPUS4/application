@@ -40,6 +40,8 @@ interface Application_Form_ViewableInterface
 {
     /**
      * Bereites die Ausgabe des Formulares als View vor.
+     *
+     * @return void
      */
     public function prepareRenderingAsView();
 

@@ -1,5 +1,27 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.16 - 2025-07-15
+
+Es wurde ein Fehler behoben, der auftrat, wenn beim Freischalten (Publish) 
+eines einzelnen Dokuments in der Metadatenansicht (nicht Review-Modul) die 
+Bestätigungsseite für das Freischalten abgeschaltet war. 
+
+https://github.com/OPUS4/application/issues/1352
+
+## Patch Release 4.8.0.15 - 2025-06-24
+
+Die Möglichkeit mehrere Schlagwörter auf einmal hinzuzufügen, wurde jetzt
+auch für PSyndex und Tags umgesetzt. 
+
+https://github.com/OPUS4/application/issues/1349
+
+Personenschlagwörter mit Kommas, können nun mit Anführungszeichen ("Mann, 
+Thomas") umschlossen werden, damit die enthaltenen Kommas beim Aufsplitten 
+der Schlagwörter ignoriert werden. Schlagwörter können durch Kommas und 
+Zeilenumbrüche voneinander getrennt werden. 
+
+https://github.com/OPUS4/application/issues/1348
+
 ## Patch Release 4.8.0.14 - 2025-04-22
 
 Es wurden kleinere Fehler behoben und einige Funktionen hinzugefügt bzw.
@@ -80,7 +102,7 @@ Für diesen Release ist `composer update` notwendig, weil auch **opus4-common**
 
 ### ORCID iDs
 
-In der Frontdoor werden GND und ORCiD iD nun für alle Personen angezeigt.
+In der Frontdoor werden GND und ORCID iD nun für alle Personen angezeigt.
 
 Die externen Links für GND und ORCID iD werden in einem separaten Tab/Fenster 
 geöffnet.

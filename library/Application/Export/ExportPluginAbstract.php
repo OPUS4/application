@@ -153,6 +153,8 @@ abstract class Application_Export_ExportPluginAbstract extends Application_Model
      * Main function performing export.
      *
      * Needs to be implemented by child classes.
+     *
+     * @return int
      */
     abstract public function execute();
 

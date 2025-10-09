@@ -25,34 +25,61 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
- */
-interface Application_Form_Validate_MultiSubFormInterface
+class Application_View_Helper_DoiLinkTest extends ControllerTestCase
 {
-    /**
-     * Bereitet die Validierung vor.
-     *
-     * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
-     *
-     * @param Zend_Form  $form
-     * @param array      $data
-     * @param null|array $context
-     * @return void
-     */
-    public function prepareValidation($form, $data, $context = null);
+    /** @var string */
+    protected $additionalResources = 'view';
 
-    /**
-     * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein
-     * sollen.
-     *
-     * @param array      $data
-     * @param null|array $context
-     * @return bool
-     */
-    public function isValid($data, $context = null);
+    /** @var Application_View_Helper_DoiLink */
+    private $viewHelper;
+
+    /** @var string DOI resolver base URL */
+    private $baseUrl;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->viewHelper = new Application_View_Helper_DoiLink();
+
+        $config = $this->getConfig();
+
+        $this->baseUrl = $config->doi->resolverUrl;
+    }
+
+    public function testDoiLink()
+    {
+        $doi    = '10.1000/182';
+        $output = $this->viewHelper->doiLink($doi);
+        $url    = $this->baseUrl . $doi;
+
+        $this->assertEquals("<a href=\"{$url}\" target=\"_blank\">{$doi}</a>", $output);
+    }
+
+    public function testDoiLinkTrimming()
+    {
+        $doi    = '  10.1000/182  ';
+        $output = $this->viewHelper->doiLink($doi);
+        $doi    = trim($doi);
+        $url    = $this->baseUrl . $doi;
+
+        $this->assertEquals("<a href=\"{$url}\" target=\"_blank\">{$doi}</a>", $output);
+    }
+
+    public function testDoiLinkResolverUrlNotConfigured()
+    {
+        $doi = '10.1000/182';
+
+        $this->adjustConfiguration([
+            'doi' => ['resolverUrl' => null],
+        ]);
+
+        $output = $this->viewHelper->doiLink($doi);
+
+        $this->assertEquals($doi, $output);
+    }
 }

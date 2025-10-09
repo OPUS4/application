@@ -283,7 +283,10 @@
                 <xsl:text>:</xsl:text>
             </th>
             <td>
-                <xsl:value-of select="@Value" />
+                <xsl:attribute name="href">
+                    <xsl:value-of select="@KeyName"/>
+                </xsl:attribute>
+                <xsl:value-of select="php:functionString('Application_Xslt::renderValue', @Value, @KeyName)" disable-output-escaping="yes" />
             </td>
         </tr>
     </xsl:template>
@@ -365,7 +368,7 @@
                 <xsl:with-param name="id"><xsl:value-of select="@IdentifierOrcid"/></xsl:with-param>
                 <xsl:with-param name="cssClass">orcid-link</xsl:with-param>
                 <xsl:with-param name="linkTitle">frontdoor_orcid</xsl:with-param>
-                <xsl:with-param name="linkText">ORCiD</xsl:with-param>
+                <xsl:with-param name="linkText">ORCID</xsl:with-param>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>

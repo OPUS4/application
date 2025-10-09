@@ -25,34 +25,33 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\LoggingTrait;
+
 /**
- * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
+ * View helper for rendering URL values.
  */
-interface Application_Form_Validate_MultiSubFormInterface
+class Application_View_Helper_RenderUrl extends Application_View_Helper_Abstract
 {
-    /**
-     * Bereitet die Validierung vor.
-     *
-     * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
-     *
-     * @param Zend_Form  $form
-     * @param array      $data
-     * @param null|array $context
-     * @return void
-     */
-    public function prepareValidation($form, $data, $context = null);
+    use LoggingTrait;
 
     /**
-     * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein
-     * sollen.
-     *
-     * @param array      $data
-     * @param null|array $context
-     * @return bool
+     * @param string $value
+     * @return string
      */
-    public function isValid($data, $context = null);
+    public function renderUrl($value)
+    {
+        $value = trim($value);
+
+        if (filter_var($value, FILTER_VALIDATE_URL)) {
+            return "<a href=\"{$value}\" target=\"_blank\">{$value}</a>";
+        } else {
+            // TODO is this log entry useful?
+            $this->getLogger()->err(__METHOD__ . " parameter is not an URL");
+            return $value;
+        }
+    }
 }

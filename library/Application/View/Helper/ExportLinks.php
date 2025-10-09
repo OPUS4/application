@@ -60,6 +60,10 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
 
         $formats = $exporter->getAllowedFormats();
 
+        if (count($formats) === 0) {
+            return '';
+        }
+
         $output = '<ul>';
 
         foreach ($formats as $format) {
