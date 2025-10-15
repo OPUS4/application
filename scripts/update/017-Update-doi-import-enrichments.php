@@ -1,4 +1,4 @@
-<?php
+<?PHP
 
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -25,34 +25,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2025, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
- */
-interface Application_Form_Validate_MultiSubFormInterface
-{
-    /**
-     * Bereitet die Validierung vor.
-     *
-     * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
-     *
-     * @param Zend_Form  $form
-     * @param array      $data
-     * @param null|array $context
-     * @return void
-     */
-    public function prepareValidation($form, $data, $context = null);
+require_once dirname(__FILE__) . '/../common/update.php';
 
-    /**
-     * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein
-     * sollen.
-     *
-     * @param array      $data
-     * @param null|array $context
-     * @return bool
-     */
-    public function isValid($data, $context = null);
-}
+/**
+ * Changes names of enrichment fields for doi based metadata import to new OPUS default.
+ * Updates key names for associated translations.
+ */
+
+$keyNames = [
+    'opus_import_data'           => 'opus_doi_json',
+    'local_crossrefDocumentType' => 'opus_crossrefDocumentType',
+    'local_crossrefLicence'      => 'opus_crossrefLicence',
+    'local_doiImportPopulated'   => 'opus_doiImportPopulated',
+    'local_import_origin'        => 'opus_import_origin',
+];
+
+$update = new Application_Update_UpdateEnrichments();
+$update->update($keyNames);

@@ -50,7 +50,7 @@ Shows general info about ORCID iDs in database.
 EOT;
 
         $this->setName('orcid:info')
-            ->setDescription('Shows info about ORCiD IDs in database')
+            ->setDescription('Shows info about ORCID iDs in database')
             ->setHelp($help);
     }
 

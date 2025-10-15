@@ -1,5 +1,14 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.17 - 2025-10-01
+
+Die RSS-Feeds unterstützen nun den Parameter `rows`, mit dem die Anzahl 
+der gewünschten Dokumente angegeben werden kann. Die maximale Anzahl kann 
+in der Konfiguration mit der Option `rss.maxDocs` festgelegt werden. Der 
+Defaultwert ist 100, wie für die Suche.
+
+https://github.com/OPUS4/application/issues/1388
+
 ## Patch Release 4.8.0.16 - 2025-07-15
 
 Es wurde ein Fehler behoben, der auftrat, wenn beim Freischalten (Publish) 
@@ -102,7 +111,7 @@ Für diesen Release ist `composer update` notwendig, weil auch **opus4-common**
 
 ### ORCID iDs
 
-In der Frontdoor werden GND und ORCiD iD nun für alle Personen angezeigt.
+In der Frontdoor werden GND und ORCID iD nun für alle Personen angezeigt.
 
 Die externen Links für GND und ORCID iD werden in einem separaten Tab/Fenster 
 geöffnet.

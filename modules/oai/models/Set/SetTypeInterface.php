@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\DocumentFinderInterface;
 use Opus\Common\DocumentInterface;
 
 /**
@@ -49,6 +50,7 @@ interface Oai_Model_Set_SetTypeInterface
      *
      * @param DocumentFinderInterface $finder
      * @param Oai_Model_Set_SetName   $setName
+     * @return void
      * @throws Oai_Model_Exception
      */
     public function configureFinder($finder, $setName);

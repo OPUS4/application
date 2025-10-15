@@ -79,9 +79,11 @@
             <xsl:call-template name="Author" />
          </div>
 
+         <xsl:if test="TitleAbstract">
          <div id="abstract">
             <xsl:call-template name="SortedAbstracts" />
          </div>
+         </xsl:if>
       </div>
 
       <!-- service templates defined in templates/services.xsl -->
@@ -119,12 +121,18 @@
          </xsl:if>
 
           <div id="export" class="services">
+              <xsl:variable name="exportLinks">
+                  <xsl:value-of disable-output-escaping="yes" select="php:function('Application_Xslt::exportLinks', 'docId', 'frontdoor')" />
+              </xsl:variable>
+              <xsl:if test="$exportLinks != ''">
             <h3>
-               <xsl:call-template name="translateString">
-                  <xsl:with-param name="string">frontdoor_export_options</xsl:with-param>
-               </xsl:call-template>
+                   <xsl:call-template name="translateString">
+                       <xsl:with-param name="string">frontdoor_export_options</xsl:with-param>
+                   </xsl:call-template>
             </h3>
-            <xsl:call-template name="ExportFunctions" />
+
+                   <xsl:value-of disable-output-escaping="yes" select="$exportLinks" />
+              </xsl:if>
          </div>
 
          <xsl:if test="$printOnDemandEnabled and Licence[@PodAllowed='1']">
@@ -219,7 +227,16 @@
             <xsl:apply-templates select="ThesisDateAccepted" />
             <xsl:apply-templates select="@CreatingCorporation" />
             <xsl:apply-templates select="@ContributingCorporation" />
-
+            
+            <!-- Conferences -->
+            <xsl:variable name="numOfConferences" select="count(Enrichment[@KeyName='OpusConferenceName'])" />
+            <xsl:if test="$numOfConferences &gt; 0">
+                <xsl:call-template name="conferences">
+                    <xsl:with-param name="counter" select="1" />
+                    <xsl:with-param name="numOfConferences" select="$numOfConferences" />
+                </xsl:call-template>
+            </xsl:if>
+            
             <xsl:apply-templates select="ServerDatePublished" />
 
             <!-- Subjects section:  New subjects must be introduced right here. -->
@@ -274,7 +291,7 @@
             <xsl:apply-templates select="@PageLast" />
             <xsl:apply-templates select="@PublicationState" />
             <xsl:apply-templates select="Note[@Visibility='public']" />
-
+            
             <!-- Enrichment Section: add the enrichment keys that have to be displayed in frontdoor -->
             <xsl:apply-templates select="Enrichment[@KeyName='Event']" />
             <xsl:apply-templates select="Enrichment[@KeyName='Relation']" />

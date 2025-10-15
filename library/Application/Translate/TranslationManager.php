@@ -409,8 +409,6 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     {
         $translations = $this->getMergedTranslations();
 
-        $translation = null;
-
         if (isset($translations[$key])) {
             $translation = $translations[$key];
         } else {

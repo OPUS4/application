@@ -49,6 +49,8 @@ interface Application_Form_FormElementInterface
      * wird.
      *
      * Statt eines Input-Tags könnte zum Beispiel nur der Wert als einfacher Text ausgegeben werden.
+     *
+     * @return void
      */
     public function prepareRenderingAsView();
 }

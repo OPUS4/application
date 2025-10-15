@@ -83,6 +83,11 @@
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Series" required="no" formelement="Select" datatype="Series" multiplicity="1"/>  
     
+    <field name="OpusConferenceName" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
+    <field name="OpusConferencePlace" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
+    <field name="OpusConferenceNumber" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
+    <field name="OpusConferenceYear" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
+    
     <field name="SubjectSwd" required="no" formelement="Text" datatype="Subject" multiplicity="5" />
     <field name="SubjectDDC" required="no" formelement="Select" datatype="CollectionLeaf" root="ddc" multiplicity="*"/>
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Subject" multiplicity="5"/>
