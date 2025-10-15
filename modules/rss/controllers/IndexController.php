@@ -77,7 +77,7 @@ class Rss_IndexController extends Application_Controller_Xml
 
         // overwrite parameters in rss context
         // rss feeds have a fixed maximum number of items
-        $params['rows']  = self::NUM_OF_ITEMS_PER_FEED;
+        $params['rows']  = $this->getRows();
         $params['start'] = 0;
         // rss feeds have both a fixed sort field and sort order
         $params['sortField'] = self::RSS_SORT_FIELD;
@@ -176,5 +176,23 @@ class Rss_IndexController extends Application_Controller_Xml
     private function setFrontdoorBaseUrl()
     {
         $this->proc->setParameter('', 'frontdoorBaseUrl', $this->view->fullUrl() . '/frontdoor/index/index/docId/');
+    }
+
+    /**
+     * @return int
+     */
+    protected function getRows()
+    {
+        $rows = (int) $this->getRequest()->getParam('rows', self::NUM_OF_ITEMS_PER_FEED);
+
+        $config = $this->getConfig();
+
+        if (isset($config->rss->maxDocs)) {
+            $maxDocs = (int) $config->rss->maxDocs;
+        } else {
+            $maxDocs = self::NUM_OF_ITEMS_PER_FEED;
+        }
+
+        return $rows <= $maxDocs || $maxDocs === 0 ? $rows : $maxDocs;
     }
 }
