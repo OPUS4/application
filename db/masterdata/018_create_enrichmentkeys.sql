@@ -16,10 +16,10 @@ INSERT INTO `enrichmentkeys` (`name`) VALUES
 ('opus_crossrefLicence'),
 ('opus_doiImportPopulated'),
 ('opus_import_origin'),
-('opus_doi_flag');
-('OpusConferenceName');
-('OpusConferencePlace');
-('OpusConferenceNumber');
+('opus_doi_flag'),
+('OpusConferenceName'),
+('OpusConferencePlace'),
+('OpusConferenceNumber'),
 ('OpusConferenceYear');
 
 
