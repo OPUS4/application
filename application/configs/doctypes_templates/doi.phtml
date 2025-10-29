@@ -93,9 +93,13 @@ $config = Config::get();
         <?= $this->element($this->Edition); ?>
         
         <?= $this->group($this->groupPersonEditor); ?>
-        <?= $this->element($this->ContributingCorporation); ?>
         <?= $this->group($this->groupPersonTranslator); ?>
         
+        <?= $this->element($this->OpusConferenceName); ?>
+        <?= $this->element($this->OpusConferencePlace); ?>
+        <?= $this->element($this->OpusConferenceNumber); ?>
+        <?= $this->element($this->OpusConferenceYear); ?>
+    
         <?= $this->element($this->PublisherName); ?>
         <?= $this->element($this->PublisherPlace); ?>
         
