@@ -225,6 +225,8 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
     {
         $patterns = $this->getKeyPatterns();
 
+        $patterns['label'] = 'Enrichment%s'; // TODO remove special handling of 'label'
+
         $translationKeys = [];
 
         foreach ($patterns as $patternName => $pattern) {
