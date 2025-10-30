@@ -64,7 +64,7 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
 
         $this->translationHelper = new Admin_Model_EnrichmentKeys();
         $this->translationHelper->createTranslations('testOldKey', null, [
-            'label' => 'EnrichmenttestOldKey'
+            'label' => 'EnrichmenttestOldKey',
         ]);
 
         $this->updater = new Application_Update_UpdateEnrichments();
