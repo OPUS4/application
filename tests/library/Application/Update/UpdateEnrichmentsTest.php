@@ -63,7 +63,9 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
         $enrichmentKey->store();
 
         $this->translationHelper = new Admin_Model_EnrichmentKeys();
-        $this->translationHelper->createTranslations('testOldKey');
+        $this->translationHelper->createTranslations('testOldKey', null, [
+            'label' => 'EnrichmenttestOldKey',
+        ]);
 
         $this->updater = new Application_Update_UpdateEnrichments();
         $this->updater->setOutput(new NullOutput());
@@ -119,7 +121,7 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
     public function testUpdateTranslations()
     {
         $translations = $this->translationHelper->getTranslations('testOldKey');
-        $this->assertCount(6, $translations);
+        $this->assertCount(7, $translations);
 
         $this->updater->update([
             'testOldKey' => 'testNewKey',
@@ -128,7 +130,7 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
         $translations = $this->translationHelper->getTranslations('testOldKey');
         $this->assertCount(0, $translations);
         $translations = $this->translationHelper->getTranslations('testNewKey');
-        $this->assertCount(6, $translations);
+        $this->assertCount(7, $translations);
 
         $this->translationHelper->removeTranslations('testNewKey');
     }
@@ -168,10 +170,10 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
         $translationManager->setFilter('testOldKey');
 
         $matchingTranslations = $translationManager->getMergedTranslations();
-        $this->assertCount(7, $matchingTranslations);
+        $this->assertCount(8, $matchingTranslations);
 
         $translations = $this->translationHelper->getTranslations('testOldKey');
-        $this->assertCount(6, $translations);
+        $this->assertCount(7, $translations);
 
         $this->updater->update([
             'testOldKey' => 'testNewKey',
@@ -180,11 +182,11 @@ class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
         $translations = $this->translationHelper->getTranslations('testOldKey');
         $this->assertCount(0, $translations);
         $translations = $this->translationHelper->getTranslations('testNewKey');
-        $this->assertCount(6, $translations);
+        $this->assertCount(7, $translations);
 
         $translationManager->setFilter('testNewKey');
         $matchingTranslations = $translationManager->getMergedTranslations();
-        $this->assertCount(6, $matchingTranslations);
+        $this->assertCount(7, $matchingTranslations);
 
         $this->assertArrayNotHasKey('additionalTestKey_testNewKey', $matchingTranslations);
 
