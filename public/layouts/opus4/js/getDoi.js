@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const abortButton  = document.querySelector("input[name='abort']");
 
 
-    // Event Listener für das Klicken auf alle Formularfelder außer dem DOI-Feld (und dem Import-Button)
+    // Event Listener für das Klicken auf ein Formularfeld außer dem DOI-Feld (sowie Import-Button und Abbruch)
     formFields.forEach(function (field) {
         if (field.id !== "IdentifierDoi" && field !== importButton && field !== abortButton) {
             field.addEventListener("focus", function (event) {
@@ -100,11 +100,14 @@ function parseJson(jsonraw)
 // Ende mehrfach belegbare Felder
 
     getDoctypes(data);
-    document.getElementById("ContributingCorporation").value = getContributingCorporation(data);
-    document.getElementById("PublisherName").value           = getPublisherName(data);    //json.message.publisher;
-    document.getElementById("PublisherPlace").value          = getPublisherPlace(data);  //json.message.publisher-location;
-    document.getElementById("TitleMain_1").value             = getTitleMain(data);//json.message.title[0];
-    document.getElementById("TitleSub_1").value              = getTitleSub(data);    //json.message.title[1];
+    document.getElementById("EnrichmentOpusConferenceName").value   = getOpusConferenceName(data);      //json.message.event.name (+json.message.event.acronym);
+    document.getElementById("EnrichmentOpusConferencePlace").value  = getOpusConferencePlace(data);     //json.message.event.location;
+    document.getElementById("EnrichmentOpusConferenceNumber").value = getOpusConferenceNumber(data);    //json.message.event.number;
+    document.getElementById("EnrichmentOpusConferenceYear").value   = getOpusConferenceYear(data);      //json.message.event.start.date-parts[0][0] ("-" json.message.event.end.date-parts[0][0]);
+    document.getElementById("PublisherName").value                  = getPublisherName(data);           //json.message.publisher;
+    document.getElementById("PublisherPlace").value                 = getPublisherPlace(data);          //json.message.publisher-location;
+    document.getElementById("TitleMain_1").value                    = getTitleMain(data);               //json.message.title[0];
+    document.getElementById("TitleSub_1").value                     = getTitleSub(data);                //json.message.title[1];
 
     var language = getLanguage(data);
     expandLanguage(language);
@@ -127,9 +130,8 @@ function parseJson(jsonraw)
     var dates = getCompletedDate(data);
     expandCompletedDate(dates);
 
-    document.getElementById("IdentifierIsbn").value = getIsbn(data);    //json.message.isbn-type[0].value;
-    document.getElementById("IdentifierIssn").value = getIssn(data);    //json.message.issn-type[0].value;
-    //document.getElementById("IdentifierUrl").value = getUrl(data);    //json.message.link[0].url -> Soll laut aw raus
+    document.getElementById("IdentifierIsbn").value                    = getIsbn(data);    //json.message.isbn-type[0].value;
+    document.getElementById("IdentifierIssn").value                    = getIssn(data);    //json.message.issn-type[0].value;
     document.getElementById("Enrichmentopus_crossrefLicence").value    = getLicence(data);
     document.getElementById("Enrichmentopus_import_origin").value      = "crossref";
     document.getElementById("Enrichmentopus_doiImportPopulated").value = populatedFields;
@@ -159,13 +161,12 @@ function expandLanguage(language)
 function expandCompletedDate(dates)
 {
  // Für CompletedYear
+    if (dates && dates.length > 2) {
+        const date = dates.join();
+        const year = date.split(',')[0];
 
-    if (dates !== '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
-
-        date = dates.join();
-
-        if ((date.split(',')[0].length) = 4) {
-            document.getElementById("CompletedYear").value = date.split(',')[0];
+        if (year.length === 4) {
+            document.getElementById("CompletedYear").value = year;
             finalize("CompletedYear");
         }
     }
