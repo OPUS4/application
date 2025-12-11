@@ -500,6 +500,8 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
      *
      * @param int[] $documentIds ids of documents for export
      * @return array Map of docId to  Document XML
+     *
+     * TODO getting documents from cache or database should be in separate class and transparent here
      */
     public function getDocumentsFromCache($documentIds)
     {

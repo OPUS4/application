@@ -43,6 +43,7 @@ use Opus\Sword\ErrorDocument;
  * TODO use OPUS 4 base class?
  * TODO too much code in this controller
  * TODO change AdditionalEnrichments into something like ImportInfo and make it easy to access properties like "user"
+ * TODO can we return multiple errors, like NOT SUPPORTED AND TOO LARGE?
  */
 class Sword_DepositController extends Zend_Rest_Controller
 {
@@ -81,7 +82,7 @@ class Sword_DepositController extends Zend_Rest_Controller
         // currently OPUS supports deposit of ZIP and TAR packages only
         try {
             $contentType    = $request->getHeader('Content-Type');
-            $packageHandler = new PackageHandler($contentType);
+            $packageHandler = PackageHandler::getPackageHandler($contentType);
         } catch (Exception $e) {
             $errorDoc = new ErrorDocument($request, $response);
             $errorDoc->setErrorContent();
@@ -117,18 +118,16 @@ class Sword_DepositController extends Zend_Rest_Controller
             }
         }
 
-        // TODO data is stored again within handlePackage - that should be avoided
+        // Keep files after import
         $filename = $this->generatePackageFileName($additionalEnrichments);
         $config   = Configuration::getInstance();
         $filePath = $config->getWorkspacePath() . 'import/' . $filename;
         file_put_contents($filePath, $payload);
 
-        // TODO data is already saved - use path as argument for package handler
-
         $errorDoc = null;
 
         try {
-            $statusDoc = $packageHandler->handlePackage($payload);
+            $statusDoc = $packageHandler->handlePackage($filePath);
             if ($statusDoc === null) {
                 // im Archiv befindet sich keine Datei opus.xml oder die Datei ist leer
                 $errorDoc = new ErrorDocument($request, $response);
@@ -149,9 +148,6 @@ class Sword_DepositController extends Zend_Rest_Controller
         if ($errorDoc !== null) {
             return;
         }
-
-    // cleanup file after successful import
-        unlink($filePath);
 
         $this->returnAtomEntryDocument($statusDoc, $request, $response, $userName);
     }
@@ -218,6 +214,10 @@ class Sword_DepositController extends Zend_Rest_Controller
         if ($checksum !== null && $checksum !== false) {
             $additionalEnrichments->addChecksum($checksum);
         }
+
+        $additionalEnrichments
+            ->setSource('sword')
+            ->setDate(gmdate('c'));
 
         return $additionalEnrichments;
     }
