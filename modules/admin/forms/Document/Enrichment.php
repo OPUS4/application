@@ -251,6 +251,7 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm
                 // sondern der Index des Wertes in der Werteliste (beginnend mit 0)
                 // daher ist hier ein zusätzlicher Mapping-Schritt erforderlich, der vom im POST
                 // angegebenen Index den tatsächlich ausgewählten Wert ableitet
+                $enrichmentValue = (int) $enrichmentValue;
 
                 // falls keine strikte Validierung stattfindet, dann darf der ursprünglich im
                 // Dokument gespeichert Enrichment-Wert (steht in Select-Feldliste an erster Stelle)
