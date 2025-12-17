@@ -1,5 +1,12 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.18 - 2025-12-17
+
+Ein Fehler mit Select-Enrichments im Metadaten-Formular, der sich mit dem 
+Wechsel zu PHP 8 bemerkbar gemacht hat, wurde behoben.
+
+https://github.com/OPUS4/application/issues/1397
+
 ## Patch Release 4.8.0.17 - 2025-10-01
 
 Die RSS-Feeds unterstützen nun den Parameter `rows`, mit dem die Anzahl 
