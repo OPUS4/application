@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
+
 /**
  * Export plugin for applying XSLT on XML before returning response.
  */
@@ -36,7 +38,7 @@ class Export_Model_XsltExport extends Export_Model_XmlExport
 {
     /**
      * @return int
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws Application_SearchException
      * @throws Zend_Exception
      * @throws Zend_View_Exception

@@ -39,6 +39,7 @@ use Opus\Common\Model\NotFoundException;
 use Opus\Common\TitleInterface;
 use Opus\Import\AdditionalEnrichments;
 use PHPUnit\Framework\Assert;
+use Symfony\Component\Filesystem\Filesystem;
 
 class DepositTestHelper extends Assert
 {
@@ -131,6 +132,7 @@ class DepositTestHelper extends Assert
             $checksum = md5_file($archive);
         }
         $request->setHeader('Content-MD5', $checksum);
+        $request->setHeader('Content-Disposition', $fileName);
         return $checksum;
     }
 
@@ -185,8 +187,6 @@ class DepositTestHelper extends Assert
 
     /**
      * Creates separate tmp folder for sword tests.
-     *
-     * TODO folder is reused, but never removed
      */
     public function setupTmpDir()
     {
@@ -196,6 +196,15 @@ class DepositTestHelper extends Assert
             mkdir($tempPath);
         }
         $appConfig->setTempPath($tempPath);
+    }
+
+    public function tearDownTmpDir()
+    {
+        $appConfig = Configuration::getInstance();
+        $tempPath  = $appConfig->getTempPath();
+        $appConfig->setTempPath(null); // reset to default
+        $filesystem = new Filesystem();
+        $filesystem->remove($tempPath);
     }
 
     /**

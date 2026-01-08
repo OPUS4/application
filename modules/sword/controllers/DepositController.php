@@ -118,7 +118,7 @@ class Sword_DepositController extends Zend_Rest_Controller
             }
         }
 
-        // Keep files after import
+        // Keep files after import, if error occured
         $filename = $this->generatePackageFileName($additionalEnrichments);
         $config   = Configuration::getInstance();
         $filePath = $config->getWorkspacePath() . 'import/' . $filename;
@@ -148,6 +148,9 @@ class Sword_DepositController extends Zend_Rest_Controller
         if ($errorDoc !== null) {
             return;
         }
+
+        // cleanup file after successful import
+        unlink($filePath);
 
         $this->returnAtomEntryDocument($statusDoc, $request, $response, $userName);
     }
