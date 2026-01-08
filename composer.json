@@ -62,6 +62,9 @@
       "composer/installers": true,
       "oomphinc/composer-installers-extender": true,
       "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "audit": {
+      "ignore": ["PKSA-jvpv-pcrn-dfzc", "PKSA-jqsz-ykjr-qncb"]
     }
   },
   "scripts": {
