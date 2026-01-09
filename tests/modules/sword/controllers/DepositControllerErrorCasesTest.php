@@ -32,8 +32,6 @@
 use Opus\App\Common\Config\MaxUploadSize;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
-use Opus\Common\EnrichmentKey;
-use Opus\Import\AdditionalEnrichments;
 
 /**
  * @covers Sword_DepositController
