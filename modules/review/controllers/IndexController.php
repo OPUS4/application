@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\DocumentFinderInterface;
 use Opus\Common\Repository;
 use Opus\Common\Security\Realm;
@@ -173,7 +174,7 @@ class Review_IndexController extends Application_Controller_Action
             if ($person === null || ! $person->isValid()) {
                 $message = "Problem clearing documents.  Information for current user is incomplete or invalid.";
                 $this->getLogger()->err($message);
-                throw new Application_Exception($message);
+                throw new ApplicationException($message);
             }
         }
 
@@ -273,7 +274,7 @@ class Review_IndexController extends Application_Controller_Action
         } else {
             $message = 'Review: Access to unpublished documents denied.';
             $logger->err($message . " (user_id: $userId)");
-            throw new Application_Exception($message);
+            throw new ApplicationException($message);
         }
 
         return $finder;

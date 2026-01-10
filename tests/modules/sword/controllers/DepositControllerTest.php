@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\CollectionInterface;
 use Opus\Common\DocumentInterface;
 use Opus\Common\EnrichmentInterface;
@@ -185,7 +186,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
             false
         );
 
-        $config      = Application_Configuration::getInstance();
+        $config      = Configuration::getInstance();
         $importDir   = $config->getWorkspacePath() . 'import/';
         $enrichments = $doc->getEnrichmentValues();
         $filename    = $enrichments['opus.import.file'];
@@ -208,7 +209,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
         $this->assertNull($doc);
 
-        $config    = Application_Configuration::getInstance();
+        $config    = Configuration::getInstance();
         $importDir = $config->getWorkspacePath() . 'import/';
 
         $payload  = file_get_contents(APPLICATION_PATH . '/tests/resources/sword-packages/invalid-xml.zip');

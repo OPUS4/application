@@ -30,6 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Modules;
 use Opus\Common\Account;
 use Opus\Common\AccountInterface;
 use Opus\Common\UserRole;
@@ -110,7 +111,7 @@ class Admin_AccountController extends Application_Controller_ActionCRUD
             $this->_helper->redirector('index');
         }
 
-        $modules = array_keys(Application_Modules::getInstance()->getModules());
+        $modules = array_keys(Modules::getInstance()->getModules());
         unset($modules['default']);
 
         $this->view->allModules = $modules;

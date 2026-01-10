@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
+
 /**
  * Validator that delegates validation of identifiers depending on the type.
  *
@@ -73,7 +75,7 @@ class Application_Form_Validate_Identifier extends Zend_Validate_Abstract
         $this->_setValue($value);
 
         $type   = strtolower($this->element->getValue());
-        $config = Application_Configuration::getInstance()->getConfig();
+        $config = Configuration::getInstance()->getConfig();
 
         if (isset($config->identifier->validation->$type->class)) {
             $validatorClass = $config->identifier->validation->$type->class;

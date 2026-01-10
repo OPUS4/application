@@ -29,10 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Config\MaxUploadSize;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
-use Opus\Common\EnrichmentKey;
-use Opus\Import\AdditionalEnrichments;
 
 /**
  * @covers Sword_DepositController
@@ -50,6 +49,12 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         parent::setUp();
         $this->testHelper = new DepositTestHelper();
         $this->testHelper->setupTmpDir();
+    }
+
+    public function tearDown(): void
+    {
+        $this->testHelper->tearDownTmpDir();
+        parent::tearDown();
     }
 
     public function testPostActionWithoutPassword()
@@ -105,7 +110,7 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         $this->getRequest()->setHeader('Content-Type', DepositTestHelper::CONTENT_TYPE_ZIP);
         $this->testHelper->setValidAuthorizationHeader($this->getRequest(), DepositTestHelper::USER_AGENT);
 
-        $maxUploadSize = new Application_Configuration_MaxUploadSize();
+        $maxUploadSize = new MaxUploadSize();
         $numOfBytes    = 1 + $maxUploadSize->getMaxUploadSizeInByte();
         $payload       = '';
         for ($i = 0; $i < $numOfBytes; $i++) {
@@ -115,27 +120,6 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
 
         $this->dispatch('/sword/deposit');
         $this->checkErrorDocument(413, 'http://www.opus-repository.org/sword/error/PayloadToLarge');
-    }
-
-    public function testPostActionMissingImportEnrichmentKey()
-    {
-        $this->getRequest()->setMethod('POST');
-        $this->getRequest()->setHeader('Content-Type', DepositTestHelper::CONTENT_TYPE_ZIP);
-        $this->testHelper->setValidAuthorizationHeader($this->getRequest(), DepositTestHelper::USER_AGENT);
-
-        $this->getRequest()->setRawBody('some content');
-
-        // remove enrichment key opus.import.user
-        $enrichmentKey = EnrichmentKey::get(AdditionalEnrichments::OPUS_IMPORT_USER);
-        $enrichmentKey->delete();
-
-        $this->dispatch('/sword/deposit');
-
-        $enrichmentKey = EnrichmentKey::new();
-        $enrichmentKey->setName(AdditionalEnrichments::OPUS_IMPORT_USER);
-        $enrichmentKey->store();
-
-        $this->checkErrorDocument(400, 'http://www.opus-repository.org/sword/error/MissingImportEnrichmentKey');
     }
 
     public function testZipArchiveWithInvalidXml()
@@ -255,6 +239,7 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
     public function testTarArchiveProvokeUrnCollision()
     {
         $doc = $this->addDocWithUrn();
+        $this->addTestDocument($doc);
         $this->depositError(
             'one-doc-with-urn.tar',
             DepositTestHelper::CONTENT_TYPE_TAR,

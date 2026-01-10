@@ -29,7 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-$opusVersion = Application_Configuration::getOpusVersion();
+use Opus\App\Common\Configuration;
+
+$opusVersion = Configuration::getOpusVersion();
 ?>
 
 <fieldset>
@@ -40,11 +42,11 @@ $opusVersion = Application_Configuration::getOpusVersion();
     </div>
 </fieldset>
 
-<?PHP if (! empty(Application_Configuration::getOpusInfo())) : ?>
+<?PHP if (! empty(Configuration::getOpusInfo())) : ?>
 <fieldset>
     <legend><?= $this->translate('admin_info_other') ?></legend>
     <dl>
-        <?PHP foreach (Application_Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
+        <?PHP foreach (Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
             <dt id="<?= $infoKey ?>"><?= htmlspecialchars($this->translate($infoKey)) ?></dt>
             <dd><?= $infoValue ?></dd>
         <?PHP endforeach ?>

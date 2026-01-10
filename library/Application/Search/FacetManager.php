@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
+
 /**
  * TODO allow adding search path for types
  */
@@ -101,7 +103,7 @@ class Application_Search_FacetManager
     public function getConfig()
     {
         if ($this->config === null) {
-            $this->config = Application_Configuration::getInstance()->getConfig();
+            $this->config = Configuration::getInstance()->getConfig();
         }
         return $this->config;
     }

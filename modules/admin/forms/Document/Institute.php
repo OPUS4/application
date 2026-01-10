@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\ModelInterface;
@@ -77,7 +78,7 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm
                 $this->addElement('Grantor', self::ELEMENT_INSTITUTE);
                 break;
             default:
-                throw new Application_Exception(__METHOD__ . ' Unknown role \'' . $this->role . '\'.');
+                throw new ApplicationException(__METHOD__ . ' Unknown role \'' . $this->role . '\'.');
         }
     }
 

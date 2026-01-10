@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
+use Opus\App\Common\Modules;
 use Opus\Common\Config;
 use Opus\Common\LoggingTrait;
 use Opus\Translate\Dao;
@@ -116,7 +118,7 @@ class Application_Translate extends Zend_Translate
     public function loadModules($reload = false)
     {
         if (! $this->loaded || $reload) {
-            $modules = Application_Modules::getInstance()->getModules();
+            $modules = Modules::getInstance()->getModules();
 
             foreach ($modules as $name => $module) {
                 $moduleDir = APPLICATION_PATH . '/modules/' . $name;
@@ -144,7 +146,7 @@ class Application_Translate extends Zend_Translate
             'reload'         => $reload,
         ]);
 
-        $locales = Application_Configuration::getInstance()->getSupportedLanguages();
+        $locales = Configuration::getInstance()->getSupportedLanguages();
 
         foreach ($locales as $locale) {
             $this->addTranslation([
@@ -268,7 +270,7 @@ class Application_Translate extends Zend_Translate
             return null;
         }
 
-        $languages = Application_Configuration::getInstance()->getSupportedLanguages();
+        $languages = Configuration::getInstance()->getSupportedLanguages();
 
         $translations = [];
 

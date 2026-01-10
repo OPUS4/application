@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Mail\SendMail;
@@ -61,7 +62,7 @@ class Frontdoor_Model_Authors
         // TODO document access check will be refactored in later releases
         try {
             new Application_Util_Document($this->document);
-        } catch (Application_Exception $e) {
+        } catch (ApplicationException $e) {
             throw new Frontdoor_Model_Exception('access to requested document is forbidden');
         }
     }

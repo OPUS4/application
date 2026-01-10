@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 
@@ -225,7 +226,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $request = $this->getRequest();
         $request->setParam('docId', $this->documentId);
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('not allowed');
         $document = $this->helper->getDocument($request);
 

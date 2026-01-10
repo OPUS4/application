@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Search\Config;
 use Opus\Search\Result\Base;
 use Opus\Search\SearchException;
@@ -339,7 +340,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             $queryBuilderInput = $this->createQueryBuilderInputFromRequest($request);
         } catch (Application_Search_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            $applicationException = new Application_Exception($e->getMessage());
+            $applicationException = new ApplicationException($e->getMessage());
             $code                 = $e->getCode();
             if ($code !== 0) {
                 $applicationException->setHttpResponseCode($code);
@@ -510,7 +511,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
      * @param Query      $query
      * @param null|array $openFacets
      * @return Base
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws Application_SearchException
      *
      * TODO facets optional (export search)

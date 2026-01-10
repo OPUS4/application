@@ -29,43 +29,49 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Config\Module;
+use Opus\App\Common\Modules;
+
+/**
+ * TODO move test to opus4-app-common (however with Laminas the Modules class becomes obsolete)
+ */
 class Application_ModulesTest extends ControllerTestCase
 {
     public function testGetInstance()
     {
-        $modules = Application_Modules::getInstance();
+        $modules = Modules::getInstance();
 
         $this->assertNotNull($modules);
-        $this->assertInstanceOf('Application_Modules', $modules);
+        $this->assertInstanceOf(Modules::class, $modules);
 
-        $this->assertSame($modules, Application_Modules::getInstance());
+        $this->assertSame($modules, Modules::getInstance());
     }
 
     public function testRegisterModule()
     {
-        Application_Modules::setInstance(null);
+        Modules::setInstance(null);
 
-        $module = new Application_Configuration_Module('frontdoor');
+        $module = new Module('frontdoor');
 
-        $this->assertFalse(Application_Modules::getInstance()->isRegistered('frontdoor'));
+        $this->assertFalse(Modules::getInstance()->isRegistered('frontdoor'));
 
-        Application_Modules::registerModule($module);
+        Modules::registerModule($module);
 
-        $this->assertTrue(Application_Modules::getInstance()->isRegistered('frontdoor'));
+        $this->assertTrue(Modules::getInstance()->isRegistered('frontdoor'));
 
-        Application_Modules::setInstance(null);
+        Modules::setInstance(null);
     }
 
     public function testGetModulesPath()
     {
-        $path = Application_Modules::getInstance()->getModulesPath();
+        $path = Modules::getInstance()->getModulesPath();
 
         $this->assertEquals(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules', $path);
     }
 
     public function testGetModules()
     {
-        $modules = Application_Modules::getInstance()->getModules();
+        $modules = Modules::getInstance()->getModules();
 
         $this->assertCount(18, $modules);
 
@@ -74,7 +80,25 @@ class Application_ModulesTest extends ControllerTestCase
 
         foreach ($expectedModules as $name) {
             $this->assertArrayHasKey($name, $modules, "Module [$name] is missing");
-            $this->assertInstanceOf('Application_Configuration_Module', $modules[$name]);
+            $this->assertInstanceOf(Module::class, $modules[$name]);
         }
+    }
+
+    public function testIsPublic()
+    {
+        $module = new Module('frontdoor');
+
+        $this->assertTrue($module->isPublic());
+
+        $module = new Module('admin');
+
+        $this->assertFalse($module->isPublic());
+    }
+
+    public function testIsPublicBadName()
+    {
+        $module = new Module('badname');
+
+        $this->assertFalse($module->isPublic());
     }
 }

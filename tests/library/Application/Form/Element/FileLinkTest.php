@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\File;
 
 class Application_Form_Element_FileLinkTest extends FormElementTestCase
@@ -102,7 +103,7 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('File with ID = 5555 not found.');
         $element->setValue(5555);
     }
@@ -111,7 +112,7 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Value must not be null.');
         $element->setValue(null);
     }
@@ -128,7 +129,7 @@ class Application_Form_Element_FileLinkTest extends FormElementTestCase
     {
         $element = $this->getElement();
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('File with ID = 5555 not found.');
         $this->assertFalse($element->isValid(5555)); // File 5555 does not exist
     }

@@ -29,6 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Config\MaxUploadSize;
+use Opus\Sword\ServiceDocument;
+
 /**
  * @covers Sword_ServicedocumentController
  */
@@ -160,15 +163,15 @@ class Sword_ServicedocumentControllerTest extends ControllerTestCase
         $root = $serviceNode->childNodes;
         $this->assertEquals(6, $root->length);
 
-        $this->testHelper->assertNodeProperties(0, $root, 'sword:version', Sword_Model_ServiceDocument::SWORD_VERSION);
+        $this->testHelper->assertNodeProperties(0, $root, 'sword:version', ServiceDocument::SWORD_VERSION);
 
-        $this->testHelper->assertNodeProperties(1, $root, 'sword:level', Sword_Model_ServiceDocument::SWORD_LEVEL);
+        $this->testHelper->assertNodeProperties(1, $root, 'sword:level', ServiceDocument::SWORD_LEVEL);
 
-        $this->testHelper->assertNodeProperties(2, $root, 'sword:verbose', Sword_Model_ServiceDocument::SWORD_SUPPORT_VERBOSE_MODE);
+        $this->testHelper->assertNodeProperties(2, $root, 'sword:verbose', ServiceDocument::SWORD_SUPPORT_VERBOSE_MODE);
 
-        $this->testHelper->assertNodeProperties(3, $root, 'sword:noOp', Sword_Model_ServiceDocument::SWORD_SUPPORT_NOOP_MODE);
+        $this->testHelper->assertNodeProperties(3, $root, 'sword:noOp', ServiceDocument::SWORD_SUPPORT_NOOP_MODE);
 
-        $maxUploadSize = new Application_Configuration_MaxUploadSize();
+        $maxUploadSize = new MaxUploadSize();
         $this->testHelper->assertNodeProperties(4, $root, 'sword:maxUploadSize', $maxUploadSize->getMaxUploadSizeInKB());
 
         $workspaceNode = $root->item(5);

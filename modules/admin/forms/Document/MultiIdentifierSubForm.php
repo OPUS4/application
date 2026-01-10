@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Enrichment;
 use Opus\Common\Identifier;
@@ -416,7 +417,7 @@ class Admin_Form_Document_MultiIdentifierSubForm extends Admin_Form_Document_Def
                         $button = $subform->getElement(self::ELEMENT_GENERATE);
                         $button->setAttrib('disabled', 'disabled');
                     }
-                } catch (Application_Exception $e) {
+                } catch (ApplicationException $e) {
                     // generation of URN value failed: show error message
                 }
                 break;

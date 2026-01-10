@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
+
 class Application_View_Helper_IsDisplayField extends Zend_View_Helper_Abstract
 {
     /**
@@ -39,7 +41,7 @@ class Application_View_Helper_IsDisplayField extends Zend_View_Helper_Abstract
      */
     public function isDisplayField($name)
     {
-        $config = Application_Configuration::getInstance()->getConfig();
+        $config = Configuration::getInstance()->getConfig();
 
         if ($config === null) {
             return false;

@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\File;
 use Opus\Common\FileInterface;
 use Opus\Common\Model\ModelException;
@@ -201,7 +202,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
      * Liefert angezeigte Datei.
      *
      * @return FileInterface
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function getModel()
     {
@@ -212,7 +213,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
                 $file = File::get($fileId);
             } catch (NotFoundException $omnfe) {
                 $this->getLogger()->err(__METHOD__ . " Unknown file ID = '$fileId'.");
-                throw new Application_Exception("Unknown file ID = '$fileId'.");
+                throw new ApplicationException("Unknown file ID = '$fileId'.");
             }
 
             $this->updateModel($file);
@@ -220,7 +221,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm
             return $file;
         } else {
             $this->getLogger()->err(__METHOD__ . " Bad file ID = '$fileId'.");
-            throw new Application_Exception("Bad file ID = '$fileId'.");
+            throw new ApplicationException("Bad file ID = '$fileId'.");
         }
     }
 

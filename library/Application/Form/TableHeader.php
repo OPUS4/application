@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
+
 /**
  * Formular fuer das Rendern eines Tabellenkopfes.
  */
@@ -40,12 +42,12 @@ class Application_Form_TableHeader extends Application_Form_Abstract
     /**
      * @param array      $columns
      * @param array|null $options
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function __construct($columns, $options = null)
     {
         if (! is_array($columns)) {
-            throw new Application_Exception(__METHOD__ . ' Parameter \'columns\' must be array.');
+            throw new ApplicationException(__METHOD__ . ' Parameter \'columns\' must be array.');
         }
 
         $this->columns = $columns;

@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Model\ModelException;
@@ -48,19 +49,19 @@ class Export_Model_DataciteExport extends Application_Export_ExportPluginAbstrac
      * Generates DataCite-XML for document.
      *
      * @return int wurde (valides oder invalides) XML erzeugt, so gibt die Methode den Rückgabewert 0 zurück
-     * @throws Application_Exception Wenn kein Dokument mit der uebergebenen ID gefunden werden konnte.
+     * @throws ApplicationException Wenn kein Dokument mit der uebergebenen ID gefunden werden konnte.
      */
     public function execute()
     {
         $docId = $this->getRequest()->getParam('docId');
         if ($docId === null) {
-            throw new Application_Exception('missing request parameter docId');
+            throw new ApplicationException('missing request parameter docId');
         }
 
         try {
             $document = Document::get($docId);
         } catch (ModelException $e) {
-            throw new Application_Exception('could not retrieve document with given ID from OPUS database');
+            throw new ApplicationException('could not retrieve document with given ID from OPUS database');
         }
 
         if ($document->getServerState() !== 'published' && ! $this->isAllowExportOfUnpublishedDocs()) {

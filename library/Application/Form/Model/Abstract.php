@@ -29,6 +29,7 @@
  * @license   http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Model\NotFoundException;
 use Opus\Model\AbstractDb;
 
@@ -159,7 +160,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
     /**
      * Instanziert und aktualisiert vom Formular angezeigtes Model.
      *
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @return AbstractDb
      */
     public function getModel()
@@ -167,7 +168,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
         $modelClass = $this->getModelClass();
 
         if ($modelClass === null) {
-            throw new Application_Exception(__METHOD__ . ' Model class has not been set.');
+            throw new ApplicationException(__METHOD__ . ' Model class has not been set.');
         }
 
         $modelId = $this->getModelId();
@@ -180,7 +181,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
             $model = $modelClass::get($modelId);
         } catch (NotFoundException $omnfe) {
             $this->getLogger()->err($omnfe->getMessage());
-            throw new Application_Exception(__METHOD__ . " Model with ID '$modelId' not found.");
+            throw new ApplicationException(__METHOD__ . " Model with ID '$modelId' not found.");
         }
 
         $this->updateModel($model);
@@ -207,12 +208,12 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * TODO support arbitrary validator (Zend) to check model ID
      *
      * @param int|string $modelId
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     protected function validateModelId($modelId)
     {
         if ($modelId !== null && ! is_numeric($modelId) && $this->getVerifyModelIdIsNumeric()) {
-            throw new Application_Exception(__METHOD__ . ' Model-ID must be numeric.');
+            throw new ApplicationException(__METHOD__ . ' Model-ID must be numeric.');
         }
     }
 

@@ -60,7 +60,7 @@ class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase
 
         $subform = $form->createNewSubFormInstance();
 
-        $this->assertInstanceOf('Admin_Form_Document_Subject', $subform);
+        $this->assertInstanceOf(Admin_Form_Document_Subject::class, $subform);
         $this->assertEquals('psyndex', $subform->getSubjectType());
         $this->assertNull($subform->getLanguage());
     }
@@ -71,7 +71,7 @@ class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase
 
         $subform = $form->createNewSubFormInstance();
 
-        $this->assertInstanceOf('Admin_Form_Document_Subject', $subform);
+        $this->assertInstanceOf(Admin_Form_Document_Subject::class, $subform);
         $this->assertEquals('swd', $subform->getSubjectType());
         $this->assertEquals('deu', $subform->getLanguage());
     }

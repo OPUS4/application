@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\FileInterface;
 
 /**
@@ -51,7 +52,7 @@ class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract
         // TODO unit test 'cover=false' URL parameter which should suppress PDF cover generation on file download
 
         if ($file === null) {
-            throw new Application_Exception(__METHOD__ . 'Parameter $file must not be null (for ' . $name . ').');
+            throw new ApplicationException(__METHOD__ . 'Parameter $file must not be null (for ' . $name . ').');
         }
 
         $fileName = $file->getPathName();

@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
+use Opus\App\Common\Configuration;
 use Opus\Common\Document;
 use Opus\Common\Repository;
 use Opus\Common\Security\Realm;
@@ -175,7 +177,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
     public function isDownloadEnabled()
     {
         if ($this->downloadEnabled === null) {
-            $appConfig = Application_Configuration::getInstance()->getConfig();
+            $appConfig = Configuration::getInstance()->getConfig();
 
             $this->downloadEnabled = isset($appConfig->export->download) ?
                 filter_var($appConfig->export->download, FILTER_VALIDATE_BOOLEAN) : true;
@@ -226,7 +228,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
      * Performs XML export.
      *
      * @return int
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws Application_SearchException
      * @throws Exception
      * @throws Zend_View_Exception
@@ -241,18 +243,18 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
         $exportParam = $request->getParam('export');
 
         if ($exportParam === null) {
-            throw new Application_Exception('export format is not specified');
+            throw new ApplicationException('export format is not specified');
         }
 
         // currently only xml is supported here
         if ($exportParam !== 'xml') {
-            throw new Application_Exception('export format is not supported: ' . $exportParam);
+            throw new ApplicationException('export format is not supported: ' . $exportParam);
         }
 
         // parameter stylesheet is mandatory (only administrator is able to see raw output)
         // non-administrative users can only reference user-defined stylesheets
         if ($request->getParam('stylesheet') === null && ! Realm::getInstance()->checkModule('admin')) {
-            throw new Application_Exception('missing parameter stylesheet');
+            throw new ApplicationException('missing parameter stylesheet');
         }
 
         $stylesheet          = $request->getParam('stylesheet');
@@ -498,6 +500,8 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
      *
      * @param int[] $documentIds ids of documents for export
      * @return array Map of docId to  Document XML
+     *
+     * TODO getting documents from cache or database should be in separate class and transparent here
      */
     public function getDocumentsFromCache($documentIds)
     {
@@ -526,7 +530,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
      * @param string $stylesheet
      * @param string $path
      * @return string
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function buildStylesheetPath($stylesheet, $path)
     {
@@ -545,7 +549,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
             if ($pos !== false) {
                 return $path . DIRECTORY_SEPARATOR . $stylesheetsAvailable[$pos] . '.xslt';
             }
-            throw new Application_Exception('given stylesheet does not exist or is not readable');
+            throw new ApplicationException('given stylesheet does not exist or is not readable');
         }
         $pos        = strrpos($path, '/');
         $scriptPath = substr($path, 0, ++$pos);

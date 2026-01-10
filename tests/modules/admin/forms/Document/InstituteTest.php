@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Document;
 use Opus\Model\Dependent\Link\DocumentDnbInstitute;
 
@@ -51,7 +52,7 @@ class Admin_Form_Document_InstituteTest extends ControllerTestCase
 
     public function testCreateFormBadRole()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Unknown role \'unknown_role\'.');
         $form = new Admin_Form_Document_Institute('unknown_role');
     }

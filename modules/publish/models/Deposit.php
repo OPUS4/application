@@ -48,7 +48,7 @@ use Opus\Model\Dependent\Link\DocumentPerson;
 use Opus\Reference;
 
 /**
- * TODO get logger from Application_Configuration if not provided
+ * TODO get logger from Configuration if not provided
  */
 class Publish_Model_Deposit
 {

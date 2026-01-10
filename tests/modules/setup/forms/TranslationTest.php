@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\Translate\UnknownTranslationKeyException;
 use Opus\Translate\Dao;
 
@@ -121,7 +122,7 @@ class Setup_Form_TranslationTest extends ControllerTestCase
     {
         $form = $this->getForm();
 
-        $languages = Application_Configuration::getInstance()->getSupportedLanguages();
+        $languages = Configuration::getInstance()->getSupportedLanguages();
         $this->assertCount(2, $languages);
         $this->assertEquals(['de', 'en'], $languages);
 

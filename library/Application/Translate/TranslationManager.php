@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
+use Opus\App\Common\Modules;
 use Opus\Common\Translate\TranslateException;
 use Opus\Common\Translate\UnknownTranslationKeyException;
 use Opus\Translate\Dao;
@@ -136,7 +138,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
             $allowedModules = $this->getAllowedModules();
 
             if ($allowedModules === null) {
-                $modulesManager = Application_Modules::getInstance();
+                $modulesManager = Modules::getInstance();
                 $allowedModules = array_keys($modulesManager->getModules());
             }
 
@@ -161,7 +163,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
             if (! empty($value)) {
                 $modules = array_map('trim', explode(',', $value));
 
-                $allModules = Application_Modules::getInstance()->getModules();
+                $allModules = Modules::getInstance()->getModules();
 
                 $allowedModules = [];
 
@@ -295,7 +297,7 @@ class Application_Translate_TranslationManager extends Application_Model_Abstrac
     protected function getLanguageOrderRef()
     {
         if ($this->languageOrderRef === null) {
-            $this->languageOrderRef = array_flip(Application_Configuration::getInstance()->getSupportedLanguages());
+            $this->languageOrderRef = array_flip(Configuration::getInstance()->getSupportedLanguages());
         }
 
         return $this->languageOrderRef;

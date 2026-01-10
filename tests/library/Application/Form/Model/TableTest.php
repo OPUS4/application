@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Licence;
 
 class Application_Form_Model_TableTest extends ControllerTestCase
@@ -78,7 +79,7 @@ class Application_Form_Model_TableTest extends ControllerTestCase
 
         $models = Licence::getAll();
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Parameter must be array.');
         $form->setModels('notanarray');
     }

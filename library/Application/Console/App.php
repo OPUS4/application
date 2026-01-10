@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\Console\DefaultCommandProvider;
 use Opus\Job\TaskManager;
 use Symfony\Component\Console\Application;
@@ -37,13 +38,12 @@ use Symfony\Component\Console\Application;
  * Command line application for OPUS 4 management tasks.
  *
  * TODO CommandProvider for opus4-job (move commands)
- * TODO CommandProvider for opus4-search
  */
 class Application_Console_App extends Application
 {
     public function __construct()
     {
-        parent::__construct('OPUS 4 Console Tool', Application_Configuration::getOpusVersion());
+        parent::__construct('OPUS 4 Console Tool', Configuration::getOpusVersion());
 
         $commandProvider = new DefaultCommandProvider();
         $commands        = $commandProvider->getCommands();

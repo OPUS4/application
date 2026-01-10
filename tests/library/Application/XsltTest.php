@@ -39,7 +39,7 @@ class Application_XsltTest extends ControllerTestCase
         $xslt = Application_Xslt::getInstance();
 
         $this->assertNotNull($xslt);
-        $this->assertInstanceOf('Application_Xslt', $xslt);
+        $this->assertInstanceOf(Application_Xslt::class, $xslt);
 
         $this->assertSame($xslt, Application_Xslt::getInstance());
     }
@@ -63,7 +63,7 @@ class Application_XsltTest extends ControllerTestCase
         $helper = $xslt->findHelper('translate');
 
         $this->assertNotNull($helper);
-        $this->assertInstanceOf('Application_View_Helper_Translate', $helper);
+        $this->assertInstanceOf(Application_View_Helper_Translate::class, $helper);
     }
 
     public function testCallStatic()

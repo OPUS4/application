@@ -32,6 +32,7 @@
  *      fontawesome min files and old fonts .eot, .svg, .woff
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\Config;
 
 $config = Config::get();
@@ -141,7 +142,7 @@ if ($this->jQueryEnabled()) {
     $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path);
 }
 
-$appConfig = new Application_Configuration();
+$appConfig = new Configuration();
 
 if ($appConfig->isLanguageSelectionEnabled()) {
     $languageSelectors = $this->languageSelector();

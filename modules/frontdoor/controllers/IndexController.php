@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\Model\NotFoundException;
@@ -75,7 +76,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
         $documentXml = null;
         try {
             $documentXml = new Application_Util_Document($document);
-        } catch (Application_Exception $e) {
+        } catch (ApplicationException $e) {
             switch ($document->getServerState()) {
                 case self::SERVER_STATE_DELETED:
                     $this->printDocumentError("frontdoor_doc_deleted", 410);
@@ -280,7 +281,7 @@ class Frontdoor_IndexController extends Application_Controller_Action
      * If no docId is provided a redirect to the document found by the search is performed without a message.
      *
      * @return bool|int
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     protected function handleSearchResultNavigation()
     {

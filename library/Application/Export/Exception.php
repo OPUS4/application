@@ -29,7 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Export_Exception extends Application_Exception
+use Opus\App\Common\ApplicationException;
+
+class Application_Export_Exception extends ApplicationException
 {
     /**
      * @param string $message

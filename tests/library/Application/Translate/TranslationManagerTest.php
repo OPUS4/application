@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Modules;
 use Opus\Common\Translate\TranslateException;
 use Opus\Common\Translate\UnknownTranslationKeyException;
 use Opus\Translate\Dao;
@@ -402,7 +403,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $tmxFile = $manager->getExportTmxFile();
 
         $this->assertNotNull($tmxFile);
-        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+        $this->assertInstanceOf(Application_Translate_TmxFile::class, $tmxFile);
 
         $dom = $tmxFile->getDomDocument();
 
@@ -431,7 +432,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $tmxFile = $manager->getExportTmxFile();
 
         $this->assertNotNull($tmxFile);
-        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+        $this->assertInstanceOf(Application_Translate_TmxFile::class, $tmxFile);
 
         $dom    = $tmxFile->getDomDocument();
         $output = $dom->saveXML();
@@ -464,7 +465,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $tmxFile = $manager->getExportTmxFile();
 
         $this->assertNotNull($tmxFile);
-        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+        $this->assertInstanceOf(Application_Translate_TmxFile::class, $tmxFile);
 
         $dom    = $tmxFile->getDomDocument();
         $output = $dom->saveXML();
@@ -492,7 +493,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
         $tmxFile = $manager->getExportTmxFile(true);
 
         $this->assertNotNull($tmxFile);
-        $this->assertInstanceOf('Application_Translate_TmxFile', $tmxFile);
+        $this->assertInstanceOf(Application_Translate_TmxFile::class, $tmxFile);
 
         $dom    = $tmxFile->getDomDocument();
         $output = $dom->saveXML();
@@ -760,7 +761,7 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $modules = $manager->getModules();
 
-        $modulesManager = Application_Modules::getInstance();
+        $modulesManager = Modules::getInstance();
 
         $this->assertEquals(array_keys($modulesManager->getModules()), $modules);
     }

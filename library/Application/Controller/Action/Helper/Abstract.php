@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\LoggingTrait;
 
 /**
@@ -82,7 +83,7 @@ abstract class Application_Controller_Action_Helper_Abstract extends Zend_Contro
     public function getConfig()
     {
         if ($this->config === null) {
-            $this->config = Application_Configuration::getInstance()->getConfig();
+            $this->config = Configuration::getInstance()->getConfig();
         }
 
         return $this->config;

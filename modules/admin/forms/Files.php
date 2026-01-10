@@ -40,7 +40,7 @@ class Admin_Form_Files extends Admin_Form_Document_DefaultMultiSubForm
 
     /**
      * @param array|null $options
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function __construct($options = null)
     {

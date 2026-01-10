@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
+
 /**
  * Controller für die Anzeige von Informationen zur Konfiguration von OPUS und dem System auf dem es läuft.
  */
@@ -59,11 +61,11 @@ class Admin_InfoController extends Application_Controller_Action
      * Zeigt an, ob eine neuere Version von OPUS verfügbar ist.
      *
      * TODO Behandlung von $latestVersion === null hängt vom Verhalten der Version Helpers ab (ueberarbeiten)
-     * TODO move comparison code into non-controller class, e.g. Application_Configuration
+     * TODO move comparison code into non-controller class, e.g. Configuration
      */
     public function updateAction()
     {
-        $localVersion  = Application_Configuration::getOpusVersion();
+        $localVersion  = Configuration::getOpusVersion();
         $latestVersion = $this->_helper->version();
 
         $this->view->currentVersion = $localVersion;

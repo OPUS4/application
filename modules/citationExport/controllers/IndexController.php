@@ -105,7 +105,7 @@ class CitationExport_IndexController extends Application_Controller_Action
 
     /**
      * @return int
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws Zend_Controller_Response_Exception
      */
     public function handleRequest()

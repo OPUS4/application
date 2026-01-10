@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Date;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Language;
@@ -87,14 +88,14 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testConstructFormNull()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('construct without parameter');
         new Application_Form_Confirmation(null);
     }
 
     public function testConstructFormEmpty()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('construct without parameter');
         new Application_Form_Confirmation('   ');
     }
@@ -248,21 +249,21 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testSetModelNull()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('must be Opus\Model\AbstractDb');
         $this->form->setModel(null);
     }
 
     public function testSetModelNotObject()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('must be Opus\Model\AbstractDb');
         $this->form->setModel('notamodel');
     }
 
     public function testSetModelBadModel()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('not instance of');
         $this->form->setModel(new Date());
     }

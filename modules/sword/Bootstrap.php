@@ -29,6 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Modules;
+use Opus\Sword\SwordModule;
+
 /**
  * @phpcs:disable PSR2.Methods.MethodDeclaration
  */
@@ -36,6 +39,6 @@ class Sword_Bootstrap extends Zend_Application_Module_Bootstrap
 {
     protected function _initSwordModule()
     {
-        Application_Modules::registerModule(new Sword_Model_SwordModule());
+        Modules::registerModule(new SwordModule());
     }
 }

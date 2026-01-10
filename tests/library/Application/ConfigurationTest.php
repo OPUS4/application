@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\Config;
 use Opus\Common\Document;
 use Opus\Document\Plugin\IdentifierDoi;
@@ -36,19 +37,19 @@ use Opus\Document\Plugin\IdentifierUrn;
 use Opus\Document\Plugin\XmlCache;
 use Opus\Search\Plugin\Index;
 
-class Application_ConfigurationTest extends ControllerTestCase
+class ConfigurationTest extends ControllerTestCase
 {
     /** @var string[] */
     protected $additionalResources = ['database', 'locale'];
 
-    /** @var Application_Configuration */
+    /** @var Configuration */
     private $config;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->makeConfigurationModifiable();
-        $this->config = new Application_Configuration();
+        $this->config = new Configuration();
     }
 
     public function testGetConfig()
@@ -73,7 +74,7 @@ class Application_ConfigurationTest extends ControllerTestCase
         $this->config->setLogger($logger);
 
         $this->assertNotNull($this->config->getLogger());
-        $this->assertInstanceOf('MockLogger', $this->config->getLogger());
+        $this->assertInstanceOf(MockLogger::class, $this->config->getLogger());
     }
 
     public function testGetSupportedLanguages()
@@ -104,12 +105,12 @@ class Application_ConfigurationTest extends ControllerTestCase
     public function testGetOpusVersion()
     {
         $config = $this->getConfig();
-        $this->assertEquals($config->version, Application_Configuration::getOpusVersion());
+        $this->assertEquals($config->version, Configuration::getOpusVersion());
     }
 
     public function testGetOpusInfo()
     {
-        $data = Application_Configuration::getOpusInfo();
+        $data = Configuration::getOpusInfo();
         $this->assertIsArray($data);
         /* OPUSVIER-3542 Version not working the same way with git
         $this->assertArrayHasKey('admin_info_version', $data);
@@ -210,15 +211,15 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testGetInstance()
     {
-        $config = Application_Configuration::getInstance();
+        $config = Configuration::getInstance();
         $this->assertNotNull($config);
-        $this->assertInstanceOf('Application_Configuration', $config);
-        $this->assertSame($config, Application_Configuration::getInstance());
+        $this->assertInstanceOf(Configuration::class, $config);
+        $this->assertSame($config, Configuration::getInstance());
     }
 
     public function testGetName()
     {
-        $config = Application_Configuration::getInstance();
+        $config = Configuration::getInstance();
         $this->assertEquals('OPUS 4', $config->getName());
 
         $this->adjustConfiguration(['name' => 'OPUS Test']);
@@ -231,27 +232,27 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testClearInstance()
     {
-        $config = Application_Configuration::getInstance();
-        $this->assertInstanceOf('Application_Configuration', $config);
+        $config = Configuration::getInstance();
+        $this->assertInstanceOf(Configuration::class, $config);
 
-        Application_Configuration::clearInstance();
+        Configuration::clearInstance();
 
-        $config2 = Application_Configuration::getInstance();
-        $this->assertInstanceOf('Application_Configuration', $config2);
+        $config2 = Configuration::getInstance();
+        $this->assertInstanceOf(Configuration::class, $config2);
 
         $this->assertNotSame($config, $config2);
     }
 
     public function testGetValue()
     {
-        $config = Application_Configuration::getInstance();
+        $config = Configuration::getInstance();
 
         $this->assertEquals('https://orcid.org/', $config->getValue('orcid.baseUrl'));
     }
 
     public function testGetValueForUnknownKey()
     {
-        $config = Application_Configuration::getInstance();
+        $config = Configuration::getInstance();
 
         $this->assertNull($config->getValue('unknownKey'));
         $this->assertNull($config->getValue('unknownScope.unknownKey'));
@@ -260,7 +261,7 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testGetValueForArray()
     {
-        $config = Application_Configuration::getInstance();
+        $config = Configuration::getInstance();
 
         $subconfig = $config->getValue('orcid');
 
@@ -269,7 +270,7 @@ class Application_ConfigurationTest extends ControllerTestCase
 
     public function testGetValueForNull()
     {
-        $config = Application_Configuration::getInstance();
+        $config = Configuration::getInstance();
 
         $this->assertNull($config->getValue(null));
         $this->assertNull($config->getValue(''));

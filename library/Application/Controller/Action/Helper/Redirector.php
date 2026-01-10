@@ -90,7 +90,7 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
      * @param null|string $controller
      * @param null|string $module
      * @param array       $params
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function redirectToPermanentAndExit(
         $action,
@@ -109,7 +109,7 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
      * @param null|string $controller
      * @param null|string $module
      * @param array       $params
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function redirectToAndExit(
         $action,
@@ -138,7 +138,7 @@ class Application_Controller_Action_Helper_Redirector extends Zend_Controller_Ac
      * @param string|null $module
      * @param array       $params
      * @param bool        $exit
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function performRedirect(
         $action,

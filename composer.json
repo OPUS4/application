@@ -27,11 +27,13 @@
     "opus4-repo/framework": "dev-master as 4.8.1",
     "opus4-repo/search": "dev-master as 4.8.1",
     "opus4-repo/opus4-bibtex": "dev-master as 4.8.1",
-    "opus4-repo/opus4-import": "dev-main as 4.8.1",
+    "opus4-repo/opus4-import": "dev-main",
     "opus4-repo/opus4-pdf": "dev-main as 4.8.1",
     "opus4-repo/opus4-job": "dev-main as 4.8.1",
     "opus4-repo/opus4-security": "dev-main as 4.8.1",
-    "opus4-repo/opus4-deepgreen": "dev-main",
+    "opus4-repo/opus4-sword": "dev-main",
+    "opus4-repo/opus4-app-common": "dev-main",
+    "opus4-repo/opus4-deepgreen": "v1.0.x-dev as dev-main",
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
     "oomphinc/composer-installers-extender": "^2.0",
@@ -60,6 +62,9 @@
       "composer/installers": true,
       "oomphinc/composer-installers-extender": true,
       "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "audit": {
+      "ignore": ["PKSA-jvpv-pcrn-dfzc", "PKSA-jqsz-ykjr-qncb"]
     }
   },
   "scripts": {

@@ -98,7 +98,7 @@ class Application_TranslateTest extends ControllerTestCase
         $this->translate->setLogger($logger);
 
         $this->assertNotNull($this->translate->getLogger());
-        $this->assertInstanceOf('MockLogger', $this->translate->getLogger());
+        $this->assertInstanceOf(MockLogger::class, $this->translate->getLogger());
     }
 
     public function testLoadLanguageDirectory()
@@ -400,7 +400,7 @@ class Application_TranslateTest extends ControllerTestCase
 
         $translate = Application_Translate::getInstance();
 
-        $this->assertInstanceOf('Application_Translate', $translate);
+        $this->assertInstanceOf(Application_Translate::class, $translate);
 
         $key = 'test_fallback';
 

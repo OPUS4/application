@@ -180,7 +180,7 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
 
         $form->constructFromPost($post, $document);
 
-        $this->assertInstanceOf('Admin_Form_FileManager', $form);
+        $this->assertInstanceOf(Admin_Form_FileManager::class, $form);
         $this->assertEquals(2, count($form->getSubForm('Files')->getSubForms()));
 
         $fileForm = $form->getSubForm('Files')->getSubForm('File0');
@@ -219,7 +219,7 @@ class Admin_Form_FileManagerTest extends ControllerTestCase
 
         $form = Admin_Form_FileManager::getInstanceFromPost($post, $document);
 
-        $this->assertInstanceOf('Admin_Form_FileManager', $form);
+        $this->assertInstanceOf(Admin_Form_FileManager::class, $form);
         $this->assertEquals(1, count($form->getSubForm('Files')->getSubForms()));
 
         $fileForm = $form->getSubForm('Files')->getSubForm('File0');
