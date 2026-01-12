@@ -52,6 +52,9 @@ class Application_Search_Facet
     /** @var bool */
     private $translated = false;
 
+    /** @var bool */
+    private $visible = true;
+
     /** @var string|null */
     private $translationPrefix;
 
@@ -369,5 +372,23 @@ class Application_Search_Facet
     public function setIndexField($indexField)
     {
         $this->indexField = $indexField;
+    }
+
+    /**
+     * @param bool $visible
+     * @return $this
+     */
+    public function setVisible($visible)
+    {
+        $this->visible = $visible;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisible()
+    {
+        return $this->visible;
     }
 }

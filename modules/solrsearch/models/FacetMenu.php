@@ -85,7 +85,7 @@ class Solrsearch_Model_FacetMenu extends Application_Model_Abstract
 
                 $values = $indexFields[$indexFieldName];
 
-                if ($facet === null || ! $facet->isAllowed()) {
+                if ($facet === null || ! $facet->isAllowed() || ! $facet->isVisible()) {
                     continue;
                 }
 
