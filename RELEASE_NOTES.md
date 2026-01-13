@@ -1,5 +1,12 @@
 # OPUS 4 Release Notes
 
+## Patch Release 4.8.0.19 - 2026-01-13
+
+Es wurde die Möglichkeit hinzugefügt Facetten für die Suche zu aktivieren,
+ohne das sie in der Weboberfläche angezeigt werden.
+
+https://github.com/OPUS4/application/issues/1403
+
 ## Patch Release 4.8.0.18 - 2025-12-17
 
 Ein Fehler mit Select-Enrichments im Metadaten-Formular, der sich mit dem 
