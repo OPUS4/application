@@ -1,5 +1,159 @@
 # OPUS 4 Release Notes
 
+## Release 4.9 - 2026-mm-dd
+
+### Crossref-Import überarbeitet
+
+Der Import von Metadaten aus Crossref per DOI hat umfangreichere Optimierungen erfahren. 
+
+Die Bezeichnungen der Enrichmentfelder orientieren sich nun am OPUS-Standard. Die Änderungen umfassen folgende Umbenennungen:
+
+| Feldname in OPUS 4.8 | Feldname in OPUS 4.9 |
+|---|---|
+| opus_import_data | opus_doi_json |
+| local_crossrefDocumentType | opus_crossrefDocumentType |
+| local_crossrefLicence | opus_crossrefLicence |
+| local_doiImportPopulated | opus_doiImportPopulated |
+| local_import_origin | opus_import_origin |
+
+Die Felder für Konferenzen wurden stark überarbeitet (s.a. [Enrichmentfelder für Konferenzen](#enrichmentfelder-f%C3%BCr-konferenzen)). Das Mapping der Konferenzangaben wurde an die neuen Felder angepasst:
+
+| Feldname in OPUS 4.8 | Feldname in OPUS 4.9 |
+|---|---|
+| conference_title | OpusConferenceName |
+| conference_place | OpusConferencePlace |
+| - | OpusConferenceNumber |
+| - | OpusConferenceYear |
+
+Das Feld `opus_doi_flag` bleibt unverändert.
+
+Das Update-Script prüft und aktualisiert sowohl die Enrichmentfelder für den DOI-basierten Metadatenimport als auch für Konferenzen. Alte Felder werden umbenannt und veränderte Übersetzungen übernommen, fehlende Felder angelegt.
+
+Die Übersetzungen für den DOI-basierten Metadatenimport sind nun mehrsprachig und können über die Übersetzungsverwaltung bearbeitet werden.
+
+Die Benutzerführung wurde verbessert, um fehlerhafte Eingaben zu vermeiden: Das Editieren der Felder im Publish-Formular ist nun erst nach Eingabe einer DOI und erfolgreichem Abruf der Crossref-Daten möglich. Ist der Metadatenimport nicht erfolgreich oder eine manuelle Interaktion erforderlich (z.B. bei Dubletten), erscheint ein Menü mit den zur Verfügung stehenden Optionen.
+
+### Dokumenttypen / Gemeinsames Vokabular 2.0
+
+Die Dokumenttypen in OPUS 4 basieren auf dem "Gemeinsamen Vokabular für Publikations- und Dokumenttypen" von DINI. Die zuständigen DINI-Arbeitsgruppen haben das Vokabular überarbeitet und an aktuelle Anforderungen angepasst. Zu den Neuerungen gehören:
+
+- Untergliederung bestehender Dokumenttypen, z.B. "Monograph" und "EditedCollection" für "Book".
+- Gänzlich neue Dokumenttypen (wie "DynamicWebResource" für Blogs).
+- Eine einheitliche Schreibweise der Terme.
+
+OPUS 4 übernimmt viele der neu hinzugekommen Dokumenttypen. Zudem wurden einige Dokumenttypen aus dem Vokabular 1.0 aufgrund der Nachfrage neu aufgenommen, wie "Noten (Musik)" und "Website".
+
+Aktuell sieht OPUS 4 keine Hierarchisierung der Dokumenttypen vor. Breit gefasste Begriffe wie "Konferenzveröffentlichung" stehen neben ausdifferenzierten Termen wie "Konferenzfolien" oder "Konferenzposter".
+
+Die Überarbeitungen des Gemeinsamen Vokabulars haben Auswirkungen auf mehrere Bereiche in OPUS 4 (Publish-Formulare für die neuen Dokumenttypen, Mappings der Im- und Exportformate etc.). Die OAI-PMH-Schnittstelle liefert nun durchgehend die neue Schreibweise der Terme aus (entsprechend den Vorgaben des DINI-Zertifikats).
+
+Die Publish-Formulare wurden ebenfalls überarbeitet und vereinheitlicht. Bei allen Personen ist das Feld "Akademischer Titel" ergänzt worden, um der fehlerhaften Erfassung des akademischen Titels in den Feldern für Vor- und Nachname entgegenzuwirken. Datenschutzrechtlich problematische Elemente wie E-Mail-Adresse, Geburtsdatum und Geburtsort sind auskommentiert. Die Dokumenttypen Diplomarbeit, Examen und Magisterarbeit bleiben unverändert.
+
+Eine Konkordanz zwischen den Dokumenttypen im Gemeinsamen Vokabular 2.0 und OPUS 4 sowie zum Mapping der Dokumenttypen in den Import- und Exportformaten finden Sie unter https://github.com/OPUS4/community/wiki/DINI-Gemeinsames-Vokabular-2.0.
+
+### Enrichmentfelder für Konferenzen
+
+Es werden eigene Felder für Konferenzen eingeführt. Basierend auf bibliothekarischen Standards und Erfassungspraktiken kennt OPUS 4 nun diese vier Metadaten-Elemente:
+
+- Name der Konferenz
+- Ort der Konferenz
+- Zählung der Konferenz
+- Jahr der Konferenz
+
+In OPUS 4.8 waren die beiden Enrichmentfelder `conference_title` und `conference_place` für den DOI-basierten Metadatenimport neu hinzugekommen. Diese werden an den OPUS-Standard angeglichen:
+
+| Feld in OPUS 4.8 | Feld in OPUS 4.9 |
+|---|---|
+| conference_title | OpusConferenceName |
+| conference_place | OpusConferencePlace |
+| - | OpusConferenceNumber |
+| - | OpusConferenceYear |
+
+### Exportformate 
+
+Neben der Umsetzung des Mappings für die neuen Dokumenttypen gibt es weitere Anpassungen und Erweiterungen.
+
+#### BibTeX / CSV / RIS
+
+Einzeltreffer- und Listenexporte wurden harmonisiert, so dass sie nun dieselben Daten ausgeben. Die dokumenttypspezifischen BibTeX-Einzeltreffer-Exporte sind zurückgebaut und analog zum Listenexport in einer XSLT-Datei zusammengeführt worden. Die Utils für BibTeX und CSV wurden für jedes Format in jeweils einer Datei gebündelt.
+
+#### CSV
+
+Die Zeichencodierung des CSV-Exports ist auf UTF-8 umgestellt worden. Zur Benennung der Standard-Spalten werden nun die jeweiligen Übersetzungen verwendet.
+
+Der CSV-Export lässt sich über Parameter um Enrichmentfelder und Collections erweitern. In `export.csv.enrichments` bzw. `export.csv.collections` sind die internen Namen einzutragen, in `export.csv.enrichments_labels` bzw. `export.csv.enrichments_labels` können die Spaltenüberschriften angegeben werden.
+
+    ; ENRICHMENTS AND COLLECTIONS TO BE EXPORTED IN CSV (comma separated)
+    export.csv.enrichments = enrichment1,enrichment2
+    export.csv.enrichments_labels = Überschrift Enrichment 1,Überschrift Enrichment 2
+    export.csv.collections = collection1,collection2,collection3
+    export.csv.collections_labels = Überschrift Sammlung 1,Überschrift Sammlung 2.Überschrift Sammlung 3
+
+Zudem lässt sich über `export.csv.enrichments_visible` bzw. `export.csv.collections_visible` die Sichtbarkeit steuern. Mit `0` wird die Spalte für alle Nutzer exportiert (Rolle "quest"), bei einer `1` erfolgt der Export der jeweiligen Spalte nur, wenn der Nutzer im Repositorium eingeloggt ist (Rolle muss Zugriff auf die Dokumentenverwaltung haben).
+
+    ; Visibility in CSV: 1 = for All, 0 = for Admins only (comma separated)
+    export.csv.enrichments_visible = 1,1
+    export.csv.collections_visible =0,1,0
+
+#### MARC
+
+Das Mapping ins MARC-Format unterscheidet nun grundsätzlich zwischen monographischen und nicht-monographischen (i.d.R. unselbständigen oder fortlaufenden) Dokumenttypen und hat darüber hinaus umfangreichere Überarbeitungen erfahren.
+
+Der Export wurde um die folgenden Felder erweitert:
+
+- 008 (Datums-/Jahresangaben, Sprachcode)
+- 250 (Ausgabe-Bezeichnung)
+- 500 (Öffentlich sichtbare Bemerkung)
+- 502 (Hochschulschriftenvermerk)
+- 540 (Lizenzangabe)
+- 650 (GND-Schlagwörter mit GND-ID)
+- 710 (Beteiligte Körperschaft)
+
+Des Weiteren gibt es Änderungen an diesen Feldern:
+
+- LEADER Pos. 7: Für periodicalpart von `a` (Monographic component part) zu `b` (Serial component part) korrigiert
+- 024: Neben der URN werden nun auch DOIs exportiert
+- 100 / 700: Um Ausgabe von GND-ID und ORCID iD in $0 erweitert
+- 110 / 710: Aufsplittung von Körperschaften in erste Hierarchieebene ($a) und untergeordnete Hierarchieebenen ($b)
+- 490: Ausgabe von TitleParent bei monographischen Dokumenttypen als Schriftenreihe
+- 700: Um Export von PersonReferee, PersonTranslator und PersonOther erweitert, Rolle von PersonAdvisor von dgs zu ths geändert
+- 773: Um Ausgabe der Atikelnummer erweitert ($g)
+- 856: Lizenzangabe entfernt, steht jetzt in 540
+
+#### DataCite-XML (DOI-Registrierung)
+
+Das hinterlegte DataCite Metadata Schema wurde auf die Version 4.6 aktualisiert und das Mapping an einigen Stellen verbessert:
+
+- Unterscheidung zwischen Personen und Körperschaften (`NameType` `Personal`/`Organisational`)
+- Registrierung der GND-ID bei Personen
+- Überarbeitung der `resourceTypes` (Umstellung auf Terme des Gemeinsamen Vokabulars), `resourceTypeGeneral` angepasst
+- Mapping DDC angepasst
+
+### ORCID
+
+Bislang fehlerhafte Schreibweisen für "ORCID" und "ORCID iD" sind korrigiert.
+
+### Identifier
+
+Als weitere Identifikatoren für Dokumente kommen die "International Standard Music Number" (ISMN) sowie die "Verbund-ID" hinzu. Die Verbund-ID kann auf der Frontdoor als Link dargestellt werden. Dazu ist die Query-URL des Verbundkatalogs im Parameter `unionCat.requestUrl` zu hinterlegen.
+
+### Personen-Identifier über OAI-PMH
+
+Im Format OAI-DC werden GND-ID und ORCID iD nun gemäß dem DINI-Zertifikat ausgeliefert:
+
+    <creator>Mustermann, Max; https://orcid.org/0000-0001-7659-8932; https://d-nb.info/gnd/1143543866</creator>
+
+### Lizenzen
+
+Die Lizenz "In Copyright / Urheberrechtlich geschützt" ist nun Teil der Standardauslieferung. Darüber hinaus kann die Darstellung der Lizenz-Logos über CSS-IDs gesteuert werden. Die IDs leiten sich aus den Namen der Lizenzen (Feld `name`) ab, z.B. `img#licence-InCopyright-logo` (frontdoor.css), um das Logo für die neue Lizenz zu skalieren.
+
+    img#licence-InCopyright-logo {
+        width: 90px;
+        height: auto;
+    }
+
+--
+
 ## Patch Release 4.8.0.17 - 2025-10-01
 
 Die RSS-Feeds unterstützen nun den Parameter `rows`, mit dem die Anzahl 
