@@ -239,7 +239,6 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
     public function testTarArchiveProvokeUrnCollision()
     {
         $doc = $this->addDocWithUrn();
-        $this->addTestDocument($doc);
         $this->depositError(
             'one-doc-with-urn.tar',
             DepositTestHelper::CONTENT_TYPE_TAR,
@@ -257,6 +256,7 @@ class Sword_DepositControllerErrorCasesTest extends ControllerTestCase
         $doc = Document::new();
         $doc->addIdentifier()->setType('urn')->setValue('colliding-urn');
         $doc->store();
+        $this->addTestDocument($doc);
         return $doc;
     }
 
