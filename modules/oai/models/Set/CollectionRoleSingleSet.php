@@ -47,12 +47,11 @@ use Opus\Common\DocumentInterface;
  */
 class Oai_Model_Set_CollectionRoleSingleSet extends Oai_Model_Set_CollectionSets
 {
-    /**
-     * The OAI name of the collection role for which the class is responsible.
-     *
-     * @var string
-     */
+    /** @var string The OAI name of the collection role for which the class is responsible. */
     private $roleOaiName;
+
+    /** @var bool */
+    private $requireOaiSubset = false;
 
     /**
      * Returns a single set if it contains documents.
@@ -106,7 +105,7 @@ class Oai_Model_Set_CollectionRoleSingleSet extends Oai_Model_Set_CollectionSets
         }
 
         $finder->setCollectionRoleId($role->getId());
-        $visibleCollections = $role->getVisibleCollections();
+        $visibleCollections = $role->getVisibleCollections($this->isRequireOaiSubset());
         $finder->setCollectionId($visibleCollections);
     }
 
@@ -139,5 +138,15 @@ class Oai_Model_Set_CollectionRoleSingleSet extends Oai_Model_Set_CollectionSets
     public function setRoleOaiName($roleOaiName)
     {
         $this->roleOaiName = $roleOaiName;
+    }
+
+    public function setRequireOaiSubset(bool $requireOaiSubset)
+    {
+        $this->requireOaiSubset = $requireOaiSubset;
+    }
+
+    public function isRequireOaiSubset(): bool
+    {
+        return $this->requireOaiSubset;
     }
 }

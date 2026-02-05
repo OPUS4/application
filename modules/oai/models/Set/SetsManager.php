@@ -75,7 +75,7 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
     /**
      * Returns the configured set type objects.
      *
-     * @return array|Oai_Model_Set_SetTypeInterfaceet[]
+     * @return array|Oai_Model_Set_SetTypeInterface[]
      */
     public function getSetTypeObjects()
     {
@@ -91,11 +91,21 @@ class Oai_Model_Set_SetsManager extends Application_Model_Abstract
                 if (class_exists($setTypeClass)) {
                     $setTypeObjects[$setTypeName] = new $setTypeClass();
 
+                    // TODO a general configuration mechanism is required
                     if (
                         $setTypeClass === Oai_Model_Set_CollectionRoleSingleSet::class &&
                         isset($setTypeConfig['roleOaiName']) && ! empty($setTypeConfig['roleOaiName'])
                     ) {
                         $setTypeObjects[$setTypeName]->setRoleOaiName($setTypeConfig['roleOaiName']);
+                    }
+
+                    if (
+                        $setTypeClass === Oai_Model_Set_CollectionRoleSingleSet::class &&
+                        isset($setTypeConfig['requireOaiSubset'])
+                    ) {
+                        $setTypeObjects[$setTypeName]->setRequireOaiSubset(
+                            filter_var($setTypeConfig['requireOaiSubset'], FILTER_VALIDATE_BOOLEAN)
+                        );
                     }
 
                     if (
