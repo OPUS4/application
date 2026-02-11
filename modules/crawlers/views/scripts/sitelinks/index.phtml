@@ -43,10 +43,11 @@
 <?php endforeach; ?>
 </span>
 
-<?PHP if ($this->ids !== null) : ?>
+<?PHP if ($this->documents !== null) : ?>
 <ol id="documents">
-    <?php foreach ($this->ids as $id) : ?>
-    <li><a href="<?= $this->url(['module' => 'frontdoor', 'controller' => 'index', 'action' => 'index', 'docId' => $id]) ?>">document <?= $id ?></a></li>
+    <?php foreach ($this->documents as $docId => $title) : ?>
+    <li><a href="<?= $this->url(['module' => 'frontdoor', 'controller' => 'index', 'action' => 'index', 'docId' => $docId]) ?>"
+           lang="<?= $this->languageWebForm($title['language']) ?>"><?= htmlspecialchars($title['value']) ?></a></li>
     <?php endforeach; ?>
 </ol>
 <?PHP endif ?>

@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Common\Document;
 use Opus\Common\Repository;
 
 /**
@@ -55,7 +56,7 @@ class Crawlers_SitelinksController extends Application_Controller_Action
 
         sort($this->view->years);
 
-        $this->view->ids = null;
+        $this->view->documents = null;
     }
 
     /**
@@ -68,17 +69,17 @@ class Crawlers_SitelinksController extends Application_Controller_Action
         $year = trim($this->_getParam('year') ?? '');
 
         if (preg_match('/^\d{4}$/', $year) > 0) {
-            $finder = Repository::getInstance()->getDocumentFinder();
-            $finder->setServerState('published');
-            $finder->setServerDatePublishedRange($year, strval((int) $year + 1));
-            $this->view->ids = $finder->getIds();
+            $documentRepository = Document::getModelRepository();
 
-            if (count($this->view->ids) > 0) {
-                $this->view->listYear = $year;
-                $this->view->title    = $this->view->translate('crawlers_sitelinks_list', $year);
+            $documents = $documentRepository->getSiteLinksInfo($year);
+
+            if (count($documents) > 0) {
+                $this->view->documents = $documents;
+                $this->view->listYear  = $year;
+                $this->view->title     = $this->view->translate('crawlers_sitelinks_list', $year);
             } else {
-                $this->view->ids   = null;
-                $this->view->title = $this->view->translate('crawlers_sitelinks_index');
+                $this->view->documents = null;
+                $this->view->title     = $this->view->translate('crawlers_sitelinks_index');
             }
         }
 
