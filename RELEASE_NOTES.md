@@ -154,6 +154,24 @@ Die Lizenz "In Copyright / Urheberrechtlich geschützt" ist nun Teil der Standar
 
 --
 
+## Patch Release 4.8.0.19 - 2026-01-13
+
+Es wurde die Möglichkeit hinzugefügt Facetten für die Suche zu aktivieren,
+ohne das sie in der Weboberfläche angezeigt werden.
+
+https://github.com/OPUS4/application/issues/1403
+
+--
+
+## Patch Release 4.8.0.18 - 2025-12-17
+
+Ein Fehler mit Select-Enrichments im Metadaten-Formular, der sich mit dem 
+Wechsel zu PHP 8 bemerkbar gemacht hat, wurde behoben.
+
+https://github.com/OPUS4/application/issues/1397
+
+--
+
 ## Patch Release 4.8.0.17 - 2025-10-01
 
 Die RSS-Feeds unterstützen nun den Parameter `rows`, mit dem die Anzahl 
@@ -163,6 +181,8 @@ Defaultwert ist 100, wie für die Suche.
 
 https://github.com/OPUS4/application/issues/1388
 
+--
+
 ## Patch Release 4.8.0.16 - 2025-07-15
 
 Es wurde ein Fehler behoben, der auftrat, wenn beim Freischalten (Publish) 
@@ -170,6 +190,8 @@ eines einzelnen Dokuments in der Metadatenansicht (nicht Review-Modul) die
 Bestätigungsseite für das Freischalten abgeschaltet war. 
 
 https://github.com/OPUS4/application/issues/1352
+
+--
 
 ## Patch Release 4.8.0.15 - 2025-06-24
 
@@ -184,6 +206,8 @@ der Schlagwörter ignoriert werden. Schlagwörter können durch Kommas und
 Zeilenumbrüche voneinander getrennt werden. 
 
 https://github.com/OPUS4/application/issues/1348
+
+--
 
 ## Patch Release 4.8.0.14 - 2025-04-22
 
@@ -254,6 +278,8 @@ verknüpfen lassen. Damit kann die konfigurierte Concatenator-Klasse getestet
 werden.
 
     $ bin/opus4 pdf:concat cover.pdf document.pdf merged.pdf
+
+--
 
 ## Patch Release 4.8.0.13 - 2025-04-08
 
@@ -326,12 +352,16 @@ Beim Abspeichern von Dokumenten, wird **ServerDateModified** nur noch dann
 aktualisiert, wenn wirklich Daten geändert wurden. Bisher ist das auch 
 passiert, wenn ein unverändertes Dokument abgespeichert wurde. 
 
+--
+
 ## Patch Release 4.8.0.12 - 2025-03-18
 
 Begrenzt die Anzahl berücksichtigter AutorInnen beim DOI-basierten Metadadatenimport
 auf 50, um eine Überlastung des Systems und einen Timeout zu vermeiden.
 
 https://github.com/OPUS4/application/issues/1283
+
+--
 
 ## Patch Release 4.8.0.11 - 2025-03-11
 
@@ -346,6 +376,8 @@ Beim Import von Autoren (Personen) in BibTeX kann eine E-Mail angegeben werden.
 
 https://github.com/OPUS4/opus4-bibtex/issues/80
 
+--
+
 ## Patch Release 4.8.0.10 - 2025-02-18
 
 Behebt eine Exception beim Freischalten von Dokumenten im Review-Modul,
@@ -359,6 +391,8 @@ OAI-Schnittstelle.
 
 https://github.com/OPUS4/application/pull/1275
 
+--
+
 ## Patch Release 4.8.0.9 - 2025-01-14
 
 Behebt das Fehlschlagen des DOI-Imports bei Datensätzen ohne Autor*in. 
@@ -368,6 +402,8 @@ https://github.com/OPUS4/application/issues/1266
 Außerdem wurde ein Typo in der Basiskonfiguration behoben.
 
 https://github.com/OPUS4/application/pull/1271
+
+--
 
 ## Patch Release 4.8.0.8 - 2024-12-04
 
@@ -391,6 +427,8 @@ Das Update kann mit `git pull` vorgenommen werden. Es ist `php-yaml` als neue
 Abhängigkeit dazu gekommen. Das Paket muss manuell installiert werden. Danach 
 ist ein `composer update` notwendig. 
 
+--
+
 ## Patch Release 4.8.0.7 - 2024-10-22
 
 Ein Fehler beim Drücken der Enter/Return-Taste in einfachen Text-Feldern 
@@ -403,16 +441,22 @@ Text-Eingabefeld die Enter/Return-Taste gedrückt wird.
 
 https://github.com/OPUS4/application/issues/1243
 
+--
+
 ## Patch Release 4.8.0.6 - 2024-08-27
 
 Problem bei der Ausführung von PHP Update-Skripten behoben.
 https://github.com/OPUS4/application/issues/992
+
+--
 
 ## Patch Release 4.8.0.5 - 2024-03-12
 
 Problem auf manchen Systemen bei der Anzeige von `BelongsToBibliography` 
 ("Bibl.") in der Dokumentenverwaltung behoben. 
 https://github.com/OPUS4/application/issues/1190
+
+--
 
 ## Patch Release 4.8.0.4 - 2024-01-09
 
@@ -436,6 +480,8 @@ Dokumente in der Administration nicht verändert, unabhängig von der neuen
 Option. Das Verhalten der verschiedenen Möglichkeiten zur Freigabe wird in
 Zukunft vereinheitlicht werden.
 https://github.com/OPUS4/application/issues/1177
+
+--
 
 ## Patch Release 4.8.0.3 - 2023-11-28
 
@@ -463,10 +509,14 @@ in der OPUS 4 Tester Mailingliste eingebracht werden.
 
 https://github.com/orgs/OPUS4/discussions
 
+--
+
 ## Patch Release 4.8.0.2 - 2023-08-29
 
 Es wurde ein Fehler bei der Javascript-Validierung von ISSNs behoben. 
 https://github.com/OPUS4/application/issues/1098
+
+--
 
 ## Patch Release 4.8.0.1 - 2023-08-15
 
@@ -494,6 +544,8 @@ https://github.com/OPUS4/opus4-bibtex/issues/70
 
 Für weitere Änderungen am OPUS4-BibTeX Package, siehe hier: 
 https://github.com/OPUS4/opus4-bibtex/releases/tag/4.8.0.1
+
+--
 
 ## Release 4.8 - 2023-04-25
 
@@ -578,7 +630,11 @@ muss unter Umständen entsprechend angepasst werden.
 
 ### Erweiterungen des CSV-Exports
 
-Neben dem Standard-CSV-Export gibt es nun ein weiteres CSV-Export-Format, das eine Formatierung der Daten gemäß den Anforderungen eines Jahresforschungsberichtes ermöglicht. Zwischen beiden Formaten kann in der config.ini umgeschaltet werden. Weitere Dokumentation unter <https://www.opus-repository.org/userdoc/export/exportlist.html>
+Neben dem Standard-CSV-Export gibt es nun ein weiteres CSV-Export-Format, 
+das eine Formatierung der Daten gemäß den Anforderungen eines 
+Jahresforschungsberichtes ermöglicht. Zwischen beiden Formaten kann in der
+config.ini umgeschaltet werden. Weitere Dokumentation unter 
+<https://www.opus-repository.org/userdoc/export/exportlist.html>
 
 --
 

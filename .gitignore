@@ -22,6 +22,7 @@ apacheconf/apache.conf
 application/configs/config.ini
 application/configs/config.xml
 application/configs/console.ini
+application/configs/deepgreen.ini
 
 public/js
 public/series_logos
