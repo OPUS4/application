@@ -38,6 +38,7 @@ use Opus\Search\Util\Query;
  * Abstract base class for search type implementations.
  *
  * TODO eliminate switch/if/else constructs for different search types
+ * TODO search class should not contain export special handling
  */
 abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstract
 {
@@ -112,6 +113,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             'query'      => $request->getParam('query', '*:*'),
         ];
 
+        // TODO search code should not contain special export code
         if ($this->getExport()) {
             $maxNumber = $this->getMaxRows();
 
