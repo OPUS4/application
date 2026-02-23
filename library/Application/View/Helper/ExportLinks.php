@@ -43,9 +43,9 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      * @param array|null           $context
      * @return string HTML
      */
-    public function exportLinks($keys = null, $context = null)
+    public function exportLinks($keys = null, $context = null, $numOfHits = null)
     {
-        return $this->toString($keys, $context);
+        return $this->toString($keys, $context, $numOfHits);
     }
 
     /**
@@ -54,7 +54,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      * @return string
      * @throws Zend_Exception
      */
-    public function toString($keys = null, $context = null)
+    public function toString($keys = null, $context = null, $numOfHits = null)
     {
         $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use constant
 
@@ -83,7 +83,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
             $format->setParams($params);
 
             $output .= '<li>';
-            $output .= $this->renderLink($format, $context);
+            $output .= $this->renderLink($format, $context, $numOfHits);
             $output .= '</li>';
         }
 
@@ -108,25 +108,42 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      * TODO use translations (register module translation first)
      * TODO add docId OR search parameters to link
      */
-    public function renderLink($format, $context = null)
+    public function renderLink($format, $context = null, $numOfHits = null)
     {
-        $name        = $format->get('name');
+        $name = $format->get('name');
         $description = $format->get('description');
         $formatClass = strtolower($name);
         $format->setResetParams(false);
 
         // Search export links should use default rows if no other value is provided as parameter
         if ($format->getParam('rows') === null && $context === 'search') {
-            // TODO rows should be limited to configured MAX rows
             $format->setParam('rows', $this->getDefaultRows());
         }
 
-        // TODO for export of ALL search results the rows parameter needs to be removed
+        if ($format->exportAll) {
+            $exportService = Zend_Registry::get('Opus_ExportService');
+            $exportPlugin = $exportService->getPlugin($format->getAction());
+            $maxRows = $exportPlugin->getMaxRows();
+            $numOfHits = $numOfHits <= $maxRows ? $numOfHits : $maxRows;
+
+            $config = $this->getConfig();
+            if (isset($config->export->allowExportAll)) {
+                $allowExportAll = filter_var($config->export->allowExportAll, FILTER_VALIDATE_BOOLEAN);
+            } else {
+                $allowExportAll = false;
+            }
+
+            if ($numOfHits < $format->getParam('rows') || ! $allowExportAll) {
+                return '';
+            }
+        }
 
         // Frontdoor links export a single document
-        if ($context === 'frontdoor') {
+        if ($context === 'frontdoor' || $format->exportAll) {
             $format->setParam('rows', null);
         }
+
+        $name = sprintf($format->get('name'), $numOfHits);
 
         return "<a href=\"{$format->getHref()}\" title=\"$description\" class=\"export $formatClass\">$name</a>";
     }
