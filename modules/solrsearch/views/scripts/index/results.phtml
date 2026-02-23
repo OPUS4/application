@@ -77,7 +77,7 @@ if ($this->jQueryEnabled()) {
             <?PHP if ($this->exportLinksEnabled('search')) : ?>
             <div class="export-links dropdown">
                 <button class="dropdown-button">Export</button>
-                <?= $this->exportLinks(null, 'search') ?>
+                <?= $this->exportLinks('rows', 'search') ?>
             </div>
             <?PHP endif ?>
             <div class="option-links dropdown">

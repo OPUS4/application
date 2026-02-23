@@ -39,7 +39,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
     /**
      * Returns HTMl for rendering export links.
      *
-     * @param string|string[]|null $keys Keys for parameters that should be include in export link
+     * @param string|string[]|null $keys Keys for parameters that should be included in export link
      * @param array|null           $context
      * @return string HTML
      */
@@ -83,7 +83,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
             $format->setParams($params);
 
             $output .= '<li>';
-            $output .= $this->renderLink($format);
+            $output .= $this->renderLink($format, $context);
             $output .= '</li>';
         }
 
@@ -102,18 +102,44 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
 
     /**
      * @param Zend_Navigation_Page_Mvc $format
+     * @param string|null              $context
      * @return string
      *
      * TODO use translations (register module translation first)
      * TODO add docId OR search parameters to link
      */
-    public function renderLink($format)
+    public function renderLink($format, $context = null)
     {
         $name        = $format->get('name');
         $description = $format->get('description');
         $formatClass = strtolower($name);
         $format->setResetParams(false);
 
+        // Search export links should use default rows if no other value is provided as parameter
+        if ($format->getParam('rows') === null && $context === 'search') {
+            // TODO rows should be limited to configured MAX rows
+            $format->setParam('rows', $this->getDefaultRows());
+        }
+
+        // TODO for export of ALL search results the rows parameter needs to be removed
+
+        // Frontdoor links export a single document
+        if ($context === 'frontdoor') {
+            $format->setParam('rows', null);
+        }
+
         return "<a href=\"{$format->getHref()}\" title=\"$description\" class=\"export $formatClass\">$name</a>";
+    }
+
+    public function getDefaultRows(): int
+    {
+        $config = $this->getConfig();
+        if (isset($config->searchengine->solr->parameterDefaults->rows)) {
+            $rows = filter_var($config->searchengine->solr->parameterDefaults->rows, FILTER_SANITIZE_NUMBER_INT);
+        } else {
+            $rows = 10;
+        }
+
+        return $rows;
     }
 }
