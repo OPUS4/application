@@ -62,7 +62,7 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
         }
 
         $exporter->addFormats([
-            'bibtex'      => [
+            'bibtex'          => [
                 'name'        => 'BibTeX',
                 'description' => 'Export BibTeX',
                 'module'      => 'citationExport',
@@ -73,7 +73,7 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
                     'output' => 'bibtex',
                 ],
             ],
-            'bibtex_list' => [
+            'bibtex_list'     => [
                 'name'        => 'BibTeX',
                 'description' => 'Export BibTeX',
                 'module'      => 'export',
@@ -90,7 +90,7 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
                 'frontdoor'   => false,
                 'exportAll'   => true,
             ],
-            'ris'         => [
+            'ris'             => [
                 'name'        => 'RIS',
                 'description' => 'Export RIS',
                 'module'      => 'citationExport',
@@ -101,7 +101,7 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
                     'output' => 'ris',
                 ],
             ],
-            'ris_list'    => [
+            'ris_list'        => [
                 'name'        => 'RIS',
                 'description' => 'Export RIS',
                 'module'      => 'export',

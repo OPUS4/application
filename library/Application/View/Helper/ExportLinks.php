@@ -41,6 +41,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      *
      * @param string|string[]|null $keys Keys for parameters that should be included in export link
      * @param array|null           $context
+     * @param int|null             $numOfHits
      * @return string HTML
      */
     public function exportLinks($keys = null, $context = null, $numOfHits = null)
@@ -51,6 +52,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
     /**
      * @param string|string[]|null $keys
      * @param string|null          $context
+     * @param int|null             $numOfHits
      * @return string
      * @throws Zend_Exception
      */
@@ -103,6 +105,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
     /**
      * @param Zend_Navigation_Page_Mvc $format
      * @param string|null              $context
+     * @param int|null                 $numOfHits
      * @return string
      *
      * TODO use translations (register module translation first)
@@ -110,7 +113,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      */
     public function renderLink($format, $context = null, $numOfHits = null)
     {
-        $name = $format->get('name');
+        $name        = $format->get('name');
         $description = $format->get('description');
         $formatClass = strtolower($name);
         $format->setResetParams(false);
@@ -122,9 +125,9 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
 
         if ($format->exportAll) {
             $exportService = Zend_Registry::get('Opus_ExportService');
-            $exportPlugin = $exportService->getPlugin($format->getAction());
-            $maxRows = $exportPlugin->getMaxRows();
-            $numOfHits = $numOfHits <= $maxRows ? $numOfHits : $maxRows;
+            $exportPlugin  = $exportService->getPlugin($format->getAction());
+            $maxRows       = $exportPlugin->getMaxRows();
+            $numOfHits     = $numOfHits <= $maxRows ? $numOfHits : $maxRows;
 
             $config = $this->getConfig();
             if (isset($config->export->allowExportAll)) {

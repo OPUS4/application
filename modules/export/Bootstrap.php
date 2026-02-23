@@ -96,7 +96,7 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap
         }
 
         $exporter->addFormats([
-            'csv' => [
+            'csv'     => [
                 'name'        => 'CSV',
                 'description' => 'Export CSV',
                 'module'      => 'export',
