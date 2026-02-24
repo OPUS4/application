@@ -1399,7 +1399,7 @@ a.gnd-link {
     color: black;
     padding: 0;
     display: block;
-    text-align: right;
+    text-align: left;
 }
 
 .export-links.dropdown ul li a {
