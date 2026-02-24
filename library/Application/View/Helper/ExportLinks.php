@@ -58,9 +58,9 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      */
     public function toString($keys = null, $context = null, $numOfHits = null)
     {
-        $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use constant
-
-        $formats = $exporter->getAllowedFormats();
+        $exporter       = Zend_Registry::get('Opus_Exporter'); // TODO use constant
+        $formats        = $exporter->getAllowedFormats();
+        $allowExportAll = $this->isAllowExportAll();
 
         $output = '<ul>';
 
@@ -84,14 +84,17 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
 
             $format->setParams($params);
 
-            $output .= '<li>';
-            $output .= $this->renderLink($format, $context, $numOfHits);
-            $output .= '</li>';
+            if (! $format->exportAll || $allowExportAll) {
+                $link = $this->renderLink($format, $context, $numOfHits);
+                if ($link !== null) {
+                    $output .= '<li>';
+                    $output .= $link;
+                    $output .= '</li>';
+                }
+            }
         }
 
-        $output .= '</ul>';
-
-        return $output;
+        return $output . '</ul>';
     }
 
     /**
@@ -106,7 +109,7 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      * @param Zend_Navigation_Page_Mvc $format
      * @param string|null              $context
      * @param int|null                 $numOfHits
-     * @return string
+     * @return string|null
      *
      * TODO use translations (register module translation first)
      * TODO add docId OR search parameters to link
@@ -123,21 +126,15 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
             $format->setParam('rows', $this->getDefaultRows());
         }
 
+        // TODO move enabled/diable logic outside of rendering code?
         if ($format->exportAll) {
             $exportService = Zend_Registry::get('Opus_ExportService');
             $exportPlugin  = $exportService->getPlugin($format->getAction());
             $maxRows       = $exportPlugin->getMaxRows();
             $numOfHits     = $numOfHits <= $maxRows ? $numOfHits : $maxRows;
 
-            $config = $this->getConfig();
-            if (isset($config->export->allowExportAll)) {
-                $allowExportAll = filter_var($config->export->allowExportAll, FILTER_VALIDATE_BOOLEAN);
-            } else {
-                $allowExportAll = false;
-            }
-
-            if ($numOfHits < $format->getParam('rows') || ! $allowExportAll) {
-                return '';
+            if ($numOfHits < $format->getParam('rows')) {
+                return null;
             }
         }
 
@@ -146,7 +143,13 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
             $format->setParam('rows', null);
         }
 
-        $name = sprintf($format->get('name'), $numOfHits);
+        if ($format->label !== null) {
+            $label = $format->getLabel();
+        } else {
+            $label = $name;
+        }
+
+        $name = sprintf($label, $numOfHits);
 
         return "<a href=\"{$format->getHref()}\" title=\"$description\" class=\"export $formatClass\">$name</a>";
     }
@@ -161,5 +164,15 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
         }
 
         return $rows;
+    }
+
+    public function isAllowExportAll(): bool
+    {
+        $config = $this->getConfig();
+        if (isset($config->export->allowExportAll)) {
+            return filter_var($config->export->allowExportAll, FILTER_VALIDATE_BOOLEAN);
+        } else {
+            return false;
+        }
     }
 }

@@ -82,7 +82,8 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
                 'frontdoor'   => false,
             ],
             'bibtex_list_all' => [
-                'name'        => 'BibTeX&nbsp;(%d)',
+                'name'        => 'BibTeXALL',
+                'label'       => 'BibTeX&nbsp;(%d)',
                 'description' => 'Export BibTeX',
                 'module'      => 'export',
                 'controller'  => 'index',
@@ -110,7 +111,8 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
                 'frontdoor'   => false,
             ],
             'ris_list_all'    => [
-                'name'        => 'RIS&nbsp;(%d)',
+                'name'        => 'RISALL',
+                'label'       => 'RIS&nbsp;(%d)',
                 'description' => 'Export RIS',
                 'module'      => 'export',
                 'controller'  => 'index',

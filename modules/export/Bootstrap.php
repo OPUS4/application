@@ -105,7 +105,8 @@ class Export_Bootstrap extends Zend_Application_Module_Bootstrap
                 'frontdoor'   => false,
             ],
             'csv_all' => [
-                'name'        => 'CSV&nbsp;(%d)',
+                'name'        => 'CSVALL',
+                'label'       => 'CSV&nbsp;(%d)',
                 'description' => 'Export CSV',
                 'module'      => 'export',
                 'controller'  => 'index',

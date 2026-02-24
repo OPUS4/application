@@ -39,6 +39,10 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
 
     public function testToStringForSearch()
     {
+        $this->adjustConfiguration([
+            'export' => ['allowExportAll' => false],
+        ]);
+
         $exportLink = new Application_View_Helper_ExportLinks();
 
         $this->assertEquals(
@@ -48,7 +52,29 @@ class Application_View_Helper_ExportLinksTest extends ControllerTestCase
             . '<li><a href="/export/index/ris/rows/10" title="Export RIS" class="export ris">RIS</a></li>'
             . '<li><a href="/export/index/index/export/xml/stylesheet/example/rows/10" title="Export XML" class="export xml">XML</a></li>'
             . '</ul>',
-            $exportLink->toString(null, 'search')
+            $exportLink->toString(null, 'search', 120)
+        );
+    }
+
+    public function testToStringForSearchWithExportAll()
+    {
+        $this->adjustConfiguration([
+            'export' => ['allowExportAll' => true],
+        ]);
+
+        $exportLink = new Application_View_Helper_ExportLinks();
+
+        $this->assertEquals(
+            '<ul>'
+            . '<li><a href="/export/index/bibtex/rows/10" title="Export BibTeX" class="export bibtex">BibTeX</a></li>'
+            . '<li><a href="/export/index/bibtex" title="Export BibTeX" class="export bibtexall">BibTeX&nbsp;(120)</a></li>'
+            . '<li><a href="/export/index/csv/rows/10" title="Export CSV" class="export csv">CSV</a></li>'
+            . '<li><a href="/export/index/csv" title="Export CSV" class="export csvall">CSV&nbsp;(120)</a></li>'
+            . '<li><a href="/export/index/ris/rows/10" title="Export RIS" class="export ris">RIS</a></li>'
+            . '<li><a href="/export/index/ris" title="Export RIS" class="export risall">RIS&nbsp;(120)</a></li>'
+            . '<li><a href="/export/index/index/export/xml/stylesheet/example/rows/10" title="Export XML" class="export xml">XML</a></li>'
+            . '</ul>',
+            $exportLink->toString(null, 'search', 120)
         );
     }
 
