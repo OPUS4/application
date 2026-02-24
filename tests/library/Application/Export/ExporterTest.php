@@ -153,7 +153,7 @@ class Application_Export_ExporterTest extends ControllerTestCase
 
         $formats = $exporter->getAllowedFormats();
 
-        $this->assertCount(9, $formats);
+        $this->assertCount(12, $formats);
 
         $this->enableSecurity();
 

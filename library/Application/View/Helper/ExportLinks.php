@@ -41,24 +41,26 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
      *
      * @param string|string[]|null $keys Keys for parameters that should be included in export link
      * @param array|null           $context
+     * @param int|null             $numOfHits
      * @return string HTML
      */
-    public function exportLinks($keys = null, $context = null)
+    public function exportLinks($keys = null, $context = null, $numOfHits = null)
     {
-        return $this->toString($keys, $context);
+        return $this->toString($keys, $context, $numOfHits);
     }
 
     /**
      * @param string|string[]|null $keys
      * @param string|null          $context
+     * @param int|null             $numOfHits
      * @return string
      * @throws Zend_Exception
      */
-    public function toString($keys = null, $context = null)
+    public function toString($keys = null, $context = null, $numOfHits = null)
     {
-        $exporter = Zend_Registry::get('Opus_Exporter'); // TODO use constant
-
-        $formats = $exporter->getAllowedFormats();
+        $exporter       = Zend_Registry::get('Opus_Exporter'); // TODO use constant
+        $formats        = $exporter->getAllowedFormats();
+        $allowExportAll = $this->isAllowExportAll();
 
         $output = '<ul>';
 
@@ -82,14 +84,17 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
 
             $format->setParams($params);
 
-            $output .= '<li>';
-            $output .= $this->renderLink($format, $context);
-            $output .= '</li>';
+            if (! $format->exportAll || $allowExportAll) {
+                $link = $this->renderLink($format, $context, $numOfHits);
+                if ($link !== null) {
+                    $output .= '<li>';
+                    $output .= $link;
+                    $output .= '</li>';
+                }
+            }
         }
 
-        $output .= '</ul>';
-
-        return $output;
+        return $output . '</ul>';
     }
 
     /**
@@ -103,12 +108,13 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
     /**
      * @param Zend_Navigation_Page_Mvc $format
      * @param string|null              $context
-     * @return string
+     * @param int|null                 $numOfHits
+     * @return string|null
      *
      * TODO use translations (register module translation first)
      * TODO add docId OR search parameters to link
      */
-    public function renderLink($format, $context = null)
+    public function renderLink($format, $context = null, $numOfHits = null)
     {
         $name        = $format->get('name');
         $description = $format->get('description');
@@ -117,16 +123,33 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
 
         // Search export links should use default rows if no other value is provided as parameter
         if ($format->getParam('rows') === null && $context === 'search') {
-            // TODO rows should be limited to configured MAX rows
             $format->setParam('rows', $this->getDefaultRows());
         }
 
-        // TODO for export of ALL search results the rows parameter needs to be removed
+        // TODO move enabled/diable logic outside of rendering code?
+        if ($format->exportAll) {
+            $exportService = Zend_Registry::get('Opus_ExportService');
+            $exportPlugin  = $exportService->getPlugin($format->getAction());
+            $maxRows       = $exportPlugin->getMaxRows();
+            $numOfHits     = $numOfHits <= $maxRows ? $numOfHits : $maxRows;
+
+            if ($numOfHits < $format->getParam('rows')) {
+                return null;
+            }
+        }
 
         // Frontdoor links export a single document
-        if ($context === 'frontdoor') {
+        if ($context === 'frontdoor' || $format->exportAll) {
             $format->setParam('rows', null);
         }
+
+        if ($format->label !== null) {
+            $label = $format->getLabel();
+        } else {
+            $label = $name;
+        }
+
+        $name = sprintf($label, $numOfHits);
 
         return "<a href=\"{$format->getHref()}\" title=\"$description\" class=\"export $formatClass\">$name</a>";
     }
@@ -141,5 +164,15 @@ class Application_View_Helper_ExportLinks extends Application_View_Helper_Abstra
         }
 
         return $rows;
+    }
+
+    public function isAllowExportAll(): bool
+    {
+        $config = $this->getConfig();
+        if (isset($config->export->allowExportAll)) {
+            return filter_var($config->export->allowExportAll, FILTER_VALIDATE_BOOLEAN);
+        } else {
+            return false;
+        }
     }
 }
