@@ -97,6 +97,7 @@ if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account']) || filt
         ->prependStylesheet($this->layoutPath() . '/css/components/button.css', 'screen')
         ->prependStylesheet($this->layoutPath() . '/css/base/base.css', 'screen')
         ->prependStylesheet($this->layoutPath() . '/css/base/fontawesome--custom.css', 'screen')
+        ->prependStylesheet($this->layoutPath() . '/fontawesome/css/fontawesome.min.css') // TODO CSS entfernen?
         ->prependStylesheet($this->layoutPath() . '/css/base/webfonts.css', 'screen')
         ->prependStylesheet($this->layoutPath() . '/css/base/normalize.css', 'screen');
 }
