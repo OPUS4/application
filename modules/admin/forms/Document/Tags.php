@@ -140,8 +140,9 @@ class Admin_Form_Document_Tags extends Admin_Form_AbstractDocumentSubForm
      */
     public function constructFromPost($post, $document = null)
     {
-        // TODO is this the best way $post['Values'] - Shouldn't base class take care of it?
-        $this->valuesSubForm->constructFromPost($post['Values'], $document);
+        if (isset($post[self::SUBFORM_VALUES])) {
+            $this->valuesSubForm->constructFromPost($post['Values'], $document);
+        }
     }
 
     /**
