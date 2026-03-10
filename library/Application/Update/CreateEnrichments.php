@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -25,27 +25,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2025, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once dirname(__FILE__) . '/../common/update.php';
+use Opus\Common\EnrichmentKey;
 
 /**
- * Changes names of enrichment fields for doi based metadata import to new OPUS default.
- * Updates key names for associated translations.
+ * Update step creates enrichment key supporting handling of DOI and URN identifiers.
  */
+class Application_Update_CreateEnrichments extends Application_Update_PluginAbstract
+{
+    /**
+     * @return void
+     * @throws Zend_Exception
+     */
+    public function run()
+    {
+        // do nothing
+    }
 
-$keyNames = [
-    'opus_import_data'           => 'opus_doi_json',
-    'local_crossrefDocumentType' => 'opus_crossrefDocumentType',
-    'local_crossrefLicence'      => 'opus_crossrefLicence',
-    'local_doiImportPopulated'   => 'opus_doiImportPopulated',
-    'local_import_origin'        => 'opus_import_origin',
-];
+    public function createEnrichments(array $enrichments): void
+    {
+        foreach ($enrichments as $name) {
+            $enrichmentKey = EnrichmentKey::fetchByName($name);
 
-$update = new Application_Update_UpdateEnrichments();
-$update->update($keyNames);
-
-$create = new Application_Update_CreateEnrichments();
-$create->createEnrichments(['opus_doi_flag']);
+            if ($enrichmentKey === null) {
+                $this->log("Creating enrichment key '$name' ...");
+                $enrichmentKey = EnrichmentKey::new();
+                $enrichmentKey->setName($name);
+                $enrichmentKey->store();
+                $this->getLogger()->info("Enrichment key '$name' created.");
+            } else {
+                $this->getLogger()->info("Enrichment key '$name' already exists!");
+            }
+        }
+    }
+}

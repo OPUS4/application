@@ -1,4 +1,4 @@
-<?PHP
+<?php
 
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -25,27 +25,62 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2025, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-require_once dirname(__FILE__) . '/../common/update.php';
+use Opus\Common\EnrichmentKey;
 
-/**
- * Changes names of enrichment fields for doi based metadata import to new OPUS default.
- * Updates key names for associated translations.
- */
+class Application_Update_CreateEnrichmentsTest extends ControllerTestCase
+{
+    /** @var string */
+    protected $additionalResources = 'database';
 
-$keyNames = [
-    'opus_import_data'           => 'opus_doi_json',
-    'local_crossrefDocumentType' => 'opus_crossrefDocumentType',
-    'local_crossrefLicence'      => 'opus_crossrefLicence',
-    'local_doiImportPopulated'   => 'opus_doiImportPopulated',
-    'local_import_origin'        => 'opus_import_origin',
-];
+    /** @var string[] */
+    private $cleanupKeys = [
+        'opus_doi_flag_test',
+    ];
 
-$update = new Application_Update_UpdateEnrichments();
-$update->update($keyNames);
+    /** @var Application_Update_UpdateEnrichments */
+    private $model;
 
-$create = new Application_Update_CreateEnrichments();
-$create->createEnrichments(['opus_doi_flag']);
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->model = new Application_Update_CreateEnrichments();
+        $this->model->setQuietMode(true);
+    }
+
+    public function tearDown(): void
+    {
+        foreach ($this->cleanupKeys as $keyName) {
+            $enrichmentKey = EnrichmentKey::fetchByName($keyName);
+            if ($enrichmentKey) {
+                $enrichmentKey->delete();
+            }
+        }
+
+        parent::tearDown();
+    }
+
+    public function testCreateEnrichments()
+    {
+        $key = 'opus_doi_flag_test';
+        $this->assertNull(EnrichmentKey::fetchByName($key));
+
+        $this->model->createEnrichments(['opus_doi_flag_test']);
+        $this->assertNotNull(EnrichmentKey::fetchByName($key));
+    }
+
+    public function testCreateEnrichmentsAlreadyExists()
+    {
+        $key = 'opus_doi_flag_test';
+
+        $this->model->createEnrichments(['opus_doi_flag_test']);
+        $this->assertNotNull(EnrichmentKey::fetchByName($key));
+
+        $this->model->createEnrichments(['opus_doi_flag_test']);
+        $this->assertNotNull(EnrichmentKey::fetchByName($key));
+    }
+}
