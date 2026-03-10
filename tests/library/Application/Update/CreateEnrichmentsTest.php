@@ -31,7 +31,7 @@
 
 use Opus\Common\EnrichmentKey;
 
-class Application_Update_UpdateEnrichmentsTest extends ControllerTestCase
+class Application_Update_CreateEnrichmentsTest extends ControllerTestCase
 {
     /** @var string */
     protected $additionalResources = 'database';
