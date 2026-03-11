@@ -26,12 +26,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @copyright   Copyright (c) 2017, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- *
- * TODO cleanup, especially "plugin config" vs. "plugin"
- * TOOD merge with Application_Export_Exporter?
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License*
  */
 
+/**
+ *  TODO cleanup, especially "plugin config" vs. "plugin"
+ *  TODO merge with Application_Export_Exporter?
+ */
 class Application_Export_ExportService extends Application_Model_Abstract
 {
     /** @var array containing export plugins */

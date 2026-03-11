@@ -91,6 +91,8 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Model_EnrichmentRenameCommand());
         $this->add(new Application_Console_Model_EnrichmentDeleteCommand());
 
+        $this->add(new Application_Console_Export_ExportCommand());
+
         $this->setDefaultCommand('list');
     }
 }
