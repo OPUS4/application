@@ -21,7 +21,7 @@ timezone: Europe/Berlin
 # If true, the timezone in config file that is used to calculate task run time will be used
 timezone_log: false
 
-# By default the errors are not logged by Crunz
+# By default, the errors are not logged by Crunz
 # You may set the value to true for logging the errors
 log_errors: true
 
@@ -29,7 +29,7 @@ log_errors: true
 # You need to make sure you have the required permission to write to this file though.
 errors_log_file: workspace/log/crunz-error.log
 
-# By default the output is not logged as they are redirected to the
+# By default, the output is not logged as they are redirected to the
 # null output.
 # Set this to true if you want to keep the outputs
 log_output: false
@@ -39,11 +39,11 @@ log_output: false
 # logged to this file though.
 output_log_file: ~
 
-# By default line breaks in logs aren't allowed.
+# By default, line breaks in logs aren't allowed.
 # Set the value to true to allow them.
 log_allow_line_breaks: false
 
-# By default empty context arrays are shown in the log.
+# By default, empty context arrays are shown in the log.
 # Set the value to true to remove them.
 log_ignore_empty_context: false
 
