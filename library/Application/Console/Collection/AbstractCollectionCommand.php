@@ -115,14 +115,14 @@ abstract class Application_Console_Collection_AbstractCollectionCommand extends 
             if ($srcRoleName !== null && $srcColNumber !== null) {
                 $role = CollectionRole::fetchByName($srcRoleName);
                 if ($role === null) {
-                    throw new Exception("CollectionRole with name '${srcRoleName}' not found.");
+                    throw new Exception("CollectionRole with name '{$srcRoleName}' not found.");
                 }
                 $collections = Collection::getModelRepository()->fetchCollectionsByRoleNumber(
                     $role->getId(),
                     $srcColNumber
                 );
                 if (count($collections) === 0) {
-                    throw new Exception("No collection found for role '${srcRoleName}' and number '$srcColNumber'.");
+                    throw new Exception("No collection found for role '{$srcRoleName}' and number '$srcColNumber'.");
                 }
                 $this->sourceCol = $collections[0];
             }
@@ -137,14 +137,14 @@ abstract class Application_Console_Collection_AbstractCollectionCommand extends 
             if ($destRoleName !== null && $destColNumber !== null) {
                 $role = CollectionRole::fetchByName($destRoleName);
                 if ($role === null) {
-                    throw new Exception("CollectionRole with name '${destRoleName}' not found.");
+                    throw new Exception("CollectionRole with name '{$destRoleName}' not found.");
                 }
                 $collections = Collection::getModelRepository()->fetchCollectionsByRoleNumber(
                     $role->getId(),
                     $destColNumber
                 );
                 if (count($collections) === 0) {
-                    throw new Exception("No collection found for role '${destRoleName}' and number '$destColNumber'.");
+                    throw new Exception("No collection found for role '{$destRoleName}' and number '$destColNumber'.");
                 }
                 $this->destCol = $collections[0];
             }

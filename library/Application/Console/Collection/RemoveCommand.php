@@ -210,7 +210,7 @@ EOT;
         $targetCount     = count($targetDocuments);
 
         if ($targetCount === 0) {
-            $output->writeln("Collection (ID = ${targetId}) does not contain documents.");
+            $output->writeln("Collection (ID = {$targetId}) does not contain documents.");
             $output->writeln('');
             $output->writeln('  "' . $targetCol->getDisplayName() . '"');
             $output->writeln('');
@@ -220,7 +220,7 @@ EOT;
         $removeDocuments = null;
 
         if ($filterCol === null) {
-            $output->writeln("Remove all documents (${targetCount}) from collection (ID = ${targetId})");
+            $output->writeln("Remove all documents ({$targetCount}) from collection (ID = {$targetId})");
             $output->writeln('');
             $output->writeln('  "' . $targetCol->getDisplayName() . '"');
             $output->writeln('');
@@ -231,7 +231,7 @@ EOT;
             $filterCount     = count($filterDocuments);
 
             if ($filterCount === 0) {
-                $output->writeln("The filter collection (ID = ${filterId}) does not contain any documents.");
+                $output->writeln("The filter collection (ID = {$filterId}) does not contain any documents.");
                 $output->writeln('');
                 $output->writeln('  "' . $filterCol->getDisplayName() . '"');
                 $output->writeln('');
@@ -242,22 +242,22 @@ EOT;
             $removeCount     = count($removeDocuments);
 
             if ($removeCount === 0) {
-                $output->writeln("Non of the documents in the filter collection (ID = ${filterId})");
+                $output->writeln("Non of the documents in the filter collection (ID = {$filterId})");
                 $output->writeln('');
                 $output->writeln('  "' . $filterCol->getDisplayName() . '"');
                 $output->writeln('');
-                $output->writeln("are present in the target collection (ID= ${targetId})");
+                $output->writeln("are present in the target collection (ID= {$targetId})");
                 $output->writeln('');
                 $output->writeln('  "' . $targetCol->getDisplayName() . '"');
                 $output->writeln('');
                 return self::FAILURE;
             }
 
-            $output->writeln("Remove documents (${filterCount}) in collection (ID = ${filterId})");
+            $output->writeln("Remove documents ({$filterCount}) in collection (ID = {$filterId})");
             $output->writeln('');
             $output->writeln('  "' . $filterCol->getDisplayName() . '"');
             $output->writeln('');
-            $output->writeln("from collection (ID= ${targetId})");
+            $output->writeln("from collection (ID= {$targetId})");
             $output->writeln('');
             $output->writeln('  "' . $targetCol->getDisplayName() . '"');
             $output->writeln('');

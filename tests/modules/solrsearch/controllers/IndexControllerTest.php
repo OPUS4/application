@@ -720,7 +720,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/doctypes');
 
         $body = $this->getResponse()->getBody();
-        $this->assertStringNotContainsString("http://${host}:${port}/solr/corethatdoesnotexist", $body);
+        $this->assertStringNotContainsString("http://{$host}:{$port}/solr/corethatdoesnotexist", $body);
         $this->assertStringContainsString('The search service is currently not available.', $body);
         $this->assertResponseCode(503);
     }

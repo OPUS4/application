@@ -75,7 +75,7 @@ EOT;
         $sourceCount = count($sourceDocuments);
 
         if ($sourceCount === 0) {
-            $output->writeln("Collection (ID = ${sourceId}) does not contain documents.");
+            $output->writeln("Collection (ID = {$sourceId}) does not contain documents.");
             $output->writeln('');
             $output->writeln('  "' . $sourceCol->getDisplayName() . '"');
             $output->writeln('');
@@ -87,15 +87,15 @@ EOT;
         $moveCount     = count($moveDocuments);
 
         if ($moveCount === 0) {
-            $output->writeln("Destination collection already contains all the documents (${sourceCount}) of source collection.");
+            $output->writeln("Destination collection already contains all the documents ({$sourceCount}) of source collection.");
             return self::SUCCESS;
         }
 
-        $output->writeln("Copy documents (${moveCount}) from source collection (ID = ${sourceId})");
+        $output->writeln("Copy documents ({$moveCount}) from source collection (ID = {$sourceId})");
         $output->writeln('');
         $output->writeln('  "' . $sourceCol->getDisplayName() . '"');
         $output->writeln('');
-        $output->writeln("to destination collection (ID = ${destId})");
+        $output->writeln("to destination collection (ID = {$destId})");
         $output->writeln('');
         $output->writeln('  "' . $destCol->getDisplayName() . '"');
         $output->writeln('');
