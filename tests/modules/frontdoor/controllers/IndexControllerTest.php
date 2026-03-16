@@ -1515,6 +1515,81 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase
         );
     }
 
+    public function testAppendSubtitle()
+    {
+        $this->adjustConfiguration([
+            'frontdoor' => ['appendSubtitle' => 1],
+        ]);
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState(Document::STATE_PUBLISHED);
+        $doc->setLanguage('eng');
+        $title = $doc->addTitleMain();
+        $title->setLanguage('eng');
+        $title->setValue('Main Title');
+        $subtitle = $doc->addTitleSub();
+        $subtitle->setLanguage('eng');
+        $subtitle->setValue('Sub Title');
+        $docId = $doc->store();
+
+        $this->dispatch("/frontdoor/index/index/docId/$docId");
+
+        $this->assertXpathContentContains(
+            '//h2[contains(@class = "titlemain", @lang = "en")]',
+            'Main Title : Sub Title'
+        );
+    }
+
+    public function testAppendSubtitleDisabled()
+    {
+        $this->adjustConfiguration([
+            'frontdoor' => ['appendSubtitle' => 0],
+        ]);
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState(Document::STATE_PUBLISHED);
+        $doc->setLanguage('eng');
+        $title = $doc->addTitleMain();
+        $title->setLanguage('eng');
+        $title->setValue('Main Title');
+        $subtitle = $doc->addTitleSub();
+        $subtitle->setLanguage('eng');
+        $subtitle->setValue('Sub Title');
+        $docId = $doc->store();
+
+        $this->dispatch("/frontdoor/index/index/docId/$docId");
+
+        $this->assertXpathContentContains(
+            '//h2[contains(@class = "titlemain", @lang = "en")]',
+            'Main Title'
+        );
+    }
+
+    public function testAppendSubtitleNotInSameLanguage()
+    {
+        $this->adjustConfiguration([
+            'frontdoor' => ['appendSubtitle' => 1],
+        ]);
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState(Document::STATE_PUBLISHED);
+        $doc->setLanguage('eng');
+        $title = $doc->addTitleMain();
+        $title->setLanguage('eng');
+        $title->setValue('Main Title');
+        $subtitle = $doc->addTitleSub();
+        $subtitle->setLanguage('deu');
+        $subtitle->setValue('Sub Title');
+        $docId = $doc->store();
+
+        $this->dispatch("/frontdoor/index/index/docId/$docId");
+
+        $this->assertXpathContentContains(
+            '//h2[contains(@class = "titlemain", @lang = "en")]',
+            'Main Title'
+        );
+    }
+
     /**
      * Tests, if the XSLT has the correct language-attribute for title in the metadata-table for the browser
      */
