@@ -64,22 +64,32 @@
     <xsl:template name="Title">
         <xsl:for-each select="TitleMain">
             <xsl:if test="(@Language = $docLang) or (position() = 1 and not($docLang))">
-                <h2 class="titlemain">
-                    <xsl:attribute name="lang"><xsl:value-of
-                            select="php:functionString('Application_Xslt::languageWebForm', @Language)"/></xsl:attribute>
-                    <xsl:value-of select="@Value" />
-                </h2>
+                <xsl:call-template name="TitleOutput">
+                    <xsl:with-param name="titleLang" select="@Language" />
+                </xsl:call-template>
             </xsl:if>
         </xsl:for-each>
         <xsl:for-each select="TitleMain">
             <xsl:if test="(@Language != $docLang) or not($docLang) and position() > 1">
-                <h3 class="titlemain">
-                    <xsl:attribute name="lang"><xsl:value-of
-                            select="php:functionString('Application_Xslt::languageWebForm', @Language)"/></xsl:attribute>
-                    <xsl:value-of select="@Value" />
-                </h3>
+                <xsl:call-template name="TitleOutput">
+                    <xsl:with-param name="titleLang" select="@Language" />
+                </xsl:call-template>
             </xsl:if>
         </xsl:for-each>
+
+    </xsl:template>
+
+    <xsl:template name="TitleOutput">
+        <xsl:param name="titleLang" />
+        <h2 class="titlemain">
+        <xsl:attribute name="lang"><xsl:value-of
+                select="php:functionString('Application_Xslt::languageWebForm', $titleLang)"/></xsl:attribute>
+        <xsl:value-of select="@Value" />
+        <xsl:if test="php:functionString('Application_Xslt::optionEnabled', 'frontdoor.appendSubtitle') and ../TitleSub[@Language = $titleLang]">
+            <xsl:text> : </xsl:text>
+            <xsl:value-of select="../TitleSub[@Language = $titleLang]/@Value" />
+        </xsl:if>
+        </h2>
     </xsl:template>
 
     <xsl:template name="SortedAbstracts">
