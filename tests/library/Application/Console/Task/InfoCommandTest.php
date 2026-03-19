@@ -70,8 +70,10 @@ class Application_Console_Task_InfoCommandTest extends ControllerTestCase
 
         // Normalized strings for expected and displayed output because we are not interested in spaces and line breaks.
         $expected = 'Task-Name: testTask1 Active: yes Schedule: */1 * * * * Prevent overlapping: yes '
-            . 'Task-Class: DummyTask1 (invalid value) Task-Class-Parameter (optionName1): option1Value '
-            . 'Task-Class-Parameter (optionName2): option2Value';
+            . 'Test-Mode-Enabled: no Test-Mode-Supported: - '
+            . 'Task-Class: DummyTask1 (invalid value) '
+            . 'Task-Class-Option (optionName1): option1Value '
+            . 'Task-Class-Option (optionName2): option2Value';
 
         $displayed = trim(
             preg_replace(

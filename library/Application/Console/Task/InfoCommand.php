@@ -102,23 +102,42 @@ EOT;
         }
 
         // show
-        $headers = ['Task-Name', 'Active', 'Schedule', 'Prevent overlapping', 'Task-Class'];
+        $headers = [
+            'Task-Name',
+            'Active',
+            'Schedule',
+            'Prevent overlapping',
+            'Test-Mode-Enabled',
+            'Test-Mode-Supported',
+            'Task-Class',
+        ];
+
+        $task = null;
+
+        if (! $taskManager->isValidTaskClass($taskConfig->getClass())) {
+            $taskClass = $taskConfig->getClass() . '<fg=red> (invalid value)</>';
+        } else {
+            $taskClass = $taskConfig->getClass();
+            $task      = new $taskClass();
+        }
 
         $taskInfo[] = $taskConfig->getName();
         $taskInfo[] = $taskConfig->isEnabled() ? 'yes' : 'no';
         $taskInfo[] = $taskConfig->getSchedule();
         $taskInfo[] = $taskConfig->isPreventOverlapping() ? 'yes' : 'no';
-
-        if (! $taskManager->isValidTaskClass($taskConfig->getClass())) {
-            $taskInfo[] = $taskConfig->getClass() . '<fg=red> (invalid value)</>';
+        // TODO show if test mode is enabled globally
+        $taskInfo[] = $taskConfig->isTestModeEnabled() || $taskManager->isTestModeEnabled() ? 'yes' : 'no';
+        if ($task !== null) {
+            $taskInfo[] = $task->isTestModeSupported() ? 'yes' : 'no';
         } else {
-            $taskInfo[] = $taskConfig->getClass();
+            $taskInfo[] = '-';
         }
+        $taskInfo[] = $taskClass;
 
         $options = [];
         if (is_array($taskConfig->getOptions())) {
             foreach ($taskConfig->getOptions() as $optionName => $optionValue) {
-                $headers[]  = 'Task-Class-Parameter (' . $optionName . ')';
+                $headers[]  = 'Task-Class-Option (' . $optionName . ')';
                 $taskInfo[] = $optionValue;
             }
         }
