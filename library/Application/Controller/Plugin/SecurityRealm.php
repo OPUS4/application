@@ -40,6 +40,9 @@ use Opus\Common\Security\SecurityException;
  */
 class Application_Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract
 {
+    /** @var array */
+    private $groups;
+
     /**
      * Determine the current User's security role and set up Realm.
      *
