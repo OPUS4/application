@@ -37,6 +37,8 @@ use Opus\Common\Note;
  */
 class Admin_Form_Document_NoteTest extends ControllerTestCase
 {
+    protected $additionalResources = ['database'];
+
     public function testCreateForm()
     {
         $form = new Admin_Form_Document_Note();
