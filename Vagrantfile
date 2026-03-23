@@ -155,7 +155,7 @@ echo "You can use 'ant reset-testdata' to reinitialize the database."
 SCRIPT
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/ubuntu-22.04"
+  config.vm.box = "bento/ubuntu-24.04"
 
   config.vm.synced_folder "workspace", "/vagrant/workspace", group: "www-data", create: true
 
@@ -163,7 +163,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 8983, host: 9983, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 3306, host: 3307, host_ip: "127.0.0.1"
 
-  ENV['SOLR_VERSION']="9.6.1"
+  ENV['SOLR_VERSION']="9.10.1"
 
   config.vm.provision "Install required software...", type: "shell", inline: $software
   config.vm.provision "Install pandoc...", type: "shell", inline: $pandoc
