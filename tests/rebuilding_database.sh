@@ -86,8 +86,7 @@ php rebuild-database.php
 
 # Debuggung TODO move setup checks into classes and command
 pwd
-ls -aux ../solr-9.10.1/server/solr/opus4/conf
-cat ../application/configs/config.ini | grep solrsearch
+ls -all ../solr-9.10.1/server/solr/opus4/conf
 
 #
 # Backup old fulltexts and log files and series logos
