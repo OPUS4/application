@@ -2,10 +2,10 @@
 # vi: set ft=ruby :
 
 $software = <<SCRIPT
-# Downgrade to PHP 8.1
+# Downgrade to PHP 8.2
 apt-add-repository -y ppa:ondrej/php
 apt-get -yq update
-apt-get -yq install php8.1
+apt-get -yq install php8.2
 
 # Install MYSQL
 debconf-set-selections <<< "mysql-server mysql-server/root_password password root"
@@ -13,15 +13,15 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password_again passwo
 apt-get -yq install mysql-server
 
 # Install required PHP packages
-apt-get -yq install php8.1-dom
-apt-get -yq install php8.1-mbstring
-apt-get -yq install php8.1-intl
-apt-get -yq install php8.1-gd
-apt-get -yq install php8.1-mcrypt
-apt-get -yq install php8.1-curl
-apt-get -yq install php8.1-zip
-apt-get -yq install php8.1-mysql
-apt-get -yq install php8.1-yaml
+apt-get -yq install php8.2-dom
+apt-get -yq install php8.2-mbstring
+apt-get -yq install php8.2-intl
+apt-get -yq install php8.2-gd
+apt-get -yq install php8.2-mcrypt
+apt-get -yq install php8.2-curl
+apt-get -yq install php8.2-zip
+apt-get -yq install php8.2-mysql
+apt-get -yq install php8.2-yaml
 
 # Install Java
 apt-get -yq install openjdk-11-jdk
@@ -155,7 +155,7 @@ echo "You can use 'ant reset-testdata' to reinitialize the database."
 SCRIPT
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "bento/ubuntu-22.04"
+  config.vm.box = "bento/ubuntu-24.04"
 
   config.vm.synced_folder "workspace", "/vagrant/workspace", group: "www-data", create: true
 
@@ -163,7 +163,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 8983, host: 9983, host_ip: "127.0.0.1"
   config.vm.network "forwarded_port", guest: 3306, host: 3307, host_ip: "127.0.0.1"
 
-  ENV['SOLR_VERSION']="9.6.1"
+  ENV['SOLR_VERSION']="9.10.1"
 
   config.vm.provision "Install required software...", type: "shell", inline: $software
   config.vm.provision "Install pandoc...", type: "shell", inline: $pandoc

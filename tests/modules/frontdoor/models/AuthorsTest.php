@@ -236,7 +236,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase
         $author->setFirstName('John');
         $author->setLastName('Doe');
         $author->setEmail('doe@example.org');
-        $this->authorId = $author->store();
+        $author->store();
 
         $linkPerson = $doc->addPersonAuthor($author);
         $linkPerson->setAllowEmailContact(false);

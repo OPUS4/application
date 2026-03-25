@@ -36,6 +36,7 @@ use Opus\Common\DocumentFinderInterface;
 use Opus\Common\DocumentInterface;
 use Opus\Common\File;
 use Opus\Common\FileInterface;
+use Opus\Common\Log\LogService;
 use Opus\Common\LoggingTrait;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\ModelInterface;
@@ -80,9 +81,6 @@ class ControllerTestCase extends TestCase
 
     /** @var array */
     private $tempFiles = [];
-
-    /** @var Application_Translate|null */
-    private $translatorBackup;
 
     /** @var string */
     private $workspacePath;
@@ -1095,29 +1093,17 @@ class ControllerTestCase extends TestCase
      */
     public function disableTranslation()
     {
-        if ($this->translatorBackup === null) {
-            $this->translatorBackup = Application_Translate::getInstance();
-        }
+        $logService = LogService::getInstance();
+        $logger     = $logService->getLog('translation');
 
         $translate = new Application_Translate([
             'adapter' => 'array',
             'content' => [],
             'locale'  => 'auto',
+            'log'     => $logger,
         ]);
 
         Application_Translate::setInstance($translate);
-    }
-
-    /**
-     * Resets translations with original (bootstrap) translation object.
-     *
-     * This function restores translation if disableTranslation has been called before.
-     */
-    public function enableTranslation()
-    {
-        if ($this->translatorBackup !== null) {
-            Application_Translate::setInstance($this->translatorBackup);
-        }
     }
 
     /**

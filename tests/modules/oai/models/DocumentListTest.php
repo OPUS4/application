@@ -76,9 +76,9 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
         $file = $this->createOpusTestFile('article.txt');
         $file->setVisibleInOai(1);
         $doc->addFile($file);
-        $this->docId = $doc->store();
+        $docId = $doc->store();
 
-        $doc                = Document::get($this->docId);
+        $doc                = Document::get($docId);
         $serverDateModified = $doc->getServerDateModified();
 
         $today = new DateTime();
@@ -120,8 +120,8 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
             $docIds        = $docListModel->query($oaiRequest);
 
             $this->assertTrue(
-                in_array($this->docId, $docIds),
-                "Response must contain document id $this->docId: " . var_export($interval, true)
+                in_array($docId, $docIds),
+                "Response must contain document id {$docId}: " . var_export($interval, true)
             );
         }
     }
@@ -134,9 +134,9 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $this->docId = $doc->store();
+        $docId = $doc->store();
 
-        $doc                = Document::get($this->docId);
+        $doc                = Document::get($docId);
         $serverDateModified = $doc->getServerDateModified();
 
         $today = new DateTime();
@@ -179,7 +179,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase
             $docListModel  = new Oai_Model_DocumentList($server);
             $docIds        = $docListModel->query($oaiRequest);
 
-            $this->assertFalse(in_array($this->docId, $docIds), "Response must NOT contain document id $this->docId: " . var_export($interval, true));
+            $this->assertFalse(in_array($docId, $docIds), "Response must NOT contain document id {$docId}: " . var_export($interval, true));
         }
     }
 

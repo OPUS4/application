@@ -58,7 +58,7 @@ cd ../solr-$SOLR_VERSION
 ./bin/solr start -force --user-managed
 ./bin/solr create -c opus4
 cd server/solr/opus4/conf/
-rm -f managed-schema schema.xml solrconfig.xml
+rm -f *
 ln -s ../../../../../vendor/opus4-repo/search/conf/schema.xml schema.xml
 ln -s ../../../../../vendor/opus4-repo/search/conf/solrconfig.xml solrconfig.xml
 cd ../../../../

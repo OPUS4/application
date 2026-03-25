@@ -19,9 +19,7 @@
     <property name="dbAdminPassword" value="" />
     <property name="solrIndexHost" value="localhost" />
     <property name="solrIndexPort" value="8983" />
-    <condition property="solrIndexPath" value="/" else="/solr">
-        <equals arg1="${phpVersion}" arg2="8.1" />
-    </condition>
+    <property name="solrIndexPath" value="/" />
     <property name="solrIndexCore" value="opus4" />
 
     <target name="analyse-code" depends="phpcs,phpmd,phpcpd,phploc" />

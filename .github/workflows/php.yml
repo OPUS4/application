@@ -12,17 +12,17 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
-        versions: [{php: '8.1', solr: '9.9.0'}]
+        versions: [{php: '8.1', solr: '9.10.1'}, {php: '8.2', solr: '9.10.1'}]
       fail-fast: false
 
     name: PHP ${{ matrix.versions.php }} Test
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
       - name: Setup PHP ${{ matrix.versions.php }}
         uses: shivammathur/setup-php@v2
@@ -40,7 +40,7 @@ jobs:
 
       - name: Get Solr ${{ matrix.versions.solr }} from Cache
         id: cache-solr
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: downloads
           key: solr-${{ matrix.versions.solr }}
@@ -77,7 +77,7 @@ jobs:
 
       - name: Test-admin
         run: php composer.phar test -- --testsuite admin
-        
+
       - name: Test-security
         run: php composer.phar test -- --testsuite security
 

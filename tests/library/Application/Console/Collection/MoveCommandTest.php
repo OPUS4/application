@@ -157,7 +157,7 @@ class Application_Console_Collection_MoveCommandTest extends ControllerTestCase
 
         $colId1 = $col2->getId();
 
-        $this->assertStringContainsString("Collection (ID = ${colId1}) does not contain documents.", $output);
+        $this->assertStringContainsString("Collection (ID = {$colId1}) does not contain documents.", $output);
     }
 
     public function testCollectionIdNotFound()
@@ -217,7 +217,7 @@ class Application_Console_Collection_MoveCommandTest extends ControllerTestCase
         $this->assertCount(0, $col2->getDocumentIds());
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("No collection found for role '${roleName}' and number 'col3'.");
+        $this->expectExceptionMessage("No collection found for role '{$roleName}' and number 'col3'.");
 
         $this->tester->execute([
             '--no-interaction'                           => true,
@@ -265,7 +265,7 @@ class Application_Console_Collection_MoveCommandTest extends ControllerTestCase
         $this->assertCount(0, $col2->getDocumentIds());
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("No collection found for role '${roleName}' and number 'col3'.");
+        $this->expectExceptionMessage("No collection found for role '{$roleName}' and number 'col3'.");
 
         $this->tester->execute([
             '--no-interaction'                           => true,

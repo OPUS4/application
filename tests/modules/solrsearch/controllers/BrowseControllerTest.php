@@ -305,7 +305,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase
         $this->dispatch('/solrsearch/browse/doctypes');
 
         $body = $this->getResponse()->getBody();
-        // $this->assertStringNotContainsString("http://${host}:${port}/solr/corethatdoesnotexist", $body);
+        // $this->assertStringNotContainsString("http://{$host}:{$port}/solr/corethatdoesnotexist", $body);
         $this->assertStringContainsString("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
         $this->assertResponseCode(503);
     }

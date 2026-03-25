@@ -72,8 +72,6 @@ abstract class CrudControllerTestCase extends ControllerTestCase
 
         $this->createsModels = false;
 
-        $this->licences = [];
-
         $models = $this->getModels();
 
         foreach ($models as $model) {
