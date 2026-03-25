@@ -22,7 +22,7 @@ jobs:
     name: PHP ${{ matrix.versions.php }} Test
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v5
 
       - name: Setup PHP ${{ matrix.versions.php }}
         uses: shivammathur/setup-php@v2
@@ -40,7 +40,7 @@ jobs:
 
       - name: Get Solr ${{ matrix.versions.solr }} from Cache
         id: cache-solr
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: downloads
           key: solr-${{ matrix.versions.solr }}
