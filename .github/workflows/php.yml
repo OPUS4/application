@@ -66,23 +66,23 @@ jobs:
       - name: Setup testdata
         run: ant reset-testdata
 
-#      - name: Mail-Server
-#        run: php scripts/opus-smtp-dumpserver.php 2>&1 >> tests/workspace/log/opus-smtp-dumpserver.log &
-#
-#      - name: Test-library
-#        run: php composer.phar test -- --testsuite library
-#
-#      - name: Test-modules
-#        run: php composer.phar test -- --testsuite modules
-#
-#      - name: Test-admin
-#        run: php composer.phar test -- --testsuite admin
-#
-#      - name: Test-security
-#        run: php composer.phar test -- --testsuite security
-#
-#      - name: Test-scripts
-#        run: php composer.phar test -- --testsuite scripts
-#
-#      - name: Coding-Style
-#        run: php composer.phar cs-check
+      - name: Mail-Server
+        run: php scripts/opus-smtp-dumpserver.php 2>&1 >> tests/workspace/log/opus-smtp-dumpserver.log &
+
+      - name: Test-library
+        run: php composer.phar test -- --testsuite library
+
+      - name: Test-modules
+        run: php composer.phar test -- --testsuite modules
+
+      - name: Test-admin
+        run: php composer.phar test -- --testsuite admin
+
+      - name: Test-security
+        run: php composer.phar test -- --testsuite security
+
+      - name: Test-scripts
+        run: php composer.phar test -- --testsuite scripts
+
+      - name: Coding-Style
+        run: php composer.phar cs-check
