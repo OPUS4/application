@@ -86,7 +86,7 @@ php rebuild-database.php
 
 # Debuggung TODO move setup checks into classes and command
 pwd
-ll ../solr-9.10.1/server/solr
+ls -aux ../solr-9.10.1/server/solr
 
 #
 # Backup old fulltexts and log files and series logos
