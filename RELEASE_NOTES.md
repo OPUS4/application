@@ -2,6 +2,16 @@
 
 ## Release 4.9 - 2026-04-07
 
+### Unterstützte PHP Versionen
+
+OPUS 4.9 ist kompatibel mit PHP 8.1 und 8.2. PHP 7 wird nicht länger 
+unterstützt. Die OPUS 4 Application funktioniert noch nicht mit PHP 8.3 und 
+neuer.
+
+### Suche (Apache Solr)
+
+OPUS 4.9 wurde mit Solr 9.10.1 getestet. Solr 10 wird noch nicht unterstützt.
+
 ### Crossref-Import überarbeitet
 
 Der Import von Metadaten aus Crossref per DOI hat umfangreichere Optimierungen
@@ -220,6 +230,11 @@ Logo für die neue Lizenz zu skalieren.
         width: 90px;
         height: auto;
     }
+
+### Entwicklung
+
+Die verwendete PHPUnit Version wurde aktualisiert und die Verwendung von 
+deprecated Funktionen ersetzt.
 
 --
 
