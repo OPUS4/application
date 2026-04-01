@@ -223,6 +223,25 @@ Logo für die neue Lizenz zu skalieren.
 
 --
 
+## Patch Release 4.8.0.20 - 2026-02-24
+
+Für den Export von Suchergebnissen in den Formaten BibTeX, RIS und CSV,
+wurden Links hinzugefügt, um sämtliche Treffer, nicht nur die gerade 
+angezeigten, in einem Schritt exportieren zu können. Diese Links können
+in der Konfiguration mit der Option `export.allowExportAll` aktiviert 
+werden. Beim Export sind konfigurierte Obergrenzen für Gäste und User
+wirksam, sodass unter Umständen auch mit den neuen Links nicht alle
+Treffer exportiert werden.
+
+https://github.com/OPUS4/application/issues/1422
+
+Bei der Suche nach allen Dokumenten wurden die alten Export-Links bisher
+nicht auf die angezeigten Treffer beschränkt. Das wurde jetzt behoben.
+
+https://github.com/OPUS4/application/issues/1423
+
+--
+
 ## Patch Release 4.8.0.19 - 2026-01-13
 
 Es wurde die Möglichkeit hinzugefügt Facetten für die Suche zu aktivieren,

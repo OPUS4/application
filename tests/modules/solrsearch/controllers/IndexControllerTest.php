@@ -1299,7 +1299,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $this->loginUser('admin', 'adminadmin');
 
         $this->dispatch('/solrsearch/index/search/searchtype/all');
-        $this->assertQuery('//a[@href="/export/index/index/searchtype/all/export/xml/stylesheet/example"]');
+        $this->assertQuery('//a[@href="/export/index/index/searchtype/all/export/xml/stylesheet/example/rows/10"]');
     }
 
     /**

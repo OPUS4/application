@@ -63,7 +63,7 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
         }
 
         $exporter->addFormats([
-            'bibtex'      => [
+            'bibtex'          => [
                 'name'        => 'BibTeX',
                 'description' => 'Export BibTeX',
                 'module'      => 'citationExport',
@@ -74,7 +74,7 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
                     'output' => 'bibtex',
                 ],
             ],
-            'bibtex_list' => [
+            'bibtex_list'     => [
                 'name'        => 'BibTeX',
                 'description' => 'Export BibTeX',
                 'module'      => 'export',
@@ -82,7 +82,17 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
                 'action'      => 'bibtex',
                 'frontdoor'   => false,
             ],
-            'ris'         => [
+            'bibtex_list_all' => [
+                'name'        => 'BibTeXALL',
+                'label'       => 'BibTeX&nbsp;(%d)',
+                'description' => 'Export BibTeX',
+                'module'      => 'export',
+                'controller'  => 'index',
+                'action'      => 'bibtex',
+                'frontdoor'   => false,
+                'exportAll'   => true,
+            ],
+            'ris'             => [
                 'name'        => 'RIS',
                 'description' => 'Export RIS',
                 'module'      => 'citationExport',
@@ -93,13 +103,23 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
                     'output' => 'ris',
                 ],
             ],
-            'ris_list'    => [
+            'ris_list'        => [
                 'name'        => 'RIS',
                 'description' => 'Export RIS',
                 'module'      => 'export',
                 'controller'  => 'index',
                 'action'      => 'ris',
                 'frontdoor'   => false,
+            ],
+            'ris_list_all'    => [
+                'name'        => 'RISALL',
+                'label'       => 'RIS&nbsp;(%d)',
+                'description' => 'Export RIS',
+                'module'      => 'export',
+                'controller'  => 'index',
+                'action'      => 'ris',
+                'frontdoor'   => false,
+                'exportAll'   => true,
             ],
         ]);
     }
