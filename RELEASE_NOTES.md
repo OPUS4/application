@@ -138,7 +138,7 @@ internen Namen einzutragen, in `export.csv.enrichments_labels` bzw.
 
 Zudem lässt sich über `export.csv.enrichments_visible` bzw. 
 `export.csv.collections_visible` die Sichtbarkeit steuern. Mit `1` wird die 
-Spalte für alle Nutzer exportiert (Rolle "quest"), bei einer `0` erfolgt der 
+Spalte für alle Nutzer exportiert (Rolle "guest"), bei einer `0` erfolgt der 
 Export der jeweiligen Spalte nur, wenn der Nutzer im Repositorium eingeloggt ist
 (Nutzer muss Zugriff auf die Dokumentenverwaltung haben).
 
