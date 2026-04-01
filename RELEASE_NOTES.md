@@ -137,10 +137,10 @@ internen Namen einzutragen, in `export.csv.enrichments_labels` bzw.
     export.csv.collections_labels = Überschrift Sammlung 1,Überschrift Sammlung 2
 
 Zudem lässt sich über `export.csv.enrichments_visible` bzw. 
-`export.csv.collections_visible` die Sichtbarkeit steuern. Mit `0` wird die 
-Spalte für alle Nutzer exportiert (Rolle "quest"), bei einer `1` erfolgt der 
+`export.csv.collections_visible` die Sichtbarkeit steuern. Mit `1` wird die 
+Spalte für alle Nutzer exportiert (Rolle "quest"), bei einer `0` erfolgt der 
 Export der jeweiligen Spalte nur, wenn der Nutzer im Repositorium eingeloggt ist
-(Rolle muss Zugriff auf die Dokumentenverwaltung haben).
+(Nutzer muss Zugriff auf die Dokumentenverwaltung haben).
 
     ; Visibility in CSV: 1 = for All, 0 = for Admins only (comma separated)
     export.csv.enrichments_visible = 1,1
