@@ -8,9 +8,116 @@ OPUS 4.9 ist kompatibel mit PHP 8.1 und 8.2. PHP 7 wird nicht länger
 unterstützt. Die OPUS 4 Application funktioniert noch nicht mit PHP 8.3 und 
 neuer.
 
+### Update von OPUS 4.8
+
+Für das Update muss der lokale Code mit `git` aktualisiert werden. Dabei kann
+es unter Umständen zu Konflikten mit lokalen Anpassungen kommen. 
+
+Ein Teil des Codes aus der Application wurde in separate Pakete verschoben. Dazu
+gekommen sind.
+
+- opus4-app-common
+- opus4-sword
+- opus4-deepgreen
+- opus4-i18n 
+
+Die Abhängigkeiten müssen mit `composer update` aktualisiert werden.
+
+Zum Abschluss muss das Update-Skript ausgeführt werden.
+
+    $ bin/update.sh
+
+Beim Update werden mehrere, teilweise interaktive, Schritte ausgeführt. Beim 
+Update von OPUS 4.8 sind das:
+
+- "In Copyright" Lizenz hinzufügen (optional)
+- Feld `PublicationState` auf `NULL` setzen (optional)
+- DOI-Import Enrichments umbenennen bzw. hinzufügen
+- Konferenz-Enrichments umbenennen bzw. hinzufügen
+- Datumsangaben, die als Zeitstempel gespeichert wurden, bereinigen
+- DOI-Werte normalisieren (Vorangestellte URLs entfernen)
+
+### Datenmodell
+
+#### Feld `PublicationState`
+
+Das Feld `PublicationState` wurde integriert. Es ist nun im Publish-Formular 
+verfügbar. Die Werte folgen dem COAR-Vokabular. In OAI gibt es Sets für die 
+möglichen Werte von `PublicationState`. Das Feld wurde in die Formate OAI-DC 
+und XMetaDissPlus integriert. In der Suche gibt es eine Facette für das Feld. 
+
+https://github.com/OPUS4/application/issues/1192
+
+Das Feld `PublicationState` existierte in der Datenbank schon länger und kann
+bei der Migration von Daten nach OPUS 4 gesetzt worden sein bzw. enthält den
+Standard-Wert `draft`. Beim Update kann das Feld für alle Dokumente auf NULL
+gesetzt werden. Der Reset sollte nur dann übersprungen werden, wenn das Feld
+bisher mit lokalen Anpassungen an OPUS 4 verwendet wurde.
+
+#### Identifier-Typen
+
+Es wurden zwei Identifier-Typen hinzugefügt.
+
+- `ISMN` (International Standard Musical Number)
+- `union-cat` (Verbund-ID)
+
+DOI-Werte werden beim Update normalisiert. Führende URLs werden entfernt und
+neue DOIs werden automatisch ohne URL gespeichert. 
+
 ### Suche (Apache Solr)
 
 OPUS 4.9 wurde mit Solr 9.10.1 getestet. Solr 10 wird noch nicht unterstützt.
+
+Solr muss ab Solr 9.8 mit einer zusätzlichen Option gestartet werden, damit 
+die Volltextextraktion weiterhin funktioniert.
+
+    $ bin/solr start -Dsolr.config.lib.enabled = true
+
+Weitere Informationen dazu finden sich in der offiziellen Dokumentation von 
+Apache Solr.
+
+Enrichment-Felder können von der Indexierung ausgeschlossen werden. Beim 
+DOI-Import wird z.B. die Originaldaten in einem Enrichment gespeichert. Der
+Wert kann zu groß sein für die Indexierung in Solr. 
+
+    search.index.enrichment.blacklist = opus_doi_json
+
+### Weboberfläche
+
+Das CSS für die normalerweise frei zugänglichen Seiten, und damit Ihr Aussehen
+wurde modernisiert und an aktuelle Browser angepasst. Das alte CSS lässt sich
+aktivieren.
+
+    themes.legacyCss = true
+
+Die Administration verwendet weiterhin das alte CSS.
+
+#### Frontdoor
+
+In der Frontdoor können nun gleichsprachige Untertitel mit angezeigt werden.
+
+    frontdoor.appendSubtitle = 1
+
+Leere Bereiche für die Zusammenfassungen oder die Export-Formate werden nun
+automatisch ausgeblendet. 
+
+##### Enrichments
+
+URL, GND und ORCID Werte in Enrichments, können in der Frontdoor nun als Links
+gerendert werden. Dafür gibt es eine neue Konfigurationsdatei.
+
+    application/configs/model.ini
+
+Die Verwendung ist in der Datei erläutert.
+
+#### Browsing
+
+Die Sichtbarkeit der Bereiche für die neuesten Dokumente, die Dokumenttypen und
+die Veröffentlichungsjahre im Browsing kann nun über Optionen gesteuert werden.
+
+    browsing.showLatestDocuments = 1
+    browsing.showDocumentTypes = 1
+    browsing.showYears = 1
 
 ### Crossref-Import überarbeitet
 
@@ -231,10 +338,63 @@ Logo für die neue Lizenz zu skalieren.
         height: auto;
     }
 
+### OAI Konfiguration
+
+### DeepGreen-Client
+
+
+
+### PDF-Deckblätter
+
+Das Cache-Verzeichnis für generierte Deckblätter wird nun bei Bedarf automatisch 
+angelegt.
+
+    ./workspace/filecache
+
+Das Beispiel-Template für Deckblätter wurde jetzt konfiguriert, um deutlich 
+kleinere PDF-Dateien zu erzeugen. 
+
+    application/configs/covers/demo-cover.md
+
+### Sitelinks (für Crawler)
+
+Die Sitelinks für alle öffentlichen Dokumente werden nun mit Titel und Language
+Attribut gerendert, um die Indexierung und das Ranking in Suchmaschinen besser
+zu unterstützen.
+
+### Hintergrundverarbeitung 
+
+Es gibt ein neues System für die Verarbeitung von Hintergrundaufgaben, wie z.B.
+die nächtliche Prüfung der EmbargoDates von Dokumenten oder die Bereinigung von
+temporären Dateien.
+
+Bisher wurde dafür einzelne Cron-Skripte verwendet, die separate eingerichtet
+werden mussten. Diese Skripte sind in OPUS 4.9 weiterhin verfügbar, werden
+aber langfristig entfernt werden. Mit dem neuen System ist nur noch ein Crontab
+für eine OPUS 4 Instanz notwendig und die Konfiguration der einzelnen Aufgaben
+erfolgt in der neuen Konfigurationsdatei `tasks.ini`. Aktuell sind im Standard
+alle Aufgaben abgeschaltet, um Betreibern eine schrittweise Migration zu dem
+neuen System zu ermöglichen. Für die Ausführung von Aufgaben gibt es eine 
+separate Log-Datei, `tasks.log`. 
+
+Weitere Informationen finden sich in der Dokumentation.
+https://www.opus-repository.org/userdoc/config/tasks.html
+
+### Kommandozeileninterface (bin/opus4)
+
+Es sind eine Reihe von neuen Kommandos hinzugekommen.
+
+- `collection:copy|move|remove` für Verknüpfungen von Dokumenten mit Sammlungen
+- `task:list|info|run` für die neue Hintergrundverarbeitung
+
 ### Entwicklung
 
 Die verwendete PHPUnit Version wurde aktualisiert und die Verwendung von 
 deprecated Funktionen ersetzt.
+
+Teile des Codes der Application und dem Framework wurden in separate Libraries
+verschoben, um Abhängigkeiten aufzulösen und isolierte Updates einzelner 
+Teilkomponenten von OPUS 4 zu ermöglichen. 
 
 --
 
