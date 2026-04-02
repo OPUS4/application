@@ -1090,7 +1090,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
     public function testSortOrderOfDocumentsInBrowsing()
     {
         $olderDoc = $this->createTestDocument();
-        $olderDoc->setServerState('published');
+        $olderDoc->setServerState(Document::STATE_PUBLISHED);
         $date = new Date();
         $date->setNow();
         $date->setDay($date->getDay() - 1);
@@ -1099,7 +1099,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase
         $olderDocId = $olderDoc->store();
 
         $newerDoc = $this->createTestDocument();
-        $newerDoc->setServerState('published');
+        $newerDoc->setServerState(Document::STATE_PUBLISHED);
         $newerDoc->setType('article');
         $newerDocId = $newerDoc->store();
 
