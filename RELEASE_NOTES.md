@@ -14,7 +14,7 @@ Für das Update muss der lokale Code mit `git` aktualisiert werden. Dabei kann
 es unter Umständen zu Konflikten mit lokalen Anpassungen kommen. 
 
 Ein Teil des Codes aus der Application wurde in separate Pakete verschoben. Dazu
-gekommen sind.
+gekommen sind:
 
 - opus4-app-common
 - opus4-sword
@@ -30,9 +30,9 @@ Zum Abschluss muss das Update-Skript ausgeführt werden.
 Beim Update werden mehrere, teilweise interaktive, Schritte ausgeführt. Beim 
 Update von OPUS 4.8 sind das:
 
-- "In Copyright" Lizenz hinzufügen (optional)
+- "In Copyright"-Lizenz hinzufügen (optional)
 - Feld `PublicationState` auf `NULL` setzen (optional)
-- DOI-Import Enrichments umbenennen bzw. hinzufügen
+- DOI-Import-Enrichments umbenennen bzw. hinzufügen
 - Konferenz-Enrichments umbenennen bzw. hinzufügen
 - Datumsangaben, die als Zeitstempel gespeichert wurden, bereinigen
 - DOI-Werte normalisieren (Vorangestellte URLs entfernen)
@@ -61,6 +61,8 @@ Es wurden zwei Identifier-Typen hinzugefügt.
 - `ISMN` (International Standard Musical Number)
 - `union-cat` (Verbund-ID)
 
+Die Verbund-ID kann auf der Frontdoor als Link dargestellt werden. Dazu ist die Query-URL des Verbundkatalogs im Parameter `unionCat.requestUrl` zu hinterlegen.
+
 DOI-Werte werden beim Update normalisiert. Führende URLs werden entfernt und
 neue DOIs werden automatisch ohne URL gespeichert. 
 
@@ -77,7 +79,7 @@ Weitere Informationen dazu finden sich in der offiziellen Dokumentation von
 Apache Solr.
 
 Enrichment-Felder können von der Indexierung ausgeschlossen werden. Beim 
-DOI-Import wird z.B. die Originaldaten in einem Enrichment gespeichert. Der
+DOI-Import werden z.B. die Originaldaten in einem Enrichment gespeichert. Der
 Wert kann zu groß sein für die Indexierung in Solr. 
 
     search.index.enrichment.blacklist = opus_doi_json
@@ -99,10 +101,10 @@ angezeigt werden. Dafür können Einträge in `custom.css` gemacht werden.
         background: url(../img/logo/opus-logo-en.png) no-repeat left;
     }
 
-Für die ORCID und GND Logos werden jetzt SVG-Dateien verwendet. Es werden nun
+Für die ORCID- und GND-Logos werden jetzt SVG-Dateien verwendet. Es werden nun
 alle Personen und nicht nur Autor*innen verlinkt.
 
-Die Default-FAQs wurde für die Namensänderung von Sherpa/Romeo in "Open 
+Die Default-FAQs wurden für die Namensänderung von Sherpa/Romeo in "Open 
 Policy Finder" angepasst.
 
 #### Frontdoor
@@ -118,7 +120,7 @@ Institute werden bei der Anzeige nun alphabetisch sortiert.
 
 ##### Enrichments
 
-URL, GND und ORCID Werte in Enrichments, können in der Frontdoor nun als Links
+URL-, GND- und ORCID-Werte in Enrichments können in der Frontdoor nun als Links
 gerendert werden. Dafür gibt es eine neue Konfigurationsdatei.
 
     application/configs/model.ini
@@ -128,15 +130,6 @@ Die Verwendung ist in der Datei erläutert.
 Der Typ `Date` für Enrichments ist dazu gekommen und kann in der Verwaltung in
 der Administration ausgewählt werden. Das hat keine Auswirkungen auf die 
 Eingabe im Publish-Modul.
-
-#### Browsing
-
-Die Sichtbarkeit der Bereiche für die neuesten Dokumente, die Dokumenttypen und
-die Veröffentlichungsjahre im Browsing kann nun über Optionen gesteuert werden.
-
-    browsing.showLatestDocuments = 1
-    browsing.showDocumentTypes = 1
-    browsing.showYears = 1
 
 ### Crossref-Import überarbeitet
 
@@ -156,16 +149,7 @@ Die Änderungen umfassen folgende Umbenennungen:
 | local_doiImportPopulated | opus_doiImportPopulated |
 | local_import_origin | opus_import_origin |
 
-Die Felder für Konferenzen wurden stark überarbeitet (s.a. 
-[Enrichmentfelder für Konferenzen](#enrichmentfelder-f%C3%BCr-konferenzen)). 
-Das Mapping der Konferenzangaben wurde an die neuen Felder angepasst:
-
-| Feldname in OPUS 4.8 | Feldname in OPUS 4.9 |
-|---|---|
-| conference_title | OpusConferenceName |
-| conference_place | OpusConferencePlace |
-| - | OpusConferenceNumber |
-| - | OpusConferenceYear |
+Die Felder für Konferenzen wurden wesentlich überarbeitet. Das Mapping der Konferenzangaben wurde an die neuen Felder angepasst. (Details s. nächster Abschnitt.)
 
 Das Feld `opus_doi_flag` bleibt unverändert.
 
@@ -332,13 +316,6 @@ und das Mapping an einigen Stellen verbessert:
 
 Bislang fehlerhafte Schreibweisen für "ORCID" und "ORCID iD" sind korrigiert.
 
-### Identifier
-
-Als weitere Identifikatoren für Dokumente kommen die "International Standard 
-Music Number" (ISMN) sowie die "Verbund-ID" hinzu. Die Verbund-ID kann auf der 
-Frontdoor als Link dargestellt werden. Dazu ist die Query-URL des 
-Verbundkatalogs im Parameter `unionCat.requestUrl` zu hinterlegen.
-
 ### Personen-Identifier über OAI-PMH
 
 Im Format OAI-DC werden GND-ID und ORCID iD nun gemäß dem DINI-Zertifikat 
@@ -368,7 +345,7 @@ Bedingungen können Dokumente mit Lizenzen oder Sammlungen verknüpft werden.
 Weitere Informationen sind im OPUS 4 Handbuch zu finden.
 https://www.opus-repository.org/userdoc/import/
 
-Um die Nutzung der Regeln einfacher zu machen, sind im OPUS-XML Format, die
+Um die Nutzung der Regeln einfacher zu machen, sind im OPUS-XML Format die
 Attribute `type` und `language` für Keywords/Subjects nun optional. Damit kann
 ein einfaches Keyword verwendet werden, um die Verknüpfung mit einer Sammlung 
 oder eine andere Aktion auszulösen.
@@ -379,11 +356,11 @@ oder eine andere Aktion auszulösen.
 
 Die Defaultwerte sind `uncontrolled` und `deu`. 
 
-### OAI-PMH Schnittstelle
+### OAI-PMH-Schnittstelle
 
-Die Implementation der OAI-PMH Schnittstelle wurde umfangreich überarbeitet. 
+Die Implementation der OAI-PMH-Schnittstelle wurde umfangreich überarbeitet. 
 Die unterstützten Formate sind nun unabhängig voneinander und können 
-konfiguriert werden. Das erlaubt es unter anderem Formate zu entfernen oder
+konfiguriert werden. Das erlaubt es unter anderem, Formate zu entfernen oder
 mit einem anderen Präfix wiederzuverwenden. 
 
 Beispielkonfiguration für Format xMetaDissPlus mit Präfix `xmdpdata`, um auch 
@@ -399,8 +376,8 @@ Die verfügbaren OAI-Sets können nun ebenfalls konfiguriert werden.
     oai.set.doc-type.class = Oai_Model_Set_DocumentTypeSets
     oai.set.publicationState.class = Oai_Model_Set_PublicationStateSets
 
-Für dem `openaccess`-Set gibt es eine neue Implementation, die bewirkt, dass
-alle Dokumente in einem Set ausgegeben werde, unabhängig davon, ob Sammlungen
+Für den `openaccess`-Set gibt es eine neue Implementation, die bewirkt, dass
+alle Dokumente in einem Set ausgegeben werden, unabhängig davon, ob Sammlungen
 verwendet wurden, um Dokumente unterschiedlichen Open Acess-Arten zuzuordnen.
 
     oai.set.openaccess.class = Oai_Model_Set_CollectionRoleSingleSet
@@ -414,7 +391,7 @@ Die Default-Konfiguration befindet sich in `application/configs/application.ini`
 
 #### OpenAIRE
 
-Die OpenAIRE-Dokumententypen können nun unabhängig von den DC-Typen konfiguriert 
+Die OpenAIRE-Dokumenttypen können nun unabhängig von den DC-Typen konfiguriert 
 werden.
 
     # documentType.OPUS_DOCUMENT_TYPE...
@@ -460,8 +437,7 @@ als `config-name` und `config-url` zur Verfügung.
 
 ### Sitelinks (für Crawler)
 
-Die Sitelinks für alle öffentlichen Dokumente werden nun mit Titel und Language
-Attribut gerendert, um die Indexierung und das Ranking in Suchmaschinen besser
+Die Sitelinks für alle öffentlichen Dokumente werden nun mit Titel und Language-Attribut gerendert, um die Indexierung und das Ranking in Suchmaschinen besser
 zu unterstützen.
 
 ### Hintergrundverarbeitung 
@@ -470,13 +446,13 @@ Es gibt ein neues System für die Verarbeitung von Hintergrundaufgaben, wie z.B.
 die nächtliche Prüfung der EmbargoDates von Dokumenten oder die Bereinigung von
 temporären Dateien.
 
-Bisher wurde dafür einzelne Cron-Skripte verwendet, die separate eingerichtet
+Bisher wurden dafür einzelne Cron-Skripte verwendet, die separat eingerichtet
 werden mussten. Diese Skripte sind in OPUS 4.9 weiterhin verfügbar, werden
 aber langfristig entfernt werden. Mit dem neuen System ist nur noch ein Crontab
 für eine OPUS 4 Instanz notwendig und die Konfiguration der einzelnen Aufgaben
 erfolgt in der neuen Konfigurationsdatei `tasks.ini`. Aktuell sind im Standard
-alle Aufgaben abgeschaltet, um Betreibern eine schrittweise Migration zu dem
-neuen System zu ermöglichen. Für die Ausführung von Aufgaben gibt es eine 
+alle Aufgaben abgeschaltet, um Betreibern eine schrittweise Migration auf das
+neue System zu ermöglichen. Für die Ausführung von Aufgaben gibt es eine 
 separate Log-Datei, `tasks.log`. 
 
 Weitere Informationen finden sich in der Dokumentation.
@@ -501,7 +477,7 @@ einfachere Implementation, bessere Testbarkeit und einheitliche Nutzung.
 Die [Dokumentation](https://www.opus-repository.org) für OPUS 4 wurde in 
 mehreren Bereichen aktualisiert. 
 
-- CSV_FN Export Format
+- CSV_FN Export-Format
 - CrossRef-Import (DOI) Enrichments
 - Neue OAI-Konfiguration für unterstützte Formate
 - Import-Regeln für SWORD Interface
@@ -512,10 +488,10 @@ gearbeitet. Hinweise oder Hilfe aus der OPUS 4 Community sind willkommen.
 
 ### Entwicklung
 
-Die verwendete PHPUnit Version wurde aktualisiert und die Verwendung von 
-deprecated Funktionen ersetzt.
+Die verwendete PHPUnit-Version wurde aktualisiert und die Verwendung von 
+deprecated-Funktionen ersetzt.
 
-Teile des Codes der Application und dem Framework wurden in separate Libraries
+Teile des Codes der Application und des Framework wurden in separate Libraries
 verschoben, um Abhängigkeiten aufzulösen und isolierte Updates einzelner 
 Teilkomponenten von OPUS 4 zu ermöglichen. 
 
