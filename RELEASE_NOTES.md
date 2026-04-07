@@ -2,7 +2,7 @@
 
 ## Release 4.9 - 2026-04-07
 
-### Unterstützte PHP Versionen
+### Unterstützte PHP-Versionen
 
 OPUS 4.9 ist kompatibel mit PHP 8.1 und 8.2. PHP 7 wird nicht länger 
 unterstützt. Die OPUS 4 Application funktioniert noch nicht mit PHP 8.3 und 
@@ -104,8 +104,8 @@ angezeigt werden. Dafür können Einträge in `custom.css` gemacht werden.
 Für die ORCID- und GND-Logos werden jetzt SVG-Dateien verwendet. Es werden nun
 alle Personen und nicht nur Autor*innen verlinkt.
 
-Die Default-FAQs wurden für die Namensänderung von Sherpa/Romeo in "Open 
-Policy Finder" angepasst.
+Die Default-FAQs wurden bezüglich der Namensänderung der Sherpa/Romeo-Liste in "Open 
+Policy Finder" aktualisiert.
 
 #### Frontdoor
 
