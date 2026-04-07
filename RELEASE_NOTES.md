@@ -92,6 +92,19 @@ aktivieren.
 
 Die Administration verwendet weiterhin das alte CSS.
 
+Es können unterschiedliche Logos in Abhängigkeit von der ausgewählten Sprache
+angezeigt werden. Dafür können Einträge in `custom.css` gemacht werden.
+
+    #logo a.logo-en {
+        background: url(../img/logo/opus-logo-en.png) no-repeat left;
+    }
+
+Für die ORCID und GND Logos werden jetzt SVG-Dateien verwendet. Es werden nun
+alle Personen und nicht nur Autor*innen verlinkt.
+
+Die Default-FAQs wurde für die Namensänderung von Sherpa/Romeo in "Open 
+Policy Finder" angepasst.
+
 #### Frontdoor
 
 In der Frontdoor können nun gleichsprachige Untertitel mit angezeigt werden.
@@ -101,6 +114,8 @@ In der Frontdoor können nun gleichsprachige Untertitel mit angezeigt werden.
 Leere Bereiche für die Zusammenfassungen oder die Export-Formate werden nun
 automatisch ausgeblendet. 
 
+Institute werden bei der Anzeige nun alphabetisch sortiert. 
+
 ##### Enrichments
 
 URL, GND und ORCID Werte in Enrichments, können in der Frontdoor nun als Links
@@ -109,6 +124,10 @@ gerendert werden. Dafür gibt es eine neue Konfigurationsdatei.
     application/configs/model.ini
 
 Die Verwendung ist in der Datei erläutert.
+
+Der Typ `Date` für Enrichments ist dazu gekommen und kann in der Verwaltung in
+der Administration ausgewählt werden. Das hat keine Auswirkungen auf die 
+Eingabe im Publish-Modul.
 
 #### Browsing
 
@@ -122,7 +141,9 @@ die Veröffentlichungsjahre im Browsing kann nun über Optionen gesteuert werden
 ### Crossref-Import überarbeitet
 
 Der Import von Metadaten aus Crossref per DOI hat umfangreichere Optimierungen
-erfahren.
+erfahren. Die Zahl der importierten Autor*innen wurde auf 50 begrenzt. Dabei 
+wird immer auch die zuletzt genannte Person importiert. 
+
 Die Bezeichnungen der Enrichment-Felder orientieren sich nun am OPUS 4-Standard. 
 
 Die Änderungen umfassen folgende Umbenennungen:
@@ -338,11 +359,86 @@ Logo für die neue Lizenz zu skalieren.
         height: auto;
     }
 
-### OAI Konfiguration
+### Import-Regeln
+
+Mit den neuen Import-Regeln lassen sich automatische Verarbeitungsschritte
+zu Imports über die SWORD-Schnittstelle hinzufügen. Abhängig von definierbaren
+Bedingungen können Dokumente mit Lizenzen oder Sammlungen verknüpft werden. 
+
+Weitere Informationen sind im OPUS 4 Handbuch zu finden.
+https://www.opus-repository.org/userdoc/import/
+
+Um die Nutzung der Regeln einfacher zu machen, sind im OPUS-XML Format, die
+Attribute `type` und `language` für Keywords/Subjects nun optional. Damit kann
+ein einfaches Keyword verwendet werden, um die Verknüpfung mit einer Sammlung 
+oder eine andere Aktion auszulösen.
+
+    <keywords>
+        <keyword>oa-green</keyword>
+    </keywords>
+
+Die Defaultwerte sind `uncontrolled` und `deu`. 
+
+### OAI-PMH Schnittstelle
+
+Die Implementation der OAI-PMH Schnittstelle wurde umfangreich überarbeitet. 
+Die unterstützten Formate sind nun unabhängig voneinander und können 
+konfiguriert werden. Das erlaubt es unter anderem Formate zu entfernen oder
+mit einem anderen Präfix wiederzuverwenden. 
+
+Beispielkonfiguration für Format xMetaDissPlus mit Präfix `xmdpdata`, um auch 
+Dokumente ohne Volltext zu berücksichtigen. 
+
+    oai.format.xmdpdata.class = Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusServer
+    oai.format.xmdpdata.hasFilesVisibleInOai = false
+    oai.format.xmdpdata.prefixLabel = xmdpdata
+
+Die verfügbaren OAI-Sets können nun ebenfalls konfiguriert werden.
+
+    oai.set.bibliography.class = Oai_Model_Set_BibliographySets
+    oai.set.doc-type.class = Oai_Model_Set_DocumentTypeSets
+    oai.set.publicationState.class = Oai_Model_Set_PublicationStateSets
+
+Für dem `openaccess`-Set gibt es eine neue Implementation, die bewirkt, dass
+alle Dokumente in einem Set ausgegeben werde, unabhängig davon, ob Sammlungen
+verwendet wurden, um Dokumente unterschiedlichen Open Acess-Arten zuzuordnen.
+
+    oai.set.openaccess.class = Oai_Model_Set_CollectionRoleSingleSet
+    oai.set.openaccess.roleOaiName = open_access
+    oai.set.openaccess.requireOaiSubset = 0
+
+Mit `requireOaiSubset` kann zusätzlich gesteuert werden, ob die Dokumente
+einzelner Sammlungen ausgeblendet werden sollten.
+
+Die Default-Konfiguration befindet sich in `application/configs/application.ini`. 
+
+#### OpenAIRE
+
+Die OpenAIRE-Dokumententypen können nun unabhängig von den DC-Typen konfiguriert 
+werden.
+
+    # documentType.OPUS_DOCUMENT_TYPE...
+    documentType.article.dcType = 'Article'
+    documentType.article.openAire = 'article'
+
+Das Default-Mapping befindet sich in `application/configs/application.ini`.
+
+Die Fehlermeldungen für unbekannte und ungültige OAI-Sets wurden vereinheitlicht.
 
 ### DeepGreen-Client
 
+In OPUS 4.9 ist die erste Version eines DeepGreen-Clients integriert. Damit
+kann OPUS 4 Dokumente von den DeepGreen-Servern abholen, anstatt sie über die 
+Sword-Schnittstelle zu empfangen. Das verschiebt das Scheduling und auch die 
+Kontrolle über das Mapping der Metadaten auf die OPUS 4 Seite. Für den Client
+gibt es eine Reihe von Konsolen-Kommandos.
 
+| Kommando           | Beschreibung                               |
+|--------------------|--------------------------------------------|
+| deepgreen:config   | Erzeugt DeepGreen Konfiguration interaktiv | 
+| deepgreen:check    | Ruft DG-Notifications ab                   |
+| deepgreen:download | Lädt DG-Dokumente herunter                 |
+| deepgreen:import   | Importiert Dokumente von DG                |
 
 ### PDF-Deckblätter
 
@@ -351,10 +447,16 @@ angelegt.
 
     ./workspace/filecache
 
+Dateien im Cache werden überschrieben, wenn ein Dokument verändert und dabei 
+`ServerDateModified` aktualisiert wird.
+
 Das Beispiel-Template für Deckblätter wurde jetzt konfiguriert, um deutlich 
 kleinere PDF-Dateien zu erzeugen. 
 
     application/configs/covers/demo-cover.md
+
+Die Repository-Metadaten `name` und `url` stehen in den Deckblatt-Templates nun 
+als `config-name` und `config-url` zur Verfügung.
 
 ### Sitelinks (für Crawler)
 
@@ -386,6 +488,27 @@ Es sind eine Reihe von neuen Kommandos hinzugekommen.
 
 - `collection:copy|move|remove` für Verknüpfungen von Dokumenten mit Sammlungen
 - `task:list|info|run` für die neue Hintergrundverarbeitung
+- `sword:deposit|import|ping` für die Verwendung mit OPUS 4 SWORD Dateien
+- `console:console|exec` für Snippets (Ersatz für `opus-console.php`)
+- `deepgreen:config|check|download|import` für den DeepGreen-Client
+- `debug:xml` gibt OPUS-XML für ein Dokument aus
+
+Die alten OPUS 4 Skripte werden schrittweise in Kommandos umgewandelt, für eine
+einfachere Implementation, bessere Testbarkeit und einheitliche Nutzung.
+
+### Dokumentation
+
+Die [Dokumentation](https://www.opus-repository.org) für OPUS 4 wurde in 
+mehreren Bereichen aktualisiert. 
+
+- CSV_FN Export Format
+- CrossRef-Import (DOI) Enrichments
+- Neue OAI-Konfiguration für unterstützte Formate
+- Import-Regeln für SWORD Interface
+- Hintergrundverarbeitung mit Crunz
+
+Die Dokumentation ist in einigen Bereichen leider veraltet. Daran wird 
+gearbeitet. Hinweise oder Hilfe aus der OPUS 4 Community sind willkommen. 
 
 ### Entwicklung
 
