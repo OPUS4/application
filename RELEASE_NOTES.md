@@ -61,7 +61,9 @@ Es wurden zwei Identifier-Typen hinzugefügt.
 - `ISMN` (International Standard Musical Number)
 - `union-cat` (Verbund-ID)
 
-Die Verbund-ID kann auf der Frontdoor als Link dargestellt werden. Dazu ist die Query-URL des Verbundkatalogs im Parameter `unionCat.requestUrl` zu hinterlegen.
+Die Verbund-ID kann auf der Frontdoor als Link dargestellt werden. Dazu ist 
+die Query-URL des Verbundkatalogs im Parameter `unionCat.requestUrl` zu 
+hinterlegen.
 
 DOI-Werte werden beim Update normalisiert. Führende URLs werden entfernt und
 neue DOIs werden automatisch ohne URL gespeichert. 
@@ -104,8 +106,8 @@ angezeigt werden. Dafür können Einträge in `custom.css` gemacht werden.
 Für die ORCID- und GND-Logos werden jetzt SVG-Dateien verwendet. Es werden nun
 alle Personen und nicht nur Autor*innen verlinkt.
 
-Die Default-FAQs wurden bezüglich der Namensänderung der Sherpa/Romeo-Liste in "Open 
-Policy Finder" aktualisiert.
+Die Default-FAQs wurden bezüglich der Namensänderung der Sherpa/Romeo-Liste in 
+"Open Policy Finder" aktualisiert.
 
 #### Frontdoor
 
@@ -149,7 +151,9 @@ Die Änderungen umfassen folgende Umbenennungen:
 | local_doiImportPopulated | opus_doiImportPopulated |
 | local_import_origin | opus_import_origin |
 
-Die Felder für Konferenzen wurden wesentlich überarbeitet. Das Mapping der Konferenzangaben wurde an die neuen Felder angepasst. (Details s. nächster Abschnitt.)
+Die Felder für Konferenzen wurden wesentlich überarbeitet. Das Mapping der 
+Konferenzangaben wurde an die neuen Felder angepasst. (Details s. nächster 
+Abschnitt.)
 
 Das Feld `opus_doi_flag` bleibt unverändert.
 
@@ -169,8 +173,8 @@ Dubletten), erscheint ein Menü mit den zur Verfügung stehenden Optionen.
 ### Enrichmentfelder für Konferenzen
 
 Es werden eigene Felder für Konferenzen eingeführt. Basierend auf 
-bibliothekarischen Standards und Erfassungspraktiken kennt OPUS 4 nun diese vier
-Metadaten-Elemente:
+bibliothekarischen Standards und Erfassungspraktiken kennt OPUS 4 nun diese 
+vier Metadaten-Elemente:
 
 - Name der Konferenz
 - Ort der Konferenz
@@ -437,8 +441,9 @@ als `config-name` und `config-url` zur Verfügung.
 
 ### Sitelinks (für Crawler)
 
-Die Sitelinks für alle öffentlichen Dokumente werden nun mit Titel und Language-Attribut gerendert, um die Indexierung und das Ranking in Suchmaschinen besser
-zu unterstützen.
+Die Sitelinks für alle öffentlichen Dokumente werden nun mit Titel und 
+Language-Attribut gerendert, um die Indexierung und das Ranking in Suchmaschinen 
+besser zu unterstützen.
 
 ### Hintergrundverarbeitung 
 
