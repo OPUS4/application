@@ -497,6 +497,16 @@ Teilkomponenten von OPUS 4 zu ermöglichen.
 
 --
 
+## Patch Release 4.8.0.21 - 2026-04-07
+
+Dieser Release dient der Vorbereitung von OPUS 4.9. Die OPUS 4 Abhängigkeiten
+in `composer.json` wurden eingeschränkt, damit OPUS 4.8 nicht ausverstehen mit
+neuen OPUS 4.9 Libraries verwendet wird, mit denen es nicht mehr funktioniert.
+Der Release Prozess für die einzelnen OPUS 4 Libraries und die Application
+kann unter Umständen einige Stunden oder sogar Tage dauern.
+
+-- 
+
 ## Patch Release 4.8.0.20 - 2026-02-24
 
 Für den Export von Suchergebnissen in den Formaten BibTeX, RIS und CSV,
