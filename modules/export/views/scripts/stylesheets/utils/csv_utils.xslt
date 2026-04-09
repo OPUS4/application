@@ -41,185 +41,30 @@
 
     <xsl:variable name="admin" select="php:function('Application_Xslt::accessAllowed', 'documents')"/>   
 
-    <!-- Map collections as $maincategory for csv_fn -->
-    <xsl:template name="maincategory">
-        <xsl:variable name="collectionnumber" select="Collection[@RoleName='relevance']/@Number"/>
-        <xsl:variable name="maincategory">
-            <xsl:choose>
-                <xsl:when test="starts-with($collectionnumber,'1')">wiss. Artikel, peer reviewed</xsl:when>
-                <xsl:when test="starts-with($collectionnumber,'2')">wissenschaftl. Veröffentlichung</xsl:when>
-                <xsl:when test="starts-with($collectionnumber,'3')">Abgeschlossene Promotion</xsl:when>
-                <xsl:when test="starts-with($collectionnumber,'4')">offengelegte Patentanmeldung</xsl:when>
-                <!-- <xsl:when test="starts-with($collectionnumber,'5')">Sonstige Publikation</xsl:when> -->
-                <xsl:otherwise>Nicht zugeordnet</xsl:otherwise>
-           </xsl:choose>
-        </xsl:variable>
-        <xsl:value-of select ="$maincategory" /><xsl:text>	</xsl:text>
-    </xsl:template>
-
     <!-- csv-style for persons  -->
 
-    <xsl:template match="PersonAuthor" mode="csv">          
-            <!--- Asterisk as marker for members of institution / xxx/bf 04.08.2022 -->
-            <xsl:if test="@IdentifierMisc">
-              <xsl:text>*</xsl:text>
-            </xsl:if>
-                  <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-            <xsl:choose>
-                <xsl:when test="position() = last()">
-                    <xsl:text></xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>; </xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+    <xsl:template match="PersonAuthor">          
+        <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+        <xsl:choose>
+            <xsl:when test="position() = last()">
+                <xsl:text></xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>; </xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="PersonAuthor" mode="csv_fn">          
-            <!--- Asterisk as marker für members of institution / xxx/bf 04.08.2022 -->
-            <xsl:if test="@IdentifierMisc">
-              <xsl:text>*</xsl:text>
-            </xsl:if>
-                  <xsl:value-of select="concat(@LastName, ', ', substring(@FirstName,1,1))" />
-            <xsl:text>.</xsl:text>
-            <xsl:choose>
-                <xsl:when test="position() = last()">
-                    <xsl:text></xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>; </xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="PersonEditor" mode="csv">      
-            <!--- Asterisk as marker für members of institution / xxx/bf 04.08.2022 -->
-            <xsl:if test="@IdentifierMisc">
-              <xsl:text>*</xsl:text>
-            </xsl:if>
-                  <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-            <xsl:choose>
-                <xsl:when test="position() = last()">
-                    <xsl:text></xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>; </xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="PersonEditor" mode="csv_fn">
-      <xsl:variable name="initiale">
-                <xsl:value-of select="substring(@FirstName,1,1)" />
-                <xsl:text>.</xsl:text>
-            </xsl:variable>
-            <xsl:variable name="und">
-                <xsl:choose>
-                    <xsl:when test="position() = last() and position() != 1">
-                        <xsl:text> und </xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text></xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <xsl:value-of select="$und"/>
-            <!--- Asterisk as marker für members of institution / xxx/bf 04.08.2022 -->
-            <xsl:if test="@IdentifierMisc">
-              <xsl:text>*</xsl:text>
-            </xsl:if>
-            <xsl:value-of select="concat(@LastName, ', ', $initiale)" />
-            <xsl:choose>
-                <xsl:when test="position() = last() or position() = last()-1">
-                    <xsl:text></xsl:text>
-                    <xsl:choose>
-                        <xsl:when test="position() = last()">
-                            <xsl:text> (Hrsg.)</xsl:text>
-                        </xsl:when>
-                    </xsl:choose>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>, </xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="PersonContributor">
-      <xsl:variable name="initiale">
-                <xsl:value-of select="substring(@FirstName,1,1)" />
-                <xsl:text>. </xsl:text>
-            </xsl:variable>
-            <xsl:variable name="und">
-                <xsl:choose>
-                    <xsl:when test="position() = last() and position() != 1">
-                        <xsl:text> und </xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text></xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <xsl:value-of select="concat($und, @LastName, ', ', $initiale, ' (Beteiligte Person)')" />
-            <xsl:choose>
-                <xsl:when test="position() = last() or position() = last()-1">
-                    <xsl:text></xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>, </xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="PersonAdvisor">
-      <xsl:variable name="initiale">
-                <xsl:value-of select="substring(@FirstName,1,1)" />
-                <xsl:text>.</xsl:text>
-            </xsl:variable>
-            <xsl:variable name="und">
-                <xsl:choose>
-                    <xsl:when test="position() = last() and position() != 1">
-                        <xsl:text> und </xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text></xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <xsl:value-of select="concat($und, @LastName, ', ', $initiale)" />
-            <xsl:choose>
-                <xsl:when test="position() = last() or position() = last()-1">
-                    <xsl:text></xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>, </xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="PersonReferee">
-      <xsl:variable name="initiale">
-                <xsl:value-of select="substring(@FirstName,1,1)" />
-                <xsl:text>.</xsl:text>
-            </xsl:variable>
-            <xsl:variable name="und">
-                <xsl:choose>
-                    <xsl:when test="position() = last() and position() != 1">
-                        <xsl:text> und </xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text></xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:variable>
-            <xsl:value-of select="concat($und, @LastName, ', ', $initiale)" />
-            <xsl:choose>
-                <xsl:when test="position() = last() or position() = last()-1">
-                    <xsl:text></xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>, </xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
+    <xsl:template match="PersonEditor">      
+        <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+        <xsl:choose>
+            <xsl:when test="position() = last()">
+                <xsl:text></xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>; </xsl:text>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <!-- institutes -->
@@ -298,10 +143,10 @@
     <xsl:template name="enrichments">    
         <xsl:if test="Enrichment and string-length(php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments')) > 0">            
             <xsl:variable name="anzahl" select="string-length(php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments'))-string-length(translate(php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments'),',','')) + 1"></xsl:variable>
-                <xsl:call-template name="aggregate_enrichments">
-                    <xsl:with-param name="i" select="1"/>
-                    <xsl:with-param name="anzahl" select="$anzahl"/>
-                </xsl:call-template>
+            <xsl:call-template name="aggregate_enrichments">
+                <xsl:with-param name="i" select="1"/>
+                <xsl:with-param name="anzahl" select="$anzahl"/>
+            </xsl:call-template>
         </xsl:if>
     </xsl:template>
 
@@ -310,18 +155,18 @@
         <xsl:param name="anzahl" />
 
         <xsl:variable name="name-set">
-                    <xsl:call-template name="tokenize">
-                        <xsl:with-param name="text">
-                            <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments')"/>
-                        </xsl:with-param>
-                    </xsl:call-template>
+            <xsl:call-template name="tokenize">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments')"/>
+                </xsl:with-param>
+            </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="visible">
-                    <xsl:call-template name="tokenize">
-                        <xsl:with-param name="text">
-                            <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments_visible')"/>
-                        </xsl:with-param>
-                    </xsl:call-template>
+            <xsl:call-template name="tokenize">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'export.csv.enrichments_visible')"/>
+                </xsl:with-param>
+            </xsl:call-template>
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="count(Enrichment[@KeyName=ext:node-set($name-set)/item[$i]/text()]) > 1">
@@ -392,13 +237,13 @@
 
     <!-- Field content "Collections" / ###BSZ/BF 27.03.2023 -->
     <xsl:template name="collections">
-            <xsl:if test="string-length(php:functionString('Application_Xslt::optionValue', 'export.csv.collections')) > 0">             
-                <xsl:variable name="anzahl" select="string-length(php:functionString('Application_Xslt::optionValue', 'export.csv.collections'))-string-length(translate(php:functionString('Application_Xslt::optionValue', 'export.csv.collections'),',','')) + 1"></xsl:variable>                
-                    <xsl:call-template name="aggregate_collections">
-                        <xsl:with-param name="i" select="1"/>
-                        <xsl:with-param name="anzahl" select="$anzahl"/>
-                    </xsl:call-template>
-            </xsl:if>    
+        <xsl:if test="string-length(php:functionString('Application_Xslt::optionValue', 'export.csv.collections')) > 0">             
+            <xsl:variable name="anzahl" select="string-length(php:functionString('Application_Xslt::optionValue', 'export.csv.collections'))-string-length(translate(php:functionString('Application_Xslt::optionValue', 'export.csv.collections'),',','')) + 1"></xsl:variable>
+            <xsl:call-template name="aggregate_collections">
+                <xsl:with-param name="i" select="1"/>
+                <xsl:with-param name="anzahl" select="$anzahl"/>
+            </xsl:call-template>
+        </xsl:if>    
     </xsl:template>
     
      <xsl:template name="aggregate_collections">  
@@ -406,19 +251,19 @@
         <xsl:param name="anzahl" />
 
         <xsl:variable name="name-set">
-                    <xsl:call-template name="tokenize">
-                        <xsl:with-param name="text">
-                            <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'export.csv.collections')"/>
-                        </xsl:with-param>
-                    </xsl:call-template>
+            <xsl:call-template name="tokenize">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'export.csv.collections')"/>
+                </xsl:with-param>
+            </xsl:call-template>
         </xsl:variable>
 
         <xsl:variable name="visible">
-                    <xsl:call-template name="tokenize">
-                        <xsl:with-param name="text">
-                            <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'export.csv.collections_visible')"/>
-                        </xsl:with-param>
-                    </xsl:call-template>
+            <xsl:call-template name="tokenize">
+                <xsl:with-param name="text">
+                    <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'export.csv.collections_visible')"/>
+                </xsl:with-param>
+            </xsl:call-template>
         </xsl:variable>
 
         <xsl:if test="ext:node-set($visible)/item[$i]/text() = '1' or php:function('Application_Xslt::accessAllowed', 'documents') != 0">           
@@ -434,4 +279,3 @@
         </xsl:if>
     </xsl:template>
 </xsl:stylesheet>
-                
