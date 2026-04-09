@@ -482,7 +482,6 @@ einfachere Implementation, bessere Testbarkeit und einheitliche Nutzung.
 Die [Dokumentation](https://www.opus-repository.org) für OPUS 4 wurde in 
 mehreren Bereichen aktualisiert. 
 
-- CSV_FN Export-Format
 - CrossRef-Import (DOI) Enrichments
 - Neue OAI-Konfiguration für unterstützte Formate
 - Import-Regeln für SWORD Interface
