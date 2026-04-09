@@ -136,11 +136,11 @@
             </xsl:variable>
 
             <xsl:variable name="author">
-                <xsl:apply-templates select="PersonAuthor" mode="csv"/>
+                <xsl:apply-templates select="PersonAuthor"/>
             </xsl:variable>
 
             <xsl:variable name="editor">
-                <xsl:apply-templates select="PersonEditor" mode="csv"/>
+                <xsl:apply-templates select="PersonEditor"/>
             </xsl:variable>
             
             <xsl:variable name="titleMain">
