@@ -306,7 +306,7 @@ Des Weiteren gibt es Änderungen an diesen Feldern:
 
 #### DataCite-XML (DOI-Registrierung)
 
-Das hinterlegte DataCite Metadata Schema wurde auf die Version 4.6 aktualisiert
+Das hinterlegte DataCite Metadata Schema wurde auf die Version 4.7 aktualisiert
 und das Mapping an einigen Stellen verbessert:
 
 - Unterscheidung zwischen Personen und Körperschaften (`NameType` 
@@ -1003,14 +1003,6 @@ Im gesamten Code wurden viele der direkten Abhängigkeiten auf die Klassen
 der aktuellen Framework-Implementation beseitigt. Dafür wurden zahlreiche 
 neue Klassen und Interfaces in **opus4-common** hinzugefügt. Lokaler Code
 muss unter Umständen entsprechend angepasst werden.
-
-### Erweiterungen des CSV-Exports
-
-Neben dem Standard-CSV-Export gibt es nun ein weiteres CSV-Export-Format, 
-das eine Formatierung der Daten gemäß den Anforderungen eines 
-Jahresforschungsberichtes ermöglicht. Zwischen beiden Formaten kann in der
-config.ini umgeschaltet werden. Weitere Dokumentation unter 
-<https://www.opus-repository.org/userdoc/export/exportlist.html>
 
 --
 
