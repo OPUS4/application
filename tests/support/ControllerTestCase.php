@@ -29,12 +29,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\Config;
 use Opus\Common\Document;
 use Opus\Common\DocumentFinderInterface;
 use Opus\Common\DocumentInterface;
 use Opus\Common\File;
 use Opus\Common\FileInterface;
+use Opus\Common\Log\LogService;
 use Opus\Common\LoggingTrait;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\ModelInterface;
@@ -79,9 +81,6 @@ class ControllerTestCase extends TestCase
 
     /** @var array */
     private $tempFiles = [];
-
-    /** @var Application_Translate|null */
-    private $translatorBackup;
 
     /** @var string */
     private $workspacePath;
@@ -134,7 +133,7 @@ class ControllerTestCase extends TestCase
         $this->setLogger(null);
 
         DoiManager::setInstance(null);
-        Application_Configuration::clearInstance(); // reset Application_Configuration
+        Configuration::clearInstance(); // reset Configuration
         Application_Translate::setInstance(null);
         Application_Security_AclProvider::clear();
 
@@ -275,7 +274,7 @@ class ControllerTestCase extends TestCase
     {
         $bodyLowerCase = strtolower($body);
         foreach ($badStrings as $badString) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 strtolower($badString),
                 $bodyLowerCase,
                 "Response must not contain '$badString'"
@@ -520,12 +519,22 @@ class ControllerTestCase extends TestCase
             'No declaration for attribute class of element html',
             'No declaration for attribute placeholder of element input',
             'No declaration for attribute target of element a',
+            'No declaration for attribute aria-label of element',
         ];
 
         $filteredErrors = [];
 
         foreach ($errors as $error) {
-            if (! in_array(trim($error->message), $ignored)) {
+            $ignore = false;
+
+            foreach ($ignored as $pattern) {
+                if (stripos($error->message, $pattern) !== false) {
+                    $ignore = true;
+                    break;
+                }
+            }
+
+            if (! $ignore) {
                 $filteredErrors[] = $error;
             }
         }
@@ -627,7 +636,7 @@ class ControllerTestCase extends TestCase
         $this->assertCount(1, $flashMessages, 'Expected one flash message in queue.');
         $flashMessage = $flashMessages[0];
 
-        $this->assertNotContains($message, $flashMessage['message']);
+        $this->assertStringNotContainsString($message, $flashMessage['message']);
         $this->assertEquals($level, $flashMessage['level']);
     }
 
@@ -1084,29 +1093,17 @@ class ControllerTestCase extends TestCase
      */
     public function disableTranslation()
     {
-        if ($this->translatorBackup === null) {
-            $this->translatorBackup = Application_Translate::getInstance();
-        }
+        $logService = LogService::getInstance();
+        $logger     = $logService->getLog('translation');
 
         $translate = new Application_Translate([
             'adapter' => 'array',
             'content' => [],
             'locale'  => 'auto',
+            'log'     => $logger,
         ]);
 
         Application_Translate::setInstance($translate);
-    }
-
-    /**
-     * Resets translations with original (bootstrap) translation object.
-     *
-     * This function restores translation if disableTranslation has been called before.
-     */
-    public function enableTranslation()
-    {
-        if ($this->translatorBackup !== null) {
-            Application_Translate::setInstance($this->translatorBackup);
-        }
     }
 
     /**

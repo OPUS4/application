@@ -44,6 +44,9 @@ class Rss_Model_FeedTest extends ControllerTestCase
     {
         parent::setUp();
 
+        $this->setHostname(null);
+        $this->setBaseUrl('/opus4test');
+
         $view = $this->getView();
 
         $this->model = new Rss_Model_Feed($view);
@@ -51,8 +54,7 @@ class Rss_Model_FeedTest extends ControllerTestCase
 
     public function testGetTitle()
     {
-        $view = $this->getView();
-        Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
+        $view  = $this->getView();
         $model = new Rss_Model_Feed($view);
 
         $this->assertEquals('http:///opus4test', $model->getTitle());
@@ -76,8 +78,7 @@ class Rss_Model_FeedTest extends ControllerTestCase
 
     public function testGetTitleWithFullUrl()
     {
-        $view = $this->getView();
-        Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
+        $view  = $this->getView();
         $model = new Rss_Model_Feed($view);
 
         $this->adjustConfiguration([

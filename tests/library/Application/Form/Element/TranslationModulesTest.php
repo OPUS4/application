@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Modules;
+
 class Application_Form_Element_TranslationModulesTest extends ControllerTestCase
 {
     /** @var string */
@@ -60,7 +62,7 @@ class Application_Form_Element_TranslationModulesTest extends ControllerTestCase
 
         $options = $element->getMultiOptions();
 
-        $modules = array_keys(Application_Modules::getInstance()->getModules());
+        $modules = array_keys(Modules::getInstance()->getModules());
 
         $this->assertCount(count($modules) + 1, $options);
     }

@@ -67,7 +67,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
         }
 
         if ($this->view->currentAnchor === $group['Name']) {
-            $fieldset .= "<a name='current'></a>";
+            $fieldset .= "<a id='current'></a>";
         }
 
         $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "'>";
@@ -101,7 +101,11 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset
             }
             $groupElementCount++;
 
-            $fieldset .= "<div class='form-item'>";
+            if ($field['req'] === 'required') {
+                $fieldset .= "<div class='form-item required'>";
+            } else {
+                $fieldset .= "<div class='form-item'>";
+            }
             $fieldset .= $this->getLabelFor($field["id"], $field["label"], $field['req']);
 
             switch ($field['type']) {

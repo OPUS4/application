@@ -56,10 +56,12 @@ licence-outro: "For more information see:"
 # 
 # LaTeX header includes
 # ---------------------
-# 
+#
+# The following two parameters for dvipdfmx strongly affect the size of the generated pdf cover. 
+# "V 4" defines the pdf version as 1.4 which also affects the processing of images, "z 9" sets the compression to maximum.
 header-includes: |
-  \special{dvipdfmx:config V 3}
-  \special{dvipdfmx:config z 0}
+  \special{dvipdfmx:config V 4}
+  \special{dvipdfmx:config z 9}
   \usepackage{scrlayer-scrpage}
   \lohead{
     \subsection{$header-left$}

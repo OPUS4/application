@@ -105,9 +105,9 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('clear');
 
-        $response = $this->getResponse();
-        $this->assertContains('sureyes', $response->getBody());
-        $this->assertContains('sureno', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('sureyes', $body);
+        $this->assertStringContainsString('sureno', $body);
 
         $document = Document::get($this->documentId);
         $this->assertEquals('unpublished', $document->getServerState());
@@ -127,9 +127,9 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('clear');
 
-        $response = $this->getResponse();
-        $this->assertContains('sureyes', $response->getBody());
-        $this->assertContains('sureno', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('sureyes', $body);
+        $this->assertStringContainsString('sureno', $body);
 
         $document = Document::get($this->documentId);
         $this->assertEquals('unpublished', $document->getServerState());
@@ -150,9 +150,9 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('index');
 
-        $response = $this->getResponse();
-        $this->assertNotContains('sureyes', $response->getBody());
-        $this->assertNotContains('sureno', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('sureyes', $body);
+        $this->assertStringNotContainsString('sureno', $body);
 
         $document = Document::get($this->documentId);
         $this->assertEquals('unpublished', $document->getServerState());
@@ -173,9 +173,9 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('clear');
 
-        $response = $this->getResponse();
-        $this->assertNotContains('sureyes', $response->getBody());
-        $this->assertNotContains('sureno', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('sureyes', $body);
+        $this->assertStringNotContainsString('sureno', $body);
 
         $document = Document::get($this->documentId);
         $this->assertEquals('published', $document->getServerState());
@@ -195,9 +195,9 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('reject');
 
-        $response = $this->getResponse();
-        $this->assertContains('sureyes', $response->getBody());
-        $this->assertContains('sureno', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('sureyes', $body);
+        $this->assertStringContainsString('sureno', $body);
 
         $document = Document::get($this->documentId);
         $this->assertEquals('unpublished', $document->getServerState());
@@ -218,9 +218,9 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('index');
 
-        $response = $this->getResponse();
-        $this->assertNotContains('sureyes', $response->getBody());
-        $this->assertNotContains('sureno', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('sureyes', $body);
+        $this->assertStringNotContainsString('sureno', $body);
 
         $document = Document::get($this->documentId);
         $this->assertEquals('unpublished', $document->getServerState());
@@ -241,9 +241,9 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('reject');
 
-        $response = $this->getResponse();
-        $this->assertNotContains('sureyes', $response->getBody());
-        $this->assertNotContains('sureno', $response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('sureyes', $body);
+        $this->assertStringNotContainsString('sureno', $body);
 
         $document = Document::get($this->documentId);
         $this->assertEquals('deleted', $document->getServerState());

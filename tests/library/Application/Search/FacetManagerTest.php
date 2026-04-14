@@ -68,7 +68,7 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
         $facet = $manager->getFacet('language');
 
-        $this->assertInstanceOf('Application_Search_Facet_Language', $facet);
+        $this->assertInstanceOf(Application_Search_Facet_Language::class, $facet);
         $this->assertFalse($facet->isTranslated());
         $this->assertEquals('Deutsch', $facet->getLabel('deu'));
     }
@@ -80,7 +80,7 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
         $facet = $manager->getFacet('doctype');
 
         $this->assertNotNull($facet);
-        $this->assertInstanceOf('Application_Search_Facet', $facet);
+        $this->assertInstanceOf(Application_Search_Facet::class, $facet);
         $this->assertTrue($facet->isTranslated());
     }
 
@@ -90,7 +90,7 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
 
         $facets = $manager->getActiveFacets();
 
-        $this->assertCount(10, $facets);
+        $this->assertCount(11, $facets);
         $this->assertContains('server_state', $facets); // TODO does this make sense?
     }
 
@@ -105,7 +105,7 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
         $facet = $manager->getFacet('enrichment_Audience');
 
         $this->assertNotNull($facet);
-        $this->assertInstanceOf('Application_Search_Facet', $facet);
+        $this->assertInstanceOf(Application_Search_Facet::class, $facet);
         $this->assertFalse($facet->isTranslated());
     }
 
@@ -120,7 +120,7 @@ class Application_Search_FacetManagerTest extends ControllerTestCase
         $facet = $manager->getFacet('enrichment_Audience');
 
         $this->assertNotNull($facet);
-        $this->assertInstanceOf('Application_Search_Facet', $facet);
+        $this->assertInstanceOf(Application_Search_Facet::class, $facet);
         $this->assertFalse($facet->isTranslated());
     }
 

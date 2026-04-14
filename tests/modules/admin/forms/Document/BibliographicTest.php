@@ -37,7 +37,7 @@ use Opus\Common\Document;
 class Admin_Form_Document_BibliographicTest extends ControllerTestCase
 {
     /** @var string[] */
-    protected $additionalResources = ['translation'];
+    protected $additionalResources = ['translation', 'view'];
 
     public function testCreateForm()
     {
@@ -59,6 +59,7 @@ class Admin_Form_Document_BibliographicTest extends ControllerTestCase
             'ThesisDateAccepted',
             'ThesisYearAccepted',
             'BelongsToBibliography',
+            'PublicationState',
         ];
 
         $this->assertEquals(count($elements), count($form->getElements()));

@@ -1,0 +1,61 @@
+#content[class*="home_help"]>.wrapper>h2::before {
+  content: "\3f";
+}
+
+.section.help h3 {
+  margin: 0;
+  line-height: normal;
+}
+
+#content .wrapper ul.nav.help {
+  list-style: decimal;
+  margin: 0.8rem 0;
+  padding-left: 4rem;
+}
+
+#content .wrapper ul.nav.help li {
+  padding: 0.2rem 0;
+}
+
+.section.answers h2 {
+  font: var(--font-headline);
+  margin: 1.5rem 0 0;
+}
+
+.section.answers dt {
+  font-weight: 600;
+  font-size: 1.125rem;
+  position: relative;
+  padding: 1rem 0 0.5rem 2.5rem;
+  margin-top: 1rem;
+  border-top: 1px solid;
+}
+
+.section.answers dd {
+  margin: 0;
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+.section.answers dt::before,
+.section.answers dd::before {
+  position: absolute;
+  left: 0;
+  font-size: 1.125rem;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.section.answers dt::before {
+  content: "\3f";
+  top: 1.2rem;
+}
+
+.section.answers dd::before {
+  content: "\f4ad";
+  top: 0.2rem;
+}
+
+.section.answers p.backlink {
+  margin: 1rem 0 1rem -2.5rem;
+}

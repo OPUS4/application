@@ -1,13 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- urn: complexType zu Persistent Identifier siehe http://www.persistent-identifier.de-->
-<!-- Copyright 2006  Deutsche Nationalbibliothek -->
-<!-- Version 1.3 -->
+<!-- Copyright 2023  Deutsche Nationalbibliothek -->
+<!-- Version xMetaDissPlus 2.5 -->
 <xs:schema targetNamespace="http://www.d-nb.de/standards/urn/" elementFormDefault="qualified"
 	attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns="http://www.d-nb.de/standards/urn">
 	<!-- Folgende Importe werden benötigt, da Elemente aus den zugehörigen Namespaces benutzt werden. -->
-	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
-	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd"/>
+	<!--<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>-->
+	<xs:annotation>
+		<xs:documentation>
+			2023-02-27:
+			CHANGED by DNB: 
+			keine Änderungen. Version auf 2.5 hochgesetzt für Einheitlichkeit.
+			
+			2017-12-01:
+			1. CHANGED alle schemaLocation-Attribute verweisen auf eine DNB eigene URL, 
+			auch wenn sie zuvor auf DNB-fremde URLs verwiesen haben 
+			(dc: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd).	
+			2. DELETE Definition des Attributs xml:lang (prohibited) in extensionBase SimpleLiteral in complexType nbn
+			3. DELETE xs:import of schema xml.xsd 
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="dc.xsd"/>    
 	<xs:complexType name="nbn">
 		<xs:simpleContent>
 			<xs:restriction base="dc:SimpleLiteral">
@@ -16,7 +30,7 @@
 						<xs:pattern value="urn:nbn:[a-z]{2}:.*"/>
 					</xs:restriction>
 				</xs:simpleType>
-				<xs:attribute ref="xml:lang" use="prohibited"/>
+				<!--<xs:attribute ref="xml:lang" use="prohibited"/>-->
 			</xs:restriction>
 		</xs:simpleContent>
 	</xs:complexType>

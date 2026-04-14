@@ -28,6 +28,9 @@
  * @copyright   Copyright (c) 2018, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\App\Common\ApplicationException;
+
 class Admin_Model_UrnGeneratorTest extends ControllerTestCase
 {
     /**
@@ -48,7 +51,7 @@ class Admin_Model_UrnGeneratorTest extends ControllerTestCase
     public function testWithMissingConfig()
     {
         $this->modifyUrnConfig('', '');
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         new Admin_Model_UrnGenerator();
     }
 
@@ -56,7 +59,7 @@ class Admin_Model_UrnGeneratorTest extends ControllerTestCase
     {
         $this->modifyUrnConfig('de:kobv:test-opus', '');
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         new Admin_Model_UrnGenerator();
     }
 
@@ -64,7 +67,7 @@ class Admin_Model_UrnGeneratorTest extends ControllerTestCase
     {
         $this->modifyUrnConfig('', 'nbn');
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         new Admin_Model_UrnGenerator();
     }
 

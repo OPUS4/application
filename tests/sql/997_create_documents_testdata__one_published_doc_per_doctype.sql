@@ -23,4 +23,4 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (144, NULL, 2011, NULL, NULL, '2011-09-26', 'studythesis', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2011, '', NULL, '2011-06-04T02:36:53Z', '2011-03-05T09:47:22Z', 'published', NULL, 0);
 
 INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_modified`, `server_date_published`, `server_state`, `volume`, `belongs_to_bibliography`, `embargo_date`) VALUES
-(145, NULL, 2011, NULL, NULL, '2011-09-26', 'workingpaper', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2011, '', NULL, '2011-06-04T02:36:53Z', '2011-03-05T09:47:22Z', 'published', NULL, 0, '2050-01-01');
+(145, NULL, 2011, NULL, NULL, '2011-09-26', 'workingpaper', NULL, NULL, 'deu', NULL, NULL, NULL, NULL, NULL, 2011, '', NULL, '2011-06-04T02:36:53Z', '2011-03-05T09:47:22Z', 'published', NULL, 0, '2050-01-01');

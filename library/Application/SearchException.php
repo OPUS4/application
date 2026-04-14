@@ -29,9 +29,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Search\SearchException;
 
-class Application_SearchException extends Application_Exception
+class Application_SearchException extends ApplicationException
 {
     /**
      * @param SearchException $exception

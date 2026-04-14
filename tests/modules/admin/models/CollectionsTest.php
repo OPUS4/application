@@ -89,10 +89,10 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
         $collections = $this->model->getCollectionRolesInfo();
 
         $this->assertNotNull($collections);
-        $this->assertInternalType('array', $collections);
+        $this->assertIsArray($collections);
 
         foreach ($collections as $collection) {
-            $this->assertInternalType('array', $collection);
+            $this->assertIsArray($collection);
             $this->assertCount(8, $collection);
             $this->assertArrayHasKey('id', $collection);
             $this->assertArrayHasKey('name', $collection);
@@ -123,10 +123,10 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
         $collections = $this->model->getCollectionRolesInfo();
 
         $this->assertNotNull($collections);
-        $this->assertInternalType('array', $collections);
+        $this->assertIsArray($collections);
 
         foreach ($collections as $collection) {
-            $this->assertInternalType('array', $collection);
+            $this->assertIsArray($collection);
             $this->assertCount(8, $collection);
             $this->assertArrayHasKey('id', $collection);
             $this->assertArrayHasKey('name', $collection);
@@ -150,10 +150,10 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
         $collections = $this->model->getCollectionRolesInfo();
 
         $this->assertNotNull($collections);
-        $this->assertInternalType('array', $collections);
+        $this->assertIsArray($collections);
 
         foreach ($collections as $collection) {
-            $this->assertInternalType('array', $collection);
+            $this->assertIsArray($collection);
             $this->assertCount(8, $collection);
             $this->assertArrayHasKey('id', $collection);
             $this->assertArrayHasKey('name', $collection);
@@ -177,7 +177,7 @@ class Admin_Model_CollectionsTest extends ControllerTestCase
         $collections = $this->model->getCollectionRolesInfo($this->docId);
 
         $this->assertNotNull($collections);
-        $this->assertInternalType('array', $collections);
+        $this->assertIsArray($collections);
 
         foreach ($collections as $collection) {
             $this->assertArrayHasKey('assigned', $collection);

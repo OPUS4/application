@@ -7,266 +7,464 @@
 
    <body>
 
-   <tu tuid="all">
+    <tu tuid="all">
         <tuv xml:lang="en">
             <seg>All fields (testing documenttype)</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Alle Felder (Testdokumenttyp)</seg>
         </tuv>
-   </tu>
+    </tu>
+   
+    <tu tuid="annotation">
+        <tuv xml:lang="en">
+            <seg>Annotation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entscheidungs- oder Urteilsanmerkung</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="article">
+    <tu tuid="article">
         <tuv xml:lang="en">
             <seg>Article</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Wissenschaftlicher Artikel</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="bachelorthesis">
+    <tu tuid="bachelorthesis">
         <tuv xml:lang="en">
             <seg>Bachelor Thesis</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Bachelorarbeit</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="book">
+    <tu tuid="book">
         <tuv xml:lang="en">
             <seg>Book</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Buch (Monographie)</seg>
+            <seg>Buch</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="bookpart">
+    <tu tuid="bookpart">
         <tuv xml:lang="en">
             <seg>Part of a Book</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Teil eines Buches (Kapitel)</seg>
         </tuv>
-   </tu>
-
-   <tu tuid="conferenceobject">
+    </tu>
+   
+    <tu tuid="conferenceabstract">
         <tuv xml:lang="en">
-            <seg>Conference Proceeding</seg>
+            <seg>Conference: Meeting Abstract</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Konferenz: Meeting Abstract</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="conferenceobject">
+        <tuv xml:lang="en">
+            <seg>Conference Publication</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Konferenzveröffentlichung</seg>
         </tuv>
-   </tu>
+    </tu>
+   
+    <tu tuid="conferencepaper">
+        <tuv xml:lang="en">
+            <seg>Conference Paper</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Konferenzpaper</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="contributiontoperiodical">
+    <tu tuid="conferenceposter">
+        <tuv xml:lang="en">
+            <seg>Conference Poster</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Konferenzposter</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="conferenceproceedings">
+        <tuv xml:lang="en">
+            <seg>Conference Proceedings</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Konferenz-Proceedings</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="conferenceslides">
+        <tuv xml:lang="en">
+            <seg>Conference Slides</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Konferenzfolien</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="contributiontoperiodical">
         <tuv xml:lang="en">
             <seg>Contribution to a Periodical</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Beitrag zu einer (nichtwissenschaftlichen) Zeitung oder Zeitschrift</seg>
         </tuv>
-   </tu>
+    </tu>
+   
+    <tu tuid="corrigendum">
+        <tuv xml:lang="en">
+            <seg>Corrigendum</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Korrigendum</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="coursematerial">
+    <tu tuid="coursematerial">
         <tuv xml:lang="en">
             <seg>Course Material</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Lehrmaterial</seg>
         </tuv>
-   </tu>
+    </tu>
+   
+    <tu tuid="datapaper">
+        <tuv xml:lang="en">
+            <seg>Data Paper</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Data Paper</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="diplom">
+    <tu tuid="diplom">
         <tuv xml:lang="en">
             <seg>Diploma Thesis</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Diplomarbeit</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="doctoralthesis">
+    <tu tuid="doctoralthesis">
         <tuv xml:lang="en">
             <seg>Doctoral Thesis</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Dissertation</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="doi">
+    <tu tuid="doi">
         <tuv xml:lang="en">
-            <seg>*Import from DOI*</seg>
+            <seg>*Import by DOI*</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>*DOI-Import*</seg>
         </tuv>
-   </tu>
+    </tu>
+   
+    <tu tuid="dynamicwebresource">
+        <tuv xml:lang="en">
+            <seg>Dynamic Web Resource </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dynamische Online-Ressource</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="examen">
+    <tu tuid="dynamicwebresourcepart">
+        <tuv xml:lang="en">
+            <seg>Part of a Dynamic Web Resource</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Teil einer dynamischen Online-Ressource</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="editedcollection">
+        <tuv xml:lang="en">
+            <seg>Edited Collection</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sammelband</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="editorial">
+        <tuv xml:lang="en">
+            <seg>Editorial</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Vorwort</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="examen">
         <tuv xml:lang="en">
             <seg>Examination Thesis</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Examensarbeit</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="habilitation">
+    <tu tuid="habilitation">
         <tuv xml:lang="en">
             <seg>Habilitation</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Habilitation</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="image">
+    <tu tuid="image">
         <tuv xml:lang="en">
             <seg>Image</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Bild</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="lecture">
+    <tu tuid="lecture">
         <tuv xml:lang="en">
             <seg>Lecture</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Vorlesung</seg>
         </tuv>
-   </tu>
+    </tu>
+   
+    <tu tuid="letter">
+        <tuv xml:lang="en">
+            <seg>Letter to the Editor</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Letter to the Editor</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="magister">
+    <tu tuid="magister">
         <tuv xml:lang="en">
             <seg>Magister's Thesis</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Magisterarbeit</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="masterthesis">
+    <tu tuid="masterthesis">
         <tuv xml:lang="en">
             <seg>Master's Thesis</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Masterarbeit</seg>
         </tuv>
-   </tu>
+    </tu>
+   
+    <tu tuid="monograph">
+        <tuv xml:lang="en">
+            <seg>Monograph</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Monographie</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="movingimage">
+    <tu tuid="movingimage">
         <tuv xml:lang="en">
             <seg>Moving Images</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Bewegte Bilder</seg>
         </tuv>
-   </tu>
+    </tu>
+   
+    <tu tuid="musicalnotation">
+        <tuv xml:lang="en">
+            <seg>Musical Notation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Noten (Musik)</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="other">
+    <tu tuid="other">
         <tuv xml:lang="en">
             <seg>Other</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Sonstiges</seg>
         </tuv>
-   </tu>
-
-   <tu tuid="periodical">
+    </tu>
+   
+    <tu tuid="periodical">
         <tuv xml:lang="en">
             <seg>Periodical</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Periodikum</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="periodicalpart">
+    <tu tuid="periodicalpart">
         <tuv xml:lang="en">
-            <seg>Part of Periodical</seg>
+            <seg>Part of a Periodical</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Ausgabe (Heft) zu einer Zeitschrift</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="preprint">
+    <tu tuid="preprint">
         <tuv xml:lang="en">
             <seg>Preprint</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Preprint</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="report">
+    <tu tuid="report">
         <tuv xml:lang="en">
             <seg>Report</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Bericht</seg>
         </tuv>
-   </tu>
-
-   <tu tuid="review">
+    </tu>
+   
+    <tu tuid="researcharticle">
         <tuv xml:lang="en">
-            <seg>Review</seg>
+            <seg>Research Article</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Forschungsartikel</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="researchdata">
+        <tuv xml:lang="en">
+            <seg>Research Data</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Forschungsdaten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="review">
+        <tuv xml:lang="en">
+            <seg>Recension</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Rezension</seg>
         </tuv>
-   </tu>
+    </tu>
+   
+    <tu tuid="reviewarticle">
+        <tuv xml:lang="en">
+            <seg>Review Article</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersichtsartikel</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="sound">
+    <tu tuid="software">
+        <tuv xml:lang="en">
+            <seg>Software</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Software</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="softwarepaper">
+        <tuv xml:lang="en">
+            <seg>Software Paper</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Softwareartikel</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="sound">
         <tuv xml:lang="en">
             <seg>Sound</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Ton</seg>
         </tuv>
-   </tu>
+    </tu>
+    
+    <tu tuid="sourceedition">
+        <tuv xml:lang="en">
+            <seg>Source Edition</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Quellenedition</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="studythesis">
+    <tu tuid="studythesis">
         <tuv xml:lang="en">
             <seg>Study Thesis</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Studienarbeit</seg>
         </tuv>
-   </tu>
+    </tu>
+   
+    <tu tuid="website">
+        <tuv xml:lang="en">
+            <seg>Website</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Website</seg>
+        </tuv>
+    </tu>
 
-   <tu tuid="workingpaper">
+    <tu tuid="workingpaper">
         <tuv xml:lang="en">
             <seg>Working Paper</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Arbeitspapier</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="talkzib">
+    <tu tuid="talkzib">
         <tuv xml:lang="en">
             <seg>Talk for ZIB</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Vortrag für ZIB</seg>
         </tuv>
-   </tu>
+    </tu>
 
-   <tu tuid="demo">
+    <tu tuid="demo">
         <tuv xml:lang="en">
             <seg>Demo (contains only two fields)</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Demo (enthält nur zwei Felder)</seg>
         </tuv>
-   </tu>
+    </tu>
    </body>
 
 </tmx>

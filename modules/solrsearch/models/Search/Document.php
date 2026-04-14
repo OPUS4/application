@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Search\Util\Query;
 
 class Solrsearch_Model_Search_Document extends Solrsearch_Model_Search_Basic
@@ -36,7 +37,7 @@ class Solrsearch_Model_Search_Document extends Solrsearch_Model_Search_Basic
     /**
      * @param array $input
      * @return Query
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws Zend_Exception
      */
     public function createSearchQuery($input)
@@ -44,7 +45,7 @@ class Solrsearch_Model_Search_Document extends Solrsearch_Model_Search_Basic
         $this->getLogger()->debug("Constructing query for id search.");
 
         if ($input['docId'] === null) {
-            throw new Application_Exception("No id provided.", 404);
+            throw new ApplicationException("No id provided.", 404);
         }
 
         $query = new Query(Query::DOC_ID);

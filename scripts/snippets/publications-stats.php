@@ -51,5 +51,3 @@ foreach ($years as $year) {
     $cumSum += $count;
     echo "year $year: $cumSum ($count)\n";
 }
-
-exit();

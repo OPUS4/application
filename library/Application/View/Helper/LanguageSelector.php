@@ -30,6 +30,8 @@
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
+
 /**
  * Builds the language selection form.
  */
@@ -49,7 +51,7 @@ class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract
 
         $currentLocale = new Zend_Locale(Application_Translate::getInstance()->getLocale());
 
-        $configHelper = new Application_Configuration();
+        $configHelper = new Configuration();
 
         // only show languages that are present in resources and activated in configuration
         $translations  = Application_Translate::getInstance()->getList();

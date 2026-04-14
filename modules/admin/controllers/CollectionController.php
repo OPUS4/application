@@ -30,6 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Collection;
 use Opus\Common\CollectionInterface;
 use Opus\Common\CollectionRole;
@@ -139,7 +140,7 @@ class Admin_CollectionController extends Application_Controller_Action
                 'admin',
                 ['id' => $id]
             );
-        } catch (Application_Exception $e) {
+        } catch (ApplicationException $e) {
             $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 ['failure' => $e->getMessage()],
@@ -166,7 +167,7 @@ class Admin_CollectionController extends Application_Controller_Action
             $returnId        = $collectionModel->delete();
             $message         = $this->view->translate('admin_collections_delete', [$name]);
             $this->_helper->Redirector->redirectTo('show', $message, 'collection', 'admin', ['id' => $returnId]);
-        } catch (Application_Exception $e) {
+        } catch (ApplicationException $e) {
             $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 ['failure' => $e->getMessage()],
@@ -195,7 +196,7 @@ class Admin_CollectionController extends Application_Controller_Action
         $collectionModel = null;
         try {
             $collectionModel = new Admin_Model_Collection($id);
-        } catch (Application_Exception $e) {
+        } catch (ApplicationException $e) {
             $this->_helper->Redirector->redirectToAndExit(
                 'index',
                 ['failure' => $e->getMessage()],

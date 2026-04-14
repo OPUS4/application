@@ -53,7 +53,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Irgendwas', $this->session);
         $val->validate();
 
-        $this->assertInternalType('array', $val->validator);
+        $this->assertIsArray($val->validator);
     }
 
     public function testValidationWithCollectionWithoutCollectionRole()
@@ -69,7 +69,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val->validate();
         $validator = $val->validator[0];
 
-        $this->assertInstanceOf('Zend_Validate_Date', $validator);
+        $this->assertInstanceOf(Zend_Validate_Date::class, $validator);
     }
 
     public function testValidationWithEmailDatatype()
@@ -78,7 +78,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val->validate();
         $validator = $val->validator[0];
 
-        $this->assertInstanceOf('Zend_Validate_EmailAddress', $validator);
+        $this->assertInstanceOf(Zend_Validate_EmailAddress::class, $validator);
     }
 
     /**
@@ -97,7 +97,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val->validate();
         $validator = $val->validator[0];
 
-        $this->assertInstanceOf('Zend_Validate_Int', $validator);
+        $this->assertInstanceOf(Zend_Validate_Int::class, $validator);
     }
 
     public function testValidationWithLanguageDatatype()
@@ -106,7 +106,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val->validate();
         $validator = $val->validator[0];
 
-        $this->assertInstanceOf('Zend_Validate_InArray', $validator);
+        $this->assertInstanceOf(Zend_Validate_InArray::class, $validator);
     }
 
     public function testValidationWithLicenceDatatype()
@@ -115,7 +115,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val->validate();
         $validator = $val->validator[0];
 
-        $this->assertInstanceOf('Zend_Validate_InArray', $validator);
+        $this->assertInstanceOf(Zend_Validate_InArray::class, $validator);
     }
 
     public function testValidationWithListDatatype()
@@ -128,7 +128,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val->validate();
         $validator = $val->validator[0];
 
-        $this->assertInstanceOf('Zend_Validate_InArray', $validator);
+        $this->assertInstanceOf(Zend_Validate_InArray::class, $validator);
     }
 
     public function testValidationWithTextDatatype()
@@ -145,7 +145,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val->validate();
         $validator = $val->validator[0];
 
-        $this->assertInstanceOf('Zend_Validate_InArray', $validator);
+        $this->assertInstanceOf(Zend_Validate_InArray::class, $validator);
     }
 
     public function testValidationWithThesisPublisherDatatype()
@@ -154,7 +154,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val->validate();
         $validator = $val->validator[0];
 
-        $this->assertInstanceOf('Zend_Validate_InArray', $validator);
+        $this->assertInstanceOf(Zend_Validate_InArray::class, $validator);
     }
 
     public function testValidationWithTitleDatatype()
@@ -171,7 +171,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val->validate();
         $validator = $val->validator[0];
 
-        $this->assertInstanceOf('Zend_Validate_GreaterThan', $validator);
+        $this->assertInstanceOf(Zend_Validate_GreaterThan::class, $validator);
     }
 
     public function testSelectOptionsForInvalidDatatype()
@@ -179,7 +179,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val      = new Publish_Model_Validation('Irgendwas', $this->session);
         $children = $val->selectOptions();
 
-        $this->assertInternalType('array', $val->validator);
+        $this->assertIsArray($val->validator);
     }
 
     public function testSelectOptionsForCollection()
@@ -289,7 +289,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $collectionRole->store();
 
         $children = $val->selectOptions('Collection');
-        $this->assertInternalType('array', $children);
+        $this->assertIsArray($children);
         $this->assertArrayHasKey('3', $children);
 
         $collectionRole->setVisible($visibleFlag);
@@ -312,7 +312,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Series', $this->session);
 
         $children = $val->selectOptions('Series');
-        $this->assertInternalType('array', $children);
+        $this->assertIsArray($children);
         $this->assertArrayHasKey('4', $children);
         //series with title: Visible Series
     }
@@ -322,7 +322,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase
         $val = new Publish_Model_Validation('Series', $this->session);
 
         $children = $val->selectOptions('Series');
-        $this->assertInternalType('array', $children);
+        $this->assertIsArray($children);
         $this->assertArrayNotHasKey('3', $children);
         //series with title: Invisible Series
     }

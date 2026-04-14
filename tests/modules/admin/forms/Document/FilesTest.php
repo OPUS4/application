@@ -66,11 +66,11 @@ class Admin_Form_Document_FilesTest extends ControllerTestCase
         $this->assertEquals(3, count($form->getSubForms()));
 
         $this->assertNotNull($form->getSubForm('File0'));
-        $this->assertInstanceOf('Admin_Form_Document_File', $form->getSubForm('File0'));
+        $this->assertInstanceOf(Admin_Form_Document_File::class, $form->getSubForm('File0'));
         $this->assertNotNull($form->getSubForm('File0')->getModel());
 
         $this->assertNotNull($form->getSubForm('File1'));
-        $this->assertInstanceOf('Admin_Form_Document_File', $form->getSubForm('File1'));
+        $this->assertInstanceOf(Admin_Form_Document_File::class, $form->getSubForm('File1'));
         $this->assertNotNull($form->getSubForm('File1')->getModel());
     }
 
@@ -78,7 +78,7 @@ class Admin_Form_Document_FilesTest extends ControllerTestCase
     {
         $form = new Admin_Form_Document_Files();
 
-        $property = new ReflectionProperty('Admin_Form_Document_Files', 'header');
+        $property = new ReflectionProperty(Admin_Form_Document_Files::class, 'header');
         $property->setAccessible(true);
 
         $header = $property->getValue($form);

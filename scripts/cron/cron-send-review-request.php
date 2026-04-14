@@ -41,20 +41,5 @@ define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Common\Log;
-use Opus\Job\MailNotification;
-use Opus\Job\Runner;
-
-$jobrunner = new Runner();
-$jobrunner->setLogger(Log::get());
-// no waiting between jobs
-$jobrunner->setDelay(0);
-// set a limit of 100 index jobs per run
-$jobrunner->setLimit(100);
-
-$mailWorker = new MailNotification();
-$mailWorker->setLogger(Log::get());
-
-$jobrunner->registerWorker($mailWorker);
-
-$jobrunner->run();
+$job = new Application_Job_SendReviewRequestJob();
+$job->run();

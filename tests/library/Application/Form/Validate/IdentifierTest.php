@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\Validate\Isbn;
 use Opus\Common\Validate\Issn;
 
@@ -271,7 +272,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      */
     public function testClassesExists()
     {
-        $config = Application_Configuration::getInstance()->getConfig();
+        $config = Configuration::getInstance()->getConfig();
         $types  = $config->identifier->validation->toArray();
         foreach ($types as $key => $val) {
             $this->assertArrayHasKey('class', $val);
@@ -284,7 +285,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
      */
     public function testMessagesKeyValid()
     {
-        $config     = Application_Configuration::getInstance()->getConfig();
+        $config     = Configuration::getInstance()->getConfig();
         $validators = $config->identifier->validation->toArray();
 
         foreach ($validators as $val) {
@@ -306,7 +307,7 @@ class Application_Form_Validate_IdentifierTest extends ControllerTestCase
     public function testTranslationExists()
     {
         $translate  = Application_Translate::getInstance();
-        $config     = Application_Configuration::getInstance()->getConfig();
+        $config     = Configuration::getInstance()->getConfig();
         $validators = $config->identifier->validation->toArray();
         foreach ($validators as $val) {
             if (array_key_exists('messageTemplates', $val)) {

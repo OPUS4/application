@@ -64,5 +64,3 @@ if ($updateRequired === 0) {
     echo "Alle Dokumente wurden überprüft -- Anzahl der Dokumente, die  keinen Titel in der Sprache des Dokuments"
         . " besitzen: $updateRequired !\n";
 }
-
-exit();

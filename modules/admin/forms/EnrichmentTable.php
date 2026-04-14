@@ -128,7 +128,7 @@ class Admin_Form_EnrichmentTable extends Application_Form_Model_Table
 
     /**
      * @param EnrichmentKeyInterface[] $models
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function setModels($models)
     {

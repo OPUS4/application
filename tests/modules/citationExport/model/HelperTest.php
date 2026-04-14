@@ -29,13 +29,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Document;
 
 class CitationExport_Model_HelperTest extends ControllerTestCase
 {
     /** @var string[] */
-    protected $additionalResources = ['database'];
+    protected $additionalResources = ['database', 'view'];
 
     /** @var int */
     private $documentId;
@@ -95,7 +96,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $output = $this->helper->getOutput($request);
 
-        $this->assertContains('school      = {School of Life},', $output);
+        $this->assertStringContainsString('school    = {School of Life},', $output);
     }
 
     public function testBibtexAttributeSchoolWithDepartment()
@@ -124,7 +125,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $institute->delete();
 
-        $this->assertContains('school      = {Test Uni, Test Dep},', $output);
+        $this->assertStringContainsString('school    = {Test Uni, Test Dep},', $output);
     }
 
     public function testBibtexAttributeSchoolForDoctoralThesis()
@@ -144,7 +145,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $output = $this->helper->getOutput($request);
 
-        $this->assertContains('school      = {School of Life},', $output);
+        $this->assertStringContainsString('school    = {School of Life},', $output);
     }
 
     public function testGetExtension()
@@ -163,7 +164,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $document->setType('masterthesis');
         $document->store();
 
-        $this->assertEquals('bibtex_masterthesis.xslt', $this->helper->getTemplateForDocument($document, 'bibtex'));
+        $this->assertEquals('bibtex.xslt', $this->helper->getTemplateForDocument($document, 'bibtex'));
         $this->assertEquals('ris.xslt', $this->helper->getTemplateForDocument($document, 'ris'));
 
         $document->setType('lecture');
@@ -225,7 +226,7 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
         $request = $this->getRequest();
         $request->setParam('docId', $this->documentId);
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('not allowed');
         $document = $this->helper->getDocument($request);
 
@@ -239,8 +240,8 @@ class CitationExport_Model_HelperTest extends ControllerTestCase
 
         $output = $this->helper->getPlainOutput($document, 'ris.xslt');
 
-        $this->assertContains('T1  - KOBV', $output);
-        $this->assertContains('T1  - COLN', $output);
-        $this->assertContains('T2  - Parent Title', $output);
+        $this->assertStringContainsString('T1  - KOBV', $output);
+        $this->assertStringContainsString('T1  - COLN', $output);
+        $this->assertStringContainsString('T3  - Parent Title', $output);
     }
 }

@@ -89,7 +89,7 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         $options = $element->getLanguageOptions();
 
         $this->assertNotNull($options);
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $this->assertEquals([
             'en' => 'Englisch',
             'de' => 'Deutsch',
@@ -105,7 +105,7 @@ class Application_Form_Element_SupportedLanguagesTest extends FormElementTestCas
         $options = $element->getLanguageOptions();
 
         $this->assertNotNull($options);
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $this->assertEquals([
             'en' => 'English',
             'de' => 'German',

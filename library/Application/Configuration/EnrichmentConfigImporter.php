@@ -123,7 +123,7 @@ class Application_Configuration_EnrichmentConfigImporter
         }
 
         if (isset($config['options']) && $type !== null) {
-            $typeClass      = 'Opus\\Enrichment\\' . $type;
+            $typeClass      = 'Opus\\Common\\Model\\FieldType\\' . $type;
             $enrichmentType = new $typeClass();
             $options        = $config['options'];
             if (is_array($options)) {

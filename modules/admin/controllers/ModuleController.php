@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Modules;
+
 /**
  * Controller for module management.
  */
@@ -41,7 +43,7 @@ class Admin_ModuleController extends Application_Controller_Action
      */
     public function indexAction()
     {
-        $modules = Application_Modules::getInstance()->getModules();
+        $modules = Modules::getInstance()->getModules();
 
         $this->view->modules = $modules;
 

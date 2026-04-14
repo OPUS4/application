@@ -54,7 +54,7 @@
 
     <tu tuid="PersonSubmitterAcademicTitle">
       <tuv xml:lang="en">
-        <seg>Academic Title</seg>
+        <seg>Academic title</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Akademischer Titel</seg>
@@ -126,10 +126,10 @@
 
     <tu tuid="PersonAuthorIdentifierOrcid">
       <tuv xml:lang="en">
-        <seg>ORCID</seg>
+        <seg>ORCID iD</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>ORCID</seg>
+        <seg>ORCID iD</seg>
       </tuv>
     </tu>
 
@@ -204,6 +204,15 @@
         <seg>Nachname</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="PersonTranslatorAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Academic title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Akademischer Titel</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="PersonAdvisorFirstName">
       <tuv xml:lang="en">
@@ -220,6 +229,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Nachname</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="PersonAdvisorAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Academic title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Akademischer Titel</seg>
       </tuv>
     </tu>
 
@@ -312,6 +330,15 @@
         <seg>Nachname</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="PersonEditorAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Academic title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Akademischer Titel</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="PersonContributorLastName">
       <tuv xml:lang="en">
@@ -319,6 +346,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Nachname</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="PersonContributorAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Academic title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Akademischer Titel</seg>
       </tuv>
     </tu>
 
@@ -346,6 +382,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Nachname</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="PersonRefereeAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Academic title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Akademischer Titel</seg>
       </tuv>
     </tu>
 

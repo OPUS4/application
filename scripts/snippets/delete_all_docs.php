@@ -50,4 +50,3 @@ foreach ($finder->getIds() as $id) {
 
 $finder = $repository->getDocumentFinder();
 echo "done -- num of docs: " . $finder->getCount() . "\n";
-exit();

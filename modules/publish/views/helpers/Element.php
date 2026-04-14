@@ -65,7 +65,11 @@ class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset
         $fieldset  = "<fieldset class='left-labels'>";
         $fieldset .= $this->getLegendFor($field['header']);
         $fieldset .= $this->getFieldsetHint($field['id']);
-        $fieldset .= "<div class='form-item'>";
+        if ($field['req'] === 'required') {
+            $fieldset .= "<div class='form-item required'>";
+        } else {
+            $fieldset .= "<div class='form-item'>";
+        }
         $fieldset .= $this->getLabelFor($field['id'], $field['label'], $field['req']);
 
         switch ($field['type']) {

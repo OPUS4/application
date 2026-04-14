@@ -59,31 +59,31 @@
 
     <xsl:output method="xml" indent="yes" />
 
-    <xsl:template match="Opus_Document" mode="xmetadissplus">
+    <xsl:template match="Opus_Document">
         <xMetaDiss:xMetaDiss
             xmlns:xMetaDiss="http://www.d-nb.de/standards/xmetadissplus/"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ https://d-nb.info/standards/schema/xmetadissplus.xsd">
 
             <!-- dc:title -->
-            <xsl:apply-templates select="TitleMain" mode="xmetadissplus" />
-            <xsl:apply-templates select="TitleSub" mode="xmetadissplus" />
+            <xsl:apply-templates select="TitleMain"  />
+            <xsl:apply-templates select="TitleSub"  />
             <!-- dc:creator -->
-            <xsl:apply-templates select="PersonAuthor" mode="xmetadissplus" />
-            <xsl:apply-templates select="@CreatingCorporation" mode="xmetadissplus" />
-            <xsl:apply-templates select="@ContributingCorporation" mode="xmetadissplus" />
+            <xsl:apply-templates select="PersonAuthor"  />
+            <xsl:apply-templates select="@CreatingCorporation"  />
+            <xsl:apply-templates select="@ContributingCorporation"  />
             <!-- dc:subject -->
-            <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="xmetadissplus" />
-            <xsl:apply-templates select="Subject[@Type='swd']" mode="xmetadissplus" />
-            <xsl:apply-templates select="Subject[@Type='uncontrolled']" mode="xmetadissplus" />
+            <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]"  />
+            <xsl:apply-templates select="Subject[@Type='swd']"  />
+            <xsl:apply-templates select="Subject[@Type='uncontrolled']"  />
             <!-- dc:abstract -->
-            <xsl:apply-templates select="TitleAbstract" mode="xmetadissplus" />
+            <xsl:apply-templates select="TitleAbstract"  />
             <!-- dc:publisher -->
-            <xsl:apply-templates select="ThesisPublisher" mode="xmetadissplus" />
+            <xsl:apply-templates select="ThesisPublisher"  />
             <!-- dc:contributor -->
-            <xsl:apply-templates select="PersonAdvisor" mode="xmetadissplus" />
-            <xsl:apply-templates select="PersonReferee" mode="xmetadissplus" />
-            <xsl:apply-templates select="PersonEditor" mode="xmetadissplus" />
+            <xsl:apply-templates select="PersonAdvisor"  />
+            <xsl:apply-templates select="PersonReferee"  />
+            <xsl:apply-templates select="PersonEditor"  />
 
             <xsl:choose>
                 <xsl:when test="ThesisDateAccepted">
@@ -126,13 +126,16 @@
                 <xsl:value-of select="php:functionString('Application_Xslt::dcmiType', @Type)" />
             </dc:type>
 
+            <!-- dini:version_driver -->
+            <xsl:apply-templates select="SetSpec[starts-with(@Value,'status-type')]" mode="metadata" />
+
             <!-- dc:identifier -->
             <xsl:choose>
                 <xsl:when test="Identifier[@Type = 'urn']">
-                    <xsl:apply-templates select="Identifier[@Type = 'urn']" mode="xmetadissplus" />
+                    <xsl:apply-templates select="Identifier[@Type = 'urn']"  />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select="Identifier[@Type = 'doi']" mode="xmetadissplus" />
+                    <xsl:apply-templates select="Identifier[@Type = 'doi']"  />
                 </xsl:otherwise>
             </xsl:choose>
 
@@ -145,7 +148,7 @@
             </xsl:for-each>
 
             <!-- dc:source must appear after dc:identifier -->
-            <xsl:apply-templates select="TitleParent" mode="xmetadissplus" />
+            <xsl:apply-templates select="TitleParent"  />
 
             <!-- weird DNB constraint: dc:language must appear after dcterms:medium -->
             <dc:language xsi:type="dcterms:ISO639-2">
@@ -158,11 +161,11 @@
                     <xsl:apply-templates select="Series" mode="xmetadissplusPeriodicalPart" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select="Series" mode="xmetadissplus" />
+                    <xsl:apply-templates select="Series"  />
                 </xsl:otherwise>
             </xsl:choose>
 
-            <xsl:apply-templates select="Licence" mode="xmetadissplus" />
+            <xsl:apply-templates select="Licence"  />
 
             <!--  thesis.degree only, if type doctoral or habilitation -->
             <xsl:if test="@Type='bachelorthesis' or @Type='doctoralthesis' or @Type='habilitation' or @Type='masterthesis'
@@ -228,12 +231,12 @@
             <ddb:fileNumber>
               <xsl:value-of select="count(File)"/>
             </ddb:fileNumber>
-            <xsl:apply-templates select="File" mode="xmetadissplus" />
+            <xsl:apply-templates select="File"  />
             <xsl:if test="File">
-                <xsl:apply-templates select="TransferUrl" mode="xmetadissplus" />
+                <xsl:apply-templates select="TransferUrl"  />
             </xsl:if>
 
-            <xsl:apply-templates select="Identifier[@Type = 'url']" mode="xmetadissplus" />
+            <xsl:apply-templates select="Identifier[@Type = 'url']"  />
 
             <ddb:identifier ddb:type="URL">
                <xsl:value-of select="@frontdoorurl" />
@@ -248,7 +251,7 @@
         </xMetaDiss:xMetaDiss>
     </xsl:template>
 
-    <xsl:template match="TitleMain" mode="xmetadissplus">
+    <xsl:template match="TitleMain" >
         <dc:title xsi:type="ddb:titleISO639-2">
             <xsl:attribute name="lang">
               <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
@@ -264,7 +267,7 @@
         </dc:title>
     </xsl:template>
 
-    <xsl:template match="TitleSub" mode="xmetadissplus">
+    <xsl:template match="TitleSub" >
         <dcterms:alternative xsi:type="ddb:talternativeISO639-2">
             <xsl:attribute name="lang">
                  <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
@@ -280,7 +283,7 @@
         </dcterms:alternative>
     </xsl:template>
 
-    <xsl:template match="PersonAuthor" mode="xmetadissplus">
+    <xsl:template match="PersonAuthor" >
        <dc:creator xsi:type="pc:MetaPers">
          <pc:person>
            <xsl:if test="normalize-space(@IdentifierGnd)">
@@ -321,7 +324,7 @@
        </dc:creator>
     </xsl:template>
 
-    <xsl:template match="@CreatingCorporation" mode="xmetadissplus">
+    <xsl:template match="@CreatingCorporation" >
        <dc:creator xsi:type="pc:MetaPers">
          <pc:person>
          <pc:name type="otherName" otherNameType="organisation">
@@ -333,7 +336,7 @@
        </dc:creator>
     </xsl:template>
 
-    <xsl:template match="@ContributingCorporation" mode="xmetadissplus">
+    <xsl:template match="@ContributingCorporation" >
        <dc:creator xsi:type="pc:MetaPers">
          <pc:person>
          <pc:name type="otherName" otherNameType="organisation">
@@ -345,25 +348,25 @@
        </dc:creator>
     </xsl:template>
 
-    <xsl:template match="Collection[@RoleName='ddc' and @Visible=1]" mode="xmetadissplus">
+    <xsl:template match="Collection[@RoleName='ddc' and @Visible=1]" >
         <dc:subject xsi:type="xMetaDiss:DDC-SG">
             <xsl:value-of select="@Number" />
         </dc:subject>
     </xsl:template>
 
-    <xsl:template match="Subject[@Type='swd']" mode="xmetadissplus">
+    <xsl:template match="Subject[@Type='swd']" >
         <dc:subject xsi:type="xMetaDiss:SWD">
             <xsl:value-of select="@Value" />
         </dc:subject>
     </xsl:template>
 
-    <xsl:template match="Subject[@Type='uncontrolled']" mode="xmetadissplus">
+    <xsl:template match="Subject[@Type='uncontrolled']" >
         <dc:subject xsi:type="xMetaDiss:noScheme">
             <xsl:value-of select="@Value" />
         </dc:subject>
     </xsl:template>
 
-    <xsl:template match="TitleAbstract" mode="xmetadissplus">
+    <xsl:template match="TitleAbstract" >
         <dcterms:abstract xsi:type="ddb:contentISO639-2" ddb:type="noScheme">
             <xsl:attribute name="lang">
                 <xsl:value-of select="php:functionString('Opus\Common\Language::getLanguageCode', @Language)" />
@@ -372,7 +375,7 @@
         </dcterms:abstract>
     </xsl:template>
 
-    <xsl:template match="PersonAdvisor" mode="xmetadissplus">
+    <xsl:template match="PersonAdvisor" >
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="advisor">
           <pc:person>
             <xsl:if test="normalize-space(@IdentifierGnd)">
@@ -413,7 +416,7 @@
        </dc:contributor>
     </xsl:template>
 
-    <xsl:template match="PersonReferee" mode="xmetadissplus">
+    <xsl:template match="PersonReferee" >
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="referee">
            <pc:person>
             <xsl:if test="normalize-space(@IdentifierGnd)">
@@ -454,7 +457,7 @@
        </dc:contributor>
     </xsl:template>
 
-    <xsl:template match="PersonEditor" mode="xmetadissplus">
+    <xsl:template match="PersonEditor" >
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="editor">
            <pc:person>
             <xsl:if test="normalize-space(@IdentifierGnd)">
@@ -495,7 +498,7 @@
        </dc:contributor>
     </xsl:template>
 
-    <xsl:template match="ThesisPublisher" mode="xmetadissplus">
+    <xsl:template match="ThesisPublisher" >
         <dc:publisher xsi:type="cc:Publisher" type="dcterms:ISO3166">
             <cc:universityOrInstitution>
                 <cc:name>
@@ -511,13 +514,19 @@
         </dc:publisher>
     </xsl:template>
 
-    <xsl:template match="Identifier[@Type = 'urn']" mode="xmetadissplus">
+    <xsl:template match="SetSpec[starts-with(@Value,'status-type')]" mode="metadata">
+        <dini:version_driver>
+            <xsl:value-of select="substring-after(@Value,'status-type:')" />
+        </dini:version_driver>
+    </xsl:template>
+
+    <xsl:template match="Identifier[@Type = 'urn']" >
         <dc:identifier xsi:type="urn:nbn">
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="Identifier[@Type = 'doi']" mode="xmetadissplus">
+    <xsl:template match="Identifier[@Type = 'doi']" >
         <dc:identifier xsi:type="doi:doi">
             <xsl:value-of select="@Value" />
         </dc:identifier>
@@ -529,13 +538,13 @@
         </ddb:identifier>
     </xsl:template>
 
-    <xsl:template match="Licence" mode="xmetadissplus">
+    <xsl:template match="Licence" >
         <dc:rights>
             <xsl:value-of select="@NameLong" />
         </dc:rights>
     </xsl:template>
 
-    <xsl:template match="File" mode="xmetadissplus">
+    <xsl:template match="File" >
         <ddb:fileProperties ddb:fileName="{@PathName}" ddb:fileSize="{@FileSize}">
             <xsl:attribute name="ddb:fileID">
                 <xsl:text>file</xsl:text><xsl:value-of select="../@Id"/>-<xsl:value-of select="position()-1"/>
@@ -543,19 +552,19 @@
         </ddb:fileProperties>
     </xsl:template>
 
-    <xsl:template match="TransferUrl" mode="xmetadissplus">
+    <xsl:template match="TransferUrl" >
         <ddb:transfer ddb:type="dcterms:URI">
             <xsl:value-of select="@PathName" />
         </ddb:transfer>
     </xsl:template>
 
-    <xsl:template match="Identifier[@Type = 'url']" mode="xmetadissplus">
+    <xsl:template match="Identifier[@Type = 'url']" >
         <ddb:identifier ddb:type="URL">
             <xsl:value-of select="@Value" />
         </ddb:identifier>
     </xsl:template>
 
-    <xsl:template match="TitleParent" mode="xmetadissplus">
+    <xsl:template match="TitleParent" >
         <dc:source xsi:type="ddb:noScheme">
             <xsl:value-of select="@Value" />
             <xsl:if test="../@Volume != ''">
@@ -565,6 +574,10 @@
             <xsl:if test="../@Issue != ''">
                 <xsl:text>, </xsl:text>
                 <xsl:value-of select="../@Issue" />
+            </xsl:if>
+            <xsl:if test="(./@ArticleNumber)">
+                <xsl:text>, </xsl:text>
+                <xsl:value-of select="./@ArticleNumber" />
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="../@PageFirst">
@@ -582,7 +595,7 @@
         </dc:source>
     </xsl:template>
 
-    <xsl:template match="Series" mode="xmetadissplus">
+    <xsl:template match="Series" >
         <dcterms:isPartOf xsi:type="ddb:noScheme">
             <xsl:value-of select="@Title" />
             <xsl:text> ; </xsl:text>

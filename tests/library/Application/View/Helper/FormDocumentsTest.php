@@ -59,7 +59,7 @@ class Application_View_Helper_FormDocumentsTest extends ControllerTestCase
             1 => Document::get(1),
         ]);
 
-        $this->assertContains('<div class="documents">', $output);
-        $this->assertContains('<div class="document-authors"><span class="author">Hapke, Thomas</span></div>', $output);
+        $this->assertStringContainsString('<div class="documents">', $output);
+        $this->assertStringContainsString('<div class="document-authors"><span class="author">Hapke, Thomas</span></div>', $output);
     }
 }

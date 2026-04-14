@@ -120,7 +120,7 @@ class AuthControllerTest extends ControllerTestCase
     {
         $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/auth/logout/rmodule/admin/rcontroller/index/raction/index');
-        $this->assertNotContains('Argument 4 passed to Zend_Controller_Action_Helper_Redirector::direct() must be an array, null given', $this->response->outputBody());
+        $this->assertStringNotContainsString('Argument 4 passed to Zend_Controller_Action_Helper_Redirector::direct() must be an array, null given', $this->response->outputBody());
         $this->assertResponseLocationHeader($this->response, '/home');
         $this->assertResponseCode('302');
         $this->assertNull(Zend_Auth::getInstance()->getIdentity());

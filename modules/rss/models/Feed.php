@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
+
 /**
  * TODO context spezifische Titel für RSS feed (latest, collections, ...)
  */
@@ -64,7 +66,7 @@ class Rss_Model_Feed extends Application_Model_Abstract
     {
         $config = $this->getConfig();
 
-        $name = Application_Configuration::getInstance()->getName();
+        $name = Configuration::getInstance()->getName();
 
         if (isset($config->rss->default->feedTitle)) {
             $feedTitle = $config->rss->default->feedTitle;

@@ -62,7 +62,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
         $this->dispatch('/admin/documents/index/collectionid/2');
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains('ddc', $body);
+        $this->assertStringNotContainsString('ddc', $body);
         $this->assertTrue(strstr($body, '<b>Dewey Decimal Classification</b>') || strstr($body, '<b>DDC-Klassifikation</b>'));
     }
 
@@ -80,7 +80,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
         $cr->delete();
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-        $this->assertNotContains('<b>foo</b>', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('<b>foo</b>', $this->getResponse()->getBody());
     }
 
     public function testShowAllDocsForDDCCollection()
@@ -96,8 +96,9 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
         $role->setDisplayBrowsing($displayBrowsing);
         $role->store();
 
-        $this->assertContains('<b>62 Ingenieurwissenschaften</b>', $this->getResponse()->getBody());
-        $this->assertNotContains('<b>Ingenieurwissenschaften</b>', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<b>62 Ingenieurwissenschaften</b>', $body);
+        $this->assertStringNotContainsString('<b>Ingenieurwissenschaften</b>', $body);
     }
 
     public function testShowAllDocsForBklCollection()
@@ -113,8 +114,9 @@ class Admin_DocumentsControllerTest extends ControllerTestCase
         $role->setDisplayBrowsing($displayBrowsing);
         $role->store();
 
-        $this->assertContains('<b>52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $this->getResponse()->getBody());
-        $this->assertNotContains('<b>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<b>52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $body);
+        $this->assertStringNotContainsString('<b>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $body);
     }
 
     public function testShowHitsPerPageLinks()

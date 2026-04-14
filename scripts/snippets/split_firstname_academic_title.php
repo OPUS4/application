@@ -89,5 +89,3 @@ foreach (Person::getModelRepository()->getAll() as $person) {
         echo '[ERR] Opus_Person #' . $person->getId() . ' could not be stored to database: ' . $e->getMessage() . "\n";
     }
 }
-
-exit();

@@ -57,16 +57,18 @@ use Opus\Common\Log;
         <?PHP if (! $this->element->isViewModeEnabled() || count($stateLinks) === 0) : ?>
         <dl id="Document-ServerState">
           <dt id="Document-ServerState-label"><?= htmlspecialchars($this->translate('ServerState_short')) . ':'?></dt>
-          <dd id="Document-ServerState-value"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_'
-                  . ucfirst($currentState))) ?></dd>
+          <dd id="Document-ServerState-value"><?= htmlspecialchars($this->translate(
+              "Opus_Document_ServerState_Value_{$currentState}"
+          )) ?></dd>
         </dl>
         <?PHP else : ?>
           <dl id="Document-ServerState" class="dropdown">
               <dt><a><?= htmlspecialchars($this->translate('ServerState_short')) . ':'?></a></dt>
               <dd>
                 <ul>
-                    <li class="active"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_'
-                            . ucfirst($currentState))) ?></li>
+                    <li class="active"><?= htmlspecialchars($this->translate(
+                        "Opus_Document_ServerState_Value_{$currentState}"
+                    )) ?></li>
                     <?PHP foreach ($stateLinks as $targetState => $params) : ?>
                     <li><a id="State-Link-<?= $targetState ?>" href="<?= $this->url($params) ?>"
                             ><?= htmlspecialchars($this->translate('admin_workflow_' . $targetState)) ?></a></li>

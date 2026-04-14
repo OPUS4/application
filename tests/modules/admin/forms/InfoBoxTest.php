@@ -70,7 +70,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Called with instance of', $messages[0]);
+        $this->assertStringContainsString('Called with instance of', $messages[0]);
 
         $logger->clear();
 
@@ -79,7 +79,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Called with instance of \'' . __CLASS__ . '\'', $messages[0]);
+        $this->assertStringContainsString('Called with instance of \'' . __CLASS__ . '\'', $messages[0]);
     }
 
     public function testConstructFromPost()
@@ -105,7 +105,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Called with instance of', $messages[0]);
+        $this->assertStringContainsString('Called with instance of', $messages[0]);
 
         $logger->clear();
 
@@ -114,7 +114,7 @@ class Admin_Form_InfoBoxTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Called with instance of \'Opus\Person\'', $messages[0]);
+        $this->assertStringContainsString('Called with instance of \'Opus\Person\'', $messages[0]);
     }
 
     public function testIsEmpty()

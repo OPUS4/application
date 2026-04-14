@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Modules;
+
 class Application_View_Helper_AdminCssClassTest extends ControllerTestCase
 {
     /** @var string */
@@ -39,7 +41,7 @@ class Application_View_Helper_AdminCssClassTest extends ControllerTestCase
      */
     public function modulesProvider()
     {
-        $modules = Application_Modules::getInstance()->getModules();
+        $modules = Modules::getInstance()->getModules();
 
         $data = [];
 

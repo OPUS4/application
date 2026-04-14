@@ -54,6 +54,6 @@ class Setup_Form_ImprintPageTest extends ControllerTestCase
         $this->assertNotNull($element);
         $value = $element->getValue();
         $this->assertArrayHasKey('en', $value);
-        $this->assertContains('law', $value['en']);
+        $this->assertStringContainsString('law', $value['en']);
     }
 }

@@ -134,7 +134,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-        $this->assertContains('badVerb', $response->getBody(), "Response must contain 'badVerb'");
+        $this->assertStringContainsString('badVerb', $response->getBody(), "Response must contain 'badVerb'");
     }
 
     /**
@@ -148,7 +148,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-        $this->assertContains('badVerb', $response->getBody(), "Response must contain 'badVerb'");
+        $this->assertStringContainsString('badVerb', $response->getBody(), "Response must contain 'badVerb'");
     }
 
     /**
@@ -278,9 +278,35 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $this->dispatch('/oai?verb=ListMetadataFormats');
         $this->assertResponseCode(200);
+        $this->registerXpathNamespaces($this->xpathNamespaces);
 
-        $response = $this->getResponse();
-        $this->checkForBadStringsInHtml($response->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->checkForBadStringsInHtml($body);
+
+        $this->assertStringNotContainsString(
+            'copy_xml',
+            $body,
+            "Response must not contain format 'copy_xml'"
+        );
+
+        $this->assertStringNotContainsString(
+            'xsl:text',
+            $body,
+            "Response must not contain 'xsl:text'"
+        );
+
+        $this->assertXpathContentContains('//oai:metadataFormat/oai:metadataPrefix', 'oai_dc');
+
+        $this->assertXpathContentContains(
+            "//oai:metadataFormat[oai:metadataPrefix = 'oai_dc']/oai:schema",
+            'http://www.openarchives.org/OAI/2.0/oai_dc.xsd'
+        );
+
+        $this->assertXpathContentContains(
+            "//oai:metadataFormat[oai:metadataPrefix = 'oai_dc']/oai:metadataNamespace",
+            'http://www.openarchives.org/OAI/2.0/oai_dc/'
+        );
     }
 
     /**
@@ -293,13 +319,13 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=ListSets');
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
-        $this->checkForBadStringsInHtml($response->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->checkForBadStringsInHtml($body);
 
         // Test "valid" set specs: Non-empty sets in test data
         $assertSets = [
-            'doc-type:article',
-            'doc-type:preprint',
+            'doc-type:Article',
+            'doc-type:Preprint',
             'bibliography:true',
             'bibliography:true',
             'ddc:62',
@@ -307,14 +333,14 @@ class Oai_IndexControllerTest extends ControllerTestCase
             'pacs:07.07.Df',
         ];
         foreach ($assertSets as $assertSet) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $assertSet,
-                $response->getBody(),
+                $body,
                 "Response must contain set '$assertSet'"
             );
-            $this->assertContains(
+            $this->assertStringContainsString(
                 "<setSpec>$assertSet</setSpec>",
-                $response->getBody(),
+                $body,
                 "Response must contain set '$assertSet'"
             );
         }
@@ -322,9 +348,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
         // Test "valid" set specs: Non-existent/empty sets in test data.
         $assertNoSets = ['msc:90C90'];
         foreach ($assertNoSets as $assertNoSet) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 $assertNoSet,
-                $response->getBody(),
+                $body,
                 "Response must not contain set '$assertNoSet'"
             );
         }
@@ -353,7 +379,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
             $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
             $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
-            $this->assertContains(
+            $this->assertStringContainsString(
                 "oai::$docId",
                 $response->getBody(),
                 "Response must contain 'oai::$docId'"
@@ -405,13 +431,13 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'oai::41',
             $response->getBody(),
             "Response must contain 'oai::41'"
         );
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'xMetaDiss',
             $response->getBody(),
             "Response must contain 'xMetaDiss'"
@@ -437,10 +463,10 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $badStrings = ["Exception", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response, $badStrings);
 
-        $this->assertContains("oai::$docId", $response, "Response must contain 'oai::$docId'");
+        $this->assertStringContainsString("oai::$docId", $response, "Response must contain 'oai::$docId'");
 
-        $this->assertContains('noRecordsMatch', $response);
-        $this->assertContains('Document is not available for OAI export!', $response);
+        $this->assertStringContainsString('noRecordsMatch', $response);
+        $this->assertStringContainsString('Document is not available for OAI export!', $response);
     }
 
     /**
@@ -457,13 +483,13 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'oai::41',
             $response->getBody(),
             "Response must contain 'oai::41'"
         );
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'xMetaDiss',
             $response->getBody(),
             "Response must contain 'xMetaDiss'"
@@ -488,7 +514,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $assertTitles = ["Dr.", "Prof."];
         foreach ($assertTitles as $title) {
             $testString = "<pc:academicTitle>$title</pc:academicTitle>";
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $testString,
                 $response->getBody(),
                 "Response must contain '$testString'"
@@ -544,9 +570,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
         $this->assertResponseCode(200);
 
-        $response   = $this->getResponse();
+        $body       = $this->getResponse()->getBody();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
-        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+        $this->checkForCustomBadStringsInHtml($body, $badStrings);
 
         // Regression test for OPUSVIER-2170, OPUSVIER-2175
         $badNamespaces = [
@@ -556,9 +582,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
             'xmlns:ddb1="http://www.d-nb.de/standards/ddb/"',
         ];
         foreach ($badNamespaces as $badNamespace) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 $badNamespace,
-                $response->getBody(),
+                $body,
                 "Output contains '$badNamespace', which indicates bad namespaces."
             );
         }
@@ -574,11 +600,11 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
         $this->assertResponseCode(200);
 
-        $response   = $this->getResponse();
+        $body       = $this->getResponse()->getBody();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
-        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+        $this->checkForCustomBadStringsInHtml($body, $badStrings);
 
-        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $xpath = $this->prepareXpathFromResultString($body);
 
         // Regression test for OPUSVIER-2193
         $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:medium');
@@ -613,11 +639,11 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
         $this->assertResponseCode(200);
 
-        $response   = $this->getResponse();
+        $body       = $this->getResponse()->getBody();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
-        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+        $this->checkForCustomBadStringsInHtml($body, $badStrings);
 
-        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $xpath = $this->prepareXpathFromResultString($body);
 
         // Regression test for OPUSVIER-2068
         $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:dateAccepted');
@@ -655,11 +681,11 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
         $this->assertResponseCode(200);
 
-        $response   = $this->getResponse();
+        $body       = $this->getResponse()->getBody();
         $badStrings = ["Exception", "Error", "Stacktrace", "badVerb"];
-        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+        $this->checkForCustomBadStringsInHtml($body, $badStrings);
 
-        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $xpath = $this->prepareXpathFromResultString($body);
 
         // Regression test for OPUSVIER-1788 (show DDC 51)
         $elements = $xpath->query('//xMetaDiss:xMetaDiss/dc:subject[@xsi:type="xMetaDiss:DDC-SG" and text()="51"]');
@@ -728,7 +754,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertEquals(1, $elements->length, "Unexpected ddb:identifier count");
 
         $value = $elements->item(0)->nodeValue;
-        $this->assertContains(
+        $this->assertStringContainsString(
             "frontdoor/index/index/docId/1",
             $value,
             'expected frontdoor URL in ddb:identifier'
@@ -920,7 +946,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
             $this->assertEquals($label, $elements->item(0)->nodeValue);
 
             $elements = $xpath->query('//dc:type[@xsi:type="dini:PublType"]');
-            $this->assertEquals('masterThesis', $elements->item(0)->nodeValue);
+            $this->assertEquals('MasterThesis', $elements->item(0)->nodeValue);
         }
     }
 
@@ -988,12 +1014,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $badStrings = ["Exception", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<ListRecords>',
             $response->getBody(),
             "Response must contain '<ListRecords>'"
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<record>',
             $response->getBody(),
             "Response must contain '<record>'"
@@ -1020,7 +1046,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $responseBody = $this->getResponse()->getBody();
 
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             '<ddb:fileNumber>0</ddb:fileNumber>',
             $responseBody,
             "Response must not contain records without files"
@@ -1076,8 +1102,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertNotContains("oai::$docId", $body, 'Response should not contain embargoed document.');
-        $this->assertContains("oai::$visibleId", $body, 'Response should contain document without embargo.');
+        $this->assertStringNotContainsString("oai::$docId", $body, 'Response should not contain embargoed document.');
+        $this->assertStringContainsString("oai::$visibleId", $body, 'Response should contain document without embargo.');
     }
 
     /**
@@ -1115,13 +1141,14 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->enableSecurity();
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::123');
 
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-        $this->assertContains('<GetRecord>', $this->getResponse()->getBody());
-        $this->assertContains('<header status="deleted">', $this->getResponse()->getBody());
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<GetRecord>', $body);
+        $this->assertStringContainsString('<header status="deleted">', $body);
 
-        $this->assertNotContains('<error>', $this->getResponse()->getBody());
-        $this->assertNotContains('<error>Unauthorized: Access to module not allowed.</error>', $this->getResponse()->getBody());
-        $this->assertNotContains('<error code="unknown">An internal error occured.</error>', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('<error>', $body);
+        $this->assertStringNotContainsString('<error>Unauthorized: Access to module not allowed.</error>', $body);
+        $this->assertStringNotContainsString('<error code="unknown">An internal error occured.</error>', $body);
     }
 
     /**
@@ -1140,8 +1167,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
 
         $this->assertResponseCode(200);
-        $this->assertContains('<ddb:transfer', $this->getResponse()->getBody());
-        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<ddb:transfer', $this->getResponse()->getBody());
+        $this->assertStringContainsString($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
     }
 
     /**
@@ -1155,7 +1182,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
 
         $this->assertResponseCode(200);
-        $this->assertNotContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
     }
 
     /**
@@ -1226,8 +1253,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::' . $id);
 
         $response = $this->getResponse()->getBody();
-        $this->assertContains('<Opus_Document xmlns="" Id="' . $id . '"', $response);
-        $this->assertNotContains('<File', $response);
+        $this->assertStringContainsString('<Opus_Document Id="' . $id . '"', $response);
+        $this->assertStringNotContainsString('<File', $response);
     }
 
     /**
@@ -1239,7 +1266,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $this->enableSecurity();
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::80');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<error code="cannotDisseminateFormat">The metadataPrefix \'copy_xml\' is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'Usage of metadataPrefix copy_xml and verb GetRecords is not denied'
@@ -1253,7 +1280,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $this->enableSecurity();
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=copy_xml&from=2100-01-01');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<error code="cannotDisseminateFormat">The metadataPrefix \'copy_xml\' is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'Usage of metadataPrefix copy_xml and verb ListRecords is not denied'
@@ -1267,7 +1294,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
     {
         $this->enableSecurity();
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=copy_xml');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<error code="cannotDisseminateFormat">The metadataPrefix \'copy_xml\' is not supported by the item or this repository.</error>',
             $this->getResponse()->getBody(),
             'Usage of metadataPrefix copy_xml and verb ListIdentifiers is not denied'
@@ -1307,8 +1334,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
 
         $this->assertResponseCode(200);
-        $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $this->getResponse()->getBody());
-        $this->assertContains(
+        $this->assertStringContainsString('<ddb:fileNumber>1</ddb:fileNumber>', $this->getResponse()->getBody());
+        $this->assertStringContainsString(
             $this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>',
             $this->getResponse()->getBody()
         );
@@ -1336,8 +1363,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
 
         $this->assertResponseCode(200);
-        $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $this->getResponse()->getBody());
-        $this->assertContains(
+        $this->assertStringContainsString('<ddb:fileNumber>2</ddb:fileNumber>', $this->getResponse()->getBody());
+        $this->assertStringContainsString(
             $this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>',
             $this->getResponse()->getBody()
         );
@@ -1377,9 +1404,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
-        $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
-        $this->assertNotContains('<ddb:fileNumber>3</ddb:fileNumber>', $body);
+        $this->assertStringContainsString('<ddb:fileNumber>2</ddb:fileNumber>', $body);
+        $this->assertStringContainsString('<ddb:fileNumber>1</ddb:fileNumber>', $body);
+        $this->assertStringNotContainsString('<ddb:fileNumber>3</ddb:fileNumber>', $body);
     }
 
     /**
@@ -1421,22 +1448,22 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
-        $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
+        $this->assertStringContainsString('<ddb:fileNumber>2</ddb:fileNumber>', $body);
+        $this->assertStringContainsString('<ddb:fileNumber>1</ddb:fileNumber>', $body);
         // docs without files are not longer output; see OPUSVIER-3142
-//        $this->assertContains('<ddb:fileNumber>0</ddb:fileNumber>', $body);
-        $this->assertNotContains('<ddb:fileNumber>3</ddb:fileNumber>', $body);
+//        $this->assertStringContainsString('<ddb:fileNumber>0</ddb:fileNumber>', $body);
+        $this->assertStringNotContainsString('<ddb:fileNumber>3</ddb:fileNumber>', $body);
 
         // TODO host name and instance name are empty in test environment (OPUSVIER-2511)
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<ddb:transfer ddb:type="dcterms:URI">http:///oai/container/index/docId/' . $doc1->getId() . '</ddb:transfer>',
             $body
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<ddb:transfer ddb:type="dcterms:URI">http:///oai/container/index/docId/' . $doc2->getId() . '</ddb:transfer>',
             $body
         );
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             '<ddb:transfer ddb:type="dcterms:URI">http:///oai/container/index/docId/' . $doc3->getId() . '</ddb:transfer>',
             $body
         );
@@ -1466,8 +1493,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
 
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);
-        $this->assertContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
+        $this->assertStringNotContainsString('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);
+        $this->assertStringContainsString('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
     }
 
     /**
@@ -1485,12 +1512,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=pacs');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<setSpec>pacs:07.07.Df</setSpec>', $body);
-        $this->assertContains(':79</identifier>', $body);
+        $this->assertStringContainsString('<setSpec>pacs:07.07.Df</setSpec>', $body);
+        $this->assertStringContainsString(':79</identifier>', $body);
 
         // Regression test for OPUSVIER-2564: invalid SetSpec characters
-        $this->assertNotContains('<setSpec>pacs:07.75.', $body);
-        $this->assertNotContains('<setSpec>pacs:85.85.', $body);
+        $this->assertStringNotContainsString('<setSpec>pacs:07.75.', $body);
+        $this->assertStringNotContainsString('<setSpec>pacs:85.85.', $body);
     }
 
     /**
@@ -1508,12 +1535,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc&set=pacs');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<setSpec>pacs:07.07.Df</setSpec>', $body);
-        $this->assertContains(':79</identifier>', $body);
+        $this->assertStringContainsString('<setSpec>pacs:07.07.Df</setSpec>', $body);
+        $this->assertStringContainsString(':79</identifier>', $body);
 
         // Regression test for OPUSVIER-2564: invalid SetSpec characters
-        $this->assertNotContains('<setSpec>pacs:07.75.', $body);
-        $this->assertNotContains('<setSpec>pacs:85.85.', $body);
+        $this->assertStringNotContainsString('<setSpec>pacs:07.75.', $body);
+        $this->assertStringNotContainsString('<setSpec>pacs:85.85.', $body);
     }
 
     /**
@@ -1531,12 +1558,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:opus4.demo:79');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<setSpec>pacs:07.07.Df</setSpec>', $body);
-        $this->assertContains(':79</identifier>', $body);
+        $this->assertStringContainsString('<setSpec>pacs:07.07.Df</setSpec>', $body);
+        $this->assertStringContainsString(':79</identifier>', $body);
 
         // Regression test for OPUSVIER-2564: invalid SetSpec characters
-        $this->assertNotContains('<setSpec>pacs:07.75.', $body);
-        $this->assertNotContains('<setSpec>pacs:85.85.', $body);
+        $this->assertStringNotContainsString('<setSpec>pacs:07.75.', $body);
+        $this->assertStringNotContainsString('<setSpec>pacs:85.85.', $body);
     }
 
     /**
@@ -1550,7 +1577,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('<error code="noRecordsMatch">', $body);
+        $this->assertStringContainsString('<error code="noRecordsMatch">', $body);
     }
 
     /**
@@ -1562,7 +1589,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $this->assertResponseCode(200);
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<error code="noRecordsMatch">', $body);
+        $this->assertStringContainsString('<error code="noRecordsMatch">', $body);
     }
 
     /**
@@ -1879,9 +1906,9 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertNotContains('xml:lang="deu"', $body);
-        $this->assertNotContains('xml:lang="ger"', $body);
-        $this->assertContains('xml:lang="de"', $body);
+        $this->assertStringNotContainsString('xml:lang="deu"', $body);
+        $this->assertStringNotContainsString('xml:lang="ger"', $body);
+        $this->assertStringContainsString('xml:lang="de"', $body);
     }
 
     /**
@@ -1900,7 +1927,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $values  = $this->nodeListToArray($docType);
 
         $this->assertContains('doctoralthesis', $values);
-        $this->assertContains('doc-type:doctoralThesis', $values);
+        $this->assertContains('doc-type:Habilitation', $values);
     }
 
     /**
@@ -2007,12 +2034,12 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $badStrings   = ["Exception", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($responseBody, $badStrings);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<setSpec>openaire</setSpec>',
             $responseBody,
             'OpenAire requires set-name to be "openaire"'
         );
-        $this->assertNotContains('<setSpec>doc-type:doctoralthesis</setSpec>', $responseBody);
+        $this->assertStringNotContainsString('<setSpec>doc-type:doctoralthesis</setSpec>', $responseBody);
 
         $xpath = $this->prepareXpathFromResultString($responseBody);
 
@@ -2059,7 +2086,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         // Identifier
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:identifier");
         // assertContains, weil der Identifier die url ist und diese sich mit dem Host ändert
-        $this->assertContains('frontdoor/index/index/docId/145', $queryResponse->item(0)->nodeValue);
+        $this->assertStringContainsString('frontdoor/index/index/docId/145', $queryResponse->item(0)->nodeValue);
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:identifier");
         $this->assertEquals('urn:nbn:op:123', $queryResponse->item(1)->nodeValue);
 
@@ -2105,8 +2132,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $badStrings   = ["Exception", "Stacktrace", "badVerb"];
         $this->checkForCustomBadStringsInHtml($responseBody, $badStrings);
 
-        $this->assertContains('<setSpec>openaire</setSpec>', $responseBody, 'OpenAire requires set-name to be "openaire"');
-        $this->assertNotContains('<setSpec>doc-type:doctoralthesis</setSpec>', $responseBody);
+        $this->assertStringContainsString('<setSpec>openaire</setSpec>', $responseBody, 'OpenAire requires set-name to be "openaire"');
+        $this->assertStringNotContainsString('<setSpec>doc-type:doctoralthesis</setSpec>', $responseBody);
 
         $xpath = $this->prepareXpathFromResultString($responseBody);
 
@@ -2147,7 +2174,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         // Publication Version
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:type");
         $values        = $this->nodeListToArray($queryResponse);
-        $this->assertContains('info:eu-repo/semantics/publishedVersion', $values);
+        $this->assertContains('info:eu-repo/semantics/updatedVersion', $values);
 
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:type");
         $values        = $this->nodeListToArray($queryResponse);
@@ -2328,7 +2355,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertEquals(2, $elements->length);
 
         $elements = $xpath->query('//oai:setSpec');
-        $this->assertEquals(12, $elements->length);
+        $this->assertEquals(13, $elements->length);
 
         $elements = $xpath->query('//oai:request');
         $this->assertEquals(1, $elements->length);
@@ -2364,7 +2391,7 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
 
         // Schema validation does not detect problem
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             '>"',
             $this->getResponse()->getBody(),
             'XML contains \'"\' after an element.'
@@ -2423,13 +2450,13 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]', '2010');
         $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]', 'MySeries');
         $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="v"]', '1/5');
+        $this->assertXpathContentContains('//marc:datafield[@tag="490"]/marc:subfield[@code="a"]', 'This is a parent title');
         $this->assertXpathContentContains('//marc:datafield[@tag="520"]/marc:subfield[@code="a"]', 'This is a pdf test document');
         $this->assertXpathContentContains('//marc:datafield[@tag="653"]/marc:subfield[@code="a"]', 'Informationssystem');
         $this->assertXpathContentContains('//marc:datafield[@tag="653"]/marc:subfield[@code="a"]', 'eBook');
-        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'report');
+        $this->assertXpathContentContains('//marc:datafield[@tag="655"]/marc:subfield[@code="a"]', 'Report');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Zufall, Rainer');
         $this->assertXpathContentContains('//marc:datafield[@tag="700"]/marc:subfield[@code="a"]', 'Fall, Klara');
-        $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="t"]', 'This is a parent title');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///frontdoor/index/index/docId/91');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///oai/container/index/docId/91');
         $this->assertXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'http:///files/91/test.pdf');
@@ -2616,16 +2643,11 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpath('//marc:datafield[@tag="264"]/marc:subfield[@code="c"]');
     }
 
-    public function testGenerationOfField856WithInvisibleInOaiFile()
+    public function testGenerationOfField540Licence()
     {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setPublisherPlace('publisherPlace');
-
-        $f1 = File::new();
-        $f1->setPathName('invisible-in-oai.pdf');
-        $f1->setVisibleInOai(false);
-        $doc->addFile($f1);
 
         $licencePresent = Licence::get(1);
         $doc->addLicence($licencePresent);
@@ -2641,10 +2663,31 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $this->registerXpathNamespaces($this->xpathNamespaces);
 
+        $this->assertXpathContentContains('(//marc:datafield[@tag="540"])/marc:subfield[@code="a"]', $licencePresent->getNameLong());
+        $this->assertNotXpathContentContains('(//marc:datafield[@tag="540"])/marc:subfield[@code="a"]', $licenceMissing->getNameLong());
+    }
+
+    public function testGenerationOfField856WithInvisibleInOaiFile()
+    {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setPublisherPlace('publisherPlace');
+
+        $f1 = File::new();
+        $f1->setPathName('invisible-in-oai.pdf');
+        $f1->setVisibleInOai(false);
+        $doc->addFile($f1);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
         $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="x"]', 'Transfer-URL');
         $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="u"]', 'invisible-in-oai.pdf');
-        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licenceMissing->getNameLong());
-        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
     }
 
     /**
@@ -2666,12 +2709,6 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $f2->setVisibleInOai(true);
         $doc->addFile($f2);
 
-        $licencePresent = Licence::get(1);
-        $doc->addLicence($licencePresent);
-
-        $licenceMissing = Licence::get(2);
-        $doc->addLicence($licenceMissing);
-
         $docId = $doc->store();
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=marc21&identifier=oai::' . $docId);
@@ -2681,13 +2718,8 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->registerXpathNamespaces($this->xpathNamespaces);
 
         $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[3]/marc:subfield[@code="x"]', 'Transfer-URL');
-        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[3]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
         $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[4]/marc:subfield[@code="u"]', 'visible-in-oai.pdf');
-        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[4]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
         $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[5]/marc:subfield[@code="u"]', 'visible-in-oai.txt');
-        $this->assertXpathContentContains('(//marc:datafield[@tag="856"])[5]/marc:subfield[@code="z"]', $licencePresent->getNameLong());
-
-        $this->assertNotXpathContentContains('//marc:datafield[@tag="856"]/marc:subfield[@code="z"]', $licenceMissing->getNameLong());
     }
 
     public function testGenerationOfField773WithSingleTitleParent()
@@ -3363,6 +3395,96 @@ class Oai_IndexControllerTest extends ControllerTestCase
         $this->assertXpathContentContains('//marc:datafield[@tag="773"]/marc:subfield[@code="g"]', 'Jahrgang volume');
     }
 
+    public function testDocTypeSetWithNoSubset()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=doc-type');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testDocTypeSetWithExtraPart()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=doc-type:Article:ExtraSubSet');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testBliographySetWithNoSubset()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=bibliography');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testBibliographySetWithExtraPart()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=bibliography:true:ExtraSubSet');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testInvalidCollectionSetWithExtraPart()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ddc:62:100');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testInvalidCollectionSetWithUnknownSubset()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ddc:9999999999');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testInvalidCollectionSetWithUnknownSet()
+    {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ddc9999:62');
+
+        $this->assertResponseCode(200);
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('<error code="noRecordsMatch">', $body);
+    }
+
+    public function testDCTypeMasterThesisToDocTypeMapping()
+    {
+        foreach (["diplom", "examen", "magister", "masterthesis"] as $docType) {
+            $doc = $this->createTestDocument();
+            $doc->setServerState('published');
+            $doc->setType($docType);
+            $doc->store();
+        }
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=doc-type:MasterThesis');
+        $response = $this->getResponse();
+        $xpath    = $this->prepareXpathFromResultString($response->getBody());
+
+        $oaiIdentifiers      = $xpath->query('//oai:identifier');
+        $oaiIdentifierValues = $this->nodeListToArray($oaiIdentifiers);
+
+        $docTypes = [];
+
+        foreach ($oaiIdentifierValues as $oaiIdentifier) {
+            [$scheme, $namespaceIdentifier, $localIdentifier] = explode(':', $oaiIdentifier);
+            $doc                                              = Document::get($localIdentifier);
+            $docTypes[$doc->getType()]                        = $doc->getType();
+        }
+
+        $this->assertEqualsCanonicalizing(['masterthesis', 'diplom', 'magister', 'examen'], $docTypes);
+    }
+
     /**
      * Helper function for adding title parent to given document.
      *
@@ -3421,22 +3543,56 @@ class Oai_IndexControllerTest extends ControllerTestCase
 
         $this->checkForCustomBadStringsInHtml($body, ["Exception", "Stacktrace", "badVerb"]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<ListRecords>',
             $body,
             "Response must contain '<ListRecords>'"
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<record>',
             $body,
             "Response must contain '<record>'"
         );
 
         // TODO check that metadata is generated
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             '<metadata/>',
             $body,
             'Response must not contains empty \'<metadata/>\' elements.'
         );
+    }
+
+    public function testOpenAccessSetWithHiddenCollection()
+    {
+        $oaRole  = CollectionRole::fetchByName('open_access');
+        $openCol = $oaRole->getCollectionByOaiSubset('open_access');
+
+        $closedCol = Collection::new();
+        $closedCol->setName('closed_access');
+        $closedCol->setVisible(false);
+
+        $rootCol = $oaRole->getRootCollection();
+        $rootCol->addLastChild($closedCol);
+        $oaRole->store();
+
+        $openDoc = $this->createTestDocument();
+        $openDoc->setServerState(Document::STATE_PUBLISHED);
+        $openDoc->addCollection($openCol);
+        $openDoc->store();
+
+        $closedDoc = $this->createTestDocument();
+        $closedDoc->setServerState(Document::STATE_PUBLISHED);
+        $closedDoc->addCollection($closedCol);
+        $closedDoc->store();
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=open_access');
+
+        $closedCol->delete();
+
+        $this->assertResponseCode(200);
+
+        $this->registerXpathNamespaces($this->xpathNamespaces);
+
+        $this->assertXpathCount('//oai:record', 1);
     }
 }

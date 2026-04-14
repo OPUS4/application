@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Mail\MailException;
 use Opus\Common\Mail\SendMail;
 
@@ -76,7 +77,7 @@ class ErrorController extends Application_Controller_Action
             default:
                 // application error
                 $this->setResponseCode(500);
-                if ($errors->exception instanceof Application_Exception) {
+                if ($errors->exception instanceof ApplicationException) {
                     $code = $errors->exception->getHttpResponsecode();
                     // TODO VARTYPE
                     if ($code !== null || $code !== 0) {
@@ -141,7 +142,7 @@ class ErrorController extends Application_Controller_Action
      * @param Zend_Controller_Request_Http $request
      * @param Exception                    $exception
      * @return bool
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws MailException
      *
      * TODO Escape exception messages, other stuff? Is it possible to inject javascript in E-Mail?
@@ -153,11 +154,11 @@ class ErrorController extends Application_Controller_Action
         }
 
         if (! is_object($exception) || ! $exception instanceof Exception) {
-            throw new Application_Exception('Invalid Exception object given.');
+            throw new ApplicationException('Invalid Exception object given.');
         }
 
         if (! is_object($request) || ! $request instanceof Zend_Controller_Request_Abstract) {
-            throw new Application_Exception('Invalid Zend_Controller_Request_Abstract object given.');
+            throw new ApplicationException('Invalid Zend_Controller_Request_Abstract object given.');
         }
 
         // Setting up mail subject.

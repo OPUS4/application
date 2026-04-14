@@ -42,11 +42,11 @@
 
             <!-- listing all fieldsets/groups with their form elements -->
             <?php foreach ($this->form->getDisplayGroups() as $group) : ?>
-                <?php if (count($group->getElements()) >= 1) { ?>
+                <?php if (count($group->getElements()) > 0) { ?>
                     <tr><td class='group' colspan="2"><b><?= $this->translate($group->getName()) ?></b></td></tr>
 
                 <?php } foreach ($group->getElements() as $element) : ?>
-                        <?php if ($element->getValue() !== '') : ?>
+                        <?php if ($element->getValue() !== null && $element->getValue() !== '') : ?>
                             <tr><td class='label'><?= $this->translate($element->getLabel()) ?></td>
                             <?php if ($element->getType() === 'Zend_Form_Element_Select') : ?>
                                 <td><?= htmlspecialchars($element->getMultiOption($element->getValue())) ?></td>

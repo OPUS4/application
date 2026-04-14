@@ -69,5 +69,3 @@ for ($i = 1; $i < 10000; $i++) {
     $docId = $d->store();
     echo "docId: $docId\n";
 }
-
-exit();

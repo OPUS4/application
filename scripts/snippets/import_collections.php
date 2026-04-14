@@ -94,5 +94,3 @@ if ($rootCollection !== null) {
 
     echo "$linesImported collections were successfully imported\n";
 }
-
-exit();

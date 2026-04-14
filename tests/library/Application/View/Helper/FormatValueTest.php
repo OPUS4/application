@@ -129,13 +129,14 @@ class Application_View_Helper_FormatValueTest extends ControllerTestCase
 
     public function testFormatValueForPublicationState()
     {
+        $this->useGerman();
+
         $doc = Document::get(3);
 
         $field = $doc->getField('PublicationState');
 
         $output = $this->helper->format($field, Opus\Document::class);
 
-        // PublicationState is not translated right now
-        $this->assertEquals('draft', $output);
+        $this->assertEquals('Entwurf', $output);
     }
 }

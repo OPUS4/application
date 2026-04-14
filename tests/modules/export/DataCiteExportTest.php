@@ -87,8 +87,11 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->dispatch('/export/index/datacite/docId/' . $docId);
 
         $this->assertResponseCode(200);
-        $this->assertContains("DataCite XML von Dokument $docId ist nicht gültig", $this->getResponse()->getBody());
-        $this->assertContains("<h3>Fehler bei der XML-Validierung</h3>", $this->getResponse()->getBody());
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString("DataCite XML von Dokument {$docId} ist nicht gültig", $body);
+        $this->assertStringContainsString("<h3>Fehler bei der XML-Validierung</h3>", $body);
     }
 
     public function testExportOfDataCiteXmlStatusPageForUnpublishedDoc()
@@ -105,9 +108,11 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->assertResponseCode(200);
 
-        $this->assertContains("DataCite XML des nicht freigeschalteten Dokuments $docId ist gültig", $this->getResponse()->getBody());
-        $this->assertContains('Der Wert für das Pflichtelement publicationYear kann allerdings erst nach der Freischaltung bestimmt werden.', $this->getResponse()->getBody());
-        $this->assertContains("<h3>Fehler bei der XML-Validierung</h3>", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString("DataCite XML des nicht freigeschalteten Dokuments {$docId} ist gültig", $body);
+        $this->assertStringContainsString('Der Wert für das Pflichtelement publicationYear kann allerdings erst nach der Freischaltung bestimmt werden.', $body);
+        $this->assertStringContainsString("<h3>Fehler bei der XML-Validierung</h3>", $body);
         $this->assertXpath('//td/span[@class="fa fa-exclamation-triangle"]');
     }
 
@@ -129,9 +134,11 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->assertResponseCode(200);
 
-        $this->assertContains("DataCite XML von Dokument $docId ist nicht gültig", $this->getResponse()->getBody());
-        $this->assertContains('Bitte setzen Sie eine lokale DOI!', $this->getResponse()->getBody());
-        $this->assertContains("<h3>Fehler bei der XML-Validierung</h3>", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString("DataCite XML von Dokument {$docId} ist nicht gültig", $body);
+        $this->assertStringContainsString('Bitte setzen Sie eine lokale DOI!', $body);
+        $this->assertStringContainsString("<h3>Fehler bei der XML-Validierung</h3>", $body);
         $this->assertXpath('//td/span[@class="fa fa-exclamation-triangle"]');
     }
 
@@ -171,9 +178,11 @@ class Export_DataCiteExportTest extends ControllerTestCase
 
         $this->assertResponseCode(200);
 
-        $this->assertContains("DataCite XML von Dokument $docId ist nicht gültig", $this->getResponse()->getBody());
-        $this->assertContains('Bitte setzen Sie ein Publikationsjahr, das größer 0 ist!', $this->getResponse()->getBody());
-        $this->assertContains("<h3>Fehler bei der XML-Validierung</h3>", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString("DataCite XML von Dokument {$docId} ist nicht gültig", $body);
+        $this->assertStringContainsString('Bitte setzen Sie ein Publikationsdatum!', $body);
+        $this->assertStringContainsString('<h3>Fehler bei der XML-Validierung</h3>', $body);
         $this->assertXpath('//td/span[@class="fa fa-exclamation-circle"]');
         $this->assertNotXpath('//td/span[@class="fa fa-exclamation-triangle"]');
     }
@@ -216,7 +225,10 @@ class Export_DataCiteExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(401);
-        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
+        $this->assertStringContainsString(
+            'export of unpublished documents is not allowed',
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForAdmin()
@@ -247,7 +259,10 @@ class Export_DataCiteExportTest extends ControllerTestCase
         $this->restoreSecuritySetting();
 
         $this->assertResponseCode(200);
-        $this->assertContains("DataCite XML of document {$docId} is not valid", $this->getResponse()->getBody());
+        $this->assertStringContainsString(
+            "DataCite XML of document {$docId} is not valid",
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithPermission()
@@ -283,7 +298,10 @@ class Export_DataCiteExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(200);
-        $this->assertContains("DataCite XML of document {$docId} is not valid", $this->getResponse()->getBody());
+        $this->assertStringContainsString(
+            "DataCite XML of document {$docId} is not valid",
+            $this->getResponse()->getBody()
+        );
     }
 
     public function testExportOfDataCiteXmlWithUnpublishedDocAllowedForNonAdminUserWithoutPermission()
@@ -319,7 +337,10 @@ class Export_DataCiteExportTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(401);
-        $this->assertContains('export of unpublished documents is not allowed', $this->getResponse()->getBody());
+        $this->assertStringContainsString(
+            'export of unpublished documents is not allowed',
+            $this->getResponse()->getBody()
+        );
     }
 
     /**

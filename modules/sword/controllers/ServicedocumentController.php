@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\Config;
+use Opus\Sword\ServiceDocument;
 
 class Sword_ServicedocumentController extends Zend_Rest_Controller
 {
@@ -83,7 +84,7 @@ class Sword_ServicedocumentController extends Zend_Rest_Controller
     private function setServiceDocument($response)
     {
         $fullUrl         = $this->view->fullUrl();
-        $serviceDocument = new Sword_Model_ServiceDocument($fullUrl);
+        $serviceDocument = new ServiceDocument($fullUrl);
         $domDocument     = $serviceDocument->getDocument();
 
         $config         = Config::get();

@@ -33,56 +33,5 @@
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Common\Config;
-use Opus\Common\Document;
-use Opus\Common\Model\NotFoundException;
-
-// Get files directory...
-$startTime = microtime(true);
-$config    = Config::get();
-$filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
-
-if ($filesPath === false || empty($filesPath)) {
-    die("ERROR: Failed scanning workspace files path.\n");
-}
-
-echo "INFO: Scanning directory '$filesPath'...\n";
-
-// Iterate over all files
-$count  = 0;
-$errors = 0;
-
-foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") as $file) {
-    if ($count > 0 && $count % 100 === 0) {
-        echo "INFO: checked $count entries with " . round($count / (microtime(true) - $startTime)) . " entries/seconds.\n";
-    }
-    $count++;
-
-    $matches = [];
-    if (preg_match('/\/([0-9]+)$/', $file, $matches) !== 1) {
-        continue;
-    }
-
-    if (! is_dir($file)) {
-        echo "ERROR: expected directory: $file\n";
-        $errors++;
-        continue;
-    }
-
-    $id = $matches[1];
-    try {
-        $d = Document::get($id);
-    } catch (NotFoundException $e) {
-        echo "ERROR: No document $id found for workspace path '$file'!\n";
-        $errors++;
-    }
-}
-
-echo "INFO: Checked a total of $count entries with " . round($count / (microtime(true) - $startTime)) . " entries/seconds.\n";
-
-if ($errors === 0) {
-    exit(0);
-}
-
-echo "ERROR: Found $errors ERRORs in workspace files directory '$filesPath'!\n";
-exit(1);
+$job = new Application_Job_CheckWorkspaceFilesJob();
+$job->run();

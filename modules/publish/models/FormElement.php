@@ -580,6 +580,15 @@ class Publish_Model_FormElement
                 );
                 break;
 
+            case 'PublicationState':
+                $element->setMultiOptions(
+                    array_merge(
+                        ['' => $this->form->view->translate('choose_valid_option')],
+                        $reorgOptions
+                    )
+                );
+                break;
+
             case 'Language':
                 if ($this->elementName === 'Language') {
                     $element->setMultiOptions(

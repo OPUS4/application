@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Date;
 use Opus\Common\DnbInstitute;
 use Opus\Common\Language;
@@ -87,14 +88,14 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testConstructFormNull()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('construct without parameter');
         new Application_Form_Confirmation(null);
     }
 
     public function testConstructFormEmpty()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('construct without parameter');
         new Application_Form_Confirmation('   ');
     }
@@ -128,7 +129,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     {
         $form = new Application_Form_Confirmation(Licence::class);
         $form->setModel(Licence::get(4));
-        $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
+        $this->assertStringContainsString('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
     }
 
     public function testGetModelDisplayNameNoModel()
@@ -141,7 +142,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
     {
         $form = new Application_Form_Confirmation(Licence::class);
         $form->setModel(Licence::get(4));
-        $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
+        $this->assertStringContainsString('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
 
         $form->setModelDisplayName('custom display name');
 
@@ -149,7 +150,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
         $form->setModelDisplayName(null);
 
-        $this->assertContains('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
+        $this->assertStringContainsString('Creative Commons - CC BY-ND - Namensnennung', $form->getModelDisplayName());
     }
 
     public function testIsConfirmedYes()
@@ -248,21 +249,21 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testSetModelNull()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('must be Opus\Model\AbstractDb');
         $this->form->setModel(null);
     }
 
     public function testSetModelNotObject()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('must be Opus\Model\AbstractDb');
         $this->form->setModel('notamodel');
     }
 
     public function testSetModelBadModel()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('not instance of');
         $this->form->setModel(new Date());
     }
@@ -300,7 +301,9 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
         $this->form->setModel($licence);
 
-        $this->assertNotContains('<h1>Name mit Tags</h1>', $this->form->renderQuestion());
-        $this->assertContains('&lt;h1&gt;Name mit Tags&lt;/h1&gt;', $this->form->renderQuestion());
+        $output = $this->form->renderQuestion();
+
+        $this->assertStringNotContainsString('<h1>Name mit Tags</h1>', $output);
+        $this->assertStringContainsString('&lt;h1&gt;Name mit Tags&lt;/h1&gt;', $output);
     }
 }

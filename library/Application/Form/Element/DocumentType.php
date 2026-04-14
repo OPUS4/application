@@ -40,23 +40,11 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
 
         $this->setLabel($this->getView()->translate($this->getName()));
         $this->setRequired(true);
-
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
-        $options = $docTypeHelper->getDocumentTypes();
-
         $this->setDisableTranslator(true);
 
-        $translator = Application_Translate::getInstance();
+        $options = $this->getSortedOptions();
 
-        foreach ($options as $index => $type) {
-            if ($translator !== null && $translator->isTranslated($index)) {
-                $label = $translator->translate($index);
-            } else {
-                $label = $index;
-            }
-            $this->addMultiOption($index, $label);
-        }
+        $this->setMultiOptions($options);
     }
 
     /**
@@ -80,5 +68,51 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
         }
 
         return parent::setValue($value);
+    }
+
+    /**
+     * Returns document type options sorted by label.
+     *
+     * @return array
+     */
+    public function getSortedOptions()
+    {
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $options = $docTypeHelper->getDocumentTypes();
+
+        $translator = Application_Translate::getInstance();
+
+        $translatedOptions = [];
+
+        foreach ($options as $value => $type) {
+            if ($translator !== null && $translator->isTranslated($value)) {
+                $label = $translator->translate($value);
+            } else {
+                $label = $value;
+            }
+            $translatedOptions[$value] = $label;
+        }
+
+        // TODO move language dependent sorting to separate class
+        $replace = [
+            'Ä' => 'Ae',
+            'ä' => 'ae',
+            'Ö' => 'Oe',
+            'ö' => 'oe',
+            'Ü' => 'Ue',
+            'ü' => 'ue',
+            'ß' => 'ss',
+        ];
+
+        uasort($translatedOptions, function ($a, $b) use ($replace) {
+            $a = mb_strtolower($a, 'UTF-8');
+            $b = mb_strtolower($b, 'UTF-8');
+            $a = strtr($a, $replace);
+            $b = strtr($b, $replace);
+            return strcmp($a, $b);
+        });
+
+        return $translatedOptions;
     }
 }

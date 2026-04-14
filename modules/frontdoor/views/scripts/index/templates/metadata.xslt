@@ -121,6 +121,19 @@
         </tr>
     </xsl:template>
 
+    <xsl:template match="@PublicationState">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname" />
+            </th>
+            <td>
+                <xsl:call-template name="translateString">
+                    <xsl:with-param name="string">Opus_Document_PublicationState_Value_<xsl:value-of select="." /></xsl:with-param>
+                </xsl:call-template>
+            </td>
+        </tr>
+    </xsl:template>
+
     <!-- -->
     <!-- Templates for "external fields". -->
     <!-- -->
@@ -203,6 +216,47 @@
             </td>
         </tr>
     </xsl:template>
+    
+    <xsl:template name="conferences">
+        <xsl:param name="counter" />
+        <xsl:param name="numOfConferences" />        
+        <xsl:if test="$counter &lt;= $numOfConferences">
+            <tr>
+                <th class="name">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_conference</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:text>:</xsl:text>
+                </th>
+                <td>
+                    <xsl:value-of select="Enrichment[@KeyName='OpusConferenceName'][$counter]/@Value" /> 
+                    <xsl:if test="Enrichment[@KeyName='OpusConferenceNumber'][$counter] or Enrichment[@KeyName='OpusConferencePlace'][$counter] or Enrichment[@KeyName='OpusConferenceYear'][$counter]">
+                        <xsl:text> (</xsl:text>
+                        <xsl:if test="Enrichment[@KeyName='OpusConferenceNumber'][$counter]">
+                            <xsl:value-of select="Enrichment[@KeyName='OpusConferenceNumber'][$counter]/@Value" />
+                        </xsl:if>
+                        <xsl:if test="Enrichment[@KeyName='OpusConferenceYear'][$counter]">
+                            <xsl:if test="Enrichment[@KeyName='OpusConferenceNumber'][$counter]">
+                                <xsl:text> : </xsl:text>
+                            </xsl:if> 
+                            <xsl:value-of select="Enrichment[@KeyName='OpusConferenceYear'][$counter]/@Value" />
+                        </xsl:if>
+                        <xsl:if test="Enrichment[@KeyName='OpusConferencePlace'][$counter]">
+                            <xsl:if test="Enrichment[@KeyName='OpusConferenceNumber'][$counter] or Enrichment[@KeyName='OpusConferenceYear'][$counter]">
+                                <xsl:text> : </xsl:text>                            
+                            </xsl:if>
+                            <xsl:value-of select="Enrichment[@KeyName='OpusConferencePlace'][$counter]/@Value" />
+                        </xsl:if>
+                        <xsl:text>)</xsl:text>
+                    </xsl:if>
+                </td>
+            </tr>                        
+            <xsl:call-template name="conferences">
+                <xsl:with-param name="counter" select="$counter + 1" />
+                <xsl:with-param name="numOfConferences" select="$numOfConferences" />
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
 
     <xsl:template match="Enrichment" mode="unescaped">
         <tr>
@@ -229,7 +283,10 @@
                 <xsl:text>:</xsl:text>
             </th>
             <td>
-                <xsl:value-of select="@Value" />
+                <xsl:attribute name="href">
+                    <xsl:value-of select="@KeyName"/>
+                </xsl:attribute>
+                <xsl:value-of select="php:functionString('Application_Xslt::renderValue', @Value, @KeyName)" disable-output-escaping="yes" />
             </td>
         </tr>
     </xsl:template>
@@ -311,7 +368,7 @@
                 <xsl:with-param name="id"><xsl:value-of select="@IdentifierOrcid"/></xsl:with-param>
                 <xsl:with-param name="cssClass">orcid-link</xsl:with-param>
                 <xsl:with-param name="linkTitle">frontdoor_orcid</xsl:with-param>
-                <xsl:with-param name="linkText">ORCiD</xsl:with-param>
+                <xsl:with-param name="linkText">ORCID</xsl:with-param>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
@@ -453,13 +510,37 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="Identifier[@Type = 'isbn' or @Type = 'issn' or @Type = 'serial']">
+    <xsl:template match="Identifier[@Type = 'ismn' or @Type = 'isbn' or @Type = 'issn' or @Type = 'serial']">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateIdentifier"/>
             </th>
             <td>
                 <xsl:value-of select="@Value" />
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="Identifier[@Type = 'union-cat']">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateIdentifier"/>
+            </th>
+            <td>
+                <xsl:choose>
+                    <xsl:when test="contains(php:functionString('Application_Xslt::optionValue', 'unionCat.requestUrl'), '://')">
+                        <xsl:element name="a">
+                            <xsl:attribute name="href">
+                                <xsl:value-of select="php:functionString('Application_Xslt::optionValue', 'unionCat.requestUrl')"/>
+                                <xsl:value-of select="@Value" />
+                            </xsl:attribute>
+                            <xsl:value-of select="@Value" />
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@Value" />
+                    </xsl:otherwise>
+                </xsl:choose>
             </td>
         </tr>
     </xsl:template>
@@ -565,6 +646,11 @@
             </th>
             <td>
                 <img alt="License Logo">
+                    <xsl:attribute name="id">
+                        <xsl:text>licence-</xsl:text>
+                        <xsl:value-of select="translate(@Name, ' .', '')"/>
+                        <xsl:text>-logo</xsl:text>
+                    </xsl:attribute>
                     <xsl:attribute name="src">
                         <xsl:value-of select="@LinkLogo"/>
                     </xsl:attribute>
@@ -572,7 +658,7 @@
                         <xsl:value-of select="@LinkLicence"/>
                     </xsl:attribute>
                 </img>
-
+                <xsl:text> </xsl:text>
                 <xsl:element name="a">
                     <xsl:attribute name="href">
                         <xsl:value-of select="$baseUrl"/><xsl:text>/default/license/index/licId/</xsl:text><xsl:value-of select="@Id"/>

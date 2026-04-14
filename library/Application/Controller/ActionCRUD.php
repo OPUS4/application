@@ -30,6 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Model\ModelInterface;
 use Opus\Common\Model\NotFoundException;
@@ -323,7 +324,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
                     // Validierung erfolgreich; Hole Model vom Formular
                     try {
                         $model = $form->getModel();
-                    } catch (Application_Exception $ae) {
+                    } catch (ApplicationException $ae) {
                         $this->getLogger()->err(__METHOD__ . $ae->getMessage());
                         $model = null;
                     }
@@ -373,7 +374,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
      *
      * @param array|null $post
      * @return array
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function handleConfirmationPost($post = null)
     {
@@ -613,7 +614,7 @@ class Application_Controller_ActionCRUD extends Application_Controller_Action
     public function setFormClass($formClass)
     {
         if (! $this->isClassSupported($formClass)) {
-            throw new Application_Exception("Class '$formClass' is not instance of Application_Form_IModel.");
+            throw new ApplicationException("Class '$formClass' is not instance of Application_Form_IModel.");
         }
 
         $this->formClass = $formClass;

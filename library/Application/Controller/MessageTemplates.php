@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
+
 /**
  * Klasse für das Verwalten von Nachrichten.
  *
@@ -66,7 +68,7 @@ class Application_Controller_MessageTemplates
     public function __construct($messages)
     {
         if ($messages === null || ! is_array($messages)) {
-            throw new Application_Exception(__METHOD__ . ' Parameter \'messages\' is required and must be an array.');
+            throw new ApplicationException(__METHOD__ . ' Parameter \'messages\' is required and must be an array.');
         }
 
         $this->messages = $messages;
@@ -101,14 +103,14 @@ class Application_Controller_MessageTemplates
      *
      * @param string $key Schlüssel für Nachricht
      * @return string
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function getMessage($key)
     {
         if (array_key_exists($key, $this->messages)) {
             return $this->messages[$key];
         } else {
-            throw new Application_Exception("Message key '$key' is not defined.");
+            throw new ApplicationException("Message key '$key' is not defined.");
         }
     }
 
@@ -127,7 +129,7 @@ class Application_Controller_MessageTemplates
         }
 
         if ($message === null) {
-            throw new Application_Exception("Message key '$key' must not be null.");
+            throw new ApplicationException("Message key '$key' must not be null.");
         }
 
         $this->messages[$key] = $message;

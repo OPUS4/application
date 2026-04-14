@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\Document;
 use Opus\Common\DocumentInterface;
 use Opus\Common\FileInterface;
@@ -47,7 +48,7 @@ class Oai_Model_Container extends Application_Model_Abstract
     /** @var DocumentInterface */
     private $doc;
 
-    /** @var Application_Configuration */
+    /** @var Configuration */
     private $appConfig;
 
     /**
@@ -57,7 +58,7 @@ class Oai_Model_Container extends Application_Model_Abstract
     {
         $this->doc       = $this->validateId($docId);
         $this->docId     = $this->doc->getId();
-        $this->appConfig = Application_Configuration::getInstance();
+        $this->appConfig = Configuration::getInstance();
     }
 
     /**
@@ -176,7 +177,7 @@ class Oai_Model_Container extends Application_Model_Abstract
 
     /**
      * @return Oai_Model_SingleFile|Oai_Model_TarFile
-     * @throws Application_Exception
+     * @throws ApplicationException
      * @throws Oai_Model_Exception
      * @throws Zend_Exception
      * @throws OpusException

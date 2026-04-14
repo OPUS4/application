@@ -40,6 +40,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Exports documents.
  *
  * TODO unit testing
+ * TODO support format selection
+ * TODO support output for multiple documents
+ * TODO support output file
+ * TODO error handling
  */
 class Application_Console_Debug_DocumentXmlCommand extends Command
 {
@@ -64,10 +68,9 @@ EOT;
     }
 
     /**
-     * @return int
      * @throws NotFoundException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $docId = $input->getArgument(self::ARGUMENT_DOC_ID);
 
@@ -79,6 +82,6 @@ EOT;
 
         $output->write($xml->saveXml());
 
-        return 0;
+        return self::SUCCESS;
     }
 }

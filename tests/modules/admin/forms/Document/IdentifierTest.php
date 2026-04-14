@@ -149,7 +149,7 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Unknown identifier ID = \'bad\'.', $messages[0]);
+        $this->assertStringContainsString('Unknown identifier ID = \'bad\'.', $messages[0]);
     }
 
     public function testGetModelUnknownId()
@@ -172,6 +172,6 @@ class Admin_Form_Document_IdentifierTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Unknown identifier ID = \'7777\'.', $messages[0]);
+        $this->assertStringContainsString('Unknown identifier ID = \'7777\'.', $messages[0]);
     }
 }

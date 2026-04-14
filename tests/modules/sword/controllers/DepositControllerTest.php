@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\CollectionInterface;
 use Opus\Common\DocumentInterface;
 use Opus\Common\EnrichmentInterface;
@@ -88,7 +89,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     public function testZipArchiveDanglingIds()
     {
-        $doc = $this->depositSuccessful('dangling-ids.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false);
+        $doc = $this->depositSuccessful('dangling-ids.zip', DepositTestHelper::CONTENT_TYPE_ZIP, false, false, true, 6);
         $this->checkMinimalDoc($doc);
         $doc->delete();
         $this->testHelper->removeImportCollection();
@@ -96,7 +97,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
     public function testTarArchiveDanglingIds()
     {
-        $doc = $this->depositSuccessful('dangling-ids.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false);
+        $doc = $this->depositSuccessful('dangling-ids.tar', DepositTestHelper::CONTENT_TYPE_TAR, false, false, true, 6);
         $this->checkMinimalDoc($doc);
         $doc->delete();
         $this->testHelper->removeImportCollection();
@@ -185,7 +186,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
             false
         );
 
-        $config      = Application_Configuration::getInstance();
+        $config      = Configuration::getInstance();
         $importDir   = $config->getWorkspacePath() . 'import/';
         $enrichments = $doc->getEnrichmentValues();
         $filename    = $enrichments['opus.import.file'];
@@ -208,7 +209,7 @@ class Sword_DepositControllerTest extends ControllerTestCase
 
         $this->assertNull($doc);
 
-        $config    = Application_Configuration::getInstance();
+        $config    = Configuration::getInstance();
         $importDir = $config->getWorkspacePath() . 'import/';
 
         $payload  = file_get_contents(APPLICATION_PATH . '/tests/resources/sword-packages/invalid-xml.zip');

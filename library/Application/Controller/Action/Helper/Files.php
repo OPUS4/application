@@ -30,6 +30,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Config;
 use Opus\Common\Log;
 
@@ -54,7 +55,7 @@ class Application_Controller_Action_Helper_Files extends Zend_Controller_Action_
     public function listFiles($folder, $ignoreAllowedTypes = false)
     {
         if (! is_dir($folder) || ! is_readable($folder)) {
-            throw new Application_Exception("Directory '$folder' is not readable.");
+            throw new ApplicationException("Directory '$folder' is not readable.");
         }
 
         $result = [];

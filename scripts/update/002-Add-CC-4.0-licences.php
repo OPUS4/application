@@ -46,7 +46,7 @@ if ($licence !== null) {
     $helper->log('Creative Commons 4.0 seem to be present in database.');
 }
 
-if ($helper->askYesNo('Add CC 4.0 licences to database [Y|n]? ')) {
+if ($helper->askYesNo('Add CC 4.0 licences to database [Y|n]? ', true)) {
     $helper->log('Add CC 4.0 licences ...');
 
     $database = new Database();

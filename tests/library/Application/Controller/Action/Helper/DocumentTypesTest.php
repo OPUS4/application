@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
+
 /**
  * Unit tests for document types helper.
  *
@@ -165,13 +167,13 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
     public function testGetDocumentThrowsException()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->docTypeHelper->getDocument('article');
     }
 
     public function testGetDocumentThrowsSchemaInvalidException()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->docTypeHelper->getDocument('demo_invalid');
     }
 
@@ -220,7 +222,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
         unset($config->publish->path->documenttypes);
 
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('Path to document types not configured');
         $this->docTypeHelper->getDocTypesPath();
     }
@@ -323,7 +325,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $paths = $this->docTypeHelper->getDocTypesPath();
 
         $this->assertNotNull($paths);
-        $this->assertInternalType("array", $paths);
+        $this->assertIsArray($paths);
         $this->assertCount(2, $paths);
         $this->assertContains(APPLICATION_PATH . '/application/configs/doctypes', $paths);
         $this->assertContains(APPLICATION_PATH . '/tests/resources/doctypes', $paths);
@@ -342,7 +344,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
         $paths = $this->docTypeHelper->getDocTypesPath();
 
         $this->assertNotNull($paths);
-        $this->assertInternalType("string", $paths);
+        $this->assertIsString($paths);
         $this->assertEquals(APPLICATION_PATH . '/application/configs/doctypes', $paths);
     }
 
@@ -350,7 +352,7 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
     {
         $templates = $this->docTypeHelper->getTemplates();
 
-        $this->assertCount(32, $templates);
+        $this->assertCount(54, $templates);
 
         foreach ($templates as $name => $path) {
             $file = new SplFileInfo($path);

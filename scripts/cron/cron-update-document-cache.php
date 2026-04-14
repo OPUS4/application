@@ -41,32 +41,5 @@ define('APPLICATION_ENV', 'development');
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Common\Document;
-use Opus\Common\Repository;
-use Opus\Model\Xml;
-use Opus\Model\Xml\Version1;
-
-$repository = Repository::getInstance();
-
-$finder = $repository->getDocumentFinder();
-$cache  = $repository->getDocumentXmlCache();
-
-$docIds = $finder->setNotInXmlCache()->getIds();
-
-echo 'Processing ' . count($docIds) . ' documents' . PHP_EOL;
-
-foreach ($docIds as $docId) {
-    $document = Document::get($docId);
-
-    // xml version 1
-    $omx = new Xml();
-    $omx->setStrategy(new Version1())
-        ->excludeEmptyFields()
-        ->setModel($document)
-        ->setXmlCache($cache);
-
-    // TODO cache is updated as a side effect (that is not ideal and might not always be true)
-    $omx->getDomDocument();
-
-    echo "Cache refreshed for document #$docId\n";
-}
+$job = new Application_Job_UpdateDocumentCacheJob();
+$job->run();

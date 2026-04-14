@@ -50,6 +50,7 @@ class Application_Form_Element_EnrichmentKey extends Application_Form_Element_Se
 
             // die folgenden beiden Enrichments sollen indirekt über Checkboxen
             // im Abschnitt DOI / URN verwaltet werden
+            // TODO DESIGN excluded enrichment keys cannot be hardcoded here
             if ($keyName === 'opus.doi.autoCreate' || $keyName === 'opus.urn.autoCreate') {
                 continue;
             }

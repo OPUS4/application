@@ -1,0 +1,78 @@
+#content .wrapper div[class*="_pagination"] ul.paginationControl {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+#content .wrapper div[class*="_pagination"] ul.paginationControl li {
+  padding: 0;
+}
+
+a[class*="pagination-"],
+.frontdoor_pagination li[id*="pagination-"] a {
+  text-decoration: none;
+}
+
+a[class*="pagination-"]::after,
+.frontdoor_pagination li[id*="pagination-"] a::after,
+#pagination-link-hitlist::before {
+  font-size: 1rem;
+  display: inline-block;
+  width: 2.5em;
+  height: 2.5em;
+  line-height: 2.5em;
+  border-radius: 50px;
+  text-align: center;
+}
+
+a.pagination-first::after,
+.frontdoor_pagination #pagination-first a::after {
+  content: "\f100";
+}
+
+a.pagination-prev::after,
+.frontdoor_pagination #pagination-previous a::after {
+  content: "\f104";
+}
+
+a.pagination-next::after,
+.frontdoor_pagination #pagination-next a::after {
+  content: "\f105";
+}
+
+a.pagination-last::after,
+.frontdoor_pagination #pagination-last a::after {
+  content: "\f101";
+}
+
+.frontdoor_pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.frontdoor_pagination::after {
+  content: "";
+  flex: 1;
+}
+
+.frontdoor_pagination #pagination-previous {
+  order: -1;
+}
+
+#pagination-link-hitlist {
+  order: -1;
+  flex: 1;
+}
+
+#pagination-link-hitlist::before {
+  content: "\f03a";
+  margin-right: 0.5rem;
+}

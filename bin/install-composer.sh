@@ -27,20 +27,20 @@ if [[ $EUID -eq 0 ]]; then
     exit 1
 fi
 
-# get BASEDIR from first argument if present
+# TODO ? get BASEDIR from first argument if present
 if [ $# -ge 1 ] ;
 then
     INSTALL_PACKAGES=1
 fi
 
-if [ -e bin/composer ] ;
+if [ -e $SCRIPT_PATH/composer ] ;
 then
   if [[ "$INSTALL_PACKAGES" == 1 ]] ;
   then
     cd $BASEDIR
     php bin/composer install
   fi
-  exit 1
+  exit 0
 fi
 
 EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"

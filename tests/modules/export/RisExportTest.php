@@ -53,6 +53,6 @@ class Export_RisExportTest extends ControllerTestCase
 
         $response = $this->getResponse()->getBody();
 
-        $this->assertContains("U6  - {$doiResolverUrl}123", $response);
+        $this->assertStringContainsString("U6  - {$doiResolverUrl}123", $response);
     }
 }

@@ -46,7 +46,7 @@
           <default value="doe@example.org" edit="yes" public="yes" />
         </subfield>
     </field>
-    <field name="Language" required="no" formelement="select" datatype="Language" multiplicity="1">
+    <field name="Language" required="no" formelement="Select" datatype="Language" multiplicity="1">
         <default value="deu" edit="yes" public="yes"/>
     </field>
     <field name="TitleMain" required="no" formelement="text" datatype="Title" multiplicity="4">
@@ -60,9 +60,8 @@
     <field name="TitleAdditional" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
     <field name="TitleParent" required="no" formelement="text" datatype="Title" multiplicity="1"/>
 
-    <field name="PublicationState" required="no" formelement="Select" datatype="List" multiplicity="1" >
-        <option value="draft" />
-        <option value="accepted" />
+    <field name="PublicationState" required="no" formelement="Select" datatype="PublicationState" multiplicity="1" >
+        <default value="" edit="yes" public="yes" />
     </field>
 
     <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">

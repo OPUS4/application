@@ -76,7 +76,7 @@ class CronTestCase extends ControllerTestCase
         $result = shell_exec($command);
         putenv('APPLICATION_ENV=' . $savedApplicationEnv);
         $this->assertNotNull($result, "Script execution failed:\n" . $command);
-        $this->assertContains("job '" . self::$scriptPath . $fileName . "' done", $result);
+        $this->assertStringContainsString("job '" . self::$scriptPath . $fileName . "' done", $result);
         return $result;
     }
 

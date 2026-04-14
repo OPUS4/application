@@ -1,14 +1,14 @@
 "use strict";
 var exports = new Object;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getEdition = exports.getArticleNumber = exports.getLicence = exports.getSubject = exports.getThesisAccepted = exports.getPublisherPlace = exports.getTranslator = exports.getConferencePlace = exports.getConferenceTitle = exports.getUrl = exports.getIssn = exports.getEditor = exports.getIsbn = exports.getCompletedDate = exports.getVolume = exports.getIssue = exports.getPages = exports.getAuthor = exports.getPersonAuthorAcademicTitle = exports.getPersonAuthorIdentifierOrcid = exports.getType = exports.getTitleParent = exports.getAbstract = exports.getPersonAuthorLastName = exports.getPersonAuthorFirstName = exports.getOtherperson = exports.getTranslator = exports.getEditor = exports.getContributor = exports.getIdentifierIsbn = exports.getLanguage = exports.getIdentifierUrl = exports.getContributingCorporation = exports.getNote = exports.getPageCount = exports.getEdition = exports.getTitleSub = exports.getCreatingCorporation = exports.getId = exports.getCompletedYear = exports.getPublisherName = exports.getTitleMain = exports.parseDoi = void 0;
+exports.getEdition = exports.getArticleNumber = exports.getLicence = exports.getSubject = exports.getThesisAccepted = exports.getPublisherPlace = exports.getTranslator = exports.getUrl = exports.getIssn = exports.getEditor = exports.getIsbn = exports.getCompletedDate = exports.getVolume = exports.getIssue = exports.getPages = exports.getAuthor = exports.getPersonAuthorAcademicTitle = exports.getPersonAuthorIdentifierOrcid = exports.getType = exports.getTitleParent = exports.getAbstract = exports.getPersonAuthorLastName = exports.getPersonAuthorFirstName = exports.getOtherperson = exports.getTranslator = exports.getEditor = exports.getContributor = exports.getIdentifierIsbn = exports.getLanguage = exports.getIdentifierUrl = exports.getNote = exports.getPageCount = exports.getEdition = exports.getTitleSub = exports.getCreatingCorporation = exports.getId = exports.getCompletedYear = exports.getOpusConferenceYear = exports.getPublisherName = exports.getOpusConferenceName = exports.getOpusConferencePlace = exports.getOpusConferenceNumber = exports.getTitleMain = exports.parseDoi = void 0;
 
 
 function finalize(field)
 {
   // Grüne Farbe und Feldname wird in populatedFields geschrieben, um die Feldfarben nach einem Reload neu aufzubauen
     colorGreen(field);
-    populatedFields.push(field);
+    populatedFields.push(" " + field);
 }
 
 function colorGreen(field)
@@ -30,7 +30,7 @@ function getLicence(json)
     if (json['message']['license'] != undefined) {
         var result = json['message']['license'][0]['URL'];
         if (result != undefined) {
-            finalize("Enrichmentlocal_crossrefLicence")
+            finalize("Enrichmentopus_crossrefLicence")
         }
     }
     return result ? result : ''
@@ -58,29 +58,87 @@ function getSubject(json)
 exports.getSubject = getSubject;
 
 
-function getConferenceTitle(json)
+function getOpusConferenceName(json)
 {
-    if (json['message']['event'] != undefined) {
-        var result = json['message']['event']['name'];
-        if (result != undefined) {
-            finalize("Enrichmentconference_title")
+    if (json['message']['event'] && json['message']['event']['name']) {
+        var result_name = json['message']['event']['name']; // Name der Konferenz
+        if (json['message']['event']['acronym']) {
+            var result_acronym = json['message']['event']['acronym']; // Acronym der Konferenz
         }
     }
-    return result ? result : ''
-}
-exports.getConferenceTitle = getConferenceTitle;
 
-function getConferencePlace(json)
-{
-    if (json['message']['event'] != undefined) {
-        var result = json['message']['event']['location'];
-        if (result != undefined) {
-            finalize("Enrichmentconference_place")
+    if (result_name != undefined) {
+        var result = result_name;
+        if (result_acronym != undefined) {
+            result = result + ' (' + result_acronym + ')';
         }
+    }
+
+    if (result != undefined) {
+        finalize("EnrichmentOpusConferenceName")
     }
     return result ? result : ''
 }
-exports.getConferencePlace = getConferencePlace;
+exports.getOpusConferenceName = getOpusConferenceName;
+
+function getOpusConferencePlace(json)
+{
+    if (json['message']['event'] && json['message']['event']['location']) {
+        var result = json['message']['event']['location']; // Ort der Konferenz
+    }
+
+    if (result != undefined) {
+        finalize("EnrichmentOpusConferencePlace")
+    }
+    return result ? result : ''
+}
+exports.getOpusConferencePlace = getOpusConferencePlace;
+
+function getOpusConferenceNumber(json)
+{
+    if (json['message']['event'] && json['message']['event']['number']) {
+        var result = json['message']['event']['number']; // Zählung der Konferenz
+    }
+
+    if (result != undefined) {
+        finalize("EnrichmentOpusConferenceNumber")
+    }
+    return result ? result : ''
+}
+exports.getOpusConferenceNumber = getOpusConferenceNumber;
+
+function getOpusConferenceYear(json)
+{
+    var start_year;
+    var end_year;
+    var result;
+
+    if (json['message']['event'] && json['message']['event']['start'] && json['message']['event']['start']['date-parts']) {
+        start_year = json['message']['event']['start']['date-parts'][0][0];
+    }
+    if (json['message']['event'] && json['message']['event']['end'] && json['message']['event']['end']['date-parts']) {
+        end_year = json['message']['event']['end']['date-parts'][0][0];
+    }
+
+    if (start_year && end_year) {
+        if (start_year === end_year) {
+            result = start_year.toString();
+        } else {
+            result = start_year + '-' + end_year;
+        }
+    } else if (start_year) {
+        result = start_year.toString();
+    } else if (end_year) {
+        result = end_year.toString();
+    }
+
+    if (result != undefined) {
+        finalize("EnrichmentOpusConferenceYear")
+    }
+    return result ? result : '';
+}
+exports.getOpusConferenceYear = getOpusConferenceYear;
+
 
 function getUrl(json)
 {
@@ -390,29 +448,6 @@ function getTitleMain(json)
     return result ? result : ''
 }
 exports.getTitleMain = getTitleMain;
-
-function getContributingCorporation(json)
-{
-    if (json.message.author) {
-        var name, _z;
-        var _laenge = json.message.author.length;
-        if (_laenge > 0) {
-            for (_z = 0; _z < _laenge; _z++) {
-                if (json.message.author[_z].name != null) {
-                    name = json.message.author[_z].name;
-                    finalize("ContributingCorporation")
-                    return name;
-                } else {
-                    return ''
-                }
-            }
-        }
-    } else {
-        return ''
-    }
-}
-exports.ContributingCorporation = getContributingCorporation;
-
 
 function getTitleSub(json)
 {

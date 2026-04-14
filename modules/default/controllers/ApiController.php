@@ -90,6 +90,10 @@ class ApiController extends Application_Controller_Action
             return;
         }
 
+        if (preg_match('/10\..+/', $doi, $matches)) {
+            $doi = $matches[0];
+        }
+
         $response        = [];
         $response['doi'] = $doi;
         $doiExists       = false;

@@ -22,6 +22,24 @@
         </tuv>
     </tu>
 
+    <tu tuid="setup_title_appearance">
+        <tuv xml:lang="en">
+            <seg>Appearance</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Darstellung</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_title_appearance_description">
+        <tuv xml:lang="en">
+            <seg>Selection of UI theme</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Auswahl des UI-Farbschemas</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="setup_infopages_choose">
         <tuv xml:lang="en">
             <seg>Choose Translation Resource</seg>

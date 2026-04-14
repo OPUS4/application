@@ -33,9 +33,9 @@ class Admin_Form_AbstractModelSubFormTest extends ControllerTestCase
 {
     public function testConstructForm()
     {
-        $form = $this->getMockForAbstractClass('Admin_Form_AbstractModelSubForm');
+        $form = $this->getMockForAbstractClass(Admin_Form_AbstractModelSubForm::class);
 
-        $this->assertInstanceOf('Zend_Form', $form);
+        $this->assertInstanceOf(Zend_Form::class, $form);
 
         $this->assertEquals(0, count($form->getElements()));
         $this->assertEquals(0, count($form->getSubForms()));

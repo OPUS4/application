@@ -145,7 +145,7 @@ class Admin_Form_PersonTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('not instance of PersonInterface', $messages[0]);
+        $this->assertStringContainsString('not instance of PersonInterface', $messages[0]);
     }
 
     public function testGetModel()

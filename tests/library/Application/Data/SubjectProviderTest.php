@@ -39,7 +39,7 @@ class Application_Data_SubjectProviderTest extends ControllerTestCase
 
         $data = $provider->getValues('sch');
 
-        $this->assertInternalType('array', $data);
+        $this->assertIsArray($data);
         $this->assertCount(20, $data);
     }
 }

@@ -1,66 +1,85 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const formFields   = document.querySelectorAll("input, select, textarea");
+    const importButton = document.querySelector("input[name='go_import']");
+    const abortButton  = document.querySelector("input[name='abort']");
+
+
+    // Event Listener für das Klicken auf ein Formularfeld außer dem DOI-Feld (sowie Import-Button und Abbruch)
+    formFields.forEach(function (field) {
+        if (field.id !== "IdentifierDoi" && field !== importButton && field !== abortButton) {
+            field.addEventListener("focus", function (event) {
+                const enrichmentOpusDoiFlag = document.getElementById("Enrichmentopus_doi_flag");
+                if (enrichmentOpusDoiFlag && enrichmentOpusDoiFlag.value !== "true") {
+                    //Focus wurde auf ein Formularfeld gesetzt, bevor Import durchgeführt wurde -> Hinweis
+                    openDialog(translations.doiimport_header_note, translations.doiimport_hint_importMissing, "note");
+                    event.preventDefault();
+                    event.target.blur(); // Entfernt den Fokus vom Feld
+                }
+            });
+        }
+    });
+});
 
 let populatedFields = [];
+const baseUrl       = window.location.href.split('/publish')[0];
+var doi             = null;
 
-// TODO Englische Funktionsnamen fuer Einheitlichkeit im Code bitte
-
+// Diese Funktion wird beim Klick auf den Button "DOI-Daten übernehmen" aufgerufen und steuert alles Weitere
 function startCheck()
 {
     var doi = document.getElementById("IdentifierDoi").value.trim();
     if (doi.trim() === '') {
         // Feld "IdentifierDoi" ist leer
-        alert("Bitte zuerst eine DOI eingeben...");
+        openDialog(translations.doiimport_header_note, translations.doiimport_hint_insertDoi, "note");
     } else if (doi.trim() !== '' && document.getElementById("Enrichmentopus_doi_flag").value !== "true") {
-        // OK, starte Import
-        leseDoi(doi);
+        const checkUrl = baseUrl + '/api/doicheck?doi=' + doi;
+        get(
+            checkUrl,
+            function () {
+                var checkdoiData = JSON.parse(this.responseText);
+                if (checkdoiData['doiExists'] === true) { // DOI existiert bereits
+                    checkdoiId = checkdoiData['docId'];
+                    if (typeof checkdoiId !== 'undefined') { // DOI existiert bereits und ist veröffentlicht
+                        openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiExistsPublished.replace('%s', checkdoiId), "note", checkdoiId);
+                    } else { // DOI existiert bereits und ist unveröffentlicht
+                        openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiExistsUnpublished, "note");
+                    }} else {
+                    readDoi(doi);} // DOI existiert noch nicht, starte Import
+            }
+        );
     } else if (doi.trim() !== '' && document.getElementById("Enrichmentopus_doi_flag").value === "true") {
         // Import wurde bereits durchgeführt -> Bestätigung
-        if (confirm("Achtung, alle Felder des Formulars werden gelöscht und ein neuer Import gestartet! Fortfahren?")) {
-            cleanup();
-            document.getElementById("IdentifierDoi").value = doi;
-            leseDoi(doi);
-        } else {
-            return;
-        }
+        openDialog(translations.doiimport_header_warning, translations.doiimport_hint_allFieldsDeleted, "warning");
     }
 }
 
 function cleanup()
 {
-    let fields = document.getElementById("Enrichmentlocal_doiImportPopulated").value;
-    document.getElementById("Alles").reset(); // Alle Felder leeren
-    document.getElementById("PersonAuthorLastName_1").value        = ""; // Explizites reset(), weil die Felder sonst stehen bleiben
-    document.getElementById("PersonAuthorFirstName_1").value       = "";
-    document.getElementById("PersonAuthorIdentifierOrcid_1").value = "";
-
+    let fields = document.getElementById("Enrichmentopus_doiImportPopulated").value;
+    document.getElementById("doi-form").reset(); // Alle Felder leeren
     const usedFields = fields.split(',');
     for (const element of usedFields) { // Hier wird der grüne Hintergrund entfernt
         if (document.getElementById(element)) {
             document.getElementById(element).style.backgroundColor = null;
+            document.getElementById(element).value                 = "";
         }
     }
 }
 
-function leseDoi(doi)
+function readDoi(doi)
 {
- // Diese Funktion wird beim Klick auf den Button "DOI-Daten übernehmen" aufgerufen und steuert alles Weitere
-
     if (doi.trim() !== '') {
-
-        var getUrl        = window.location;
-            const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-            //alert("URL: "+getUrl.pathname);
-            const finalUrl = baseUrl + '/api/crossref?doi=' + doi;
+        const finalUrl = baseUrl + '/api/crossref?doi=' + doi;
         get(
             finalUrl,
             function () {
                 var jsonraw = this.responseText;
                 if (jsonraw === "Resource not found.") {
-                    alert("DOI wurde nicht in Crossref gefunden.");
+                    openDialog(translations.doiimport_header_note, translations.doiimport_hint_doiNotFound, "redirect");
                     colorPink("IdentifierDoi");
                 } else {
-                    // document.getElementById("Enrichmentlocal_doiJson").value = jsonraw;
-                    document.getElementById("Enrichmentopus_import_data").value = jsonraw;
-                    document.getElementById("Enrichmentopus_doi_flag").value    = "false";
+                    document.getElementById("Enrichmentopus_doi_json").value = jsonraw;
+                    document.getElementById("Enrichmentopus_doi_flag").value = "false";
                     parseJson(jsonraw);
                 }
             }
@@ -81,13 +100,14 @@ function parseJson(jsonraw)
 // Ende mehrfach belegbare Felder
 
     getDoctypes(data);
-    document.getElementById("Enrichmentconference_title").value = getConferenceTitle(data);
-    document.getElementById("Enrichmentconference_place").value = getConferencePlace(data);
-    document.getElementById("ContributingCorporation").value    = getContributingCorporation(data);    //json.author.name;
-    document.getElementById("PublisherName").value              = getPublisherName(data);    //json.message.publisher;
-    document.getElementById("PublisherPlace").value             = getPublisherPlace(data);  //json.message.publisher-location;
-    document.getElementById("TitleMain_1").value                = getTitleMain(data);//json.message.title[0];
-    document.getElementById("TitleSub_1").value                 = getTitleSub(data);    //json.message.title[1];
+    document.getElementById("EnrichmentOpusConferenceName").value   = getOpusConferenceName(data);      //json.message.event.name (+json.message.event.acronym);
+    document.getElementById("EnrichmentOpusConferencePlace").value  = getOpusConferencePlace(data);     //json.message.event.location;
+    document.getElementById("EnrichmentOpusConferenceNumber").value = getOpusConferenceNumber(data);    //json.message.event.number;
+    document.getElementById("EnrichmentOpusConferenceYear").value   = getOpusConferenceYear(data);      //json.message.event.start.date-parts[0][0] ("-" json.message.event.end.date-parts[0][0]);
+    document.getElementById("PublisherName").value                  = getPublisherName(data);           //json.message.publisher;
+    document.getElementById("PublisherPlace").value                 = getPublisherPlace(data);          //json.message.publisher-location;
+    document.getElementById("TitleMain_1").value                    = getTitleMain(data);               //json.message.title[0];
+    document.getElementById("TitleSub_1").value                     = getTitleSub(data);                //json.message.title[1];
 
     var language = getLanguage(data);
     expandLanguage(language);
@@ -110,12 +130,11 @@ function parseJson(jsonraw)
     var dates = getCompletedDate(data);
     expandCompletedDate(dates);
 
-    document.getElementById("IdentifierIsbn").value = getIsbn(data);    //json.message.isbn-type[0].value;
-    document.getElementById("IdentifierIssn").value = getIssn(data);    //json.message.issn-type[0].value;
-    //document.getElementById("IdentifierUrl").value = getUrl(data);    //json.message.link[0].url -> Soll laut aw raus
-    document.getElementById("Enrichmentlocal_crossrefLicence").value    = getLicence(data);
-    document.getElementById("Enrichmentlocal_import_origin").value      = "crossref";
-    document.getElementById("Enrichmentlocal_doiImportPopulated").value = populatedFields;
+    document.getElementById("IdentifierIsbn").value                    = getIsbn(data);    //json.message.isbn-type[0].value;
+    document.getElementById("IdentifierIssn").value                    = getIssn(data);    //json.message.issn-type[0].value;
+    document.getElementById("Enrichmentopus_crossrefLicence").value    = getLicence(data);
+    document.getElementById("Enrichmentopus_import_origin").value      = "crossref";
+    document.getElementById("Enrichmentopus_doiImportPopulated").value = populatedFields;
 }
 
 function expandLanguage(language)
@@ -141,31 +160,17 @@ function expandLanguage(language)
 
 function expandCompletedDate(dates)
 {
- // Für CompletedYear und CompletedDate
+ // Für CompletedYear
+    if (dates && dates.length > 2) {
+        const date = dates.join();
+        const year = date.split(',')[0];
 
-    if (dates !== '' && dates.length > 2) {  // = Wenn überhaupt ein Jahr enthalten ist
-
-        date = dates.join();
-
-        //if (date.includes('-')){
-        if ((date.split(',')[0].length) = 4) {
-            document.getElementById("CompletedYear").value = date.split(',')[0];
+        if (year.length === 4) {
+            document.getElementById("CompletedYear").value = year;
             finalize("CompletedYear");
         }
-         // Das else wird nur gebraucht, wenn CompletedDate befüllt werden soll.
-         /* else {
-             document.getElementById("CompletedYear").value = date.split(',')[0];
-             colorGreen("CompletedYear");
-             var month = date.split(',')[1];
-             if (month.length == 1){month = '0'+month;}
-             var day = date.split(',')[2];
-             if (day.length == 1){day = '0'+day;}
-             document.getElementById("CompletedDate").value = day+'.'+month+'.'+date.split(',')[0];
-             colorGreen("CompletedDate");
-         } */
     }
 }
-
 
 function expandSubject(subject)
 {
@@ -189,8 +194,6 @@ function expandSubject(subject)
         }
     }
 }
-
-
 
 function expandThesisAccepted(dates)
 {
@@ -235,7 +238,6 @@ function expandPages(page)
     }
 }
 
-
 function expandAuthor(author)
 {
     // Abbruch, wenn kein Autor vorhanden
@@ -276,7 +278,7 @@ function expandAuthor(author)
 
     // Überprüfen und Hinweis für zu viele Autoren
     if (document.getElementById('PersonAuthorLastName_' + maxAuthors) !== null ) {
-        alert("Der DOI-Datensatz hat zu viele AutorInnen (" + authorLength + "). Importiert werden die ersten 49 AutorInnen sowie der/die letzte AutorIn.");
+        openDialog(translations.doiimport_header_note, translations.doiimport_hint_manyAuthors.replace('%s', authorLength), "OK");
     }
 
     // Ersten Autor setzen
@@ -369,8 +371,6 @@ function expandTranslator(translator)
     }
 }
 
-
-
 function get(url, callback)
 {
     var xhr = new XMLHttpRequest();
@@ -423,19 +423,14 @@ var crossrefTypeMapping = {
  */
 async function getDoctypes(data)
 {
-    var getUrl    = window.location;
-    const baseUrl = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
-    //alert("URL: "+getUrl.pathname);
     const finalUrl = baseUrl + '/api/doctypes';
     get(
         finalUrl,
         function () {
-            var existingDoctypes = this.responseText;
-            //alert("Doctypes: " + existingDoctypes);
-
+            var existingDoctypes                                  = this.responseText;
             document.getElementById("CrossrefDocumentType").value = getType(data);
             var crossrefType                                      = document.getElementById("CrossrefDocumentType").value;
-            document.getElementById("Enrichmentlocal_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "local_crossrefDocumentType"
+            document.getElementById("Enrichmentopus_crossrefDocumentType").value = crossrefType; // Zuweisung des originalen Crossref-DokTyps zum Enrichment "opus_crossrefDocumentType"
 
             // Map Crossref document type to OPUS type
             var opusType = crossrefTypeMapping[crossrefType];
@@ -443,8 +438,6 @@ async function getDoctypes(data)
             if (! existingDoctypes.includes(opusType)) {
                 opusType = 'other';
             }
-
-
 
             if (crossrefType.includes("dissertation/")) {
                 // Wenn crossrefType "dissertation" mit Slash: mit Degree
@@ -476,10 +469,81 @@ async function getDoctypes(data)
             }
 
             document.getElementById('DocumentType').value = opusType;
-
-            //alert("OpusDoctype: " + document.getElementById('DocumentType').value);
-            document.getElementById("OpusDocumentType").value = document.getElementById("DocumentType").value;
             return;
         }
     );
+}
+
+function openDialog(title, text, type = 'note', id = null)
+{
+    var dialogButtons = {};
+
+    var dialogContent         = document.createElement("div");
+    dialogContent.textContent = text;
+
+    // Hinzufügen eines Buttons, wenn DOI schon vorhanden und eine ID verfügbar ist
+    if (id) {
+        dialogButtons[translations.doiimport_button_showId + ' ' + id] = function () {
+            var checkLink = baseUrl + "/" + id;
+            window.open(checkLink, '_blank');
+        };
+    }
+
+    switch (type) {
+        case 'warning':
+            dialogButtons['OK']                                 = function () {
+                $(this).dialog("close");
+                cleanup();
+                document.getElementById("IdentifierDoi").value = doi;
+                startCheck();
+            };
+            dialogButtons[translations.doiimport_button_cancel] = function () {
+                $(this).dialog("close");
+            };
+            break;
+        case 'note':
+            dialogButtons[translations.doiimport_button_back]     = function () {
+                $(this).dialog("close");
+                document.getElementById("abort").click();
+            };
+            dialogButtons[translations.doiimport_button_tryAgain] = function () {
+                document.getElementById("IdentifierDoi").style.backgroundColor = null;
+                document.getElementById("IdentifierDoi").value                 = "";
+                $(this).dialog("close");
+                setTimeout(function () {
+                    document.getElementById("IdentifierDoi").focus();
+                }, 100);
+            };
+            break;
+        case 'redirect':
+            //Falls DOI nicht bei Crossref gefunden wurde -> zurück zur Auswahl des Dokumenttyps (um manuelle Eingabe im DOI-Import zu verhindern)
+            dialogButtons[translations.doiimport_button_back]     = function () {
+                $(this).dialog("close");
+                document.getElementById("abort").click();
+            };
+            dialogButtons[translations.doiimport_button_tryAgain] = function () {
+                document.getElementById("IdentifierDoi").style.backgroundColor = null;
+                document.getElementById("IdentifierDoi").value                 = "";
+                $(this).dialog("close");
+                setTimeout(function () {
+                    document.getElementById("IdentifierDoi").focus();
+                }, 100);
+            };
+            break;
+        default:
+            // Weitere Fälle können hier hinzugefügt werden
+            dialogButtons['OK'] = function () {
+                $(this).dialog("close");
+            };
+            break;
+    }
+
+    // Dialog initialisieren
+    $(function () {
+        $(dialogContent).dialog({
+            title: title,
+            modal: true,
+            buttons: dialogButtons
+        });
+    });
 }

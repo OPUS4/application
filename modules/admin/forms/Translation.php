@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
+
 /**
  * Subform for editing translations for a single translation key.
  *
@@ -48,10 +50,8 @@ class Admin_Form_Translation extends Application_Form_Abstract
     {
         parent::init();
 
-        $configHelper = Application_Configuration::getInstance();
-
-        $languages = $configHelper->getSupportedLanguages();
-        $translate = $configHelper->getTranslate();
+        $languages = Configuration::getInstance()->getSupportedLanguages();
+        $translate = Application_Translate::getInstance();
 
         /* TODO REMOVE
         $text = new Zend_Form_Element_Note('description');

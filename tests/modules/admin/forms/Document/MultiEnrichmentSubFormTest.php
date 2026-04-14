@@ -77,8 +77,8 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
         // die beiden Enrichments mit dem Schlüssel opus.doi/urn.autoCreate
         // werden gesondert behandelt und erscheinen daher nicht im Unterformular
         $this->assertCount(2, $result);
-        $this->assertContains('Audience', $result[0]->getKeyName());
-        $this->assertContains('Audience', $result[1]->getKeyName());
+        $this->assertStringContainsString('Audience', $result[0]->getKeyName());
+        $this->assertStringContainsString('Audience', $result[1]->getKeyName());
     }
 
     public function testPopulateFromModel()
@@ -362,7 +362,7 @@ class Admin_Form_Document_MultiEnrichmentSubFormTest extends ControllerTestCase
      * @param string      $value
      * @param null|string $clickedButton
      * @return Admin_Form_Document_MultiEnrichmentSubForm
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     private function createTestPostDataAndConstructForm($keyName, $value, $clickedButton = null)
     {

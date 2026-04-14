@@ -59,7 +59,7 @@ class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD
     /**
      * Initializes and configures controller.
      *
-     * @throws Application_Exception
+     * @throws ApplicationException
      */
     public function init()
     {

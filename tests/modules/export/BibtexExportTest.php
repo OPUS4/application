@@ -67,7 +67,7 @@ class Export_BibtexExportTest extends ControllerTestCase
      * number    = {123},
      * school      = {Foobar Universit{\"a}tsbibliothek},
      * pages     = {1 -- 4},
-     * year      = {2009},
+     * year      = {2011},
      * abstract  = {Die KOBV-Zentrale in Berlin-Dahlem.},
      * subject      = {Berlin},
      * language  = {de}
@@ -85,8 +85,8 @@ class Export_BibtexExportTest extends ControllerTestCase
 
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('@misc{Doe2009,', $body);
-        $this->assertContains('author    = {Doe, John},', $body);
+        $this->assertStringContainsString('@mastersthesis{Doe2011', $body);
+        $this->assertStringContainsString('author    = {Doe, John},', $body);
     }
 
     /**

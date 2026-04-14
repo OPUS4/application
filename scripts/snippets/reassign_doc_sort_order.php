@@ -109,5 +109,3 @@ foreach (Series::getAll() as $series) {
         $doc->store();
     }
 }
-
-exit();

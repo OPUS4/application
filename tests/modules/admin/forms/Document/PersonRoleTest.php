@@ -644,7 +644,7 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertCount(1, $messages);
-        $this->assertContains('Attempt to add person without ID.', $messages[0]);
+        $this->assertStringContainsString('Attempt to add person without ID.', $messages[0]);
     }
 
     public function testIsValidSubFormTrue()

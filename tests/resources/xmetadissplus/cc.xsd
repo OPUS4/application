@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<!-- cc: Metadaten  Deutsche  Nationalbibliothek fuer Institutionen; Corporate Core -->
-	<!-- Copyright 2006 Deutsche Nationalbibliothek -->
-	<!-- Version xMetaDissPlus 2.1 -->
+<!-- cc: Metadaten  Deutsche  Nationalbibliothek fuer Institutionen; Corporate Core -->
+<!-- Copyright 2023  Deutsche Nationalbibliothek -->
+<!-- Version xMetaDissPlus 2.5 -->
 <xs:schema targetNamespace="http://www.d-nb.de/standards/cc/" elementFormDefault="qualified"
 	attributeFormDefault="unqualified" xmlns:ddb="http://www.d-nb.de/standards/ddb/"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.d-nb.de/standards/cc/"
 	xmlns:dc="http://purl.org/dc/elements/1.1/" >
 	<!-- Folgende Importe werden benoetigt, da Elemente aus den zugehoerigen Namespaces benutzt werden. -->
-	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd"/>
+	<xs:annotation>
+		<xs:documentation>
+			2023-02-27:
+			CHANGED by DNB: 
+			keine Änderungen. Version auf 2.5 hochgesetzt für Einheitlichkeit.
+			
+			2020-04-24:
+			CHANGED by DNB
+			cc:adress fakultativ
+			Version XMDP 2.4
+			Copyright 2020 Deutsche Nationalbibliothek
+			
+			2017-12-01: 
+			1. CHANGED by data2type: alle schemaLocation-Attribute der importierten Schemas verweisen auf eine DNB eigene URL, 
+			auch wenn sie zuvor auf DNB-fremde URLs verwiesen haben 
+			(dc: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd,
+			dcterms: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd).			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="dc.xsd"/>
 	<xs:import namespace="http://www.d-nb.de/standards/ddb/" schemaLocation="ddb.xsd"/>
 	<!-- Folgende Inklusion wird fuer die Definition des unqualifizierten Attributs countryCode benoetigt.(kein ddb Type) -->
 	<xs:include schemaLocation="iso3166.xsd"/>
@@ -15,6 +34,7 @@
 		<xs:annotation>
 			<xs:documentation xml:lang="de">CC Corporate Core: institutionelle Metadaten der
 				Deutschen Nationalbibliothek, Speicherung in der GKD </xs:documentation>
+			<xs:documentation xml:lang="de">2017-12-01 ADDED by data2type: attribute GND-Nr </xs:documentation>
 		</xs:annotation>
 		<xs:complexType>
 			<xs:sequence>
@@ -23,6 +43,7 @@
 				<xs:element name="department" type="deptType" minOccurs="0" maxOccurs="unbounded"/>
 			</xs:sequence>
 			<xs:attribute name="GKD-Nr" type="xs:string" form="qualified" use="optional"/>
+			<xs:attribute name="GND-Nr" type="xs:string" form="qualified" use="optional"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:element name="address">
@@ -52,7 +73,7 @@
 			<xs:extension base="dc:SimpleLiteral">
 				<xs:sequence>
 					<xs:element ref="universityOrInstitution"/>
-					<xs:element ref="address"/>
+					<xs:element  minOccurs="0" ref="address"/>
 				</xs:sequence>
 				<xs:attribute name="countryCode" type="countryList"/>
 				<xs:attribute name="type" default="dcterms:ISO3166" use="optional"/>

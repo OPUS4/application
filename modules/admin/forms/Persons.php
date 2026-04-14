@@ -86,7 +86,7 @@ class Admin_Form_Persons extends Application_Form_Model_Abstract
     public const ELEMENT_IDENTIFIER_GND = 'IdentifierGnd';
 
     /**
-     * Konstante für Identifier OrcId
+     * Konstante für Identifier Orcid
      */
     public const ELEMENT_IDENTIFIER_ORCID = 'IdentifierOrcid';
 

@@ -95,7 +95,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase
         $form = Admin_Form_Document::getInstanceFromPost($post, $document);
 
         $this->assertNotNull($form);
-        $this->assertInstanceOf('Admin_Form_Document', $form);
+        $this->assertInstanceOf(Admin_Form_Document::class, $form);
     }
 
     public function testProcessPostEmpty()

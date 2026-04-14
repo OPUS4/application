@@ -123,11 +123,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract
      */
     private function createDocumentTypeField()
     {
-        $optionsSorted = [];
-        foreach ($this->documentTypesHelper->getDocumentTypes() as $value => $path) {
-            $optionsSorted[$value] = $this->view->translate($value);
-        }
-        asort($optionsSorted);
+        $documentTypes = new Application_Form_Element_DocumentType('documentType');
+        $optionsSorted = $documentTypes->getSortedOptions();
 
         $doctypes = $this->createElement('select', 'documentType');
         $doctypes->setDisableTranslator(true)

@@ -78,12 +78,12 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
 
         $subforms = $form->getSubForms();
 
-        $this->assertInternalType('array', $subforms);
+        $this->assertIsArray($subforms);
         $this->assertArrayHasKey('ddc2', $subforms);
 
         $ddcform = $subforms['ddc2'];
 
-        $this->assertInstanceOf('Admin_Form_Document_Section', $ddcform);
+        $this->assertInstanceOf(Admin_Form_Document_Section::class, $ddcform);
 
         $colforms = $ddcform->getSubforms();
 
@@ -100,7 +100,7 @@ class Admin_Form_Document_CollectionsTest extends ControllerTestCase
 
         $html = $form->render();
 
-        $this->assertContains('id="ddc2"', $html);
+        $this->assertStringContainsString('id="ddc2"', $html);
     }
 
     public function testGetGroupedCollections()

@@ -104,10 +104,9 @@ EOT;
     }
 
     /**
-     * @return int
      * @throws NotFoundException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $diff = new Application_Document_DocumentDiff();
         $diff->setOutput($output);
@@ -125,7 +124,7 @@ EOT;
             $diff->diff($docIds);
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 
     /**

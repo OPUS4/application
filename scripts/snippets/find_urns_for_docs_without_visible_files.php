@@ -68,5 +68,3 @@ if ($updateRequired === 0) {
 } else {
     echo "$updateRequired docs need to be updated manually!\n";
 }
-
-exit();

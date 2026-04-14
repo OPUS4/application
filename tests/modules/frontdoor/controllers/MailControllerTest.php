@@ -91,14 +91,14 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
     {
         $this->dispatch('/frontdoor/mail/index/');
         $this->assertResponseCode(500);
-        $this->assertContains('currently not supported', $this->getResponse()->getBody());
+        $this->assertStringContainsString('currently not supported', $this->getResponse()->getBody());
     }
 
     public function testSendmailActionNotSupported()
     {
         $this->dispatch('/frontdoor/mail/sendmail/');
         $this->assertResponseCode(500);
-        $this->assertContains('currently not supported', $this->getResponse()->getBody());
+        $this->assertStringContainsString('currently not supported', $this->getResponse()->getBody());
     }
 
     public function testToauthorActionWithMissingParam()
@@ -146,6 +146,6 @@ class Frontdoor_MailControllerTest extends ControllerTestCase
     {
         $this->dispatch('/frontdoor/mail/toauthor/docId/147/docId/146');
         $this->assertResponseCode(200);
-        $this->assertContains('<b>KOBV</b>', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<b>KOBV</b>', $this->getResponse()->getBody());
     }
 }

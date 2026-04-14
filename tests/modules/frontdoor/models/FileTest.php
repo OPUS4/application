@@ -230,7 +230,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $helper = $file->getAclHelper();
 
         $this->assertNotNull($helper);
-        $this->assertInstanceOf('Application_Controller_Action_Helper_AccessControl', $helper);
+        $this->assertInstanceOf(Application_Controller_Action_Helper_AccessControl::class, $helper);
     }
 
     public function testSetAclHelper()
@@ -248,7 +248,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $helper = $file->getAclHelper();
 
         $this->assertNotNull($helper);
-        $this->assertInstanceOf('Application_Controller_Action_Helper_AccessControl', $helper);
+        $this->assertInstanceOf(Application_Controller_Action_Helper_AccessControl::class, $helper);
     }
 
     /**
@@ -315,7 +315,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $doc->addFile($file);
 
         $date = new Date();
-        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $date->setYear('2100')->setMonth('01')->setDay('01');
         $doc->setEmbargoDate($date);
 
         $docId = $doc->store();
@@ -340,7 +340,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $doc->addFile($file);
 
         $date = new Date();
-        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $date->setYear('2100')->setMonth('01')->setDay('01');
         $doc->setEmbargoDate($date);
 
         $docId = $doc->store();
@@ -365,7 +365,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $doc->addFile($file);
 
         $date = new Date();
-        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $date->setYear('2100')->setMonth('01')->setDay('01');
         $doc->setEmbargoDate($date);
 
         $docId = $doc->store();
@@ -385,7 +385,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase
         $doc->addFile($file);
 
         $date = new Date();
-        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $date->setYear('2100')->setMonth('01')->setDay('01');
         $doc->setEmbargoDate($date);
 
         $docId = $doc->store();

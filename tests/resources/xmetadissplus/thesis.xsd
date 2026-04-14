@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-	<!--
-		thesis: Metadaten Deutsche Nationalbibliothek in Anlehnung an ETD-MS
-	-->
-	<!-- Copyright 2010  Deutsche Nationalbibliothek -->
-	<!-- Version xMetaDissPlus 2.0 angepasst fuer Version 2.1-->
+<!-- thesis: Metadaten Deutsche Nationalbibliothek in Anlehnung an ETD-MS -->
+<!-- Copyright 2023 Deutsche Nationalbibliothek -->
+<!-- Version 2.5 -->
 <xs:schema targetNamespace="http://www.ndltd.org/standards/metadata/etdms/1.0/"
 	elementFormDefault="qualified" attributeFormDefault="qualified"
 	xmlns="http://www.ndltd.org/standards/metadata/etdms/1.0/"
 	xmlns:cc="http://www.d-nb.de/standards/cc/"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema">
-	<xs:import namespace="http://www.d-nb.de/standards/cc/"
-	schemaLocation="http://files.dnb.de/standards/xmetadiss/cc.xsd" />
+	<xs:import namespace="http://www.d-nb.de/standards/cc/" schemaLocation="cc.xsd" />
+	<xs:annotation>
+		<xs:documentation xml:lang="de">
+			2023-02-27:
+			CHANGED by DNB: 
+			DINI-Begriffe aus 2022 (DOI:10.18452/24147) für Hochschulschriftenvermerk ergänzt.
+			XMDP soll einfacher werden, indem für das Element theisis:level die jeweils gleichen Begriffe aus dem DINI-Vokabular verwendet werden.
+			Beispiel: DINI-Begriff "Habilitation" ersetzt "thesis.habiltiation".
+			
+			Die vorliegende Version 2.5 ist abwärtskompatibel zu den Vorgängerversionen.
+		
+		</xs:documentation>
+	</xs:annotation>
 	<xs:annotation>
 		<xs:documentation xml:lang="de">In der Version 2.1. im Element 8 der "editor" als weiterer "contributor" aufgenommen.
 		</xs:documentation>
@@ -43,29 +52,59 @@
 			</xs:restriction>
 		</xs:simpleType>
 	</xs:attribute>
-	<xs:simpleType name="levelType">
+	<xs:simpleType name="levelType"><!-- 2023 überarbeitet und ergänzt für einheitlichere Terminologie mit DINI -->
 		<xs:restriction base="xs:string">
-			<xs:enumeration value="thesis.doctoral">
+			<xs:enumeration value="thesis.doctoral"><!-- Verwendung nicht mehr empfohlen -->
 				<xs:annotation>
 					<xs:documentation>Term fuer Dissertation</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="thesis.habilitation">
+			<!-- 24 DoctoralThesis ergänzt - Für Ablieferung an DNB wird es als Dissertation gewertet. -->
+			<xs:enumeration value="DoctoralThesis">
+				<xs:annotation>
+					<xs:documentation>DNB: bezeichnet eine Dissertation. DINI: Eine Doctoral Thesis ist die hoechste Stufe einer Abschlussarbeit. Mit diesem Term wird bezeichnet, was gleichwertig oder hoeher ist als eine Dissertation, aber nicht der Bologna-Konvention folgt. Auch die Habilitationsschrift ist enthalten.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<!-- 25 PhDThesis ergänzt -->
+			<xs:enumeration value="PhDThesis">
+				<xs:annotation>
+					<xs:documentation>Term fuer Dissertation</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="thesis.habilitation"><!-- Verwendung nicht mehr empfohlen -->
 				<xs:annotation>
 					<xs:documentation>Term fuer Habilitation</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="bachelor">
+			<!-- 26 Habilitation ergänzt -->
+			<xs:enumeration value="Habilitation">
+				<xs:annotation>
+					<xs:documentation>Term fuer Habilitation</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="bachelor"><!-- Verwendung nicht mehr empfohlen -->
 				<xs:annotation>
 					<xs:documentation>Term fuer Abschlussarbeit Bachelor</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="master">
+			<!--  22 BachelorThesis ergänzt-->
+			<xs:enumeration value="BachelorThesis">
+				<xs:annotation>
+					<xs:documentation>Term fuer Abschlussarbeit Bachelor</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="master"><!-- Verwendung nicht mehr empfohlen -->
 				<xs:annotation>
 					<xs:documentation>Term fuer Abschlussarbeit Master</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="post-doctoral">
+			<!-- 23 MasterThesis ergänzt -->
+			<xs:enumeration value="MasterThesis">
+				<xs:annotation>
+					<xs:documentation>Term fuer Abschlussarbeit Master</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="post-doctoral"><!-- Verwendung nicht empfohlen -->
 				<xs:annotation>
 					<xs:documentation>Im englischsprachigen Raum verwendeter Term fuer Habilitationsschrift</xs:documentation>
 				</xs:annotation>
@@ -85,12 +124,18 @@
 					<xs:documentation>Term fuer Abschlussarbeit Diplom</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="Lizentiat">
+			<xs:enumeration value="Lizentiat"> <!-- Verwendung nicht empfohlen -->
 				<xs:annotation>
 					<xs:documentation>Term fuer Abschlussarbeit Lizentiat</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="other">
+			<xs:enumeration value="other"> <!-- Verwendung nicht empfohlen -->
+				<xs:annotation>
+					<xs:documentation>Fuer Abschlussarbeiten, die nicht unter die oben genannten Terme abgedeckt werden</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<!-- 50 Other ergänzt -->
+			<xs:enumeration value="Other"> <!-- Verwendung nicht empfohlen -->
 				<xs:annotation>
 					<xs:documentation>Fuer Abschlussarbeiten, die nicht unter die oben genannten Terme abgedeckt werden</xs:documentation>
 				</xs:annotation>

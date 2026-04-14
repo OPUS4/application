@@ -128,12 +128,12 @@ class Oai_Format_DcTest extends ControllerTestCase
 
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
-        // Regression test for OPUSVIER-2379 (show doc-type:report)
-        $elements = $xpath->query('//oai_dc:dc/dc:type[text()="doc-type:report"]');
+        // Regression test for OPUSVIER-2379 (show doc-type:Report)
+        $elements = $xpath->query('//oai_dc:dc/dc:type[text()="doc-type:Report"]');
         $this->assertEquals(
             1,
             $elements->length,
-            "Unexpected count for doc-type:report"
+            "Unexpected count for doc-type:Report"
         );
     }
 
@@ -345,7 +345,7 @@ class Oai_Format_DcTest extends ControllerTestCase
 
         if (preg_match('#<oai_dc:dc.*>#', $xml, $matches)) {
             $startTag = $matches[0];
-            $this->assertContains('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
+            $this->assertStringContainsString('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
         } else {
             $this->fail('element \'oai_dc:dc\' not found');
         }
@@ -397,7 +397,7 @@ class Oai_Format_DcTest extends ControllerTestCase
 
         if (preg_match('#<oai_dc:dc.*>#', $xml, $matches)) {
             $startTag = $matches[0];
-            $this->assertContains('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
+            $this->assertStringContainsString('xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"', $startTag);
         } else {
             $this->fail('element \'oai_dc:dc\' not found');
         }

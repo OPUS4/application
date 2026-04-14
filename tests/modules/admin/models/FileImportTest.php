@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\ApplicationException;
 use Opus\Common\Document;
 
 class Admin_Model_FileImportTest extends ControllerTestCase
@@ -114,7 +115,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase
 
         $files = $this->model->getNamesOfIncomingFiles();
 
-        $this->assertInternalType('array', $files);
+        $this->assertIsArray($files);
         $this->assertEquals(1, count($files));
         $this->assertEquals('testfile', $files[0]);
 
@@ -123,14 +124,14 @@ class Admin_Model_FileImportTest extends ControllerTestCase
 
     public function testAddFilesToDocumentNoFiles()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('no files for import');
         $this->model->addFilesToDocument(200, null);
     }
 
     public function testAddFilesToDocumentUnknownDocument()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('no document found for id 500');
         $this->model->addFilesToDocument(500, ['testfile']);
     }

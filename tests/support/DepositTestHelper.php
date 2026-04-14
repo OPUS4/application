@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\Collection;
 use Opus\Common\CollectionRole;
 use Opus\Common\Config;
@@ -38,6 +39,7 @@ use Opus\Common\Model\NotFoundException;
 use Opus\Common\TitleInterface;
 use Opus\Import\AdditionalEnrichments;
 use PHPUnit\Framework\Assert;
+use Symfony\Component\Filesystem\Filesystem;
 
 class DepositTestHelper extends Assert
 {
@@ -130,6 +132,7 @@ class DepositTestHelper extends Assert
             $checksum = md5_file($archive);
         }
         $request->setHeader('Content-MD5', $checksum);
+        $request->setHeader('Content-Disposition', $fileName);
         return $checksum;
     }
 
@@ -184,17 +187,24 @@ class DepositTestHelper extends Assert
 
     /**
      * Creates separate tmp folder for sword tests.
-     *
-     * TODO folder is reused, but never removed
      */
     public function setupTmpDir()
     {
-        $appConfig = Application_Configuration::getInstance();
+        $appConfig = Configuration::getInstance();
         $tempPath  = $appConfig->getTempPath() . 'sword';
         if (! file_exists($tempPath)) {
             mkdir($tempPath);
         }
         $appConfig->setTempPath($tempPath);
+    }
+
+    public function tearDownTmpDir()
+    {
+        $appConfig = Configuration::getInstance();
+        $tempPath  = $appConfig->getTempPath();
+        $appConfig->setTempPath(null); // reset to default
+        $filesystem = new Filesystem();
+        $filesystem->remove($tempPath);
     }
 
     /**
@@ -204,7 +214,7 @@ class DepositTestHelper extends Assert
      */
     public function assertEmptyTmpDir()
     {
-        $dirName = Application_Configuration::getInstance()->getTempPath();
+        $dirName = Configuration::getInstance()->getTempPath();
         $files   = scandir($dirName);
         foreach ($files as $file) {
             $this->assertTrue(in_array($file, ['.', '..', '.gitignore', 'resumption']), $dirName);

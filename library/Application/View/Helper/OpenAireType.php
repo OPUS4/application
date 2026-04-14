@@ -32,11 +32,8 @@
 /**
  * Converts document type into OpenAIRE dc:type value.
  */
-class Application_View_Helper_OpenAireType extends Application_View_Helper_DcType
+class Application_View_Helper_OpenAireType extends Application_View_Helper_Abstract
 {
-    /** @var array */
-    private $openAireTypes;
-
     /**
      * Returns dc:type value for OpenAIRE.
      *
@@ -45,30 +42,18 @@ class Application_View_Helper_OpenAireType extends Application_View_Helper_DcTyp
      */
     public function openAireType($docType)
     {
-        $dcType = $this->dcType($docType);
+        $config = $this->getConfig();
 
-        // filter types not recognized by OpenAIRE
-        if (! in_array($dcType, $this->getOpenAireTypes())) {
-            $dcType = 'other';
+        $openAireType = null;
+
+        if (isset($config->documentType->$docType->openAireType)) {
+            $openAireType = $config->documentType->$docType->openAireType;
+        } elseif (isset($config->documentType->default->openAireType)) {
+            $openAireType = $config->documentType->default->openAireType;
+        } else {
+            $openAireType = 'other';
         }
 
-        return $dcType;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOpenAireTypes()
-    {
-        if ($this->openAireTypes === null) {
-            $config = $this->getConfig();
-            if (isset($config->openAireTypes)) {
-                $this->openAireTypes = $config->openAireTypes->toArray();
-            } else {
-                $this->openAireTypes = [];
-            }
-        }
-
-        return $this->openAireTypes;
+        return $openAireType;
     }
 }

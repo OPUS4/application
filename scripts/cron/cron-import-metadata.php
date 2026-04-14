@@ -33,20 +33,5 @@ define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-use Opus\Common\Log;
-use Opus\Import\Worker\MetadataImportWorker;
-use Opus\Job\Runner;
-
-$jobrunner = new Runner();
-$jobrunner->setLogger(Log::get());
-// no waiting between jobs
-$jobrunner->setDelay(0);
-// set a limit of 100 index jobs per run
-$jobrunner->setLimit(100);
-
-$importWorker = new MetadataImportWorker(null);
-$importWorker->setLogger(Log::get());
-
-$jobrunner->registerWorker($importWorker);
-
-$jobrunner->run();
+$job = new Application_Job_ImportMetadataJob();
+$job->run();

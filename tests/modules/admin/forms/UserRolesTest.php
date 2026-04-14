@@ -104,7 +104,7 @@ class Admin_Form_UserRolesTest extends ControllerTestCase
 
         $roles = $account->getRole();
 
-        $this->assertInternalType('array', $roles);
+        $this->assertIsArray($roles);
         $this->assertCount(3, $roles);
 
         foreach ($roles as $role) {

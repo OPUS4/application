@@ -56,4 +56,27 @@ class Application_View_Helper_DcType extends Application_View_Helper_Abstract
 
         return $dcType;
     }
+
+    /**
+     * Returns the document types for DCMI-Type.
+     *
+     * @param string $dcType
+     * @return array
+     */
+    public function documentTypes($dcType)
+    {
+        $config = $this->getConfig();
+
+        $documentTypes = [];
+
+        if (isset($config->documentType)) {
+            foreach ($config->documentType as $documentTypeName => $documentType) {
+                if (isset($documentType->dcType) && $documentType->dcType === $dcType) {
+                    $documentTypes[] = $documentTypeName;
+                }
+            }
+        }
+
+        return $documentTypes;
+    }
 }

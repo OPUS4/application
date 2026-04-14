@@ -1,0 +1,12 @@
+:root {
+  --maxdark: white;
+  --dark: #eee;
+  --bright: white;
+  --light: black;
+  --xlight: black;
+  --xxlight: black;
+  --maxlight: black;
+  --error: #ddd;
+  --notice: #555;
+  --success: #555;
+}

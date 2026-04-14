@@ -1,5 +1,506 @@
 # OPUS 4 Release Notes
 
+## Release 4.9 - 2026-04-14
+
+### Unterstützte PHP-Versionen
+
+OPUS 4.9 ist kompatibel mit PHP 8.1 und 8.2. PHP 7 wird nicht länger 
+unterstützt. Die OPUS 4 Application funktioniert noch nicht mit PHP 8.3 und 
+PHP 8.4.
+
+### Update von OPUS 4.8
+
+Für das Update muss der lokale Code mit `git` aktualisiert werden. Dabei kann
+es unter Umständen zu Konflikten mit lokalen Anpassungen kommen. 
+
+Ein Teil des Codes aus der Application wurde in separate Pakete verschoben. Dazu
+gekommen sind:
+
+- opus4-app-common
+- opus4-sword
+- opus4-deepgreen
+- opus4-i18n 
+
+Die Abhängigkeiten müssen mit `composer update` aktualisiert werden.
+
+Zum Abschluss muss das Update-Skript ausgeführt werden.
+
+    $ bin/update.sh
+
+Beim Update werden mehrere, teilweise interaktive, Schritte ausgeführt. Beim 
+Update von OPUS 4.8 auf 4.9 sind das:
+
+- "In Copyright"-Lizenz hinzufügen (optional)
+- Feld `PublicationState` auf `NULL` setzen (optional)
+- DOI-Import-Enrichments umbenennen bzw. hinzufügen
+- Konferenz-Enrichments umbenennen bzw. hinzufügen
+- Datumsangaben, die als Zeitstempel gespeichert wurden, bereinigen
+- DOI-Werte normalisieren (Vorangestellte URLs entfernen)
+
+### Datenmodell
+
+#### Feld `PublicationState`
+
+Das Feld `PublicationState` wurde integriert. Es ist nun im Publish-Formular 
+verfügbar. Die Werte folgen dem COAR-Vokabular. In OAI gibt es Sets für die 
+möglichen Werte von `PublicationState`. Das Feld wurde in die Formate OAI-DC 
+und XMetaDissPlus integriert. In der Suche gibt es eine Facette für das Feld. 
+
+https://github.com/OPUS4/application/issues/1192
+
+Das Feld `PublicationState` existierte in der Datenbank schon länger und kann
+bei der Migration von Daten nach OPUS 4 gesetzt worden sein bzw. enthält den
+Standard-Wert `draft`. Beim Update kann das Feld für alle Dokumente auf NULL
+gesetzt werden. Der Reset sollte nur dann übersprungen werden, wenn das Feld
+bisher mit lokalen Anpassungen an OPUS 4 verwendet wurde.
+
+#### Identifier-Typen
+
+Es wurden zwei Identifier-Typen hinzugefügt.
+
+- `ISMN` (International Standard Musical Number)
+- `union-cat` (Verbund-ID)
+
+Die Verbund-ID kann auf der Frontdoor als Link dargestellt werden. Dazu ist 
+die Query-URL des Verbundkatalogs im Parameter `unionCat.requestUrl` zu 
+hinterlegen.
+
+DOI-Werte werden beim Update normalisiert. Führende URLs werden entfernt und
+neue DOIs werden automatisch ohne URL gespeichert. 
+
+### Suche (Apache Solr)
+
+OPUS 4.9 wurde mit Solr 9.10.1 getestet. Solr 10 wird noch nicht unterstützt.
+
+Solr muss ab Solr 9.8 mit einer zusätzlichen Option gestartet werden, damit 
+die Volltextextraktion weiterhin funktioniert.
+
+    $ bin/solr start -Dsolr.config.lib.enabled = true
+
+Weitere Informationen dazu finden sich in der offiziellen Dokumentation von 
+Apache Solr.
+
+Enrichment-Felder können von der Indexierung ausgeschlossen werden. Beim 
+DOI-Import werden z.B. die Originaldaten in einem Enrichment gespeichert. Der
+Wert kann zu groß sein für die Indexierung in Solr. 
+
+    search.index.enrichment.blacklist = opus_doi_json
+
+### Weboberfläche
+
+Das CSS für die normalerweise frei zugänglichen Seiten, und damit Ihr Aussehen
+wurde modernisiert und an aktuelle Browser angepasst. Das alte CSS lässt sich
+aktivieren.
+
+    themes.legacyCss = true
+
+Die Administration verwendet weiterhin das alte CSS.
+
+Es können unterschiedliche Logos in Abhängigkeit von der ausgewählten Sprache
+angezeigt werden. Dafür können Einträge in `custom.css` gemacht werden.
+
+    #logo a.logo-en {
+        background: url(../img/logo/opus-logo-en.png) no-repeat left;
+    }
+
+Für die ORCID- und GND-Logos werden jetzt SVG-Dateien verwendet. Es werden nun
+alle Personen und nicht nur Autor*innen verlinkt.
+
+Die Default-FAQs wurden bezüglich der Namensänderung der Sherpa/Romeo-Liste in 
+"Open Policy Finder" aktualisiert.
+
+#### Frontdoor
+
+In der Frontdoor können nun gleichsprachige Untertitel mit angezeigt werden.
+
+    frontdoor.appendSubtitle = 1
+
+Leere Bereiche für die Zusammenfassungen oder die Export-Formate werden nun
+automatisch ausgeblendet. 
+
+Institute werden bei der Anzeige nun alphabetisch sortiert. 
+
+##### Enrichments
+
+URL-, GND- und ORCID-Werte in Enrichments können in der Frontdoor nun als Links
+gerendert werden. Dafür gibt es eine neue Konfigurationsdatei.
+
+    application/configs/model.ini
+
+Die Verwendung ist in der Datei erläutert.
+
+Der Typ `Date` für Enrichments ist dazu gekommen und kann in der Verwaltung in
+der Administration ausgewählt werden. Das hat noch keine Auswirkungen auf die 
+Eingabe im Publish-Modul.
+
+### Crossref-Import überarbeitet
+
+Der Import von Metadaten aus Crossref per DOI hat umfangreichere Optimierungen
+erfahren. Die Zahl der importierten Autor*innen wurde auf 50 begrenzt. Dabei 
+wird immer auch die zuletzt genannte Person importiert. 
+
+Die Bezeichnungen der Enrichment-Felder orientieren sich nun am OPUS 4-Standard. 
+
+Die Änderungen umfassen folgende Umbenennungen:
+
+| Feldname in OPUS 4.8       | Feldname in OPUS 4.9      |
+|----------------------------|---------------------------|
+| opus_import_data           | opus_doi_json             |
+| local_crossrefDocumentType | opus_crossrefDocumentType |
+| local_crossrefLicence      | opus_crossrefLicence      |
+| local_doiImportPopulated   | opus_doiImportPopulated   |
+| local_import_origin        | opus_import_origin        |
+
+Die Felder für Konferenzen wurden wesentlich überarbeitet. Das Mapping der 
+Konferenzangaben wurde an die neuen Felder angepasst. (Details s. nächster 
+Abschnitt.)
+
+Das Feld `opus_doi_flag` bleibt unverändert.
+
+Das Update-Script prüft und aktualisiert sowohl die Enrichmentfelder für den 
+DOI-basierten Metadatenimport als auch für Konferenzen. Alte Felder werden 
+umbenannt und veränderte Übersetzungen übernommen, fehlende Felder angelegt.
+
+Die Übersetzungen für den DOI-basierten Metadatenimport sind nun mehrsprachig 
+und können über die Übersetzungsverwaltung bearbeitet werden.
+
+Die Benutzerführung wurde verbessert, um fehlerhafte Eingaben zu vermeiden: 
+Das Editieren der Felder im Publish-Formular ist nun erst nach Eingabe einer 
+DOI und erfolgreichem Abruf der Crossref-Daten möglich. Ist der Metadatenimport
+nicht erfolgreich oder eine manuelle Interaktion erforderlich (z.B. bei 
+Dubletten), erscheint ein Menü mit den zur Verfügung stehenden Optionen.
+
+### Enrichmentfelder für Konferenzen
+
+Es werden eigene Felder für Konferenzen eingeführt. Basierend auf 
+bibliothekarischen Standards und Erfassungspraktiken kennt OPUS 4 nun diese 
+vier Metadaten-Elemente:
+
+- Name der Konferenz
+- Ort der Konferenz
+- Zählung der Konferenz
+- Jahr der Konferenz
+
+In OPUS 4.8 waren die beiden Enrichmentfelder `conference_title` und 
+`conference_place` für den DOI-basierten Metadatenimport neu hinzugekommen. 
+Diese werden an den OPUS-Standard angeglichen:
+
+| Feld in OPUS 4.8 | Feld in OPUS 4.9     |
+|------------------|----------------------|
+| conference_title | OpusConferenceName   |
+| conference_place | OpusConferencePlace  |
+| -                | OpusConferenceNumber |
+| -                | OpusConferenceYear   |
+
+
+
+### Dokumenttypen / Gemeinsames Vokabular 2.0
+
+Die Dokumenttypen in OPUS 4 basieren auf dem "Gemeinsamen Vokabular für 
+Publikations- und Dokumenttypen" von DINI. Die zuständigen DINI-Arbeitsgruppen
+haben das Vokabular überarbeitet und an aktuelle Anforderungen angepasst. 
+Zu den Neuerungen gehören:
+
+- Untergliederung bestehender Dokumenttypen, z.B. "Monograph" und 
+  "EditedCollection" für "Book".
+- Gänzlich neue Dokumenttypen (wie "DynamicWebResource" für Blogs).
+- Eine einheitliche Schreibweise der Terme.
+
+OPUS 4 übernimmt viele der neu hinzugekommen Dokumenttypen. Zudem wurden einige
+Dokumenttypen aus dem Vokabular 1.0 aufgrund der Nachfrage neu aufgenommen, wie
+"Noten (Musik)" und "Website".
+
+Aktuell sieht OPUS 4 keine Hierarchisierung der Dokumenttypen vor. Breit 
+gefasste Begriffe wie "Konferenzveröffentlichung" stehen neben 
+ausdifferenzierten Termen wie "Konferenzfolien" oder "Konferenzposter".
+
+Die Überarbeitungen des Gemeinsamen Vokabulars haben Auswirkungen auf mehrere 
+Bereiche in OPUS 4 (Publish-Formulare für die neuen Dokumenttypen, Mappings der
+Im- und Exportformate etc.). Die OAI-PMH-Schnittstelle liefert nun durchgehend 
+die neue Schreibweise der Terme aus (entsprechend den Vorgaben des 
+DINI-Zertifikats).
+
+Die Publish-Formulare wurden ebenfalls überarbeitet und vereinheitlicht. Bei 
+allen Personen ist das Feld "Akademischer Titel" ergänzt worden, um der 
+fehlerhaften Erfassung des akademischen Titels in den Feldern für Vor- und 
+Nachname entgegenzuwirken. Datenschutzrechtlich problematische Elemente wie 
+E-Mail-Adresse, Geburtsdatum und Geburtsort sind auskommentiert. Die 
+Dokumenttypen Diplomarbeit, Examen und Magisterarbeit bleiben unverändert.
+
+Eine Konkordanz zwischen den Dokumenttypen im Gemeinsamen Vokabular 2.0 und 
+OPUS 4 sowie zum Mapping der Dokumenttypen in den Import- und Exportformaten 
+finden Sie unter 
+
+https://github.com/OPUS4/community/wiki/DINI-Gemeinsames-Vokabular-2.0.
+
+### Export-Formate
+
+Neben der Umsetzung des Mappings für die neuen Dokumenttypen gibt es weitere 
+Anpassungen und Erweiterungen.
+
+#### BibTeX / CSV / RIS
+
+Einzeltreffer- und Listenexporte wurden harmonisiert, sodass sie nun dieselben 
+Daten ausgeben. Die dokumenttypspezifischen BibTeX-Einzeltreffer-Exporte sind 
+zurückgebaut und analog zum Listenexport in einer XSLT-Datei zusammengeführt 
+worden. Die Utils für BibTeX und CSV wurden für jedes Format in jeweils einer 
+Datei gebündelt.
+
+#### CSV
+
+Die Zeichencodierung des CSV-Exports ist auf UTF-8 umgestellt worden. Zur 
+Benennung der Standard-Spalten werden nun die jeweiligen Übersetzungen verwendet.
+
+Der CSV-Export lässt sich über Parameter um Enrichmentfelder und Collections 
+erweitern. In `export.csv.enrichments` bzw. `export.csv.collections` sind die 
+internen Namen einzutragen, in `export.csv.enrichments_labels` bzw. 
+`export.csv.enrichments_labels` können die Spaltenüberschriften angegeben werden.
+
+    ; ENRICHMENTS AND COLLECTIONS TO BE EXPORTED IN CSV (comma separated)
+    export.csv.enrichments = enrichment1,enrichment2
+    export.csv.enrichments_labels = Überschrift Enrichment 1,Überschrift Enrichment 2
+    export.csv.collections = collection1,collection2
+    export.csv.collections_labels = Überschrift Sammlung 1,Überschrift Sammlung 2
+
+Zudem lässt sich über `export.csv.enrichments_visible` bzw. 
+`export.csv.collections_visible` die Sichtbarkeit steuern. Mit `1` wird die 
+Spalte für alle Nutzer exportiert (Rolle "guest"), bei einer `0` erfolgt der 
+Export der jeweiligen Spalte nur, wenn der Nutzer im Repositorium eingeloggt ist
+(Nutzer muss Zugriff auf die Dokumentenverwaltung haben).
+
+    ; Visibility in CSV: 1 = for All, 0 = for Admins only (comma separated)
+    export.csv.enrichments_visible = 1,1
+    export.csv.collections_visible = 0,1,0
+
+#### MARC
+
+Das Mapping ins MARC-Format unterscheidet nun grundsätzlich zwischen 
+monographischen und nicht-monographischen (i.d.R. unselbständigen oder 
+fortlaufenden) Dokumenttypen und hat darüber hinaus umfangreichere 
+Überarbeitungen erfahren.
+
+Der Export wurde um die folgenden Felder erweitert:
+
+- 008 (Datums-/Jahresangaben, Sprachcode)
+- 250 (Ausgabe-Bezeichnung)
+- 500 (Öffentlich sichtbare Bemerkung)
+- 502 (Hochschulschriftenvermerk)
+- 540 (Lizenzangabe)
+- 650 (GND-Schlagwörter mit GND-ID)
+- 710 (Beteiligte Körperschaft)
+
+Des Weiteren gibt es Änderungen an diesen Feldern:
+
+- LEADER Pos. 7: Für periodicalpart von `a` (Monographic component part) zu `b` 
+  (Serial component part) korrigiert
+- 024: Neben der URN werden nun auch DOIs exportiert
+- 100 / 700: Um Ausgabe von GND-ID und ORCID iD in $0 erweitert
+- 110 / 710: Aufsplittung von Körperschaften in erste Hierarchieebene ($a) und 
+  untergeordnete Hierarchieebenen ($b)
+- 490: Ausgabe von TitleParent bei monographischen Dokumenttypen als 
+  Schriftenreihe
+- 700: Um Export von PersonReferee, PersonTranslator und PersonOther erweitert,
+  Rolle von PersonAdvisor von dgs zu ths geändert
+- 773: Um Ausgabe der Artikelnummer erweitert ($g)
+- 856: Lizenzangabe entfernt, steht jetzt in 540
+
+#### DataCite-XML (DOI-Registrierung)
+
+Das hinterlegte DataCite Metadata Schema wurde auf die Version 4.7 aktualisiert
+und das Mapping an einigen Stellen verbessert:
+
+- Unterscheidung zwischen Personen und Körperschaften (`NameType` 
+  `Personal`/`Organisational`)
+- Registrierung der GND-ID bei Personen
+- Überarbeitung der `resourceTypes` (Umstellung auf Terme des Gemeinsamen 
+  Vokabulars), `resourceTypeGeneral` angepasst
+- Mapping DDC angepasst
+
+### ORCID
+
+Bislang fehlerhafte Schreibweisen für "ORCID" und "ORCID iD" sind korrigiert.
+
+### Personen-Identifier über OAI-PMH
+
+Im Format OAI-DC werden GND-ID und ORCID iD nun gemäß dem DINI-Zertifikat 
+ausgeliefert:
+
+    <creator>Mustermann, Max; https://orcid.org/0000-0001-7659-8932; https://d-nb.info/gnd/1143543866</creator>
+
+### Lizenzen
+
+Die Lizenz "In Copyright / Urheberrechtlich geschützt" ist nun Teil der 
+Standardauslieferung. Darüber hinaus kann die Darstellung der Lizenz-Logos über
+CSS-IDs gesteuert werden. Die IDs leiten sich aus den Namen der Lizenzen 
+(Feld `Name`) ab, z.B. `img#licence-InCopyright-logo` (frontdoor.css), um das 
+Logo für die neue Lizenz zu skalieren.
+
+    img#licence-InCopyright-logo {
+        width: 90px;
+        height: auto;
+    }
+
+### Import-Regeln
+
+Mit den neuen Import-Regeln lassen sich automatische Verarbeitungsschritte
+zu Imports über die SWORD-Schnittstelle hinzufügen. Abhängig von definierbaren
+Bedingungen können Dokumente mit Lizenzen oder Sammlungen verknüpft werden. 
+
+Weitere Informationen sind im OPUS 4 Handbuch zu finden.
+https://www.opus-repository.org/userdoc/import/
+
+Um die Nutzung der Regeln einfacher zu machen, sind im OPUS-XML Format die
+Attribute `type` und `language` für Keywords/Subjects nun optional. Damit kann
+ein einfaches Keyword verwendet werden, um die Verknüpfung mit einer Sammlung 
+oder eine andere Aktion auszulösen.
+
+    <keywords>
+        <keyword>oa-green</keyword>
+    </keywords>
+
+Die Defaultwerte sind `uncontrolled` und `deu`. 
+
+### OAI-PMH-Schnittstelle
+
+Die Implementation der OAI-PMH-Schnittstelle wurde umfangreich überarbeitet. 
+Die unterstützten Formate sind nun unabhängig voneinander und können 
+konfiguriert werden. Das erlaubt es unter anderem, Formate zu entfernen oder
+mit einem anderen Präfix wiederzuverwenden. 
+
+Beispielkonfiguration für Format xMetaDissPlus mit Präfix `xmdpdata`, um auch 
+Dokumente ohne Volltext zu berücksichtigen. 
+
+    oai.format.xmdpdata.class = Oai_Model_Prefix_XMetaDissPlus_XMetaDissPlusServer
+    oai.format.xmdpdata.hasFilesVisibleInOai = false
+    oai.format.xmdpdata.prefixLabel = xmdpdata
+
+Die verfügbaren OAI-Sets können nun ebenfalls konfiguriert werden.
+
+    oai.set.bibliography.class = Oai_Model_Set_BibliographySets
+    oai.set.doc-type.class = Oai_Model_Set_DocumentTypeSets
+    oai.set.publicationState.class = Oai_Model_Set_PublicationStateSets
+
+Für den `openaccess`-Set gibt es eine neue Implementation, die bewirkt, dass
+alle Dokumente in einem Set ausgegeben werden, unabhängig davon, ob Sammlungen
+verwendet wurden, um Dokumente unterschiedlichen Open Acess-Arten zuzuordnen.
+
+    oai.set.openaccess.class = Oai_Model_Set_CollectionRoleSingleSet
+    oai.set.openaccess.roleOaiName = open_access
+    oai.set.openaccess.requireOaiSubset = 0
+
+Mit `requireOaiSubset` kann zusätzlich gesteuert werden, ob die Dokumente
+einzelner Sammlungen ausgeblendet werden sollten.
+
+Die Default-Konfiguration befindet sich in `application/configs/application.ini`. 
+
+#### OpenAIRE
+
+Die OpenAIRE-Dokumenttypen können nun unabhängig von den DC-Typen konfiguriert 
+werden.
+
+    # documentType.OPUS_DOCUMENT_TYPE...
+    documentType.article.dcType = 'Article'
+    documentType.article.openAire = 'article'
+
+Das Default-Mapping befindet sich in `application/configs/application.ini`.
+
+Die Fehlermeldungen für unbekannte und ungültige OAI-Sets wurden vereinheitlicht.
+
+### DeepGreen-Client
+
+In OPUS 4.9 ist die erste Version eines DeepGreen-Clients integriert. Damit
+kann OPUS 4 Dokumente von den DeepGreen-Servern abholen, anstatt sie über die 
+Sword-Schnittstelle zu empfangen. Das verschiebt das Scheduling und auch die 
+Kontrolle über das Mapping der Metadaten auf die OPUS 4 Seite. Für den Client
+gibt es eine Reihe von Konsolen-Kommandos.
+
+| Kommando           | Beschreibung                               |
+|--------------------|--------------------------------------------|
+| deepgreen:config   | Erzeugt DeepGreen Konfiguration interaktiv | 
+| deepgreen:check    | Ruft DG-Notifications ab                   |
+| deepgreen:download | Lädt DG-Dokumente herunter                 |
+| deepgreen:import   | Importiert Dokumente von DG                |
+
+### PDF-Deckblätter
+
+Das Cache-Verzeichnis für generierte Deckblätter wird nun bei Bedarf automatisch 
+angelegt.
+
+    ./workspace/filecache
+
+Dateien im Cache werden überschrieben, wenn ein Dokument verändert und dabei 
+`ServerDateModified` aktualisiert wird.
+
+Das Beispiel-Template für Deckblätter wurde jetzt konfiguriert, um deutlich 
+kleinere PDF-Dateien zu erzeugen. 
+
+    application/configs/covers/demo-cover.md
+
+Die Repository-Metadaten `name` und `url` stehen in den Deckblatt-Templates nun 
+als `config-name` und `config-url` zur Verfügung.
+
+### Sitelinks (für Crawler)
+
+Die Sitelinks für alle öffentlichen Dokumente werden nun mit Titel und 
+Language-Attribut gerendert, um die Indexierung und das Ranking in Suchmaschinen 
+besser zu unterstützen.
+
+### Hintergrundverarbeitung 
+
+Es gibt ein neues System für die Verarbeitung von Hintergrundaufgaben, wie z.B.
+die nächtliche Prüfung der EmbargoDates von Dokumenten oder die Bereinigung von
+temporären Dateien.
+
+Bisher wurden dafür einzelne Cron-Skripte verwendet, die separat eingerichtet
+werden mussten. Diese Skripte sind in OPUS 4.9 weiterhin verfügbar, werden
+aber langfristig entfernt werden. Mit dem neuen System ist nur noch ein Crontab
+für eine OPUS 4 Instanz notwendig und die Konfiguration der einzelnen Aufgaben
+erfolgt in der neuen Konfigurationsdatei `tasks.ini`. Aktuell sind im Standard
+alle Aufgaben abgeschaltet, um Betreibern eine schrittweise Migration auf das
+neue System zu ermöglichen. Für die Ausführung von Aufgaben gibt es eine 
+separate Log-Datei, `tasks.log`. 
+
+Weitere Informationen finden sich in der Dokumentation.
+https://www.opus-repository.org/userdoc/config/tasks.html
+
+### Kommandozeileninterface (bin/opus4)
+
+Es sind eine Reihe von neuen Kommandos hinzugekommen.
+
+- `collection:copy|move|remove` für Verknüpfungen von Dokumenten mit Sammlungen
+- `task:list|info|run` für die neue Hintergrundverarbeitung
+- `sword:deposit|import|ping` für die Verwendung mit OPUS 4 SWORD Dateien
+- `console:console|exec` für Snippets (Ersatz für `opus-console.php`)
+- `deepgreen:config|check|download|import` für den DeepGreen-Client
+- `debug:xml` gibt OPUS-XML für ein Dokument aus
+
+Die alten OPUS 4 Skripte werden schrittweise in Kommandos umgewandelt, für eine
+einfachere Implementation, bessere Testbarkeit und einheitliche Nutzung.
+
+### Dokumentation
+
+Die [Dokumentation](https://www.opus-repository.org) für OPUS 4 wurde in 
+mehreren Bereichen aktualisiert. 
+
+- CrossRef-Import (DOI) Enrichments
+- Neue OAI-Konfiguration für unterstützte Formate
+- Import-Regeln für SWORD Interface
+- Hintergrundverarbeitung mit Crunz
+
+Die Dokumentation ist in einigen Bereichen leider veraltet. Daran wird 
+gearbeitet. Hinweise oder Hilfe aus der OPUS 4 Community sind willkommen. 
+
+### Entwicklung
+
+Die verwendete PHPUnit-Version wurde aktualisiert und die Verwendung von 
+deprecated-Funktionen ersetzt.
+
+Teile des Codes der Application und des Frameworks wurden in separate Libraries
+verschoben, um Abhängigkeiten aufzulösen und isolierte Updates einzelner 
+Teilkomponenten von OPUS 4 zu ermöglichen. 
+
+--
+
 ## Patch Release 4.8.0.21 - 2026-04-07
 
 Dieser Release dient der Vorbereitung von OPUS 4.9. Die OPUS 4 Abhängigkeiten
@@ -36,12 +537,16 @@ ohne das sie in der Weboberfläche angezeigt werden.
 
 https://github.com/OPUS4/application/issues/1403
 
+--
+
 ## Patch Release 4.8.0.18 - 2025-12-17
 
 Ein Fehler mit Select-Enrichments im Metadaten-Formular, der sich mit dem 
 Wechsel zu PHP 8 bemerkbar gemacht hat, wurde behoben.
 
 https://github.com/OPUS4/application/issues/1397
+
+--
 
 ## Patch Release 4.8.0.17 - 2025-10-01
 
@@ -52,6 +557,8 @@ Defaultwert ist 100, wie für die Suche.
 
 https://github.com/OPUS4/application/issues/1388
 
+--
+
 ## Patch Release 4.8.0.16 - 2025-07-15
 
 Es wurde ein Fehler behoben, der auftrat, wenn beim Freischalten (Publish) 
@@ -59,6 +566,8 @@ eines einzelnen Dokuments in der Metadatenansicht (nicht Review-Modul) die
 Bestätigungsseite für das Freischalten abgeschaltet war. 
 
 https://github.com/OPUS4/application/issues/1352
+
+--
 
 ## Patch Release 4.8.0.15 - 2025-06-24
 
@@ -73,6 +582,8 @@ der Schlagwörter ignoriert werden. Schlagwörter können durch Kommas und
 Zeilenumbrüche voneinander getrennt werden. 
 
 https://github.com/OPUS4/application/issues/1348
+
+--
 
 ## Patch Release 4.8.0.14 - 2025-04-22
 
@@ -144,6 +655,8 @@ werden.
 
     $ bin/opus4 pdf:concat cover.pdf document.pdf merged.pdf
 
+--
+
 ## Patch Release 4.8.0.13 - 2025-04-08
 
 Dieser Patch Release implementiert kleinere Features im Zusammenhang mit OCRID 
@@ -154,7 +667,7 @@ Für diesen Release ist `composer update` notwendig, weil auch **opus4-common**
 
 ### ORCID iDs
 
-In der Frontdoor werden GND und ORCiD iD nun für alle Personen angezeigt.
+In der Frontdoor werden GND und ORCID iD nun für alle Personen angezeigt.
 
 Die externen Links für GND und ORCID iD werden in einem separaten Tab/Fenster 
 geöffnet.
@@ -215,12 +728,16 @@ Beim Abspeichern von Dokumenten, wird **ServerDateModified** nur noch dann
 aktualisiert, wenn wirklich Daten geändert wurden. Bisher ist das auch 
 passiert, wenn ein unverändertes Dokument abgespeichert wurde. 
 
+--
+
 ## Patch Release 4.8.0.12 - 2025-03-18
 
 Begrenzt die Anzahl berücksichtigter AutorInnen beim DOI-basierten Metadadatenimport
 auf 50, um eine Überlastung des Systems und einen Timeout zu vermeiden.
 
 https://github.com/OPUS4/application/issues/1283
+
+--
 
 ## Patch Release 4.8.0.11 - 2025-03-11
 
@@ -235,6 +752,8 @@ Beim Import von Autoren (Personen) in BibTeX kann eine E-Mail angegeben werden.
 
 https://github.com/OPUS4/opus4-bibtex/issues/80
 
+--
+
 ## Patch Release 4.8.0.10 - 2025-02-18
 
 Behebt eine Exception beim Freischalten von Dokumenten im Review-Modul,
@@ -248,6 +767,8 @@ OAI-Schnittstelle.
 
 https://github.com/OPUS4/application/pull/1275
 
+--
+
 ## Patch Release 4.8.0.9 - 2025-01-14
 
 Behebt das Fehlschlagen des DOI-Imports bei Datensätzen ohne Autor*in. 
@@ -257,6 +778,8 @@ https://github.com/OPUS4/application/issues/1266
 Außerdem wurde ein Typo in der Basiskonfiguration behoben.
 
 https://github.com/OPUS4/application/pull/1271
+
+--
 
 ## Patch Release 4.8.0.8 - 2024-12-04
 
@@ -280,6 +803,8 @@ Das Update kann mit `git pull` vorgenommen werden. Es ist `php-yaml` als neue
 Abhängigkeit dazu gekommen. Das Paket muss manuell installiert werden. Danach 
 ist ein `composer update` notwendig. 
 
+--
+
 ## Patch Release 4.8.0.7 - 2024-10-22
 
 Ein Fehler beim Drücken der Enter/Return-Taste in einfachen Text-Feldern 
@@ -292,16 +817,22 @@ Text-Eingabefeld die Enter/Return-Taste gedrückt wird.
 
 https://github.com/OPUS4/application/issues/1243
 
+--
+
 ## Patch Release 4.8.0.6 - 2024-08-27
 
 Problem bei der Ausführung von PHP Update-Skripten behoben.
 https://github.com/OPUS4/application/issues/992
+
+--
 
 ## Patch Release 4.8.0.5 - 2024-03-12
 
 Problem auf manchen Systemen bei der Anzeige von `BelongsToBibliography` 
 ("Bibl.") in der Dokumentenverwaltung behoben. 
 https://github.com/OPUS4/application/issues/1190
+
+--
 
 ## Patch Release 4.8.0.4 - 2024-01-09
 
@@ -325,6 +856,8 @@ Dokumente in der Administration nicht verändert, unabhängig von der neuen
 Option. Das Verhalten der verschiedenen Möglichkeiten zur Freigabe wird in
 Zukunft vereinheitlicht werden.
 https://github.com/OPUS4/application/issues/1177
+
+--
 
 ## Patch Release 4.8.0.3 - 2023-11-28
 
@@ -352,10 +885,14 @@ in der OPUS 4 Tester Mailingliste eingebracht werden.
 
 https://github.com/orgs/OPUS4/discussions
 
+--
+
 ## Patch Release 4.8.0.2 - 2023-08-29
 
 Es wurde ein Fehler bei der Javascript-Validierung von ISSNs behoben. 
 https://github.com/OPUS4/application/issues/1098
+
+--
 
 ## Patch Release 4.8.0.1 - 2023-08-15
 
@@ -383,6 +920,8 @@ https://github.com/OPUS4/opus4-bibtex/issues/70
 
 Für weitere Änderungen am OPUS4-BibTeX Package, siehe hier: 
 https://github.com/OPUS4/opus4-bibtex/releases/tag/4.8.0.1
+
+--
 
 ## Release 4.8 - 2023-04-25
 

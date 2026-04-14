@@ -63,5 +63,3 @@ if ($numOfErrors > 0) {
 } else {
     echo "no errors were found\n";
 }
-
-exit();

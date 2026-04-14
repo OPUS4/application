@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Liste der Publikationstypen fuer das Element 14 Publikationstyp im Schema xMetaDissPlus Version 2.0 -->
-<!-- Copyright 2010 Deutsche Nationalbibliothek -->
-<!-- Version 2.0 -->
+<!-- Liste der Publikationstypen fuer das Element 14 Publikationstyp  -->
+<!-- Copyright 2023 Deutsche Nationalbibliothek -->
+<!-- Version 2.5 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns="http://www.d-nb.de/standards/xmetadissplus/type/"
 	targetNamespace="http://www.d-nb.de/standards/xmetadissplus/type/"
@@ -10,20 +10,40 @@
 	xmlns:driver="info:eu-repo/semantics/"
 	elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
-
-	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd" />
-
+	<xs:annotation>
+		<xs:documentation>
+			2023-02-27:
+			CHANGED by DNB: 
+			Die Änderungen wurden notwendig durch Version 2.0 des Dini-Vokabulars.
+			Alle neuen DINI-Begriffe aus 10.18452/24147.2 wurden ergänzt.
+			Die Verwendung der alten Schreibweisen/Begriffe wird nicht mehr empfohlen.
+			Die vorliegende Version 2.5 ist abwärtskompatibel zu den Vorgängerversionen.
+									
+			2017-12-01: 
+			CHANGED by data2type GmbH: alle schemaLocation-Attribute der importierten Schemas verweisen auf eine DNB eigene URL, 
+			auch wenn sie zuvor auf DNB-fremde URLs verwiesen haben 
+			(dc: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd,
+			dcmitype: http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcmitype.xsd,
+			versionTypes: http://purl.org/info:eu-repo/schemas/xmls/2010/05/07/versionTypes.xsd,
+			xml: http://www.w3.org/2001/03/xml.xsd).			
+		</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="xml.xsd" />
 	<!-- dc -->
-	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd" />
-
+	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="dc.xsd"/>    
 	<!-- dcmitype -->
-	<xs:import namespace="http://purl.org/dc/dcmitype/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcmitype.xsd" />
-	
+	<xs:import namespace="http://purl.org/dc/dcmitype/" schemaLocation="dcmitype.xsd"/>
 	<!-- driver -->
-	<xs:import namespace="info:eu-repo/semantics/" schemaLocation="http://purl.org/info:eu-repo/schemas/xmls/2010/05/07/versionTypes.xsd" />
+	<xs:import namespace="info:eu-repo/semantics/" schemaLocation="versionTypes.xsd" />
 	
 	<xs:annotation>
-		<xs:documentation xml:lang="de">Das "Gemeinsame Vokabular fuer Publikations- und Dokumenttypen stuetzt sich auf vorhandene, international verbreiteten Vorgaben: das Dublin Core Type Vocabulary und das Publication Type Vocabulary der DRIVER Guidelines. Weiterhin wurden eigene Werte im Bereich nicht textgepraegter Ressourcen eingefuehrt.
+		<xs:documentation xml:lang="de">
+			2023: Gemeinsames Vokabular angepasst nach DOI:10.18452/24147.
+			Von den veralteten Begriffen wurden nur diejenigen im Schema behalten, die schon vorher für die vorhanden waren. Ihre Verwendung ist aber nicht mehr empfohlen und wird nach einer
+			Übergangszeit herausgenommen. Zum jeweils aktuellen Stand siehe https://www.dnb.de/xmetadissplusnp.
+			Die neuen Begriffe von 2022 wurden vollständig übernommen.
+			
+			Das "Gemeinsame Vokabular fuer Publikations- und Dokumenttypen stuetzt sich auf vorhandene, international verbreiteten Vorgaben: das Dublin Core Type Vocabulary und das Publication Type Vocabulary der DRIVER Guidelines. Weiterhin wurden eigene Werte im Bereich nicht textgepraegter Ressourcen eingefuehrt.
 			Das Schema der "Publication Type Vocabulary" der DRIVER Guidelines liegt unter http://purl.org/info:eu-repo/schemas/xmls/2010/04/15/publicationTypes.xsd. 
 			Die Publikationstypen wurde in das Schema xmetadissplustype.xsd mit einer deutschen Ãœbersetzung integriert, um die Publikationstypen des "Gemeinsamen Vokabulars" einheitlich dokumentieren zu kÃ¶nnen.</xs:documentation>
 	</xs:annotation>
@@ -34,7 +54,7 @@
 		</xs:annotation>
 	</xs:element>
 
-	<!-- Publikationstyp Definition zusammengefuehrt aus 3 Listen -->
+	<!-- Publikationstyp Definition zusammengefuehrt aus 3 Listen; Ergänzung DINI 2022 nicht zwingend der Herkunft zugeordnet -->
 	<xs:complexType name="PublType">
 		<xs:simpleContent>
 			<xs:restriction base="dc:SimpleLiteral">
@@ -51,7 +71,7 @@
 		<xs:restriction base="dcmitype:DCMIType">
 			<xs:enumeration value="Image">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Eine nicht textgebundene visuelle Darstellung</xs:documentation>
+					<xs:documentation xml:lang="de">Eine nicht textgebundene visuelle Darstellung.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="MovingImage">
@@ -66,7 +86,7 @@
 			</xs:enumeration>
 			<xs:enumeration value="Software">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Ein Computerprogramm als Quellcode oder in kompilierter Form.</xs:documentation>
+					<xs:documentation xml:lang="de">Software bezeichnet Computerprogramme mit einer dazugehoerigen Dokumentation.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="Sound">
@@ -79,79 +99,243 @@
 
 	<xs:simpleType name="PublTypeDriver">
 		<xs:restriction base="xs:Name">
-			<xs:enumeration value="article">
+			<xs:enumeration value="Article">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Ein Artikel oder ein redaktioneller Teil veroeffentlicht in einer wissenschaftlichen Zeitschrift</xs:documentation>
+					<xs:documentation xml:lang="de">Ein wissenschaftlicher Artikel ist ein Artikel, der in einer wissenschaftlichen Zeitschrift, einem periodisch oder fortlaufend erscheinenden Medium veroeffentlicht ist. </xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="annotation">
+			<xs:enumeration value="article">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ResearchArticle">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Forschungsartikel (Research Article) ist ein Artikel , dessen Autor*innen ueber Methoden und Ergebnisse ihrer originaeren Forschung berichten.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ReviewArticle">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Uebersichtsartikel ist ein Artikel, der die Summe von veroeffentlichten wissenschaftlichen Arbeiten zu einem Thema zusammenfasst. Im KDSF entspricht dies dem Review.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Corrigendum">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Korrigendum ist eine offiziell als Artikel eingereichte Korrektur eines zuvor veroeffentlichten Dokuments.
+					</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="DataPaper">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Data Paper beschreibt ein/einen bestimmtes/n Datenset/Datensatz, das/der in Form eines peer-reviewed articles in einer  Zeitschrift erscheint. Der Fokus eines Data Papers liegt auf der Beschreibung der Daten sowie Informationen zur Zugaenglichkeit und potentieller Nachnutzung.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SoftwarePaper">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Software Paper enthaelt die Grundprinzipien der Entwicklung und Details zum verwendeten Code.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Editorial">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Vorwort ist ein durch einen oder mehrere  Herausgeber*innen oder im Auftrag eines oder mehrerer  Herausgeber*innen verfasster Text, der die Meinung der Redaktion/des Herausgeber*innengremiums wiedergibt.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="LetterToTheEditor">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Letter to the Editor  ist eine Zuschrift an die Redaktion.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="Annotation">
 				<xs:annotation>
 					<xs:documentation xml:lang="de">Entscheidungs- oder Urteilsanmerkung</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
+			<xs:enumeration value="annotation">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BachelorThesis">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Eine Abschlussarbeit (Bachelor) ist die niedrigste Stufe einer Abschlussarbeit.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
 			<xs:enumeration value="bachelorThesis">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Niedrigste Stufe einer Abschlussarbeit (normalerweise nach drei Jahren Studium). Vgl. http://de.wikipedia.org/wiki/Diplom</xs:documentation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Book">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Buch ist eine nicht-periodische Publikation, die in einem Band oder einer begrenzten Zahl von Baenden abgeschlossen ist.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="book">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Buch oder Monographie</xs:documentation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
+			
 			<xs:enumeration value="bookPart">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Teil oder Kapitel eines Buches</xs:documentation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="BookPart">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Teil oder Kapitel eines Buches (Monographie oder Sammelband)</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Monograph">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Eine Monographie ist ein Buch, geschrieben von einem oder mehreren Autor*innen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="EditedCollection">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Sammelband ist ein Buch, herausgegeben von einer oder mehreren Personen. Es enthae¤lt Beitraege in Form von Kapiteln oder Aufsaetzen verschiedener Autor*innen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="SourceEdition">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Eine Quellenedition ist die Publikation von geschichts- oder kulturwissenschaftlichen Quellen mit einem substanziellen Beitrag des Quelleneditors in Form eines Artikels oder eines Buches. [Dieser Dokumenttyp enthaelt auch: Wissenschaftliche Musikedition].</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ConferenceObject">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Konferenzveroeffentlichungen meinen alle Arten von Dokumenten, die mit einer Konferenz verbunden sind, z.B. Konferenzbaende, Konferenzberichte, Konferenzvortraege, Konferenzposter.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="conferenceObject">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Alle Arten von Dokumenten, die mit einer Konferenz verbunden sind.</xs:documentation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ConferenceProceedings">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Conference Proceedings meint eine Publikation von Beitraegen, die als Sammelwerk erscheinen. Herausgeber*innen koennen natuerliche Personen oder Koerperschaften sein. Sie enthaelt Beitraege zu Tagungen, Kongressen oder wissenschaftlichen Konferenzen verschiedener Autor*innen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ConferenceSlides">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Konferenzfolien sind Folien eines Vortrags, der auf einer Konferenz oder Tagung gehalten wurde.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ConferencePaper">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Konferenzpaper wird bei einer Konferenz eingereicht und vorgetragen. Es ist zur Veroeffentlichung z.B. in den Conference Proceedings bestimmt.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ConferencePoster">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Konferenzposter ist eine visuelle Praesentation von Ergebnissen, die als Poster auf einer Konferenz praesentiert und als solche bzw. als Kurzbeitrag in den Conference Proceedings oder separat veroeffentlicht wurde und permanent verfuegbar ist.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="MeetingAbstract">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Meeting Abstract ist ein kurzer Text, der eine Praesentation an einer Konferenz zusammenfasst und entweder in einer wissenschaftlichen Zeitschrift oder in den Conference Proceedings veroeffentlicht wurde.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			
+			<xs:enumeration value="ContributionToPeriodical">
+				<xs:annotation>
+					<xs:documentation>Ein Beitrag zu einem Periodikum ist ein Beitrag in einer Zeitung, einem Wochenmagazin oder einem anderen nicht-wissenschaftlichen Periodikum.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="contributionToPeriodical">
 				<xs:annotation>
-					<xs:documentation>Beitrag in einer Zeitung, einem Wochenmagazin oder einem anderen nicht-wissenschaftlichen Periodikum </xs:documentation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="doctoralThesis">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Hoechste Stufe einer Abschlussarbeit normalerweise nach mehr als vier oder fuenf Jahren Studium. Mit diesem Term wird bezeichnet, was gleichwertig oder hoeher ist als eine Dissertation, aber nicht der Bologna-Konvention folgt. Auch die Habilitationschrift ist enthalten.</xs:documentation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="lecture">
+			<xs:enumeration value="DoctoralThesis">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Eine Doctoral Thesis ist die hoechste Stufe einer Abschlussarbeit. Mit diesem Term wird bezeichnet, was gleichwertig oder hoeher ist als eine Dissertation, aber nicht der Bologna-Konvention folgt. Auch die Habilitationsschrift ist enthalten.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="PhDThesis">
+					<xs:annotation>
+						<xs:documentation xml:lang="de">Eine Dissertation ist eine wissenschaftliche Arbeit fuer den Erwerb des Doktorgrades.</xs:documentation>
+					</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Habilitation">
+					<xs:annotation>
+						<xs:documentation xml:lang="de">Eine Habilitation ist eine wissenschaftliche Arbeit fuer den Erwerb der universitaeren Lehrbefaehigung.</xs:documentation>
+					</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Lecture">
 				<xs:annotation>
 					<xs:documentation xml:lang="de">Vorlesung oder Praesentation anlaesslich einer akademischen Veranstaltung. Ausgeschlossen sind Konferenzvortraege.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="masterThesis">
+			<xs:enumeration value="lecture">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Mittlere Stufe einer Abschlussarbeit (normalerweise nach vier oder fÃ¼nf Jahren Studium). Vgl. http://de.wikipedia.org/wiki/Diplom. Dieser Term referiert auch Abschlussarbeiten aus der Zeit vor Beginn des Bologna-Prozesses fÃ¼r akademische Grade auf der gleichen Stufe, die jetzt als Master-Abschluss bekannt sind.</xs:documentation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="report">
-				<xs:annotation>
-					<xs:documentation xml:lang="de">Dieser Term ist als Kategorie fuer textgepraegtes Material, das nicht anderweitig zugeordnet werden kann, zu sehen.</xs:documentation>
-				</xs:annotation>
-			</xs:enumeration>
-			<xs:enumeration value="review">
+			<xs:enumeration value="Recension">
 				<xs:annotation>
 					<xs:documentation xml:lang="de">Rezension eines Buches oder eines Artikels</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-			<xs:enumeration value="patent">
+			<xs:enumeration value="MasterThesis">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Eine Abschlussarbeit (Master) ist die mittlere Stufe einer Abschlussarbeit.  Dieser Term referiert auch Abschlussarbeiten aus der Zeit vor Beginn des Bologna-Prozesses fuer akademische Grade auf der gleichen Stufe, die jetzt als Master-Abschluss bekannt sind.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="masterThesis">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Report">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Unter Report fallen Veroeffentlichungen textgepraegten Materials, das nicht anderweitig zugeordnet werden kann.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="report">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="review">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+				<xs:enumeration value="Patent">
 				<xs:annotation>
 					<xs:documentation xml:lang="de">Patent, Norm, Standard</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
+			<xs:enumeration value="patent">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+					</xs:annotation>
+			</xs:enumeration>
 			<xs:enumeration value="preprint">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Wie beim WorkingPaper liegt ein vorlaeufiges wissenschaftliches oder technisches Papier vor, das aber nicht in einer Reihe einer Institiuion erscheint. Das Papier soll in einer wissenschaftlichen Zeitschrift oder als Teil eines Buches erscheinen</xs:documentation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Preprint">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Preprint ist eine wissenschaftliche Veroeffentlichung, welche (noch) kein Begutachtungsverfahren durchlaufen hat. Preprints werden ueber im jeweiligen Fach anerkannte Preprintserver veroeffentlicht (z.B. ueber arXiv.org). Preprints sind abzugrenzen vom Publikationstyp Arbeitspapier/Forschungsbericht . Anm:  Das Papier soll in einer wissenschaftlichen Zeitschrift oder als Teil eines Buches erscheinen.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="workingPaper">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Vorlaeufiges wissenschaftliches oder technisches Papier, das in einer Reihe einer Institution veroeffentlicht wird, wo die Forschung stattfindet. Auch bezeichnet als Research Papier, Research Memorandum oder Diskussionspapier</xs:documentation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="WorkingPaper">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Ein Arbeitspapier ist eine wissenschaftliche Veroeffentlichung, die entweder von der Institution herausgegeben wird, in der die Forschung stattfindet, oder im Auftrag einer Institution angefertigt wurde. Es hat (noch) kein Begutachtungsverfahren durchlaufen.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 		</xs:restriction>
@@ -160,9 +344,14 @@
 	<!-- zusÃ¤tzliche Publikationstypen -->
 	<xs:simpleType name="PublTypeOwn">
 		<xs:restriction base="xs:Name">
+			<xs:enumeration value="CartographicMaterial">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Kartografisches Material bezeichnet Ressourcen, welche die Erde, einen anderen Himmelskoerper oder einen imaginaeren Ort als Ganzes oder in Ausschnitten darstellen.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
 			<xs:enumeration value="CarthographicMaterial">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Kartographisches Material sind Ressourcen, die die Erde oder einen Himmelskoerper in einem belibigen MaÃŸstab ganz oder teiweise abbilden. </xs:documentation>
+					<xs:documentation xml:lang="de">DNB: Schreibweise und/oder Begriff/oder Definition veraltet, Verwendung nicht mehr empfohlen.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="CourseMaterial">
@@ -172,42 +361,52 @@
 			</xs:enumeration>
 			<xs:enumeration value="Manuscript">
 				<xs:annotation>
-						<xs:documentation xml:lang="de">Handschrift oder Manuskript in digitalisierter Form</xs:documentation>
+					<xs:documentation xml:lang="de">Mit einer Handschrift wird hier eine Handschrift oder ein Manuskript in digitalisierter Form bezeichnet.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="MusicalNotation">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Beispiele umfassen Ressourche musikalischer Werke (z.B. Partituren, Klavier- und Orgelauszuege, Stimmen, Liedersammlungen mit Noten, Songbooks und dgl., Seet Music....</xs:documentation>
+					<xs:documentation xml:lang="de">Ressourcen, die in graphischer Form festgehaltene musikalische Parameter wie Tonhoehe, -dauer, -lautstaerke und Klangfarbe beschreiben.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="ResearchData">
+			<xs:annotation>
+					<xs:documentation xml:lang="en">Research data are data generated or processed during research. Type and form vary over academic disciplines. Research data comprise collections, measurements, structured observations, survey data, metadata as well as compilations of texts, graphic-visual materials and simulations.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration><!-- PartOfADynamicWebRessource wurde korrigiert DINI 2022-08-26 -->
+			<xs:enumeration value="PartOfADynamicWebResource">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Forschungsdaten sind Daten, die bei einer Datenerhebung gewonnen wurden, strukturiert bzw. unstrukturiert vorliegen und nicht interpretiert sind.</xs:documentation>
+					<xs:documentation xml:lang="de">Ein Teil einer dynamsichen Ressource ist ein Beitrag mit Bezug auf wissenschaftliche Taetigkeiten, veroeffentlicht z.B. in Blogs oder Wikis.</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration><!-- DynamicWebRessource wurde korrigiert DINI 2022-08-26 -->
+			<xs:enumeration value="DynamicWebResource">
+				<xs:annotation>
+					<xs:documentation xml:lang="de">Dynamische Online-Ressourcen sind Publikationen (z.B. Blogs, Wikis) mit laufenden Ergaenzungen, Updates, Ersetzungen oder Loeschungen, nicht eingeschlossen sind Webseiten.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="Other">
 				<xs:annotation>
-					<xs:documentation>Verschiedenartige Ressourcen, nicht textgepraegt</xs:documentation>
+					<xs:documentation>Speziell gedacht fuer Material, das nicht anderweitig zugeordnet werden kann.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="Periodical">
 				<xs:annotation>
-						<xs:documentation xml:lang="de">Zeitschrift oder Periodikums </xs:documentation>
+					<xs:documentation xml:lang="de">Zeitschrift oder Periodikum</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="PeriodicalPart">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Teil einer Zeitschrift oder eines Periodikums, enthaelt im Allgemeinen mehrere Beitraege (Artikel) </xs:documentation>
+					<xs:documentation xml:lang="de">Ein Teil einer Zeitschrift oder eines Periodikums enthaelt im Allgemeinen mehrere Beitraege (Artikel).</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="StudyThesis">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Textgepraegte Ausarbeitungen, die im Rahmen eines Studiums entstehen</xs:documentation>
+					<xs:documentation xml:lang="de">Eine Studienarbeit ist eine textgepraegte Ausarbeitung, die im Rahmen eines Studiums entsteht.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="Website">
 				<xs:annotation>
-					<xs:documentation xml:lang="de">Eine durch einen URL (Uniform Essource Locator) bezeichnete Praesen im WWW, unter der Webseiten fuer Zugriff und Nutzung gespeichert sind. Unter einer Webseite ist eine Seite im Hyptertext-Dokument einer -Praesenz im WWW zu verstehen. Webseiten einschlieÃŸlich der Untermenge der Homepages bilden die risige Dokumentsammlung des World Wide Web</xs:documentation>
+					<xs:documentation xml:lang="de">Eine Webseite, auch als Website bezeichnet, ist eine Sammlung miteinander verwandter Werke, typischerweise basierend auf einer gemeinsamen Webdomain. Eine Webseite wird auf mindestens einem Server gehostet und ist ueber das Internet oder lokale Netzwerke unter einer uniform resource locator (url) aufrufbar. Alle oeffentlich aufrufbaren Webseiten bilden gemeinsam das World Wide Web.</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 		</xs:restriction>

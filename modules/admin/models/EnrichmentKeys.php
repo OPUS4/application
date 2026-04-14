@@ -218,6 +218,25 @@ class Admin_Model_EnrichmentKeys extends Application_Model_Abstract
     }
 
     /**
+     * @param string $enrichmentKey
+     * @return string[]
+     */
+    public function getTranslationKeys($enrichmentKey)
+    {
+        $patterns = $this->getKeyPatterns();
+
+        $patterns['label'] = 'Enrichment%s'; // TODO remove special handling of 'label'
+
+        $translationKeys = [];
+
+        foreach ($patterns as $patternName => $pattern) {
+            $translationKeys[$patternName] = sprintf($pattern, $enrichmentKey);
+        }
+
+        return $translationKeys;
+    }
+
+    /**
      * @param string $name
      * @return string[]
      */

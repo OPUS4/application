@@ -179,13 +179,6 @@ class ControllerTestCaseTest extends ControllerTestCase
 
         $translator = Application_Translate::getInstance();
         $this->assertFalse($translator->isTranslated('LastName'));
-
-        $this->enableTranslation();
-
-        $translator = Application_Translate::getInstance();
-        $this->assertTrue($translator->isTranslated('LastName'));
-
-        $this->assertSame($defaultTranslator, $translator);
     }
 
     public function testGetWorkspacePath()

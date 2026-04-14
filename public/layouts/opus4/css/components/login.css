@@ -1,0 +1,12 @@
+#content[class*="auth_login"]>.wrapper>h2::before {
+  content: "\f2f6";
+}
+
+#content[class*="auth_login"]>.wrapper>form dd[id*="-element"] {
+  margin-left: 0;
+}
+
+#content[class*="auth_login"] dl.zend_form {
+  margin: auto;
+  width: 20rem;
+}

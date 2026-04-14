@@ -163,7 +163,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->dispatch('/admin/document/index/id/' . $doc->getId());
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<pre class="abstractTextContainer preserve-spaces">' . "foo\nbar\n\nbaz" . '</pre>',
             $this->getResponse()->getBody()
         );
@@ -185,7 +185,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase
 
         $this->dispatch('/admin/document/index/id/' . $doc->getId());
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<pre class="preserve-spaces noteTextContainer">' . "foo\nbar\n\nbaz" . '</pre>',
             $this->getResponse()->getBody()
         );
@@ -205,8 +205,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $role->setDisplayBrowsing($displayBrowsing);
         $role->store();
 
-        $this->assertContains('62 Ingenieurwissenschaften', $this->getResponse()->getBody());
-        $this->assertNotContains('Ingenieurwissenschaften 62', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('62 Ingenieurwissenschaften', $body);
+        $this->assertStringNotContainsString('Ingenieurwissenschaften 62', $body);
     }
 
     public function testDisplayCollectionNumberAndNameOnAssignmentPageForDDCCollection()
@@ -223,8 +224,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase
         $role->setDisplayBrowsing($displayBrowsing);
         $role->store();
 
-        $this->assertContains('62 Ingenieurwissenschaften', $this->getResponse()->getBody());
-        $this->assertNotContains('Ingenieurwissenschaften 62', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('62 Ingenieurwissenschaften', $body);
+        $this->assertStringNotContainsString('Ingenieurwissenschaften 62', $body);
     }
 
     public function testShowDocInfoOnIndex()

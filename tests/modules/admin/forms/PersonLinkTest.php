@@ -88,7 +88,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('not instance of', $messages[0]);
+        $this->assertStringContainsString('not instance of', $messages[0]);
     }
 
     public function testGetModel()
@@ -183,6 +183,6 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase
         $messages = $logger->getMessages();
 
         $this->assertEquals(1, count($messages));
-        $this->assertContains('not instance of', $messages[0]);
+        $this->assertStringContainsString('not instance of', $messages[0]);
     }
 }

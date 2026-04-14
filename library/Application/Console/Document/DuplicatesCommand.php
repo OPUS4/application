@@ -121,10 +121,9 @@ EOT;
     }
 
     /**
-     * @return int
      * @throws NotFoundException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $finder = new Application_Document_DuplicateFinder();
         $finder->setOutput($output);
@@ -178,7 +177,7 @@ EOT;
             $output->writeln('No DOI values found');
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 
     /**

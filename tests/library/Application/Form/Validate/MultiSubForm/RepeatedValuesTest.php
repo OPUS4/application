@@ -28,6 +28,9 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
+
+use Opus\App\Common\ApplicationException;
+
 class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase
 {
     /** @var string */
@@ -52,7 +55,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
         $elements = $instance->getOtherElements();
 
         $this->assertNotNull($elements);
-        $this->assertInternalType('array', $elements);
+        $this->assertIsArray($elements);
         $this->assertEquals(1, count($elements));
         $this->assertEquals('Language', $elements[0]);
     }
@@ -71,7 +74,7 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
         $elements = $instance->getOtherElements();
 
         $this->assertNotNull($elements);
-        $this->assertInternalType('array', $elements);
+        $this->assertIsArray($elements);
         $this->assertEquals(2, count($elements));
         $this->assertEquals('Language', $elements[0]);
         $this->assertEquals('Active', $elements[1]);
@@ -79,14 +82,14 @@ class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends Controll
 
     public function testConstructBadFirstArgument()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('#1 argument must not be null or empty.');
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues(null, 'testmessage');
     }
 
     public function testConstructBadSecondArgument()
     {
-        $this->expectException(Application_Exception::class);
+        $this->expectException(ApplicationException::class);
         $this->expectExceptionMessage('#2 argument must not be null or empty.');
         $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues('Language', null);
     }

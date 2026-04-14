@@ -13,7 +13,9 @@
 			iso639-2:BibliographicCodeType which contains only bibliographic codes (local use codes
 			not included) iso639-2:TerminologyCodeType which contains only terminology codes (local
 			use codes not included) osi639-2:LocalUseCodeType which contains codes for local use
-			'qaa-qtz'. Anpassung 14-11-12 Code "hsb" ergaenzt. </xs:documentation>
+			'qaa-qtz'. Anpassung 14-11-12 Code "hsb" ergaenzt. Anpassung 2015-04-15 (ht): Namespace
+			und Schema-Name belassen, fehlende codes zu Stand April 8, 2011 ergaenzt durch anhaengen unsortiert, maintained
+			durch http://www.loc.gov/standards/iso639-2/langhome.html. Es existiert iso639-3, sehr maechtig, nicht ergaenzt </xs:documentation>
 		<xs:appinfo xmlns:dc="http://purl.org/dc/elements/1.1/">
 			<dc:title>ISO 639-2 Language Code Types</dc:title>
 			<dc:creator>Tom Habing, thabing@uiuc.edu</dc:creator>
@@ -31,8 +33,10 @@
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="RegisteredCodeType">
-		<xs:union memberTypes="iso639-2:TerminologyCodeType iso639-2:BibliographicCodeType
-			iso639-2:LocalUseCodeType"/>
+		<xs:union
+			memberTypes="iso639-2:TerminologyCodeType iso639-2:BibliographicCodeType
+			iso639-2:LocalUseCodeType"
+		/>
 	</xs:simpleType>
 	<xs:simpleType name="LocalUseCodeType">
 		<xs:restriction base="iso639-2:CodeType">
@@ -1149,7 +1153,7 @@
 				<xs:annotation>
 					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
 						>Interlingua (International Auxiliary Language
-					Association)</xs:documentation>
+						Association)</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="ile">
@@ -2718,6 +2722,267 @@
 						>Zuni</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
+			<!-- hier Ende vor 2016 -->
+			<!-- und Anfang neu 2016-->
+			<xs:enumeration value="ady">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Adyghe; Adygei</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="ain">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Ainu</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="alt">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Southern Altai</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="anp">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Angika</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="arg">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Aragonese</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="byn">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Blin; Bilin</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="crh">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Crimean Tatar; Crimean Turkish</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="csb">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Kashubian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="dar">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Dargwa</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="dsb">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Lower Sorbian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="fil">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Filipino; Pilipino</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="frr">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Northern Frisian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="frs">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Eastern Frisian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="gsw">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Swiss German; Alemannic; Alsatian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="hat">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Haitian; Haitian Creole</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="hrv">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Croatian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="hsb">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Upper Sorbian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="iii">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Sichuan Yi; Nuosu</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="inh">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Ingush</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="jbo">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Lojban</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="kbd">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Kabardian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="krc">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Karachay-Balkar</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="krl">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Karelian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="lim">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Limburgan; Limburger; Limburgish</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="mdf">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Moksha</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="mwl">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Mirandese</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="myv">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Erzya</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="nap">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Neapolitan</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="nog">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Nogai</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="nqo">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>N'Ko</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="nwc">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Classical Newari; Old Newari; Classical Nepal Bhasa</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="rup">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Aromanian; Arumanian; Macedo-Romanian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="scn">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Sicilian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="srn">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Sranan Tongo</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="srp">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Serbian</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="syc">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Classical Syriac</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="tlh">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Klingon; tlhIngan-Hol</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="udm">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Udmurt</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="xal">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Kalmyk; Oirat</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="zbl">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Blissymbols; Blissymbolics; Bliss</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="zgh">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Standard Moroccan Tamazight</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="zxx">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>No linguistic content; Not applicable</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="zza">
+				<xs:annotation>
+					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
+						>Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<!-- hier Ende neu 2016 -->
 		</xs:restriction>
 	</xs:simpleType>
 	<xs:simpleType name="TerminologyCodeType">
@@ -3825,7 +4090,7 @@
 				<xs:annotation>
 					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
 						>Interlingua (International Auxiliary Language
-					Association)</xs:documentation>
+						Association)</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
 			<xs:enumeration value="ile">
@@ -5387,7 +5652,7 @@
 					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
 						>Zenaga</xs:documentation>
 				</xs:annotation>
-			</xs:enumeration>			
+			</xs:enumeration>
 			<xs:enumeration value="zul">
 				<xs:annotation>
 					<xs:documentation xmlns:xml="http://www.w3.org/XML/1998/namespace" xml:lang="en"
@@ -5400,6 +5665,6 @@
 						>Zuni</xs:documentation>
 				</xs:annotation>
 			</xs:enumeration>
-		</xs:restriction>
-	</xs:simpleType>
+</xs:restriction>
+</xs:simpleType>
 </xs:schema>

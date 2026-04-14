@@ -130,7 +130,7 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
 
         $this->assertNotNull($namespace);
 
-        $this->assertInstanceOf('Zend_Session_Namespace', $namespace);
+        $this->assertInstanceOf(Zend_Session_Namespace::class, $namespace);
 
         // zweimal aufrufen; beim ersten Mal ist die interne Variable noch nicht gesetzt
         $namespace2 = $model->getSessionNamespace();
@@ -146,7 +146,7 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase
         $namespace = $model->getDocumentSessionNamespace();
 
         $this->assertNotNull($namespace);
-        $this->assertInstanceOf('Zend_Session_Namespace', $namespace);
+        $this->assertInstanceOf(Zend_Session_Namespace::class, $namespace);
 
         $namespace2 = $model->getDocumentSessionNamespace();
 

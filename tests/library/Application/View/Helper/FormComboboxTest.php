@@ -60,8 +60,8 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
             ['Berlin' => 'Berlin', 'Hamburg' => 'Hamburg']
         );
 
-        $this->assertContains('<option value="Berlin">Berlin</option>', $output);
-        $this->assertContains('<option value="Hamburg">Hamburg</option>', $output);
+        $this->assertStringContainsString('<option value="Berlin">Berlin</option>', $output);
+        $this->assertStringContainsString('<option value="Hamburg">Hamburg</option>', $output);
     }
 
     public function testFormComboboxWithValue()
@@ -73,9 +73,9 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
             ['Berlin' => 'Berlin', 'Hamburg' => 'Hamburg']
         );
 
-        $this->assertContains('<option value="Bremen">Bremen</option>', $output);
-        $this->assertContains('<option value="Berlin">Berlin</option>', $output);
-        $this->assertContains('<option value="Hamburg">Hamburg</option>', $output);
+        $this->assertStringContainsString('<option value="Bremen">Bremen</option>', $output);
+        $this->assertStringContainsString('<option value="Berlin">Berlin</option>', $output);
+        $this->assertStringContainsString('<option value="Hamburg">Hamburg</option>', $output);
     }
 
     public function testFormComboboxWithValueMatchingOption()
@@ -88,7 +88,7 @@ class Application_View_Helper_FormComboboxTest extends ControllerTestCase
         );
 
         $this->assertEquals(1, substr_count($output, '<option value="Hamburg"'));
-        $this->assertContains('<option value="Berlin">Berlin</option>', $output);
-        $this->assertContains('<option value="Hamburg" selected="selected">Hamburg</option>', $output);
+        $this->assertStringContainsString('<option value="Berlin">Berlin</option>', $output);
+        $this->assertStringContainsString('<option value="Hamburg" selected="selected">Hamburg</option>', $output);
     }
 }

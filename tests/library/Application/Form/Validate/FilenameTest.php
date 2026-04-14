@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
+
 /**
  * Class Application_Form_Validate_FilenameTest is testing the filename-validator
  */
@@ -43,7 +45,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->appConfig = Application_Configuration::getInstance();
+        $this->appConfig = Configuration::getInstance();
         $this->config    = $this->appConfig->getConfig();
     }
 
@@ -192,7 +194,7 @@ class Application_Form_Validate_FilenameTest extends ControllerTestCase
 
         $messages = $logger->getMessages();
         $this->assertEquals(1, count($messages));
-        $this->assertContains('Your regular expression for your filename-validation is not valid.', $messages[0]);
+        $this->assertStringContainsString('Your regular expression for your filename-validation is not valid.', $messages[0]);
         $this->assertEquals('', $validator->getFilenameFormat());
     }
 

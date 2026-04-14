@@ -50,5 +50,3 @@ $xmlModel->setXml($xml);
 
 $doc = $xmlModel->getModel();
 $doc->store();
-
-exit();

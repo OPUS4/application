@@ -9,8 +9,8 @@ mostly.
 
 ## OPUS 4
 
-The current version of OPUS 4 is __4.8.0.21__. It is available on the [master][MASTER] branch and compatible with 
-PHP 7.1 to 8.1. The PHP 7 Support will end with OPUS 4.9. PHP 8.2+ versions are not supported yet. 
+The current version of OPUS 4 is __4.9__. It is available on the [master][MASTER] branch and compatible with 
+PHP 8.1 to 8.2. PHP 8.3 and beyond are not supported yet. 
 
 [Documentation][DOC]
 : Information on setting up a repository, for users and administrators.

@@ -34,6 +34,9 @@ class Application_Util_BrowsingParams
     /** @var Zend_Controller_Request_Http */
     private $request;
 
+    /** @var Zend_Log */
+    private $log;
+
     /**
      * @param Zend_Controller_Request_Http $request
      * @param Zend_Log                     $log

@@ -117,19 +117,19 @@
 
     <tu tuid="validation_error_person_orcid">
         <tuv xml:lang="en">
-            <seg>Please provide a valid ORCID identifier in format '0000-0000-0000-0000'.</seg>
+            <seg>Please provide a valid ORCID iD in format '0000-0000-0000-0000'.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte geben Sie eine valide Orc-Id in folgendem Format an: '0000-0000-0000-0000'.</seg>
+            <seg>Bitte geben Sie eine valide ORCID iD in folgendem Format an: '0000-0000-0000-0000'.</seg>
         </tuv>
     </tu>
 
     <tu tuid="validation_error_person_orcid_checksum">
         <tuv xml:lang="en">
-            <seg>The check digit of the ORC-ID is invalid. Please check the number.</seg>
+            <seg>The check digit of the ORCID iD is invalid. Please check the number.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die Prüfziffer der ORC-ID stimmt nicht.</seg>
+            <seg>Die Prüfziffer der ORCID iD stimmt nicht.</seg>
         </tuv>
     </tu>
 

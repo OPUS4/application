@@ -29,6 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\Log;
 
 class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
@@ -43,7 +44,7 @@ class CitationExport_Bootstrap extends Zend_Application_Module_Bootstrap
     protected function _initExport()
     {
         // @phpcs:enable
-        $updateInProgress = Application_Configuration::isUpdateInProgress();
+        $updateInProgress = Configuration::isUpdateInProgress();
 
         if (! Zend_Registry::isRegistered('Opus_Exporter')) {
             if (! $updateInProgress) {

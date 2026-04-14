@@ -94,7 +94,7 @@ class Application_Form_Element_LoginTest extends FormElementTestCase
 
         $this->assertCount(1, $messages);
         $this->assertArrayHasKey('regexNotMatch', $messages);
-        $this->assertContains('letters, numbers', $messages['regexNotMatch']);
+        $this->assertStringContainsString('letters, numbers', $messages['regexNotMatch']);
 
         $this->useGerman();
 
@@ -103,7 +103,7 @@ class Application_Form_Element_LoginTest extends FormElementTestCase
 
         $this->assertCount(1, $messages);
         $this->assertArrayHasKey('regexNotMatch', $messages);
-        $this->assertContains('Buchstaben, Zahlen', $messages['regexNotMatch']);
+        $this->assertStringContainsString('Buchstaben, Zahlen', $messages['regexNotMatch']);
     }
 
     public function testStringLengthValidationTranslated()
@@ -118,7 +118,7 @@ class Application_Form_Element_LoginTest extends FormElementTestCase
 
         $this->assertCount(1, $messages);
         $this->assertArrayHasKey('stringLengthTooShort', $messages);
-        $this->assertContains('less than 3 characters', $messages['stringLengthTooShort']);
+        $this->assertStringContainsString('less than 3 characters', $messages['stringLengthTooShort']);
 
         $this->useGerman();
 
@@ -127,6 +127,6 @@ class Application_Form_Element_LoginTest extends FormElementTestCase
 
         $this->assertCount(1, $messages);
         $this->assertArrayHasKey('stringLengthTooShort', $messages);
-        $this->assertContains('weniger als 3 Zeichen', $messages['stringLengthTooShort']);
+        $this->assertStringContainsString('weniger als 3 Zeichen', $messages['stringLengthTooShort']);
     }
 }

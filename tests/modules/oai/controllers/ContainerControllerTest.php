@@ -45,7 +45,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
     {
         $this->dispatch('/oai/container/index');
         $this->assertResponseCode(500);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'missing parameter docId',
             $this->getResponse()->getBody()
         );
@@ -55,7 +55,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
     {
         $this->dispatch('/oai/container/index/docId/foobar');
         $this->assertResponseCode(500);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'invalid value for parameter docId',
             $this->getResponse()->getBody()
         );
@@ -65,7 +65,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
     {
         $this->dispatch('/oai/container/index/docId/123456789');
         $this->assertResponseCode(500);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'requested docId does not exist',
             $this->getResponse()->getBody()
         );
@@ -97,7 +97,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         }
 
         $this->assertResponseCode(500);
-        $this->assertContains('access to requested document is forbidden', $this->getResponse()->getBody());
+        $this->assertStringContainsString('access to requested document is forbidden', $this->getResponse()->getBody());
     }
 
     public function testRequestPublishedDocWithoutAssociatedFiles()
@@ -108,7 +108,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         $this->dispatch('/oai/container/index/docId/' . $doc->getId());
 
         $this->assertResponseCode(500);
-        $this->assertContains('requested document does not have any associated readable files', $this->getResponse()->getBody());
+        $this->assertStringContainsString('requested document does not have any associated readable files', $this->getResponse()->getBody());
     }
 
     public function testRequestPublishedDocWithInaccessibleFile()
@@ -137,7 +137,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase
         FileUtil::deleteDirectory($path);
 
         $this->assertResponseCode(500);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'access denied on all files that are associated to the requested document',
             $this->getResponse()->getBody()
         );
