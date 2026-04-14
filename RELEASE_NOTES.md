@@ -1,12 +1,12 @@
 # OPUS 4 Release Notes
 
-## Release 4.9 - 2026-04-07
+## Release 4.9 - 2026-04-14
 
 ### Unterstützte PHP-Versionen
 
 OPUS 4.9 ist kompatibel mit PHP 8.1 und 8.2. PHP 7 wird nicht länger 
 unterstützt. Die OPUS 4 Application funktioniert noch nicht mit PHP 8.3 und 
-neuer.
+PHP 8.4.
 
 ### Update von OPUS 4.8
 
@@ -28,7 +28,7 @@ Zum Abschluss muss das Update-Skript ausgeführt werden.
     $ bin/update.sh
 
 Beim Update werden mehrere, teilweise interaktive, Schritte ausgeführt. Beim 
-Update von OPUS 4.8 sind das:
+Update von OPUS 4.8 auf 4.9 sind das:
 
 - "In Copyright"-Lizenz hinzufügen (optional)
 - Feld `PublicationState` auf `NULL` setzen (optional)
@@ -130,7 +130,7 @@ gerendert werden. Dafür gibt es eine neue Konfigurationsdatei.
 Die Verwendung ist in der Datei erläutert.
 
 Der Typ `Date` für Enrichments ist dazu gekommen und kann in der Verwaltung in
-der Administration ausgewählt werden. Das hat keine Auswirkungen auf die 
+der Administration ausgewählt werden. Das hat noch keine Auswirkungen auf die 
 Eingabe im Publish-Modul.
 
 ### Crossref-Import überarbeitet
@@ -143,13 +143,13 @@ Die Bezeichnungen der Enrichment-Felder orientieren sich nun am OPUS 4-Standard.
 
 Die Änderungen umfassen folgende Umbenennungen:
 
-| Feldname in OPUS 4.8 | Feldname in OPUS 4.9 |
-|---|---|
-| opus_import_data | opus_doi_json |
+| Feldname in OPUS 4.8       | Feldname in OPUS 4.9      |
+|----------------------------|---------------------------|
+| opus_import_data           | opus_doi_json             |
 | local_crossrefDocumentType | opus_crossrefDocumentType |
-| local_crossrefLicence | opus_crossrefLicence |
-| local_doiImportPopulated | opus_doiImportPopulated |
-| local_import_origin | opus_import_origin |
+| local_crossrefLicence      | opus_crossrefLicence      |
+| local_doiImportPopulated   | opus_doiImportPopulated   |
+| local_import_origin        | opus_import_origin        |
 
 Die Felder für Konferenzen wurden wesentlich überarbeitet. Das Mapping der 
 Konferenzangaben wurde an die neuen Felder angepasst. (Details s. nächster 
@@ -185,12 +185,12 @@ In OPUS 4.8 waren die beiden Enrichmentfelder `conference_title` und
 `conference_place` für den DOI-basierten Metadatenimport neu hinzugekommen. 
 Diese werden an den OPUS-Standard angeglichen:
 
-| Feld in OPUS 4.8 | Feld in OPUS 4.9 |
-|---|---|
-| conference_title | OpusConferenceName |
-| conference_place | OpusConferencePlace |
-| - | OpusConferenceNumber |
-| - | OpusConferenceYear |
+| Feld in OPUS 4.8 | Feld in OPUS 4.9     |
+|------------------|----------------------|
+| conference_title | OpusConferenceName   |
+| conference_place | OpusConferencePlace  |
+| -                | OpusConferenceNumber |
+| -                | OpusConferenceYear   |
 
 
 
@@ -495,7 +495,7 @@ gearbeitet. Hinweise oder Hilfe aus der OPUS 4 Community sind willkommen.
 Die verwendete PHPUnit-Version wurde aktualisiert und die Verwendung von 
 deprecated-Funktionen ersetzt.
 
-Teile des Codes der Application und des Framework wurden in separate Libraries
+Teile des Codes der Application und des Frameworks wurden in separate Libraries
 verschoben, um Abhängigkeiten aufzulösen und isolierte Updates einzelner 
 Teilkomponenten von OPUS 4 zu ermöglichen. 
 
