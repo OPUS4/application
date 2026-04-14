@@ -1,6 +1,6 @@
 # OPUS 4 Change Log
 
-## Patch Release 4.8.0.21 - 2026-04-07
+## Release 4.8.0.21 - 2026-04-07
 
 https://github.com/OPUS4/application/issues/1448
 
