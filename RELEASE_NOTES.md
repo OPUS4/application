@@ -1,5 +1,14 @@
 # OPUS 4 Release Notes
 
+## Release 4.10 - 2026-05-12
+
+### RSS-Links
+
+RSS-Links können nun ausgeblendet werden. Sie werden automatisch ausgeblendet,
+wenn ein User keinen Zugriff auf das RSS-Modul hat. 
+
+    rss.showLinks = 0
+
 ## Release 4.9 - 2026-04-14
 
 ### Unterstützte PHP-Versionen
