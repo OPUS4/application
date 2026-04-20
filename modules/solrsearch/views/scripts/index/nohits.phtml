@@ -31,13 +31,7 @@
 
 ?>
 
-<?php
-    $this->headLink([
-        'rel'  => 'alternate',
-        'type' => 'application/rss+xml',
-        'href' => $this->serverUrl() . $this->url($this->rssUrl),
-    ]);
-    ?>
+<?php $this->rssMetaLink($this->url($this->rssUrl)) ?>
 
 <?php
 if ($this->searchType === 'simple') {

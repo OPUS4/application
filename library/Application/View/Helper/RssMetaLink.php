@@ -25,24 +25,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-?>
+/**
+ * TODO check permissions and options
+ * TODO unit tests
+ */
+class Application_View_Helper_RssMetaLink extends Application_View_Helper_RssLink
+{
+    public function rssMetaLink(?string $rssUrl = null): string
+    {
+        if (! $this->isShowRssLinks() || ! $this->isRssAllowed()) {
+            return '';
+        }
 
-<h2><?= htmlspecialchars($this->translate('browse_year_title')) ?></h2>
+        $view = $this->view;
 
-<p><?= htmlspecialchars($this->translate('browse_year_message')) ?></p>
+        if ($rssUrl === null) {
+            $rssUrl = $view->baseUrl() . '/rss/index/index';
+        }
 
-<div class="content">
-    <ul class="nav browsing">
-    <?php foreach ($this->facetitems as $facetitem) : ?>
-        <li>
-            <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'simple', 'query' => '*:*', 'browsing' => 'true', 'yearfq' => $facetitem->getText()], null, true) ?>"><?= htmlspecialchars($this->translate($facetitem->getText())) ?></a>
-            &nbsp;(<?= $facetitem->getCount() ?>)
-            <?= $this->rssLink(['searchtype' => 'simple', 'query' => '*:*', 'yearfq' => $facetitem->getText()]) ?>
-        </li>
-    <?php endforeach ?>
-    </ul>
-</div>
+        $view->headLink([
+            'rel'  => 'alternate',
+            'type' => 'application/rss+xml',
+            'href' => $view->serverUrl() . $rssUrl,
+        ]);
+
+        return '';
+    }
+}

@@ -41,9 +41,7 @@
         <li>
             <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'simple', 'query' => '*:*', 'browsing' => 'true', 'doctypefq' => $facetitem->getText()], null, true) ?>"><?= htmlspecialchars($this->translate($facetitem->getText())) ?></a>
             &nbsp;(<?= $facetitem->getCount() ?>)
-            <a href="<?= $this->url(['module' => 'rss', 'controller' => 'index', 'action' => 'index', 'searchtype' => 'simple', 'query' => '*:*', 'doctypefq' => $facetitem->getText()], null, true) ?>" class="rss" type="application/rss+xml">
-                <img src="<?= $this->layoutPath() ?>/img/feed_small.png" width="12" height="12" alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" />
-            </a>
+            <?= $this->rssLink(['searchtype' => 'simple', 'query' => '*:*', 'doctypefq' => $facetitem->getText()]) ?>
         </li>
     <?php endforeach ?>
     </ul>

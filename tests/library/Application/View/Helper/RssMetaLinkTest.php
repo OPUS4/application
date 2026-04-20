@@ -25,27 +25,71 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-?>
+use Opus\Common\UserRole;
 
-<?php $this->rssMetaLink() ?>
+/**
+ * @covers Application_View_Helper_RssMetaLink
+ */
+class Application_View_Helper_RssMetaLinkTest extends ControllerTestCase
+{
+    /** @var string[] */
+    protected $additionalResources = ['view', 'database'];
 
-<?PHP $this->title = 'home_index_index_pagetitle' ?>
+    /** @var Application_View_Helper_RssMetaLink */
+    private $helper;
 
-<h2><?= $this->translate('home_index_index_title') ?></h2>
+    public function setUp(): void
+    {
+        parent::setUp();
 
-<div class="intro">
-    <div class="col col-left">
-        <p><?= $this->translate('home_index_index_welcome') ?></p>
-    </div>
-    <div class="col col-right">
-        <p><?= $this->translate('home_index_index_instructions') ?></p>
-    </div>
-</div>
+        $this->helper = new Application_View_Helper_RssMetaLink();
+        $this->helper->setView($this->getView());
+    }
 
-<div class="content">
-    <?php include APPLICATION_PATH . '/modules/solrsearch/views/scripts/index/simpleSearchForm.phtml' ?>
-</div>
+    public function testRssMetaLink()
+    {
+        $output = $this->helper->rssMetaLink();
+
+        $this->assertEquals('', $output);
+
+        $view = $this->getView();
+
+        $links = $view->headLink()->toString();
+
+        $this->assertEquals(
+            '<link href="http:///rss/index/index" rel="alternate" type="application/rss+xml" />',
+            $links
+        );
+    }
+
+    public function testRssMetaLinkDisabled()
+    {
+        $this->adjustConfiguration([
+            'rss' => ['showLinks' => false],
+        ]);
+
+        $this->helper->rssMetaLink();
+
+        $this->assertEquals('', $this->getView()->headLink()->toString());
+    }
+
+    public function testRssMetaLinkNoAccess()
+    {
+        $this->enableSecurity();
+
+        $guest = UserRole::fetchByName('guest');
+        $guest->removeAccessModule('rss');
+        $guest->store();
+
+        $this->helper->rssMetaLink();
+
+        $guest->appendAccessModule('rss');
+        $guest->store();
+
+        $this->assertEquals('', $this->getView()->headLink()->toString());
+    }
+}
