@@ -1,5 +1,10 @@
 # OPUS 4 Change Log
 
+## Release 4.10 - 2026-05-12
+
+OPUS 4.10 Project on GitHub
+https://github.com/orgs/OPUS4/projects/74
+
 ## Release 4.9 - 2026-04-14
 
 OPUS 4.9 Project on GitHub

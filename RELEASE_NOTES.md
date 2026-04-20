@@ -9,6 +9,8 @@ wenn ein User keinen Zugriff auf das RSS-Modul hat.
 
     rss.showLinks = 0
 
+--
+
 ## Release 4.9 - 2026-04-14
 
 ### Unterstützte PHP-Versionen
