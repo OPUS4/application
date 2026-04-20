@@ -84,10 +84,7 @@ use Opus\Common\Config;
                     <a href="<?= $this->url(['module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $child->getId()], null, true) ?>"><?= htmlspecialchars($child->getDisplayNameForBrowsingContext($this->collectionRole)) ?></a>
                     (<?= $documentCount ?>)
             <?php endif ?>
-                <a href="<?= $this->url(['module' => 'rss', 'controller' => 'index', 'action' => 'index', 'searchtype' => 'collection', 'id' => $child->getId()], null, true) ?>" class="rss" type="application/rss+xml">
-                    <img src="<?= $this->layoutPath() ?>/img/feed_small.png" width="12" height="12"
-                         alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" />
-                </a>
+                    <?= $this->rssLink(['searchtype' => 'collection', 'id' => $child->getId()]) ?>
                 </li>
     <?php endforeach ?>
     </ul>
