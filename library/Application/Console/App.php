@@ -74,6 +74,8 @@ class Application_Console_App extends Application
         $this->add(new Application_Console_Collection_MoveCommand());
         $this->add(new Application_Console_Collection_RemoveCommand());
 
+        $this->add(new Application_Console_Admin_ChangePasswordCommand());
+
         if (class_exists(TaskManager::class)) {
             /*
                 Tasks commands do not work without the TaskManager. If the current PHP version is less than 7.4
