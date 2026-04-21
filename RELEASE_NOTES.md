@@ -75,7 +75,7 @@ OPUS 4.9 wurde mit Solr 9.10.1 getestet. Solr 10 wird noch nicht unterstützt.
 Solr muss ab Solr 9.8 mit einer zusätzlichen Option gestartet werden, damit 
 die Volltextextraktion weiterhin funktioniert.
 
-    $ bin/solr start -Dsolr.config.lib.enabled = true
+    $ bin/solr start -Dsolr.config.lib.enabled=true
 
 Weitere Informationen dazu finden sich in der offiziellen Dokumentation von 
 Apache Solr.
