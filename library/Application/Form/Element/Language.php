@@ -29,7 +29,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\App\Common\Configuration;
 use Opus\Common\Language;
+use Opus\I18n\Languages;
 
 /**
  * TODO override setLabel for more robust translation
@@ -68,12 +70,27 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
      */
     public static function initLanguageList()
     {
+        $config = Configuration::getInstance()->getConfig();
+
+        if (! isset($config->languages->active)) {
+            throw new Exception('no active languages configured');
+        }
+
+        $activeLanguages = explode(',',  $config->languages->active);
+
         $translate = Application_Translate::getInstance();
+
         $languages = [];
-        foreach (Language::getAllActiveTable() as $languageRow) {
-            $langId             = $languageRow['part2_t'];
+
+        foreach ($activeLanguages as $lang) {
+            $langId             = Languages::getPart2t(trim($lang));
             $languages[$langId] = $translate->translateLanguage($langId);
         }
+
+        if (isset($config->languages->sortByName) && filter_var($config->languages->sortByName, FILTER_VALIDATE_BOOLEAN)) {
+            asort($languages);
+        }
+
         self::$languageList = $languages;
     }
 }
