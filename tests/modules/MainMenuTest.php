@@ -78,7 +78,6 @@ class MainMenuTest extends ControllerTestCase
             "/admin/collectionroles",
             "/admin/series",
             "/admin/security",
-            "/admin/language",
             "/admin/statistic",
             "/admin/oailink",
             "/admin/dnbinstitute",
