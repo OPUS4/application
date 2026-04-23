@@ -82,12 +82,12 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
             $activeLanguages = explode(',', $optionValue);
         } else {
             // Use all languages
-            $helper = new Languages();
+            $helper          = new Languages();
             $activeLanguages = array_keys($helper->getAllAsArray());
         }
 
         $activeLanguages = array_filter($activeLanguages, function ($lang) {
-            return !empty($lang);
+            return ! empty($lang);
         });
 
         $translate = Application_Translate::getInstance();
