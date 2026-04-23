@@ -75,7 +75,20 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
             throw new Exception('no active languages configured');
         }
 
-        $activeLanguages = explode(',', $config->languages->active);
+        $optionValue = $config->languages->active;
+
+        if (strlen(trim($optionValue)) > 0) {
+            // Use configured languages
+            $activeLanguages = explode(',', $optionValue);
+        } else {
+            // Use all languages
+            $helper = new Languages();
+            $activeLanguages = array_keys($helper->getAllAsArray());
+        }
+
+        $activeLanguages = array_filter($activeLanguages, function ($lang) {
+            return !empty($lang);
+        });
 
         $translate = Application_Translate::getInstance();
 
