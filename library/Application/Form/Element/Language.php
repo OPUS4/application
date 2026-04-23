@@ -82,8 +82,15 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
         $languages = [];
 
         foreach ($activeLanguages as $lang) {
-            $langId             = Languages::getPart2t(trim($lang));
-            $languages[$langId] = $translate->translateLanguage($langId);
+            $langId      = Languages::getPart2t(trim($lang));
+            $translation = $translate->translateLanguage($langId); // TODO use $language->getDisplayName()
+
+            if ($translation === $langId) {
+                $lang        = Languages::getLanguage($langId);
+                $translation = $lang->getRefName();
+            }
+
+            $languages[$langId] = $translation;
         }
 
         if (isset($config->languages->sortByName) && filter_var($config->languages->sortByName, FILTER_VALIDATE_BOOLEAN)) {
