@@ -29,7 +29,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Language;
+use Opus\I18n\Languages;
 
 /**
  * View helper for tranform long language form in short language form (Part2 in Part1).
@@ -55,8 +55,7 @@ class Application_View_Helper_LanguageWebForm extends Zend_View_Helper_Abstract
     public function languageWebForm($value)
     {
         if (! array_key_exists($value, $this->langCache)) {
-            $lang                    = Language::getPropertiesByPart2T($value);
-            $this->langCache[$value] = $lang['part1'];
+            $this->langCache[$value] = Languages::getPart1($value);
         }
         return $this->langCache[$value];
     }

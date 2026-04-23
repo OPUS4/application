@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\DocumentInterface;
-use Opus\Common\Language;
+use Opus\I18n\Languages;
 
 /**
  * Helper for printing the abstract of a OPUS document.
@@ -48,7 +48,7 @@ class Application_View_Helper_DocumentAbstract extends Application_View_Helper_D
     public function documentAbstract($document = null)
     {
         if ($this->isPreferUserInterfaceLanguage()) {
-            $language = Language::getPart2tForPart1(Application_Translate::getInstance()->getLocale());
+            $language = Languages::getPart2t(Application_Translate::getInstance()->getLocale());
 
             $abstract = $document->getMainAbstract($language);
         } else {

@@ -30,7 +30,6 @@
  */
 
 use Opus\App\Common\Configuration;
-use Opus\Common\Language;
 use Opus\I18n\Languages;
 
 /**
@@ -76,7 +75,7 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
             throw new Exception('no active languages configured');
         }
 
-        $activeLanguages = explode(',',  $config->languages->active);
+        $activeLanguages = explode(',', $config->languages->active);
 
         $translate = Application_Translate::getInstance();
 
