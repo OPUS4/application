@@ -30,6 +30,7 @@
  */
 
 use Opus\App\Common\Configuration;
+use Opus\Common\Log;
 use Opus\I18n\Languages;
 
 /**
@@ -66,6 +67,8 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
 
     /**
      * Setup language list.
+     *
+     * TODO reduce responsibilities of this function
      */
     public static function initLanguageList()
     {
@@ -90,18 +93,27 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
             return ! empty($lang);
         });
 
+        // TODO load local languages
+
         $translate = Application_Translate::getInstance();
         $locale    = $translate->getLocale();
 
         $languages = [];
 
         foreach ($activeLanguages as $lang) {
-            $language    = Languages::getLanguage(trim($lang));
+            $part2t   = trim($lang);
+            $language = Languages::getLanguage($part2t);
+
+            if ($language === null) {
+                Log::get()->err("Language '{$part2t}' not found");
+                continue;
+            }
+
             $langId      = $language->getPart2t();
             $translation = $language->getDisplayName($locale);
 
+            // TODO move this to getDisplayName
             if ($translation === $langId) {
-                $lang        = Languages::getLanguage($langId);
                 $translation = $lang->getRefName();
             }
 
