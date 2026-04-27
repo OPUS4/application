@@ -31,6 +31,7 @@
 
 use Opus\App\Common\Configuration;
 use Opus\Common\Log;
+use Opus\I18n\I18nException;
 use Opus\I18n\Languages;
 
 /**
@@ -93,7 +94,15 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
             return ! empty($lang);
         });
 
-        // TODO load local languages
+        if (isset($config->languages->local)) {
+            $localLanguages = $config->languages->local->toArray();
+            $languages      = new Languages();
+            try {
+                $languages->addLanguages($localLanguages);
+            } catch (I18nException $ex) {
+                Log::get()->err('Error loading local languages: ' . $ex->getMessage());
+            }
+        }
 
         $translate = Application_Translate::getInstance();
         $locale    = $translate->getLocale();
@@ -111,6 +120,8 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
 
             $langId      = $language->getPart2t();
             $translation = $language->getDisplayName($locale);
+
+            // TODO support local translations
 
             $languages[$langId] = $translation;
         }
