@@ -476,74 +476,112 @@ async function getDoctypes(data)
 
 function openDialog(title, text, type = 'note', id = null)
 {
-    var dialogButtons = {};
+    if (! window.HTMLDialogElement) {
+        window.alert(title + "\n\n" + text);
+        return;
+    }
 
-    var dialogContent         = document.createElement("div");
-    dialogContent.textContent = text;
+    var dlg       = document.createElement("dialog");
+    dlg.className = "opus-dialog opus-dialog--" + type;
 
-    // Hinzufügen eines Buttons, wenn DOI schon vorhanden und eine ID verfügbar ist
+    var header         = document.createElement("div");
+    header.className   = "opus-dialog__title";
+    header.textContent = title;
+
+    var closeBtn       = document.createElement("button");
+    closeBtn.type      = "button";
+    closeBtn.className = "opus-dialog__close";
+    closeBtn.setAttribute("aria-label", translations.doiimport_button_cancel || "Close");
+    closeBtn.textContent = "×";
+    closeBtn.addEventListener("click", closeDialog);
+    header.appendChild(closeBtn);
+
+    var body         = document.createElement("div");
+    body.className   = "opus-dialog__body";
+    body.textContent = text;
+
+    var footer       = document.createElement("div");
+    footer.className = "opus-dialog__footer";
+
+    function closeDialog()
+    {
+        dlg.close();
+        dlg.remove();
+    }
+
+    function addButton(label, handler, css)
+    {
+        var btn         = document.createElement("button");
+        btn.type        = "button";
+        btn.className   = "opus-dialog__btn" + (css ? " " + css : "");
+        btn.textContent = label;
+        btn.addEventListener("click", handler);
+        footer.appendChild(btn);
+    }
+
+    // Optionaler Button, wenn DOI bereits existiert
     if (id) {
-        dialogButtons[translations.doiimport_button_showId + ' ' + id] = function () {
+        addButton(translations.doiimport_button_showId + ' ' + id, function () {
             var checkLink = baseUrl + "/" + id;
             window.open(checkLink, '_blank');
-        };
+        }, "secondary");
     }
 
     switch (type) {
         case 'warning':
-            dialogButtons['OK']                                 = function () {
-                $(this).dialog("close");
+            addButton('OK', function () {
+                closeDialog();
                 cleanup();
                 document.getElementById("IdentifierDoi").value = doi;
                 startCheck();
-            };
-            dialogButtons[translations.doiimport_button_cancel] = function () {
-                $(this).dialog("close");
-            };
+            }, "primary");
+            addButton(translations.doiimport_button_cancel, closeDialog, "secondary");
             break;
         case 'note':
-            dialogButtons[translations.doiimport_button_back]     = function () {
-                $(this).dialog("close");
+            addButton(translations.doiimport_button_back, function () {
+                closeDialog();
                 document.getElementById("abort").click();
-            };
-            dialogButtons[translations.doiimport_button_tryAgain] = function () {
+            }, "secondary");
+            addButton(translations.doiimport_button_tryAgain, function () {
                 document.getElementById("IdentifierDoi").style.backgroundColor = null;
                 document.getElementById("IdentifierDoi").value                 = "";
-                $(this).dialog("close");
+                closeDialog();
                 setTimeout(function () {
                     document.getElementById("IdentifierDoi").focus();
                 }, 100);
-            };
+            }, "primary");
             break;
         case 'redirect':
-            //Falls DOI nicht bei Crossref gefunden wurde -> zurück zur Auswahl des Dokumenttyps (um manuelle Eingabe im DOI-Import zu verhindern)
-            dialogButtons[translations.doiimport_button_back]     = function () {
-                $(this).dialog("close");
+            addButton(translations.doiimport_button_back, function () {
+                closeDialog();
                 document.getElementById("abort").click();
-            };
-            dialogButtons[translations.doiimport_button_tryAgain] = function () {
+            }, "secondary");
+            addButton(translations.doiimport_button_tryAgain, function () {
                 document.getElementById("IdentifierDoi").style.backgroundColor = null;
                 document.getElementById("IdentifierDoi").value                 = "";
-                $(this).dialog("close");
+                closeDialog();
                 setTimeout(function () {
                     document.getElementById("IdentifierDoi").focus();
                 }, 100);
-            };
+            }, "primary");
             break;
         default:
-            // Weitere Fälle können hier hinzugefügt werden
-            dialogButtons['OK'] = function () {
-                $(this).dialog("close");
-            };
+            addButton('OK', closeDialog, "primary");
             break;
     }
 
-    // Dialog initialisieren
-    $(function () {
-        $(dialogContent).dialog({
-            title: title,
-            modal: true,
-            buttons: dialogButtons
-        });
+    dlg.appendChild(header);
+    dlg.appendChild(body);
+    dlg.appendChild(footer);
+
+    dlg.addEventListener("cancel", function (ev) {
+        ev.preventDefault();
+        closeDialog();
     });
+    dlg.addEventListener("close", function () {
+        dlg.remove();
+    });
+
+    document.body.appendChild(dlg);
+    dlg.showModal();
 }
