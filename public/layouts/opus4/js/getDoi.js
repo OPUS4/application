@@ -476,42 +476,44 @@ async function getDoctypes(data)
 
 function openDialog(title, text, type = 'note', id = null)
 {
-    if (!window.HTMLDialogElement) {
+    if (! window.HTMLDialogElement) {
         window.alert(title + "\n\n" + text);
         return;
     }
 
-    var dlg = document.createElement("dialog");
+    var dlg =       document.createElement("dialog");
     dlg.className = "opus-dialog opus-dialog--" + type;
 
-    var header = document.createElement("div");
-    header.className = "opus-dialog__title";
+    var header =         document.createElement("div");
+    header.className =   "opus-dialog__title";
     header.textContent = title;
 
-    var closeBtn = document.createElement("button");
-    closeBtn.type = "button";
+    var closeBtn =       document.createElement("button");
+    closeBtn.type =      "button";
     closeBtn.className = "opus-dialog__close";
     closeBtn.setAttribute("aria-label", translations.doiimport_button_cancel || "Close");
     closeBtn.textContent = "×";
     closeBtn.addEventListener("click", closeDialog);
     header.appendChild(closeBtn);
 
-    var body = document.createElement("div");
-    body.className = "opus-dialog__body";
+    var body =         document.createElement("div");
+    body.className =   "opus-dialog__body";
     body.textContent = text;
 
-    var footer = document.createElement("div");
+    var footer =       document.createElement("div");
     footer.className = "opus-dialog__footer";
 
-    function closeDialog() {
+    function closeDialog() 
+    {
         dlg.close();
         dlg.remove();
     }
 
-    function addButton(label, handler, css) {
-        var btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "opus-dialog__btn" + (css ? " " + css : "");
+    function addButton(label, handler, css) 
+    {
+        var btn =         document.createElement("button");
+        btn.type =        "button";
+        btn.className =   "opus-dialog__btn" + (css ? " " + css : "");
         btn.textContent = label;
         btn.addEventListener("click", handler);
         footer.appendChild(btn);
