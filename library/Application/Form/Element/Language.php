@@ -101,21 +101,16 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
         $languages = [];
 
         foreach ($activeLanguages as $lang) {
-            $part2t   = trim($lang);
-            $language = Languages::getLanguage($part2t);
+            $part2b   = trim($lang);
+            $language = Languages::getLanguage($part2b);
 
             if ($language === null) {
-                Log::get()->err("Language '{$part2t}' not found");
+                Log::get()->err("Language '{$part2b}' not found");
                 continue;
             }
 
             $langId      = $language->getPart2t();
             $translation = $language->getDisplayName($locale);
-
-            // TODO move this to getDisplayName
-            if ($translation === $langId) {
-                $translation = $lang->getRefName();
-            }
 
             $languages[$langId] = $translation;
         }

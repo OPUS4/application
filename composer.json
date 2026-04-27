@@ -34,7 +34,7 @@
     "opus4-repo/opus4-sword": "^4.9",
     "opus4-repo/opus4-app-common": "^4.9",
     "opus4-repo/opus4-deepgreen": "^4.9",
-    "opus4-repo/opus4-i18n": "*",
+    "opus4-repo/opus4-i18n": "dev-main as 4.10",
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
     "oomphinc/composer-installers-extender": "^2.0",
