@@ -63,7 +63,6 @@ class LicencesAdminTest extends ControllerTestCase
         $this->assertNotQuery('//a[@href="/admin/index/security"]');
         $this->assertNotQuery('//a[@href="/admin/collectionroles"]');
         $this->assertNotQuery('//a[@href="/admin/series"]');
-        $this->assertNotQuery('//a[@href="/admin/language"]');
         $this->assertNotQuery('//a[@href="/admin/dnbinstitute"]');
         $this->assertNotQuery('//a[@href="/admin/index/setup"]');
         $this->assertNotQuery('//a[@href="/review"]');

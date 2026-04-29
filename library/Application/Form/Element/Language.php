@@ -29,7 +29,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Language;
+use Opus\App\Common\Configuration;
+use Opus\Common\Log;
+use Opus\I18n\I18nException;
+use Opus\I18n\Languages;
 
 /**
  * TODO override setLabel for more robust translation
@@ -53,6 +56,23 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
     }
 
     /**
+     * @param string|null $value
+     * @return void
+     */
+    public function setValue($value)
+    {
+        if ($value !== null) {
+            $language = Languages::getLanguage($value);
+
+            if (null !== $language) {
+                $value = $language->getId();
+            }
+        }
+
+        parent::setValue($value);
+    }
+
+    /**
      * @return array
      */
     public static function getLanguageList()
@@ -65,15 +85,68 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
 
     /**
      * Setup language list.
+     *
+     * TODO reduce responsibilities of this function
      */
     public static function initLanguageList()
     {
-        $translate = Application_Translate::getInstance();
-        $languages = [];
-        foreach (Language::getAllActiveTable() as $languageRow) {
-            $langId             = $languageRow['part2_t'];
-            $languages[$langId] = $translate->translateLanguage($langId);
+        $config = Configuration::getInstance()->getConfig();
+
+        if (! isset($config->languages->active)) {
+            throw new Exception('no active languages configured');
         }
+
+        $optionValue = $config->languages->active;
+
+        if (strlen(trim($optionValue)) > 0) {
+            // Use configured languages
+            $activeLanguages = explode(',', $optionValue);
+        } else {
+            // Use all languages
+            $helper          = new Languages();
+            $activeLanguages = array_keys($helper->getAllAsArray());
+        }
+
+        $activeLanguages = array_filter($activeLanguages, function ($lang) {
+            return ! empty($lang);
+        });
+
+        if (isset($config->languages->local)) {
+            $localLanguages = $config->languages->local->toArray();
+            $languages      = new Languages();
+            try {
+                $languages->addLanguages($localLanguages);
+            } catch (I18nException $ex) {
+                Log::get()->err('Error loading local languages: ' . $ex->getMessage());
+            }
+        }
+
+        $translate = Application_Translate::getInstance();
+        $locale    = $translate->getLocale();
+
+        $languages = [];
+
+        foreach ($activeLanguages as $lang) {
+            $part2b   = trim($lang);
+            $language = Languages::getLanguage($part2b);
+
+            if ($language === null) {
+                Log::get()->err("Language '{$part2b}' not found");
+                continue;
+            }
+
+            $langId      = $language->getPart2t();
+            $translation = $language->getDisplayName($locale);
+
+            // TODO support local translations
+
+            $languages[$langId] = $translation;
+        }
+
+        if (isset($config->languages->sortByName) && filter_var($config->languages->sortByName, FILTER_VALIDATE_BOOLEAN)) {
+            asort($languages);
+        }
+
         self::$languageList = $languages;
     }
 }

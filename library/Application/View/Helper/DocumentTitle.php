@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\DocumentInterface;
-use Opus\Common\Language;
+use Opus\I18n\Languages;
 
 /**
  * Helper for printing the title of a OPUS document.
@@ -55,7 +55,7 @@ class Application_View_Helper_DocumentTitle extends Application_View_Helper_Docu
     public function documentTitle($document = null)
     {
         if ($this->isPreferUserInterfaceLanguage()) {
-            $language = Language::getPart2tForPart1(Application_Translate::getInstance()->getLocale());
+            $language = Languages::getPart2t(Application_Translate::getInstance()->getLocale());
 
             $title = $document->getMainTitle($language);
         } else {

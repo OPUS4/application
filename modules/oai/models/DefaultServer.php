@@ -335,7 +335,10 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
      */
     protected function setupProcessor()
     {
-        $this->proc->registerPHPFunctions('Opus\Common\Language::getLanguageCode');
+        $this->proc->registerPHPFunctions([
+            'Opus\I18n\Languages::getPart1',
+            'Opus\I18n\Languages::getPart2b',
+        ]);
         Application_Xslt::registerViewHelper($this->proc, $this->getViewHelpers());
         $this->proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
         $this->proc->setParameter('', 'doiResolverUrl', $this->getConfig()->doi->resolverUrl);

@@ -31,7 +31,6 @@
 
 use Opus\Common\Enrichment;
 use Opus\Document;
-use Opus\Language;
 
 /**
  * Helper for handling translations.
@@ -103,12 +102,7 @@ class Application_Controller_Action_Helper_Translation extends Zend_Controller_A
             $translationKey = $this->normalizeModelName($modelName) . '_' . $fieldName;
             return preg_replace('/Opus_Common_/', 'Opus_', $translationKey); // TODO LAMINAS fix keys
         } else {
-            switch ($modelName) {
-                case Language::class:
-                    return $this->normalizeModelName($modelName) . '_' . $fieldName;
-                default:
-                    return $fieldName;
-            }
+            return $fieldName;
         }
     }
 
