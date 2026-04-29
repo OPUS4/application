@@ -56,6 +56,23 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
     }
 
     /**
+     * @param string|null $value
+     * @return void
+     */
+    public function setValue($value)
+    {
+        if ($value !== null) {
+            $language = Languages::getLanguage($value);
+
+            if (null !== $language) {
+                $value = $language->getId();
+            }
+        }
+
+        parent::setValue($value);
+    }
+
+    /**
      * @return array
      */
     public static function getLanguageList()
