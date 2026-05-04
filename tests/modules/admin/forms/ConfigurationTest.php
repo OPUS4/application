@@ -80,8 +80,7 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
         $form = new Admin_Form_Configuration();
 
         $this->assertTrue($form->isValid([
-            'supportedLanguages' => ['de'],
-            'maxSearchResults'   => '10',
+            'searchengine_solr_parameterDefaults_rows' => '10',
         ]));
     }
 
@@ -90,7 +89,7 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
         $form = new Admin_Form_Configuration();
 
         $this->assertFalse($form->isValid([
-            'supportedLanguages' => ['ru'],
+            'searchengine_solr_parameterDefaults_rows' => '5',
         ]));
     }
 
