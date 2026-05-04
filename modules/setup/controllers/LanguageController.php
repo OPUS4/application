@@ -29,8 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\App\Common\Configuration;
-
 /**
  * TODO rename controller to TranslationController
  * TODO sorting using table header
