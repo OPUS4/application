@@ -492,7 +492,7 @@ class Setup_LanguageController extends Application_Controller_Action
         // TODO provide form with options config
 
         $form = new Admin_Form_Configuration([
-            'supportedLanguages' => [
+            'activatedLanguages' => [
                 'type'    => 'supportedLanguages',
                 'section' => 'general',
             ],
@@ -525,7 +525,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
             $form->populateFromModel($config);
 
-            $element = $form->getElement('supportedLanguages');
+            $element = $form->getElement('activatedLanguages');
             if (! isset($config->activatedLanguages)) {
                 $element->setValue($config->supportedLanguages);
             }
