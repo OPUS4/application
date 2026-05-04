@@ -495,7 +495,6 @@ class Setup_LanguageController extends Application_Controller_Action
 
         $form = new Admin_Form_Configuration([
             'supportedLanguages' => [
-                'key'     => 'activatedLanguages',
                 'type'    => 'supportedLanguages',
                 'section' => 'general',
             ],
@@ -513,7 +512,6 @@ class Setup_LanguageController extends Application_Controller_Action
                     if ($form->isValid($data)) {
                         $config = new Zend_Config([], true);
                         $form->updateModel($config);
-                        Configuration::save($config);
                     } else {
                         break;
                     }

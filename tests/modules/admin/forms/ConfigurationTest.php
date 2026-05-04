@@ -29,6 +29,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Db2\Configuration;
+
 class Admin_Form_ConfigurationTest extends ControllerTestCase
 {
     /** @var string[] */
@@ -51,7 +53,7 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
             'searchengine' => ['solr' => ['parameterDefaults' => ['rows' => '20']]],
         ])); // searchengine.solr.parameterDefaults.rows
 
-        $element = $form->getElement('maxSearchResults');
+        $element = $form->getElement('searchengine_solr_parameterDefaults_rows');
 
         $this->assertNotNull($element);
         $this->assertEquals(20, $element->getValue());
@@ -61,13 +63,16 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
     {
         $form = new Admin_Form_Configuration();
 
-        $form->getElement('maxSearchResults')->setValue(15);
+        $form->getElement('searchengine_solr_parameterDefaults_rows')->setValue(15);
 
         $config = new Zend_Config([], true);
 
         $form->updateModel($config);
 
-        $this->assertEquals(15, $config->searchengine->solr->parameterDefaults->rows);
+        $configDatabase = new Configuration();
+        $this->assertEquals(15, $configDatabase->getOption(
+            'searchengine.solr.parameterDefaults.rows'
+        ));
     }
 
     public function testValidationSuccess()
@@ -87,5 +92,14 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase
         $this->assertFalse($form->isValid([
             'supportedLanguages' => ['ru'],
         ]));
+    }
+
+    public function testLoadOptionsConfig()
+    {
+        $optionsConfigPath = APPLICATION_PATH . '/application/configs/options.yml';
+
+        $options = yaml_parse_file($optionsConfigPath);
+
+        $this->assertIsArray($options);
     }
 }

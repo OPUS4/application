@@ -26,7 +26,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="admin_config_section_searchopt">
+    <tu tuid="admin_config_section_searching">
         <tuv xml:lang="en">
             <seg>Search</seg>
         </tuv>
@@ -53,25 +53,34 @@
         </tuv>
     </tu>
 
-    <tu tuid="admin_config_supportedLanguages">
+    <tu tuid="admin_config_section_languages">
         <tuv xml:lang="en">
-            <seg>Supported Languages</seg>
+            <seg>Languages</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Unterstützte Sprachen</seg>
+            <seg>Sprachen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_config_supportedLanguages">
+        <tuv xml:lang="en">
+            <seg>User Interface Languages</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Weboberfläche Sprachen</seg>
         </tuv>
     </tu>
 
     <tu tuid="admin_config_supportedLanguages_description">
         <tuv xml:lang="en">
-            <seg>Languages for the user interface. Select at least one.</seg>
+            <seg>Languages for the user interface. Select at least one (e.g. 'en').</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Sprachen für die Benutzeroberfläche. Mindestens eine auswählen.</seg>
+            <seg>Sprachen für die Benutzeroberfläche. Mindestens eine angeben (z.B. 'de').</seg>
         </tuv>
     </tu>
 
-    <tu tuid="admin_config_maxSearchResults">
+    <tu tuid="admin_config_searchengine.solr.parameterDefaults.rows">
       <tuv xml:lang="en">
         <seg>Default search results/page</seg>
       </tuv>
@@ -80,7 +89,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_config_maxSearchResults_description">
+    <tu tuid="admin_config_searchengine.solr.parameterDefaults.rows_description">
       <tuv xml:lang="en">
         <seg>Number of results that should be display on a single page.</seg>
       </tuv>
@@ -89,7 +98,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_config_seriesSortByTitle">
+    <tu tuid="admin_config_browsing.series.sortByTitle">
       <tuv xml:lang="en">
         <seg>Sort series by title</seg>
       </tuv>
@@ -98,7 +107,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_config_seriesSortByTitle_description">
+    <tu tuid="admin_config_browsing.series.sortByTitle_description">
       <tuv xml:lang="en">
         <seg>Activates alphabetical sorting of series in browsing list and publish form.</seg>
       </tuv>
