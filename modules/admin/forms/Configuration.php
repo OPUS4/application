@@ -148,12 +148,19 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
     {
         $group = $this->getDisplayGroup($section);
 
+        $translator = $this->getTranslator();
+        $sectionKey = self::LABEL_TRANSLATION_PREFIX . 'section_' . $section;
+
+        if (! $translator->isTranslated($sectionKey)) {
+            $sectionKey = ucfirst($section);
+        }
+
         if ($group === null) {
             $this->addDisplayGroup(
                 [$element],
                 $section,
                 [
-                    'legend'     => self::LABEL_TRANSLATION_PREFIX . 'section_' . $section,
+                    'legend'     => $sectionKey,
                     'decorators' => ['FormElements', 'Fieldset'],
                 ]
             );
