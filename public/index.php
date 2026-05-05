@@ -71,14 +71,6 @@ $localConfig = new Zend_Config_Ini(
 
 $config->merge($localConfig);
 
-// configuration file that is modified via application user interface
-if (is_readable(APPLICATION_PATH . '/application/configs/config.xml')) {
-    $onlineConfig = new Zend_Config_Xml(
-        APPLICATION_PATH . '/application/configs/config.xml'
-    );
-    $config->merge($onlineConfig);
-}
-
 // Create application, bootstrap, and run
 $application = new Zend_Application(APPLICATION_ENV, $config);
 

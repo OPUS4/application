@@ -25,44 +25,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Admin_ConfigController extends Application_Controller_Action
-{
-    public function indexAction()
-    {
-        $form = new Admin_Form_Configuration();
+require_once dirname(__FILE__) . '/../common/update.php';
 
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
+use Opus\Db2\Configuration;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Filesystem\Filesystem;
 
-            $form->populate($data);
+$output = new ConsoleOutput();
 
-            $result = $form->processPost($data, $data);
+$configPath = APPLICATION_PATH . '/application/configs/config.xml';
 
-            switch ($result) {
-                case Admin_Form_Configuration::RESULT_SAVE:
-                    if ($form->isValid($data)) {
-                        $config = new Zend_Config([], true);
-                        $form->updateModel($config); // TODO $config object is not needed
-                    } else {
-                        break;
-                    }
-                    // after saving fall through for same redirect as 'Cancel'
-                case Admin_Form_Configuration::RESULT_CANCEL:
-                    $this->_helper->Redirector->redirectTo('config', null, 'index', 'admin');
-                    break;
-                default:
-                    break;
-            }
-        } else {
-            $form->populateFromModel($this->getConfig());
-        }
+if (! file_exists($configPath)) {
+    exit();
+}
 
-        $this->_helper->viewRenderer->setNoRender(true);
+$output->writeln("Importing '{$configPath}' into database.");
 
-        echo $form;
+if (! is_readable($configPath)) {
+    $output->writeln('<error>File \'' . $configPath . '\' is not readable.</error>');
+    exit();
+}
+
+// Import options from config.xml
+$config         = new Zend_Config_Xml($configPath);
+$configDatabase = new Configuration();
+$configDatabase->import($config, true);
+
+// Show imported options
+$imported = $configDatabase->getConfig();
+if (count($imported) > 0) {
+    $options = $configDatabase->arr2ini($imported->toArray());
+    $output->writeln('Imported options:');
+    foreach ($options as $key => $value) {
+        $output->writeln('  ' . $key . ' = ' . $value);
     }
+}
+
+// Remove config.xml file
+$helper = new Application_Update_Helper();
+
+if ($helper->askYesNo("Delete '{$configPath}' file [Y/n]?", true)) {
+    $output->write("Removeing '{$configPath}' file ... ");
+    $filesystem = new Filesystem();
+    $filesystem->remove($configPath);
+    $output->writeln('done');
 }

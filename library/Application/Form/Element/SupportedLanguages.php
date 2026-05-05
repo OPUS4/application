@@ -116,7 +116,7 @@ class Application_Form_Element_SupportedLanguages extends Application_Form_Eleme
      */
     public function setValue($value)
     {
-        if (! is_array($value)) {
+        if (! is_array($value) && $value !== null) {
             $values = array_map('trim', explode(',', $value));
         } else {
             $values = $value;

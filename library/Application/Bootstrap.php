@@ -30,9 +30,11 @@
  */
 
 use Opus\App\Common\Configuration;
+use Opus\Common\Config;
 use Opus\Common\Log\LogService;
 use Opus\Common\Repository;
 use Opus\Db\DatabaseBootstrap;
+use Opus\Db2\Configuration as ConfigurationDatabase;
 use Opus\Search\Plugin\Index;
 
 /**
@@ -258,7 +260,7 @@ class Application_Bootstrap extends DatabaseBootstrap
      */
     protected function _initTranslation()
     {
-        $this->bootstrap(['Configuration', 'Session', 'Logging', 'ZendCache']);
+        $this->bootstrap(['Configuration', 'OnlineConfiguration', 'Session', 'Logging', 'ZendCache']);
         $logService = LogService::getInstance();
         $logger     = $logService->getLog('translation');
 
@@ -410,5 +412,16 @@ class Application_Bootstrap extends DatabaseBootstrap
 
         // TODO this is a dependency on a specific implementation (refactor to remove)
         $cache::setIndexPluginClass(Index::class);
+    }
+
+    protected function _initOnlineConfiguration()
+    {
+        $this->bootstrap('Database');
+
+        $configuration = new ConfigurationDatabase();
+        $onlineConfig  = $configuration->getConfig();
+
+        $config = Config::get();
+        $config->merge($onlineConfig);
     }
 }
