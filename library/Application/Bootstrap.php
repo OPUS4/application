@@ -260,7 +260,7 @@ class Application_Bootstrap extends DatabaseBootstrap
      */
     protected function _initTranslation()
     {
-        $this->bootstrap(['Configuration', 'Session', 'Logging', 'ZendCache']);
+        $this->bootstrap(['Configuration', 'OnlineConfiguration', 'Session', 'Logging', 'ZendCache']);
         $logService = LogService::getInstance();
         $logger     = $logService->getLog('translation');
 

@@ -32,7 +32,7 @@
     "opus4-repo/opus4-job": "^4.9",
     "opus4-repo/opus4-security": "^4.9",
     "opus4-repo/opus4-sword": "^4.9",
-    "opus4-repo/opus4-app-common": "^4.9",
+    "opus4-repo/opus4-app-common": "dev-main as 4.10",
     "opus4-repo/opus4-deepgreen": "^4.9",
     "components/jquery": "3.4.*",
     "components/jqueryui": "1.12.*",
