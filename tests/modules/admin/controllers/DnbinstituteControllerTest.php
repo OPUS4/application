@@ -342,7 +342,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase
         $testRole = UserRole::new();
         $testRole->setName('TestRole');
         $testRole->appendAccessModule('admin');
-        $testRole->appendAccessModule('resource_languages');
+        $testRole->appendAccessModule('resource_collections');
         $this->roleId = $testRole->store();
 
         $userAccount = Account::new();

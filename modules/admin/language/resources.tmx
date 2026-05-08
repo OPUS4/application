@@ -34,15 +34,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="acl_resource_languages">
-      <tuv xml:lang="en">
-        <seg>Manage languages</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sprachen verwalten</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="acl_resource_licences">
       <tuv xml:lang="en">
         <seg>Manage licences</seg>
