@@ -92,11 +92,11 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
     {
         $config = Configuration::getInstance()->getConfig();
 
-        if (! isset($config->languages->active)) {
+        if (! isset($config->i18n->languages->active)) {
             throw new Exception('no active languages configured');
         }
 
-        $optionValue = $config->languages->active;
+        $optionValue = $config->i18n->languages->active;
 
         if (strlen(trim($optionValue)) > 0) {
             // Use configured languages
@@ -111,8 +111,8 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
             return ! empty($lang);
         });
 
-        if (isset($config->languages->local)) {
-            $localLanguages = $config->languages->local->toArray();
+        if (isset($config->i18n->languages->local)) {
+            $localLanguages = $config->i18n->languages->local->toArray();
             $languages      = new Languages();
             try {
                 $languages->addLanguages($localLanguages);
@@ -143,7 +143,7 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
             $languages[$langId] = $translation;
         }
 
-        if (isset($config->languages->sortByName) && filter_var($config->languages->sortByName, FILTER_VALIDATE_BOOLEAN)) {
+        if (isset($config->i18n->languages->sortByName) && filter_var($config->i18n->languages->sortByName, FILTER_VALIDATE_BOOLEAN)) {
             asort($languages);
         }
 
