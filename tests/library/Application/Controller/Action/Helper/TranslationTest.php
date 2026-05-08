@@ -35,7 +35,6 @@ use Opus\Common\Note;
 use Opus\Common\Person;
 use Opus\Document;
 use Opus\Enrichment;
-use Opus\I18n\Languages;
 use Opus\Model\Dependent\Link\DocumentPerson;
 use Opus\Patent;
 use Opus\Reference;
