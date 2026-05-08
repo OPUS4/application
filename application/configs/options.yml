@@ -1,0 +1,9 @@
+searchengine.solr.parameterDefaults.rows:
+  type: int
+  section: searching
+  options:
+    min: 10
+
+browsing.series.sortByTitle:
+  type: bool
+  section: browsing

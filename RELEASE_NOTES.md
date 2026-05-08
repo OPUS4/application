@@ -2,6 +2,24 @@
 
 ## Release 4.10 - 2026-05-12
 
+### Update
+
+Das Updateskript muss ausgeführt werden, da es Änderungen an der Datenbank und
+zusätzliche Updateschritte gibt. 
+
+### Konfiguration
+
+Bislang sind nur wenige Optionen in der Administration editierbar. Diese wurde
+bisher in `application/configs/config.xml` gespeichert. Dafür gibt es jetzt eine
+Tabelle in der Datenbank. Beim Update wird der Inhalt von `config.xml` in die
+Datenbank übertragen und die Datei dann (optional) gelöscht. 
+
+Die editierbaren Optionen werden nun in `application/configs/options.yml`
+definiert. Generell kann die Liste lokal erweitert werden. Im Standard werden
+im Laufe der Zeit mehr Optionen in der Weboberfläche verfügbar gemacht werden.
+
+TODO Link to documentation
+
 ### RSS-Links
 
 RSS-Links können nun ausgeblendet werden. Sie werden automatisch ausgeblendet,

@@ -38,54 +38,41 @@ class Admin_Model_Options extends Application_Model_Abstract
     /**
      * Path to options configuration.
      */
-    public const OPTIONS_CONFIG_FILE = '/modules/admin/models/options.json';
+    public const OPTIONS_CONFIG_FILE = '/application/configs/options.yml';
 
     /** @var array Option objects. */
     private $options;
 
-    /** @var Zend_Config */
+    /** @var array */
     private $config;
 
-    /**
-     * @param Zend_Config|null $config
-     *
-     * TODO allow providing Zend_Config object
-     */
-    public function __construct($config = null)
+    public function __construct(?array $config = null)
     {
-        if ($config !== null && is_array($config)) {
-            $this->config = new Zend_Config($config);
-        }
+        $this->config = $config;
     }
 
     /**
      * Returns options configuration from file.
-     *
-     * @return array
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         if ($this->options === null) {
             $this->options = [];
-            $config        = $this->getConfig();
-            $options       = $config->toArray();
 
-            foreach ($options as $name => $parameters) {
-                $this->options[$name] = new Admin_Model_Option($name, $parameters);
+            $config = $this->getConfig();
+
+            foreach ($config as $optionKey => $parameters) {
+                $this->options[$optionKey] = new Admin_Model_Option($optionKey, $parameters);
             }
         }
 
         return $this->options;
     }
 
-    /**
-     * @return Zend_Config
-     * @throws Zend_Config_Exception
-     */
-    public function getConfig()
+    public function getConfig(): array
     {
         if ($this->config === null) {
-            $this->config = new Zend_Config_Json(APPLICATION_PATH . self::OPTIONS_CONFIG_FILE);
+            $this->config = yaml_parse_file(APPLICATION_PATH . self::OPTIONS_CONFIG_FILE);
         }
 
         return $this->config;

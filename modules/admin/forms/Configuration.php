@@ -33,25 +33,20 @@ use Opus\App\Common\Configuration;
 
 /**
  * Form for editing selected OPUS 4 configuration options.
- *
- * TODO Application_Form_Abstract should be enough (not ID element needed)
  */
 class Admin_Form_Configuration extends Application_Form_Model_Abstract
 {
     /**
      * Prefix for translation keys of configuration options.
      *
-     * TODO wird auf von Admin_Model_Option verwendet
+     * TODO wird auch von Admin_Model_Option verwendet
      */
     public const LABEL_TRANSLATION_PREFIX = 'admin_config_';
 
     /** @var array Configured options for form. */
     private $options;
 
-    /**
-     * @param null|Zend_Config $config
-     */
-    public function __construct($config = null)
+    public function __construct(?array $config = null)
     {
         if ($config !== null) {
             $options       = new Admin_Model_Options($config);
@@ -73,19 +68,27 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
             $this->options = $options->getOptions();
         }
 
-        foreach ($this->options as $name => $option) {
+        foreach ($this->options as $option) {
             $section = $option->getSection();
+
+            $elementOptions = $option->getOptions();
+
+            $translator = $this->getTranslator();
+
+            if ($translator->isTranslated($option->getDescription())) {
+                $elementOptions['description'] = $option->getDescription();
+            }
+
+            if ($translator->isTranslated($option->getLabel())) {
+                $elementOptions['label'] = $option->getLabel();
+            } else {
+                $elementOptions['label'] = $option->getKey();
+            }
 
             $element = $this->createElement(
                 $option->getElementType(),
-                $name,
-                array_merge(
-                    [
-                        'label'       => $option->getLabel(),
-                        'description' => $option->getDescription(),
-                    ],
-                    $option->getOptions()
-                )
+                $option->getElementId(),
+                $elementOptions
             );
 
             $this->addElement($element);
@@ -95,6 +98,8 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
         $this->removeElement(self::ELEMENT_MODEL_ID);
 
         $this->setAttrib('class', 'admin_config');
+
+        $this->sortSections();
     }
 
     /**
@@ -104,9 +109,9 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
      */
     public function populateFromModel($config)
     {
-        foreach ($this->options as $name => $option) {
+        foreach ($this->options as $option) {
             $value = Configuration::getValueFromConfig($config, $option->getKey());
-            $this->getElement($name)->setValue($value);
+            $this->getElement($option->getElementId())->setValue($value);
         }
     }
 
@@ -117,15 +122,18 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
      */
     public function updateModel($config)
     {
-        foreach ($this->options as $name => $option) {
-            $value = $this->getElement($name)->getValue();
+        foreach ($this->options as $option) {
+            $value = $this->getElement($option->getElementId())->getValue();
 
             // TODO move into Admin_Model_Option?
             if (is_array($value)) {
                 $value = implode(',', $value);
             }
+            if (strlen(trim($value)) === 0) {
+                $value = null;
+            }
 
-            Configuration::setValueInConfig($config, $option->getKey(), $value);
+            $option->setValue($value);
         }
     }
 
@@ -134,25 +142,50 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
      *
      * If necessary a new display group is created.
      *
-     * @param Zend_Form_Element $element Form element
-     * @param string            $section Name of section
      * @throws Zend_Form_Exception
      */
-    public function addElementToSection($element, $section)
+    public function addElementToSection(Zend_Form_Element $element, string $section): void
     {
         $group = $this->getDisplayGroup($section);
+
+        $translator = $this->getTranslator();
+        $sectionKey = self::LABEL_TRANSLATION_PREFIX . 'section_' . $section;
+
+        if (! $translator->isTranslated($sectionKey)) {
+            $sectionKey = ucfirst($section);
+        }
 
         if ($group === null) {
             $this->addDisplayGroup(
                 [$element],
                 $section,
                 [
-                    'legend'     => self::LABEL_TRANSLATION_PREFIX . 'section_' . $section,
+                    'legend'     => $sectionKey,
                     'decorators' => ['FormElements', 'Fieldset'],
                 ]
             );
         } else {
             $group->addElement($element);
         }
+    }
+
+    public function sortSections(): void
+    {
+        $groups = $this->getDisplayGroups();
+
+        $names = array_keys($groups);
+        unset($names['actions']);
+
+        sort($names);
+
+        $sorted = [];
+
+        foreach ($names as $section) {
+            $sorted[$section] = $groups[$section];
+        }
+
+        $sorted['actions'] = $groups['actions'];
+
+        $this->setDisplayGroups($sorted);
     }
 }

@@ -174,7 +174,7 @@ do
   fi
 done
 
-php "$BASEDIR/scripts/change-password.php" admin "$ADMIN_PWD"
+php "$BASEDIR/bin/opus4" account:setpwd admin -p "$ADMIN_PWD"
 
 #
 # Configure Solr connection
