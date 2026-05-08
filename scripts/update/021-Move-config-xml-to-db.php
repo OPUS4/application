@@ -53,7 +53,7 @@ if (! is_readable($configPath)) {
 // Import options from config.xml
 $config         = new Zend_Config_Xml($configPath);
 $configDatabase = new Configuration();
-$configDatabase->import($config, true);
+$configDatabase->import($config, false); // No reset because `MigrateLanguages` schema update creates options
 
 // Show imported options
 $imported = $configDatabase->getConfig();
