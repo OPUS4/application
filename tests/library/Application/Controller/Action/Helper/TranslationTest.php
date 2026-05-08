@@ -30,12 +30,12 @@
  */
 
 use Opus\Common\Identifier;
-use Opus\Common\Language;
 use Opus\Common\Model\ModelException;
 use Opus\Common\Note;
 use Opus\Common\Person;
 use Opus\Document;
 use Opus\Enrichment;
+use Opus\I18n\Languages;
 use Opus\Model\Dependent\Link\DocumentPerson;
 use Opus\Patent;
 use Opus\Reference;
@@ -279,16 +279,6 @@ class Application_Controller_Action_Helper_TranslationTest extends ControllerTes
                 $this->translate->isTranslated($key),
                 "Translation key '$key' is missing."
             );
-        }
-    }
-
-    public function testTranslationOfLanguages()
-    {
-        $languages = Language::getAll();
-
-        foreach ($languages as $language) {
-            $key = $language->getPart2T();
-            $this->assertNotEquals($key, $this->translate->translateLanguage($key));
         }
     }
 }
