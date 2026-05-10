@@ -7,3 +7,13 @@ searchengine.solr.parameterDefaults.rows:
 browsing.series.sortByTitle:
   type: bool
   section: browsing
+
+i18n.languages.active:
+  type: string
+  section: languages
+  options:
+    size: 60
+
+i18n.languages.sortByName:
+  type: bool
+  section: languages

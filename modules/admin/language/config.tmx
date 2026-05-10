@@ -49,7 +49,7 @@
             <seg>Browsing</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Browsing</seg>
+            <seg>Browsen</seg>
         </tuv>
     </tu>
 
@@ -113,6 +113,33 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Aktiviert die alphabetische Sortierung der Schriftenreihen beim Browsing und im Publish-Formular.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_config_i18n.languages.active">
+      <tuv xml:lang="en">
+        <seg>Selectable languages</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Auswählbare Sprachen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_config_i18n.languages.active_description">
+      <tuv xml:lang="en">
+        <seg>Languages selectable for a document (ISO 639).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprachen, die für ein Dokument auswählbar sind (ISO 639).</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_config_i18n.languages.sortByName">
+      <tuv xml:lang="en">
+        <seg>Sort alphabetical</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alphabetisch sortieren</seg>
       </tuv>
     </tu>
 
