@@ -57,7 +57,6 @@ class Application_Security_AccessTest extends ControllerTestCase
         $this->assertNotQuery('//a[@href="/review"]');
         $this->assertNotQuery('//a[@href="/admin/collectionroles"]');
         $this->assertNotQuery('//a[@href="/admin/series"]');
-        $this->assertNotQuery('//a[@href="/admin/language"]');
         $this->assertNotQuery('//a[@href="/admin/index/security"]');
         $this->assertNotQuery('//a[@href="/admin/dnbinstitute"]');
     }

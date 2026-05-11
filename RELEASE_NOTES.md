@@ -2,10 +2,31 @@
 
 ## Release 4.10 - 2026-05-12
 
-### Update
+Der neue Release bringt insbesondere Veränderungen bei der Sprachverwaltung und
+den Optionen, die in der Administration editierbar sind.
 
-Das Updateskript muss ausgeführt werden, da es Änderungen an der Datenbank und
-zusätzliche Updateschritte gibt. 
+### Update auf OPUS 4.10
+
+Das Updateskript, `bin/update.sh`, muss ausgeführt werden, da es Änderungen an 
+der Datenbank und weitere Updateschritte gibt. 
+
+- Tabelle `configuration` wird angelegt
+- Tabelle `languages` wird entfernt
+- Konfiguration in `config.xml` with in die Datenbank übertragen und die
+  Datei optional gelöscht
+- Aktive Sprachen werden in neue Konfigurationsoptionen übernommen
+
+### Sprachverwaltung
+
+Die Sprachverwaltung wurde aus der Administration entfernt. Dafür werden jetzt
+485 ISO 639 Sprachen im Standard unterstützt. Welche Sprachen in den Formularen
+zur Auswahl stehen sollen, lässt sich über Optionen einstellen. 
+
+Mehr dazu findet sich im OPUS 4 Handbuch unter
+https://www.opus-repository.org/userdoc/admin/languages.html
+
+Beim Update werden die aktiven Sprachen automatisch in die neue Konfiguration
+übernommen. 
 
 ### Konfiguration
 
@@ -17,8 +38,6 @@ Datenbank übertragen und die Datei dann (optional) gelöscht.
 Die editierbaren Optionen werden nun in `application/configs/options.yml`
 definiert. Generell kann die Liste lokal erweitert werden. Im Standard werden
 im Laufe der Zeit mehr Optionen in der Weboberfläche verfügbar gemacht werden.
-
-TODO Link to documentation
 
 ### RSS-Links
 

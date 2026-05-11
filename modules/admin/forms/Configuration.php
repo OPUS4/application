@@ -129,7 +129,7 @@ class Admin_Form_Configuration extends Application_Form_Model_Abstract
             if (is_array($value)) {
                 $value = implode(',', $value);
             }
-            if (strlen(trim($value)) === 0) {
+            if ($value !== null && strlen(trim($value)) === 0) {
                 $value = null;
             }
 

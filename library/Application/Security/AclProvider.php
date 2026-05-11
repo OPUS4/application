@@ -65,7 +65,6 @@ class Application_Security_AclProvider
             'licences',
             'collections',
             'series',
-            'languages',
             'statistics',
             'institutions',
             'enrichments',

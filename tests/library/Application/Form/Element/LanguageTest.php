@@ -95,6 +95,13 @@ class Application_Form_Element_LanguageTest extends FormElementTestCase
         $this->assertTrue($element->isValid('deu'));
     }
 
+    public function testAutoMapValueToLanguageId()
+    {
+        $element = $this->getElement();
+        $element->setValue('ger');
+        $this->assertEquals('deu', $element->getValue());
+    }
+
     public function testUnknownLanguage()
     {
         $this->markTestIncomplete();

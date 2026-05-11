@@ -92,7 +92,6 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase
             $this->assertElement('//a[@href="/admin/index/security"]', $this->acls['module_admin']);
             $this->assertElement('//a[@href="/admin/collectionroles"]', $this->acls['module_admin']);
             $this->assertElement('//a[@href="/admin/series"]', $this->acls['module_admin']);
-            $this->assertElement('//a[@href="/admin/language"]', $this->acls['module_admin']);
             $this->assertElement('//a[@href="/admin/dnbinstitute"]', $this->acls['module_admin']);
             $this->assertElement('//a[@href="/admin/index/info"]', $this->acls['module_admin']);
             $this->assertElement('//a[@href="/admin/index/setup"]', $this->acls['module_admin']);

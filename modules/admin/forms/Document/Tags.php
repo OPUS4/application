@@ -30,7 +30,7 @@
  */
 
 use Opus\Common\DocumentInterface;
-use Opus\Common\Language;
+use Opus\I18m\Languages;
 
 /**
  * Unterformular fuer GND Subjects im Metadaten-Formular.
@@ -186,7 +186,7 @@ class Admin_Form_Document_Tags extends Admin_Form_AbstractDocumentSubForm
             $lang = $data[self::ELEMENT_LANGUAGE];
             if ($lang === null) {
                 $translate = Application_Translate::getInstance();
-                $lang      = Language::getPart2tForPart1($translate->getLocale());
+                $lang      = Languages::getPart2t($translate->getLocale());
             }
             $this->addMultipleSubjectsFromString($data[self::ELEMENT_SUBJECTS], $lang);
             return Admin_Form_Document::RESULT_SHOW;

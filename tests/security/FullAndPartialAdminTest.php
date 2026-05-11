@@ -63,7 +63,6 @@ class FullAndPartialAdminTest extends ControllerTestCase
         $this->assertQuery('//a[@href="/admin/index/security"]');
         $this->assertQuery('//a[@href="/admin/collectionroles"]');
         $this->assertQuery('//a[@href="/admin/series"]');
-        $this->assertQuery('//a[@href="/admin/language"]');
         $this->assertQuery('//a[@href="/admin/dnbinstitute"]');
         $this->assertQuery('//a[@href="/admin/index/info"]');
         $this->assertQuery('//a[@href="/admin/index/setup"]');
