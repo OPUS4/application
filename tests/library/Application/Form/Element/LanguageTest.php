@@ -104,6 +104,11 @@ class Application_Form_Element_LanguageTest extends FormElementTestCase
 
     public function testUnknownLanguage()
     {
-        $this->markTestIncomplete();
+        $language = $this->getElement();
+        $langCode = 'cmn';
+
+        $language->setValue($langCode);
+        $this->assertEquals($langCode, $language->getValue());
+        $this->assertTrue($language->isValid($langCode));
     }
 }
