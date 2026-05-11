@@ -1,3 +1,28 @@
+#
+# Defines options available in administration user interface (Settings->Options).
+#
+# The 'type' defines how the option appears in the form. Supported types are
+# - string (default)
+# - int
+# - bool
+#
+# The 'section' allows grouping options. The names are arbitrary and are used as section
+# labels if no translations for the section exist.
+#
+# 'options' can be used to pass additional options to the form element, for
+# instance to increase the size.
+#
+# The translation keys for options use the following patterns:
+# - admin_config_section_SECTIONNAME
+# - admin_config_OPTIONKEY
+# - admin_config_OPTIONKEY_description
+#
+# For instance:
+# - admin_config_section_languages
+# - admin_config_i18n.languages.active
+# - admin_config_i18n.languages.active_description
+#
+
 searchengine.solr.parameterDefaults.rows:
   type: int
   section: searching
