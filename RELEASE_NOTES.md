@@ -3,7 +3,8 @@
 ## Release 4.10 - 2026-05-12
 
 Der neue Release bringt insbesondere Veränderungen bei der Sprachverwaltung und
-den Optionen, die in der Administration editierbar sind.
+den Optionen, die in der Administration editierbar sind. Weiterhin gab es eine
+Reihe kleinerer Fehlerbehebungen.
 
 ### Update auf OPUS 4.10
 
@@ -45,6 +46,21 @@ RSS-Links können nun ausgeblendet werden. Sie werden automatisch ausgeblendet,
 wenn ein User keinen Zugriff auf das RSS-Modul hat. 
 
     rss.showLinks = 0
+
+### DeepGreen Client
+
+Es gibt zwei neue Optionen, die steuern wie beim Import von Dokumenten mit 
+nicht erlaubten Dateitypen umgegangen werden soll.
+
+    deepgreen.import.importAllFiles = 0
+    deepgreen.import.importSupportedFiles = 1
+
+Wenn **importAllFiles** aktiviert ist, werden alle Dateien importiert. Sollen 
+nur die in der OPUS 4 Konfiguration erlaubt Dateitypen importiert werden, kann
+**importSupportedFiles** aktiviert werden. Sind beide Optionen deaktiviert, 
+werden Dokumente mit nicht erlaubten Dateitypen nicht importiert. Es geplant
+in diesen Fällen in Zukunft Benachrichtigungen in der Administration anzuzeigen
+und die Konfigurationsmöglichkeiten weiter auszubauen.
 
 --
 
