@@ -90,7 +90,6 @@ abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase
         $this->assertElement('//a[@href="/admin/index/security"]', false);
         $this->assertElement('//a[@href="/admin/collectionroles"]', false);
         $this->assertElement('//a[@href="/admin/series"]', false);
-        $this->assertElement('//a[@href="/admin/language"]', false);
         $this->assertElement('//a[@href="/admin/dnbinstitute"]', false);
         $this->assertElement('//a[@href="/admin/index/setup"]', $this->acls['module_setup']);
         $this->assertElement('//a[@href="/review"]', false);

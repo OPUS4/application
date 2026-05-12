@@ -25,56 +25,61 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-/**
- * TODO refactor this class (cleanup the design)
- * TODO cleanup dependency on module/admin
- */
-class Admin_Model_Options extends Application_Model_Abstract
+use Opus\Common\ConfigTrait;
+use Opus\Common\Security\Realm;
+
+class Application_View_Helper_RssLink extends Application_View_Helper_Abstract
 {
-    /**
-     * Path to options configuration.
-     */
-    public const OPTIONS_CONFIG_FILE = '/application/configs/options.yml';
+    use ConfigTrait;
 
-    /** @var array Option objects. */
-    private $options;
-
-    /** @var array */
-    private $config;
-
-    public function __construct(?array $config = null)
+    public function rssLink(string|array|null $options = null): string
     {
-        $this->config = $config;
-    }
+        if (! $this->isShowRssLinks() || ! $this->isRssAllowed()) {
+            return '';
+        }
 
-    /**
-     * Returns options configuration from file.
-     */
-    public function getOptions(): array
-    {
-        if ($this->options === null) {
-            $this->options = [];
+        $view = $this->view;
 
-            $config = $this->getConfig();
+        if (is_string($options)) {
+            $rssUrl = $options;
+        } else {
+            $basicOptions = [
+                'module'     => 'rss',
+                'controller' => 'index',
+                'action'     => 'index',
+            ];
 
-            foreach ($config as $optionKey => $parameters) {
-                $this->options[$optionKey] = new Admin_Model_Option($optionKey, $parameters);
+            if (is_array($options)) {
+                $rssUrl = $view->url(array_merge($basicOptions, $options), null, true);
+            } else {
+                $rssUrl = $view->url($basicOptions, null, true);
             }
         }
 
-        return $this->options;
+        $imagePath = $view->layoutPath() . '/img/feed_small.png';
+        $alt       = $view->translate('rss_icon');
+        $title     = $view->translate('rss_title');
+
+        $output  = "<a href=\"{$rssUrl}\" class=\"rss\" type=\"application/rss+xml\">" . PHP_EOL;
+        $output .= "  <img src=\"{$imagePath}\" width=\"12\" height=\"12\" alt=\"{$alt}\" title=\"{$title}\" />" . PHP_EOL;
+        $output .= "</a>";
+
+        return $output;
     }
 
-    public function getConfig(): array
+    protected function isShowRssLinks(): bool
     {
-        if ($this->config === null) {
-            $this->config = yaml_parse_file(APPLICATION_PATH . self::OPTIONS_CONFIG_FILE);
-        }
+        $config = $this->getConfig();
+        return isset($config->rss->showLinks) && filter_var($config->rss->showLinks, FILTER_VALIDATE_BOOLEAN);
+    }
 
-        return $this->config;
+    protected function isRssAllowed(): bool
+    {
+        $realm = Realm::getInstance();
+        return $realm->checkModule('rss');
     }
 }

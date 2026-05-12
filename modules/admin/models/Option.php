@@ -29,58 +29,53 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
+use Opus\Db2\Configuration;
+
 class Admin_Model_Option extends Application_Model_Abstract
 {
     /** @var string Name of configuration option. */
-    private $name;
+    private $key;
 
     /** @var array Parameters for option. */
     private $config;
 
-    /**
-     * @param string $name Name of option
-     * @param array  $config Parameters for option
-     */
-    public function __construct($name, $config)
+    public function __construct(string $key, array $config)
     {
-        $this->name   = $name;
+        $this->key    = $key;
         $this->config = $config;
     }
 
     /**
-     * @return string
+     * Returns option key.
      */
-    public function getName()
+    public function getKey(): string
     {
-        return $this->name;
+        return $this->key;
     }
 
     /**
-     * @return string
+     * Returns translation key for option label.
      */
-    public function getKey()
+    public function getLabel(): string
     {
-        return $this->config['key'];
-    }
-
-    /**
-     * Returns label name for option.
-     *
-     * @return string
-     */
-    public function getLabel()
-    {
-        return Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . $this->name;
+        return Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . $this->key;
     }
 
     /**
      * Returns translation key for option description.
-     *
-     * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
-        return Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . $this->name . '_description';
+        return Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . $this->key . '_description';
+    }
+
+    public function getType(): string
+    {
+        if (isset($this->config['type'])) {
+            return $this->config['type'];
+        }
+
+        return 'text';
     }
 
     /**
@@ -90,13 +85,27 @@ class Admin_Model_Option extends Application_Model_Abstract
      */
     public function getElementType()
     {
-        if (isset($this->config['type'])) {
-            $type = $this->config['type'];
-        } else {
+        $type = $this->getType();
+
+        if (null === $type) {
             $type = 'text';
         }
 
-        return $type;
+        switch ($this->getType()) {
+            case 'int':
+                return 'number';
+            case 'bool':
+                return 'checkbox';
+            case 'string':
+                return 'text';
+            default:
+                return $type;
+        }
+    }
+
+    public function getElementId(): string
+    {
+        return str_replace('.', '_', $this->getKey());
     }
 
     /**
@@ -127,5 +136,18 @@ class Admin_Model_Option extends Application_Model_Abstract
         } else {
             return [];
         }
+    }
+
+    public function getValue(): string
+    {
+        $configuration = new Configuration();
+        return $configuration->getOption($this->getKey());
+    }
+
+    public function setValue(?string $value): self
+    {
+        $configuration = new Configuration();
+        $configuration->setOption($this->getKey(), $value);
+        return $this;
     }
 }

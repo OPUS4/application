@@ -364,50 +364,6 @@
                     </pages>
                 </licence>
 
-                <languages>
-                    <type>mvc</type>
-                    <label>admin_title_languages</label>
-                    <description>admin_title_languages_description</description>
-                    <group>group-cafelatte</group>
-                    <module>admin</module>
-                    <controller>language</controller>
-                    <action>index</action>
-                    <resource>languages</resource>
-                    <pages>
-                        <show>
-                            <type>mvc</type>
-                            <label>admin_language_show</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>show</action>
-                        </show>
-
-                        <new>
-                            <type>mvc</type>
-                            <label>admin_language_new</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>new</action>
-                        </new>
-
-                        <edit>
-                            <type>mvc</type>
-                            <label>admin_language_edit</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>edit</action>
-                        </edit>
-
-                        <delete>
-                            <type>mvc</type>
-                            <label>admin_language_delete</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>delete</action>
-                        </delete>
-                    </pages>
-                </languages>
-
                 <dnbInstitute>
                     <type>mvc</type>
                     <label>admin_title_dnbinstitute</label>

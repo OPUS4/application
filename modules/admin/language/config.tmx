@@ -26,7 +26,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="admin_config_section_searchopt">
+    <tu tuid="admin_config_section_searching">
         <tuv xml:lang="en">
             <seg>Search</seg>
         </tuv>
@@ -49,29 +49,38 @@
             <seg>Browsing</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Browsing</seg>
+            <seg>Browsen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_config_section_languages">
+        <tuv xml:lang="en">
+            <seg>Languages</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sprachen</seg>
         </tuv>
     </tu>
 
     <tu tuid="admin_config_supportedLanguages">
         <tuv xml:lang="en">
-            <seg>Supported Languages</seg>
+            <seg>User Interface Languages</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Unterstützte Sprachen</seg>
+            <seg>Weboberfläche Sprachen</seg>
         </tuv>
     </tu>
 
     <tu tuid="admin_config_supportedLanguages_description">
         <tuv xml:lang="en">
-            <seg>Languages for the user interface. Select at least one.</seg>
+            <seg>Languages for the user interface. Select at least one (e.g. 'en').</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Sprachen für die Benutzeroberfläche. Mindestens eine auswählen.</seg>
+            <seg>Sprachen für die Benutzeroberfläche. Mindestens eine angeben (z.B. 'de').</seg>
         </tuv>
     </tu>
 
-    <tu tuid="admin_config_maxSearchResults">
+    <tu tuid="admin_config_searchengine.solr.parameterDefaults.rows">
       <tuv xml:lang="en">
         <seg>Default search results/page</seg>
       </tuv>
@@ -80,7 +89,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_config_maxSearchResults_description">
+    <tu tuid="admin_config_searchengine.solr.parameterDefaults.rows_description">
       <tuv xml:lang="en">
         <seg>Number of results that should be display on a single page.</seg>
       </tuv>
@@ -89,7 +98,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_config_seriesSortByTitle">
+    <tu tuid="admin_config_browsing.series.sortByTitle">
       <tuv xml:lang="en">
         <seg>Sort series by title</seg>
       </tuv>
@@ -98,12 +107,39 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_config_seriesSortByTitle_description">
+    <tu tuid="admin_config_browsing.series.sortByTitle_description">
       <tuv xml:lang="en">
         <seg>Activates alphabetical sorting of series in browsing list and publish form.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Aktiviert die alphabetische Sortierung der Schriftenreihen beim Browsing und im Publish-Formular.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_config_i18n.languages.active">
+      <tuv xml:lang="en">
+        <seg>Selectable languages</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Auswählbare Sprachen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_config_i18n.languages.active_description">
+      <tuv xml:lang="en">
+        <seg>Languages selectable for a document (ISO 639).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprachen, die für ein Dokument auswählbar sind (ISO 639).</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_config_i18n.languages.sortByName">
+      <tuv xml:lang="en">
+        <seg>Sort alphabetical</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alphabetisch sortieren</seg>
       </tuv>
     </tu>
 

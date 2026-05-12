@@ -316,9 +316,11 @@
     </target>
 
     <target name="demo-reset-password">
-        <exec executable="php" dir="${basedir}/scripts" failonerror="true">
-            <arg line="change-password.php" />
+        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+            <arg line="opus4" />
+            <arg line="account:setpwd" />
             <arg line="admin" />
+            <arg line="-p" />
             <arg line="${adminPassword}" />
         </exec>
     </target>

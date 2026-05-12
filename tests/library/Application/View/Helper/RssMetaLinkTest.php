@@ -25,55 +25,71 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Element_LanguageTypeTest extends FormElementTestCase
-{
-    /** @var string */
-    protected $additionalResources = 'translation';
+use Opus\Common\UserRole;
 
+/**
+ * @covers Application_View_Helper_RssMetaLink
+ */
+class Application_View_Helper_RssMetaLinkTest extends ControllerTestCase
+{
     /** @var string[] */
-    private $keys;
+    protected $additionalResources = ['view', 'database'];
+
+    /** @var Application_View_Helper_RssMetaLink */
+    private $helper;
 
     public function setUp(): void
     {
-        $this->keys                   = ['Null', 'A', 'C', 'E', 'H', 'L', 'S'];
-        $this->formElementClass       = 'Application_Form_Element_LanguageType';
-        $this->expectedDecorators     = [
-            'ViewHelper',
-            'Errors',
-            'Description',
-            'ElementHtmlTag',
-            'LabelNotEmpty',
-            'dataWrapper',
-            'ElementHint',
-        ];
-        $this->expectedDecoratorCount = count($this->expectedDecorators);
-        $this->staticViewHelper       = 'viewFormSelect';
         parent::setUp();
+
+        $this->helper = new Application_View_Helper_RssMetaLink();
+        $this->helper->setView($this->getView());
     }
 
-    public function testOptions()
+    public function testRssMetaLink()
     {
-        $element = $this->getElement();
+        $output = $this->helper->rssMetaLink();
 
-        $options = $element->getMultiOptions();
+        $this->assertEquals('', $output);
 
-        $this->assertEquals(count($this->keys), count($options));
+        $view = $this->getView();
 
-        foreach ($this->keys as $key) {
-            $this->assertTrue(array_key_exists($key, $options), "Key '$key' is missing.");
-        }
+        $links = $view->headLink()->toString();
+
+        $this->assertEquals(
+            '<link href="http:///rss/index/index" rel="alternate" type="application/rss+xml" />',
+            $links
+        );
     }
 
-    public function testOptionsTranslated()
+    public function testRssMetaLinkDisabled()
     {
-        $translator = Application_Translate::getInstance();
+        $this->adjustConfiguration([
+            'rss' => ['showLinks' => false],
+        ]);
 
-        foreach ($this->keys as $key) {
-            $this->assertTrue($translator->isTranslated('Opus_Language_Type_Value_' . $key));
-        }
+        $this->helper->rssMetaLink();
+
+        $this->assertEquals('', $this->getView()->headLink()->toString());
+    }
+
+    public function testRssMetaLinkNoAccess()
+    {
+        $this->enableSecurity();
+
+        $guest = UserRole::fetchByName('guest');
+        $guest->removeAccessModule('rss');
+        $guest->store();
+
+        $this->helper->rssMetaLink();
+
+        $guest->appendAccessModule('rss');
+        $guest->store();
+
+        $this->assertEquals('', $this->getView()->headLink()->toString());
     }
 }

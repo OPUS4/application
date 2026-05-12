@@ -29,8 +29,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\App\Common\Configuration;
-
 /**
  * TODO rename controller to TranslationController
  * TODO sorting using table header
@@ -494,8 +492,7 @@ class Setup_LanguageController extends Application_Controller_Action
         // TODO provide form with options config
 
         $form = new Admin_Form_Configuration([
-            'supportedLanguages' => [
-                'key'     => 'activatedLanguages',
+            'activatedLanguages' => [
                 'type'    => 'supportedLanguages',
                 'section' => 'general',
             ],
@@ -513,7 +510,6 @@ class Setup_LanguageController extends Application_Controller_Action
                     if ($form->isValid($data)) {
                         $config = new Zend_Config([], true);
                         $form->updateModel($config);
-                        Configuration::save($config);
                     } else {
                         break;
                     }
@@ -529,7 +525,7 @@ class Setup_LanguageController extends Application_Controller_Action
 
             $form->populateFromModel($config);
 
-            $element = $form->getElement('supportedLanguages');
+            $element = $form->getElement('activatedLanguages');
             if (! isset($config->activatedLanguages)) {
                 $element->setValue($config->supportedLanguages);
             }

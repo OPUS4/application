@@ -31,13 +31,7 @@
 
 ?>
 
-<?php
-    $this->headLink([
-        'rel'  => 'alternate',
-        'type' => 'application/rss+xml',
-        'href' => $this->serverUrl() . $this->baseUrl() . '/rss/index/index',
-    ]);
-    ?>
+<?php $this->rssMetaLink() ?>
 
 <?PHP $this->title = 'home_index_index_pagetitle' ?>
 

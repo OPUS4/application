@@ -431,7 +431,6 @@ class Publish_Model_Validation
     {
         $languages = $this->getLanguages();
         if (isset($languages) || count($languages) >= 1) {
-            asort($languages);
             return $languages;
         }
         return null;

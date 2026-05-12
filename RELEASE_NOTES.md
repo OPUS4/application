@@ -1,5 +1,69 @@
 # OPUS 4 Release Notes
 
+## Release 4.10 - 2026-05-12
+
+Der neue Release bringt insbesondere Veränderungen bei der Sprachverwaltung und
+den Optionen, die in der Administration editierbar sind. Weiterhin gab es eine
+Reihe kleinerer Fehlerbehebungen.
+
+### Update auf OPUS 4.10
+
+Das Updateskript, `bin/update.sh`, muss ausgeführt werden, da es Änderungen an 
+der Datenbank und weitere Updateschritte gibt. 
+
+- Tabelle `configuration` wird angelegt
+- Tabelle `languages` wird entfernt
+- Konfiguration in `config.xml` with in die Datenbank übertragen und die
+  Datei optional gelöscht
+- Aktive Sprachen werden in neue Konfigurationsoptionen übernommen
+
+### Sprachverwaltung
+
+Die Sprachverwaltung wurde aus der Administration entfernt. Dafür werden jetzt
+485 ISO 639 Sprachen im Standard unterstützt. Welche Sprachen in den Formularen
+zur Auswahl stehen sollen, lässt sich über Optionen einstellen. 
+
+Mehr dazu findet sich im OPUS 4 Handbuch unter
+https://www.opus-repository.org/userdoc/admin/languages.html
+
+Beim Update werden die aktiven Sprachen automatisch in die neue Konfiguration
+übernommen. 
+
+### Konfiguration
+
+Bislang sind nur wenige Optionen in der Administration editierbar. Diese wurde
+bisher in `application/configs/config.xml` gespeichert. Dafür gibt es jetzt eine
+Tabelle in der Datenbank. Beim Update wird der Inhalt von `config.xml` in die
+Datenbank übertragen und die Datei dann (optional) gelöscht. 
+
+Die editierbaren Optionen werden nun in `application/configs/options.yml`
+definiert. Generell kann die Liste lokal erweitert werden. Im Standard werden
+im Laufe der Zeit mehr Optionen in der Weboberfläche verfügbar gemacht werden.
+
+### RSS-Links
+
+RSS-Links können nun ausgeblendet werden. Sie werden automatisch ausgeblendet,
+wenn ein User keinen Zugriff auf das RSS-Modul hat. 
+
+    rss.showLinks = 0
+
+### DeepGreen Client
+
+Es gibt zwei neue Optionen, die steuern wie beim Import von Dokumenten mit 
+nicht erlaubten Dateitypen umgegangen werden soll.
+
+    deepgreen.import.importAllFiles = 0
+    deepgreen.import.importSupportedFiles = 1
+
+Wenn **importAllFiles** aktiviert ist, werden alle Dateien importiert. Sollen 
+nur die in der OPUS 4 Konfiguration erlaubt Dateitypen importiert werden, kann
+**importSupportedFiles** aktiviert werden. Sind beide Optionen deaktiviert, 
+werden Dokumente mit nicht erlaubten Dateitypen nicht importiert. Es geplant
+in diesen Fällen in Zukunft Benachrichtigungen in der Administration anzuzeigen
+und die Konfigurationsmöglichkeiten weiter auszubauen.
+
+--
+
 ## Release 4.9 - 2026-04-14
 
 ### Unterstützte PHP-Versionen

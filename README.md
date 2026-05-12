@@ -9,7 +9,7 @@ mostly.
 
 ## OPUS 4
 
-The current version of OPUS 4 is __4.9__. It is available on the [master][MASTER] branch and compatible with 
+The current version of OPUS 4 is __4.10__. It is available on the [master][MASTER] branch and compatible with 
 PHP 8.1 to 8.2. PHP 8.3 and beyond are not supported yet. 
 
 [Documentation][DOC]

@@ -38,8 +38,7 @@ class Admin_Model_OptionTest extends ControllerTestCase
     {
         parent::setUp();
 
-        $this->model = new Admin_Model_Option('test', [
-            'key'     => 'supportedLanguages',
+        $this->model = new Admin_Model_Option('supportedLanguages', [
             'type'    => 'number',
             'section' => 'search',
             'options' => [
@@ -86,20 +85,23 @@ class Admin_Model_OptionTest extends ControllerTestCase
 
     public function testGetLabel()
     {
-        $this->assertEquals(Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'test', $this->model->getLabel());
+        $this->assertEquals(
+            Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'supportedLanguages',
+            $this->model->getLabel()
+        );
     }
 
     public function testGetDescription()
     {
         $this->assertEquals(
-            Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'test_description',
+            Admin_Form_Configuration::LABEL_TRANSLATION_PREFIX . 'supportedLanguages_description',
             $this->model->getDescription()
         );
     }
 
     public function testGetName()
     {
-        $this->assertEquals('test', $this->model->getName());
+        $this->assertEquals('supportedLanguages', $this->model->getKey());
     }
 
     public function testGetKey()

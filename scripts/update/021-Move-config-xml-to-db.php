@@ -25,20 +25,52 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Element_LanguageType extends Application_Form_Element_SelectWithNull
-{
-    public function init()
-    {
-        parent::init();
+require_once dirname(__FILE__) . '/../common/update.php';
 
-        $values = ['Null', 'A', 'C', 'E', 'H', 'L', 'S'];
+use Opus\Db2\Configuration;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Filesystem\Filesystem;
 
-        foreach ($values as $value) {
-            $this->addMultiOption($value, 'Opus_Language_Type_Value_' . $value);
-        }
+$output = new ConsoleOutput();
+
+$configPath = APPLICATION_PATH . '/application/configs/config.xml';
+
+if (! file_exists($configPath)) {
+    exit();
+}
+
+$output->writeln("Importing '{$configPath}' into database.");
+
+if (! is_readable($configPath)) {
+    $output->writeln('<error>File \'' . $configPath . '\' is not readable.</error>');
+    exit();
+}
+
+// Import options from config.xml
+$config         = new Zend_Config_Xml($configPath);
+$configDatabase = new Configuration();
+$configDatabase->import($config, false); // No reset because `MigrateLanguages` schema update creates options
+
+// Show imported options
+$imported = $configDatabase->getConfig();
+if (count($imported) > 0) {
+    $options = $configDatabase->arr2ini($imported->toArray());
+    $output->writeln('Imported options:');
+    foreach ($options as $key => $value) {
+        $output->writeln('  ' . $key . ' = ' . $value);
     }
+}
+
+// Remove config.xml file
+$helper = new Application_Update_Helper();
+
+if ($helper->askYesNo("Delete '{$configPath}' file [Y/n]?", true)) {
+    $output->write("Removeing '{$configPath}' file ... ");
+    $filesystem = new Filesystem();
+    $filesystem->remove($configPath);
+    $output->writeln('done');
 }

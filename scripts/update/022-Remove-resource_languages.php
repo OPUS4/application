@@ -25,59 +25,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Application_Form_Element_LanguageScopeTest extends FormElementTestCase
-{
-    /** @var string */
-    protected $additionalResources = 'translation';
+require_once dirname(__FILE__) . '/../common/update.php';
 
-    /** @var string[] */
-    private $keys;
+use Opus\SecurityStorage;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
-    public function setUp(): void
-    {
-        $this->keys = ['Null', 'I', 'M', 'S'];
+$output = new ConsoleOutput();
 
-        $this->formElementClass       = 'Application_Form_Element_LanguageScope';
-        $this->expectedDecorators     = [
-            'ViewHelper',
-            'Errors',
-            'Description',
-            'ElementHtmlTag',
-            'LabelNotEmpty',
-            'dataWrapper',
-            'ElementHint',
-        ];
-        $this->expectedDecoratorCount = count($this->expectedDecorators);
-        $this->staticViewHelper       = 'viewFormSelect';
-        parent::setUp();
-    }
+$output->writeln('');
+$output->write('Removing \'resource_languages\' from role permissions...');
 
-    public function testOptions()
-    {
-        $element = $this->getElement();
+$security = new SecurityStorage();
+$security->removeResource('resource_languages');
 
-        $options = $element->getMultiOptions();
-
-        $this->assertEquals(count($this->keys), count($options));
-
-        foreach ($this->keys as $key) {
-            $this->assertTrue(array_key_exists($key, $options), "Key '$key' is missing.");
-        }
-    }
-
-    public function testOptionsTranslated()
-    {
-        $translator = Application_Translate::getInstance();
-
-        foreach ($this->keys as $key) {
-            $this->assertTrue(
-                $translator->isTranslated('Opus_Language_Scope_Value_' . $key),
-                "Key '$key' not translated."
-            );
-        }
-    }
-}
+$output->writeln(' done');
