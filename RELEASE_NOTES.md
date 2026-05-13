@@ -1,5 +1,9 @@
 # OPUS 4 Release Notes
 
+## Release 4.10.1 - 2026-05-19
+
+--
+
 ## Release 4.10 - 2026-05-12
 
 Der neue Release bringt insbesondere Veränderungen bei der Sprachverwaltung und
