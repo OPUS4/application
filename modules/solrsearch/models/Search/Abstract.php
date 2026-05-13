@@ -292,7 +292,34 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             return $this->createSearchQuery($this->validateInput($queryBuilderInput, 10, 100));
         }
 
-        return $this->createSearchQuery($this->validateInput($queryBuilderInput));
+        return $this->createSearchQuery($this->validateInput($queryBuilderInput, 1, $this->getRowsLimit()));
+    }
+
+    public function getRowsLimit(): int
+    {
+        $maxRows = $this->getMaxRows();
+
+        $config = $this->getConfig();
+
+        $identity = Zend_Auth::getInstance()->getIdentity();
+
+        if (empty($identity) === true) {
+            if (isset($config->plugins->export->default->maxDocumentsGuest)) {
+                $value = filter_var($config->plugins->export->default->maxDocumentsGuest, FILTER_VALIDATE_INT);
+                if ($value !== false) {
+                    $maxRows = $value;
+                }
+            }
+        } else {
+            if (isset($config->plugins->export->default->maxDocumentsUser)) {
+                $value = filter_var($config->plugins->export->default->maxDocumentsUser, FILTER_VALIDATE_INT);
+                if ($value !== false) {
+                    $maxRows = $value;
+                }
+            }
+        }
+
+        return $maxRows;
     }
 
     /**
@@ -324,6 +351,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             $logger->warn("A negative start parameter is ignored.");
             $input['start'] = 0;
         }
+
         return $input;
     }
 
@@ -433,7 +461,13 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             $view->numOfPages = (int) ($numOfHits / $nrOfRows) + 1;
         }
 
-        $view->rows         = $query->getRows();
+        if ($nrOfRows >= $numOfHits && $request->getParam('rows') === 'all') {
+            $view->displayRows = $this->view->translate('default_all');
+        } else {
+            $view->displayRows = $nrOfRows;
+        }
+
+        $view->rows         = $nrOfRows;
         $view->authorSearch = Solrsearch_Model_Search::createSearchUrlArray([
             'searchtype' => Application_Util_Searchtypes::AUTHOR_SEARCH,
         ]);

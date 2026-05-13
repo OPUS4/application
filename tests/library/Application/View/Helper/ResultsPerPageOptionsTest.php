@@ -32,7 +32,7 @@
 class Application_View_Helper_ResultsPerPageOptionsTest extends ControllerTestCase
 {
     /** @var string[] */
-    protected $additionalResources = ['view'];
+    protected $additionalResources = ['view', 'translation'];
 
     /** @var Application_View_Helper_ResultsPerPageOptions */
     protected $helper;
@@ -47,10 +47,16 @@ class Application_View_Helper_ResultsPerPageOptionsTest extends ControllerTestCa
 
     public function testGetOptions()
     {
+        $options = $this->helper->getOptions();
+
         $this->assertEqualsCanonicalizing(
             ['10', '20', '50', '100'],
-            $this->helper->getOptions()
+            $options
         );
+
+        foreach ($options as $option => $label) {
+            $this->assertEquals($label, $option);
+        }
     }
 
     public function testGetOptionsMalformedList()
@@ -73,5 +79,24 @@ class Application_View_Helper_ResultsPerPageOptionsTest extends ControllerTestCa
             ['10', '20', '50', '100'],
             $this->helper->getOptions()
         );
+    }
+
+    public function testGetOptionsTranslateAll()
+    {
+        $this->useGerman();
+
+        $this->adjustConfiguration([
+            'search' => ['resultsPerPageOptions' => '10, 20, 50, 100, all'],
+        ]);
+
+        $options = $this->helper->getOptions();
+
+        $this->assertEqualsCanonicalizing(
+            ['10', '20', '50', '100', 'Alle'],
+            $options
+        );
+
+        $this->assertArrayHasKey('all', $options);
+        $this->assertEquals('Alle', $options['all']);
     }
 }

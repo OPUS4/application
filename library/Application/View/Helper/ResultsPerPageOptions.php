@@ -48,10 +48,10 @@ class Application_View_Helper_ResultsPerPageOptions extends Application_View_Hel
 
         $output = '<ul>';
 
-        foreach ($options as $option) {
+        foreach ($options as $option => $label) {
             $searchUrl = $this->view->url(['rows' => $option]);
 
-            $output .= "<li><a href=\"$searchUrl\">$option</a></li>";
+            $output .= "<li><a href=\"$searchUrl\">$label</a></li>";
         }
 
         $output .= '</ul>';
@@ -76,6 +76,16 @@ class Application_View_Helper_ResultsPerPageOptions extends Application_View_Hel
             $options = [10, 20, 50, 100]; // TODO do we need defaults in the code?
         }
 
-        return $options;
+        $labelled = [];
+
+        foreach ($options as $option) {
+            if (strtolower($option) === 'all') {
+                $labelled['all'] = $this->view->translate('default_all');
+            } else {
+                $labelled[$option] = $option;
+            }
+        }
+
+        return $labelled;
     }
 }
