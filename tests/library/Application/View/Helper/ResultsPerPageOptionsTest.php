@@ -25,57 +25,53 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2017, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\ConfigTrait;
-
-/**
- * View helper for returning value of configuration option.
- */
-class Application_View_Helper_ResultsPerPageOptions extends Application_View_Helper_Abstract
+class Application_View_Helper_ResultsPerPageOptionsTest extends ControllerTestCase
 {
-    use ConfigTrait;
+    /** @var string[] */
+    protected $additionalResources = ['view'];
 
-    /**
-     * @param int $steps
-     * @return string
-     */
-    public function resultsPerPageOptions($steps = 0)
+    /** @var Application_View_Helper_ResultsPerPageOptions */
+    protected $helper;
+
+    public function setUp(): void
     {
-        $options = $this->getOptions();
+        parent::setUp();
 
-        $output = '<ul>';
-
-        foreach ($options as $option) {
-            $searchUrl = $this->view->url(['rows' => $option]);
-
-            $output .= "<li><a href=\"$searchUrl\">$option</a></li>";
-        }
-
-        $output .= '</ul>';
-
-        return $output;
+        $this->helper = new Application_View_Helper_ResultsPerPageOptions();
+        $this->helper->setView($this->getView());
     }
 
-    public function getOptions(): array
+    public function testGetOptions()
     {
-        $config = $this->getConfig();
+        $this->assertEqualsCanonicalizing(
+            ['10', '20', '50', '100'],
+            $this->helper->getOptions()
+        );
+    }
 
-        $options = [];
+    public function testGetOptionsMalformedList()
+    {
+        $this->adjustConfiguration([
+            'search' => ['resultsPerPageOptions' => '10, , 20, 50,100, 200, , '],
+        ]);
+        $this->assertEqualsCanonicalizing(
+            ['10', '20', '50', '100', '200'],
+            $this->helper->getOptions()
+        );
+    }
 
-        if (isset($config->search->resultsPerPageOptions)) {
-            $list = $config->search->resultsPerPageOptions;
-            if (strlen(trim($list)) > 0) {
-                $options = array_filter(array_map('trim', explode(',', $list)));
-            }
-        }
-
-        if (count($options) === 0) {
-            $options = [10, 20, 50, 100]; // TODO do we need defaults in the code?
-        }
-
-        return $options;
+    public function testGetOptionsEmptyList()
+    {
+        $this->adjustConfiguration([
+            'search' => ['resultsPerPageOptions' => ''],
+        ]);
+        $this->assertEqualsCanonicalizing(
+            ['10', '20', '50', '100'],
+            $this->helper->getOptions()
+        );
     }
 }
