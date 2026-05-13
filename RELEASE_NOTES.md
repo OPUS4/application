@@ -2,6 +2,19 @@
 
 ## Release 4.10.1 - 2026-05-19
 
+### Anzeige der Suchergebnisse
+
+Es gibt eine neue Option, mit der die Optionen für die Anzahl der Suchergebnisse
+pro Seite konfiguriert werden können.
+
+    search.resultsPerPageOptions = 10, 20, 50, 100
+
+Als Wert ist auch `all` möglich. Dabei ist zu beachten, dass auch die folgenden
+Optionen greifen und die maximal angezeigten Dokumente begrenzen.
+
+    plugins.export.default.maxDocumentsGuest = 100
+    plugins.export.default.maxDocumentsUser = 500
+
 --
 
 ## Release 4.10 - 2026-05-12
