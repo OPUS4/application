@@ -566,6 +566,7 @@ class Export_Model_XmlExport extends Application_Export_ExportPluginAbstract
             'isAuthenticated',
             'translate',
             'dcType',
+            'documentYear',
         ]);
     }
 }
