@@ -1143,7 +1143,6 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
 
         // listMetadataFormats ist part of basic OAI functionality.
         $viewHelpers[] = 'listMetadataFormats';
-        $viewHelpers[] = 'documentYear';
 
         return $viewHelpers;
     }

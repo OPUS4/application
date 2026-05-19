@@ -268,7 +268,7 @@ class Oai_Model_ServerFactoryTest extends ControllerTestCase
 
     public function testDoViewHelpersExist()
     {
-        $viewHelpers         = ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType'];
+        $viewHelpers         = ['optionValue', 'fileUrl', 'frontdoorUrl', 'transferUrl', 'dcmiType', 'dcType', 'openAireType', 'documentYear'];
         $viewHelpersNotFound = [];
 
         foreach ($viewHelpers as $viewHelper) {
