@@ -338,6 +338,7 @@ class Oai_Model_DefaultServer extends Application_Model_Abstract
         $this->proc->registerPHPFunctions([
             'Opus\I18n\Languages::getPart1',
             'Opus\I18n\Languages::getPart2b',
+            'Opus\Common\Document::getYear',
         ]);
         Application_Xslt::registerViewHelper($this->proc, $this->getViewHelpers());
         $this->proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);

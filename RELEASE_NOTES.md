@@ -2,6 +2,8 @@
 
 ## Release 4.10.1 - 2026-05-19
 
+Der Release enthält kleinere Änderungen und Fehlerbehebungen.
+
 ### Anzeige der Suchergebnisse
 
 Es gibt eine neue Option, mit der die Optionen für die Anzahl der Suchergebnisse
