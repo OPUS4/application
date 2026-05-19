@@ -32,7 +32,6 @@
 use Opus\App\Common\ApplicationException;
 use Opus\Common\Date;
 use Opus\Common\DnbInstitute;
-use Opus\Common\Language;
 use Opus\Common\Licence;
 
 /**
@@ -155,7 +154,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testIsConfirmedYes()
     {
-        $form = new Application_Form_Confirmation(Language::class);
+        $form = new Application_Form_Confirmation(Licence::class);
 
         $post = [
             'Id'         => '100',
@@ -167,7 +166,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testIsConfirmedNo()
     {
-        $form = new Application_Form_Confirmation(Language::class);
+        $form = new Application_Form_Confirmation(Licence::class);
 
         $post = [
             'Id'        => '100',
@@ -179,7 +178,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testIsConfirmedNoInvalidForm()
     {
-        $subform = new Application_Form_Confirmation(Language::class);
+        $subform = new Application_Form_Confirmation(Licence::class);
         $form    = new Zend_Form();
         $form->addSubForm($subform, 'confirmation');
 
@@ -206,7 +205,7 @@ class Application_Form_ConfirmationTest extends ControllerTestCase
 
     public function testProcessPostNo()
     {
-        $form = new Application_Form_Confirmation(Language::class);
+        $form = new Application_Form_Confirmation(Licence::class);
 
         $post = [
             'Id'        => '100',
