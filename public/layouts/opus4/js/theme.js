@@ -84,7 +84,7 @@ $(document).ready(function () {
         minLength: 2,
         select: function (event, ui) {
             // automaticaly set external key field or clear value
-            var elemId = "#" + this.id.replace('Value', 'ExternalKey');
+            var elemId = "#" + this.id.replace(/-Value$/, '-ExternalKey');
             if (typeof ui.item.extkey !== 'undefined' && ui.item.extkey) {
                 $(elemId).val(ui.item.extkey);
             } else {
