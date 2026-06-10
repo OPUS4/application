@@ -320,6 +320,17 @@
                     </pages>
                 </series>
 
+                <deepgreen>
+                    <type>mvc</type>
+                    <label>admin_title_deepgreen</label>
+                    <description>admin_title_deepgreen_description</description>
+                    <group>group-meadow</group>
+                    <module>admin</module>
+                    <controller>deepgreen</controller>
+                    <action>index</action>
+                    <resource>deepgreen</resource>
+                </deepgreen>
+
                 <licence>
                     <type>mvc</type>
                     <label>admin_title_licence</label>

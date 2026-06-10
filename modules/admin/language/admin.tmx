@@ -61,6 +61,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_title_deepgreen">
+      <tuv xml:lang="en">
+        <seg>DeepGreen</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DeepGreen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_title_person">
       <tuv xml:lang="en">
         <seg>Person data</seg>
