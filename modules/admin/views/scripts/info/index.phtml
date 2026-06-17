@@ -93,11 +93,13 @@ $opusVersion = Configuration::getOpusVersion();
         <tr>
             <th><?= $this->translate('folder') ?></th>
             <th><?= $this->translate('state') ?></th>
+            <th><?= $this->translate('size') ?></th>
         </tr>
-    <?PHP foreach ($this->workspaceFolders as $folder => $state) : ?>
-        <tr class="state-<?= $state ?>">
-            <td><?= $folder ?></td>
-            <td><?= $state ?></td>
+    <?PHP foreach ($this->workspaceFolders as $folder) : ?>
+        <tr class="state-<?= $folder->getState() ?>">
+            <td><?= $folder->getName() ?></td>
+            <td><?= $folder->getState() ?></td>
+            <td><?= $folder->getSize() ?></td>
         </tr>
     <?PHP endforeach ?>
     </table>
