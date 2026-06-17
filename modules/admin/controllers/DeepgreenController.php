@@ -32,7 +32,7 @@
 class Admin_DeepgreenController extends Application_Controller_Action
 {
     /**
-     * TODO show general deepgreen infos
+     * TODO show general deepgreen infos (client status, schedule)
      * TODO list deepgreen events
      */
     public function indexAction()
