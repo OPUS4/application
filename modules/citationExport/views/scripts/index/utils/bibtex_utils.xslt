@@ -57,7 +57,7 @@
            <xsl:when test="$type='identifier'">
                <xsl:choose>
                    <xsl:when test="position() = 1 or position() = 2 or position() = 3">
-                       <xsl:call-template name="replace_strings">
+                       <xsl:call-template name="replace_identifier_strings">
                            <xsl:with-param name="input_text"><xsl:value-of select="@LastName" /></xsl:with-param>
                        </xsl:call-template>
                    </xsl:when>
