@@ -59,6 +59,31 @@
         </xsl:if>
     </xsl:template>
 
+    <!-- Replace special characters in BibTeX citation keys with ASCII approximations. -->
+    <xsl:template name="replace_identifier_strings">
+      <xsl:param name="input_text" />
+      <xsl:param name="search" select="document('bibtex_identifier_characters.xml')/string_replacement/search" />
+      <xsl:variable name="replaced_text">
+        <xsl:call-template name="replace_substring">
+          <xsl:with-param name="text" select="$input_text" />
+          <xsl:with-param name="from" select="$search[1]/find" />
+          <xsl:with-param name="to" select="$search[1]/replace" />
+        </xsl:call-template>
+      </xsl:variable>
+
+      <xsl:choose>
+        <xsl:when test="$search[2]">
+          <xsl:call-template name="replace_identifier_strings">
+            <xsl:with-param name="input_text" select="$replaced_text" />
+            <xsl:with-param name="search" select="$search[position() > 1]" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$replaced_text" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
     <!-- Replace Special Characters -->
     <xsl:template name="replace_strings">
       <xsl:param name="input_text" />
@@ -91,7 +116,7 @@
         <xsl:choose>
             <xsl:when test="contains($text, $from)">
             	<xsl:value-of select="substring-before($text, $from)" />
-                <xsl:value-of select="$to" />                        
+                <xsl:value-of select="$to" />
                 <xsl:call-template name="replace_substring">
                     <xsl:with-param name="text">
                         <xsl:value-of select="substring-after($text, $from)" />
@@ -111,5 +136,3 @@
     </xsl:template>
 
 </xsl:stylesheet>
-
-
