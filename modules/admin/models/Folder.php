@@ -25,42 +25,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2020, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\App\Common\Configuration;
-use Opus\Common\OpusException;
+use Symfony\Component\Process\Process;
 
 /**
- * Checking of information about workspace.
+ * Folder info used for info page in administration.
  */
-class Application_Configuration_Workspace
+class Admin_Model_Folder
 {
-    /**
-     * @return array
-     * @throws OpusException
-     */
-    public function getFolders()
+    private string $name;
+    private string $path;
+    private string $state;
+
+    public function __construct(object $fileInfo)
     {
-        $workspacePath = Configuration::getInstance()->getWorkspacePath();
+        $this->name = $fileInfo->getBasename();
+        $this->path = $fileInfo->getRealPath();
 
-        $folders = [];
+        $this->state  = $fileInfo->isReadable() ? 'r' : '';
+        $this->state .= $fileInfo->isWritable() ? 'w' : '';
+    }
 
-        foreach (new DirectoryIterator($workspacePath) as $fileInfo) {
-            if ($fileInfo->isDot() || $fileInfo->isFile()) {
-                continue; // ignore '.' and '..' and files
-            }
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
-            $name = $fileInfo->getBasename();
+    public function getState(): string
+    {
+        return $this->state;
+    }
 
-            if (substr($name, 0, 1) === '.') {
-                continue; // ignore folders starting with a dot
-            }
+    public function getSize(): string
+    {
+        return $this->folderSize($this->path);
+    }
 
-            $folders[$name] = new Admin_Model_Folder($fileInfo);
-        }
-
-        return $folders;
+    protected function folderSize(string $path): string
+    {
+        $process = new Process(['du', '-hs', $path]);
+        $process->run();
+        $output = $process->getOutput();
+        preg_match('/^\S+/', $output, $matches);
+        return $matches[0];
     }
 }
