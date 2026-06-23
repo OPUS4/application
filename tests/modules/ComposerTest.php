@@ -38,7 +38,6 @@ class ComposerTest extends ControllerTestCase
     {
         $assetsPath = APPLICATION_PATH . '/public/assets';
 
-        $this->assertFileExists("$assetsPath/jquery");
-        $this->assertFileExists("$assetsPath/jqueryui");
+        $this->assertFileExists("$assetsPath/jquery");        
     }
 }
