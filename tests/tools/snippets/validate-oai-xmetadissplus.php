@@ -34,7 +34,7 @@ if (basename(__FILE__) !== basename($argv[0])) {
     exit;
 }
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+require_once dirname(__FILE__) . '/../../../scripts/common/bootstrap.php';
 
 $options = getopt('', ['source:', 'schema-cache:']);
 
