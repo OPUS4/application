@@ -326,16 +326,18 @@
     </target>
 
     <target name="demo-prepare-docs">
-        <exec executable="php" dir="${basedir}/scripts" failonerror="true">
-            <arg line="opus-console.php" />
-            <arg line="snippets/delete_non-demo_docs.php" />
+        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+            <arg line="opus4" />
+            <arg line="console:exec" />
+            <arg line="${basedir}/tests/demo/delete_non-demo_docs.php" />
         </exec>
     </target>
 
     <target name="remove-hhar-files">
-        <exec executable="php" dir="${basedir}/scripts" failonerror="true">
-            <arg line="opus-console.php" />
-            <arg line="snippets/delete_files.php" />
+        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+            <arg line="opus4" />
+            <arg line="console:exec" />
+            <arg line="${basedir}/tests/demo/delete_files.php" />
         </exec>
     </target>
 

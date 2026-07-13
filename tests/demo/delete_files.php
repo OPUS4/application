@@ -30,23 +30,36 @@
  */
 
 use Opus\Common\Document;
-use Opus\Common\Repository;
+use Opus\Common\Model\NotFoundException;
 
 /**
- * Removes all documents
- *
- * TODO convert to command (with confirmation check)
+ * Removes associated File objects for all HHAR test documents (id = 1..90)
+ * since full text files do not exist in file system
  */
 
-$repository = Repository::getInstance();
+$startId = 1;
+$endId   = 90;
 
-$finder = $repository->getDocumentFinder();
-
-foreach ($finder->getIds() as $id) {
-    $doc = Document::get($id);
-    $doc->delete();
-    echo "document " . $id . " was deleted.\n";
+for ($i = $startId; $i <= $endId; $i++) {
+    $d = null;
+    try {
+        $d = Document::get($i);
+    } catch (NotFoundException $e) {
+        // document with id $i does not exist
+        continue;
+    }
+    $files = $d->getFile();
+    foreach ($files as $file) {
+        try {
+            $file->doDelete($file->delete());
+        } catch (Exception $e) {
+            // ignore exception (is thrown since file does not exist physically)
+        }
+    }
+    $numOfFiles = count($files);
+    if ($numOfFiles > 0) {
+        echo 'delete ' . $numOfFiles . ' file(s) associated with docId: ' . $d->getId() . "\n";
+    }
 }
 
-$finder = $repository->getDocumentFinder();
-echo "done -- num of docs: " . $finder->getCount() . "\n";
+echo "done.\n";

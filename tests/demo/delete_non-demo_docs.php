@@ -8,12 +8,11 @@
  *
  * OPUS 4 is a complete rewrite of the original OPUS software and was developed
  * by the Stuttgart University Library, the Library Service Center
- * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
- * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
- * and State Library, the Saxon State Library - Dresden State and University
- * Library, the Bielefeld University Library and the University Library of
- * Hamburg University of Technology with funding from the German Research
- * Foundation and the European Regional Development Fund.
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
  *
  * LICENCE
  * OPUS is free software; you can redistribute it and/or modify it under the
@@ -26,28 +25,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-// TODO integrate as command in opus4 tool
-// TODO add exit command
+use Opus\Common\Document;
+use Opus\Common\Repository;
 
-use Opus\Common\Config;
-use Opus\Common\Security\Realm;
+/**
+ * Erstellt die Demoinstanz, in der nur die Testdokumente mit den IDs 91 bis 110
+ * enthalten sind.
+ */
 
-$config = Config::get();
-if (isset($config->security) && filter_var($config->security, FILTER_VALIDATE_BOOLEAN)) {
-    // setup realm
-    $realm = Realm::getInstance();
-}
+$repository = Repository::getInstance();
 
-while (1) {
-    $input = readline('opus> ');
-    readline_add_history($input);
-    try {
-        eval($input);
-    } catch (Exception $e) {
-        echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
+$finder = $repository->getDocumentFinder();
+foreach ($finder->getIds() as $id) {
+    if (intval($id) < 91 || intval($id) > 110) {
+        $doc = Document::get($id);
+        $doc->delete();
+        echo "document " . $id . " was deleted.\n";
     }
 }
+
+$finder = $repository->getDocumentFinder();
+echo "done -- num of remaining docs: " . $finder->getCount() . "\n";
