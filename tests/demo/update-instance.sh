@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# TODO move this file to another place (it is used for demo instance)
+# Used for demo instance
+# TODO should be move to a opus4-demo package
 
 # set -ex
 set -e
@@ -34,16 +35,14 @@ rm -f $INSTANCE/server/workspace/cache/zend*
 # phpunit --verbose
 
 #
-# Rebuilde database and index.
+# Rebuild database and index.
 #
 
 cd $INSTANCE_DIR/server/tests
 ./rebuilding_database.sh
 
-cd $INSTANCE_DIR/server/scripts
-
 # remove all fulltext associated with hhar test documents
-php opus-console.php snippets/delete_files.php
+php bin/opus4 console:exec demo/delete_files.php
 
 cd $INSTANCE_DIR
 
