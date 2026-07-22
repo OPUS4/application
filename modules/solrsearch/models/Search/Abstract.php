@@ -275,7 +275,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
      * @return Query
      * @throws Application_Search_QueryBuilderException
      */
-    public function getQueryUrl($request)
+    public function getQueryUrl($request, bool $export = false)
     {
         $queryBuilderInput = $this->createQueryBuilderInputFromRequest($request);
 
@@ -286,6 +286,10 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             ($request->getParam('browsing') === 'true' || $searchType === 'collection')
         ) {
             $queryBuilderInput['sortField'] = 'server_date_published';
+        }
+
+        if ($export) {
+            return $this->createSearchQuery($queryBuilderInput);
         }
 
         if ($searchType === Application_Util_Searchtypes::LATEST_SEARCH) {
@@ -358,7 +362,9 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
     /**
      * Sets up the xml query.
      *
-     * TODO CRITICAL merge with regular buildQuery
+     * TODO CRITICAL fix redundancy/relationship to buildQuery
+     *      probably a split of SEARCH-TYPE related code and general handling
+     *      search and export should use the same search code to determine documents
      *
      * @param Zend_Controller_Request_Http $request
      * @return Query
@@ -366,7 +372,7 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
     public function buildExportQuery($request)
     {
         try {
-            return $this->getQueryUrl($request);
+            return $this->getQueryUrl($request, true);
         } catch (Application_Search_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $applicationException = new ApplicationException($e->getMessage());
