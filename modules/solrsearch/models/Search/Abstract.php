@@ -365,9 +365,8 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
      */
     public function buildExportQuery($request)
     {
-        $queryBuilderInput = [];
         try {
-            $queryBuilderInput = $this->createQueryBuilderInputFromRequest($request);
+            return $this->getQueryUrl($request);
         } catch (Application_Search_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $applicationException = new ApplicationException($e->getMessage());
@@ -377,8 +376,6 @@ abstract class Solrsearch_Model_Search_Abstract extends Application_Model_Abstra
             }
             throw $applicationException;
         }
-
-        return $this->createSearchQuery($queryBuilderInput);
     }
 
     /**
