@@ -103,7 +103,6 @@ if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account']) || filt
 }
 
 $this->headLink()
-    ->prependStylesheet($this->baseUrl() . '/' . $config->css->jqueryui->path, 'screen')
     ->headLink([
         'rel'  => 'shortcut icon',
         'type' => 'image/x-icon',
@@ -120,9 +119,10 @@ $this->container = Zend_Registry::get('Opus_Navigation');
 $jsFiles = ['searchutil.js', 'frontdoorutil.js', 'submit.js'];
 
 if (in_array($this->moduleName, ['admin', 'review', 'setup', 'account'])) {
+    $jsFiles[] = 'autocomplete.js';
+    $jsFiles[] = 'combobox.js';
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
-    $jsFiles[] = 'opus-ui.js';
 } elseif (in_array($this->moduleName, ['publish'])) {
     $jsFiles[] = 'upload.js';
     $jsFiles[] = 'getDoi.js';
@@ -139,7 +139,6 @@ if ($this->jQueryEnabled()) {
          $this->headScript()->prependFile($this->layoutPath() . '/js/' . $filename);
     }
 
-    $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jqueryui->path);
     $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path);
 }
 

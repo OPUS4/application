@@ -13,22 +13,22 @@ $(document).ready(function () {
         if (! $(this).attr('target', '_blank')) {
             $(this).attr('target', '_blank');
         }
-    })
+    });
 
     // normalize box-heights
     var max = 0;
-        $('#adminMenuContainer ul > li > *').each(function () {
-            if ($(this).height() > max) {
-                max = $(this).height();
-            }
-        });
+    $('#adminMenuContainer ul > li > *').each(function () {
+        if ($(this).height() > max) {
+            max = $(this).height();
+        }
+    });
     $('#adminMenuContainer ul > li > *').height(max);
 
     /*
      * ActionBox
      *
-     * The code here fixes a menu bar at the top of the screen when the user scrolls down, in order to keep the functions
-     * always accessible.
+     * The code here fixes a menu bar at the top of the screen when the user
+     * scrolls down, in order to keep the functions always accessible.
      */
     var $actionbox       = $('.fixedMenubar');
     var $actionboxSpacer = $('<div />', {
@@ -55,7 +55,7 @@ $(document).ready(function () {
     });
     $(".dropdown > dd a").click(function (event) {
         $(this).closest(".dropdown").toggleClass("dropdown-open");
-        $('html,body').animate({scrollTop:$(this.hash).offset().top - ($actionbox.outerHeight() + 10)}, 0);
+        $('html,body').animate({ scrollTop: $(this.hash).offset().top - ($actionbox.outerHeight() + 10) }, 0);
         event.preventDefault();
     });
     $(document).mouseup(function (event) {
@@ -70,10 +70,10 @@ $(document).ready(function () {
         $(this).removeClass("blur");
     });
     $('[placeholder]').blur(function () {
-        if ( ! $(this).val() ) {
-              $(this).addClass('blur');
+        if (! $(this).val()) {
+            $(this).addClass('blur');
         } else {
-              $(this).removeClass('blur');
+            $(this).removeClass('blur');
         }
     });
 
@@ -106,12 +106,16 @@ $(document).ready(function () {
                 optionsElement.next(".hint").html("");
             } else {
                 // hole die Beschreibung für den ausgewählten Enrichment Type vom Server
-                $.get(window.opusBaseUrl + "/admin/autocomplete/enrichmentTypeDescription", { typeName: enrichmentTypeSelected }, function (data) {
-                    var optionsElement = $("#admin_enrichmentkey_options");
-                    if (optionsElement) {
-                        optionsElement.next(".hint").html(data.typeName);
+                $.get(
+                    window.opusBaseUrl + "/admin/autocomplete/enrichmentTypeDescription",
+                    { typeName: enrichmentTypeSelected },
+                    function (data) {
+                        var optionsElement = $("#admin_enrichmentkey_options");
+                        if (optionsElement) {
+                            optionsElement.next(".hint").html(data.typeName);
+                        }
                     }
-                });
+                );
             }
         }
     });
