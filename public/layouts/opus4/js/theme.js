@@ -77,6 +77,22 @@ $(document).ready(function () {
         }
     });
 
+    // Add autocomplete to GND subject input
+    // Response can contain: 'value', 'extkey' and 'label'
+    $('.subject').autocomplete({
+        source: window.opusBaseUrl + "/admin/autocomplete/subject",
+        minLength: 2,
+        select: function (event, ui) {
+            // automaticaly set external key field or clear value
+            var elemId = "#" + this.id.replace(/-Value$/, '-ExternalKey');
+            if (typeof ui.item.extkey !== 'undefined' && ui.item.extkey) {
+                $(elemId).val(ui.item.extkey);
+            } else {
+                $(elemId).val(null);
+            }
+        }
+    });
+
     // handle change of enrichment type in enrichment key create / edit form
     $("#admin_enrichmentkey_type").change(function () {
         var optionsElement = $("#admin_enrichmentkey_options");

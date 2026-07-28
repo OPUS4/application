@@ -35,8 +35,6 @@ use Opus\Common\Model\NotFoundException;
 /**
  * Removes associated File objects for all HHAR test documents (id = 1..90)
  * since full text files do not exist in file system
- *
- * TODO move script (it is used for testing/development)
  */
 
 $startId = 1;

@@ -58,10 +58,7 @@ class Application_Configuration_Workspace
                 continue; // ignore folders starting with a dot
             }
 
-            $status  = $fileInfo->isReadable() ? 'r' : '';
-            $status .= $fileInfo->isWritable() ? 'w' : '';
-
-            $folders[$name] = $status;
+            $folders[$name] = new Admin_Model_Folder($fileInfo);
         }
 
         return $folders;

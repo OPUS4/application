@@ -1043,4 +1043,63 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         $this->markTestIncomplete('Setup collection for publist including document with pubmed-id');
     }
+
+    public function testExportSortingPage()
+    {
+        $this->dispatch('/export/index/index/searchtype/collection/id/74/rows/10/export/xml');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertXPath('//export[@doccount="10"]');
+        $this->assertXPath('//export[@queryhits="75"]');
+
+        $this->assertXpath('//Opus_Document[@Id="90"]');
+        $this->assertXpath('//Opus_Document[@Id="79"]');
+        $pos90 = strpos($body, 'Id="90"');
+        $pos79 = strpos($body, 'Id="79"');
+        $this->assertTrue($pos90 < $pos79);
+    }
+
+    public function testExportSortingLastPage()
+    {
+        $this->dispatch('/export/index/index/searchtype/collection/id/74/start/70/rows/10/export/xml');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertXPath('//export[@doccount="5"]');
+        $this->assertXPath('//export[@queryhits="75"]');
+
+        $this->assertXpath('//Opus_Document[@Id="11"]');
+        $this->assertXpath('//Opus_Document[@Id="3"]');
+        $pos90 = strpos($body, 'Id="11"');
+        $pos79 = strpos($body, 'Id="3"');
+        $this->assertTrue($pos90 < $pos79);
+    }
+
+    public function testExportNoRowsParameter()
+    {
+        $this->dispatch('/export/index/index/searchtype/collection/id/74/export/xml');
+
+        $this->assertResponseCode(200);
+
+        $this->assertXPath('//export[@doccount="75"]');
+        $this->assertXPath('//export[@queryhits="75"]');
+    }
+
+    public function testExportConfigurableLimits()
+    {
+        $this->enableSecurity();
+        $this->addAccessOnModuleExportForGuest();
+        $this->adjustConfiguration(['plugins' => ['export' => ['default' => ['maxDocumentsGuest' => 50]]]]);
+
+        $this->dispatch('/export/index/index/searchtype/collection/id/74/export/xml/rows/100/stylesheet/example');
+
+        $this->assertResponseCode(200);
+
+        $this->assertXpathCount('//doc', 50);
+    }
 }

@@ -1,5 +1,13 @@
 # OPUS 4 Release Notes
 
+## Release 4.10.2 - 2026-07-28
+
+OPUS 4.10.2 behebt einen Fehler beim Export von Sammlungen im Browsing. Durch
+eine fehlerhafte Sortierung beim Export werden unter Umständen andere Dokumente
+exportiert als vorher im Browsing angezeigt wurden.
+
+https://github.com/OPUS4/application/issues/1505
+
 ## Release 4.10.1 - 2026-05-19
 
 Der Release enthält kleinere Änderungen und Fehlerbehebungen.

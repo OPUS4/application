@@ -9,3 +9,69 @@
     font-size: 15px;
     border-radius: 4px;
 }
+
+/* Dialog */
+.opus-dialog {
+    border: 2px solid #0b3a70;
+    border-radius: 8px;
+    padding: 0;
+    max-width: 520px;
+    width: 90vw;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.25);
+    font: inherit;
+}
+
+.opus-dialog::backdrop {
+    background: rgba(0,0,0,0.35);
+}
+
+.opus-dialog__title {
+    position: relative;
+    padding: 16px 48px 16px 16px;
+    font-weight: 600;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.opus-dialog__body {
+    padding: 20px 16px 12px;
+    line-height: 1.4;
+}
+
+.opus-dialog__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 16px 20px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.opus-dialog__btn {
+    padding: 10px 14px;
+    border: 1px solid #0b3a70;
+    border-radius: 4px;
+    background: #e3f0ff;
+    cursor: pointer;
+    color: #0b3a70;
+}
+
+.opus-dialog__btn.primary {
+    background: #4da3ff;
+    border-color: #0b3a70;
+    color: #fff;
+}
+
+.opus-dialog__btn.secondary {
+    background: #e3f0ff;
+}
+
+.opus-dialog__close {
+    position: absolute;
+    right: 12px;
+    top: 12px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    color: #0b3a70;
+}

@@ -33,6 +33,7 @@ use Opus\App\Common\Configuration;
 use Opus\App\Common\Modules;
 use Opus\Common\Config;
 use Opus\Common\LoggingTrait;
+use Opus\I18n\Languages;
 use Opus\Translate\Dao;
 use Opus\Translate\DatabaseAdapter;
 
@@ -242,18 +243,19 @@ class Application_Translate extends Zend_Translate
 
     /**
      * Translates language names utilizing PHP functions.
-     *
-     * @param string $langId
-     * @return string
      */
-    public function translateLanguage($langId)
+    public function translateLanguage(string $langId): string
     {
-        if ($this->isTranslated($langId)) {
-            $language = $this->translate($langId);
+        $translationKey = "i18n_language_{$langId}";
+        if ($this->isTranslated($translationKey)) {
+            return $this->translate($translationKey);
         } else {
-            $language = Locale::getDisplayLanguage($langId, $this->getLocale());
+            $lang = Languages::getLanguage($langId);
+            if (null !== $lang) {
+                return $lang->getDisplayName($this->getLocale());
+            }
         }
-        return $language;
+        return $langId;
     }
 
     /**

@@ -25,28 +25,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2026, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-use Opus\Common\Document;
-use Opus\Common\Repository;
+use Symfony\Component\Process\Process;
 
 /**
- * Removes all documents
- *
- * TODO convert to command (with confirmation check)
+ * Folder info used for info page in administration.
  */
+class Admin_Model_Folder
+{
+    private string $name;
+    private string $path;
+    private string $state;
 
-$repository = Repository::getInstance();
+    public function __construct(object $fileInfo)
+    {
+        $this->name = $fileInfo->getBasename();
+        $this->path = $fileInfo->getRealPath();
 
-$finder = $repository->getDocumentFinder();
+        $this->state  = $fileInfo->isReadable() ? 'r' : '';
+        $this->state .= $fileInfo->isWritable() ? 'w' : '';
+    }
 
-foreach ($finder->getIds() as $id) {
-    $doc = Document::get($id);
-    $doc->delete();
-    echo "document " . $id . " was deleted.\n";
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getState(): string
+    {
+        return $this->state;
+    }
+
+    public function getSize(): string
+    {
+        return $this->folderSize($this->path);
+    }
+
+    protected function folderSize(string $path): string
+    {
+        $process = new Process(['du', '-hs', $path]);
+        $process->run();
+        $output = $process->getOutput();
+        preg_match('/^\S+/', $output, $matches);
+        return $matches[0];
+    }
 }
-
-$finder = $repository->getDocumentFinder();
-echo "done -- num of docs: " . $finder->getCount() . "\n";
