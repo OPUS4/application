@@ -122,4 +122,19 @@ class Export_BibtexExportTest extends ControllerTestCase
 
         $this->assertEquals(12, substr_count($body, '@'));
     }
+
+    public function testEscapeSpecialCharsInBibtexEntryKey()
+    {
+        $this->adjustConfiguration([
+            'export' => ['download' => self::CONFIG_VALUE_FALSE],
+        ]);
+
+        $this->dispatch('/export/index/bibtex/searchtype/id/docId/81');
+
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $this->assertStringContainsString('@inproceedings{VorhoelterQiuReimersetal.2010,', $body);
+    }
 }
