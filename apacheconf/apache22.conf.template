@@ -52,6 +52,7 @@ Alias /OPUS_URL_BASE "/BASEDIR/public"
     # Setting cookie options
     php_value session.cookie_path     /OPUS_URL_BASE
     php_value session.cookie_httponly on
+    php_value session.cookie_secure   off
 
     # On Debian/Ubuntu, prevent PHP from deleting the cookies
     #Enable for UBUNTU/DEBIAN:# php_value session.gc_probability 0
