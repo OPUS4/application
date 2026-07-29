@@ -63,9 +63,15 @@ class Admin_Form_Document_Actions extends Admin_Form_AbstractDocumentSubForm
 
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('hash', self::ELEMENT_HASH, ['salt' => 'unique']); // TODO salt?
-        $this->addElement('submit', self::ELEMENT_SAVE, ['decorators' => ['ViewHelper']]);
+        $this->addElement('submit', self::ELEMENT_SAVE, [
+            'decorators' => ['ViewHelper'],
+            'label'      => $this->getTranslator()->translate('Save'),
+        ]);
         $this->addElement('submit', self::ELEMENT_SAVE_AND_CONTINUE, ['decorators' => ['ViewHelper']]);
-        $this->addElement('submit', self::ELEMENT_CANCEL, ['decorators' => ['ViewHelper']]);
+        $this->addElement('submit', self::ELEMENT_CANCEL, [
+            'decorators' => ['ViewHelper'],
+            'label'      => $this->getTranslator()->translate('Cancel'),
+        ]);
 
         $this->getElement(self::ELEMENT_SAVE)->setDisableTranslator(true);
         $this->getElement(self::ELEMENT_SAVE_AND_CONTINUE)->setDisableTranslator(true);
