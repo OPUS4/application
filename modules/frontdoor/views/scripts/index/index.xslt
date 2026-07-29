@@ -164,7 +164,11 @@
 
       <!-- metadata templates defined in templates/metadata.xsl -->
    <table class="result-data frontdoordata">
-            <caption>Metadaten</caption>
+            <caption>
+                <xsl:call-template name="translateString">
+                    <xsl:with-param name="string">metadata</xsl:with-param>
+                </xsl:call-template>
+            </caption>
             <colgroup class="angaben">
                 <col class="name"/>
             </colgroup>

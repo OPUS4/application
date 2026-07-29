@@ -766,10 +766,19 @@
 
       <tu tuid="state">
         <tuv xml:lang="en">
-          <seg>Status</seg>
+          <seg>State</seg>
         </tuv>
         <tuv xml:lang="de">
-          <seg>State</seg>
+          <seg>Status</seg>
+        </tuv>
+      </tu>
+
+      <tu tuid="metadata">
+        <tuv xml:lang="en">
+          <seg>Metadata</seg>
+        </tuv>
+        <tuv xml:lang="de">
+          <seg>Metadaten</seg>
         </tuv>
       </tu>
 
