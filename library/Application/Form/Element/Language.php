@@ -67,14 +67,14 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
             if (null !== $language) {
                 $value = $language->getId();
             }
-        }
 
-        if (! in_array($value, array_keys(self::getLanguageList()))) {
-            $label = Locale::getDisplayName($value);
-            if ($label !== $value) {
-                $label .= " ({$value})";
+            if (! in_array($value, array_keys(self::getLanguageList()))) {
+                $label = Locale::getDisplayName($value);
+                if ($label !== $value) {
+                    $label .= " ({$value})";
+                }
+                $this->addMultiOption($value, $label);
             }
-            $this->addMultiOption($value, $label);
         }
 
         parent::setValue($value);
