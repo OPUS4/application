@@ -2017,13 +2017,6 @@ ul.links input:hover {
     padding: 1em;
 }
 
-.admin_config legend {
-}
-
-.ui-widget-content {
-    font-size: 0.9em;
-}
-
 .adminContainer .opus-module-name {
     font-size: 1.2em;
     font-weight: bold;
@@ -2165,9 +2158,6 @@ ul.links input:hover {
     padding: 3px;
 }
 
-#filter h4 {
-}
-
 .adminContainer table.collections td.assigned {
     font-weight: bold;
 }
@@ -2222,9 +2212,6 @@ ul.links input:hover {
     background-color: #f3f6f8;
     margin-bottom: 1px;
     padding: 2px;
-}
-
-.documents .document span.person {
 }
 
 /* TODO limit to persons confirmation form */
@@ -2308,9 +2295,6 @@ form.persons-confirm legend {
 
 .adminContainer table.changes-table tr:hover {
     background-color: transparent;
-}
-
-.adminContainer table.changes-table tr {
 }
 
 .changes-table tr.modified td {
@@ -2620,10 +2604,181 @@ fieldset.collectionRole i.fa-trash:hover {
     cursor: pointer;
 }
 
-.ui-autocomplete-category {
-    font-weight: bold;
-    padding: .2em .2em;
-    margin: .2em 0 .8em;
+/* Combobox (Vanilla JS): consolidates legacy select.combobox styling from opus.css and jQuery UI. */
+.custom-combobox {
+    position: relative;
+    display: inline-flex;
+    align-items: stretch;
+    max-width: 100%;
+}
+
+.custom-combobox-input {
+    margin: 0;
+    padding: 5px 10px;
+    font-size: 1.1em;
+    line-height: 1.3;
+    border: 1px solid #c5c5c5;
+    border-right: none;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    background: #fff;
+    color: #333;
+}
+
+.custom-combobox-input:focus {
+    outline: none;
+    border-color: #7aaed6;
+    box-shadow: 0 0 0 2px rgba(122, 174, 214, 0.2);
+}
+
+.custom-combobox-toggle {
+    position: static;
+    top: auto;
+    bottom: auto;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.2rem;
+    padding: 0 0.65rem;
+    margin-left: 0;
+    border: 1px solid #c5c5c5;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    background: linear-gradient(#fafafa, #ececec);
+    color: #333;
+    cursor: pointer;
+}
+
+.custom-combobox-toggle:hover {
+    background: linear-gradient(#f5f5f5, #e3e3e3);
+}
+
+.custom-combobox-toggle:focus {
+    outline: none;
+}
+
+.custom-combobox-icon {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #555;
+}
+
+.custom-combobox-menu {
+    position: absolute;
+    z-index: 10000;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #bbb;
+    border-radius: 0 0 3px 3px;
+    background: #fff;
+    color: #333;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    max-height: 240px;
+    overflow-y: auto;
+}
+
+.custom-combobox-option {
+    margin: 0;
+    padding: 0;
+}
+
+.custom-combobox-option-label {
+    display: block;
+    padding: 0.35rem 0.5rem;
+    cursor: pointer;
+}
+
+.custom-combobox-option-label.is-active,
+.custom-combobox-option-label:hover {
+    background: #eef5ff;
+}
+
+.admin_person_edit .custom-combobox-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.admin_person_edit .custom-combobox-menu {
+    background-color: white;
+}
+
+/* Highlight combobox toggles if multiple options are available. */
+.admin_person_edit .custom-combobox.combobox-has-multiple .custom-combobox-toggle {
+    background: #fff8cc;
+}
+
+/* Collection autocomplete (Vanilla JS): replaces jQuery UI menu styling. */
+.collection-autocomplete-list {
+    position: absolute;
+    z-index: 10000;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #bbb;
+    background: #fff;
+    max-height: 260px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    font-size: 0.875rem;
+    line-height: 1.25;
+}
+
+.collection-autocomplete-item {
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.collection-autocomplete-item.active,
+.collection-autocomplete-item:hover {
+    background: #eef5ff;
+}
+
+.collection-autocomplete-category {
+    padding: 0.25rem 0.5rem;
+    font-weight: 600;
+    border-top: 1px solid #e2e2e2;
+    background: #f8f8f8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.collection-autocomplete-category:first-child {
+    border-top: none;
+}
+
+/* Subject autocomplete (Vanilla JS): replaces jQuery UI widget styling. */
+.subject-autocomplete-list {
+    position: absolute;
+    z-index: 10000;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #bbb;
+    background: #fff;
+    max-height: 240px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.subject-autocomplete-item {
+    padding: 0.35rem 0.5rem;
+    cursor: pointer;
+}
+
+.subject-autocomplete-item.active {
+    background: #eef5ff;
+}
+
+.subject-autocomplete-item:hover {
+    background: #f5f8ff;
 }
 
 #Document-Content-Subjects-Psyndex-Language {

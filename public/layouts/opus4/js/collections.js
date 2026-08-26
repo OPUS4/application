@@ -1,94 +1,415 @@
 /**
- * This function is executed when the page has been loaded completely and prepares some rendering for the
- * administration pages.
- *
- * TODO separate into independent functions (consider performance)
- * TODO load collection role info into variable
- * TODO sort collections
+ * Collection autocomplete (Vanilla JS replacement for jQuery UI autocomplete)
  */
+(function () {
+    "use strict";
 
-$(document).ready(function () {
+    var minLength     = 3;
+    var debounceDelay = 180;
+    var roleMap       = {};
 
-    $.getJSON(window.opusBaseUrl + "/admin/autocomplete/collectionroles", function (data) {
-        $('.collections').data('roles', data);
-    });
+    var activeInput        = null;
+    var activeItems        = [];
+    var activeIndex        = -1;
+    var isOpen             = false;
+    var debounceTimer      = null;
+    var requestController  = null;
+    var suggestionElements = [];
 
-    $('.collections').on('keydown', function (event) {
-        if (event.key == "Enter") {
-            event.preventDefault();
+    function createSuggestionList()
+    {
+        var list       = document.createElement("ul");
+        list.id        = "collection-autocomplete-list";
+        list.className = "collection-autocomplete-list";
+        list.setAttribute("role", "listbox");
+        list.style.display = "none";
+        document.body.appendChild(list);
+        return list;
+    }
+
+    var suggestionList = null;
+
+    function closeSuggestions()
+    {
+        isOpen                       = false;
+        activeItems                  = [];
+        activeIndex                  = -1;
+        suggestionElements           = [];
+        suggestionList.style.display = "none";
+        suggestionList.innerHTML     = "";
+
+        if (activeInput) {
+            activeInput.removeAttribute("aria-activedescendant");
         }
-    }).autocomplete({
-        source: window.opusBaseUrl + "/admin/autocomplete/collection",
-        minLength: 3,
-        select: function (event, ui) {
-            var container = $('#CollectionIdsSelected'); // TODO get element without hard coded name (ColectionIds)
-            var listId    = 'CollectionList' + ui.item.RoleId;
-            var colList   = $("#" + listId);
+    }
 
-            // Check if list for collection role exists
-            if (! colList.length) {
-                var roleName = $('.collections').data('roles')[ui.item.RoleId];
+    function positionSuggestionList()
+    {
+        if (! activeInput) {
+            return;
+        }
 
-                var listWrapper = $("<fieldset>").attr('class', 'collectionRole').append($("<legend>").text(roleName));
-                colList         = $("<ul>").attr('id', listId);
-                listWrapper.append(colList);
-                container.append(listWrapper);
+        var pageXOffset     = window.pageXOffset || 0;
+        var pageYOffset     = window.pageYOffset || 0;
+        var viewportWidth   = document.documentElement.clientWidth || window.innerWidth || 0;
+        var rect            = activeInput.getBoundingClientRect();
+        var minWidth        = Math.ceil(rect.width);
+        var desiredWidth    = Math.max(minWidth, 560);
+        var maxAllowedWidth = Math.max(minWidth, viewportWidth - 24);
+        var finalWidth      = Math.min(desiredWidth, maxAllowedWidth);
+
+        var left    = pageXOffset + rect.left;
+        var minLeft = pageXOffset + 12;
+        var maxLeft = pageXOffset + viewportWidth - finalWidth - 12;
+
+        if (left > maxLeft) {
+            left = maxLeft;
+        }
+        if (left < minLeft) {
+            left = minLeft;
+        }
+
+        suggestionList.style.left  = left + "px";
+        suggestionList.style.top   = (pageYOffset + rect.bottom) + "px";
+        suggestionList.style.width = finalWidth + "px";
+    }
+
+    function getRoleLabel(roleId)
+    {
+        if (roleMap && roleMap[roleId]) {
+            return roleMap[roleId];
+        }
+
+        return String(roleId);
+    }
+
+    function toItemLabel(item)
+    {
+        if (item.Number) {
+            return item.Number + " " + item.Name;
+        }
+
+        return item.Name;
+    }
+
+    function renderSuggestions(items)
+    {
+        closeSuggestions();
+
+        if (! items.length) {
+            return;
+        }
+
+        var currentRole = null;
+        var index       = 0;
+        var i;
+
+        for (i = 0; i < items.length; i++) {
+            var item = items[i];
+
+            if (item.RoleId !== currentRole) {
+                currentRole = item.RoleId;
+
+                var category         = document.createElement("li");
+                category.className   = "collection-autocomplete-category";
+                category.textContent = getRoleLabel(currentRole);
+                suggestionList.appendChild(category);
             }
 
-            // Add collection to list
-            if (colList) {
-                colList
-                    .append($("<li>")
-                        .append("<input name='Collections[]' type='hidden' value='" + ui.item.Id + "'/>")
-                        .append(ui.item.Name)
-                        .append($("<i>").attr("class", "fa fa-trash remove-me").attr("aria-hidden", "true")));
+            var option       = document.createElement("li");
+            option.className = "collection-autocomplete-item";
+            option.setAttribute("role", "option");
+            option.setAttribute("data-index", String(index));
+            option.id          = "collection-autocomplete-item-" + index;
+            option.textContent = toItemLabel(item);
+            option.setAttribute("aria-label", item.RoleId + " : " + item.Name);
+            suggestionList.appendChild(option);
+
+            activeItems.push(item);
+            suggestionElements.push(option);
+            index++;
+        }
+
+        positionSuggestionList();
+        suggestionList.style.display = "block";
+        isOpen                       = true;
+    }
+
+    function updateActiveSuggestion()
+    {
+        var i;
+        for (i = 0; i < suggestionElements.length; i++) {
+            var isActive = i === activeIndex;
+            suggestionElements[i].classList.toggle("active", isActive);
+
+            if (isActive && activeInput) {
+                activeInput.setAttribute("aria-activedescendant", suggestionElements[i].id);
             }
-        },
-        create: function () {
+        }
+    }
 
-            $(this).data('ui-autocomplete')._renderItem = function (ul, item) {
-                var label = item.Name;
+    function addCollectionItem(item)
+    {
+        var container = document.getElementById("CollectionIdsSelected");
+        if (! container) {
+            return;
+        }
 
-                if (item.Number) {
-                    label = item.Number + " " + label;
+        var listId  = "CollectionList" + item.RoleId;
+        var colList = document.getElementById(listId);
+
+        if (! colList) {
+            var roleName          = getRoleLabel(item.RoleId);
+            var listWrapper       = document.createElement("fieldset");
+            listWrapper.className = "collectionRole";
+
+            var legend         = document.createElement("legend");
+            legend.textContent = roleName;
+            listWrapper.appendChild(legend);
+
+            colList    = document.createElement("ul");
+            colList.id = listId;
+            listWrapper.appendChild(colList);
+            container.appendChild(listWrapper);
+        }
+
+        var entry = document.createElement("li");
+
+        var hidden   = document.createElement("input");
+        hidden.name  = "Collections[]";
+        hidden.type  = "hidden";
+        hidden.value = item.Id;
+        entry.appendChild(hidden);
+
+        entry.appendChild(document.createTextNode(item.Name));
+
+        var removeIcon       = document.createElement("i");
+        removeIcon.className = "fa fa-trash remove-me";
+        removeIcon.setAttribute("aria-hidden", "true");
+        entry.appendChild(removeIcon);
+
+        colList.appendChild(entry);
+    }
+
+    function applySelection(item)
+    {
+        if (! activeInput) {
+            return;
+        }
+
+        addCollectionItem(item);
+        activeInput.value = "";
+        closeSuggestions();
+    }
+
+    function fetchCollectionRoles()
+    {
+        return fetch(window.opusBaseUrl + "/admin/autocomplete/collectionroles", {
+            headers: { "Accept": "application/json" }
+        })
+            .then(function (response) {
+                if (! response.ok) {
+                    throw new Error("Collection role request failed");
                 }
 
-                return $("<li>")
-                    .attr("data-value", item.Id)
-                    .append($("<div>").text(label))
-                    .appendTo(ul);
-            };
+                return response.json();
+            })
+            .then(function (data) {
+                roleMap = data || {};
+            })
+            .catch(function () {
+                roleMap = {};
+            });
+    }
 
-            $(this).data('ui-autocomplete')._renderMenu = function (ul, items) {
-                var that  = this, currentRole = 0;
-                var roles = $('.collections').data('roles');
-                $.each(items, function (index, item) {
-                    var li;
-                    if (item.RoleId != currentRole) {
-                        currentRole   = item.RoleId;
-                        var roleLabel = roles[currentRole];
-                        ul.append("<li class='ui-autocomplete-category'>" + roleLabel + "</li>");
-                    }
+    function fetchSuggestionsForInput(input)
+    {
+        var term = input.value.trim();
 
-                    li = that._renderItemData(ul, item);
+        if (term.length < minLength) {
+            closeSuggestions();
+            return;
+        }
 
-                    if (item.RoleId) {
-                        li.attr("aria-label", item.RoleId + " : " + item.Name);
-                    }
-                })
+        if (requestController) {
+            requestController.abort();
+        }
+
+        requestController = new AbortController();
+
+        fetch(window.opusBaseUrl + "/admin/autocomplete/collection?term=" + encodeURIComponent(term), {
+            signal: requestController.signal,
+            headers: { "Accept": "application/json" }
+        })
+            .then(function (response) {
+                if (! response.ok) {
+                    throw new Error("Collection autocomplete request failed");
+                }
+
+                return response.json();
+            })
+            .then(function (data) {
+                if (activeInput !== input) {
+                    return;
+                }
+
+                renderSuggestions(Array.isArray(data) ? data : []);
+            })
+            .catch(function (error) {
+                if (error && error.name !== "AbortError") {
+                    closeSuggestions();
+                }
+            });
+    }
+
+    function scheduleFetch(input)
+    {
+        if (debounceTimer) {
+            window.clearTimeout(debounceTimer);
+        }
+
+        debounceTimer = window.setTimeout(function () {
+            fetchSuggestionsForInput(input);
+        }, debounceDelay);
+    }
+
+    function bindCollectionInput(input)
+    {
+        if (input.dataset.collectionAutocompleteBound === "1") {
+            return;
+        }
+
+        input.dataset.collectionAutocompleteBound = "1";
+        input.setAttribute("autocomplete", "off");
+        input.setAttribute("aria-controls", suggestionList.id);
+        input.setAttribute("aria-autocomplete", "list");
+
+        input.addEventListener("focus", function () {
+            activeInput = input;
+            if (isOpen) {
+                positionSuggestionList();
+            }
+        });
+
+        input.addEventListener("input", function () {
+            activeInput = input;
+            scheduleFetch(input);
+        });
+
+        input.addEventListener("keydown", function (event) {
+            activeInput = input;
+
+            if (event.key === "Enter") {
+                event.preventDefault();
             }
 
-        }
-    });
+            if (! isOpen || ! activeItems.length) {
+                if (event.key === "ArrowDown" && input.value.trim().length >= minLength) {
+                    event.preventDefault();
+                    scheduleFetch(input);
+                }
 
-});
+                return;
+            }
 
-$(document).on('click', ".remove-me", function (event) {
-    event.preventDefault();
-    var entry = $(this).parent();
-    var list  = entry.parent();
-    entry.remove();
-    if (! list.children('li').length) {
-        list.parent().remove();
+            if (event.key === "ArrowDown") {
+                event.preventDefault();
+                activeIndex = (activeIndex + 1) % activeItems.length;
+                updateActiveSuggestion();
+            } else if (event.key === "ArrowUp") {
+                event.preventDefault();
+                activeIndex = (activeIndex <= 0) ? activeItems.length - 1 : activeIndex - 1;
+                updateActiveSuggestion();
+            } else if (event.key === "Enter") {
+                if (activeIndex >= 0) {
+                    applySelection(activeItems[activeIndex]);
+                }
+            } else if (event.key === "Escape") {
+                closeSuggestions();
+            }
+        });
+
+        input.addEventListener("blur", function () {
+            window.setTimeout(closeSuggestions, 120);
+        });
     }
-});
+
+    function bindRemoveButtons()
+    {
+        document.addEventListener("click", function (event) {
+            var removeButton = event.target.closest(".remove-me");
+            if (! removeButton) {
+                return;
+            }
+
+            event.preventDefault();
+
+            var entry = removeButton.parentElement;
+            if (! entry) {
+                return;
+            }
+
+            var list = entry.parentElement;
+            entry.remove();
+
+            if (list && ! list.querySelector("li")) {
+                var fieldset = list.parentElement;
+                if (fieldset) {
+                    fieldset.remove();
+                }
+            }
+        });
+    }
+
+    function initCollections()
+    {
+        var inputs = document.querySelectorAll(".collections");
+        if (! inputs.length) {
+            return;
+        }
+
+        if (! suggestionList) {
+            suggestionList = createSuggestionList();
+        }
+        bindRemoveButtons();
+
+        var i;
+        for (i = 0; i < inputs.length; i++) {
+            bindCollectionInput(inputs[i]);
+        }
+
+        fetchCollectionRoles();
+
+        suggestionList.addEventListener("mousedown", function (event) {
+            event.preventDefault();
+
+            var option = event.target.closest(".collection-autocomplete-item");
+            if (! option) {
+                return;
+            }
+
+            var index = Number(option.getAttribute("data-index"));
+            if (! isNaN(index) && activeItems[index]) {
+                applySelection(activeItems[index]);
+            }
+        });
+
+        window.addEventListener("resize", function () {
+            if (isOpen) {
+                positionSuggestionList();
+            }
+        });
+
+        window.addEventListener("scroll", function () {
+            if (isOpen) {
+                positionSuggestionList();
+            }
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initCollections);
+    } else {
+        initCollections();
+    }
+})();
