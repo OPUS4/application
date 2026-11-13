@@ -56,10 +56,9 @@ class Application_Translate_TmxParser
     {
         $this->parser = xml_parser_create();
 
-        xml_set_object($this->parser, $this);
-        xml_set_element_handler($this->parser, "tagOpen", "tagClose");
-        xml_set_character_data_handler($this->parser, "cdata");
-        xml_set_default_handler($this->parser, "handleDefault");
+        xml_set_element_handler($this->parser, [$this, 'tagOpen'], [$this, 'tagClose']);
+        xml_set_character_data_handler($this->parser, [$this, 'cdata']);
+        xml_set_default_handler($this->parser, [$this, 'handleDefault']);
     }
 
     public function __destruct()
@@ -109,7 +108,7 @@ class Application_Translate_TmxParser
                 break;
 
             case 'SEG':
-                xml_set_element_handler($this->parser, 'tagOpenSeg', 'tagCloseSeg');
+                xml_set_element_handler($this->parser, [$this, 'tagOpenSeg'], [$this, 'tagCloseSeg']);
                 xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, 0);
                 $this->inSeg = true;
                 break;
@@ -174,7 +173,7 @@ class Application_Translate_TmxParser
     {
         switch (strtoupper($tag)) {
             case 'SEG':
-                xml_set_element_handler($this->parser, 'tagOpen', 'tagClose');
+                xml_set_element_handler($this->parser, [$this, 'tagOpen'], [$this, 'tagClose']);
                 xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, 1);
                 $this->translations[$this->currentKey]['values'][$this->currentLang] = $this->currentValue;
                 $this->currentValue                                                  = null;
