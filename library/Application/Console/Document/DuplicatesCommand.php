@@ -63,7 +63,7 @@ class Application_Console_Document_DuplicatesCommand extends Command
 
     public const OPTION_REMOVE = 'remove';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

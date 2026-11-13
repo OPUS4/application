@@ -41,7 +41,7 @@ class Application_Console_Orcid_ValidateCommand extends Command
 {
     public const OPTION_TAG = 'tag';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

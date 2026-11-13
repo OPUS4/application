@@ -45,7 +45,7 @@ class Application_Console_Console_ExecCommand extends Command
     /** Argument for the PHP code snippet file(s) to be executed */
     public const ARGUMENT_SNIPPET_FILES = 'SnippetFile';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

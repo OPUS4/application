@@ -49,7 +49,7 @@ class Application_Console_Model_EnrichmentDeleteCommand extends Command
 
     public const OPTION_FORCE = 'force';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

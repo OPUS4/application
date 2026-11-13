@@ -46,7 +46,7 @@ class Application_Console_Task_RunCommand extends Command
 {
     public const ARGUMENT_TASK_NAME = 'TaskName';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

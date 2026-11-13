@@ -49,7 +49,7 @@ class Application_Console_Debug_DocumentXmlCommand extends Command
 {
     public const ARGUMENT_DOC_ID = 'DocID';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

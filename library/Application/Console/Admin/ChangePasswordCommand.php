@@ -51,7 +51,7 @@ class Application_Console_Admin_ChangePasswordCommand extends Command
 
     public const OPTION_PASSWORD = 'password';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

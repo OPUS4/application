@@ -44,7 +44,7 @@ class Application_Console_Model_EnrichmentRenameCommand extends Command
 
     public const ARGUMENT_NEW_KEY = 'newKey';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

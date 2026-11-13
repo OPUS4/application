@@ -61,7 +61,7 @@ abstract class Application_Console_Collection_AbstractCollectionCommand extends 
     /** @var bool */
     protected $updateDateModified = false;
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

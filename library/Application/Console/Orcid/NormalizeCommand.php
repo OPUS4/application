@@ -41,7 +41,7 @@ class Application_Console_Orcid_NormalizeCommand extends Command
 {
     public const OPTION_FIX = 'fix';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

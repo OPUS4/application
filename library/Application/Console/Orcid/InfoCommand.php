@@ -41,7 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Application_Console_Orcid_InfoCommand extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

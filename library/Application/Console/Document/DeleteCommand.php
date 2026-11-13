@@ -46,7 +46,7 @@ class Application_Console_Document_DeleteCommand extends AbstractDocumentCommand
 {
     public const OPTION_PERMANENT = 'permanent';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

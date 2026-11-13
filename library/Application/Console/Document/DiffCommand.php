@@ -54,7 +54,7 @@ class Application_Console_Document_DiffCommand extends Command
 
     public const ARGUMENT_DOC_ID = 'DocID';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
