@@ -147,7 +147,7 @@ class Oai_Model_Set_PublicationStateSets implements Oai_Model_Set_SetTypeInterfa
      */
     public function getSubsetName($publicationState)
     {
-        if (array_key_exists($publicationState, $this->subsetMapping)) {
+        if (null !== $publicationState && array_key_exists($publicationState, $this->subsetMapping)) {
             return $this->subsetMapping[$publicationState];
         } else {
             return null;
