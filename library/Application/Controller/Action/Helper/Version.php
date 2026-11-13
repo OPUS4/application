@@ -85,7 +85,6 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
         curl_setopt($ch, CURLOPT_USERAGENT, 'OPUS 4');
         curl_setopt($ch, CURLOPT_TIMEOUT, 5);
         $response = curl_exec($ch);
-        curl_close($ch);
 
         if (! $response) {
             // TODO no response
