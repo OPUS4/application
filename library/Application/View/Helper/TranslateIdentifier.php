@@ -30,6 +30,7 @@
  */
 
 use Opus\Common\Identifier;
+use Opus\Common\Model\ModelException;
 
 class Application_View_Helper_TranslateIdentifier extends Zend_View_Helper_Translate
 {
@@ -45,7 +46,11 @@ class Application_View_Helper_TranslateIdentifier extends Zend_View_Helper_Trans
 
         $translator = Application_Translate::getInstance();
         // TODO map from Type to field name
-        $fieldname = Identifier::getFieldnameForType($type);
+        try {
+            $fieldname = Identifier::getFieldnameForType($type);
+        } catch (ModelException $me) {
+            $fieldname = 'Identifier';
+        }
         return $translator->translate($fieldname);
     }
 }
