@@ -79,7 +79,6 @@ class Admin_Form_Document_FilesTest extends ControllerTestCase
         $form = new Admin_Form_Document_Files();
 
         $property = new ReflectionProperty(Admin_Form_Document_Files::class, 'header');
-        $property->setAccessible(true);
 
         $header = $property->getValue($form);
 

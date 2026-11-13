@@ -94,9 +94,7 @@ class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase
 
     public function testGetAllowedFileTypes()
     {
-        $method = new ReflectionMethod('Application_Controller_Action_Helper_Files', 'getAllowedFileTypes');
-        $method->setAccessible(true);
-
+        $method    = new ReflectionMethod('Application_Controller_Action_Helper_Files', 'getAllowedFileTypes');
         $fileTypes = $method->invoke($this->helper);
 
         $this->assertEquals(4, count($fileTypes));

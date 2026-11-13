@@ -124,7 +124,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
      */
     public function isValid($documentType)
     {
-        return array_key_exists($documentType, $this->getDocumentTypes());
+        return null !== $documentType && array_key_exists($documentType, $this->getDocumentTypes());
     }
 
     /**

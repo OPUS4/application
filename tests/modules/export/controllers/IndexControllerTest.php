@@ -263,7 +263,6 @@ class Export_IndexControllerTest extends ControllerTestCase
 
         // add document to search index
         // TODO fix $methodSendSolrXmlToServer = $class->getMethod('sendSolrXmlToServer');
-        // $methodSendSolrXmlToServer->setAccessible(true);
         // $methodSendSolrXmlToServer->invoke($indexer, $solrXml);
         // $indexer->commit();
 

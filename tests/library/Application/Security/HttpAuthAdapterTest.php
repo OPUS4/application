@@ -39,7 +39,6 @@ class Application_Security_HttpAuthAdapterTest extends ControllerTestCase
         ]);
 
         $method = new ReflectionMethod('Application_Security_HttpAuthAdapter', '_secureStringCompare');
-        $method->setAccessible(true);
 
         $this->assertFalse($method->invoke($adapter, 'password', 'password'));
 

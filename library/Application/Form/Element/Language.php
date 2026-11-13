@@ -61,7 +61,7 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
      */
     public function setValue($value)
     {
-        if ($value !== null) {
+        if (null !== $value) {
             $language = Languages::getLanguage($value);
 
             if (null !== $language) {
@@ -69,7 +69,7 @@ class Application_Form_Element_Language extends Application_Form_Element_Select
             }
         }
 
-        if (! in_array($value, array_keys(self::getLanguageList()))) {
+        if (null !== $value && ! in_array($value, array_keys(self::getLanguageList()))) {
             $label = Locale::getDisplayName($value);
             if ($label !== $value) {
                 $label .= " ({$value})";

@@ -447,7 +447,6 @@ class Admin_Form_Document_DefaultMultiSubFormTest extends ControllerTestCase
     public function testPrepareSubFormDecoratorsForTableRendering()
     {
         $method = new ReflectionMethod('Admin_Form_Document_MultiSubForm', 'prepareSubFormDecorators');
-        $method->setAccessible(true);
 
         $columns = [
             [],
@@ -494,7 +493,6 @@ class Admin_Form_Document_DefaultMultiSubFormTest extends ControllerTestCase
         ]);
 
         $method = new ReflectionMethod('Admin_Form_Document_MultiSubForm', 'addRemoveButton');
-        $method->setAccessible(true);
 
         $subform = new Zend_Form_SubForm();
         $subform->addElement('hidden', 'Id');

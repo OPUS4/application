@@ -245,10 +245,8 @@ class Application_Util_PublicationNotificationTest extends ControllerTestCase
      */
     protected function getMethod($methodName)
     {
-        $class  = new ReflectionClass('Application_Util_PublicationNotification');
-        $method = $class->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method;
+        $class = new ReflectionClass('Application_Util_PublicationNotification');
+        return $class->getMethod($methodName);
     }
 
     public function testGetPublicationMailBodyWithEmptyAuthorsAndEmptyTitle()

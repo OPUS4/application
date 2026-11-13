@@ -82,9 +82,7 @@ class Application_Form_Validate_CollectionRoleOaiNameUniqueTest extends Controll
         $collectionRole->store();
 
         $method = new ReflectionMethod(Application_Form_Validate_CollectionRoleOaiNameUnique::class, 'getModel');
-        $method->setAccessible(true);
-
-        $model = $method->invoke($this->validator, ['NewTestColRoleOaiName']);
+        $model  = $method->invoke($this->validator, ['NewTestColRoleOaiName']);
 
         $this->assertNotNull($model);
         $this->assertEquals('NewTestColRoleOaiName', $model->getOaiName());

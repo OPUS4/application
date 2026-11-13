@@ -90,8 +90,7 @@ class Application_Job_CleanTemporariesJobTest extends ControllerTestCase
         $job       = $this->job;
         $reflector = new ReflectionClass($job);
         $getDate   = $reflector->getMethod('getPreviousDate');
-        $getDate->setAccessible(true);
-        $date = $getDate->invokeArgs($job, []);
+        $date      = $getDate->invokeArgs($job, []);
 
         $dateTime = new DateTime();
         $expected = $dateTime->sub(new DateInterval('P2D'))->format('Y-m-d');
