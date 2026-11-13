@@ -57,7 +57,7 @@ class Application_Form_Element_PublicationState extends Application_Form_Element
 
         $publicationState = new PublicationState();
 
-        if (! array_key_exists($value, $options) && in_array($value, $publicationState->getAllValues())) {
+        if (null !== $value && ! array_key_exists($value, $options) && in_array($value, $publicationState->getAllValues())) {
             $additionalOption[$value] = $this->translateValue($value);
 
             $options = array_merge(

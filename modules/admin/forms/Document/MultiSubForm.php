@@ -582,9 +582,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         $result = true;
 
         if ($this->subformValidator !== null) {
-            if (array_key_exists($this->getName(), $data)) {
-                $this->subformValidator->prepareValidation($this, $data[$this->getName()], $context);
-                $result = $this->subformValidator->isValid($data[$this->getName()], $context);
+            $name = $this->getName();
+            if (null !== $name && array_key_exists($name, $data)) {
+                $this->subformValidator->prepareValidation($this, $data[$name], $context);
+                $result = $this->subformValidator->isValid($data[$name], $context);
             }
         }
 

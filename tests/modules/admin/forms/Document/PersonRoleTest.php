@@ -716,9 +716,7 @@ class Admin_Form_Document_PersonRoleTest extends ControllerTestCase
      */
     private function getMethod($className, $methodName)
     {
-        $class  = new ReflectionClass($className);
-        $method = $class->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method;
+        $class = new ReflectionClass($className);
+        return $class->getMethod($methodName);
     }
 }

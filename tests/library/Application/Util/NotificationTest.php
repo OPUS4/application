@@ -283,10 +283,8 @@ class Application_Util_NotificationTest extends ControllerTestCase
      */
     protected function getMethod($methodName)
     {
-        $class  = new ReflectionClass('Application_Util_Notification');
-        $method = $class->getMethod($methodName);
-        $method->setAccessible(true);
-        return $method;
+        $class = new ReflectionClass('Application_Util_Notification');
+        return $class->getMethod($methodName);
     }
 
     public function testGetSubjectTemplate()

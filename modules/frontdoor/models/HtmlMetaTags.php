@@ -566,7 +566,7 @@ class Frontdoor_Model_HtmlMetaTags
     {
         $mappingConfig = $this->getMappingConfig();
         $docType       = $document->getType();
-        if (isset($mappingConfig[$docType])) {
+        if (null !== $docType && isset($mappingConfig[$docType])) {
             return $mappingConfig[$docType];
         } else {
             return 'other';

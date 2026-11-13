@@ -1216,7 +1216,6 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $class  = new ReflectionClass(get_class($manager));
         $method = $class->getMethod('getLanguageOrderRef');
-        $method->setAccessible(true);
 
         $order = $method->invoke($manager);
 
@@ -1246,7 +1245,6 @@ class Application_Translate_TranslationManagerTest extends ControllerTestCase
 
         $class  = new ReflectionClass(get_class($manager));
         $method = $class->getMethod('sortLanguages');
-        $method->setAccessible(true);
 
         $sorted = $method->invoke($manager, [
             'en' => 'English',

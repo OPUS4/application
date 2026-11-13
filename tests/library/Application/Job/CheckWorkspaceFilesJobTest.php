@@ -71,8 +71,7 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
         $job       = $this->job;
         $reflector = new ReflectionClass($job);
         $getPath   = $reflector->getMethod('getFilesPath');
-        $getPath->setAccessible(true);
-        $path = $getPath->invokeArgs($job, []);
+        $path      = $getPath->invokeArgs($job, []);
 
         $expectedPath = realpath(Config::get()->workspacePath . DIRECTORY_SEPARATOR . "files");
 
@@ -84,8 +83,7 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
         $job       = $this->job;
         $reflector = new ReflectionClass($job);
         $getPath   = $reflector->getMethod('getFilesPath');
-        $getPath->setAccessible(true);
-        $path = $getPath->invokeArgs($job, []);
+        $path      = $getPath->invokeArgs($job, []);
 
         $file = $this->createTestFile('/0909', null, $path);
 
@@ -105,8 +103,7 @@ class Application_Job_CheckWorkspaceFilesJobTest extends ControllerTestCase
 
         $reflector = new ReflectionClass($job);
         $getPath   = $reflector->getMethod('getFilesPath');
-        $getPath->setAccessible(true);
-        $path = $getPath->invokeArgs($job, []);
+        $path      = $getPath->invokeArgs($job, []);
 
         $this->assertSame($expectedPath, $path);
     }

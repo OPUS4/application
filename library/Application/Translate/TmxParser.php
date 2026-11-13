@@ -63,7 +63,6 @@ class Application_Translate_TmxParser
 
     public function __destruct()
     {
-        xml_parser_free($this->parser);
         unset($this->parser);
     }
 
