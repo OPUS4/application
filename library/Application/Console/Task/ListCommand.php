@@ -41,7 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Application_Console_Task_ListCommand extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

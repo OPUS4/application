@@ -50,7 +50,7 @@ class Application_Console_Model_EnrichmentExportCommand extends Command
 
     public const OPTION_OUTPUT_FILE = 'outputFile';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

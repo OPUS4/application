@@ -38,7 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Application_Console_Console_ConsoleCommand extends Command
 {
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

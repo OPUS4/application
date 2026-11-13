@@ -35,7 +35,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Application_Console_Collection_CopyCommand extends Application_Console_Collection_AbstractCollectionCommand
 {
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

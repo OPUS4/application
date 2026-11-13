@@ -41,7 +41,7 @@ class Application_Console_Person_CleanCommand extends Command
 {
     public const OPTION_KEEP = 'keep';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 

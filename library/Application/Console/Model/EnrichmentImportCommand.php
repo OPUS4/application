@@ -41,7 +41,7 @@ class Application_Console_Model_EnrichmentImportCommand extends Command
 {
     public const ARGUMENT_FILE = 'config_file';
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
 
